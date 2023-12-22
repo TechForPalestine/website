@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "We run small projects that help normalize Palestinian humanity in different ways. #freepalestine",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="text-zinc-950 dark:text-zinc-50 bg-zinc-50 dark:bg-zinc-950">
+    <slot />
+  </body>
+</html>
