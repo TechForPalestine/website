@@ -1,0 +1,20 @@
+---
+import Card from "../components/Card.astro";
+import Button from "../components/Button.astro";
+---
+
+<Card>
+<div class="space-y-8">
+    <div class="space-y-2">
+        <h1 class="text-xl font-medium tracking-tight">
+        Sign up to be emailed.
+        </h1>
+        <p class="text-zinc-800">For when we have something interesting.</p>
+    </div>
+    <form class="flex flex-col gap-4">
+        <input type="text" placeholder="First Name" class="h-10 border bg-white rounded px-3 w-full"/>
+        <input type="email" placeholder="Email" class="h-10 border bg-white rounded px-3 w-full"/>
+        <Button>Sign Up</Button>
+    </form>
+</div>
+</Card>

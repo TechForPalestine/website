@@ -1,0 +1,14 @@
+---
+interface Props {
+  type?: "button" | "submit" | "reset";
+}
+
+const { type = "button" } = Astro.props;
+---
+
+<button
+  type={type}
+  class="inline-flex items-center justify-center whitespace-nowrap transition-colors rounded border border-green-700 bg-green-600 hover:bg-green-700 hover:border-green-800 px-3 h-10 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+>
+  <slot />
+</button>
