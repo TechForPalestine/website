@@ -1,20 +1,18 @@
 ---
 import Card from "../components/Card.astro";
-import Button from "../components/Button.astro";
 ---
 
 <Card>
-<div class="space-y-8">
+  <div class="space-y-8">
     <div class="space-y-2">
-        <h1 class="text-xl font-medium tracking-tight">
-        Sign up to be emailed.
-        </h1>
-        <p class="text-zinc-800">For when we have something interesting.</p>
+      <p class="text-zinc-800">
+        <span class="font-medium tracking-tight"> We'll email you</span>
+         when we have a way you can help or something to announce.
+      </p>
     </div>
-    <form class="flex flex-col gap-4">
-        <input type="text" placeholder="First Name" class="h-10 border bg-white rounded px-3 w-full"/>
-        <input type="email" placeholder="Email" class="h-10 border bg-white rounded px-3 w-full"/>
-        <Button>Sign Up</Button>
-    </form>
-</div>
+    <script
+      async
+      src="https://eocampaign1.com/form/b3aa6848-a407-11ee-a140-73b6d6a648c6.js"
+      data-form="b3aa6848-a407-11ee-a140-73b6d6a648c6"></script>
+  </div>
 </Card>
