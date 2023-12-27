@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
+import "../styles/base.css";
 ---
 
 <Layout title="Tech For Palestine">
@@ -13,15 +14,26 @@ import SignUpForm from "../structures/SignUpForm.astro";
           Tech for Palestine
         </h1>
         <p class="text-lg md:text-xl">
-          Nobody feels that they can speak up for Palestine, and all the while
-          there is a US-funded genocide in Gaza. We are a loose collection of
-          tech folks working to normalize speaking up for Palestine in tech. We
-          run small projects that help normalize Palestinian humanity in
-          different ways.
+          A loose coalition of over 25 founders, engineers, product marketers,
+          community builders, investors, and other tech folks working towards
+          Palestinian freedom.
         </p>
-      </div>
-      <div class="mx-auto max-w-screen-sm px-4">
-        <SignUpForm />
+        <p>
+          Our goal is to change tech by normalizing the idea that Palestinians
+          are people, and ableing tech founders, employees, and investors, to
+          speak up for Palestinian lives.
+        </p><p>
+          We are working on
+          <a href="https://github.com/orgs/TechForPalestine"
+            >multiple projects</a
+          >, and <a
+            href="https://github.com/orgs/TechForPalestine/discussions/categories/volunteers"
+            >need volunteers</a
+          >.<p></p>
+          <div class="mx-auto max-w-screen-sm px-4">
+            <SignUpForm />
+          </div>
+        </p>
       </div>
     </section>
   </main>
