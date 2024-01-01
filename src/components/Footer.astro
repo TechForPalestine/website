@@ -1,3 +1,51 @@
+---
+import Container from "./Container.astro";
+import * as Icon from "@astropub/icons";
+
+const socials = [
+  {
+    name: "Twitter",
+    url: "https://twitter.com/TechForPalestine",
+    Icon: Icon.TwitterLogo,
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/TechForPalestine/",
+    Icon: Icon.GitHubLogo,
+  },
+];
+---
+
 <footer>
-  <div class="py-4 border-t"></div>
+  <Container>
+    <div
+      class="py-4 flex gap-4 flex-col md:flex-row justify-between items-center text-xs text-zinc-950/60"
+    >
+      <div>
+        <p>
+          &copy; {new Date().getFullYear()} TechForPalestine. All rights
+          reserved.
+        </p>
+      </div>
+      <div>
+        <ul class="flex space-x-4">
+          {
+            socials.map((social) => (
+              <li>
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-zinc-950/60 hover:text-zinc-950/80"
+                >
+                  <span class="sr-only">{social.name}</span>
+                  <social.Icon class="w-6 h-6" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Container>
 </footer>
