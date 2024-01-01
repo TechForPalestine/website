@@ -1,40 +1,60 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ProjectsList from "../structures/ProjectsList.astro";
+import * as Icon from "@astropub/icons";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 ---
 
 <Layout title="Tech For Palestine">
   <main>
-    <section
-      class="text-center items-center justify-center min-h-fit py-24 space-y-12"
-    >
-      <div class="w-full mx-auto max-w-screen-lg space-y-8 px-4">
-        <h1 class="text-6xl md:text-8xl font-medium tracking-tight">
-          Tech for Palestine
-        </h1>
-        <p class="text-lg md:text-xl">
-          A loose coalition of over 25 founders, engineers, product marketers,
-          community builders, investors, and other tech folks working towards
-          Palestinian freedom.
-        </p>
-        <p>
-          Our goal is to change tech by normalizing the idea that Palestinians
-          are people, and enabling tech founders, employees, and investors, to
-          speak up for Palestinian lives.
-        </p><p>
-          We are working on
-          <a href="https://github.com/orgs/TechForPalestine"
-            >multiple projects</a
-          >, and <a
-            href="https://github.com/orgs/TechForPalestine/discussions/categories/volunteers"
-            >need volunteers</a
-          >.<p></p>
-          <div class="mx-auto max-w-screen-sm px-4">
-            <SignUpForm />
+    <section class="grid grid-cols-1 lg:grid-cols-2 items-center bg-white">
+      <div
+        class="text-center items-center justify-center min-h-fit py-16 space-y-12"
+      >
+        <div class="w-full mx-auto max-w-screen-md space-y-8 px-6 md:px-8">
+          <h1 class="text-6xl font-bold tracking-tight">Tech for Palestine</h1>
+          <p class="text-lg md:text-xl">
+            A loose coalition of over 25 founders, engineers, product marketers,
+            community builders, investors, and other tech folks working towards
+            Palestinian freedom.
+          </p>
+          <p>
+            Our goal is to change tech by normalizing the idea that Palestinians
+            are people, and enabling tech founders, employees, and investors, to
+            speak up for Palestinian lives.
+          </p>
+          <div class="flex flex-col md:flex-row gap-4 justify-center">
+            <a
+              href="/#projects-list"
+              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >View Projects</a
+            >
+            <a
+              target="_blank"
+              href="https://github.com/orgs/TechForPalestine/discussions/categories/volunteers"
+              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-white hover:border-gray-300 px-3 h-10 text-base font-medium text-zinc-950 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              ><Icon.GitHubLogo class="w-6 h-6" />Become a volunteer</a
+            >
           </div>
-        </p>
+        </div>
+      </div>
+      <figure class="bg-indigo-300 relative">
+        <img
+          src="/happy-kids.jpg"
+          class="object-cover w-full h-[32rem] lg:h-[42rem]"
+          alt="Happy kids in palestine"
+        />
+        <figcaption class="absolute right-2 bottom-2 text-xs text-white">
+          ®Motaz Azaiza
+        </figcaption>
+      </figure>
+    </section>
+    <section>
+      <div class="mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative">
+        <SignUpForm />
       </div>
     </section>
+    <ProjectsList />
   </main>
 </Layout>

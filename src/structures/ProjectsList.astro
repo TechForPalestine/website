@@ -1,0 +1,57 @@
+---
+import Button from "../components/Button.astro";
+import * as Icon from "@astropub/icons";
+import Container from "../components/Container.astro";
+const data = [
+  {
+    img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
+    label: "Palestine Badges",
+    description: "Show solidarity with palestine and add a badge to your repo",
+    url: "https://github.com/TechForPalestine/badges",
+  },
+  {
+    img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
+    label: "Palestine Banner",
+    description:
+      "A website banner you can load to show solidarity with Palestine",
+    url: "https://github.com/TechForPalestine/palestine-banner",
+  },
+];
+---
+
+<section class="py-24" id="project-list">
+  <Container>
+    <div class="space-y-8">
+      <div class="text-center space-y-2">
+        <h2 class="font-medium text-4xl">Browse our projects</h2>
+        <p>We're dedicated in elevating and e</p>
+      </div>
+      <div
+        class="divide-y divide-solid border rounded-md overflow-hidden bg-white shadow-sm"
+      >
+        {
+          data.map(({ label, description, url, img }) => (
+            <a
+              class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
+              href={url}
+            >
+              <div class="flex-grow flex gap-4 items-center">
+                <img src={img} class="w-10 h-10 rounded-lg" />
+                <div>
+                  <h3 class="font-semibold">{label}</h3>
+                  <p class="text-ellipsis overflow-hidden text-sm text-zinc-600">
+                    {description}
+                  </p>
+                </div>
+              </div>
+              <Button>
+                <Icon.GitHubLogo class="w-6 h-6" />
+                GitHub
+              </Button>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</section>

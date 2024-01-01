@@ -109,6 +109,11 @@
     is-wsl "^3.0.0"
     which-pm-runs "^1.1.0"
 
+"@astropub/icons@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@astropub/icons/-/icons-0.2.0.tgz#62e5c0ac1f89c84915c5596166e6a36c5a1125d9"
+  integrity sha512-qM/ldW/9rVHULNOZgz/23Yzgm2r3Iy2JJ1FuvJB6sFU67n61o1ImuXdHiaWSNoEHubD+IUkD9WG0hbhINgszqA==
+
 "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.23.5":
   version "7.23.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.23.5.tgz#9009b69a8c602293476ad598ff53e4562e15c244"
