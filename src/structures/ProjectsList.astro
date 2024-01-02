@@ -15,14 +15,16 @@ const data = [
     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
     label: "Palestine Banner",
     website: null,
-    description: "A website banner you can load to show solidarity with Palestine",
+    description:
+      "A website banner you can load to show solidarity with Palestine",
     github: "https://github.com/TechForPalestine/palestine-banner",
   },
   {
     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
     label: "Anti-Palestinian VC Funds",
     website: null,
-    description: "A list of VCs that support Israel's genocide against the Palestinian people of Gaza",
+    description:
+      "A list of VCs that support Israel's genocide against the Palestinian people of Gaza",
     github: "https://github.com/TechForPalestine/antipalestinian-vc-funds",
   },
   {
@@ -31,12 +33,13 @@ const data = [
     website: "https://israelitechalternatives.com/",
     description:
       "A comprehensive list of Israeli tech companies to boycott and suggested alternatives",
-    github: "https://github.com/TechForPalestine/boycott-israeli-tech-companies-dataset",
+    github:
+      "https://github.com/TechForPalestine/boycott-israeli-tech-companies-dataset",
   },
 ];
 ---
 
-<section class="py-24 bg-white" id="project-list">
+<section class="py-24 bg-white" id="projects-list">
   <Container>
     <div class="space-y-8">
       <div class="text-center space-y-2">
@@ -57,14 +60,16 @@ const data = [
                   </p>
                 </div>
               </div>
-              <div  class="flex flex-col md:flex-row">
-                {website && <a
-                  class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
-                  href={website}
-                  target="_blank"
-                >
-                  <Icon.Globe class="w-6 h-6" />
-                </a>}
+              <div class="flex flex-col md:flex-row">
+                {website && (
+                  <a
+                    class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
+                    href={website}
+                    target="_blank"
+                  >
+                    <Icon.Globe class="w-6 h-6" />
+                  </a>
+                )}
                 <a
                   class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
                   href={github}
@@ -72,7 +77,7 @@ const data = [
                 >
                   <Icon.GitHubLogo class="w-6 h-6" />
                 </a>
-             </div>
+              </div>
             </div>
           ))
         }
