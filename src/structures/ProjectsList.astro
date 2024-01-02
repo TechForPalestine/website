@@ -57,28 +57,22 @@ const data = [
                   </p>
                 </div>
               </div>
-              {website &&
-                <a
-                  class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
+              <div  class="flex flex-col md:flex-row">
+                {website && <a
+                  class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
                   href={website}
                   target="_blank"
                 >
-                  <Button>
-                    <Icon.Globe class="w-6 h-6" />
-                    Website
-                  </Button>
+                  <Icon.Globe class="w-6 h-6" />
+                </a>}
+                <a
+                  class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
+                  href={github}
+                  target="_blank"
+                >
+                  <Icon.GitHubLogo class="w-6 h-6" />
                 </a>
-              }
-              <a
-                class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
-                href={github}
-                target="_blank"
-              >
-              <Button>
-                <Icon.GitHubLogo class="w-6 h-6" />
-                GitHub
-              </Button>
-              </a>
+             </div>
             </div>
           ))
         }
