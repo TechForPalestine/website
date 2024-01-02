@@ -1,23 +1,23 @@
 ---
 import Container from "./Container.astro";
-import * as Icon from "@astropub/icons";
+import { Icon } from "astro-icon/components";
 
 const socials = [
   {
     name: "Twitter",
     url: "https://twitter.com/tech4palestine",
-    Icon: Icon.TwitterLogo,
+    icon: "mdi:twitter",
   },
   {
     name: "GitHub",
     url: "https://github.com/TechForPalestine/",
-    Icon: Icon.GitHubLogo,
+    icon: "bi:github",
   },
-  // {
-  //   name: "Discord",
-  //   url: "https://techforpalestine.org/discord-invite",
-  //   Icon: Icon.DiscordLogo,
-  // },
+  {
+    name: "Discord",
+    url: "https://techforpalestine.org/discord-invite",
+    icon: "ic:baseline-discord",
+  },
 ];
 ---
 
@@ -44,7 +44,7 @@ const socials = [
                   class="text-zinc-950/60 hover:text-zinc-950/80"
                 >
                   <span class="sr-only">{social.name}</span>
-                  <social.Icon class="w-6 h-6" />
+                  <Icon name={social.icon} class="w-6 h-6" />
                 </a>
               </li>
             ))

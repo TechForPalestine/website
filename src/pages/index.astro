@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProjectsList from "../structures/ProjectsList.astro";
-import * as Icon from "@astropub/icons";
+import { Icon } from "astro-icon/components";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 ---
@@ -20,19 +20,26 @@ import "../styles/base.css";
             Palestinian freedom.
           </p>
           <p>
-           Our goal is to facilitate collaboration on tech projects in support of the Palestinian people who are under attack by Israel
+            Our goal is to facilitate collaboration on tech projects in support
+            of the Palestinian people who are under attack by Israel
           </p>
           <div class="flex flex-col md:flex-row gap-4 justify-center">
             <a
               href="/#projects-list"
-              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
               >View Projects</a
             >
             <a
               target="_blank"
               href="https://github.com/techforpalestine#how-to-help"
-              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-white hover:border-gray-300 px-3 h-10 text-base font-medium text-zinc-950 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              ><Icon.GitHubLogo class="w-6 h-6" />Get involved</a
+              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-white hover:border-gray-300 px-3 h-10 text-base font-medium text-zinc-950 hover:shadow-sm focus:outline-none"
+              ><Icon name="bi:github" class="w-6 h-6" />Get involved</a
+            >
+            <a
+              target="_blank"
+              href="https://techforpalestine.org/discord-invite"
+              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-purple-500 border-purple-600 hover:border-purple-700 px-3 h-10 text-base font-medium text-white hover:bg-purple-600 hover:shadow-sm focus:outline-none"
+              ><Icon name="ic:baseline-discord" class="w-6 h-6" />Join Our</a
             >
           </div>
         </div>

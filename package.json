@@ -14,8 +14,15 @@
     "@astrojs/check": "^0.3.4",
     "@astrojs/tailwind": "^5.0.4",
     "@astropub/icons": "^0.2.0",
+    "@tabler/icons": "^2.45.0",
     "astro": "^4.0.7",
+    "astro-icon": "^1.0.1",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@iconify-json/bi": "^1.1.22",
+    "@iconify-json/ic": "^1.1.17",
+    "@iconify-json/mdi": "^1.1.64"
   }
 }
