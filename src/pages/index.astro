@@ -4,6 +4,7 @@ import ProjectsList from "../structures/ProjectsList.astro";
 import { Icon } from "astro-icon/components";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
+import DiscordButton from "../structures/DiscordButton.astro";
 ---
 
 <Layout title="Tech For Palestine">
@@ -15,9 +16,9 @@ import "../styles/base.css";
         <div class="w-full mx-auto max-w-screen-md space-y-8 px-6 md:px-8">
           <h1 class="text-6xl font-bold tracking-tight">Tech for Palestine</h1>
           <p class="text-lg md:text-xl">
-            A loose coalition of over 2000+ founders, engineers, product marketers,
-            community builders, investors, and other tech folks working towards
-            Palestinian freedom.
+            A loose coalition of over 2000+ founders, engineers, product
+            marketers, community builders, investors, and other tech folks
+            working towards Palestinian freedom.
           </p>
           <p>
             We aim to end the dehumanisation of Palestinians within the tech
@@ -35,13 +36,7 @@ import "../styles/base.css";
               class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-white hover:border-gray-300 px-3 h-10 text-base font-medium text-zinc-950 hover:shadow-sm focus:outline-none"
               ><Icon name="bi:github" class="w-6 h-6" />Get involved</a
             >
-            <a
-              target="_blank"
-              href="https://techforpalestine.org/discord-invite"
-              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-purple-500 border-purple-600 hover:border-purple-700 px-3 h-10 text-base font-medium text-white hover:bg-purple-600 hover:shadow-sm focus:outline-none"
-              ><Icon name="ic:baseline-discord" class="w-6 h-6" />Join Our
-              Discord</a
-            >
+            <DiscordButton>Join Our Discord</DiscordButton>
           </div>
         </div>
       </div>

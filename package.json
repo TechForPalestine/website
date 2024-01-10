@@ -23,6 +23,7 @@
   "devDependencies": {
     "@iconify-json/bi": "^1.1.22",
     "@iconify-json/ic": "^1.1.17",
-    "@iconify-json/mdi": "^1.1.64"
+    "@iconify-json/mdi": "^1.1.64",
+    "@iconify-json/tabler": "^1.1.103"
   }
 }

@@ -1,6 +1,14 @@
 ---
+import Container from "../components/Container.astro";
 import Layout from "../layouts/Layout.astro";
+import DiscordButton from "../structures/DiscordButton.astro";
+import { Icon } from "astro-icon/components";
 import "../styles/base.css";
+
+const streaming = [
+  "https://www.icj-cij.org/home",
+  "https://media.un.org/en/webtv",
+];
 ---
 
 <Layout title="ICJ Hearing Information">
@@ -27,9 +35,11 @@ import "../styles/base.css";
               into the International Court of Justice hearing this Thursday,
               January 11th 2024
             </p>
-            <div class="flex items-center justify-center relative">
+            <div
+              class="flex flex-col md:flex-row gap-2 items-center justify-center relative"
+            >
               <add-to-calendar-button
-                styleLight="--btn-background: #01B861; --btn-border: #00ca58;  --btn-text: #fff; --font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';"
+                styleLight="--btn-background: #01B861; --btn-border: #00ca58; --btn-padding-y: 7px; --btn-padding-x: 7px;  --btn-text: #fff; --font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';"
                 styleDark="--btn-background: #01B861;"
                 name="[Reminder] ICJ Hearing: South Africa case against Israel"
                 description="LIVE STREAMS: https://www.icj-cij.org/home or https://media.un.org/en/webtv"
@@ -41,13 +51,19 @@ import "../styles/base.css";
                 endTime="12:00"
                 timeZone="Europe/Amsterdam"
                 hideBranding={true}></add-to-calendar-button>
+              <span class="text-white">Or</span>
+              <DiscordButton
+                href="https://discord.com/invite/wkgAPFnQ?event=1194405485500170261"
+              >
+                Listen Discord
+              </DiscordButton>
             </div>
           </div>
         </div>
       </div>
     </section>
     <section
-      class="w-full mx-auto max-w-screen-md space-y-8 py-12 md:py-24 px-6 md:px-8 bg-white"
+      class="w-full mx-auto max-w-screen-md space-y-12 py-12 md:py-24 px-6 md:px-8 bg-white"
     >
       <div class="space-y-6 text-sm text-justify">
         <p>
@@ -73,6 +89,34 @@ import "../styles/base.css";
             href="https://www.icj-cij.org/index.php/case/192">here</a
           >.
         </p>
+      </div>
+      <div class="space-y-4">
+        <h2 class="font-medium text-xl">Streams</h2>
+        <div
+          class="divide-y divide-solid border rounded-md overflow-hidden bg-white shadow-sm"
+        >
+          {
+            streaming.map((item) => (
+              <div class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50">
+                <div class="flex-grow flex gap-4 items-center">
+                  <div>
+                    <h3 class="font-semibold">{item}</h3>
+                  </div>
+                </div>
+                <div class="flex flex-col md:flex-row">
+                  <a
+                    class="flex gap-2 justify-between items-center text-zinc-900 px-2 py-1 rounded border hover:border-gray-300 hover:shadow-sm bg-white"
+                    href={item}
+                    target="_blank"
+                  >
+                    <Icon name="tabler:video" class="w-4 h-4" />
+                    Watch
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </div>
     </section>
   </main>
