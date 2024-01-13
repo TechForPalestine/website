@@ -18,18 +18,22 @@ const socials = [
     url: "https://techforpalestine.org/discord-invite",
     icon: "ic:baseline-discord",
   },
+  {
+    name: "Blog",
+    url: "https://updates.techforpalestine.org",
+    icon: "mdi:blog",
+  },
 ];
 ---
 
 <footer>
   <Container>
     <div
-      class="py-4 flex gap-4 flex-col md:flex-row justify-between items-center text-xs text-zinc-950/60"
+      class="flex flex-col items-center justify-between gap-4 py-4 text-xs text-zinc-950/60 md:flex-row"
     >
       <div>
         <p>
-          &copy; {new Date().getFullYear()} TechForPalestine. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} TechForPalestine. All rights reserved.
         </p>
       </div>
       <div>
@@ -44,7 +48,7 @@ const socials = [
                   class="text-zinc-950/60 hover:text-zinc-950/80"
                 >
                   <span class="sr-only">{social.name}</span>
-                  <Icon name={social.icon} class="w-6 h-6" />
+                  <Icon name={social.icon} class="h-6 w-6" />
                 </a>
               </li>
             ))
