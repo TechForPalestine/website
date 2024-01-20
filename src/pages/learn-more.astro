@@ -1,0 +1,68 @@
+---
+import { number } from "astro/zod";
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+
+const response = await fetch('https://data.techforpalestine.org/api/v2/summary.min.json');
+const data = await response.json();
+
+console.log(data);
+
+const numberWithCommas = (x: number) =>  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+const stats = [
+    `Over ${numberWithCommas(data.killed.total)} men, women, children and elderly, have been killed in Gaza, Palestine`,
+    'Over 1,000 children have had a limb amputated without anesthesia as a result of Israel denying most necessary humanitarian aid into Gaza',
+    '1 out of every 100 Gazans have been murdered by Israel',
+    'Over 85% (1.9 million people) of Gaza\'s population has been forcibly displaced by Israel. That\'s the equivalent of entire cities like Vienna, Rabat, and Phoenix',
+    `Over ${numberWithCommas(data.killed.press)} journalists have been killed by Israel`,
+    `Over ${numberWithCommas(data.killed.medical)} medical workers have been killed by Israel`
+]
+---
+
+<Layout title="Learn More">
+  <main>
+    <section>      
+        <div class="relative bg-white">
+            <div class="mx-auto max-w-7xl lg:flex lg:justify-between lg:px-8 xl:justify-end">
+              <div class="lg:flex lg:w-1/2 lg:shrink lg:grow-0 xl:absolute xl:inset-y-0 xl:right-1/2 xl:w-1/2">
+                <!-- <div class="relative h-80 lg:-ml-8 lg:h-auto lg:w-full lg:grow xl:ml-0"> -->
+                  <figure class="relative h-80 lg:-ml-8 lg:h-auto lg:w-full lg:grow xl:ml-0">
+                    <img
+                      src="/mass-grave.jpg"
+                      class="absolute inset-0 h-full w-full bg-gray-50 object-cover object-right"
+                      alt="Palestinians pray over bodies of people killed in the Israeli bombardment who were brought from the al-Shifa Hospital before burying them in a mass grave in the town of Khan Younis, southern Gaza, on November 22, 2023."
+                    />
+                    <figcaption class="absolute right-2 bottom-2 text-xs text-white">
+                        [Mohammed Dahman/AP Photo]
+                    </figcaption>
+                  </figure>
+                <!-- </div> -->
+              </div>
+              <div class="px-6 lg:contents">
+                <div class="mx-auto max-w-2xl pb-24 pt-16 sm:pb-32 sm:pt-20 lg:ml-8 lg:mr-0 lg:w-full lg:max-w-lg lg:flex-none lg:pt-32 xl:w-1/2">
+                  <p class="text-base font-semibold leading-7 text-red-600">Call for a #CeasefireNOW</p>
+                  <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"> Israel is committing a genocide in Gaza</h1>
+                  <p class="mt-6 text-xl leading-8 text-gray-700">As of {new Date(data.lastDailyUpdate).toDateString()}</p>
+                  <div class="mt-10 max-w-xl text-base leading-7 text-gray-700 lg:max-w-none">
+                    <ul role="list" class="mt-8 space-y-3 text-gray-600">
+                        {stats.map(stat => {
+                            return (
+                            <li class="flex gap-x-3">
+                               <svg class="mt-1 h-5 w-5 flex-none" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 7L15 12L10 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span><strong class="font-semibold text-gray-900">{stat}</strong></span>
+                            </li>
+                            )
+                        })}
+                    </ul>
+                    <p class="mt-8">To get up-to-date information around the death toll, <a href="https://data.techforpalestine.org/" target="_blank">check out this resource.</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+  </main>
+</Layout>
