@@ -1,0 +1,134 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+import "../styles/base.css";
+
+const contacts = [
+  {
+    name: "Twitter",
+    url: "https://twitter.com/tech4palestine",
+    icon: "mdi:twitter",
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/TechForPalestine/",
+    icon: "mdi:github",
+  },
+  {
+    name: "Discord",
+    url: "https://techforpalestine.org/discord-invite",
+    icon: "ic:baseline-discord",
+  },
+];
+
+const resources = [
+  {
+    name: 'Manara.tech',
+    url: 'https://manara.tech',
+    logo: `
+      <svg viewBox="0 0 450 99">
+        <g id="logo">
+          <path clip-rule="evenodd" d="M211.775 49.5809C211.775 35.8655 219.929 27 232.262 27C233.107 27 234.46 27.0333 236.318 27.1L239.026 27.206L239.355 27.2221C250.168 27.837 258.644 36.4406 258.644 46.8773V70.9483H246.304V64.7842L244.853 66.4638L244.692 66.6468C241.755 69.9189 236.92 72 232.851 72C219.975 72 211.775 63.2765 211.775 49.5809ZM243.297 43.1929C241.612 40.2011 237.907 38.5031 234.033 38.5031C228.053 38.5031 223.758 42.3035 223.758 49.5C223.758 56.3731 227.716 60.5778 234.369 60.5778C238.075 60.5778 241.444 59.1223 243.297 55.6453C244.14 53.6829 244.562 51.4436 244.562 48.9276C244.562 46.4117 244.14 44.5001 243.297 43.1929ZM315.864 49.5809C315.864 35.8655 324.019 27 336.352 27C337.197 27 338.55 27.0333 340.407 27.1L343.116 27.206L343.444 27.2221C354.258 27.837 362.734 36.4406 362.734 46.8773V70.9483H350.394V64.7842L348.943 66.4638L348.781 66.6468C345.844 69.9189 341.009 72 336.941 72C324.064 72 315.864 63.2765 315.864 49.5809ZM347.386 43.1929C345.702 40.2011 341.996 38.5031 338.122 38.5031C332.143 38.5031 327.848 42.3035 327.848 49.5C327.848 56.3731 331.806 60.5778 338.459 60.5778C342.165 60.5778 345.534 59.1223 347.386 55.6453C348.533 53.6635 349.107 51.4361 349.107 48.9631C349.107 46.7146 348.533 44.7913 347.386 43.1929ZM423.618 27C411.285 27 403.13 35.8655 403.13 49.5809C403.13 63.2765 411.331 72 424.207 72C428.275 72 433.111 69.9189 436.048 66.6468L436.209 66.4638L437.66 64.7842V70.9483H450V46.8773C450 36.4406 441.524 27.837 430.71 27.2221L430.382 27.206L427.673 27.1C425.816 27.0333 424.463 27 423.618 27ZM425.388 38.5031C429.262 38.5031 432.968 40.2011 434.652 43.1929C435.716 44.8346 436.248 46.937 436.248 49.5C436.248 52.063 435.716 54.1115 434.652 55.6453C432.8 59.1223 429.431 60.5778 425.725 60.5778C419.072 60.5778 415.114 56.3731 415.114 49.5C415.114 42.3035 419.409 38.5031 425.388 38.5031ZM397.98 27.0809L398.158 27.0823C398.453 27.0872 398.74 27.1044 399.055 27.135L399.181 27.1481V40.4684L398.781 40.403C397.319 40.1685 396.206 40.0604 395.117 40.0604L394.905 40.0616C387.955 40.1377 383.769 43.9822 383.769 51.3598V70.9483H370.924V44.9237L370.926 44.6414C371.079 35.3411 378.765 27.7399 388.478 27.3495C392.349 27.1939 395.248 27.106 397.173 27.0855L397.98 27.0809ZM266.424 44.6928C268.326 34.0771 275.437 28.8351 288.002 28.8351C296.589 28.8351 302.422 31.1942 305.952 35.2636L306.143 35.4887C308.533 38.3566 309.626 41.8655 309.626 44.891V70.9483H296.697L296.697 50.3092L296.695 50.0288C296.668 47.4384 296.382 45.5932 295.488 43.8845C294.17 41.3656 291.722 39.9528 288.002 39.9528C284.049 39.9528 281.491 41.7139 280.187 44.7017L280.078 44.9607C279.306 46.8684 279.11 48.9469 279.224 51.0748L279.223 70.9483H266.378V44.953L266.424 44.6928ZM148.336 50.9395V71.1268H135.095L135 45.3937C135 45.3937 136.265 28.7785 156.505 28.7785C166.836 28.7785 169.544 31.1624 172.447 35.6758C175.862 31.4086 181.048 28.7785 187.708 28.7785C205.629 28.7785 206.57 41.7764 206.57 45.3592V71.1268H192.994V48.1493C192.994 43.4718 189.834 40.5175 185.821 40.5175C180.783 40.5175 177.453 44.0462 177.453 50.9395V71.1268H163.791V48.1493C163.791 43.4718 160.632 40.5175 156.533 40.5175C151.581 40.5175 148.336 44.0462 148.336 50.9395Z" fill="#1c1c1c" fill-rule="evenodd" id="Manara"></path>
+          <path clip-rule="evenodd" d="M47.5969 40.5802H41.5017L41.4977 46.3065H17.7654L0 28.9128V23.3362L23.5208 23.2739L23.8256 0H29.616L35.7112 5.96768L41.5017 11.637L47.2921 17.3063L47.5969 40.5802ZM59.1008 40.5802H53.0056L53.3104 17.3063L59.1008 11.637L64.8913 5.96768L70.9865 0H76.7769L77.0817 23.2739L100.602 23.3362V28.9128L82.8371 46.3065H59.1048L59.1008 40.5802ZM47.056 46.3065H53.0056V52.1613H47.056V46.3065ZM41.7677 98.8611H59.3549V93.8793L50.3184 86.1073L41.7677 93.8793V98.8611ZM53.0056 57.8875H59.1008L59.1048 52.1613H82.8371L100.602 69.5549V75.1315L77.0817 75.1938L76.7769 98.4677H70.9865L64.8913 92.5001L59.1008 86.8308L53.3104 81.1615L53.0056 57.8875ZM41.5017 58.4198H47.5969L47.2921 81.6937L41.5017 87.363L35.7112 93.0323L29.616 99H23.8256L23.5208 75.7261L0 75.6638V70.0872L17.7654 52.6935H41.4977L41.5017 58.4198ZM83.2945 99V81.4355H101.143L83.2945 99ZM17.8488 81.4355V99L0 81.4355H17.8488ZM83.2945 0V17.5645H101.143L83.2945 0ZM17.8488 18.0968V0.532258L0 18.0968H17.8488ZM100.602 58.0161V40.4516H95.6338L88.1624 49.2065L95.6338 58.0161H100.602ZM41.4989 0.146035H59.086V4.87796L50.0496 11.8384L41.4989 4.87796V0.146035ZM0 58.0161V40.4516H4.73783L12.4401 49.2065L4.73783 58.0161H0Z" fill="#FF773B" fill-rule="evenodd" id="logo_2"></path>
+        </g>
+      </svg>
+    `,
+    description: `A community aimed at nurturing top computer scientists in the Middle East & North Africa by enhancing their skills and connecting them to world-class job opportunities, either remotely or through relocation. Through training and mentorship, Manara supports software engineers in realizing their potential and securing employment in the global tech sector, thereby promoting diversity in the industry and economic growth in the region. Success stories from alumni highlight the transformative impact of Manara on their careers and personal development.`,
+  },
+  {
+    name: 'ps.bees.to',
+    url: 'https://ps.bees.to/',
+    logo: '/bees-logo-horizontal.webp',
+    description: `The website "Rising from Ashes" focuses on connecting Palestine's tech talent with remote work opportunities worldwide. It serves as a platform for companies to discover and engage with skilled professionals from Palestine, including full-stack developers and data scientists. The site highlights the economic challenges faced by Palestine, such as job losses and the impact on GDP, and offers a simple collaboration process to match companies with the right talent, aiming to empower Palestinian tech talent with good income and opportunities for skill development.`,
+  },
+  {
+    name: 'Mena Alliances',
+    url: 'https://menaalliances.com/',
+    logo: '/mena-alliances-logo.webp',
+    description: `MENA Alliances is a platform offering on-demand access to skilled professionals from the Middle East and North Africa (MENA) region, catering to businesses globally. They specialize in providing remote tech teams, including software engineers, designers, data scientists, and more, through flexible staffing models such as placement, staff augmentation, and project-based engagements. Their services extend to data labeling, professional on-demand talent, and translation & localization, aiming to simplify the scaling process for companies while delivering quality and expertise.`,
+  },
+  {
+    name: 'Foras Palestine',
+    url: 'https://foras.ps/',
+    logo: '/foras-logo.svg',
+    description: `A comprehensive online platform designed to facilitate job matching and professional development opportunities in Palestine. It offers a wide range of categories including entrepreneurship, competitions, jobs, workshops, online learning, scholarships, and various other opportunities. Aimed at supporting the career growth of Palestinian professionals, Foras.ps provides an easy-to-navigate interface for users to register, search for, and apply to various opportunities tailored to their interests and career goals, thereby enhancing their professional journey and employment prospects in the region.`,
+  },
+  {
+    name: 'TAP',
+    url: 'https://www.tapcareers.io/',
+    logo: '/tap-logo.svg',
+    description: `a career accelerator in Palestine and Jordan, offering intensive upskilling programs in software development, business development, and digital marketing. It aims to fast-track careers by equipping participants with the necessary skills and knowledge for remote tech roles. TAP operates on a risk-free model with a shared success agreement, allowing payment for training in installments after employment. The platform supports students through world-class training, virtual internships, expert mentoring, and job interviews, with a strong focus on creating a positive impact on both individuals and hiring companies.`,
+  },
+  {
+    name: 'Gaza Sky Geeks',
+    url: 'https://gazaskygeeks.com/',
+    logo: '/gaza-sky-geeks-logo.png',
+    description: `A leading tech hub in Gaza and the West Bank, fostering the digital economy and future technology leaders since 2011. It offers intensive coding and professional skills training to create junior developers, alongside incubation and acceleration programs for entrepreneurs. With a community-driven approach, it involves mentors, investors, and employer partners globally, boasting high success rates in freelancer placements and substantial female participation in its programs. Its mission extends to transcending borders through education, mentorship, and industry connections, significantly contributing to the tech ecosystem in Palestine.`,
+  },
+  {
+    name: 'Bees.to',
+    url: 'https://bees.to/',
+    logo: '/bees-logo-horizontal.webp',
+    description: `A platform aimed at streamlining the hiring process for companies by providing access to skilled Palestinian tech talents. They offer comprehensive HR services, including talent matching, staff augmentation, payroll management, and insurance coverage, tailored to the needs of businesses. With a focus on long-term staff augmentation and specialized team training, Bees.to facilitates seamless integration of talent into teams, emphasizing female representation and extensive technical experience among its talent pool, thereby simplifying the expansion of tech teams globally.`,
+  },
+]
+
+const logoClasses = `h-10 w-auto sm:h-12 md:h-14 lg:h-16`
+---
+
+<Layout title="Jobs for Palestinians" description="Find organizations that connect Palestinian job seekers with employers.">
+  <main>
+    <section class="py-24 px-6 sm:py-40 sm:px-16 md:px-20 lg:flex lg:justify-center">
+      <div class="lg:max-w-2xl">
+        <h1 class="text-4xl font-normal sm:text-5xl md:text-6xl">
+          Work for a company that
+          <span class="font-bold">hires Palestinians</span>
+        </h1>
+        <p class="mt-4 text-xl sm:text-2xl md:text-3xl">
+          The following organizations connect Palestinian job seekers with employers.
+        </p>
+        <p class="mt-12 text-lg md:mt-20 md:text-xl">
+          Know another good resource? Let us know at:
+          {
+            contacts.map((contact) => (
+                <a
+                  href={contact.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block relative top-1.5 ml-1 text-zinc-950/60 hover:text-zinc-950/80"
+                >
+                  <span class="sr-only">{contact.name}</span>
+                  <Icon name={contact.icon} class="h-6 w-6" />
+                </a>
+            ))
+          }
+        </p>
+      </div>
+    </section>
+    <section class="bg-white py-24 px-6 sm:px-16 md:px-20 lg:flex lg:justify-center">
+      <div class="flex flex-col gap-24 md:gap-32 lg:max-w-2xl">
+        {
+          resources.map(resource => (
+            <article>
+              <h2 class="sr-only">{ resource.name }</h2>
+              <a href={resource.url}>
+                {resource.logo.substring(0, 1) === '/' ? <img class={logoClasses} src={resource.logo}> : <Fragment set:html={resource.logo.replace('<svg ', `<svg class="${logoClasses}" `)}></Fragment> }
+              </a>
+              <p class="mt-4 text-lg leading-loose md:text-2xl md:leading-loose" set:html={resource.description}></p>
+              <p class="mt-8 text-lg md:mt-12">
+                <a
+                  href={resource.url}
+                  class="
+                    inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none
+                    md:text-2xl md:px-6 md:py-8
+                  "
+                  >View {resource.name}</a
+                >
+              </p>
+            </artice>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</Layout>
