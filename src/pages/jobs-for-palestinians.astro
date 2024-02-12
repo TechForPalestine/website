@@ -23,8 +23,20 @@ const contacts = [
 
 const resources = [
   {
+    name: `Connect Palestine`,
+    url: 'https://join.slack.com/t/connectjobsfo-6xs9807/shared_invite/zt-2aklqmhci-3hb33MV~Bps5fKIV6dr9fg',
+    logo: '/slack.webp',
+    description: `A Slack platform to connect job seekers with employers, share job opportunities, provide mentorship and career advice, and establish partnerships and collaborations with pro-Palestinian companies.`,
+  },
+  {
+    name: 'Mena Alliances',
+    url: 'https://menaalliances.com/',
+    logo: '/mena-alliances-logo.webp',
+    description: `A woman-owned business providing staff augmentation, project-based services, and placement models.`,
+  },
+  {
     name: 'Manara.tech',
-    url: 'https://manara.tech',
+    url: 'https://manara.tech/tech-jobs-for-palestine',
     logo: `
       <svg viewBox="0 0 450 99">
         <g id="logo">
@@ -33,55 +45,39 @@ const resources = [
         </g>
       </svg>
     `,
-    description: `A community aimed at nurturing top computer scientists in the Middle East & North Africa by enhancing their skills and connecting them to world-class job opportunities, either remotely or through relocation. Through training and mentorship, Manara supports software engineers in realizing their potential and securing employment in the global tech sector, thereby promoting diversity in the industry and economic growth in the region. Success stories from alumni highlight the transformative impact of Manara on their careers and personal development.`,
+    description: `Built to connect top tech talent in the Middle East & N. Africa (MENA) to jobs around the world, with a focus on women and Palestine - especially Gaza.`,
   },
   {
-    name: 'ps.bees.to',
+    name: 'Rising from Ashes',
     url: 'https://ps.bees.to/',
     logo: '/bees-logo-horizontal.webp',
-    description: `The website "Rising from Ashes" focuses on connecting Palestine's tech talent with remote work opportunities worldwide. It serves as a platform for companies to discover and engage with skilled professionals from Palestine, including full-stack developers and data scientists. The site highlights the economic challenges faced by Palestine, such as job losses and the impact on GDP, and offers a simple collaboration process to match companies with the right talent, aiming to empower Palestinian tech talent with good income and opportunities for skill development.`,
-  },
-  {
-    name: 'Mena Alliances',
-    url: 'https://menaalliances.com/',
-    logo: '/mena-alliances-logo.webp',
-    description: `MENA Alliances is a platform offering on-demand access to skilled professionals from the Middle East and North Africa (MENA) region, catering to businesses globally. They specialize in providing remote tech teams, including software engineers, designers, data scientists, and more, through flexible staffing models such as placement, staff augmentation, and project-based engagements. Their services extend to data labeling, professional on-demand talent, and translation & localization, aiming to simplify the scaling process for companies while delivering quality and expertise.`,
-  },
-  {
-    name: 'Foras Palestine',
-    url: 'https://foras.ps/',
-    logo: '/foras-logo.svg',
-    description: `A comprehensive online platform designed to facilitate job matching and professional development opportunities in Palestine. It offers a wide range of categories including entrepreneurship, competitions, jobs, workshops, online learning, scholarships, and various other opportunities. Aimed at supporting the career growth of Palestinian professionals, Foras.ps provides an easy-to-navigate interface for users to register, search for, and apply to various opportunities tailored to their interests and career goals, thereby enhancing their professional journey and employment prospects in the region.`,
+    description: `Leveraging partnerships with Bees, Flow Accelerator, and Gaza Sky Geeks, this platform is purpose built to connect global companies with remote workers on the ground in Palestine.`,
   },
   {
     name: 'TAP',
     url: 'https://www.tapcareers.io/',
     logo: '/tap-logo.svg',
-    description: `a career accelerator in Palestine and Jordan, offering intensive upskilling programs in software development, business development, and digital marketing. It aims to fast-track careers by equipping participants with the necessary skills and knowledge for remote tech roles. TAP operates on a risk-free model with a shared success agreement, allowing payment for training in installments after employment. The platform supports students through world-class training, virtual internships, expert mentoring, and job interviews, with a strong focus on creating a positive impact on both individuals and hiring companies.`,
+    description: `A career accelerator in Palestine and Jordan, offering remote ready talent for startups.`,
   },
   {
-    name: 'Gaza Sky Geeks',
-    url: 'https://gazaskygeeks.com/',
-    logo: '/gaza-sky-geeks-logo.png',
-    description: `A leading tech hub in Gaza and the West Bank, fostering the digital economy and future technology leaders since 2011. It offers intensive coding and professional skills training to create junior developers, alongside incubation and acceleration programs for entrepreneurs. With a community-driven approach, it involves mentors, investors, and employer partners globally, boasting high success rates in freelancer placements and substantial female participation in its programs. Its mission extends to transcending borders through education, mentorship, and industry connections, significantly contributing to the tech ecosystem in Palestine.`,
+    name: 'Upwork',
+    url: 'https://www.upwork.com/hire/ps/',
+    logo: `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102 28" role="img" aria-hidden="true">
+        <path fill="#14a800" d="M28.18,19.06A6.54,6.54,0,0,1,23,16c.67-5.34,2.62-7,5.2-7s4.54,2,4.54,5-2,5-4.54,5m0-13.34a7.77,7.77,0,0,0-7.9,6.08,26,26,0,0,1-1.93-5.62H12v7.9c0,2.87-1.3,5-3.85,5s-4-2.12-4-5l0-7.9H.49v7.9A8.61,8.61,0,0,0,2.6,20a7.27,7.27,0,0,0,5.54,2.35c4.41,0,7.5-3.39,7.5-8.24V8.77a25.87,25.87,0,0,0,3.66,8.05L17.34,28h3.72l1.29-7.92a11,11,0,0,0,1.36,1,8.32,8.32,0,0,0,4.14,1.28h.34A8.1,8.1,0,0,0,36.37,14a8.12,8.12,0,0,0-8.19-8.31"></path>
+        <path fill="#14a800" d="M80.8,7.86V6.18H77.2V21.81h3.65V15.69c0-3.77.34-6.48,5.4-6.13V6c-2.36-.18-4.2.31-5.45,1.87"></path>
+        <polygon fill="#14a800" points="55.51 6.17 52.87 17.11 50.05 6.17 45.41 6.17 42.59 17.11 39.95 6.17 36.26 6.17 40.31 21.82 44.69 21.82 47.73 10.71 50.74 21.82 55.12 21.82 59.4 6.17 55.51 6.17"></polygon>
+        <path fill="#14a800" d="M67.42,19.07c-2.59,0-4.53-2.05-4.53-5s2-5,4.53-5S72,11,72,14s-2,5-4.54,5m0-13.35A8.1,8.1,0,0,0,59.25,14,8.18,8.18,0,1,0,75.6,14a8.11,8.11,0,0,0-8.18-8.31"></path>
+        <path fill="#14a800" d="M91.47,14.13h.84l5.09,7.69h4.11l-5.85-8.53a7.66,7.66,0,0,0,4.74-7.11H96.77c0,3.37-2.66,4.65-5.3,4.65V0H87.82V21.82h3.64Z"></path>
+      </svg>
+    `,
+    description: `Hire freelancers from Palestine on the Upwork platform.`,
   },
   {
-    name: 'Bees.to',
-    url: 'https://bees.to/',
-    logo: '/bees-logo-horizontal.webp',
-    description: `A platform aimed at streamlining the hiring process for companies by providing access to skilled Palestinian tech talents. They offer comprehensive HR services, including talent matching, staff augmentation, payroll management, and insurance coverage, tailored to the needs of businesses. With a focus on long-term staff augmentation and specialized team training, Bees.to facilitates seamless integration of talent into teams, emphasizing female representation and extensive technical experience among its talent pool, thereby simplifying the expansion of tech teams globally.`,
-  },
-  {
-    name: `Connect Palestine's Slack Channel`,
-    url: 'https://join.slack.com/t/connectjobsfo-6xs9807/shared_invite/zt-2aklqmhci-3hb33MV~Bps5fKIV6dr9fg',
-    logo: '/slack.webp',
-    description: `An initiative undertaken to address the employment challenges faced by Palestinians who have lost their jobs, as well as people abroad who have faced repercussions for their solidarity with Palestine.  Our aim is to assist them in finding new, and hopefully improved, employment opportunities. For this purpose, we have built a Slack platform to connect job seekers with employers, share job opportunities, provide mentorship and career advice, and establish partnerships and collaborations with pro-Palestinian companies.`,
-  },
-  {
-    name: 'UX Designers for Hire',
+    name: 'Dribble',
     url: 'https://dribbble.com/freelance-ux-designers-for-hire-gaza-ps',
     logo: '/dribbble-logo.png',
-    description: `The Dribbble page "Freelance UX Designers for Hire in Gaza" showcases a diverse range of UX designers from Gaza, offering their professional services. It highlights the availability of talented individuals skilled in mobile design, UI/Visual Design, UX Design/Research, and more. This platform provides direct access to hiring top freelance UX designers, facilitating companies to browse, engage, and seamlessly hire candidates suited for their design needs.`,
+    description: `Showcases a diverse range of UX designers from Gaza, offering their professional services.`,
   },
 ]
 
@@ -93,11 +89,12 @@ const logoClasses = `h-10 w-auto sm:h-12 md:h-14 lg:h-16`
     <section class="py-24 px-6 sm:py-40 sm:px-16 md:px-20 lg:flex lg:justify-center">
       <div class="lg:max-w-2xl">
         <h1 class="text-4xl font-normal sm:text-5xl md:text-6xl">
-          Work for a company that
-          <span class="font-bold">hires Palestinians</span>
+          Hire
+          <span class="font-bold">top talent</span>
+          from Palestine and the Middle East
         </h1>
         <p class="mt-4 text-xl sm:text-2xl md:text-3xl">
-          The following organizations connect Palestinian job seekers with employers.
+          Get help hiring engineers, designers and technologists from across the region.
         </p>
         <p class="mt-12 text-lg md:mt-20 md:text-xl">
           Know another good resource? Let us know at:
