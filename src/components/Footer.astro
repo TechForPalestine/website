@@ -1,29 +1,6 @@
 ---
 import Container from "./Container.astro";
-import { Icon } from "astro-icon/components";
-
-const socials = [
-  {
-    name: "Twitter",
-    url: "https://twitter.com/tech4palestine",
-    icon: "mdi:twitter",
-  },
-  {
-    name: "GitHub",
-    url: "https://github.com/TechForPalestine/",
-    icon: "mdi:github",
-  },
-  {
-    name: "Discord",
-    url: "https://techforpalestine.org/discord-invite",
-    icon: "ic:baseline-discord",
-  },
-  {
-    name: "Blog",
-    url: "https://updates.techforpalestine.org",
-    icon: "mdi:rss",
-  },
-];
+import Socials from "./Socials.astro";
 ---
 
 <footer>
@@ -37,23 +14,7 @@ const socials = [
         </p>
       </div>
       <div>
-        <ul class="flex space-x-4">
-          {
-            socials.map((social) => (
-              <li>
-                <a
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-zinc-950/60 hover:text-zinc-950/80"
-                >
-                  <span class="sr-only">{social.name}</span>
-                  <Icon name={social.icon} class="h-6 w-6" />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+        <Socials />
       </div>
     </div>
   </Container>
