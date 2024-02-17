@@ -1,0 +1,27 @@
+---
+const { text = 'I am a tooltip info!' } = Astro.props;
+---
+
+<div class='tooltip'>
+  <slot />
+  <span class='tooltiptext'>{text}</span>
+</div>
+<style>
+  .tooltip {
+    @apply relative inline-block;
+  }
+
+  .tooltip .tooltiptext {
+    @apply invisible;
+    @apply w-full bg-black;
+    @apply text-white text-center;
+    @apply rounded-md;
+    @apply absolute left-0 bottom-11;
+    @apply p-2;
+    @apply z-10;
+  }
+
+  .tooltip:hover .tooltiptext {
+    @apply visible;
+  }
+</style>
