@@ -1,11 +1,17 @@
 ---
-import { Icon } from "astro-icon/components";
-const { href = "https://techforpalestine.org/discord-invite" } = Astro.props;
+import { Icon } from 'astro-icon/components';
+const { href = 'https://techforpalestine.org/discord-invite' } = Astro.props;
+import ToolTip from '../components/ToolTip.astro';
 ---
 
-<a
-  target="_blank"
-  href={href}
-  class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-purple-500 border-purple-600 hover:border-purple-700 px-3 h-10 text-base font-medium text-white hover:bg-purple-600 hover:shadow-sm focus:outline-none"
-  ><Icon name="ic:baseline-discord" class="w-6 h-6" /><slot /></a
+<ToolTip
+  text='If you face any issues, try signing out of discord then try again.'
 >
+  <a
+    target='_blank'
+    href={href}
+    class='inline-flex w-full items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-purple-500 border-purple-600 hover:border-purple-700 px-3 h-10 text-base font-medium text-white hover:bg-purple-600 hover:shadow-sm focus:outline-none'
+  >
+    <Icon name='ic:baseline-discord' class='w-6 h-6' /><slot /></a
+  >
+</ToolTip>
