@@ -1,64 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProjectsList from "../structures/ProjectsList.astro";
-import { Icon } from "astro-icon/components";
-import SignUpForm from "../structures/SignUpForm.astro";
+
 import "../styles/base.css";
-import DiscordButton from "../structures/DiscordButton.astro";
 ---
 
 <Layout title="Tech For Palestine">
     <main>
-        <!-- <section class="grid grid-cols-1 lg:grid-cols-2 items-center bg-white">
-            <div
-                class="text-center items-center justify-center min-h-fit py-16 space-y-12"
-            >
-                <div
-                    class="w-full mx-auto max-w-screen-md space-y-8 px-6 md:px-8"
-                >
-                    <h1 class="text-6xl font-bold tracking-tight">
-                        Tech for Palestine
-                    </h1>
-                    <p class="text-lg md:text-xl">
-                        A loose coalition of 4,000+ founders, engineers, product
-                        marketers, community builders, investors, and other tech
-                        folks working towards Palestinian freedom.
-                    </p>
-                    <p>
-                        We aim to end the dehumanisation of Palestinians within
-                        the tech community, and to bring voice to those who
-                        speak up.
-                    </p>
-                    <div class="flex flex-col md:flex-row gap-4 justify-center">
-                        <a
-                            href="/#projects-list"
-                            class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
-                            >View Projects</a
-                        >
-                        <a
-                            target="_blank"
-                            href="https://github.com/techforpalestine#how-to-help"
-                            class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md border bg-white hover:border-gray-300 px-3 h-10 text-base font-medium text-zinc-950 hover:shadow-sm focus:outline-none"
-                            ><Icon name="bi:github" class="w-6 h-6" />Get
-                            involved</a
-                        >
-                        <DiscordButton>Join Our Discord</DiscordButton>
-                    </div>
-                </div>
-            </div>
-            <figure class="bg-zinc-50 relative">
-                <img
-                    src="/happy-kids.jpg"
-                    class="object-cover w-full h-[32rem] lg:h-[42rem]"
-                    alt="Happy kids in palestine"
-                />
-                <figcaption
-                    class="absolute right-2 bottom-2 text-xs text-white"
-                >
-                    ®Motaz Azaiza
-                </figcaption>
-            </figure>
-        </section> -->
         <ProjectsList />
     </main>
 </Layout>
