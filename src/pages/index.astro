@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ProjectsList from "../structures/ProjectsList.astro";
 import { Icon } from "astro-icon/components";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
@@ -16,9 +15,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
         <div class="w-full mx-auto max-w-screen-md space-y-8 px-6 md:px-8">
           <h1 class="text-6xl font-bold tracking-tight">Tech for Palestine</h1>
           <p class="text-lg md:text-xl">
-            A loose coalition of 4,000+ founders, engineers, product
-            marketers, community builders, investors, and other tech folks
-            working towards Palestinian freedom.
+            A loose coalition of 4,000+ founders, engineers, product marketers,
+            community builders, investors, and other tech folks working towards
+            Palestinian freedom.
           </p>
           <p>
             We aim to end the dehumanisation of Palestinians within the tech
@@ -26,7 +25,7 @@ import DiscordButton from "../structures/DiscordButton.astro";
           </p>
           <div class="flex flex-col md:flex-row gap-4 justify-center">
             <a
-              href="/#projects-list"
+              href="/projects"
               class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
               >View Projects</a
             >
@@ -52,10 +51,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
       </figure>
     </section>
     <section>
-      <div class="mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative">
+      <div class="mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative pb-24">
         <SignUpForm />
       </div>
     </section>
-    <ProjectsList />
   </main>
 </Layout>
