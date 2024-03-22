@@ -2,13 +2,17 @@
 import * as Icon from "@astropub/icons";
 import Container from "../components/Container.astro";
 import { Client } from "@notionhq/client";
-
+import DiscordButton from "./DiscordButton.astro";
 import type { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 
 // Initializing a client
 const notion = new Client({
   auth: import.meta.env.NOTION_TOKEN,
 });
+
+function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const projects: QueryDatabaseResponse = await notion.databases.query({
   database_id: "c4180f9f1b6449f79d0a84645d92879c",
@@ -20,82 +24,30 @@ const projects: QueryDatabaseResponse = await notion.databases.query({
   ],
 });
 
-type Project = {
-  Category: string;
-  "Start date": string;
-  Logo: string;
-  Name: string;
-  Description: string;
-  ChannelURL: string;
-};
-
 const project_items = projects.results
   .map((project: any) => {
     return {
       category: project.properties.Category.select?.name,
       start_date: project.properties["Start date"].date?.start,
       logo: project.properties.Logo.files[0]?.name,
-      name: project.properties.Name.title[0]?.plain_text,
+      name: project.properties.Name.title[0]?.plain_text
+        .split("-")
+        .map(capitalizeFirstLetter)
+        .join(" "),
       description: project.properties.Description.rich_text[0]?.plain_text,
       discord_channel_url: project.properties.ChannelURL.url,
       website_url: project.properties.WebsiteURL.url,
       github_url: project.properties.Github.url,
+      published: project.properties.Published.checkbox,
     };
   })
   .filter(
     (project) =>
-      project.name && project.description && project.discord_channel_url,
+      project.name &&
+      project.description &&
+      project.discord_channel_url &&
+      project.published,
   );
-
-// const data = [
-//   {
-//     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
-//     label: "Palestine Badge",
-//     website: null,
-//     description:
-//       "Show solidarity with Palestine and add a badge to your code repository",
-//     github: "https://github.com/TechForPalestine/badges",
-//   },
-//   {
-//     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
-//     label: "Palestine Banner",
-//     website: null,
-//     description: "Add a #CeasefireNOW banner to your website",
-//     github: "https://github.com/TechForPalestine/palestine-banner",
-//   },
-//   {
-//     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
-//     label: "Palestine Datasets",
-//     website: "https://data.techforpalestine.org",
-//     description:
-//       "Open source datasets showing the human toll on Palestinians of Israel's attacks since Oct 7",
-//     github: "https://github.com/TechForPalestine/palestine-numbers",
-//   },
-//   {
-//     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
-//     label: "Palestine Profile Pic Maker",
-//     website: "https://ppm.techforpalestine.org",
-//     description: "Add a 🇵🇸 themed border to your profile images",
-//     github: "https://github.com/TechForPalestine/palestine-pfp-maker",
-//   },
-//   {
-//     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
-//     label: "Anti-Palestinian VC Funds",
-//     website: null,
-//     description:
-//       "A list of VCs that support Israel's genocide against the Palestinian people of Gaza",
-//     github: "https://github.com/TechForPalestine/antipalestinian-vc-funds",
-//   },
-//   {
-//     img: "https://avatars.githubusercontent.com/u/151086389?s=200&v=4",
-//     label: "Israeli Tech Alternatives",
-//     website: "https://israelitechalternatives.com/",
-//     description:
-//       "A comprehensive list of Israeli tech companies to boycott and suggested alternatives",
-//     github:
-//       "https://github.com/TechForPalestine/boycott-israeli-tech-companies-dataset",
-//   },
-// ];
 ---
 
 <section class="py-24 bg-white" id="projects-list">
@@ -103,6 +55,9 @@ const project_items = projects.results
     <div class="space-y-8">
       <div class="text-center space-y-2">
         <h2 class="font-medium text-4xl">Browse our projects</h2>
+        <div class="py-2">
+          <DiscordButton>Join our Discord to explore projects</DiscordButton>
+        </div>
       </div>
       <div
         class="divide-y divide-solid border rounded-md overflow-hidden bg-white shadow-sm"
@@ -113,7 +68,6 @@ const project_items = projects.results
               name,
               description,
               github_url,
-              logo,
               website_url,
               discord_channel_url,
             }) => (
@@ -159,7 +113,7 @@ const project_items = projects.results
                       href={discord_channel_url}
                       target="_blank"
                     >
-                      <img class="h-6" src="/public/discord.png" />
+                      <img class="h-6" src="/discord.png" />
                     </a>
                   )}
                 </div>
