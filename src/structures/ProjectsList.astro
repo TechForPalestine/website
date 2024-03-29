@@ -10,9 +10,11 @@ const notion = new Client({
   auth: import.meta.env.NOTION_TOKEN,
 });
 
+const acronyms = ["tfp", "vc", "icj", "lp", "emr"];
+
 function capitalizeFirstLetter(string: string) {
-  return string.toLowerCase() === "tfp"
-    ? "TFP"
+  return acronyms.includes(string.toLowerCase())
+    ? string.toUpperCase()
     : string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -24,6 +26,16 @@ const projects: QueryDatabaseResponse = await notion.databases.query({
       direction: "ascending",
     },
   ],
+  filter: {
+    and: [
+      {
+        property: "Published",
+        checkbox: {
+          equals: true,
+        },
+      },
+    ],
+  },
 });
 
 const project_items = projects.results
@@ -36,7 +48,8 @@ const project_items = projects.results
         .split("-")
         .map(capitalizeFirstLetter)
         .join(" "),
-      description: project.properties.Description.rich_text[0]?.plain_text,
+      description:
+        project.properties.Description.rich_text[0]?.plain_text || " ",
       discord_channel_url: project.properties.ChannelURL.url,
       website_url: project.properties.WebsiteURL.url,
       github_url: project.properties.Github.url,
@@ -45,10 +58,7 @@ const project_items = projects.results
   })
   .filter(
     (project) =>
-      project.name &&
-      project.description &&
-      project.discord_channel_url &&
-      project.published,
+      project.name && project.description && project.discord_channel_url,
   );
 ---
 
