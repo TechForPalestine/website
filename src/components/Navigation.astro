@@ -1,96 +1,27 @@
 ---
-import DiscordButton from "../structures/DiscordButton.astro";
 import Socials from "./Socials.astro";
+import TFPLogo from "./TFPLogo.astro";
+import { Icon } from "astro-icon/components";
+import NavBar from "./NavBar.svelte";
+let toggleEl = false;
 
-const navigation = [
-  {
-    label: "About",
-    href: "/about",
-  },
-  {
-    label: "Projects",
-    href: "/projects",
-  },
-  {
-    label: "Blog",
-    href: "https://updates.techforpalestine.org",
-  },
-  {
-    label: "Hire Palestinians",
-    href: "/help/hire",
-  },
-  {
-    label: "Media",
-    href: "mailto:media@techforpalestine.org",
-  },
-];
+const toggle = () => {
+  toggleEl = !toggleEl;
+};
+const navigation = new Map([
+  ["About", "/about"],
+  ["Projects", "/projects"],
+  ["Blog", "https://updates.techforpalestine.org"],
+  ["Hire Palestinians", "/help/hire"],
+  ["Media", "mailto:media@techforpalestine.org"],
+]);
 
 // TODO: MOVE BANNER TO LAYOUT
 ---
 
-<header class="flex flex-col sticky w-full top-0 z-50 bg-white border-b">
-  <div class="relative">
-    <nav class="flex flex-col md:flex-row lg:flex-row justify-center items-center w-full px-4 gap-4 py-2">
-      <div>
-        <a href="/" class="text-red-600"
-          ><svg
-            class="w-12 h-9"
-            width="204"
-            height="165"
-            viewBox="0 0 204 165"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <mask
-              id="mask0_5_2"
-              style="mask-type:alpha"
-              maskUnits="userSpaceOnUse"
-              x="0"
-              y="0"
-              width="204"
-              height="165"
-            >
-              <rect width="204" height="165" rx="40" fill="#1A1A1A"></rect>
-            </mask>
-            <g mask="url(#mask0_5_2)">
-              <rect width="204" height="165" fill="currentColor"></rect>
-              <rect y="80" width="68" height="85" fill="#007A3D"></rect>
-              <rect x="68" y="80" width="68" height="85" fill="white"></rect>
-              <rect x="136" y="80" width="68" height="85" fill="#1A1A1A"></rect>
-              <path
-                d="M101.25 -23L204.5 80.25L101.25 123.5L-2.00001 80.25L101.25 -23Z"
-                fill="currentColor"></path>
-              <path
-                d="M77.3331 33H31V46.2H46.4444V75H61.8887V46.2H77.3331V33Z"
-                fill="white"></path>
-              <path
-                d="M80.8855 33H123.655V46.2H96.3299V50.4H123.06V63.6H96.3299V75H80.8855V33Z"
-                fill="white"></path>
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M143.259 65.4V75H127.815V33H152.942C159.476 33 164.466 34.44 167.911 37.32C171.277 40.08 172.96 44.04 172.96 49.2C172.96 54.36 171.277 58.32 167.911 61.08C164.466 63.96 159.476 65.4 152.942 65.4H143.259ZM143.259 46.2V52.2H153.476C156.169 52.2 157.516 51.2 157.516 49.2C157.516 47.2 156.169 46.2 153.476 46.2H143.259Z"
-                fill="white"></path>
-            </g>
-          </svg>
-        </a>
-      </div>
-      <div class="flex-grow">
-        <ul class="flex gap-4">
-          {
-            navigation.map(({ href, label }) => (
-              <li>
-                <a href={href} class="text-zinc-900">
-                  {label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div>
-        <Socials />
-      </div>
-    </nav>
-  </div>
-</header>
+<NavBar navigation={navigation} client:only="svelte">
+  <TFPLogo slot="tfp-logo" />
+  <Socials slot="socials" />
+  <Icon name="solar:hamburger-menu-outline" class="h-8 w-8" slot="burger-icon" />
+  <Icon name="mdi:close" class="h-8 w-8" slot="close" />
+</NavBar>
