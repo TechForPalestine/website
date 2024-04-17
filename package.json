@@ -12,20 +12,23 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
+    "@astrojs/svelte": "^5.4.0",
     "@astrojs/tailwind": "^5.0.4",
     "@astropub/icons": "^0.2.0",
     "@notionhq/client": "^2.2.14",
     "@tabler/icons": "^2.45.0",
-    "astro": "^4.0.7",
-    "astro-icon": "^1.0.1",
+    "astro": "^4.6.1",
+    "astro-icon": "^1.1.0",
     "moderndash": "^3.11.1",
+    "svelte": "^4.2.14",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@iconify-json/bi": "^1.1.22",
     "@iconify-json/ic": "^1.1.17",
     "@iconify-json/mdi": "^1.1.64",
+    "@iconify-json/solar": "^1.1.9",
     "@iconify-json/tabler": "^1.1.103"
   }
 }
