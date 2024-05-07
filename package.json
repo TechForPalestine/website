@@ -18,6 +18,7 @@
     "@notionhq/client": "^2.2.14",
     "@tabler/icons": "^2.45.0",
     "astro": "^4.6.1",
+    "astro-heroicons": "^2.1.1",
     "astro-icon": "^1.1.0",
     "moderndash": "^3.11.1",
     "svelte": "^4.2.14",
