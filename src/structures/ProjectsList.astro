@@ -7,7 +7,7 @@ import type { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpo
 
 // Initializing a client
 const notion = new Client({
-  auth: import.meta.env.NOTION_TOKEN,
+  auth: import.meta.env.PUBLIC_NOTION_TOKEN,
 });
 
 const acronyms = ["tfp", "vc", "icj", "lp", "emr"];
@@ -19,7 +19,7 @@ function capitalizeFirstLetter(string: string) {
 }
 
 const projects: QueryDatabaseResponse = await notion.databases.query({
-  database_id: "c4180f9f1b6449f79d0a84645d92879c",
+database_id: "a50e07cf1aa642cf84e529bd64970fd8",
   sorts: [
     {
       property: "Name",
@@ -29,9 +29,9 @@ const projects: QueryDatabaseResponse = await notion.databases.query({
   filter: {
     and: [
       {
-        property: "Published",
-        checkbox: {
-          equals: true,
+        property: "Status",
+        select: {
+          equals: "Onboarded",
         },
       },
     ],
@@ -41,25 +41,15 @@ const projects: QueryDatabaseResponse = await notion.databases.query({
 const project_items = projects.results
   .map((project: any) => {
     return {
-      category: project.properties.Category.select?.name,
-      start_date: project.properties["Start date"].date?.start,
-      logo: project.properties.Logo.files[0]?.name,
-      name: project.properties.Name.title[0]?.plain_text
-        .split("-")
-        .map(capitalizeFirstLetter)
-        .join(" "),
+      name: project.properties["Project Name"].rich_text[0]?.plain_text,
       description:
-        project.properties.Description.rich_text[0]?.plain_text || " ",
-      discord_channel_url: project.properties.ChannelURL.url,
-      website_url: project.properties.WebsiteURL.url,
-      github_url: project.properties.Github.url,
-      published: project.properties.Published.checkbox,
+        project.properties["Elevator Pitch"].rich_text[0]?.plain_text || " ",
+      discord_channel_url: project.properties["Discord Channel"].url,
+      website_url: project.properties["Website URL"].rich_text[0]?.plain_text || " ",
     };
   })
-  .filter(
-    (project) =>
-      project.name && project.description && project.discord_channel_url,
-  );
+
+  console.log(project_items);
 ---
 
 <section class="py-24 bg-white" id="projects-list">
@@ -79,8 +69,6 @@ const project_items = projects.results
             ({
               name,
               description,
-              github_url,
-              website_url,
               discord_channel_url,
             }) => (
               <div class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50">
@@ -101,24 +89,6 @@ const project_items = projects.results
                   </div>
                 </div>
                 <div class="flex flex-col md:flex-row">
-                  {website_url && (
-                    <a
-                      class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
-                      href={website_url}
-                      target="_blank"
-                    >
-                      <Icon.Globe class="w-6 h-6" />
-                    </a>
-                  )}
-                  {github_url && (
-                    <a
-                      class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
-                      href={github_url}
-                      target="_blank"
-                    >
-                      <Icon.GitHubLogo class="w-6 h-6" />
-                    </a>
-                  )}
                   {discord_channel_url && (
                     <a
                       class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
