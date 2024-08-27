@@ -12,7 +12,7 @@ const notion = new Client({
 
 const acronyms = ["tfp", "vc", "icj", "lp", "emr"];
 
-function capitalizeFirstLetter(string: string) {
+export function capitalizeFirstLetter(string: string) {
   return acronyms.includes(string.toLowerCase())
     ? string.toUpperCase()
     : string.charAt(0).toUpperCase() + string.slice(1);
@@ -58,7 +58,7 @@ const project_items = projects.results
   })
   .filter(
     (project) =>
-      project.name && project.description && project.discord_channel_url,
+      project.name && project.description && project.discord_channel_url
   );
 ---
 
@@ -130,7 +130,7 @@ const project_items = projects.results
                   )}
                 </div>
               </div>
-            ),
+            )
           )
         }
       </div>
