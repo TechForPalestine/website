@@ -1,8 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Icon } from "astro-icon/components";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
+import ArrowIcon from "../components/ArrowIcon.astro";
 import DiscordButton from "../structures/DiscordButton.astro";
 ---
 
@@ -14,36 +14,77 @@ import DiscordButton from "../structures/DiscordButton.astro";
       >
         <div class="w-full mx-auto max-w-screen-md space-y-8 px-6 md:px-8">
           <h1 class="text-6xl font-bold tracking-tight">Tech for Palestine</h1>
+          <p class="text-lg md:text-xl font-bold">
+            Activism comes in many forms. This is ours.
+          </p>
           <p class="text-lg md:text-xl">
             A loose coalition of 5,000+ founders, engineers, product marketers,
             community builders, investors, and other tech folks working towards
             Palestinian freedom.
           </p>
           <p>
-            We aim to end the dehumanization of Palestinians within the tech
-            community, and to bring a voice to those who speak up.
+            We use our skills, networks, and professional experiences to end the
+            dehumanization of Palestinians, support projects that empower
+            Palestinians globally, and give a voice to those who courageously
+            choose to speak up.
           </p>
+
+          <h2
+            class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+          >
+            Want to get involved?
+          </h2>
+          <p class="text-lg md:text-xl">
+            What started as an aligned collective on a Discord server has grown
+            into a non-profit incubator that supports projects from idea to
+            launch.
+          </p>
+
           <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <a
-              href="/projects"
-              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
+            <div
+              class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 hover:text-gray-800 flex-1 bg-green-800 text-white cursor-pointer relative"
+            >
+              <span
+                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                aria-hidden="true"
               >
-              Our Projects
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>    
-            </a>
-            <a
-              target="_blank"
-              href="/get-involved"
-              class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 hover:text-gray-800 font-semibold py-2 px-4 rounded-md shadow-sm"
+                <ArrowIcon />
+              </span>
+              <h4 class="font-medium text-xl mb-2">Project Incubator</h4>
+              <p>
+                Submit your project to get mentorship and access to a skilled,
+                supportive tech community
+              </p>
+            </div>
+            <div
+              class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 hover:text-gray-800 flex-1 bg-red-800 text-white cursor-pointer relative"
+            >
+              <span
+                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                aria-hidden="true"
               >
-              Get Involved
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>    
-            </a>
-            <DiscordButton>Join Our Discord</DiscordButton>
+                <ArrowIcon />
+              </span>
+              <h4 class="font-medium text-xl mb-2">Volunteer</h4>
+              <p>
+                Apply to volunteer for any of our current or future projects
+              </p>
+            </div>
+            <div
+              class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 bg-black text-white hover:text-gray-800 flex-1 relative cursor-pointer"
+            >
+              <span
+                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                aria-hidden="true"
+              >
+                <ArrowIcon />
+              </span>
+              <h4 class="font-medium text-xl mb-2">Community</h4>
+              <p>
+                Get involved by finding like-minded tech folk on our Discord
+                server
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -59,7 +100,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
       </figure>
     </section>
     <section>
-      <div class="mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative pb-24 z-0">
+      <div
+        class="mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative pb-24 z-0"
+      >
         <SignUpForm />
       </div>
     </section>
