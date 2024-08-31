@@ -1,4 +1,5 @@
 ---
+import SignUpForm from "../structures/SignUpForm.astro";
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
 ---
@@ -59,33 +60,52 @@ import "../styles/base.css";
           >
             <div class="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
               <h1
-                class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl"
+                class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl mb-8"
               >
                 Let's make tech a driving force for Palestinian freedom and
                 liberation
               </h1>
-              <p
-                class="relative mt-6 mb-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+
+              <h2
+                class="text-xl font-bold tracking-tight text-green-800 sm:text-4xl"
               >
-                Technology should disrupt the status quo - not serve it. For
-                decades, the narrative about Palestine has been shaped by
+                Technology should disrupt the status quo — not serve it.
+              </h2>
+              <p
+                class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+              >
+                For decades, the narrative about Palestine has been shaped by
                 selective historical accounts and an occupying force that
-                restricts access to the reality of on the ground. The community
-                at Tech for Palestine is shifting the conversation towards
-                equality and justice, by cultivating a garden of projects and
-                services that shut down genocidal speech, enable people to speak
-                up for Palestinian freedom, scale Palestinian activism with
-                technology, and cultivate fierce advocates for Palestine within
-                the Tech community.
+                restricts access to the reality of on the ground.
+              </p>
+              <p
+                class="relative mt-4 mb-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+              >
+                The community at Tech for Palestine is shifting the conversation
+                towards equality and justice, by cultivating a garden of
+                projects and services that shut down genocidal speech, enable
+                people to speak up for Palestinian freedom, scale Palestinian
+                activism with technology, and cultivate fierce advocates for
+                Palestine within the Tech community.
               </p>
               <a
                 href="/get-involved"
                 class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
               >
                 Get Involved
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                </svg>                       
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+                </svg>
               </a>
             </div>
             <div
@@ -165,15 +185,94 @@ import "../styles/base.css";
     <!-- Content section -->
     <div class="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
       <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+        <div>
+          <h2
+            class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+          >
+            Who we are
+          </h2>
+          <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
+            <div class="lg:w-full lg:max-w-2xl lg:flex-auto">
+              <p class="text-xl leading-8 text-gray-600">
+                Tech for Palestine isn’t a company, an NGO, or an incubator.
+                We’re a loose coalition of tech folks working towards
+                Palestinian freedom by using our tech skills to support our
+                morals.
+              </p>
+              <p class="text-xl leading-8 text-gray-600 mt-3">
+                What started as a collection of community projects has grown
+                into a unified collective of volunteers that mentors, supports,
+                and builds community via tech in support of a free Palestine.
+              </p>
+              <p class="text-xl leading-8 text-gray-600 mt-3">
+                We believe that:
+                <ul class="list-disc mt-3">
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      <span class="font-bold">
+                        We can build a better society, including a sovereign
+                        Palestine
+                      </span>
+                      and a tech industry that enables equal human rights and acts
+                      as a vehicle for positive systemic change.
+                    </p>
+                  </li>
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      <span class="font-bold">
+                        We can leverage technology, processes, and experiences
+                      </span>
+                      to maximize our impact and effect change through our resources,
+                      networks, and expertise.
+                    </p>
+                  </li>
+                </ul>
+              </p>
+            </div>
+            <div>
+              <h3 class="text-xl text-gray-800 font-bold">About Paul Biggar</h3>
+              <p class="text-l text-gray-600 mt-2 leading-snug">
+                Paul is a tech founder and software engineer. He founded Tech
+                For Palestine, <a href="https://circleci.com">CircleCI</a> and
+                <a href="https://darklang.com">Darklang</a>.
+              </p>
+              <p class="text-l text-gray-600 mt-2 leading-snug">
+                Read why <a href="https://blog.paulbiggar.com/i-cant-sleep/"
+                  >Paul couldn't sleep</a
+                > - the post that started Tech for Palestine.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Who we are
+          What we do
         </h2>
         <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
           <div class="lg:w-full lg:max-w-2xl lg:flex-auto">
             <p class="text-xl leading-8 text-gray-600">
-              A loose coalition of 5,000+ founders, engineers, product
-              marketers, community builders, investors, and other tech folks
-              working towards Palestinian freedom.
+              We empower a global community of skilled tech professionals to
+              unite in their unwavering support of Palestine so that we can:
+              <ul class="list-disc mt-3">
+                <li class="ml-9 text-gray-600">
+                  <p class="text-xl leading-8 text-gray-600">
+                    Disrupt conventional narratives
+                  </p>
+                </li>
+                <li class="ml-9 text-gray-600">
+                  <p class="text-xl leading-8 text-gray-600">
+                    Capture systems of power
+                  </p>
+                </li>
+                <li class="ml-9 text-gray-600">
+                  <p class="text-xl leading-8 text-gray-600">
+                    Accelerate pro-Palestinian organizing and public awareness
+                    efforts, both online and off
+                  </p>
+                </li>
+              </ul>
             </p>
           </div>
         </div>
@@ -182,30 +281,115 @@ import "../styles/base.css";
           <h2
             class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
           >
-            What we do
+            What we want
           </h2>
           <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
             <div class="lg:w-full lg:max-w-2xl lg:flex-auto">
               <p class="text-xl leading-8 text-gray-600">
-                To harness a global community of skilled professionals united in
-                their unwavering support of Palestine and the Palestinian
-                diaspora, in order to disrupt conventional narratives, capture
-                systems of power, and accelerate pro-Palestine organizing and
-                public awareness efforts both online and offline.
+                <ul class="list-disc mt-3">
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      <span class="font-bold">
+                        A more ethical tech industry
+                      </span>
+                      that works to abolish the conditions for authoritarianism,
+                      surveillance, occupation, and apartheid in favor of those that
+                      promote justice, equality, and human rights.
+                    </p>
+                  </li>
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      <span class="font-bold">
+                        To draw on decades of pro-Palestinian advocacy
+                      </span>
+                      while building the T4P community. We humbly learn from the
+                      wider community and contribute to it in aim of the main goal
+                      of liberation for Palestine.
+                    </p>
+                  </li>
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      <span class="font-bold"> To be a catalyst </span>
+                      for the reformed tech industry, aimed at abolishing apartheid
+                      and promoting human empowerment and development.
+                    </p>
+                  </li>
+                </ul>
               </p>
             </div>
           </div>
         </div>
+        <br />
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+          <h2
+            class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+          >
+            How we work
+          </h2>
+          <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
+            <div class="lg:w-full lg:max-w-2xl lg:flex-auto">
+              <p class="text-xl leading-8 text-gray-600">
+                <ul class="list-disc mt-3">
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      We connect project leaders to communities of volunteers
+                    </p>
+                  </li>
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      We mentor, provide office hours, and support start-up
+                      projects aimed at ending apartheid, minimizing media bias,
+                      encouraging boycotts, and more
+                    </p>
+                  </li>
+                  <li class="ml-9 text-gray-600">
+                    <p class="text-xl leading-8 text-gray-600">
+                      We create a community of pro-Palestinian techies to get
+                      involved in causes they believe in and help Palestinians
+                      get hired
+                    </p>
+                  </li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+        <br />
+        <a
+          href="/projects"
+          class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
+        >
+          Learn more about our Projects
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+          </svg>
+        </a>
       </div>
-
-      <!-- Image section -->
-      <div class="mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8 pb-24">
-        <img
-          src="/gaza-children-playing-ocean.jpg"
-          alt=""
-          class="aspect-[5/2] w-full object-cover xl:rounded-3xl"
-        />
+      <br />
+      <div
+        class="sm:mt-20 mt-12 mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative pb-24"
+      >
+        <SignUpForm />
       </div>
     </div>
   </main>
+
+  <!-- Image section -->
+  <div class="mt-12 sm:mt-20 xl:mx-auto xl:max-w-7xl xl:px-8 pb-24">
+    <img
+      src="/gaza-children-playing-ocean.jpg"
+      alt=""
+      class="aspect-[5/2] w-full object-cover xl:rounded-3xl"
+    />
+  </div>
 </Layout>
