@@ -1,12 +1,108 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ProjectsList from "../structures/ProjectsList.astro";
-
+import Card from "../components/Card.astro";
 import "../styles/base.css";
+import { getCollection } from "astro:content";
+import DiscordButton from "../structures/DiscordButton.astro";
+
+const projects = await getCollection("projects");
+
+const renderedProjects = await Promise.all(
+  projects.map(async (project) => {
+    const { Content } = await project.render();
+    return { ...project, Content };
+  }),
+);
 ---
 
-<Layout title="Tech For Palestine">
-    <main>
-        <ProjectsList />
-    </main>
+<Layout title="Projects">
+  <main>
+    <div class="relative isolate">
+      <div class="px-6 py-10 sm:py-16 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <h2
+            class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"
+          >
+            We invest in projects that change the world.
+          </h2>
+          <p
+            class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+          >
+            Tech for Palestine isn’t a typical incubator—but we are an allyship,
+            a community, and a source of mentorship that draws on decades of
+            tech entrepreneurship, engineering, and aligned solidarity to build
+            tech that matters.
+          </p>
+          <p
+            class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+          >
+            We take on a limited number of projects to support with our
+            expertise, and are happy to promote other community and affiliated
+            projects that could use some airtime.
+          </p>
+        </div>
+        <div class="flex flex-col md:flex-row gap-4 justify-center mt-7">
+          <a
+            target="_blank"
+            href="/get-involved"
+            class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-red-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
+          >
+            Get Involved
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+            </svg>
+          </a>
+          <DiscordButton>Join Our Discord</DiscordButton>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Content section -->
+  <div class="mx-auto max-w-4xl">
+    <h2
+      class="text-4xl font-bold tracking-tight sm:text-5xl text-center text-green-800"
+    >
+      Tech for Palestine incubator
+    </h2>
+    <p
+      class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+    >
+      What started as community-powered ideas have turned into a systematic
+      non-profit incubator that’s supporting tens of apps, extensions, and tools
+      to put power behind Palestinian freedom.
+    </p>
+    <p
+      class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+    >
+      We accept new projects on a rolling basis as our volunteer capacity
+      allows.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
+      {
+        renderedProjects.map((project) => (
+          <Card>
+            <h3 class="font-bold text-xl text-green-800 mb-4">
+              {project.data.title}
+            </h3>
+            <div class="mb-5">
+              <a href={project.data.url}>{project.data.url}</a>
+            </div>
+            <div class="text-gray-600">
+              <project.Content />
+            </div>
+          </Card>
+        ))
+      }
+    </div>
+  </div>
 </Layout>
