@@ -12,7 +12,7 @@ const notion = new Client({
 
 const acronyms = ["tfp", "vc", "icj", "lp", "emr"];
 
-function capitalizeFirstLetter(string: string) {
+export function capitalizeFirstLetter(string: string) {
   return acronyms.includes(string.toLowerCase())
     ? string.toUpperCase()
     : string.charAt(0).toUpperCase() + string.slice(1);
@@ -38,15 +38,16 @@ const projects: QueryDatabaseResponse = await notion.databases.query({
   },
 });
 
-const project_items = projects.results
-  .map((project: any) => {
-    return {
-      name: project.properties["Project Name"].rich_text[0]?.plain_text,
-      description: project.properties["Elevator Pitch"].rich_text[0]?.plain_text || " ",
-      discord_channel_url: project.properties["Discord Channel"].url,
-      website_url: project.properties["Website URL"].rich_text[0]?.plain_text || " ",
-    };
-  })
+const project_items = projects.results.map((project: any) => {
+  return {
+    name: project.properties["Project Name"].rich_text[0]?.plain_text,
+    description:
+      project.properties["Elevator Pitch"].rich_text[0]?.plain_text || " ",
+    discord_channel_url: project.properties["Discord Channel"].url,
+    website_url:
+      project.properties["Website URL"].rich_text[0]?.plain_text || " ",
+  };
+});
 ---
 
 <section class="py-24 bg-white" id="projects-list">
@@ -62,43 +63,37 @@ const project_items = projects.results
         class="divide-y divide-solid border rounded-md overflow-hidden bg-white shadow-sm"
       >
         {
-          project_items.map(
-            ({
-              name,
-              description,
-              discord_channel_url,
-            }) => (
-              <div class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50">
-                <div class="flex-grow flex gap-4 items-center">
-                  <img
-                    src={
-                      "https://avatars.githubusercontent.com/u/151086389?s=200&v=4"
-                    }
-                    class="w-10 h-10 rounded-lg"
-                  />
-                  <div>
-                    <h3 class="font-semibold">{name}</h3>
-                    <p class="text-ellipsis overflow-hidden text-sm text-zinc-600">
-                      {description.length > 120
-                        ? description.slice(0, 120) + "..."
-                        : description}
-                    </p>
-                  </div>
-                </div>
-                <div class="flex flex-col md:flex-row">
-                  {discord_channel_url && (
-                    <a
-                      class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
-                      href={discord_channel_url}
-                      target="_blank"
-                    >
-                      <img class="h-6" src="/discord.png" />
-                    </a>
-                  )}
+          project_items.map(({ name, description, discord_channel_url }) => (
+            <div class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50">
+              <div class="flex-grow flex gap-4 items-center">
+                <img
+                  src={
+                    "https://avatars.githubusercontent.com/u/151086389?s=200&v=4"
+                  }
+                  class="w-10 h-10 rounded-lg"
+                />
+                <div>
+                  <h3 class="font-semibold">{name}</h3>
+                  <p class="text-ellipsis overflow-hidden text-sm text-zinc-600">
+                    {description.length > 120
+                      ? description.slice(0, 120) + "..."
+                      : description}
+                  </p>
                 </div>
               </div>
-            ),
-          )
+              <div class="flex flex-col md:flex-row">
+                {discord_channel_url && (
+                  <a
+                    class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
+                    href={discord_channel_url}
+                    target="_blank"
+                  >
+                    <img class="h-6" src="/discord.png" />
+                  </a>
+                )}
+              </div>
+            </div>
+          ))
         }
       </div>
     </div>
