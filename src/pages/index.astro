@@ -40,65 +40,53 @@ import ArrowIcon from "../components/ArrowIcon.astro";
           </p>
 
           <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <div
+            <a
+              href="/projects"
               class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 hover:text-gray-800 flex-1 bg-green-800 text-white relative"
             >
-              <a
-                href="/projects"
-                class="no-underline text-inherit cursor-pointer"
+              <span
+                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                aria-hidden="true"
               >
-                <span
-                  class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
-                  aria-hidden="true"
-                >
-                  <ArrowIcon />
-                </span>
-                <h4 class="font-medium text-xl mb-2">Project Incubator</h4>
-              </a>
+                <ArrowIcon />
+              </span>
+              <h4 class="font-medium text-xl mb-2">Project Incubator</h4>
               <p>
                 Submit your project to get mentorship and access to a skilled,
                 supportive tech community
               </p>
-            </div>
-            <div
+            </a>
+            <a
+              href="/get-involved"
               class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 hover:text-gray-800 flex-1 bg-red-800 text-white relative"
             >
-              <a
-                href="/get-involved"
-                class="no-underline text-inherit cursor-pointer"
+              <span
+                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                aria-hidden="true"
               >
-                <span
-                  class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
-                  aria-hidden="true"
-                >
-                  <ArrowIcon />
-                </span>
-                <h4 class="font-medium text-xl mb-2">Volunteer</h4>
-              </a>
+                <ArrowIcon />
+              </span>
+              <h4 class="font-medium text-xl mb-2">Volunteer</h4>
               <p>
                 Apply to volunteer for any of our current or future projects
               </p>
-            </div>
-            <div
+            </a>
+            <a
+              href="https://discord.com/invite/wkgAPFnQ?event=1194405485500170261"
               class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 bg-black text-white hover:text-gray-800 flex-1 relative"
             >
-              <a
-                href="https://discord.com/invite/wkgAPFnQ?event=1194405485500170261"
-                class="no-underline text-inherit cursor-pointer"
+              <span
+                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                aria-hidden="true"
               >
-                <span
-                  class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
-                  aria-hidden="true"
-                >
-                  <ArrowIcon />
-                </span>
-                <h4 class="font-medium text-xl mb-2">Community</h4>
-              </a>
+                <ArrowIcon />
+              </span>
+              <h4 class="font-medium text-xl mb-2">Community</h4>
               <p>
                 Get involved by finding like-minded tech folk on our Discord
                 server
               </p>
-            </div>
+            </a>
           </div>
         </div>
       </div>
