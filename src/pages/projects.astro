@@ -88,24 +88,34 @@ const renderedProjects = await Promise.all(
       allows.
     </p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
-      {
-        renderedProjects.map((project) => (
-          <Card>
-            <h3 class="font-bold text-xl text-green-800 mb-4">
-              {project.data.title}
-            </h3>
+    {
+      renderedProjects.map((project) => (
+        <Card>
+          <h3 class="font-bold text-xl text-green-800 mb-4">
+            {project.data.title}
+          </h3>
+          
+          {/* Conditionally render the URL link if it exists */}
+          {project.data.url && (
             <div class="mb-5">
-              <a href={project.data.url}>{project.data.url}</a>
+              <a href={project.data.url}>Website</a>
             </div>
+          )}
+          
+          {/* Conditionally render the Channel link if it exists */}
+          {project.data.channel && (
             <div class="mb-5">
-              <a href={project.data.channel}>{project.data.channel}</a>
+              <a href={project.data.channel}>Discord Channel</a>
             </div>
-            <div class="text-gray-600">
-              <project.Content />
-            </div>
-          </Card>
-        ))
-      }
+          )}
+          
+          <div class="text-gray-600">
+            <project.Content />
+          </div>
+        </Card>
+      ))
+    }
+
     </div>
   </div>
 </Layout>
