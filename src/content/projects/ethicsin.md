@@ -1,5 +1,6 @@
 ---
 title: "EthicsIn"
+channel: "https://discord.com/channels/1186702814341234740/1272587460353855558"
 ---
 
 Launching an ethical recruitment platform to connect talented professionals

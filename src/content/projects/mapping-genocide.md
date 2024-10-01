@@ -1,6 +1,7 @@
 ---
 title: "Mapping Genocide"
 url: "https://mappinggenocide.com"
+channel: "https://discord.com/channels/1186702814341234740/1267105537162608650"
 ---
 
 The Mapping Genocide Project is a radical digital tool to provide transparency,

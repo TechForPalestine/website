@@ -1,5 +1,6 @@
 ---
 title: "Sardiya"
+channel: "https://discord.com/channels/1186702814341234740/1267105692649783357"
 ---
 
 Sardiya is an open-source chrome plugin to enhance the online browsing

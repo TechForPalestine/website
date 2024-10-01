@@ -1,6 +1,7 @@
 ---
 title: "Boycat"
 url: "https://www.boycat.io/"
+channel: "https://discord.com/channels/1186702814341234740/1207416694260236390"
 ---
 
 Boycotting made simple.

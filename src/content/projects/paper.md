@@ -1,5 +1,6 @@
 ---
 title: "Paper"
+channel: "https://discord.com/channels/1186702814341234740/1267668300062658570"
 ---
 
 Having worked in Financial Services, I believe there is a lot to be done to be

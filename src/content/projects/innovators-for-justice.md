@@ -1,6 +1,7 @@
 ---
 title: "Social Innovators for Justice"
 url: "https://si4j.wordpress.com/"
+channel: "https://discord.com/channels/1186702814341234740/1267105723062423552"
 ---
 
 A platform to submit evidence anonymously regarding institutional and corporate
