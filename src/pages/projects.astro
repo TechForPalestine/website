@@ -90,7 +90,13 @@ const renderedProjects = await Promise.all(
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
     {
       renderedProjects.map((project) => (
-        <Card>
+        <Card style={{
+      borderTop: "3px solid black",   /* Black border on top */
+      borderBottom: "3px solid green",  /* Red border on bottom */
+      borderLeft: "3px solid red",  /* Green border on left */
+      borderRight: "none",            /* No border on right */
+      padding: "1rem"                 /* Optional padding for spacing */
+    }}>
           <h3 class="font-bold text-xl text-green-800 mb-4">
             {project.data.title}
           </h3>
