@@ -97,6 +97,9 @@ const renderedProjects = await Promise.all(
             <div class="mb-5">
               <a href={project.data.url}>{project.data.url}</a>
             </div>
+            <div class="mb-5">
+              <a href={project.data.channel}>{project.data.channel}</a>
+            </div>
             <div class="text-gray-600">
               <project.Content />
             </div>
