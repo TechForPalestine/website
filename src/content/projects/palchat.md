@@ -1,5 +1,5 @@
 ---
-title: "pal-chat"
+title: "Pal-Chat"
 url: "https://pal-chat.net/"
 channel: "https://discord.com/channels/1186702814341234740/1202256434507816990"
 ---
