@@ -6,6 +6,7 @@ const projectsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     url: z.string().optional(),
+    channel: z.string().optional(),
   }),
 });
 
