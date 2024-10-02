@@ -95,19 +95,18 @@ const renderedProjects = await Promise.all(
             {project.data.title}
           </h3>
           
-          {/* Conditionally render the URL link if it exists */}
-          {project.data.url && (
-            <div class="mb-1">
+    {/* Conditionally render the links if at least one exists */}
+        {(project.data.url || project.data.channel) && (
+          <div class="mb-4 text-sm">
+            {project.data.url && (
               <a href={project.data.url}>Website</a>
-            </div>
-          )}
-          
-          {/* Conditionally render the Channel link if it exists */}
-          {project.data.channel && (
-            <div class="mb-5">
+            )}
+            {project.data.url && project.data.channel && ' | '}
+            {project.data.channel && (
               <a href={project.data.channel}>Discord Channel</a>
-            </div>
-          )}
+            )}
+          </div>
+        )}
           
           <div class="text-gray-600">
             <project.Content />
