@@ -97,7 +97,7 @@ const renderedProjects = await Promise.all(
           
     {/* Conditionally render the links if at least one exists */}
         {(project.data.url || project.data.channel) && (
-          <div class="mb-1 text-sm">
+          <div class="mb-4 text-sm">
             {project.data.url && (
               <a href={project.data.url}>Website</a>
             )}
