@@ -23,7 +23,8 @@ const renderedProjects = await Promise.all(
             class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"
           >
             <span class="text-base sm:text-3xl">Tech for Palestine</span><br />
-            <span class="text-4xl sm:text-6xl">Incubator Projects</span>
+            <span class="text-4xl sm:text-6xl">Incubator Projects</span><br />
+            <span class="text-base sm:text-2xl"><a href="/incubator">What is the incubator?</a></span>
           </h2>
           <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-2 bg-gray-700"/>
         </div>
@@ -59,7 +60,34 @@ const renderedProjects = await Promise.all(
         </Card>
       ))
     }
-
     </div>
   </div>
+  <!-- Call to Action -->
+  <div class="mt-16 mb-8 relative">
+    <!-- Divider Line -->
+    <div class="absolute inset-0 flex justify-center items-center">
+      <div class="w-full border-t border-gray-300"></div>
+    </div>
+    
+    <!-- CTA Button -->
+    <div class="relative flex justify-center">
+      <a
+        href="https://techforpalestine.org/project-application-form"
+        target="_blank"
+        class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 transform hover:scale-105 ease-in-out z-10 text-lg sm:text-xl md:text-2xl"
+          >
+            Apply to the T4P Incubator Today!
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 ml-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
 </Layout>
