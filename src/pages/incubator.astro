@@ -3,274 +3,614 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
 import DiscordButton from "../structures/DiscordButton.astro";
 ---
-
+        
 <Layout title="Incubator">
   <main>
     <div class="relative isolate">
       <div class="px-6 py-10 sm:py-16 lg:px-8">
         <div class="mx-auto max-w-4xl">
-          <h2
-            class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"
-          >
-            <span class="text-base sm:text-3xl">Welcome to the</span><br />
-            <span class="text-4xl sm:text-6xl">Tech for Palestine Incubator</span>
-          </h2>
-          <p class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-            The Tech for Palestine incubator isn’t typical — it is an allyship,
-            a community, and a source of mentorship that draws on decades of
-            tech entrepreneurship, engineering, and aligned solidarity to build
-            tech that matters.
+          <h1 class="mt-2 text-4xl sm:text-6xl font-extrabold tracking-tight text-gray-900 text-center">
+            Welcome to the <br class="hidden sm:block" />
+            <span class="text-green-800">Tech for Palestine Incubator</span>
+          </h1>
+          <p class="mt-6 text-lg leading-8 text-gray-600 text-center">
+            The Tech for Palestine incubator isn’t typical — it is an allyship, a community, and a source of mentorship that draws on decades of tech entrepreneurship, engineering, and aligned solidarity to build tech that matters.
           </p>
-          <p class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-            We take on a limited number of projects to support with our
-            expertise, and are happy to promote other community and affiliated
-            projects that could use some airtime.
+          <p class="mt-4 text-lg leading-8 text-gray-600 text-center">
+            We take on a limited number of projects to support with our expertise and are happy to promote other community and affiliated projects that could use some airtime.
           </p>
         </div>
-        <div class="flex flex-col md:flex-row gap-4 justify-center mt-7">
+        <!-- Button Container -->
+        <div class="flex flex-col md:flex-row gap-4 justify-center mt-8">
+          <!-- Projects Button -->
           <a
             target="_blank"
             href="/projects"
-            class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-green-800 hover:bg-red-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
+            class="inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-green-800 hover:bg-green-900 text-white font-semibold py-2 px-4 shadow-sm w-40"
           >
-            Projects
+            Explore Projects
+            <!-- Chevron Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              stroke-width="2"
               stroke="currentColor"
-              class="w-6 h-6"
+              class="w-5 h-5 ml-2"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-              ></path>
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
             </svg>
           </a>
+          
+          <!-- Get Involved Button -->
           <a
             target="_blank"
             href="/get-involved"
-            class="inline-flex items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-red-800 hover:bg-green-900 px-3 h-10 text-base font-medium text-white focus:outline-none"
+            class="inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-red-800 hover:bg-red-900 text-white font-semibold py-2 px-4 shadow-sm w-40"
           >
             Get Involved
+            <!-- Chevron Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              stroke-width="2"
               stroke="currentColor"
-              class="w-6 h-6"
+              class="w-5 h-5 ml-2"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-              ></path>
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
             </svg>
           </a>
-          <DiscordButton>Join Our Discord</DiscordButton>
+          
+          <!-- Join Discord Button -->
+          <a
+            target="_blank"
+            href="/discord-invite"
+            class="inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-blue-800 hover:bg-blue-900 text-white font-semibold py-2 px-4 shadow-sm w-40"
+          >
+            Join Discord
+            <!-- Chevron Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5 ml-2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </div>
   </main>
-  <!-- Content section -->
-  <div class="mx-auto max-w-4xl">
-    <p
-      class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
-    >
-      By joining, you will get:
-    </p>
-    <ul class="list-disc list-inside mt-4 text-lg leading-8 text-gray-600">
-      <li>
-        Be part of a community and work with others doing similar activities
-      </li>
-      <li>
-        To join an “office hours” call 3x a week (optional) with other leaders
-        and management
-        <ul class="list-disc list-inside ml-6">
-          <li>Excellent for motivation and sharing learnings</li>
-          <li>Discuss challenges</li>
-          <li>Meet other project leaders</li>
-          <li>Get resources and advice from T4P management</li>
-          <li>Optional, stop in when you like</li>
-        </ul>
-      </li>
-      <li>
-        Membership of a Discord server with other dedicated project leaders
-      </li>
-      <li>
-        Significant help from the T4P team
-        <ul class="list-disc list-inside ml-6">
-          <li>Help refining your vision to have high impact</li>
-          <li>Access to our volunteer DB (2000 people and growing)</li>
-          <li>
-            (Optional) an experienced mentor, usually an experienced startup
-            founder
-          </li>
-          <li>
-            Marketing support
-            <ul class="list-disc list-inside ml-6">
-              <li>Launch coordination</li>
-              <li>User discovery tweets or similar</li>
-              <li>Listing on the T4P website</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li>
-        In some cases the ability to brand as T4P (e.g., a T4P email address or
-        use the logo or call yourself sponsored) — determined on a case-by-case
-        basis
-      </li>
-    </ul>
-    <p
-      class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
-    >
-      If you choose to be part of this, we expect:
-    </p>
-    <ul class="list-disc list-inside mt-4 text-lg leading-8 text-gray-600">
-      <li>
-        That you are attempting to make your project high impact (for example,
-        getting to ten million users; obviously success metrics will depend on
-        the project)
-      </li>
-      <li>
-        Keep us updated — at the moment this means at least attending one “office
-        hours” each week or posting a weekly status update in the “Project
-        Leaders” channel
-        <ul class="list-disc list-inside ml-6">
-          <li>
-            <a
-              href="https://www.notion.so/Weekly-Updates-Share-out-Sample-dfa6c71eb0dd47918f18520a41d409a1?pvs=21"
-              target="_blank"
+
+  <!-- Content Sections -->
+  <div class="mx-auto max-w-4xl px-6 lg:px-8">
+    <!-- Benefits Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">By Joining, You Will Get:</h2>
+      <div class="mt-6 space-y-6">
+        <!-- Benefit Item -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <!-- Chevron Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
             >
-              Weekly Updates/Share-out Sample
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        You to hang out a bit in the community, be a resource, ask questions,
-        etc
-      </li>
-      <li>
-        You to understand if it no longer fits or isn’t working, we may remove
-        membership. We hope it won’t cause hard feelings if that happens
-      </li>
-    </ul>
-    <p
-      class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
-    >
-      What we don’t require / expect:
-    </p>
-    <ul class="list-disc list-inside mt-4 text-lg leading-8 text-gray-600">
-      <li>Being in the meeting every day or even every week</li>
-      <li>That your project be an “official” or T4P branded project</li>
-      <li>
-        Using T4P channels / infra for running projects
-        <ul class="list-disc list-inside ml-6">
-          <li>
-            Please feel free to continue using whatever community, project
-            management software, tooling, infra, etc, works for you
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <h2
-      class="text-3xl font-bold tracking-tight sm:text-4xl text-green-800 mt-8"
-    >
-      To Join
-    </h2>
-    <ul class="list-disc list-inside mt-4 text-lg leading-8 text-gray-600">
-      <li>
-        If you have a project you are leading:
-        <ul class="list-disc list-inside ml-6">
-          <li>
-            <a
-              href="https://techforpalestine.org/project-application-form"
-              target="_blank"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Be part of a community and collaborate with others engaged in similar activities.</p>
+          </div>
+        </div>
+
+        <!-- Additional Benefit Items (Repeat the above block with different content) -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
             >
-              Apply to join with your project
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        If you would like to lead a project but don’t know what project to lead
-        <ul class="list-disc list-inside ml-6">
-          <li>
-            Apply to be a
-            <a
-              href="https://techforpalestine.org/project-leader-form"
-              target="_blank"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Join "office hours" calls three times a week with other leaders and management for motivation, sharing learnings, discussing challenges, meeting project leaders, and accessing resources and advice from T4P management.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
             >
-              project leader
-            </a>
-            Here’s a
-            <a
-              href="https://techforpalestine.org/incubator/ideas"
-              target="_blank"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Access a Discord server with other dedicated project leaders.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
             >
-              list of projects we’d love to get started
-            </a>
-            !
-          </li>
-        </ul>
-      </li>
-      <li>
-        If you don’t want to lead a project
-        <ul class="list-disc list-inside ml-6">
-          <li>
-            Fill in the
-            <a
-              href="https://techforpalestine.org/volunteer-form"
-              target="_blank"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Receive significant help from the T4P team, including refining your vision, access to our volunteer database, mentorship, and marketing support such as launch coordination and social media promotion.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
             >
-              volunteer application form
-            </a>
-            to get connected to a project
-          </li>
-        </ul>
-      </li>
-      <li>If you have already applied, we’ll be in touch</li>
-    </ul>
-    <h2
-      class="text-3xl font-bold tracking-tight sm:text-4xl text-green-800 mt-8"
-    >
-      What’s next?
-    </h2>
-    <ul class="list-disc list-inside mt-4 text-lg leading-8 text-gray-600">
-      <li>We will do an interview</li>
-      <li>
-        If admitted, you’ll get notified and given access to the private
-        channels
-        <ul class="list-disc list-inside ml-6">
-          <li>Say hi, introduce yourself</li>
-          <li>
-            Come to 11:30am EST meeting(s) on Tuesday, Thursdays and Saturdays
-            <ul class="list-disc list-inside ml-6">
-              <li>
-                This is great for being part of a community of like-minded folks
-                and meeting people and getting resources and advice
-              </li>
-            </ul>
-          </li>
-          <li>
-            In the meeting or channel you can ask us for:
-            <ul class="list-disc list-inside ml-6">
-              <li>A mentor</li>
-              <li>Volunteers</li>
-              <li>
-                Help getting early users using our social media channels, our
-                community
-              </li>
-              <li>Launches on social media</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Ability to brand as T4P in certain cases, such as using a T4P email address, logo, or calling yourself sponsored.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expectations Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">If You Choose to Be Part of This, We Expect:</h2>
+      <div class="mt-6 space-y-6">
+        <!-- Expectation Item -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <!-- Chevron Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="green"
+              class="w-6 h-6 text-red-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Ensure your project aims for high impact, such as reaching ten million users, with success metrics tailored to your specific project.</p>
+          </div>
+        </div>
+
+        <!-- Additional Expectation Items -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="green"
+              class="w-6 h-6 text-red-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Keep us updated by attending at least one “office hours” call each week or posting a weekly status update in the “Project Leaders” channel.</p>
+            <a href="https://www.notion.so/Weekly-Updates-Share-out-Sample-dfa6c71eb0dd47918f18520a41d409a1?pvs=21" target="_blank" class="text-blue-600 hover:underline mt-2 block">Weekly Updates/Share-out Sample</a>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="green"
+              class="w-6 h-6 text-red-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Engage with the community by being a resource, asking questions, and contributing to discussions.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="green"
+              class="w-6 h-6 text-red-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Understand that if the incubator no longer fits your needs or isn’t working, your membership may be removed without hard feelings.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What We Don’t Require Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What We Don’t Require / Expect:</h2>
+      <div class="mt-6 space-y-6">
+        <!-- What Not Required Item -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <!-- Chevron Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="red"
+              class="w-6 h-6 text-gray-500"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>   
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Daily or weekly meeting attendance.</p>
+          </div>
+        </div>
+
+        <!-- Additional What Not Required Items -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="red"
+              class="w-6 h-6 text-gray-500"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>   
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Official or T4P-branded project status.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="red"
+              class="w-6 h-6 text-gray-500"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>   
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Use of T4P channels or infrastructure for running projects.</p>
+            <p class="text-lg text-gray-700 mt-2">Feel free to continue using any community, project management software, tooling, or infrastructure that works best for you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- To Join Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">To Join</h2>
+      <div class="mt-6 space-y-6">
+        <!-- To Join Item -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <!-- Chevron Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-blue-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If you have a project you are leading:</p>
+            <a href="https://techforpalestine.org/project-application-form" target="_blank" class="text-blue-600 hover:underline ml-8 mt-2 block">Apply to join with your project</a>
+          </div>
+        </div>
+
+        <!-- Additional To Join Items -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-blue-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If you would like to lead a project but don’t know what project to lead:</p>
+            <div class="ml-8 mt-2 space-y-2">
+              <p class="text-lg text-gray-700">
+                Apply to be a 
+                <a href="https://techforpalestine.org/project-leader-form" target="_blank" class="text-blue-600 hover:underline">project leader</a>.
+                Here’s a 
+                <a href="https://techforpalestine.org/incubator/ideas" target="_blank" class="text-blue-600 hover:underline">list of projects we’d love to get started</a>!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-blue-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If you don’t want to lead a project:</p>
+            <a href="https://techforpalestine.org/volunteer-form" target="_blank" class="text-blue-600 hover:underline ml-8 mt-2 block">Fill in the volunteer application form to get connected to a project</a>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-blue-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If you have already applied, we’ll be in touch.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What’s Next Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What’s Next?</h2>
+      <div class="mt-6 space-y-6">
+        <!-- What’s Next Item -->
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <!-- Chevron Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-yellow-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">We will conduct an interview to understand your project and goals better.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-yellow-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>            
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If admitted, you’ll receive notification and access to private channels.</p>
+            <div class="ml-8 mt-2 space-y-2">
+              <p class="text-lg text-gray-700">Say hi and introduce yourself to the community.</p>
+              <p class="text-lg text-gray-700">Attend our 11:30am EST meetings on Tuesdays, Thursdays, and Saturdays to engage with the community and receive resources and advice.</p>
+              <p class="text-lg text-gray-700">In meetings or channels, you can request:</p>
+              <div class="ml-8 mt-2 space-y-2">
+                <p class="text-lg text-gray-700">• A mentor</p>
+                <p class="text-lg text-gray-700">• Volunteers</p>
+                <p class="text-lg text-gray-700">• Help with acquiring early users through our social media channels and community</p>
+                <p class="text-lg text-gray-700">• Launches on social media</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="mt-16 mb-8 relative">
+    <!-- Divider Line -->
+    <div class="absolute inset-0 flex justify-center items-center">
+      <div class="w-full border-t border-gray-300"></div>
+    </div>
+    
+    <!-- CTA Button -->
+    <div class="relative flex justify-center">
+      <a
+        href="https://techforpalestine.org/project-application-form"
+        target="_blank"
+        class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 transform hover:scale-105 ease-in-out z-10 text-lg sm:text-xl md:text-2xl"
+      >
+        Apply to the T4P Incubator Today!
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 ml-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
   </div>
 </Layout>

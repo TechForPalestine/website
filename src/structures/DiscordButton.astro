@@ -1,29 +1,32 @@
 ---
-const { href = "https://techforpalestine.org/discord-invite" } = Astro.props;
+const { href = "https://techforpalestine.org/discord-invite", children, class: additionalClass = '' } = Astro.props;
 import ToolTip from "../components/ToolTip.astro";
 ---
-
+    
 <ToolTip
-  text="If you face any issues, try signing out of discord then try again."
+  text="If you face any issues, try signing out of Discord then try again."
 >
   <a
     target="_blank"
     href={href}
-    class="inline-flex w-full items-center gap-2 justify-center whitespace-nowrap transition-colors rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 hover:text-gray-800 font-semibold py-2 px-4 rounded-md shadow-sm"
+    class={`inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-blue-600 text-white hover:bg-blue-700 font-semibold py-2 px-4 shadow-sm w-40 ${additionalClass}`}
   >
-    <slot />
+    {children}
+    <!-- Chevron Icon -->
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      stroke-width="1.5"
+      stroke-width="2"
       stroke="currentColor"
-      class="w-6 h-6"
+      class="w-5 h-5 ml-2"
+      aria-hidden="true"
     >
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
-        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+      />
     </svg>
   </a>
 </ToolTip>
