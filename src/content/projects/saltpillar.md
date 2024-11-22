@@ -1,5 +1,5 @@
 ---
-title: "Pillar of Salt"
+title: "Saltpillar"
 url: "https://pillarofsalt.net"
 channel: "https://discord.com/channels/1186702814341234740/1303329506924302429"
 ---
