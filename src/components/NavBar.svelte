@@ -32,6 +32,11 @@
       <div class={toggleFlag ? "max-md:block" : "max-md:hidden"}>
         <slot name="socials" />
       </div>
+      <div>
+        <a href="/donate" class="bg-green-800 hover:bg-green-900 text-white font-semibold py-2 px-4 rounded-md">
+          Donate
+        </a>
+      </div>
     </nav>
     <button
       class=" hover:cursor-pointer md:hidden max-md:self-start max-md:pt-2"
