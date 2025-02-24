@@ -41,6 +41,13 @@ export default function RHFTextField({ name, label, helperText, type, rules, ...
                     }}
                     error={!!error}
                     helperText={error ? error?.message : helperText}
+                    sx={{
+                        backgroundColor: 'white', // ✅ Set background to white
+                        borderRadius: '8px', // Optional: Rounded corners
+                        '& .MuiInputBase-input': {
+                            backgroundColor: 'white', // Ensure input itself is white
+                        },
+                    }}
                     {...other}
                 />
             )}
