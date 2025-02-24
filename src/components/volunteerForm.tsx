@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState, useMemo } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { Backdrop, CircularProgress, Grid, Typography, Button, Box, Stack, Alert, Divider } from '@mui/material';
-import { RenderFormFields } from '../components/inputs-mapping';
-import FormProvider from '../components/hook-form';
+import { RenderFormFields } from './inputs-mapping';
+import FormProvider from './hook-form/index';
 import { transformObject } from '../utils/helpers';
 import { fetchFormFields, submitForm } from '../store/api';
 
@@ -82,7 +82,6 @@ const VolunteerForm = () => {
 
     // const tableFields = useMemo(() => fields.filter((field) => field.fieldtype === 'Table'), [fields]);
 
-    console.log(structuredSections ,"structuredSections")
     return (
         <Box sx={{p:10}}>
             {/* Header Section */}
