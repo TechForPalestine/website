@@ -2,12 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import "../styles/base.css";
-import { fetchFormFields } from "../store/api"; // Import API function
-import { Icon } from "astro-icon/components"; // Import Astro Icon component
+import { fetchFormFields } from "../store/api";
+import { Icon } from "astro-icon/components";
 
-const apiUrl = "/incubator_management.api.incubator.projects_details?status=Onboarded"; // Replace with actual API endpoint
-const apiResponse = await fetchFormFields(apiUrl); // Fetch projects from API
-const projects = apiResponse.data || []; // Fallback to empty array if undefined
+let projects = [];
+
+try {
+    const apiUrl = "/incubator_management.api.incubator.projects_details?status=Onboarded";
+    const apiResponse = await fetchFormFields(apiUrl);
+    projects = apiResponse.data || [];
+} catch (error) {
+    console.error("Error fetching projects:", error);
+}
 ---
 
     <Layout title="Projects">
@@ -15,12 +21,12 @@ const projects = apiResponse.data || []; // Fallback to empty array if undefined
             <div class="relative isolate">
                 <div class="px-6 py-10 sm:py-16 lg:px-8">
                     <div class="mx-auto max-w-4xl">
-                        <h2
-                            class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"
-                        >
+                        <h2 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center">
                             <span class="text-base sm:text-3xl">Tech for Palestine</span><br />
                             <span class="text-4xl sm:text-6xl">Incubator Projects</span><br />
-                            <span class="text-base sm:text-2xl"><a href="/incubator">What is the incubator?</a></span>
+                            <span class="text-base sm:text-2xl">
+                            <a href="/incubator">What is the incubator?</a>
+                        </span>
                         </h2>
                         <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-2 bg-gray-700"/>
                     </div>
@@ -31,7 +37,7 @@ const projects = apiResponse.data || []; // Fallback to empty array if undefined
         <!-- Content section -->
         <div class="mx-auto max-w-4xl">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
-                {projects.map((project:any) => (
+                {projects.map((project: any) => (
                     <Card>
                         <h3 class="font-bold text-xl text-green-800 mb-4">
                             {project.project_name}
@@ -41,7 +47,7 @@ const projects = apiResponse.data || []; // Fallback to empty array if undefined
                         {(project.website || project.discord_channel) && (
                             <div class="mb-4 text-sm flex items-center gap-4">
                                 {project.website && (
-                                    <a href={project.website} target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                    <a href={project.website} target="_blank" rel="noopener noreferrer">
                                         <Icon name="ic:baseline-language" class="h-6 w-6 text-black" />
                                     </a>
                                 )}
