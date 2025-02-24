@@ -32,7 +32,7 @@ const projects = apiResponse.data || []; // Fallback to empty array if undefined
       <div class="mx-auto max-w-4xl">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
           {
-            projects.map((project) => (
+            projects.map((project:any) => (
                 <Card>
                   <h3 class="font-bold text-xl text-green-800 mb-4">
                     {project.project_name}

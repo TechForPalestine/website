@@ -8,11 +8,9 @@ import { fetchFormFields, submitForm } from '../store/api';
 
 export const defaultValues = {};
 
-type Props = {
-    debug: boolean;
-};
 
-const ProjectForm = ({ debug }: Props) => {
+
+const ProjectForm = () => {
     const methods = useForm({ defaultValues, mode: 'onSubmit' });
 
     const { control, handleSubmit, formState: { isSubmitting, errors }, setError } = methods;
