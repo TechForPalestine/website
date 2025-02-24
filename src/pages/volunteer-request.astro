@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+
+import VolunteerRequestForm from "../components/volunteerRequestForm.tsx";
+---
+    <Layout title="Volunteer">
+
+    <VolunteerRequestForm client:only="react"/>
+    </Layout>

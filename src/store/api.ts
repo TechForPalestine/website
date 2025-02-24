@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   baseURL: API_URL, // Set the base URL here
   headers: {
     'Content-Type': 'application/json',
-    Authorization: 'token bf60d1f18ef8fb3:ce7ce244943730c',
+    Authorization: 'token 3b60481b357cb7f:25dc8b19560ca4d',
   },
 });
 
