@@ -2,92 +2,88 @@
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import "../styles/base.css";
-import { getCollection } from "astro:content";
+import { fetchFormFields } from "../store/api"; // Import your API function
 
-const projects = await getCollection("projects");
+const apiUrl = "/incubator_management.api.incubator.projects_details?status=Onboarded"; // Replace with the actual API endpoint
+const apiResponse = await fetchFormFields(apiUrl); // Fetch projects from API
+const projects = apiResponse.data || []; // Fallback to empty array if undefined
 
-const renderedProjects = await Promise.all(
-  projects.map(async (project) => {
-    const { Content } = await project.render();
-    return { ...project, Content };
-  }),
-);
 ---
 
-<Layout title="Projects">
-  <main>
-    <div class="relative isolate">
-      <div class="px-6 py-10 sm:py-16 lg:px-8">
-        <div class="mx-auto max-w-4xl">
-          <h2
-            class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"
-          >
-            <span class="text-base sm:text-3xl">Tech for Palestine</span><br />
-            <span class="text-4xl sm:text-6xl">Incubator Projects</span><br />
-            <span class="text-base sm:text-2xl"><a href="/incubator">What is the incubator?</a></span>
-          </h2>
-          <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-2 bg-gray-700"/>
+    <Layout title="Projects">
+      <main>
+        <div class="relative isolate">
+          <div class="px-6 py-10 sm:py-16 lg:px-8">
+            <div class="mx-auto max-w-4xl">
+              <h2
+                  class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"
+              >
+                <span class="text-base sm:text-3xl">Tech for Palestine</span><br />
+                <span class="text-4xl sm:text-6xl">Incubator Projects</span><br />
+                <span class="text-base sm:text-2xl"><a href="/incubator">What is the incubator?</a></span>
+              </h2>
+              <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-2 bg-gray-700"/>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Content section -->
+      <div class="mx-auto max-w-4xl">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
+          {
+            projects.map((project) => (
+                <Card>
+                  <h3 class="font-bold text-xl text-green-800 mb-4">
+                    {project.project_name}
+                  </h3>
+
+                  {/* Conditionally render the links if at least one exists */}
+                  {(project.website || project. discord_channel) && (
+                      <div class="mb-4 text-sm">
+                        {project.website && (
+                            <a href={project.website}>Website</a>
+                        )}
+                        {project.website && project. discord_channel && ' | '}
+                        {project. discord_channel && (
+                            <a href={project. discord_channel}>Discord  discord_channel</a>
+                        )}
+                      </div>
+                  )}
+
+                  <div class="text-gray-600">
+                    {project.elevator_pitch}  {/* Assuming API returns a description */}
+                  </div>
+                </Card>
+            ))
+          }
         </div>
       </div>
-    </div>
-  </main>
-  <!-- Content section -->
-  <div class="mx-auto max-w-4xl">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
-    {
-      renderedProjects.map((project) => (
-        <Card>
-          <h3 class="font-bold text-xl text-green-800 mb-4">
-            {project.data.title}
-          </h3>
-          
-    {/* Conditionally render the links if at least one exists */}
-        {(project.data.url || project.data.channel) && (
-          <div class="mb-4 text-sm">
-            {project.data.url && (
-              <a href={project.data.url}>Website</a>
-            )}
-            {project.data.url && project.data.channel && ' | '}
-            {project.data.channel && (
-              <a href={project.data.channel}>Discord Channel</a>
-            )}
-          </div>
-        )}
-          
-          <div class="text-gray-600">
-            <project.Content />
-          </div>
-        </Card>
-      ))
-    }
-    </div>
-  </div>
-  <!-- Call to Action -->
-  <div class="mt-16 mb-8 relative">
-    <!-- Divider Line -->
-    <div class="absolute inset-0 flex justify-center items-center">
-      <div class="w-full border-t border-gray-300"></div>
-    </div>
-    
-    <!-- CTA Button -->
-    <div class="relative flex justify-center">
-      <a
-        href="https://techforpalestine.org/project-application-form"
-        target="_blank"
-        class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 transform hover:scale-105 ease-in-out z-10 text-lg sm:text-xl md:text-2xl"
+
+      <!-- Call to Action -->
+      <div class="mt-16 mb-8 relative">
+        <div class="absolute inset-0 flex justify-center items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+
+        <div class="relative flex justify-center">
+          <a
+              href="/project-apply"
+              target="_blank"
+              class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 transform hover:scale-105 ease-in-out z-10 text-lg sm:text-xl md:text-2xl"
           >
             Apply to the T4P Incubator Today!
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5 ml-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 ml-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
             >
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
         </div>
       </div>
-</Layout>
+    </Layout>
