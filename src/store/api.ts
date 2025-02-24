@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 });
 
 // ✅ Fetch form fields from API
-export const fetchFormFields = async (url) => {
+export const fetchFormFields = async (url:any) => {
   try {
     const response = await axiosInstance.get(url); // Endpoint relative to the base URL
     return response.data;
