@@ -102,7 +102,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
         case 'Data':
         case 'Text':
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFTextField
                         name={fieldName} // Use computed fieldName
                         label={field.label}
@@ -112,7 +112,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
             );
         case 'Small Text':
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFTextField
                         multiline={true}
                         rows={4}
@@ -124,7 +124,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
             );
         case 'Select':
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFSelect
                         name={fieldName} // Use computed fieldName
                         label={field.label}
@@ -142,7 +142,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
             );
         case 'Check':
             return (
-                <Block>
+                <Block description={field.description}>
                     <FormControlLabel
                         control={<Checkbox name={fieldName} />}
                         label={field.label}
@@ -153,7 +153,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
             let key = field.table_fields[0].fieldname;
 
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFMultiSelect
                         chip
                         checkbox
@@ -168,14 +168,14 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
 
         case 'Attach':
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFFileUpload name={fieldName} label={field.label} />
                 </Block>
             );
 
         case 'Table':
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFTableSection
                         label={field.label}
                         name={fieldName} // Use computed fieldName
@@ -186,7 +186,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
 
         case 'Link':
             return (
-                <Block label={field.label}>
+                <Block label={field.label} description={field.description}>
                     <RHFSelect
                         name={fieldName}
                         label={field.label}
@@ -226,10 +226,11 @@ interface BlockProps extends StackProps {
     children: React.ReactNode;
 }
 
-function Block({ label = 'RHFTextField', sx, children }: BlockProps) {
+function Block({ label = 'RHFTextField', sx, children,description }: BlockProps) {
     return (
         <Stack spacing={1} sx={{  mb: 2 , width: 1, ...sx }} >
             {children}
+            <Typography variant={'caption'} sx={{color:"gray"}}>{description}</Typography>
         </Stack>
     );
 }

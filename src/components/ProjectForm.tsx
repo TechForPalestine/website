@@ -72,24 +72,69 @@ const ProjectForm = () => {
     }
 
     return (
-        <Box sx={{p:10}}>
-            <Box>
-                <Typography variant="h2" align="center">
-                    Apply for Project
+        <Box sx={{ p: 10 }}>
+            {/* Header Section */}
+            <Box sx={{ textAlign: "center" }}>
+                <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                    Build a Project with Us
+                </Typography>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        mx: "auto",
+                        p: 3,
+                        fontSize: "1.1rem",
+                        lineHeight: 1.8,
+                    }}
+                >
+                    Thank you very much for your interest in building a project in the{" "}
+                    <Typography component="span" sx={{ fontWeight: "bold", color: "green" }}>
+                        Tech For Palestine
+                    </Typography>{" "}
+                    incubator. Please be sure to provide as much information as possible to help us better understand what you are
+                    building. We look forward to working with you for a{" "}
+                    <Typography component="span" sx={{ fontWeight: "bold", color: "red" }}>
+                        free Palestine!
+                    </Typography>
+                    <br />
+                    <br />
+                    More{" "}
+                    <a href="/incubator" target="_blank" rel="noopener noreferrer">
+                        details about the incubator
+                    </a>{" "}
+                    and some{" "}
+                    <a href="/ideas" target="_blank" rel="noopener noreferrer">
+                        suggested project ideas
+                    </a>{" "}
+                    are available here.
                 </Typography>
             </Box>
 
-            <Grid container spacing={4} sx={{ p: 6 }}>
+            {/* Form Container */}
+            <Box
+                sx={{
+                    mx: "auto",
+                    p: 5,
+                    mt: 6,
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                    borderRadius: "12px",
+                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+                }}
+            >
                 {loading || isSubmitting ? (
                     <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.modal + 1 }}>
                         <CircularProgress color="primary" />
                     </Backdrop>
                 ) : null}
 
-                {error && <Typography variant="h6" color="error">{error}</Typography>}
+                {error && (
+                    <Typography variant="h6" color="error" sx={{ mb: 2 }}>
+                        {error}
+                    </Typography>
+                )}
 
                 {submissionErrors.length > 0 && (
-                    <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+                    <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
                         {submissionErrors.map((err, index) => (
                             <div key={index} dangerouslySetInnerHTML={{ __html: `Error: ${err.message}` }} />
                         ))}
@@ -110,7 +155,12 @@ const ProjectForm = () => {
                                 )}
                                 <Grid container spacing={2}>
                                     {section.columns.map((column, columnIdx) => (
-                                        <Grid item xs={12} sm={section.columns.length === 1 ? 12 : 6} key={`column-${sectionIdx}-${columnIdx}`}>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            sm={section.columns.length === 1 ? 12 : 6}
+                                            key={`column-${sectionIdx}-${columnIdx}`}
+                                        >
                                             {column.map((field: any) => (
                                                 <RenderFormFields key={field.fieldname} fields={[field]} control={control} errors={errors} />
                                             ))}
@@ -127,8 +177,9 @@ const ProjectForm = () => {
                         </Stack>
                     </Grid>
                 </FormProvider>
-            </Grid>
+            </Box>
         </Box>
+
     );
 };
 
