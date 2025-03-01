@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+
+import ProjectForm from "../components/ProjectForm.tsx";
+---
+    <Layout title="Project">
+
+    <ProjectForm client:only="react"/>
+    </Layout>
