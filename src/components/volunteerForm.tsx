@@ -33,6 +33,16 @@ const VolunteerForm = () => {
     }, []);
 
     const onSubmit = handleSubmit(async (records) => {
+
+        if(records.skills__checkbox){
+            const result = Object.entries(records.skills__checkbox).map(([skill, skill_level]) => ({
+                skill,
+                skill_level
+            }));
+
+            console.log(result)
+            records.skills__checkbox = result
+        }
         const res = await submitForm('/incubator_management.api.applications.volunteering.apply', transformObject(records));
         const { message, hasErrors, errors: apiErrors } = res;
 
@@ -68,6 +78,8 @@ const VolunteerForm = () => {
         structuredSections.push(currentSection);
     }
 
+    const values = methods.getValues();
+    console.log('Current form values:', values);
     return (
         <Box sx={{ p: 10 }}>
             <Box sx={{ textAlign: "center" }}>
