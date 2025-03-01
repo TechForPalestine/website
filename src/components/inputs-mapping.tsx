@@ -1,6 +1,6 @@
 import { useEffect, useState, memo, useRef } from 'react';
 import { MenuItem, Divider, Grid, Checkbox, FormControlLabel } from '@mui/material';
-import { RHFSelect, RHFTextField, RHFMultiSelect, RHFFileUpload, RHFTableSection } from '../components/hook-form';
+import { RHFSelect, RHFTextField, RHFMultiSelect, RHFFileUpload, RHFTableSection ,RHFSkillSelector} from '../components/hook-form';
 import Stack from '@mui/material/Stack';
 import type { StackProps } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -31,6 +31,15 @@ const useAllLinkOptions = (fields) => {
                 if (field.fieldtype === 'Link' && !newOptions[field.fieldname]) {
                     try {
                         const { data } = await fetchFormFields(`/incubator_management.api.incubator.${field.fieldname}`);
+                        newOptions[field.fieldname] = data || [];
+                    } catch (err) {
+                        newOptions[field.fieldname] = [];
+                    }
+                }
+                if (field.fieldname == "skills__checkbox") {
+
+                    try {
+                        const { data } = await fetchFormFields(`/incubator_management.api.incubator.skill`);
                         newOptions[field.fieldname] = data || [];
                     } catch (err) {
                         newOptions[field.fieldname] = [];
@@ -97,6 +106,20 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
 
     // Compute field path based on parentName
     const fieldName = parentName ? `${parentName}.${field.fieldname}` : field.fieldname;
+
+    if(field.fieldname == "skills__checkbox") {
+        return (
+            <Block label={field.label} description={field.description}>
+                <RHFSkillSelector
+                    name={fieldName} // Use computed fieldName
+                    label={field.label}
+                    skills={options[field.fieldname]?.map((row)=>({...row,skill:row.skill_name}))}
+                    skillLevels={parseOptions(field.table_fields[1]?.options)}
+                />
+            </Block>
+        );
+
+    }
 
     switch (field.fieldtype) {
         case 'Data':
