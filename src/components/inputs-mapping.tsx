@@ -120,7 +120,6 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
         );
 
     }
-
     switch (field.fieldtype) {
         case 'Data':
         case 'Text':

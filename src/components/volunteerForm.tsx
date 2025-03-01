@@ -43,7 +43,6 @@ const VolunteerForm = () => {
             console.log(result)
             records.skills__checkbox = result
         }
-
         const res = await submitForm('/incubator_management.api.applications.volunteering.apply', transformObject(records));
         const { message, hasErrors, errors: apiErrors } = res;
 

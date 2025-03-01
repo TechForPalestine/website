@@ -29,4 +29,4 @@ Finally, open [http://localhost:4321](http://localhost:4321) in your browser to 
 
 ## Contributions
 
-Contributions of all kind are welcome. Fork this repo, clone, create branch and make the first commit for change. Finally open a PR with appropriate title.
+Contributions of all kind are welcome. Fork this repo, clone, create branch and make the first commit for change. Open a PR with appropriate title.
