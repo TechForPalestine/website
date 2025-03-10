@@ -1,19 +1,21 @@
 import axios from 'axios';
 
-const API_URL = 'https://app.techforpalestine.org/api/method/';
-// const API_URL = 'http://172.236.98.135/api/method/';
+// const API_URL = 'https://app.techforpalestine.org/api/method/';
+const API_URL = import.meta.env.API_URL;
+const SECRET_KEY = import.meta.env.SECRET_KEY;
 
 // Define Axios instance with headers
 const axiosInstance = axios.create({
   baseURL: API_URL, // Set the base URL here
   headers: {
     'Content-Type': 'application/json',
-    Authorization: 'token bf60d1f18ef8fb3:ce7ce244943730c',
+    Authorization: SECRET_KEY,
   },
 });
 
 // ✅ Fetch form fields from API
 export const fetchFormFields = async (url:any) => {
+  console.log(url ,"url")
   try {
     const response = await axiosInstance.get(url); // Endpoint relative to the base URL
     return response.data;

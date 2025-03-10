@@ -54,7 +54,7 @@ const ProjectForm = () => {
     const structuredSections: any[] = [];
     let currentSection: any = { title: '', columns: [[]] };
 
-    fields.forEach((field) => {
+    fields?.forEach((field) => {
         if (field.fieldtype === "Section Break") {
             if (currentSection.columns.some(col => col.length > 0)) {
                 structuredSections.push(currentSection);
