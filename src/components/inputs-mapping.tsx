@@ -4,7 +4,7 @@ import { RHFSelect, RHFTextField, RHFMultiSelect, RHFFileUpload, RHFTableSection
 import Stack from '@mui/material/Stack';
 import type { StackProps } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { fetchFormFields } from '../store/api'; // ✅ Import API call
+import { fetchFormFields ,fetchFieldData } from '../store/api'; // ✅ Import API call
 
 const parseOptions = (options) => options.split('\n').filter((option) => option.trim() !== '');
 
@@ -36,22 +36,25 @@ const useAllLinkOptions = (fields) => {
                         newOptions[field.fieldname] = [];
                     }
                 }
-                if (field.fieldname == "skills__checkbox") {
+                // if (field.fieldname == "skills__checkbox") {
+                //
+                //     try {
+                //         const { data } = await fetchFormFields(`/incubator_management.api.incubator.skill`);
+                //         newOptions[field.fieldname] = data || [];
+                //     } catch (err) {
+                //         newOptions[field.fieldname] = [];
+                //     }
+                // }
+                else if (field.fieldtype === 'Table MultiSelect') {
+                    newOptions[field.fieldname] = {};
+                    let key = field.table_fields[0].endpoint;
 
+                    console.log(key ,"key")
                     try {
-                        const { data } = await fetchFormFields(`/incubator_management.api.incubator.skill`);
+                        const { data } = await fetchFieldData(`${key}`);
                         newOptions[field.fieldname] = data || [];
                     } catch (err) {
                         newOptions[field.fieldname] = [];
-                    }
-                } else if (field.fieldtype === 'Table MultiSelect') {
-                    newOptions[field.fieldname] = {};
-                    let key = field.table_fields[0].fieldname;
-                    try {
-                        const { data } = await fetchFormFields(`/incubator_management.api.incubator.${key}`);
-                        newOptions[field.fieldname][key] = data || [];
-                    } catch (err) {
-                        newOptions[field.fieldname][key] = [];
                     }
                 }
             }
@@ -107,19 +110,19 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
     // Compute field path based on parentName
     const fieldName = parentName ? `${parentName}.${field.fieldname}` : field.fieldname;
 
-    if(field.fieldname == "skills__checkbox") {
-        return (
-            <Block label={field.label} description={field.description}>
-                <RHFSkillSelector
-                    name={fieldName} // Use computed fieldName
-                    label={field.label}
-                    skills={options[field.fieldname]?.map((row)=>({...row,skill:row.skill_name}))}
-                    skillLevels={parseOptions(field.table_fields[1]?.options)}
-                />
-            </Block>
-        );
-
-    }
+    // if(field.fieldname == "skills__checkbox") {
+    //     return (
+    //         <Block label={field.label} description={field.description}>
+    //             <RHFSkillSelector
+    //                 name={fieldName} // Use computed fieldName
+    //                 label={field.label}
+    //                 skills={options[field.fieldname]?.map((row)=>({...row,skill:row.skill_name}))}
+    //                 skillLevels={parseOptions(field.table_fields[1]?.options)}
+    //             />
+    //         </Block>
+    //     );
+    //
+    // }
     switch (field.fieldtype) {
         case 'Data':
         case 'Text':
@@ -183,7 +186,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
                         // name={fieldName} // Use computed fieldName
                         name={`${field.fieldname}.${key}`} // Use computed fieldName
                         label={field.label}
-                        options={options[field.fieldname] ? options[field.fieldname][key] : [] || []}
+                        options={options[field.fieldname] ? options[field.fieldname] : [] || []}
                     />
                 </Block>
             );

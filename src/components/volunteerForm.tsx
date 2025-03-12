@@ -34,15 +34,15 @@ const VolunteerForm = () => {
 
     const onSubmit = handleSubmit(async (records) => {
 
-        if(records.skills__checkbox){
-            const result = Object.entries(records.skills__checkbox).map(([skill, skill_level]) => ({
-                skill,
-                skill_level
-            }));
-
-            console.log(result)
-            records.skills__checkbox = result
-        }
+        // if(records.skills__checkbox){
+        //     const result = Object.entries(records.skills__checkbox).map(([skill, skill_level]) => ({
+        //         skill,
+        //         skill_level
+        //     }));
+        //
+        //     console.log(result)
+        //     records.skills__checkbox = result
+        // }
         const res = await submitForm('/incubator_management.api.applications.volunteering.apply', transformObject(records));
         const { message, hasErrors, errors: apiErrors } = res;
 
@@ -93,9 +93,9 @@ const VolunteerForm = () => {
                         p: 3,
                         fontSize: "1.1rem",
                         lineHeight: 1.8,
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        // backgroundColor: "rgba(255, 255, 255, 0.1)",
                         borderRadius: "8px",
-                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                        // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                     }}
                 >
                     Welcome and thank you for offering your time to support {" "}

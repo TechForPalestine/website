@@ -15,6 +15,14 @@ const axiosInstance = axios.create({
 // ✅ Fetch form fields from API
 export const fetchFormFields = async (url:any) => {
   try {
+    const response = await axiosInstance.get(`/api/method${url}`); // Endpoint relative to the base URL
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data?.message || 'Failed to load form fields';
+  }
+};// ✅ Fetch form fields from API
+export const fetchFieldData = async (url:any) => {
+  try {
     const response = await axiosInstance.get(url); // Endpoint relative to the base URL
     return response.data;
   } catch (error: any) {
@@ -53,7 +61,7 @@ export const submitForm = async (url: any, formData: any) => {
     const form = convertToFormData(formData);
 
     // Send the FormData object via POST
-    const response = await axiosInstance.post(url, form, {
+    const response = await axiosInstance.post(`/api/method${url}`, form, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
