@@ -96,7 +96,7 @@ type RHFMultiSelectProps = FormControlProps & {
     placeholder?: string;
     helperText?: React.ReactNode;
     options: {
-        label: string;
+        title: string;
         value: string;
         name: string;
     }[];
@@ -126,7 +126,7 @@ export function RHFMultiSelect({
             return (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                     {selectedItems.map((item) => (
-                        <Chip key={item.name} size="small" label={item.label} />
+                        <Chip key={item.name} size="small" label={item.title} />
                     ))}
                 </Box>
             );
@@ -181,7 +181,7 @@ export function RHFMultiSelect({
                             return (
                                 <MenuItem key={option.name} value={option.name}>
                                     {checkbox && <Checkbox size="small" disableRipple checked={selected} />}
-                                    {option.label}
+                                    {option.title}
                                 </MenuItem>
                             );
                         })}
