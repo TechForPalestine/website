@@ -14,4 +14,24 @@
     align-items: flex-start;
     justify-content: space-between;
   }
+  /* You can place this in your base.css */
+  .accordion-item {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .accordion-header {
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .accordion-body {
+    transition: max-height 0.3s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  .accordion-body.open {
+    max-height: 500px;
+  }
+
 }

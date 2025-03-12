@@ -1,0 +1,26 @@
+---
+import "../styles/base.css";
+import Layout from "../layouts/Layout.astro";
+import FAQAccordion from "../components/FAQAccordion.jsx"; // Import the React Accordion component
+
+const faqArray = [
+    {
+        question: "Can Tech for Palestine help our non-profit build an app or website?",
+        answer: "Our partner <a href='https://techtotherescue.org/'>Tech to the Rescue</a> is the right place for that. They will partner you with a tech company,typically within 6 weeks, who will work with you to build what you need for free. You can sign up for help <a href='https://app.techtotherescue.org/sign-in/new'>here</a>."
+
+    },
+
+    // Add more FAQs here as needed
+];
+---
+
+    <Layout title="Resource">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 80vh; width: 100%;">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h1>
+
+            <!-- FAQ Accordion -->
+            <div class="w-full max-w-4xl">
+                <FAQAccordion faqArray={faqArray} client:only="react"/>
+            </div>
+        </div>
+    </Layout>
