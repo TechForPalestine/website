@@ -7,4 +7,11 @@
   a {
     @apply text-blue-900;
   }
+  .tool-box{
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 }
