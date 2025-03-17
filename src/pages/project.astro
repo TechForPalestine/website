@@ -10,6 +10,7 @@ let projects = [];
 try {
     const apiUrl = "/incubator_management.api.incubator.projects_details?status=Onboarded";
     const apiResponse = await fetchFormFields(apiUrl);
+    console.log(apiResponse ,"apiResponse")
     projects = apiResponse.data || [];
 } catch (error) {
     console.error("Error fetching projects:", error);
