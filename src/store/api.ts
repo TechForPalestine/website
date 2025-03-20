@@ -3,6 +3,9 @@ import axios from 'axios';
 const API_URL = import.meta.env.PUBLIC_API_URL;
 const SECRET_KEY = import.meta.env.PUBLIC_SECRET_KEY;
 
+console.log('PUBLIC_API_URL:', import.meta.env.PUBLIC_API_URL);
+console.log('PUBLIC_SECRET_KEY:', import.meta.env.PUBLIC_SECRET_KEY);
+
 // Define Axios instance with headers
 const axiosInstance = axios.create({
   baseURL: API_URL, // Set the base URL here
