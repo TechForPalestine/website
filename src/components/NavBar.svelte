@@ -1,5 +1,7 @@
 <script lang="ts">
   export let navigation: Map<string, string>;
+  export let currentRoute: string;
+
   let toggleFlag = false;
 
   const toggle = () => {
@@ -23,7 +25,9 @@
       >
         <ul class="flex gap-4 max-md:flex-col">
           {#each navigation as [label, href]}
-            <a {href} class="text-zinc-950">
+            <a {href}
+               class="text-zinc-950 hover:text-zinc-800 {currentRoute === href ? 'font-bold' : ''}"
+            >
               {label}
             </a>
           {/each}
