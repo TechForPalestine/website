@@ -8,6 +8,9 @@ let toggleEl = false;
 const toggle = () => {
   toggleEl = !toggleEl;
 };
+
+const currentRoute = Astro.url.pathname;
+
 const navigation = new Map([
   ["About", "/about"],
   ["Incubator", "/incubator"],
@@ -23,7 +26,7 @@ const navigation = new Map([
 // TODO: MOVE BANNER TO LAYOUT
 ---
 
-<NavBar navigation={navigation} client:only="svelte">
+<NavBar navigation={navigation} currentRoute={currentRoute} client:only="svelte">
   <TFPLogo slot="tfp-logo" />
   <Socials slot="socials" />
   <Icon name="solar:hamburger-menu-outline" class="h-8 w-8" slot="burger-icon" />
