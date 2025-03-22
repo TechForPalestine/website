@@ -26,7 +26,7 @@
         <ul class="flex gap-4 max-md:flex-col">
           {#each navigation as [label, href]}
             <a {href}
-               class="text-zinc-950 hover:text-zinc-800 {currentRoute === href ? 'font-bold' : ''}"
+               class="text-zinc-950 hover:text-zinc-800 {currentRoute.replace(/\/$/, '') === href ? 'font-bold' : ''}"
             >
               {label}
             </a>
