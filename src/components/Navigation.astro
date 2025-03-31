@@ -26,7 +26,7 @@ const navigation = new Map([
 // TODO: MOVE BANNER TO LAYOUT
 ---
 
-<NavBar navigation={navigation} currentRoute={currentRoute}>
+<NavBar client:load navigation={navigation} currentRoute={currentRoute}>
   <TFPLogo slot="tfp-logo" />
   <Socials slot="socials" />
   <Icon name="solar:hamburger-menu-outline" class="h-8 w-8" slot="burger-icon" />
