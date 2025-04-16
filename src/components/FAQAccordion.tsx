@@ -24,7 +24,7 @@ export default function FAQAccordion({ question, answer }: FAQAccordionProps) {
                 <Typography>{question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-                <Typography>{answer}</Typography>
+                {answer}
             </AccordionDetails>
         </Accordion>
     );
