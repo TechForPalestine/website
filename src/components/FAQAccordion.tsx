@@ -19,7 +19,7 @@ export default function FAQAccordion({ question, answer }: FAQAccordionProps) {
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="faq-content"
-                id={`faq-${question}`}
+                id={`faq-${question.replaceAll(' ', '-')}`}
             >
                 <Typography>{question}</Typography>
             </AccordionSummary>
