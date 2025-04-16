@@ -1,14 +1,8 @@
 ---
 import * as Icon from "@astropub/icons";
 import Container from "../components/Container.astro";
-import { Client } from "@notionhq/client";
 import DiscordButton from "./DiscordButton.astro";
-import type { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
-
-// Initializing a client
-const notion = new Client({
-  auth: import.meta.env.NOTION_TOKEN,
-});
+import { getCollection } from "astro:content";
 
 const acronyms = ["tfp", "vc", "icj", "lp", "emr"];
 
@@ -18,36 +12,16 @@ export function capitalizeFirstLetter(string: string) {
     : string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const projects: QueryDatabaseResponse = await notion.databases.query({
-  database_id: "a50e07cf1aa642cf84e529bd64970fd8",
-  sorts: [
-    {
-      property: "Name",
-      direction: "ascending",
-    },
-  ],
-  filter: {
-    and: [
-      {
-        property: "Status",
-        select: {
-          equals: "Onboarded",
-        },
-      },
-    ],
-  },
-});
-
-const project_items = projects.results.map((project: any) => {
+// Get all entries from the projects collection
+const projectEntries = await getCollection("projects");
+const project_items = projectEntries.map(entry => {
   return {
-    name: project.properties["Project Name"].rich_text[0]?.plain_text,
-    description:
-      project.properties["Elevator Pitch"].rich_text[0]?.plain_text || " ",
-    discord_channel_url: project.properties["Discord Channel"].url,
-    website_url:
-      project.properties["Website URL"].rich_text[0]?.plain_text || " ",
+    name: entry.data.title,
+    description: entry.body || " ",
+    discord_channel_url: entry.data.channel,
+    website_url: entry.data.url || " "
   };
-});
+}).sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <section class="py-24 bg-white" id="projects-list">
