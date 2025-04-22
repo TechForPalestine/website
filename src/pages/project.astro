@@ -2,19 +2,17 @@
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import "../styles/base.css";
-import { fetchFormFields } from "../store/api";
 import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
 
-let projects = [];
-
-try {
-    const apiUrl = "/incubator_management.api.incubator.projects_details?status=Onboarded";
-    const apiResponse = await fetchFormFields(apiUrl);
-    console.log(apiResponse ,"apiResponse")
-    projects = apiResponse.data || [];
-} catch (error) {
-    console.error("Error fetching projects:", error);
-}
+// Get all entries from the projects collection
+const projectEntries = await getCollection("projects");
+const projects = projectEntries.map(entry => ({
+    project_name: entry.data.title,
+    website: entry.data.url,
+    discord_channel: entry.data.channel,
+    elevator_pitch: entry.body
+}));
 ---
 
     <Layout title="Projects">
