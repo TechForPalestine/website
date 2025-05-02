@@ -1,21 +1,45 @@
 ---
 import Container from "./Container.astro";
 import Socials from "./Socials.astro";
+import TFPLogo from "./TFPLogo.astro";
+import { navigation } from "./navigation.ts";
 ---
 
-<footer>
-  <Container>
-    <div
-      class="flex flex-col items-center justify-between gap-4 py-4 text-xs text-zinc-950/60 md:flex-row"
-    >
-      <div>
-        <p>
-          &copy; {new Date().getFullYear()} TechForPalestine. All rights reserved. Tech for Palestine is a registered 501(c)(3) nonprofit.
-        </p>
-      </div>
-      <div>
-        <Socials />
-      </div>
-    </div>
-  </Container>
-</footer>
+    <footer class="text-zinc-700 text-sm">
+        <Container>
+            <div class="flex flex-col gap-10 py-10 md:flex-row md:justify-between md:items-start">
+
+                <!-- Left Column: Logo and copyright -->
+                <div class="space-y-2 max-w-sm">
+                    <div class="h-16 w-auto">
+                        <a href="/" class="flex items-center">
+                            <img src="/mark-transparent.png" alt="tpf logo" class="h-16" />
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Site Index -->
+                <div class="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3 lg:grid-cols-4 text-right md:text-left">
+                    {Array.from(navigation).map(([label, href]) => (
+                        <a
+                            href={href}
+                            class="text-black transition-colors hover:text-zinc-900 hover:underline"
+                            target={href.startsWith('http') || href.startsWith('mailto:') ? '_blank' : '_self'}
+                            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        >
+                            {label}
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+
+            <div class="flex flex-col gap-10 py-10 md:flex-row md:justify-between md:items-start">
+                <p className="text-xs text-zinc-600">
+                    &copy; {new Date().getFullYear()} TechForPalestine. All rights reserved.Tech for Palestine is a registered 501(c)(3) nonprofit.
+                </p>
+                <Socials/>
+            </div>
+        </Container>
+    </footer>
