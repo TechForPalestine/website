@@ -11,8 +11,10 @@ import {
 
 export default function ResourceList({ sections }) {
     return (
-        <div style={{ marginTop: '2rem' }}>
-            {sections.map((section) => (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                <div style={{ maxWidth: '1200px', width: '100%', padding: '0 1rem' }}>
+
+                {sections.map((section) => (
                 <div key={section.name} style={{ marginBottom: '2rem' }}>
                     <Typography variant="h5" gutterBottom>{section.name}</Typography>
                     <Grid container spacing={3}>
@@ -58,5 +60,6 @@ export default function ResourceList({ sections }) {
                 </div>
             ))}
         </div>
+            </div>
     );
 }
