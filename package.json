@@ -30,7 +30,6 @@
     "astro-icon": "^1.1.0",
     "axios": "^1.7.9",
     "install": "^0.13.0",
-    "marked": "^15.0.11",
     "moderndash": "^3.11.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
