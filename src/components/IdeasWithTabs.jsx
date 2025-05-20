@@ -22,7 +22,7 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
         }
     };
 
-    return (<div className=" py-12  min-h-screen">
+    return (<div className=" py-4  min-h-screen">
         <div className=" px-4 sm:px-6 lg:px-8 ">
             <div className="max-w-7xl mx-auto">
                 {/* Tabs */}
@@ -71,10 +71,23 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                                     <p className="text-sm text-gray-600 line-clamp-2">{excerpt}</p>
                                 )}
                             </div>
-                            <div className="mt-4 text-right">
-                <span className="text-[#166534] text-sm font-medium hover:underline">
+                            <div className="mt-4  flex justify-between items-center">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevent modal from opening
+                                        window.open(
+                                            "https://app.formbricks.com/s/clzax64r70000v39tqtnvg558",
+                                            "_blank"
+                                        );
+                                    }}
+                                    className="text-white bg-black hover:bg-[#166534] text-xs font-medium px-3 py-1 rounded-full shadow transition"
+                                >
+                                    { activeTab === "new"?  "Get Involved" : "Take the Lead"}
+                                </button>
+                <span className="text-black text-sm font-medium hover:underline">
                   Read more →
                 </span>
+
                             </div>
                         </div>
                     ))}
@@ -115,6 +128,16 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                                 ))}
                             </div>
                         )}
+                        <div className="mt-6 text-right">
+                            <a
+                                href="https://app.formbricks.com/s/clzax64r70000v39tqtnvg558"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block bg-[#166534] hover:bg-[#14532d] text-white font-semibold px-6 py-2 rounded-full shadow transition"
+                            >
+                                Apply for this idea
+                            </a>
+                        </div>
                     </div>
                 </div>
             )}
@@ -148,10 +171,11 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                     <div className="flex-1">
                         <h2 className="text-2xl font-bold text-[#166534] mb-4">How to apply</h2>
                         <p className="text-gray-700 mb-6">
-                            Click below to apply to start or take the lead on one of these projects!
+                            Want to lead an existing project or bring a new idea to life? Let us know below.
+
                         </p>
                         <a
-                            href="mailto:paul@techforpalestine.org"
+                            href="https://app.formbricks.com/s/clzax64r70000v39tqtnvg558"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-block bg-[#166534] hover:bg-[#14532d] text-white font-semibold px-6 py-2 rounded-full shadow transition"
