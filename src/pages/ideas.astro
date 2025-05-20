@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+import { getCollection } from "astro:content";
+import { marked } from "marked";
+import IdeasWithTabs from "../components/IdeasWithTabs.jsx";
+
+const rawIdeas = await getCollection("ideas");
+
+// Simple filter based on tags (or use separate folders)
+const newIdeas = rawIdeas
+    .filter(idea => idea.data.category !== "existing")
+    .map(idea => {
+        const firstParagraph = idea.body
+            .split(/\n{2,}/)
+            .find(block => !block.trim().startsWith("###"))
+            ?.replace(/[*_`>#-]/g, "")
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+            .trim();
+
+        return {
+            ...idea,
+            renderedBody: marked.parse(idea.body),
+            excerpt: firstParagraph || ""
+        };
+    });
+
+const existingIdeas = rawIdeas
+    .filter(idea => idea.data.category === "existing")
+    .map(idea => {
+        const firstParagraph = idea.body
+            .split(/\n{2,}/)
+            .find(block => !block.trim().startsWith("###"))
+            ?.replace(/[*_`>#-]/g, "")
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+            .trim();
+
+        return {
+            ...idea,
+            renderedBody: marked.parse(idea.body),
+            excerpt: firstParagraph || ""
+        };
+    });
+
+---
+
+    <Layout title="Ideas">
+        <main>
+            <div class="relative isolate">
+                <div class="px-6 py-4 sm:py-4 lg:px-8">
+                    <div class="mx-auto max-w-4xl">
+                        <h1 class="mt-2 text-4xl sm:text-6xl font-extrabold tracking-tight text-gray-900 text-center">
+                            Welcome to the <br class="hidden sm:block" />
+                            <span class="text-green-800">Tech for Palestine Ideas</span>
+                        </h1>
+
+                        <p class="mt-2 text-lg leading-8 text-gray-600 text-center">
+                            Tech for Palestine builds bold projects to support Palestinian freedom and counter pro-Israel propaganda.
+                        </p>
+
+
+                        <p class="mt-2 text-lg leading-8 text-gray-600 text-center">
+                            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to help make them real.
+                        </p>
+
+                        <p class="mt-2 text-lg leading-8 text-gray-600 text-center">
+                            Explore the ideas below and get involved.
+                        </p>
+                    </div>
+                </div>
+
+                <IdeasWithTabs newIdeas={newIdeas} existingIdeas={existingIdeas} client:only="react" />
+
+            </div>
+        </main>
+    </Layout>
