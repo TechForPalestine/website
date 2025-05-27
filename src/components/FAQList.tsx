@@ -35,13 +35,24 @@ const faqs = [
                 <Typography>
                     Our partner{' '}
                     <Link
-                        href="https://www.accessnow.org/help/#contact-us"
+                        href="https://www.accessnow.org/help/"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
                         Access Now
                     </Link>{' '}
-                    provides digital security support for civil society organizations and non-profits. Reach out to their helpline and you should get an answer quickly.
+                    provides digital security support for civil society organizations, 
+                    activists, media, human rights defenders. They can help provide rapid 
+                    response for security incidents, work with you to improve your organization's 
+                    security profile, and many other security related issues. Reach out to their
+                    <Link
+                        href="https://www.accessnow.org/help/#contact-us"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                    helpline
+                    </Link>{' '}
+                    and you should get a response within 2 hours.
                 </Typography>
             </>
         )
