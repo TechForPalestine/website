@@ -28,6 +28,24 @@ const faqs = [
             </>
         )
     },
+        {
+        question: 'How can I get help securing our devices or digital service?',
+        answer: (
+            <>
+                <Typography>
+                    Our partner{' '}
+                    <Link
+                        href="https://www.accessnow.org/help/#contact-us"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Access Now
+                    </Link>{' '}
+                    provides digital security support for civil society organizations and non-profits. Reach out to their helpline and you should get an answer quickly.
+                </Typography>
+            </>
+        )
+    },
     {
         question: 'Where can I get graphical resources about Palestine for my advocacy work?',
         answer: (
