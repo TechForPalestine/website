@@ -44,7 +44,7 @@ const faqs = [
                     provides digital security support for civil society organizations, 
                     activists, media, human rights defenders. They can help provide rapid 
                     response for security incidents, work with you to improve your organization's 
-                    security profile, and many other security related issues. Reach out to their
+                    security profile, and many other security-related issues. Reach out to their{' '}
                     <Link
                         href="https://www.accessnow.org/help/#contact-us"
                         target="_blank"
