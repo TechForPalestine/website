@@ -2,7 +2,7 @@
 export const navigation = new Map<string, string>([
     ["About", "/about"],
     ["Incubator", "/incubator"],
-    ["Projects", "/project"],
+    ["Projects", "/projects"],
     ["Blog", "https://updates.techforpalestine.org"],
     ["Hire Palestinians", "/help/hire"],
     ["Media", "mailto:media@techforpalestine.org"],
