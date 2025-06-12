@@ -93,12 +93,69 @@ const newsletters = [
 
     <Layout title="Media">
         <main>
+
             <section class="relative isolate bg-white px-6 py-10 sm:py-16 lg:px-8">
                 <div class="mx-auto max-w-4xl text-center">
                     <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Media & Press</h2>
-                    <p class="mt-4 text-lg text-gray-600">Interviews, news coverage, and thought leadership about Tech for Palestine</p>
-                    <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-1 bg-gray-700" />
+                    <p class="mt-4 text-lg text-gray-600">Interviews, news coverage, and thought leadership about
+                        Tech for Palestine</p>
+                    <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-1 bg-gray-700"/>
                 </div>
+
+                <!-- Press Kit Section -->
+                <div class="mx-auto mt-12 max-w-6xl">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">🧰 Media Press Kit</h3>
+
+                    <!-- About Summary -->
+                    <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm mb-6">
+                        <p class="text-sm text-gray-700">
+                            Tech for Palestine is a global community of technologists, designers, and builders creating open-source tools
+                            and digital infrastructure to support the Palestinian cause. We connect volunteers, build software that centers
+                            Palestinian voices, and collaborate with civil society organizations to amplify digital resistance and resilience.
+                        </p>
+                    </div>
+
+                    <!-- Logos Section -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Official Logos</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+
+                            <div class="relative group border rounded-lg shadow-sm overflow-hidden">
+                                <img src="/t4p-full.png" alt="Logo Light" class="w-full h-28 object-contain bg-gray-50 p-2" />
+                                <a href="/t4p-full.png" download
+                                   class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 group-hover:opacity-100 transition">
+                                    Download
+                                </a>
+                            </div>
+                            <div class="relative group border rounded-lg shadow-sm overflow-hidden">
+                                <img src="/t4p-logo.png" alt="Logo Icon" class="w-full h-28 object-contain bg-white p-2" />
+                                <a href="/t4p-logo.png" download
+                                   class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 group-hover:opacity-100 transition">
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Headshots -->
+                    {/*<div class="mb-8">*/}
+                    {/*    <h4 class="text-lg font-semibold text-gray-800 mb-2">Team Headshots</h4>*/}
+                    {/*    <div class="flex flex-wrap justify-start gap-6">*/}
+                    {/*        <img src="/paul-founder.jpg" alt="Team Member 1" class="h-28 w-28 object-cover rounded-full shadow" />*/}
+                    {/*        <img src="/press/headshot2.jpg" alt="Team Member 2" class="h-28 w-28 object-cover rounded-full shadow" />*/}
+                    {/*        <img src="/press/headshot3.jpg" alt="Team Member 3" class="h-28 w-28 object-cover rounded-full shadow" />*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+                    <!-- Press Kit PDF -->
+                    <div class="mt-6">
+                        <a href="/tech_for_palestine_press_kit.pdf" download
+                           class="inline-block px-6 py-3 bg-black text-white rounded-full hover:bg-zinc-800 transition shadow">
+                            Download Full Press Kit (PDF)
+                        </a>
+                    </div>
+                </div>
+
 
                 <!-- Articles Section -->
                 <div class="mx-auto mt-12 max-w-6xl">
