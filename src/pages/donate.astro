@@ -28,10 +28,8 @@ import "../styles/base.css";
             const variant = Math.random() < 0.5 ? "A" : "B";
             const container = document.getElementById("donation-variant");
 
-            // Log variant to Plausible
-            plausible("ab_test_variant", {
-            props: { variant: variant }
-        });
+            umami.track('ab_test_variant', { variant:variant });
+
 
             if (variant === "A") {
             container.innerHTML = `
