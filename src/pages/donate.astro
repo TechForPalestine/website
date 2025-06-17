@@ -25,33 +25,36 @@ import "../styles/base.css";
         <!-- CharityStack Embed Script -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-            const variant = Math.random() < 0.5 ? "A" : "B";
+            // Check if a variant is already saved in localStorage
+            var variant = localStorage.getItem("donation_variant");
+
+            // If not, randomly assign one and save it
+            if (!variant) {
+            variant = Math.random() < 0.5 ? "A" : "B";
+            localStorage.setItem("donation_variant", variant);
+        }
+
+
             const container = document.getElementById("donation-variant");
-
-            umami.track('ab_test_variant', { variant:variant });
-
 
             if (variant === "A") {
             container.innerHTML = `
-                    <div data-entity="EMBED_FORM" data-source="CharityStack" id="6141ae9a-cdcd-4e14-b0d6-b5e0fa766abf"></div>
-
+            <div data-entity="EMBED_FORM" data-source="CharityStack" id="6141ae9a-cdcd-4e14-b0d6-b5e0fa766abf"></div>
         `;
         } else {
             container.innerHTML = `
-          <div data-entity="EMBED_FORM" data-source="CharityStack" id="f817c26f-0e60-47dd-a9fa-1652e1c17ec3"></div>
-
+            <div data-entity="EMBED_FORM" data-source="CharityStack" id="f817c26f-0e60-47dd-a9fa-1652e1c17ec3"></div>
         `;
         }
 
-            // Inject CharityStack script AFTER the correct form is in DOM
+            // Inject CharityStack script AFTER correct form is in DOM
             const script = document.createElement("script");
             script.defer = true;
             script.id = "charitystack-embed";
-            script.dataset.id = "M_lDGj72xT61"; // Replace with your correct embed key
-            script.src =
-            "https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js";
+            script.dataset.id = "M_lDGj72xT61";
+            script.src = "https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js";
             document.body.appendChild(script);
-
         });
         </script>
+
     </Layout>
