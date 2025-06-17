@@ -1,0 +1,93 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectLogo from "../../components/ProjectLogo";
+import { getCollection } from "astro:content";
+import "../../styles/base.css";
+
+// Slug from URL
+const { slug } = Astro.params;
+
+// Slugify function (same logic used in the listing page)
+function slugify(name) {
+  return name
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .join("-");
+}
+
+// Load all projects and find the matching one
+const entries = await getCollection("projects");
+const project = entries.find(entry => slugify(entry.data.title) === slug);
+
+if (!project) throw new Error("Project not found");
+
+// Render markdown content
+const { Content } = await project.render();
+
+// Export getStaticPaths for static generation
+export async function getStaticPaths() {
+  const entries = await getCollection("projects");
+  function slugify(name) {
+    return name
+        .replace(/[^a-zA-Z0-9\s]/g, "")
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .join("-");
+  }
+  return entries.map(entry => ({
+    params: { slug: slugify(entry.data.title) }
+  }));
+}
+console.log(project.data ,"project.data")
+---
+
+    <Layout title={project.data.title}>
+      <div class="max-w-4xl mx-auto py-16 px-4 space-y-10">
+        <!-- Header: Logo + Title + Links -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div
+                class="w-20 h-20 flex items-center justify-center rounded-full bg-white border border-gray-300 shadow">
+              <ProjectLogo projectName={project.data.title} client:only="react"/>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900">{project.data.title}</h1>
+          </div>
+
+          <!-- Links -->
+          <div class="flex gap-4">
+            {project.data.url && (
+                <a
+                    href={project.data.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                >
+                  🌐 Website
+                </a>
+            )}
+            {project.data.channel && (
+                <a
+                    href={project.data.channel}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition"
+                >
+                  💬 Discord
+                </a>
+            )}
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <hr class="border-t border-gray-300"/>
+
+        <!-- Description -->
+        <div class="bg-white border border-gray-200 shadow-md rounded-xl p-6 prose prose-lg max-w-none">
+          <Content/>
+        </div>
+      </div>
+
+    </Layout>
