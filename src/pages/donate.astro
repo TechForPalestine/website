@@ -40,9 +40,17 @@ import "../styles/base.css";
 
             const container = document.getElementById("donation-variant");
             // Log variant to Plausible
-            plausible("ab_test_variant", {
+            if(variant =='A'){
+            plausible("Monthly-donate", {
             props: { variant: variant }
         });
+        }else {
+            plausible("One-time-donate", {
+            props: {variant: variant}
+        });
+        }
+
+
             if (variant === "A") {
             container.innerHTML = `
           <div data-entity="EMBED_FORM" data-source="CharityStack" id="6141ae9a-cdcd-4e14-b0d6-b5e0fa766abf"></div>
