@@ -1,0 +1,21 @@
+---
+// src/pages/events.astro
+import Layout from "../layouts/Layout.astro";
+import Events from "../components/Events";
+import "../styles/base.css";
+
+import { fetchNotionEvents } from "../store/notionClient";
+
+let events = [];
+try {
+     events = await fetchNotionEvents();
+} catch (err) {
+    console.error("Error fetching events:", err);
+}
+
+---
+
+    <Layout title="Events">
+        <h1 class="text-3xl font-bold text-center mt-10 mb-4">Events</h1>
+        <Events events={events} />
+    </Layout>
