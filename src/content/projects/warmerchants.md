@@ -2,4 +2,4 @@
 title: "WarMerchants"
 ---
 
-Tracking maritime shipping of war material to enable port-blocking by ICJ-compliant states.
+Answering the question, who profits from the genocide in Palestine and the violent destruction of Western Asian societies?

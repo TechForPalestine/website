@@ -18,6 +18,7 @@
     "@astropub/icons": "^0.2.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@iconify-json/simple-icons": "^1.2.38",
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
     "@mui/system": "^6.4.3",
