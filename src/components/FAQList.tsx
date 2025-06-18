@@ -28,6 +28,35 @@ const faqs = [
             </>
         )
     },
+        {
+        question: 'How can I get help securing our devices or digital service?',
+        answer: (
+            <>
+                <Typography>
+                    Our partner{' '}
+                    <Link
+                        href="https://www.accessnow.org/help/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Access Now
+                    </Link>{' '}
+                    provides digital security support for civil society organizations, 
+                    activists, media, human rights defenders. They can help provide rapid 
+                    response for security incidents, work with you to improve your organization's 
+                    security profile, and many other security-related issues. Reach out to their{' '}
+                    <Link
+                        href="https://www.accessnow.org/help/#contact-us"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                    helpline
+                    </Link>{' '}
+                    and you should get a response within 2 hours.
+                </Typography>
+            </>
+        )
+    },
     {
         question: 'Where can I get graphical resources about Palestine for my advocacy work?',
         answer: (
@@ -76,7 +105,7 @@ const faqs = [
 
 export default function FAQList() {
     return (
-        <div>
+        <div class={'mt-6'}>
             {faqs.map((faq, index) => (
                 <FAQAccordion key={index} question={faq.question} answer={faq.answer} />
             ))}

@@ -12,7 +12,8 @@ import "../styles/base.css";
                 <p>Now, we need your support. Your donation will allow us to hire professionals, strengthen existing projects, and create even more initiatives for a free Palestine. </p>
             </div>
 
-            <div data-entity="EMBED_FORM" data-source="CharityStack" id="1546c2c2-a580-4994-bbb3-9e643aed1309"></div>
+            <!-- Placeholder for A/B test content -->
+            <div id="donation-variant"></div>
 
             <p style="margin-top: 20px;">
                 Tech for Palestine is a registered 501(c)(3) nonprofit.
@@ -22,11 +23,38 @@ import "../styles/base.css";
         </div>
 
         <!-- CharityStack Embed Script -->
-        <script
-            type="text/javascript"
-            defer
-            id="charitystack-embed"
-            data-id="M_lDGj72xT61"
-            src="https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js">
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            // Check if a variant is already saved in localStorage
+            var variant = localStorage.getItem("donation_variant");
+
+            // If not, randomly assign one and save it
+            if (!variant) {
+            variant = Math.random() < 0.5 ? "A" : "B";
+            localStorage.setItem("donation_variant", variant);
+        }
+
+
+            const container = document.getElementById("donation-variant");
+
+            if (variant === "A") {
+            container.innerHTML = `
+            <div data-entity="EMBED_FORM" data-source="CharityStack" id="6141ae9a-cdcd-4e14-b0d6-b5e0fa766abf"></div>
+        `;
+        } else {
+            container.innerHTML = `
+            <div data-entity="EMBED_FORM" data-source="CharityStack" id="f817c26f-0e60-47dd-a9fa-1652e1c17ec3"></div>
+        `;
+        }
+
+            // Inject CharityStack script AFTER correct form is in DOM
+            const script = document.createElement("script");
+            script.defer = true;
+            script.id = "charitystack-embed";
+            script.dataset.id = "M_lDGj72xT61";
+            script.src = "https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js";
+            document.body.appendChild(script);
+        });
         </script>
+
     </Layout>
