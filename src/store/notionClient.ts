@@ -15,20 +15,71 @@ const notionAxios = axios.create({
 export const fetchNotionEvents = async () => {
     const response = await notionAxios.post(`databases/${NOTION_DB_ID}/query`);
 
-    console.log("res",response.data.results)
     return response.data.results.map((page: any) => {
         const props = page.properties;
 
+        let headerImage = "";
+        if (props["Header"]?.files?.length > 0) {
+            const file = props["Header"].files[0];
+            if (file.type === "external") {
+                headerImage = file.external.url;
+            } else if (file.type === "file") {
+                headerImage = file.file.url;
+            }
+        }
+
+        const description =
+            props["Description"]?.rich_text?.[0]?.plain_text || "";
+
+        const registerLink = props["Link to registration"]?.url || "";
+        const recordingLink = props["Link to recording"]?.url || "";
+
         return {
-            title: props.Name?.title?.[0]?.plain_text || "Untitled",
-            date: props.Date?.date?.start || "",
-            status: props.Status?.select?.name || "",
-            location: props.Location?.select?.name || "",
-            image:
-                page.cover?.external?.url ||
-                page.cover?.file?.url ||
-                "/images/default.jpg",
+            id: page.id,
+            title: props["Title"]?.title?.[0]?.plain_text || "Untitled",
+            date: props["Date of event"]?.date?.start || "",
+            status: props["Stage"]?.select?.name || "",
+            location: props["Type of event"]?.multi_select?.[0]?.name || "",
+            image: headerImage || "/images/default.jpg",
             link: page.url,
+            description,
+            registerLink,
+            recordingLink,
         };
     });
+};
+
+export const fetchNotionEventById = async (pageId: string) => {
+
+    const response = await notionAxios.get(`pages/${pageId}`);
+
+    const props = response.data.properties;
+
+    // Image from "Header" files property
+    let headerImage = "";
+    if (props["Header"]?.files?.length > 0) {
+        const file = props["Header"].files[0];
+        if (file.type === "external") {
+            headerImage = file.external.url;
+        } else if (file.type === "file") {
+            headerImage = file.file.url;
+        }
+    }
+
+    const description = props["Description"]?.rich_text?.[0]?.plain_text || "";
+    const registerLink = props["Link to registration"]?.url || "";
+    const recordingLink = props["Link to recording"]?.url || "";
+
+    return {
+        id: response.data.id,
+        title: props["Title"]?.title?.[0]?.plain_text || "Untitled",
+        date: props["Date of event"]?.date?.start || "",
+        status: props["Stage"]?.select?.name || "",
+        location: props["Type of event"]?.multi_select?.[0]?.name || "",
+        image: headerImage || "/images/default.jpg",
+        link: response.data.url,
+        description,
+        registerLink,
+        recordingLink,
+    };
 };

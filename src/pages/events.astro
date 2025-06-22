@@ -1,21 +1,28 @@
 ---
-// src/pages/events.astro
 import Layout from "../layouts/Layout.astro";
 import Events from "../components/Events";
 import "../styles/base.css";
+import PageHeader from "../components/PageHeader.astro";
 
 import { fetchNotionEvents } from "../store/notionClient";
 
 let events = [];
+let loading = false;
+
 try {
-     events = await fetchNotionEvents();
+    events = await fetchNotionEvents();
 } catch (err) {
+    loading = true;
     console.error("Error fetching events:", err);
 }
-
 ---
 
     <Layout title="Events">
-        <h1 class="text-3xl font-bold text-center mt-10 mb-4">Events</h1>
-        <Events events={events} />
+        <PageHeader
+            overline="Tech for Palestine"
+            title="Events"
+            subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
+        />
+
+        <Events events={events} loading={loading} client:only="react" />
     </Layout>
