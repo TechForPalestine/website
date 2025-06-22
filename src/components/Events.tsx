@@ -1,0 +1,193 @@
+import React from "react";
+import {
+    Box,
+    Typography,
+    Card,
+    CardMedia,
+    Chip,
+    Button,
+    Link,
+    CircularProgress,
+} from "@mui/material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+
+interface EventItem {
+    id: string;
+    title: string;
+    date: string;
+    status: string;
+    location: string;
+    image: string;
+    link: string;
+    time?: string;
+    description?: string;
+    registerLink?: string;
+    recordingLink?: string;
+}
+
+interface EventsProps {
+    events: EventItem[];
+    loading?: boolean;
+}
+
+export default function Events({ events, loading = false }: EventsProps) {
+    return (
+        <div className="mx-auto max-w-6xl px-4 py-10">
+            {loading && (
+                <Box className="text-center py-6">
+                    <CircularProgress size={32} color="success" />
+                </Box>
+            )}
+
+            <div className="space-y-6">
+                {events.map((event, i) => {
+                    const eventDate = new Date(event.date);
+                    const day = eventDate.getDate();
+                    const month = eventDate.toLocaleString("default", {
+                        month: "short",
+                    }).toUpperCase();
+                    const isPast = event.status?.toLowerCase() === "past";
+                    const eventUrl = `/event-details?id=${event.id}`;
+
+                    return (
+                        <Card
+                            key={i}
+                            component="a"
+                            href={eventUrl}
+                            className="group cursor-pointer flex flex-col md:flex-row items-start gap-4 rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition bg-white no-underline"
+                            onClick={(e) => {
+                                const tag = (e.target as HTMLElement).tagName;
+                                if (["A", "BUTTON", "SVG", "PATH"].includes(tag)) {
+                                    e.stopPropagation();
+                                }
+                            }}
+                        >
+                            {/* Image */}
+                            <Box className="relative w-full md:w-1/3">
+                                <CardMedia
+                                    component="img"
+                                    image={event.image}
+                                    alt={event.title}
+                                    className="rounded-xl w-full h-48 object-cover"
+                                />
+                            </Box>
+
+                            {/* Content */}
+                            <Box className="flex-1 space-y-2 px-2">
+                                <Box className="flex items-center gap-2 flex-wrap">
+                                    <Typography
+                                        variant="h6"
+                                        className="font-bold tracking-tight text-gray-900"
+                                    >
+                                        {event.title}
+                                    </Typography>
+                                    {event.status && (
+                                        <Chip
+                                            size="small"
+                                            label={event.status}
+                                            sx={{
+                                                backgroundColor: isPast ? "#EA4335" : "#168039",
+                                                color: "#fff",
+                                                fontWeight: 500,
+                                            }}
+                                        />
+                                    )}
+                                </Box>
+
+                                {/* Meta */}
+                                <Box className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                  <span className="flex items-center gap-1">
+                    <CalendarTodayIcon fontSize="small" />
+                      {month} {day}, {eventDate.getFullYear()}
+                  </span>
+                                    {event.time && (
+                                        <span className="flex items-center gap-1">
+                      <AccessTimeIcon fontSize="small" />
+                                            {event.time}
+                    </span>
+                                    )}
+                                    {event.location && (
+                                        <span className="flex items-center gap-1">
+                      <LocationOnIcon fontSize="small" />
+                                            {event.location}
+                    </span>
+                                    )}
+                                </Box>
+
+                                {/* Description */}
+                                {event.description && (
+                                    <Typography
+                                        variant="body2"
+                                        className="text-sm text-gray-600 leading-relaxed line-clamp-3"
+                                    >
+                                        {event.description}
+                                    </Typography>
+                                )}
+
+                                {/* Footer */}
+                                <Box className="flex flex-wrap items-center justify-between pt-2 gap-4">
+                                    <Box className="flex gap-3 text-sm">
+                                        {event.registerLink && (
+                                            <Link
+                                                href={event.registerLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="flex items-center font-medium text-[#EA4335] hover:underline"
+                                            >
+                                                <EditCalendarIcon fontSize="small" className="mr-1" />
+                                                Register
+                                            </Link>
+                                        )}
+                                        {event.recordingLink && (
+                                            <Link
+                                                href={event.recordingLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="flex items-center font-medium text-[#168039] hover:underline"
+                                            >
+                                                <VideoLibraryIcon fontSize="small" className="mr-1" />
+                                                Recording
+                                            </Link>
+                                        )}
+                                    </Box>
+
+                                    <Button
+                                        variant="outlined"
+                                        endIcon={<OpenInNewIcon />}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            window.location.href = eventUrl;
+                                        }}
+                                        size="small"
+                                        sx={{
+                                            color: "#168039",
+                                            borderColor: "#168039",
+                                            textTransform: "none",
+                                            fontWeight: 500,
+                                            borderRadius: "0.375rem",
+                                            px: 3,
+                                            py: 1,
+                                            '&:hover': {
+                                                backgroundColor: '#f0fdf4',
+                                                borderColor: "#168039",
+                                            },
+                                        }}
+                                    >
+                                        View Details
+                                    </Button>
+                                </Box>
+                            </Box>
+                        </Card>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}

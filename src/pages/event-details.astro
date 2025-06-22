@@ -1,0 +1,9 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EventDetails from "../components/EventDetails";
+import "../styles/base.css";
+
+---
+    <Layout title="Event Details">
+        <EventDetails client:only="react" />
+    </Layout>
