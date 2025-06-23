@@ -15,7 +15,7 @@ const notionAxios = axios.create({
 export const fetchNotionEvents = async () => {
     const response = await notionAxios.post(`databases/${NOTION_DB_ID}/query`);
 
-    return response.data.results.map((page: any) => {
+    const events = response.data.results.map((page: any) => {
         const props = page.properties;
 
         let headerImage = "";
@@ -47,6 +47,9 @@ export const fetchNotionEvents = async () => {
             recordingLink,
         };
     });
+
+    // Sort by date (ascending)
+    return events.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 export const fetchNotionEventById = async (pageId: string) => {
