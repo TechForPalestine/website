@@ -57,15 +57,7 @@ export default function Events({ events, loading = false }: EventsProps) {
                     return (
                         <Card
                             key={i}
-                            component="a"
-                            href={eventUrl}
-                            className="group cursor-pointer flex flex-col md:flex-row items-start gap-4 rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition bg-white no-underline"
-                            onClick={(e) => {
-                                const tag = (e.target as HTMLElement).tagName;
-                                if (["A", "BUTTON", "SVG", "PATH"].includes(tag)) {
-                                    e.stopPropagation();
-                                }
-                            }}
+                            className="group  flex flex-col md:flex-row items-start gap-4 rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition bg-white no-underline"
                         >
                             {/* Image */}
                             <Box className="relative w-full md:w-1/3">
@@ -123,7 +115,7 @@ export default function Events({ events, loading = false }: EventsProps) {
                                 {event.description && (
                                     <Typography
                                         variant="body2"
-                                        className="text-sm text-gray-600 leading-relaxed line-clamp-3"
+                                        className="text-sm text-gray-600 leading-relaxed "
                                     >
                                         {event.description}
                                     </Typography>
@@ -158,30 +150,7 @@ export default function Events({ events, loading = false }: EventsProps) {
                                         )}
                                     </Box>
 
-                                    <Button
-                                        variant="outlined"
-                                        endIcon={<OpenInNewIcon />}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            window.location.href = eventUrl;
-                                        }}
-                                        size="small"
-                                        sx={{
-                                            color: "#168039",
-                                            borderColor: "#168039",
-                                            textTransform: "none",
-                                            fontWeight: 500,
-                                            borderRadius: "0.375rem",
-                                            px: 3,
-                                            py: 1,
-                                            '&:hover': {
-                                                backgroundColor: '#f0fdf4',
-                                                borderColor: "#168039",
-                                            },
-                                        }}
-                                    >
-                                        View Details
-                                    </Button>
+
                                 </Box>
                             </Box>
                         </Card>
