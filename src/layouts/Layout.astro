@@ -2,79 +2,71 @@
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 interface Props {
-  title: string;
-  description?: string;
+    title: string;
+    description?: string;
 }
 
 const {
-  title,
-  description = "We run small projects that help normalize Palestinian humanity in different ways. #freepalestine",
+    title,
+    description = "We run small projects that help normalize Palestinian humanity in different ways. #freepalestine",
 } = Astro.props;
 ---
 
-<!doctype html>
+    <!doctype html>
 <html lang="en">
-  <head>
+    <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-    <link rel="me" href="https://infosec.exchange/@tech4palestine" />
-    <script type="speculationrules">
+<meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+<link rel="me" href="https://infosec.exchange/@tech4palestine" />
+<script type="speculationrules">
     {
         "prerender": [{"urls": ["/", "/about", "/incubator", "/project", "/tools", "/help/hire"]}]
     }
-    </script>
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <meta
-      property="twitter:card"
-      name="twitter:card"
-      content="summary_large_image"
-    />
-    <meta
-      property="twitter:site"
-      name="twitter:site"
-      content="@tech4palestine"
-    />
-    <meta
-      property="twitter:description"
-      name="twitter:description"
-      content={description}
-    />
-    <meta
-      property="twitter:image"
-      name="twitter:image"
-      content={"https://techforpalestine.org/happy-kids.jpg"}
-    />
-    <meta
-      property="twitter:creator"
-      name="twitter:creator"
-      content="@tech4palestine"
-    />
-    <meta
-      property="og:description"
-      property="og:description"
-      content={description}
-    />
-    <meta
-      property="og:image"
-      property="og:image"
-      content={"https://techforpalestine.org/happy-kids.jpg"}
-    />
+</script>
+<meta name="generator" content={Astro.generator} />
+<title>{title}</title>
+<meta property="twitter:card" name="twitter:card" content="summary_large_image" />
+<meta property="twitter:site" name="twitter:site" content="@tech4palestine" />
+<meta property="twitter:description" name="twitter:description" content={description} />
+<meta property="twitter:image" name="twitter:image" content={"https://techforpalestine.org/happy-kids.jpg"} />
+<meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={"https://techforpalestine.org/happy-kids.jpg"} />
 
-
-    <script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
+<script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
 <script defer data-domain="techforpalestine.org" src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+<script>
+    window.plausible = window.plausible || function() {
+    (window.plausible.q = window.plausible.q || []).push(arguments)
+}
+</script>
+</head>
+<body class="text-zinc-950 bg-gradient-to-br from-green-50 to-red-100 min-h-screen relative">
+<Navigation />
 
-  </head>
-  <body
-    class="text-zinc-950 bg-gradient-to-br from-green-50 to-red-100 min-h-screen"
-  >
-    <Navigation />
 
-    <slot />
-    <Footer />
-  </body>
+
+<!-- Floating Button -->
+<a
+    href="/donate"
+    class="fixed right-0 top-1/2 transform -translate-y-1/2 text-white px-2 py-6 shadow-lg hover:bg-green-900 transition z-50 bg-green-800"
+    style="
+    writing-mode: sideways-lr;
+    text-orientation: mixed;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  "
+>
+    Donate
+</a>
+
+
+
+<slot />
+<Footer />
+</body>
 </html>
