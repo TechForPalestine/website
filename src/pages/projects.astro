@@ -5,16 +5,16 @@ import ProjectLogo from "../components/ProjectLogo";
 import PageHeader from "../components/PageHeader.astro";
 import "../styles/base.css";
 import { Icon } from "astro-icon/components";
-import { getCollection } from "astro:content";
 
-// Get all entries from the projects collection
-const projectEntries = await getCollection("projects");
-const projects = projectEntries.map(entry => ({
-    project_name: entry.data.title,
-    website: entry.data.url,
-    discord_channel: entry.data.channel,
-    elevator_pitch: entry.body
-}));
+import { fetchProjectsFromNotion } from "../store/notionClient";
+
+let projects = [];
+
+try {
+    projects = await fetchProjectsFromNotion();
+} catch (err) {
+    console.error("Failed to fetch projects from Notion:", err);
+}
 ---
 
     <Layout title="Projects">
@@ -25,25 +25,24 @@ const projects = projectEntries.map(entry => ({
                 subtitle="What is the incubator?"
                 subtitleLink="/incubator"
             />
-
         </main>
 
         <div class="mx-auto max-w-6xl px-4 py-12">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {projects.map((project: any) => {
                     const nameParts = project.project_name
-                        .replace(/[^a-zA-Z0-9\s]/g, "") // Clean name
+                        .replace(/[^a-zA-Z0-9\s]/g, "")
                         .trim()
                         .split(/\s+/);
 
                     const logoName = nameParts.slice(0, 2).join("");
                     const logoPath = `/projectIcons/${logoName}.png`;
                     const slug = project.project_name
-                        .replace(/[^a-zA-Z0-9\s]/g, '')
+                        .replace(/[^a-zA-Z0-9\s]/g, "")
                         .trim()
                         .toLowerCase()
                         .split(/\s+/)
-                        .join('-');
+                        .join("-");
 
                     return (
                         <div
@@ -53,21 +52,16 @@ const projects = projectEntries.map(entry => ({
                             class="cursor-pointer relative flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 focus:outline-none"
                             onKeyPress="if(event.key === 'Enter') location.href='/project-details/${slug}'"
                         >
+                            <ProjectLogo projectName={project.project_name} client:only="react" />
 
-                            {/* Logo (inside ProjectLogo.tsx component) */}
-                            <ProjectLogo projectName={project.project_name} client:only="react"/>
-
-                            {/* Project title */}
                             <h3 class="text-lg font-semibold text-gray-900 pr-14 leading-snug tracking-tight">
                                 {project.project_name}
                             </h3>
 
-                            {/* Description */}
                             <p class="text-sm text-gray-600 leading-relaxed line-clamp-4">
                                 {project.elevator_pitch}
                             </p>
 
-                            {/* Icons */}
                             {(project.website || project.discord_channel) && (
                                 <div class="flex items-center gap-3 mt-auto">
                                     {project.website && (
@@ -101,19 +95,18 @@ const projects = projectEntries.map(entry => ({
                                 </div>
                             )}
 
-                            {/* Bottom red/green stripe */}
                             <div
-                                class="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-16 h-1.5 flex rounded-full overflow-hidden shadow-sm">
+                                class="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-16 h-1.5 flex rounded-full overflow-hidden shadow-sm"
+                            >
                                 <div class="w-1/2 bg-[#D32F2F]"></div>
                                 <div class="w-1/2 bg-[#388E3C]"></div>
                             </div>
                         </div>
-                        );
+                    );
                 })}
             </div>
         </div>
 
-        <!-- Call to Action -->
         <div class="mt-16 mb-8 relative">
             <div class="absolute inset-0 flex justify-center items-center">
                 <div class="w-full border-t border-gray-300"></div>
@@ -134,7 +127,12 @@ const projects = projectEntries.map(entry => ({
                         stroke="currentColor"
                         aria-hidden="true"
                     >
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                        />
                     </svg>
                 </a>
             </div>
