@@ -2,4 +2,5 @@
 title: "Sardiya"
 ---
 
-Presenting Palestinian narrative on web browsers
+Presenting the Palestinian narrative on the internet.
+
