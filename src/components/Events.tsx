@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Typography,
@@ -35,9 +35,57 @@ interface EventsProps {
     loading?: boolean;
 }
 
-export default function Events({ events, loading = false }: EventsProps) {
+export default function Events({ events: initialEvents, loading = false }: EventsProps) {
+    const [events, setEvents] = useState<EventItem[]>(initialEvents);
+    const [isPolling, setIsPolling] = useState(false);
+    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+    // Polling function
+    const pollForUpdates = async () => {
+        if (isPolling) return; // Prevent concurrent requests
+        
+        setIsPolling(true);
+        try {
+            const response = await fetch('/api/events');
+            if (response.ok) {
+                const newEvents = await response.json();
+                
+                // Simple comparison - in production you might want a more sophisticated diff
+                if (JSON.stringify(newEvents) !== JSON.stringify(events)) {
+                    setEvents(newEvents);
+                    setLastUpdated(new Date());
+                }
+            }
+        } catch (error) {
+            console.error('Failed to poll for events:', error);
+        } finally {
+            setIsPolling(false);
+        }
+    };
+
+    // Set up polling
+    useEffect(() => {
+        const interval = setInterval(pollForUpdates, 30000); // Poll every 30 seconds
+        return () => clearInterval(interval);
+    }, [events, isPolling]);
+
     return (
         <div className="mx-auto max-w-6xl px-4 py-10">
+            {/* Status indicator */}
+            <Box className="flex justify-between items-center mb-4">
+                <Typography variant="caption" className="text-gray-500">
+                    Last updated: {lastUpdated.toLocaleTimeString()}
+                </Typography>
+                {isPolling && (
+                    <Box className="flex items-center gap-2">
+                        <CircularProgress size={16} />
+                        <Typography variant="caption" className="text-gray-500">
+                            Checking for updates...
+                        </Typography>
+                    </Box>
+                )}
+            </Box>
+
             {loading && (
                 <Box className="text-center py-6">
                     <CircularProgress size={32} color="success" />
