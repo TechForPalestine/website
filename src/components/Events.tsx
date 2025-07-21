@@ -54,7 +54,6 @@ export default function Events({ events, loading = false }: EventsProps) {
                     const isPast = event.status?.toLowerCase() === "past";
                     const eventUrl = `/event-details?id=${event.id}`;
 
-                    console.log("event.image :",event.image)
                     return (
                         <Card
                             key={i}
