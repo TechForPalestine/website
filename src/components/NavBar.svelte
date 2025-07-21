@@ -8,7 +8,7 @@
   };
 </script>
 
-<header class="sticky top-0 z-50 bg-white border-b">
+<header class="sticky top-0  bg-white border-b" style="z-index: 1000;">
   <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
     <!-- Logo -->
     <div class="flex gap-4">
