@@ -2,7 +2,33 @@
 import Container from "./Container.astro";
 import Socials from "./Socials.astro";
 import TFPLogo from "./TFPLogo.astro";
-import { navigation } from "./navigation.ts";
+
+// Comprehensive footer navigation organized by category
+const footerNavigation = {
+    "About": [
+        ["About Us", "/about"],
+        ["Learn More", "/learn-more"],
+        ["Media", "/media"],
+    ],
+    "Get Involved": [
+        ["Get Involved", "/get-involved"],
+        ["Why Volunteer", "/why-volunteer"],
+        ["Volunteer", "/volunteer"],
+        ["Donate", "/donate"],
+    ],
+    "Programs": [
+        ["Incubator", "/incubator"],
+        ["Projects", "/projects"],
+        ["Ideas", "/ideas"],
+        ["Events", "/events"],
+    ],
+    "Resources": [
+        ["Tools", "/tools"],
+        ["Resources", "/resources"],
+        ["Hire Palestinians", "/help/hire"],
+        ["Blog", "https://updates.techforpalestine.org"],
+    ]
+};
 ---
 
     <footer class="text-zinc-700 text-sm">
@@ -20,16 +46,23 @@ import { navigation } from "./navigation.ts";
                 </div>
 
                 <!-- Right Column: Site Index -->
-                <div class="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3 lg:grid-cols-4 text-right md:text-left">
-                    {Array.from(navigation).map(([label, href]) => (
-                        <a
-                            href={href}
-                            class="text-black transition-colors hover:text-zinc-900 hover:underline"
-                            target={href.startsWith('http') || href.startsWith('mailto:') ? '_blank' : '_self'}
-                            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        >
-                            {label}
-                        </a>
+                <div class="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 text-right md:text-left">
+                    {Object.entries(footerNavigation).map(([category, links]) => (
+                        <div class="space-y-3">
+                            <h3 class="font-semibold text-black text-base">{category}</h3>
+                            <div class="space-y-2">
+                                {links.map(([label, href]) => (
+                                    <a
+                                        href={href}
+                                        class="block text-zinc-600 transition-colors hover:text-zinc-900 hover:underline"
+                                        target={href.startsWith('http') || href.startsWith('mailto:') ? '_blank' : '_self'}
+                                        rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                    >
+                                        {label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
