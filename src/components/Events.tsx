@@ -41,10 +41,18 @@ const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolea
         return true;
     }
     
-    // Create a map of old events by id for efficient lookup
+    // Create maps for efficient lookup
     const oldEventMap = new Map(oldEvents.map(event => [event.id, event]));
+    const newEventMap = new Map(newEvents.map(event => [event.id, event]));
     
-    // Check if any event has changed
+    // Check if any old event has been deleted
+    for (const oldEvent of oldEvents) {
+        if (!newEventMap.has(oldEvent.id)) {
+            return true; // Event was deleted
+        }
+    }
+    
+    // Check if any new event was added or existing event was modified
     return newEvents.some(newEvent => {
         const oldEvent = oldEventMap.get(newEvent.id);
         if (!oldEvent) {
@@ -64,7 +72,6 @@ const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolea
         );
     });
 };
-
 export default function Events({ events: initialEvents, loading = false }: EventsProps) {
     const [events, setEvents] = useState<EventItem[]>(initialEvents);
     const [isPolling, setIsPolling] = useState(false);
