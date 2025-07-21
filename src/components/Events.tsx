@@ -35,6 +35,36 @@ interface EventsProps {
     loading?: boolean;
 }
 
+// Helper function to compare events arrays for changes
+const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolean => {
+    if (oldEvents.length !== newEvents.length) {
+        return true;
+    }
+    
+    // Create a map of old events by id for efficient lookup
+    const oldEventMap = new Map(oldEvents.map(event => [event.id, event]));
+    
+    // Check if any event has changed
+    return newEvents.some(newEvent => {
+        const oldEvent = oldEventMap.get(newEvent.id);
+        if (!oldEvent) {
+            return true; // New event
+        }
+        
+        // Compare key properties that might change
+        return (
+            oldEvent.title !== newEvent.title ||
+            oldEvent.date !== newEvent.date ||
+            oldEvent.status !== newEvent.status ||
+            oldEvent.location !== newEvent.location ||
+            oldEvent.description !== newEvent.description ||
+            oldEvent.registerLink !== newEvent.registerLink ||
+            oldEvent.recordingLink !== newEvent.recordingLink ||
+            oldEvent.image !== newEvent.image
+        );
+    });
+};
+
 export default function Events({ events: initialEvents, loading = false }: EventsProps) {
     const [events, setEvents] = useState<EventItem[]>(initialEvents);
     const [isPolling, setIsPolling] = useState(false);
@@ -50,8 +80,10 @@ export default function Events({ events: initialEvents, loading = false }: Event
             if (response.ok) {
                 const newEvents = await response.json();
                 
-                // Simple comparison - in production you might want a more sophisticated diff
-                if (JSON.stringify(newEvents) !== JSON.stringify(events)) {
+                // More robust comparison - check if events have changed
+                const hasChanges = hasEventChanges(events, newEvents);
+                if (hasChanges) {
+                    console.log('Events updated:', { oldCount: events.length, newCount: newEvents.length });
                     setEvents(newEvents);
                     setLastUpdated(new Date());
                 }
