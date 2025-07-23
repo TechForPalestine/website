@@ -154,6 +154,13 @@ export default function Events({ events: initialEvents, loading = false }: Event
                                     alt={event.title}
                                     className="rounded-xl w-full h-48 object-cover"
                                     crossOrigin="anonymous"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        if (target.src !== "/images/default.jpg") {
+                                            console.log(`Image failed to load: ${target.src}, falling back to default`);
+                                            target.src = "/images/default.jpg";
+                                        }
+                                    }}
                                 />
                             </Box>
 
