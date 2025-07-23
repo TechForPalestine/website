@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getProxiedImageUrl } from '../utils/imageProxy.js';
 
 
 const NOTION_SECRET = import.meta.env.NOTION_SECRET;
@@ -24,7 +25,7 @@ export const fetchNotionEvents = async () => {
             if (file.type === "external") {
                 headerImage = file.external.url;
             } else if (file.type === "file") {
-                headerImage = file.file.url;
+                headerImage = getProxiedImageUrl(file.file.url);
             }
         }
 
@@ -65,7 +66,7 @@ export const fetchNotionEventById = async (pageId: string) => {
         if (file.type === "external") {
             headerImage = file.external.url;
         } else if (file.type === "file") {
-            headerImage = file.file.url;
+            headerImage = getProxiedImageUrl(file.file.url);
         }
     }
 

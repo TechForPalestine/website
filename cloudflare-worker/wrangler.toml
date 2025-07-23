@@ -1,0 +1,11 @@
+name = "notion-image-proxy"
+main = "worker.js"
+compatibility_date = "2024-03-08"
+account_id = "cf1bd4ae16c96d5e9bf794817c06f3cc"
+
+# Set this to your domain where the worker will be deployed
+# Example: notion-images.yourdomain.com
+# route = "notion-images.yourdomain.com/*"
+
+[env.production]
+name = "notion-image-proxy"
