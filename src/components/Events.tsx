@@ -152,7 +152,7 @@ export default function Events({ events: initialEvents, loading = false }: Event
                                 <img
                                     src={event.image}
                                     alt={event.title}
-                                    className="rounded-xl w-full aspect-[4/3] object-cover"
+                                    className="rounded-xl w-full aspect-[4/3] object-contain bg-gray-100"
                                     crossOrigin="anonymous"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
