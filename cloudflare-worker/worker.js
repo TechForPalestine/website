@@ -5,6 +5,19 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Max-Age': '86400',
+        },
+      });
+    }
+
     // Handle GET and HEAD requests
     if (request.method !== 'GET' && request.method !== 'HEAD') {
       return new Response('Method not allowed', { status: 405 });
@@ -54,10 +67,15 @@ export default {
         // Clone response to cache it
         const responseToCache = response.clone();
         
-        // Add cache headers (cache for 24 hours, serve stale for up to 7 days)
+        // Add cache and CORS headers (cache for 24 hours, serve stale for up to 7 days)
         const headers = new Headers(responseToCache.headers);
         headers.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
         headers.set('X-Cached-By', 'CF-Worker');
+        
+        // Add CORS headers for cross-origin image requests
+        headers.set('Access-Control-Allow-Origin', '*');
+        headers.set('Access-Control-Allow-Methods', 'GET, HEAD');
+        headers.set('Access-Control-Allow-Headers', 'Content-Type');
         
         // Create response with cache headers
         // For HEAD requests, don't include body
@@ -74,9 +92,14 @@ export default {
         return new Response('Failed to fetch image', { status: 502 });
       }
     } else {
-      // Add header to indicate cache hit
+      // Add header to indicate cache hit and CORS headers
       const headers = new Headers(response.headers);
       headers.set('X-Cache-Status', 'HIT');
+      
+      // Add CORS headers for cross-origin image requests
+      headers.set('Access-Control-Allow-Origin', '*');
+      headers.set('Access-Control-Allow-Methods', 'GET, HEAD');
+      headers.set('Access-Control-Allow-Headers', 'Content-Type');
       // For HEAD requests, don't include body
       response = new Response(request.method === 'HEAD' ? null : response.body, {
         status: response.status,
