@@ -74,7 +74,22 @@ export default {
         });
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch image: ${response.status}`);
+          console.error(`S3 fetch failed: ${response.status} ${response.statusText} for URL: ${notionUrl}`);
+          
+          // If it's a 403, the URL has likely expired - return a specific error
+          if (response.status === 403) {
+            return new Response('Image URL has expired. Please refresh the page to get updated images.', { 
+              status: 410, // Gone
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, HEAD',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Error-Reason': 'notion-url-expired'
+              }
+            });
+          }
+          
+          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
         }
 
         // Clone response to cache it
