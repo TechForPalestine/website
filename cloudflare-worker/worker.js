@@ -1,5 +1,6 @@
 // Cloudflare Worker for proxying and caching Notion images
 // Deploy this to a CF Worker (e.g., notion-images.your-domain.com)
+// Version: 2.1 - CORS support with forced cache refresh
 
 export default {
   async fetch(request, env, ctx) {
@@ -28,7 +29,12 @@ export default {
     const pathParts = url.pathname.split('/');
     if (pathParts.length < 3 || pathParts[1] !== 'proxy') {
       return new Response('Invalid URL format. Use: /proxy/{base64-encoded-url}', { 
-        status: 400 
+        status: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, HEAD',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        }
       });
     }
 
@@ -43,7 +49,14 @@ export default {
         throw new Error('Invalid Notion URL');
       }
     } catch (error) {
-      return new Response('Invalid encoded URL', { status: 400 });
+      return new Response('Invalid encoded URL', { 
+        status: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, HEAD',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        }
+      });
     }
 
     // Check cache first
@@ -89,7 +102,14 @@ export default {
         ctx.waitUntil(cache.put(cacheKey, response.clone()));
       } catch (error) {
         console.error('Error fetching image:', error);
-        return new Response('Failed to fetch image', { status: 502 });
+        return new Response('Failed to fetch image', { 
+          status: 502,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, HEAD',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          }
+        });
       }
     } else {
       // Add header to indicate cache hit and CORS headers
