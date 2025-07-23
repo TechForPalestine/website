@@ -75,21 +75,22 @@ export default {
 
         if (!response.ok) {
           console.error(`S3 fetch failed: ${response.status} ${response.statusText} for URL: ${notionUrl}`);
+          console.log(`Falling back to default image`);
           
-          // If it's a 403, the URL has likely expired - return a specific error
-          if (response.status === 403) {
-            return new Response('Image URL has expired. Please refresh the page to get updated images.', { 
-              status: 410, // Gone
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, HEAD',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Error-Reason': 'notion-url-expired'
-              }
-            });
+          // Fetch the default image instead of returning an error
+          try {
+            const defaultImageUrl = 'https://techforpalestine.org/t4p-logo.png';
+            response = await fetch(defaultImageUrl);
+            
+            if (!response.ok) {
+              throw new Error(`Default image also failed: ${response.status}`);
+            }
+            
+            console.log(`Successfully fetched default image`);
+          } catch (defaultError) {
+            console.error('Failed to fetch default image:', defaultError);
+            throw new Error(`Both original and default image failed`);
           }
-          
-          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
         }
 
         // Clone response to cache it
@@ -117,6 +118,36 @@ export default {
         ctx.waitUntil(cache.put(cacheKey, response.clone()));
       } catch (error) {
         console.error('Error fetching image:', error);
+        console.log('Attempting final fallback to default image');
+        
+        // Final fallback: try to serve the default image
+        try {
+          const defaultImageUrl = 'https://techforpalestine.org/t4p-logo.png';
+          const fallbackResponse = await fetch(defaultImageUrl);
+          
+          if (fallbackResponse.ok) {
+            const headers = new Headers(fallbackResponse.headers);
+            headers.set('Cache-Control', 'public, max-age=1209600, s-maxage=2419200, stale-while-revalidate=2419200');
+            headers.set('X-Cached-By', 'CF-Worker-Fallback');
+            headers.set('Access-Control-Allow-Origin', '*');
+            headers.set('Access-Control-Allow-Methods', 'GET, HEAD');
+            headers.set('Access-Control-Allow-Headers', 'Content-Type');
+            
+            const finalResponse = new Response(request.method === 'HEAD' ? null : fallbackResponse.body, {
+              status: fallbackResponse.status,
+              statusText: fallbackResponse.statusText,
+              headers: headers,
+            });
+            
+            // Cache the fallback response
+            ctx.waitUntil(cache.put(cacheKey, finalResponse.clone()));
+            return finalResponse;
+          }
+        } catch (fallbackError) {
+          console.error('Final fallback also failed:', fallbackError);
+        }
+        
+        // If all else fails, return an error
         return new Response('Failed to fetch image', { 
           status: 502,
           headers: {
