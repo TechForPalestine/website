@@ -5,8 +5,8 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
-    // Only handle GET requests
-    if (request.method !== 'GET') {
+    // Handle GET and HEAD requests
+    if (request.method !== 'GET' && request.method !== 'HEAD') {
       return new Response('Method not allowed', { status: 405 });
     }
 
@@ -60,7 +60,8 @@ export default {
         headers.set('X-Cached-By', 'CF-Worker');
         
         // Create response with cache headers
-        response = new Response(responseToCache.body, {
+        // For HEAD requests, don't include body
+        response = new Response(request.method === 'HEAD' ? null : responseToCache.body, {
           status: responseToCache.status,
           statusText: responseToCache.statusText,
           headers: headers,
@@ -76,7 +77,8 @@ export default {
       // Add header to indicate cache hit
       const headers = new Headers(response.headers);
       headers.set('X-Cache-Status', 'HIT');
-      response = new Response(response.body, {
+      // For HEAD requests, don't include body
+      response = new Response(request.method === 'HEAD' ? null : response.body, {
         status: response.status,
         statusText: response.statusText,
         headers: headers,
