@@ -80,9 +80,9 @@ export default {
         // Clone response to cache it
         const responseToCache = response.clone();
         
-        // Add cache and CORS headers (cache for 24 hours, serve stale for up to 7 days)
+        // Add cache and CORS headers (cache for 2 weeks, serve stale for up to 4 weeks)
         const headers = new Headers(responseToCache.headers);
-        headers.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
+        headers.set('Cache-Control', 'public, max-age=1209600, s-maxage=2419200, stale-while-revalidate=2419200');
         headers.set('X-Cached-By', 'CF-Worker');
         
         // Add CORS headers for cross-origin image requests
