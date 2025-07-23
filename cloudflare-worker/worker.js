@@ -1,0 +1,88 @@
+// Cloudflare Worker for proxying and caching Notion images
+// Deploy this to a CF Worker (e.g., notion-images.your-domain.com)
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    
+    // Only handle GET requests
+    if (request.method !== 'GET') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Extract the encoded Notion URL from the path
+    // URL format: /proxy/{base64-encoded-notion-url}
+    const pathParts = url.pathname.split('/');
+    if (pathParts.length < 3 || pathParts[1] !== 'proxy') {
+      return new Response('Invalid URL format. Use: /proxy/{base64-encoded-url}', { 
+        status: 400 
+      });
+    }
+
+    let notionUrl;
+    try {
+      // Decode the base64-encoded Notion URL
+      notionUrl = atob(pathParts[2]);
+      
+      // Validate it's a Notion S3 URL
+      if (!notionUrl.includes('s3.us-west-2.amazonaws.com') && 
+          !notionUrl.includes('prod-files-secure.s3')) {
+        throw new Error('Invalid Notion URL');
+      }
+    } catch (error) {
+      return new Response('Invalid encoded URL', { status: 400 });
+    }
+
+    // Check cache first
+    const cache = caches.default;
+    const cacheKey = new Request(request.url, request);
+    let response = await cache.match(cacheKey);
+
+    if (!response) {
+      try {
+        // Fetch from Notion's S3
+        response = await fetch(notionUrl, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; NotionImageProxy/1.0)',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status}`);
+        }
+
+        // Clone response to cache it
+        const responseToCache = response.clone();
+        
+        // Add cache headers (cache for 24 hours, serve stale for up to 7 days)
+        const headers = new Headers(responseToCache.headers);
+        headers.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
+        headers.set('X-Cached-By', 'CF-Worker');
+        
+        // Create response with cache headers
+        response = new Response(responseToCache.body, {
+          status: responseToCache.status,
+          statusText: responseToCache.statusText,
+          headers: headers,
+        });
+
+        // Cache the response
+        ctx.waitUntil(cache.put(cacheKey, response.clone()));
+      } catch (error) {
+        console.error('Error fetching image:', error);
+        return new Response('Failed to fetch image', { status: 502 });
+      }
+    } else {
+      // Add header to indicate cache hit
+      const headers = new Headers(response.headers);
+      headers.set('X-Cache-Status', 'HIT');
+      response = new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: headers,
+      });
+    }
+
+    return response;
+  },
+};
