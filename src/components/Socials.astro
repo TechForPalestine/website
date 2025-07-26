@@ -42,6 +42,11 @@ const socials = [
     url: "https://bsky.app/profile/techforpalestine.org",
     icon: "simple-icons:bluesky",
   },
+  {
+    name: "UpScrolled",
+    url: "https://upscrolled.com",
+    icon: "/upscrolled-icon.svg",
+  },
 ];
 
 ---
@@ -57,7 +62,11 @@ const socials = [
           class="text-zinc-950/60 hover:text-zinc-950/80"
         >
           <span class="sr-only">{social.name}</span>
-          <Icon name={social.icon} class="h-6 w-6" />
+          {social.icon.startsWith('/') ? (
+            <img src={social.icon} alt={social.name} class="h-6 w-6" />
+          ) : (
+            <Icon name={social.icon} class="h-6 w-6" />
+          )}
         </a>
       </li>
     ))
