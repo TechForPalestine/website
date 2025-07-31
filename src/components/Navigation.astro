@@ -12,16 +12,50 @@ const toggle = () => {
 const currentRoute = Astro.url.pathname;
 
 const navigation = new Map([
-  ["Get Involved", "/get-involved"],
-  ["About", "/about"],
-  ["Incubator", "/incubator"],
-  ["Projects", "/projects"],
-  ["Ideas", "/ideas"],
-  ["Blog", "https://updates.techforpalestine.org"],
-  ["Hire Palestinians", "/help/hire"],
-  ["Media", "/media"],
-  ["Tools", "/tools"],
-  ["Resources", "/resources"],
+  ["Home", {
+    href: "/",
+    submenu: null
+  }],
+  ["About", {
+    href: "/about",
+    submenu: [
+      ["Team", "/coming-soon"],
+      ["Mission & Vision", "/coming-soon"],
+      ["Media", "/media"],
+      ["Contact Us", "/coming-soon"]
+    ]
+  }],
+  ["Incubator", {
+    href: "/incubator",
+    submenu: [
+      ["Projects", "/projects"],
+      ["Ideas", "/ideas"],
+      ["Tools", "/tools"]
+    ]
+  }],
+  ["Get Involved", {
+    href: "/get-involved",
+    submenu: [
+      ["Discord", "/coming-soon"],
+      ["Entrepreneurs for Palestine", "/e4p"],
+      ["Investors for Palestine", "/coming-soon"],
+      ["Mentor", "/coming-soon"],
+      ["Volunteer", "/volunteer"],
+      ["Start a project", "/project-apply"],
+      ["Hire Palestinians", "/help/hire"]
+    ]
+  }],
+  ["Learn", {
+    href: "/coming-soon",
+    submenu: [
+      ["Updates", "https://updates.techforpalestine.org"],
+      ["Events", "/events"],
+      ["Shopping Ethically", "/coming-soon"],
+      ["How to Boycott", "/coming-soon"],
+      ["Tech Complicity", "/coming-soon"],
+      ["FAQ", "/coming-soon"]
+    ]
+  }]
 ]);
 
 // TODO: MOVE BANNER TO LAYOUT
