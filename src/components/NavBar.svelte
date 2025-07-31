@@ -1,10 +1,20 @@
 <script lang="ts">
-  export let navigation: Map<string, string>;
+  export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
   export let currentRoute: string;
 
   let toggleFlag = false;
+  let activeDropdown: string | null = null;
+
   const toggle = () => {
     toggleFlag = !toggleFlag;
+  };
+
+  const toggleDropdown = (label: string) => {
+    activeDropdown = activeDropdown === label ? null : label;
+  };
+
+  const closeDropdown = () => {
+    activeDropdown = null;
   };
 </script>
 
@@ -20,13 +30,47 @@
 
       <!-- Desktop Navigation  -->
       <nav class="hidden md:flex md:items-center md:space-x-4">
-        {#each navigation as [label, href]}
-          <a
-                  href={href}
-                  class="text-zinc-950 hover:text-zinc-800 {currentRoute.replace(/\/$/, '') === href ? 'font-bold' : ''}"
-          >
-            {label}
-          </a>
+        {#each navigation as [label, item]}
+          <div class="relative">
+            {#if item.submenu}
+              <!-- Dropdown Menu Item -->
+              <button
+                on:click={() => toggleDropdown(label)}
+                on:mouseover={() => activeDropdown = label}
+                class="flex items-center text-zinc-950 hover:text-zinc-800 {currentRoute.replace(/\/$/, '') === item.href ? 'font-bold' : ''}"
+              >
+                {label}
+                <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              
+              <!-- Dropdown Content -->
+              {#if activeDropdown === label}
+                <div 
+                  class="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                  on:mouseleave={closeDropdown}
+                >
+                  {#each item.submenu as [subLabel, subHref]}
+                    <a
+                      href={subHref}
+                      class="block px-4 py-2 text-sm text-zinc-950 hover:bg-gray-100 {currentRoute.replace(/\/$/, '') === subHref ? 'font-semibold bg-gray-50' : ''}"
+                    >
+                      {subLabel}
+                    </a>
+                  {/each}
+                </div>
+              {/if}
+            {:else}
+              <!-- Regular Menu Item -->
+              <a
+                href={item.href}
+                class="text-zinc-950 hover:text-zinc-800 {currentRoute.replace(/\/$/, '') === item.href ? 'font-bold' : ''}"
+              >
+                {label}
+              </a>
+            {/if}
+          </div>
         {/each}
       </nav>
     </div>
@@ -64,13 +108,43 @@
   {#if toggleFlag}
     <nav class="md:hidden bg-white border-2 rounded-lg mx-4 my-2 p-4 animate-fadeIn">
       <div class="flex flex-col items-start space-y-3">
-        {#each navigation as [label, href]}
-          <a
-                  href={href}
-                  class="w-full text-lg text-zinc-800 hover:text-zinc-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === href ? 'font-semibold underline underline-offset-4 decoration-2 decoration-indigo-400' : ''}"
-          >
-            {label}
-          </a>
+        {#each navigation as [label, item]}
+          <div class="w-full">
+            {#if item.submenu}
+              <!-- Mobile Dropdown Item -->
+              <button
+                on:click={() => toggleDropdown(label)}
+                class="flex items-center justify-between w-full text-lg text-zinc-800 hover:text-zinc-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold underline underline-offset-4 decoration-2 decoration-indigo-400' : ''}"
+              >
+                {label}
+                <svg class="h-4 w-4 transform {activeDropdown === label ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              
+              <!-- Mobile Dropdown Content -->
+              {#if activeDropdown === label}
+                <div class="mt-2 ml-4 space-y-2">
+                  {#each item.submenu as [subLabel, subHref]}
+                    <a
+                      href={subHref}
+                      class="block text-base text-zinc-700 hover:text-zinc-500 {currentRoute.replace(/\/$/, '') === subHref ? 'font-semibold text-indigo-600' : ''}"
+                    >
+                      {subLabel}
+                    </a>
+                  {/each}
+                </div>
+              {/if}
+            {:else}
+              <!-- Regular Mobile Item -->
+              <a
+                href={item.href}
+                class="block w-full text-lg text-zinc-800 hover:text-zinc-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold underline underline-offset-4 decoration-2 decoration-indigo-400' : ''}"
+              >
+                {label}
+              </a>
+            {/if}
+          </div>
         {/each}
       </div>
       <div class="mt-4 flex justify-center">
