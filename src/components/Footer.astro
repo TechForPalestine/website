@@ -3,30 +3,38 @@ import Container from "./Container.astro";
 import Socials from "./Socials.astro";
 import TFPLogo from "./TFPLogo.astro";
 
-// Comprehensive footer navigation organized by category
+// Footer navigation matching the new navbar structure
 const footerNavigation = {
     "About": [
-        ["About Us", "/about"],
-        ["Learn More", "/learn-more"],
+        ["About", "/about"],
+        ["Team", "/coming-soon"],
+        ["Mission & Vision", "/coming-soon"], 
         ["Media", "/media"],
+        ["Contact Us", "/coming-soon"]
     ],
-    "Get Involved": [
-        ["Get Involved", "/get-involved"],
-        ["About Volunteering", "/volunteer"],
-        ["Apply to Volunteer", "https://techforpalestine.org/volunteer-form"],
-        ["Donate", "/donate"],
-    ],
-    "Programs": [
+    "Incubator": [
         ["Incubator", "/incubator"],
         ["Projects", "/projects"],
         ["Ideas", "/ideas"],
-        ["Events", "/events"],
+        ["Tools", "/tools"]
     ],
-    "Resources": [
-        ["Tools", "/tools"],
-        ["Resources", "/resources"],
-        ["Hire Palestinians", "/help/hire"],
-        ["Blog", "https://updates.techforpalestine.org"],
+    "Get Involved": [
+        ["Get Involved", "/get-involved"],
+        ["Discord", "/coming-soon"],
+        ["Entrepreneurs for Palestine", "/e4p"],
+        ["Investors for Palestine", "/coming-soon"],
+        ["Mentor", "/coming-soon"],
+        ["Volunteer", "/volunteer"],
+        ["Start a project", "/project-apply"],
+        ["Hire Palestinians", "/help/hire"]
+    ],
+    "Learn": [
+        ["Updates", "https://updates.techforpalestine.org"],
+        ["Events", "/events"],
+        ["Shopping Ethically", "/coming-soon"],
+        ["How to Boycott", "/coming-soon"],
+        ["Tech Complicity", "/coming-soon"],
+        ["FAQ", "/coming-soon"]
     ]
 };
 ---
