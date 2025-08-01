@@ -1,12 +1,11 @@
-import { Box, Typography, Avatar, Grid, Paper, Link, Stack, IconButton } from '@mui/material';
+import { Box, Typography, Avatar, Grid, Paper, Stack } from '@mui/material';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const founders = [
     {
         name: "Chris Musei-Sequeira",
         title: "Founder, CJSC — USA",
-        image: "/images/cj.jpg",
+        image: "/images/chris-linkedin.jpg",
         linkedin: "https://www.linkedin.com/in/cjsequeira/",
         quote: `I'm so glad to be a member of Entrepreneurs for Palestine,
 where I know everyone stands for basic human decency.
@@ -16,7 +15,7 @@ but we all agree on this most fundamental value.`
     {
         name: "Sami Abu Heiba",
         title: "Founder, GIL — Palestine",
-        image: "/images/sami.jpg",
+        image: "/images/sami-linkedin.jpg",
         linkedin: "https://www.linkedin.com/in/samiabuheiba/",
         quote: `Joining E4P has been an incredibly rich and inspiring experience.
 It connected me with a diverse community of purpose-driven entrepreneurs
@@ -26,7 +25,7 @@ Being part of this network reminds me daily of the power of collaboration and sh
     {
         name: "Ariana Alexander-Sefre",
         title: "Founder, SPOKE — UK",
-        image: "/images/ariana.jpg",
+        image: "/images/ariana-linkedin.jpg",
         linkedin: "https://www.linkedin.com/in/arianasefre/",
         quote: `I joined E4P because I started to ask myself who I can truly trust.
 I don’t want to work with, or take investment from, people who aren’t on the right side of history.
@@ -39,7 +38,7 @@ export default function FoundersTestimonials() {
     return (
         <Box py={12}>
             <Typography variant="h4" align="center" fontWeight="bold" mb={8}>
-                Founding Signatories
+                Testimonials
             </Typography>
             <Grid container spacing={6} justifyContent="center">
                 {founders.map((f, i) => (
@@ -83,15 +82,6 @@ export default function FoundersTestimonials() {
                                     <Typography variant="caption" color="text.secondary">
                                         {f.title}
                                     </Typography>
-                                    <IconButton
-                                        href={f.linkedin}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        size="small"
-                                        sx={{ mt: 0.5, color: "primary.main" }}
-                                    >
-                                        <LinkedInIcon />
-                                    </IconButton>
                                 </Box>
                             </Stack>
                         </Paper>
