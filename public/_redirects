@@ -1,0 +1,3 @@
+# Redirects for renamed pages
+/resources /faq 301
+/resources/ /faq 301
