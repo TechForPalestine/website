@@ -33,7 +33,7 @@ export function E4PPage() {
 
                 {/* CTA Buttons */}
 
-                <Box textAlign="center" mb={8}>
+                {/* <Box textAlign="center" mb={8}>
                     <Button
                         variant="contained"
                         size="large"
@@ -76,7 +76,7 @@ export function E4PPage() {
                     >
                         Take Action
                     </Button>
-                </Box>
+                </Box> */}
 
                 {/* Global Community + Map */}
                 <Box mb={10}>
