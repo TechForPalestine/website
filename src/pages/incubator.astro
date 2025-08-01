@@ -1,10 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
-import DiscordButton from "../structures/DiscordButton.astro";
 ---
 
-<Layout title="Incubator">
+<Layout title="Tech for Palestine Incubator">
   <main>
     <div class="relative isolate">
       <div class="px-6 py-10 sm:py-16 lg:px-8">
@@ -14,88 +13,11 @@ import DiscordButton from "../structures/DiscordButton.astro";
             <span class="text-green-800">Tech for Palestine Incubator</span>
           </h1>
           <p class="mt-6 text-lg leading-8 text-gray-600 text-center">
-            The Tech for Palestine incubator isn’t typical — it is an allyship, a community, and a source of mentorship that draws on decades of tech entrepreneurship, engineering, and aligned solidarity to build tech that matters.
+            The Tech for Palestine incubator supports initiatives for Palestine, by getting them off the ground and helping them scale up. Our goal is to create a broad and diverse set of initiatives for Palestine that are able to educate the entire world about Palestine, and to address Hasbara and Zionism wherever it takes hold.
           </p>
           <p class="mt-4 text-lg leading-8 text-gray-600 text-center">
-            We take on a limited number of projects to support with our expertise and are happy to promote other community and affiliated projects that could use some airtime.
+            We take on a limited number of projects to support with our expertise and resources.
           </p>
-        </div>
-        <!-- Button Container -->
-        <div class="flex flex-col md:flex-row gap-4 justify-center mt-8">
-          <!-- Projects Button -->
-          <a
-            target="_blank"
-            href="/projects"
-            class="inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-green-800 hover:bg-green-900 text-white font-semibold py-2 px-4 shadow-sm w-40"
-          >
-            Explore Projects
-            <!-- Chevron Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="w-5 h-5 ml-2"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </a>
-
-          <!-- Get Involved Button -->
-          <a
-            target="_blank"
-            href="/get-involved"
-            class="inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-red-800 hover:bg-red-900 text-white font-semibold py-2 px-4 shadow-sm w-40"
-          >
-            Get Involved
-            <!-- Chevron Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="w-5 h-5 ml-2"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </a>
-
-          <!-- Join Discord Button -->
-          <a
-            target="_blank"
-            href="/discord-invite"
-            class="inline-flex items-center justify-center gap-2 transition-colors rounded-md bg-blue-800 hover:bg-blue-900 text-white font-semibold py-2 px-4 shadow-sm w-40"
-          >
-            Join Discord
-            <!-- Chevron Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="w-5 h-5 ml-2"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </a>
         </div>
       </div>
     </div>
@@ -103,14 +25,15 @@ import DiscordButton from "../structures/DiscordButton.astro";
 
   <!-- Content Sections -->
   <div class="mx-auto max-w-4xl px-6 lg:px-8">
-    <!-- Benefits Section -->
+    <!-- Who the incubator is for Section -->
     <section class="mt-12">
-      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">By Joining, You Will Get:</h2>
-      <div class="mt-6 space-y-6">
-        <!-- Benefit Item -->
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">Who the incubator is for:</h2>
+      <p class="mt-4 text-lg leading-8 text-gray-600">
+        Any early stage project which directly or indirectly advocates for Palestine. We typically support projects in the following areas:
+      </p>
+      <div class="mt-6 space-y-3">
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <!-- Chevron Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -128,11 +51,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Be part of a community and collaborate with others engaged in similar activities.</p>
+            <p class="text-lg text-gray-700">Scaling up boycotts</p>
           </div>
         </div>
-
-        <!-- Additional Benefit Items (Repeat the above block with different content) -->
         <div class="flex items-start">
           <div class="flex-shrink-0">
             <svg
@@ -152,10 +73,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Join "office hours" calls three times a week with other leaders and management for motivation, sharing learnings, discussing challenges, meeting project leaders, and accessing resources and advice from T4P management.</p>
+            <p class="text-lg text-gray-700">Protest Tech</p>
           </div>
         </div>
-
         <div class="flex items-start">
           <div class="flex-shrink-0">
             <svg
@@ -175,10 +95,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Access a Discord server with other dedicated project leaders.</p>
+            <p class="text-lg text-gray-700">Tech industry / VC divestment</p>
           </div>
         </div>
-
         <div class="flex items-start">
           <div class="flex-shrink-0">
             <svg
@@ -198,10 +117,9 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Receive significant help from the T4P team, including refining your vision, access to our volunteer database, mentorship, and marketing support such as launch coordination and social media promotion.</p>
+            <p class="text-lg text-gray-700">Media bias</p>
           </div>
         </div>
-
         <div class="flex items-start">
           <div class="flex-shrink-0">
             <svg
@@ -221,27 +139,91 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Ability to brand as T4P in certain cases, such as using a T4P email address, logo, or calling yourself sponsored.</p>
+            <p class="text-lg text-gray-700">Reach new audiences with the Palestinian message</p>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Silicon Valley / Palestine partnerships</p>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Bias in AI</p>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Exposing Hasbara</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Expectations Section -->
+    <!-- What the incubator does Section -->
     <section class="mt-12">
-      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">If You Choose to Be Part of This, We Expect:</h2>
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What the incubator does:</h2>
       <div class="mt-6 space-y-6">
-        <!-- Expectation Item -->
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <!-- Chevron Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="green"
-              class="w-6 h-6 text-red-600"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
               aria-hidden="true"
             >
               <path
@@ -252,32 +234,7 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Ensure your project aims for high impact, such as reaching ten million users, with success metrics tailored to your specific project.</p>
-          </div>
-        </div>
-
-        <!-- Additional Expectation Items -->
-        <div class="flex items-start">
-          <div class="flex-shrink-0">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="green"
-              class="w-6 h-6 text-red-600"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
-          <div class="ml-4">
-            <p class="text-lg text-gray-700">Keep us updated by attending at least one “office hours” call each week or posting a weekly status update in the “Project Leaders” channel.</p>
-            <a href="https://www.notion.so/Weekly-Updates-Share-out-Sample-dfa6c71eb0dd47918f18520a41d409a1?pvs=21" target="_blank" class="text-blue-600 hover:underline mt-2 block">Weekly Updates/Share-out Sample</a>
+            <p class="text-lg text-gray-700"><strong>Mentorship:</strong> provide support and advice around strategy, impact and direction, helping projects to massively increase their impact. This is provided through Office Hours with Paul Biggar (available 6x per week), as well as an optional dedicated mentor with a background in tech entrepreneurship and leadership.</p>
           </div>
         </div>
 
@@ -288,8 +245,8 @@ import DiscordButton from "../structures/DiscordButton.astro";
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="green"
-              class="w-6 h-6 text-red-600"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
               aria-hidden="true"
             >
               <path
@@ -300,7 +257,7 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Engage with the community by being a resource, asking questions, and contributing to discussions.</p>
+            <p class="text-lg text-gray-700"><strong>Marketing:</strong> We help you get early users and launch to get off the ground, including connecting you to press, influencers, and ecosystem partners, as well as through our supportive community across our Discord and social media.</p>
           </div>
         </div>
 
@@ -311,8 +268,8 @@ import DiscordButton from "../structures/DiscordButton.astro";
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="green"
-              class="w-6 h-6 text-red-600"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
               aria-hidden="true"
             >
               <path
@@ -323,27 +280,140 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Understand that if the incubator no longer fits your needs or isn’t working, your membership may be removed without hard feelings.</p>
+            <p class="text-lg text-gray-700"><strong>Volunteering:</strong> We have a database of nearly 3000 volunteers, and a dedicated recruitment team to connect them to your projects. Our most common requests are for social media coordinators, and software engineers.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700"><strong>Connections:</strong> We are connected to a large part of the Palestine advocacy ecosystem, and typically know the right partners who will want to help your initiative.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700"><strong>Funding:</strong> We provide small grants to most projects in Tech for Palestine with minimal fuss</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700"><strong>Community:</strong> Join a group of over 60 project leaders going through the same challenges as you. Many are doing similar work and can provide advice and support.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700"><strong>Education:</strong> We run seminars to level you up as a project leader, helping you learn more about marketing, sales, go-to-market, building technical projects, etc.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-green-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Ability to brand as T4P in most cases</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- What We Don’t Require Section -->
+    <!-- What we expect Section -->
     <section class="mt-12">
-      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What We Don’t Require / Expect:</h2>
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What we expect if you join:</h2>
       <div class="mt-6 space-y-6">
-        <!-- What Not Required Item -->
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <!-- Chevron Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="red"
-              class="w-6 h-6 text-gray-500"
+              stroke="currentColor"
+              class="w-6 h-6 text-red-600"
               aria-hidden="true"
             >
               <path
@@ -354,31 +424,7 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Daily or weekly meeting attendance.</p>
-          </div>
-        </div>
-
-        <!-- Additional What Not Required Items -->
-        <div class="flex items-start">
-          <div class="flex-shrink-0">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="red"
-              class="w-6 h-6 text-gray-500"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
-          <div class="ml-4">
-            <p class="text-lg text-gray-700">Official or T4P-branded project status.</p>
+            <p class="text-lg text-gray-700">We expect projects to focus on <strong>impact</strong>, such as for example reaching 10 million users</p>
           </div>
         </div>
 
@@ -389,7 +435,59 @@ import DiscordButton from "../structures/DiscordButton.astro";
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="red"
+              stroke="currentColor"
+              class="w-6 h-6 text-red-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Monthly updates: we expect you to send monthly updates (a short email). During your first 6 weeks you must attend at least one office hours call per week, after that we expect you to attend once a month at least until you achieve Product Market Fit.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-red-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If the incubator no longer fits your needs, or you stop participating in it, your membership may be removed (without hard feelings)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What We Don't Require Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What We Don't Require / Expect:</h2>
+      <div class="mt-6 space-y-6">
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
               class="w-6 h-6 text-gray-500"
               aria-hidden="true"
             >
@@ -401,89 +499,123 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">Use of T4P channels or infrastructure for running projects.</p>
-            <p class="text-lg text-gray-700 mt-2">Feel free to continue using any community, project management software, tooling, or infrastructure that works best for you.</p>
+            <p class="text-lg text-gray-700">Daily or multiple weekly meetings.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-gray-500"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Official T4P branding or status, or T4P ownership of your work.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-gray-500"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">Use of T4P infrastructure or tools—feel free to use whatever works best for you.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- To Join Section -->
-<section class="mt-12">
-  <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">To Join</h2>
-  <div class="mt-6 space-y-6">
-    <!-- To Join Item -->
-    <div class="flex items-start">
-      <div class="flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <p class="text-lg text-gray-700">When you're ready to build a project</p>
-        <a href="https://techforpalestine.org/project-application-form" target="_blank" class="text-blue-600 hover:underline mt-2 inline-block">
-          Apply to join the incubator
-        </a>
-      </div>
-    </div>
-
-    <!-- To Join Item -->
-    <div class="flex items-start">
-      <div class="flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <p class="text-lg text-gray-700">
-          If you would like to lead a project but don’t have a good idea
-        </p>
-        <p class="text-lg text-gray-700">
-          Here’s a <a href="https://techforpalestine.org/incubator/ideas" target="_blank" class="text-blue-600 hover:underline">list of projects we’d love to get started</a>!
-        </p>
-      </div>
-    </div>
-
-    <!-- To Join Item -->
-    <div class="flex items-start">
-      <div class="flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <p class="text-lg text-gray-700">If you don’t want to lead a project:</p>
-        <a href="https://techforpalestine.org/volunteer-form" target="_blank" class="text-blue-600 hover:underline mt-2 inline-block">
-          Register as a volunteer!
-        </a>
-      </div>
-    </div>
-
-    <!-- To Join Item -->
-    <div class="flex items-start">
-      <div class="flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <p class="text-lg text-gray-700">
-          If you have already applied, we’ll be in touch.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-    <!-- What’s Next Section -->
     <section class="mt-12">
-      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">What’s Next?</h2>
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">To Join:</h2>
       <div class="mt-6 space-y-6">
-        <!-- What’s Next Item -->
+        <!-- When you're ready to build -->
+        <div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">When you're ready to build a project</h3>
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+            <div class="ml-4">
+              <a href="/project-application-form" target="_blank" class="text-blue-600 hover:underline text-lg font-semibold">
+                Apply to join the incubator
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- If you'd like to lead but don't have an idea -->
+        <div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">If you'd like to lead a project but don't have an idea</h3>
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-lg text-gray-700">Review our list of <strong>project ideas</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- If you don't want to lead -->
+        <div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">If you don't want to lead a project</h3>
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+            <div class="ml-4">
+              <a href="/volunteer" target="_blank" class="text-blue-600 hover:underline text-lg font-semibold">
+                Register as a volunteer!
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <p class="text-lg text-gray-700">If you have already applied, we'll reach out.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Application process Section -->
+    <section class="mt-12">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">Application process</h2>
+      <div class="mt-6 space-y-6">
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <!-- Chevron Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -501,7 +633,7 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">We will conduct an interview to understand your project and goals better.</p>
+            <p class="text-lg text-gray-700">After you apply, we'll review your application, and invite selected projects for an interview.</p>
           </div>
         </div>
 
@@ -524,18 +656,53 @@ import DiscordButton from "../structures/DiscordButton.astro";
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-lg text-gray-700">If admitted, you’ll receive notification and access to private channels.</p>
-            <div class="ml-8 mt-2 space-y-2">
-              <p class="text-lg text-gray-700">Say hi and introduce yourself to the community.</p>
-              <p class="text-lg text-gray-700">Attend our 11:30am EST meetings on Tuesdays, Thursdays, and Saturdays to engage with the community and receive resources and advice.</p>
-              <p class="text-lg text-gray-700">In meetings or channels, you can request:</p>
-              <div class="ml-8 mt-2 space-y-2">
-                <p class="text-lg text-gray-700">• A mentor</p>
-                <p class="text-lg text-gray-700">• Volunteers</p>
-                <p class="text-lg text-gray-700">• Help with acquiring early users through our social media channels and community</p>
-                <p class="text-lg text-gray-700">• Launches on social media</p>
-              </div>
-            </div>
+            <p class="text-lg text-gray-700">The interview: a 30 minute call, focusing on the impact you intend to have and how you intend to get there. Please don't prepare slides or a presentation.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-yellow-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">After the interview, we'll make a decision to admit you, and notify you as soon as possible.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-yellow-600"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-lg text-gray-700">If admitted, you'll receive an email with next steps, and how to get access to all the resources from Tech for Palestine.</p>
           </div>
         </div>
       </div>
@@ -552,7 +719,7 @@ import DiscordButton from "../structures/DiscordButton.astro";
     <!-- CTA Button -->
     <div class="relative flex justify-center">
       <a
-        href="https://techforpalestine.org/project-application-form"
+        href="/project-application-form"
         target="_blank"
         class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 transform hover:scale-105 ease-in-out z-10 text-lg sm:text-xl md:text-2xl"
       >
