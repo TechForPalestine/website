@@ -5,82 +5,108 @@ import TFPLogo from "./TFPLogo.astro";
 
 // Footer navigation matching the new navbar structure
 const footerNavigation = {
-    "About": [
-        ["About", "/about"],
-        ["Team", "/coming-soon"],
-        ["Mission & Vision", "/coming-soon"], 
-        ["Media", "/media"],
-        ["Contact Us", "/coming-soon"]
-    ],
-    "Incubator": [
-        ["Incubator", "/incubator"],
-        ["Projects", "/projects"],
-        ["Ideas", "/ideas"],
-        ["Tools", "/tools"]
-    ],
-    "Get Involved": [
-        ["Get Involved", "/get-involved"],
-        ["Discord", "/coming-soon"],
-        ["Entrepreneurs for Palestine", "/e4p"],
-        ["Investors for Palestine", "/coming-soon"],
-        ["Mentor", "/coming-soon"],
-        ["Volunteer", "/volunteer"],
-        ["Start a project", "/project-apply"],
-        ["Hire Palestinians", "/help/hire"]
-    ],
-    "Learn": [
-        ["Updates", "https://updates.techforpalestine.org"],
-        ["Events", "/events"],
-        ["Shopping Ethically", "/coming-soon"],
-        ["How to Boycott", "/coming-soon"],
-        ["Tech Complicity", "/coming-soon"],
-        ["FAQ", "/coming-soon"]
-    ]
+    "About": {
+        href: "/about",
+        links: [
+            ["Team", "/coming-soon"],
+            ["Mission & Vision", "/coming-soon"], 
+            ["Media", "/media"],
+            ["Contact Us", "/coming-soon"]
+        ]
+    },
+    "Incubator": {
+        href: "/incubator",
+        links: [
+            ["Projects", "/projects"],
+            ["Ideas", "/ideas"],
+            ["Tools", "/tools"]
+        ]
+    },
+    "Get Involved": {
+        href: "/get-involved",
+        links: [
+            ["Join our Discord", "https://techforpalestine.org/discord-invite"],
+            ["Entrepreneurs for Palestine", "/e4p"],
+            ["Investors for Palestine", "/coming-soon"],
+            ["Be a Mentor", "/coming-soon"],
+            ["Volunteer", "/volunteer"],
+            ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
+            ["Hire Palestinians", "/help/hire"]
+        ]
+    },
+    "Learn": {
+        href: "/coming-soon",
+        links: [
+            ["Past Updates", "https://updates.techforpalestine.org"],
+            ["Past Events", "/events"],
+            ["Shopping Ethically", "/coming-soon"],
+            ["How to Boycott", "/coming-soon"],
+            ["Tech Complicity", "/coming-soon"],
+            ["FAQ", "/faq"]
+        ]
+    }
 };
 ---
 
-    <footer class="text-zinc-700 text-sm">
+    <footer class="bg-gray-50 border-t border-gray-200 mt-20">
         <Container>
-            <div class="flex flex-col gap-10 py-10 md:flex-row md:justify-between md:items-start">
-
-                <!-- Left Column: Logo and copyright -->
-                <div class="space-y-2 max-w-sm">
-                    <div class="h-16 w-auto">
-                        <a href="/" class="flex items-center">
-                            <img src="/mark-transparent.png" alt="tpf logo" class="h-16" />
-                        </a>
+            <div class="py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+                    
+                    <!-- Left Column: Logo and description -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div>
+                            <a href="/" class="inline-block">
+                                <img src="/mark-transparent.png" alt="Tech for Palestine logo" class="h-12 w-auto" />
+                            </a>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed max-w-md">
+                            Tech for Palestine is a coalition of thousands of founders, engineers, and professionals working in support of Palestinian liberation through technology and advocacy.
+                        </p>
+                        <div class="pt-2">
+                            <Socials/>
+                        </div>
                     </div>
 
-                </div>
-
-                <!-- Right Column: Site Index -->
-                <div class="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 text-right md:text-left">
-                    {Object.entries(footerNavigation).map(([category, links]) => (
-                        <div class="space-y-3">
-                            <h3 class="font-semibold text-black text-base">{category}</h3>
-                            <div class="space-y-2">
-                                {links.map(([label, href]) => (
-                                    <a
-                                        href={href}
-                                        class="block text-zinc-600 transition-colors hover:text-zinc-900 hover:underline"
-                                        target={href.startsWith('http') || href.startsWith('mailto:') ? '_blank' : '_self'}
-                                        rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                                    >
-                                        {label}
-                                    </a>
-                                ))}
+                    <!-- Right Columns: Site Index -->
+                    <div class="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {Object.entries(footerNavigation).map(([category, {href, links}]) => (
+                            <div class="space-y-4">
+                                <a 
+                                    href={href}
+                                    class="font-semibold text-gray-900 text-sm hover:text-green-700 transition-colors duration-200"
+                                >
+                                    {category}
+                                </a>
+                                <div class="space-y-3">
+                                    {links.map(([label, linkHref]) => (
+                                        <a
+                                            href={linkHref}
+                                            class="block text-gray-600 text-sm hover:text-gray-900 hover:translate-x-1 transition-all duration-200"
+                                            target={linkHref.startsWith('http') || linkHref.startsWith('mailto:') ? '_blank' : '_self'}
+                                            rel={linkHref.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                        >
+                                            {label}
+                                        </a>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
 
-
-            <div class="flex flex-col gap-10 py-10 md:flex-row md:justify-between md:items-start">
-                <p className="text-xs text-zinc-600">
-                    &copy; {new Date().getFullYear()} TechForPalestine. All rights reserved. Tech for Palestine is a registered 501(c)(3) nonprofit.
-                </p>
-                <Socials/>
+            <!-- Bottom section -->
+            <div class="border-t border-gray-200 py-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-xs text-gray-500">
+                        &copy; {new Date().getFullYear()} Tech for Palestine. All rights reserved. Tech for Palestine is a registered 501(c)(3) nonprofit.
+                    </p>
+                    <div class="flex items-center gap-6 text-xs text-gray-500">
+                        <a href="/coming-soon" class="hover:text-gray-700 transition-colors">Privacy Policy</a>
+                        <a href="/coming-soon" class="hover:text-gray-700 transition-colors">Terms of Service</a>
+                    </div>
+                </div>
             </div>
         </Container>
     </footer>
