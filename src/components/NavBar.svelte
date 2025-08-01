@@ -34,22 +34,31 @@
           <div class="relative">
             {#if item.submenu}
               <!-- Dropdown Menu Item -->
-              <button
-                on:click={() => toggleDropdown(label)}
+              <div
+                class="flex items-center"
                 on:mouseover={() => activeDropdown = label}
-                class="flex items-center text-zinc-950 hover:text-zinc-800 {currentRoute.replace(/\/$/, '') === item.href ? 'font-bold' : ''}"
               >
-                {label}
-                <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
+                <a
+                  href={item.href}
+                  class="text-zinc-950 hover:text-zinc-800 {currentRoute.replace(/\/$/, '') === item.href ? 'font-bold' : ''}"
+                >
+                  {label}
+                </a>
+                <button
+                  on:click={() => toggleDropdown(label)}
+                  class="ml-1 text-zinc-950 hover:text-zinc-800"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </div>
               
               <!-- Dropdown Content -->
               {#if activeDropdown === label}
                 <div 
                   class="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-                  on:mouseleave={closeDropdown}
+                  on:mouseleave={() => activeDropdown = null}
                 >
                   {#each item.submenu as [subLabel, subHref]}
                     <a
@@ -112,15 +121,22 @@
           <div class="w-full">
             {#if item.submenu}
               <!-- Mobile Dropdown Item -->
-              <button
-                on:click={() => toggleDropdown(label)}
-                class="flex items-center justify-between w-full text-lg text-zinc-800 hover:text-zinc-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold underline underline-offset-4 decoration-2 decoration-indigo-400' : ''}"
-              >
-                {label}
-                <svg class="h-4 w-4 transform {activeDropdown === label ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
+              <div class="flex items-center justify-between w-full">
+                <a
+                  href={item.href}
+                  class="flex-1 text-lg text-zinc-800 hover:text-zinc-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold underline underline-offset-4 decoration-2 decoration-indigo-400' : ''}"
+                >
+                  {label}
+                </a>
+                <button
+                  on:click={() => toggleDropdown(label)}
+                  class="ml-2 text-zinc-800 hover:text-zinc-600"
+                >
+                  <svg class="h-4 w-4 transform {activeDropdown === label ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </div>
               
               <!-- Mobile Dropdown Content -->
               {#if activeDropdown === label}
