@@ -43,7 +43,7 @@ const {
 }
 </script>
 </head>
-<body class="text-zinc-950 bg-gradient-to-br from-green-50 to-red-100 min-h-screen relative">
+<body class="text-zinc-950 bg-gradient-to-br from-green-50 to-red-100 min-h-screen relative flex flex-col">
 <Navigation />
 
 
@@ -64,9 +64,9 @@ const {
     Donate
 </a>
 
-
-
+<div class="flex-grow">
 <slot />
+</div>
 <Footer />
 </body>
 </html>
