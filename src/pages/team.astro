@@ -1,0 +1,146 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+---
+
+<Layout title="Team & Board">
+  <main>
+    <div class="relative isolate">
+      <!-- Background pattern from other pages -->
+      <svg
+        class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern
+            id="team-pattern"
+            width="200"
+            height="200"
+            x="50%"
+            y="-1"
+            patternUnits="userSpaceOnUse"
+          >
+            <path d="M.5 200V.5H200" fill="none"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" stroke-width="0" fill="url(#team-pattern)"></rect>
+      </svg>
+      
+      <div class="px-6 py-24 sm:py-32 lg:px-8">
+        <div class="mx-auto max-w-6xl">
+          <!-- Page Header -->
+          <div class="text-center mb-16">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <span class="text-green-800">Team & Board</span>
+            </h1>
+            <p class="mt-6 text-lg leading-8 text-gray-600 max-w-3xl mx-auto">
+              Meet the dedicated leaders guiding Tech for Palestine's mission to support Palestinian liberation through technology and advocacy.
+            </p>
+          </div>
+
+          <!-- Board of Directors Section -->
+          <div class="mb-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Board of Directors</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <!-- Paul Biggar -->
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                  <div class="text-gray-400 text-6xl">👤</div>
+                </div>
+                <div class="p-6">
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">Paul Biggar</h3>
+                  <p class="text-green-700 font-medium mb-3">Founder & CEO</p>
+                  <p class="text-gray-600 text-sm">Leading Tech for Palestine's strategic vision and organizational development.</p>
+                </div>
+              </div>
+
+              <!-- Amir Nathoo -->
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                  <div class="text-gray-400 text-6xl">👤</div>
+                </div>
+                <div class="p-6">
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">Amir Nathoo</h3>
+                  <p class="text-green-700 font-medium mb-3">CEO of Outschool</p>
+                  <p class="text-gray-600 text-sm">Bringing extensive experience in scaling mission-driven technology organizations.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leadership Team Section -->
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Leadership Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <!-- Volunteer Management Lead -->
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                  <div class="text-gray-400 text-5xl">👤</div>
+                </div>
+                <div class="p-4">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1">Jane Doe</h3>
+                  <p class="text-green-700 font-medium text-sm mb-2">Volunteer Management Lead</p>
+                  <p class="text-gray-600 text-xs">Coordinating our global volunteer community and engagement initiatives.</p>
+                </div>
+              </div>
+
+              <!-- Marketing Lead -->
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                  <div class="text-gray-400 text-5xl">👤</div>
+                </div>
+                <div class="p-4">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1">John Doe</h3>
+                  <p class="text-green-700 font-medium text-sm mb-2">Marketing Lead</p>
+                  <p class="text-gray-600 text-xs">Amplifying our message and building awareness for Palestinian tech initiatives.</p>
+                </div>
+              </div>
+
+              <!-- Community Lead -->
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                  <div class="text-gray-400 text-5xl">👤</div>
+                </div>
+                <div class="p-4">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1">Alex Doe</h3>
+                  <p class="text-green-700 font-medium text-sm mb-2">Community Lead</p>
+                  <p class="text-gray-600 text-xs">Building and nurturing our vibrant tech community across platforms.</p>
+                </div>
+              </div>
+
+              <!-- Incubator Lead -->
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                  <div class="text-gray-400 text-5xl">👤</div>
+                </div>
+                <div class="p-4">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1">Sam Doe</h3>
+                  <p class="text-green-700 font-medium text-sm mb-2">Incubator Lead</p>
+                  <p class="text-gray-600 text-xs">Guiding innovative projects from concept to impact in our incubator program.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Join Us Section -->
+          <div class="mt-20 text-center">
+            <div class="bg-green-50 rounded-lg p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">Join Our Mission</h3>
+              <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+                We're always looking for passionate individuals to join our team and contribute to Palestinian liberation through technology.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/volunteer" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-700 hover:bg-green-800 transition-colors">
+                  Get Involved
+                </a>
+                <a href="mailto:contact@techforpalestine.org" class="inline-flex items-center px-6 py-3 border border-green-700 text-base font-medium rounded-md text-green-700 bg-white hover:bg-gray-50 transition-colors">
+                  Contact Us
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
