@@ -27,10 +27,19 @@ export const fetchNotionEvents = async () => {
                 headerImage = file.external.url;
                 console.log('Using external URL:', headerImage);
             } else if (file.type === "file") {
-                // Add cache busting parameter to ensure fresh images
+                // Create hash from URL to detect when file changes
+                const urlHash = btoa(file.file.url).slice(0, 8);
+                const timestamp = Date.now();
+                
+                // Add cache busting parameter with both hash and timestamp
                 const baseProxyUrl = getProxiedImageUrl(file.file.url);
-                headerImage = `${baseProxyUrl}?cb=${Date.now()}`;
-                console.log('Using proxied URL with cache bust:', { original: file.file.url, proxied: headerImage });
+                headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
+                console.log('Using proxied URL with aggressive cache bust:', { 
+                    original: file.file.url, 
+                    proxied: headerImage,
+                    urlHash,
+                    timestamp: new Date(timestamp).toISOString()
+                });
             }
         } else {
             console.log('No header image found for event:', props["Title"]?.title?.[0]?.plain_text);
@@ -73,9 +82,13 @@ export const fetchNotionEventById = async (pageId: string) => {
         if (file.type === "external") {
             headerImage = file.external.url;
         } else if (file.type === "file") {
-            // Add cache busting parameter to ensure fresh images
+            // Create hash from URL to detect when file changes
+            const urlHash = btoa(file.file.url).slice(0, 8);
+            const timestamp = Date.now();
+            
+            // Add cache busting parameter with both hash and timestamp
             const baseProxyUrl = getProxiedImageUrl(file.file.url);
-            headerImage = `${baseProxyUrl}?cb=${Date.now()}`;
+            headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
         }
     }
 
