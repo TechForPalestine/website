@@ -27,8 +27,10 @@ export const fetchNotionEvents = async () => {
                 headerImage = file.external.url;
                 console.log('Using external URL:', headerImage);
             } else if (file.type === "file") {
-                headerImage = getProxiedImageUrl(file.file.url);
-                console.log('Using proxied URL:', { original: file.file.url, proxied: headerImage });
+                // Add cache busting parameter to ensure fresh images
+                const baseProxyUrl = getProxiedImageUrl(file.file.url);
+                headerImage = `${baseProxyUrl}?cb=${Date.now()}`;
+                console.log('Using proxied URL with cache bust:', { original: file.file.url, proxied: headerImage });
             }
         } else {
             console.log('No header image found for event:', props["Title"]?.title?.[0]?.plain_text);
@@ -71,7 +73,9 @@ export const fetchNotionEventById = async (pageId: string) => {
         if (file.type === "external") {
             headerImage = file.external.url;
         } else if (file.type === "file") {
-            headerImage = getProxiedImageUrl(file.file.url);
+            // Add cache busting parameter to ensure fresh images
+            const baseProxyUrl = getProxiedImageUrl(file.file.url);
+            headerImage = `${baseProxyUrl}?cb=${Date.now()}`;
         }
     }
 

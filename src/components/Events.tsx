@@ -154,14 +154,42 @@ export default function Events({ events: initialEvents, loading = false }: Event
                                     alt={event.title}
                                     className="rounded-xl w-full aspect-[4/3] object-contain bg-gray-100"
                                     crossOrigin="anonymous"
+                                    onLoad={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        console.log(`Image loaded successfully for event "${event.title}":`, target.src);
+                                    }}
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
-                                        if (target.src !== "/images/default.jpg") {
-                                            console.error(`Image failed to load for event "${event.title}":`, {
-                                                originalSrc: target.src,
+                                        const currentSrc = target.src;
+                                        
+                                        // Try fallback strategies
+                                        if (currentSrc.includes('notion-image-proxy') && currentSrc !== "/images/default.jpg") {
+                                            console.error(`Proxy image failed for event "${event.title}". Trying original Notion URL:`, {
+                                                proxySrc: currentSrc,
                                                 eventImage: event.image,
                                                 eventId: event.id
                                             });
+                                            
+                                            // Try to decode the original URL from the proxy URL
+                                            try {
+                                                const proxyPath = currentSrc.split('/proxy/')[1];
+                                                const originalUrl = atob(proxyPath);
+                                                console.log(`Trying original Notion URL: ${originalUrl}`);
+                                                target.src = originalUrl;
+                                                return;
+                                            } catch (decodeError) {
+                                                console.error('Could not decode original URL from proxy:', decodeError);
+                                            }
+                                        } else if (!currentSrc.includes('/images/default.jpg')) {
+                                            console.error(`Direct Notion URL failed for event "${event.title}". Using default:`, {
+                                                originalSrc: currentSrc,
+                                                eventImage: event.image,
+                                                eventId: event.id
+                                            });
+                                        }
+                                        
+                                        // Final fallback to default image
+                                        if (target.src !== "/images/default.jpg") {
                                             target.src = "/images/default.jpg";
                                         }
                                     }}
