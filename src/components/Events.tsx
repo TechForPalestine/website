@@ -78,21 +78,36 @@ export default function Events({ events: initialEvents, loading = false }: Event
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
     // Polling function
-    const pollForUpdates = async () => {
+    const pollForUpdates = async (forceRefresh = false) => {
         if (isPolling) return; // Prevent concurrent requests
         
         setIsPolling(true);
         try {
-            const response = await fetch('/api/events');
+            const url = forceRefresh ? '/api/events?refresh=true' : '/api/events';
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            
             if (response.ok) {
-                const newEvents = await response.json();
+                const data = await response.json();
+                const newEvents = forceRefresh ? data.events : data;
                 
-                // More robust comparison - check if events have changed
-                const hasChanges = hasEventChanges(events, newEvents);
-                if (hasChanges) {
-                    console.log('Events updated:', { oldCount: events.length, newCount: newEvents.length });
+                if (forceRefresh) {
+                    console.log('Force refresh completed:', data);
                     setEvents(newEvents);
                     setLastUpdated(new Date());
+                } else {
+                    // More robust comparison - check if events have changed
+                    const hasChanges = hasEventChanges(events, newEvents);
+                    if (hasChanges) {
+                        console.log('Events updated:', { oldCount: events.length, newCount: newEvents.length });
+                        setEvents(newEvents);
+                        setLastUpdated(new Date());
+                    }
                 }
             }
         } catch (error) {
@@ -115,14 +130,25 @@ export default function Events({ events: initialEvents, loading = false }: Event
                 <Typography variant="caption" className="text-gray-500">
                     Last updated: {lastUpdated.toLocaleTimeString()}
                 </Typography>
-                {isPolling && (
-                    <Box className="flex items-center gap-2">
-                        <CircularProgress size={16} />
-                        <Typography variant="caption" className="text-gray-500">
-                            Checking for updates...
-                        </Typography>
-                    </Box>
-                )}
+                <Box className="flex items-center gap-4">
+                    <Button
+                        size="small" 
+                        variant="outlined"
+                        onClick={() => pollForUpdates(true)}
+                        disabled={isPolling}
+                        className="text-xs"
+                    >
+                        Force Refresh
+                    </Button>
+                    {isPolling && (
+                        <Box className="flex items-center gap-2">
+                            <CircularProgress size={16} />
+                            <Typography variant="caption" className="text-gray-500">
+                                Checking for updates...
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
             </Box>
 
             {loading && (
