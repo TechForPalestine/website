@@ -72,41 +72,62 @@ const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolea
         );
     });
 };
-export default function Events({ events: initialEvents, loading = false }: EventsProps) {
+export default function Events({ events: initialEvents, loading: initialLoading = false }: EventsProps) {
     const [events, setEvents] = useState<EventItem[]>(initialEvents);
-    const [isPolling, setIsPolling] = useState(false);
+    const [loading, setLoading] = useState(initialLoading);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
-    // Polling function
-    const pollForUpdates = async () => {
-        if (isPolling) return; // Prevent concurrent requests
-        
-        setIsPolling(true);
+    // Function to fetch fresh events (for refresh button)
+    const fetchFreshEvents = async () => {
+        setLoading(true);
         try {
-            const response = await fetch('/api/events');
+            console.log('Fetching fresh events from Notion API...');
+            const response = await fetch('/api/events', {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            
             if (response.ok) {
                 const newEvents = await response.json();
-                
-                // More robust comparison - check if events have changed
-                const hasChanges = hasEventChanges(events, newEvents);
-                if (hasChanges) {
-                    console.log('Events updated:', { oldCount: events.length, newCount: newEvents.length });
-                    setEvents(newEvents);
-                    setLastUpdated(new Date());
-                }
+                console.log(`Refreshed: Loaded ${newEvents.length} events from Notion`);
+                setEvents(newEvents);
+                setLastUpdated(new Date());
             }
         } catch (error) {
-            console.error('Failed to poll for events:', error);
+            console.error('Failed to fetch fresh events:', error);
         } finally {
-            setIsPolling(false);
+            setLoading(false);
         }
     };
 
-    // Set up polling
+    // Only fetch fresh events if we don't have initial data
     useEffect(() => {
-        const interval = setInterval(pollForUpdates, 30000); // Poll every 30 seconds
-        return () => clearInterval(interval);
-    }, [events, isPolling]);
+        console.log('Events component mounted:', { 
+            initialEventsLength: initialEvents.length, 
+            initialLoading, 
+            currentLoadingState: loading 
+        });
+        
+        if (initialEvents.length === 0 && initialLoading) {
+            console.log('No initial events, fetching from API...');
+            fetchFreshEvents();
+        } else {
+            console.log(`Using ${initialEvents.length} initial events from SSR, setting loading to false`);
+            setLoading(false);
+        }
+    }, []);
+
+    // Debug logging for state changes
+    useEffect(() => {
+        console.log('Loading state changed:', loading);
+    }, [loading]);
+
+    useEffect(() => {
+        console.log('Events state changed:', { count: events.length, firstEventTitle: events[0]?.title });
+    }, [events]);
 
     return (
         <div className="mx-auto max-w-6xl px-4 py-10">
@@ -115,19 +136,33 @@ export default function Events({ events: initialEvents, loading = false }: Event
                 <Typography variant="caption" className="text-gray-500">
                     Last updated: {lastUpdated.toLocaleTimeString()}
                 </Typography>
-                {isPolling && (
-                    <Box className="flex items-center gap-2">
-                        <CircularProgress size={16} />
-                        <Typography variant="caption" className="text-gray-500">
-                            Checking for updates...
-                        </Typography>
-                    </Box>
-                )}
+                <Box className="flex items-center gap-4">
+                    <Button
+                        size="small" 
+                        variant="outlined"
+                        onClick={fetchFreshEvents}
+                        disabled={loading}
+                        className="text-xs"
+                    >
+                        Refresh
+                    </Button>
+                    {loading && (
+                        <Box className="flex items-center gap-2">
+                            <CircularProgress size={16} />
+                            <Typography variant="caption" className="text-gray-500">
+                                Loading...
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
             </Box>
 
-            {loading && (
+            {loading && events.length === 0 && (
                 <Box className="text-center py-6">
                     <CircularProgress size={32} color="success" />
+                    <Typography variant="body2" className="mt-4 text-gray-600">
+                        Loading events from Notion...
+                    </Typography>
                 </Box>
             )}
 
