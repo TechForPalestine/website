@@ -59,7 +59,60 @@ export default {
       });
     }
 
-    // Check cache first
+    // Check if this is an expired S3 URL by parsing expiration time
+    let isExpiredUrl = false;
+    try {
+      const urlObj = new URL(notionUrl);
+      const expiresParam = urlObj.searchParams.get('X-Amz-Expires');
+      const dateParam = urlObj.searchParams.get('X-Amz-Date');
+      
+      if (expiresParam && dateParam) {
+        // Parse the date parameter (format: YYYYMMDDTHHMMSSZ)
+        const year = parseInt(dateParam.substring(0, 4));
+        const month = parseInt(dateParam.substring(4, 6)) - 1; // JS months are 0-based
+        const day = parseInt(dateParam.substring(6, 8));
+        const hour = parseInt(dateParam.substring(9, 11));
+        const minute = parseInt(dateParam.substring(11, 13));
+        const second = parseInt(dateParam.substring(13, 15));
+        
+        const signedDate = new Date(Date.UTC(year, month, day, hour, minute, second));
+        const expirationDate = new Date(signedDate.getTime() + (parseInt(expiresParam) * 1000));
+        const now = new Date();
+        
+        isExpiredUrl = now > expirationDate;
+        console.log(`URL expiration check: signed=${signedDate.toISOString()}, expires=${expirationDate.toISOString()}, now=${now.toISOString()}, expired=${isExpiredUrl}`);
+      }
+    } catch (parseError) {
+      console.log('Could not parse S3 URL expiration, proceeding with fetch:', parseError.message);
+    }
+
+    // If URL is expired, don't check cache and don't cache the result - go straight to fallback
+    if (isExpiredUrl) {
+      console.log('S3 URL is expired, using default image immediately');
+      try {
+        const defaultImageUrl = 'https://techforpalestine.org/t4p-logo.png';
+        const fallbackResponse = await fetch(defaultImageUrl);
+        
+        if (fallbackResponse.ok) {
+          const headers = new Headers(fallbackResponse.headers);
+          headers.set('Cache-Control', 'public, max-age=1209600, s-maxage=2419200, stale-while-revalidate=2419200');
+          headers.set('X-Cached-By', 'CF-Worker-Expired-Fallback');
+          headers.set('Access-Control-Allow-Origin', '*');
+          headers.set('Access-Control-Allow-Methods', 'GET, HEAD');
+          headers.set('Access-Control-Allow-Headers', 'Content-Type');
+          
+          return new Response(request.method === 'HEAD' ? null : fallbackResponse.body, {
+            status: fallbackResponse.status,
+            statusText: fallbackResponse.statusText,
+            headers: headers,
+          });
+        }
+      } catch (fallbackError) {
+        console.error('Fallback for expired URL also failed:', fallbackError);
+      }
+    }
+
+    // Check cache first (only for non-expired URLs)
     const cache = caches.default;
     const cacheKey = new Request(request.url, request);
     let response = await cache.match(cacheKey);
