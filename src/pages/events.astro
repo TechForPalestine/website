@@ -7,16 +7,22 @@ import PageHeader from "../components/PageHeader.astro";
 import { fetchNotionEvents } from "../store/notionClient";
 
 let events = [];
-let loading = false;
+let loading = true;
 
-try {
-    // Quick server-side fetch for faster initial load
-    events = await fetchNotionEvents();
-    console.log(`SSR: Loaded ${events.length} events for initial page load`);
-} catch (err) {
-    loading = true;
-    console.error("SSR: Error fetching events:", err);
-}
+// Skip SSR fetch for now - let client handle it (SSR takes 30+ seconds)
+console.log("SSR: Skipping server-side fetch, letting client load data");
+
+// TODO: Re-enable SSR once we fix the 30-second delay
+// The API route /api/events works instantly, but SSR fetchNotionEvents() hangs
+// try {
+//     events = await fetchNotionEvents();
+//     console.log(`SSR: Loaded ${events.length} events for initial page load`);
+//     loading = false;
+// } catch (err) {
+//     loading = true;
+//     console.error("SSR: Error fetching events:", err);
+// }
+---
     <Layout title="Events">
         <PageHeader
             overline="Tech for Palestine"
@@ -24,5 +30,5 @@ try {
             subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
         />
 
-        <Events events={[]} loading={true} client:only="react" />
+        <Events events={events} loading={loading} client:only="react" />
     </Layout>
