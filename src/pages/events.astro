@@ -3,8 +3,20 @@ import Layout from "../layouts/Layout.astro";
 import Events from "../components/Events.tsx";
 import "../styles/base.css";
 import PageHeader from "../components/PageHeader.astro";
----
 
+import { fetchNotionEvents } from "../store/notionClient";
+
+let events = [];
+let loading = false;
+
+try {
+    // Quick server-side fetch for faster initial load
+    events = await fetchNotionEvents();
+    console.log(`SSR: Loaded ${events.length} events for initial page load`);
+} catch (err) {
+    loading = true;
+    console.error("SSR: Error fetching events:", err);
+}
     <Layout title="Events">
         <PageHeader
             overline="Tech for Palestine"
