@@ -157,7 +157,11 @@ export default function Events({ events: initialEvents, loading = false }: Event
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
                                         if (target.src !== "/images/default.jpg") {
-                                            console.log(`Image failed to load: ${target.src}, falling back to default`);
+                                            console.error(`Image failed to load for event "${event.title}":`, {
+                                                originalSrc: target.src,
+                                                eventImage: event.image,
+                                                eventId: event.id
+                                            });
                                             target.src = "/images/default.jpg";
                                         }
                                     }}
