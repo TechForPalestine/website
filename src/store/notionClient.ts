@@ -22,11 +22,16 @@ export const fetchNotionEvents = async () => {
         let headerImage = "";
         if (props["Header"]?.files?.length > 0) {
             const file = props["Header"].files[0];
+            console.log('Event header file found:', { eventTitle: props["Title"]?.title?.[0]?.plain_text, fileType: file.type, file });
             if (file.type === "external") {
                 headerImage = file.external.url;
+                console.log('Using external URL:', headerImage);
             } else if (file.type === "file") {
                 headerImage = getProxiedImageUrl(file.file.url);
+                console.log('Using proxied URL:', { original: file.file.url, proxied: headerImage });
             }
+        } else {
+            console.log('No header image found for event:', props["Title"]?.title?.[0]?.plain_text);
         }
 
         const description =
