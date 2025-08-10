@@ -17,8 +17,6 @@ try {
     loading = true;
     console.error("SSR: Error fetching events:", err);
 }
----
-
     <Layout title="Events">
         <PageHeader
             overline="Tech for Palestine"
@@ -26,5 +24,5 @@ try {
             subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
         />
 
-        <Events events={events} loading={loading} client:only="react" />
+        <Events events={[]} loading={true} client:only="react" />
     </Layout>
