@@ -14,8 +14,24 @@ export const GET: APIRoute = async ({ request }) => {
       throw new Error(`ProjectHub API returned ${response.status}: ${response.statusText}`);
     }
 
-    const projects = await response.json();
-    console.log(`API: Fetched ${projects.length} projects from ProjectHub`);
+    const data = await response.json();
+    console.log('API: Raw response from ProjectHub:', JSON.stringify(data, null, 2));
+    
+    // Handle different possible response structures
+    let projects;
+    if (Array.isArray(data)) {
+      projects = data;
+    } else if (data.data && Array.isArray(data.data)) {
+      projects = data.data;
+    } else if (data.projects && Array.isArray(data.projects)) {
+      projects = data.projects;
+    } else {
+      console.error('API: Unexpected response structure:', data);
+      projects = [];
+    }
+    
+    console.log(`API: Processed ${projects.length} projects from ProjectHub`);
+    console.log('API: First project sample:', projects[0] ? JSON.stringify(projects[0], null, 2) : 'No projects found');
     
     return new Response(JSON.stringify(projects), {
       status: 200,
