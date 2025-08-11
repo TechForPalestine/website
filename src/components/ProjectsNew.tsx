@@ -3,14 +3,10 @@ import {
     Box,
     Typography,
     Card,
-    Chip,
     Button,
     Link,
     CircularProgress,
 } from "@mui/material";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 interface ProjectItem {
     id: number;
@@ -160,41 +156,12 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
 
                             {/* Content */}
                             <Box className="flex-1 space-y-3">
-                                <Box className="flex items-center gap-2 flex-wrap">
-                                    <Typography
-                                        variant="h6"
-                                        className="font-bold tracking-tight text-gray-900"
-                                    >
-                                        {project.name}
-                                    </Typography>
-                                    {project.status && (
-                                        <Chip
-                                            size="small"
-                                            label={project.status}
-                                            sx={{
-                                                backgroundColor: project.status === "active" ? "#168039" : "#EA4335",
-                                                color: "#fff",
-                                                fontWeight: 500,
-                                            }}
-                                        />
-                                    )}
-                                </Box>
-
-                                {/* Meta info */}
-                                <Box className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                                    {project.discordUsername && (
-                                        <span className="flex items-center gap-1">
-                                            <LocationOnIcon fontSize="small" />
-                                            Discord: {project.discordUsername}
-                                        </span>
-                                    )}
-                                    {project.updatedAt && (
-                                        <span className="flex items-center gap-1">
-                                            <CalendarTodayIcon fontSize="small" />
-                                            {new Date(project.updatedAt).toLocaleDateString()}
-                                        </span>
-                                    )}
-                                </Box>
+                                <Typography
+                                    variant="h6"
+                                    className="font-bold tracking-tight text-gray-900 mb-3"
+                                >
+                                    {project.name}
+                                </Typography>
 
                                 {/* Description */}
                                 <Typography
