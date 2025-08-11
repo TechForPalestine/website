@@ -143,7 +143,17 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                             {/* Project Image */}
                             <Box className="relative w-full">
                                 <img
-                                    src={project.logoUrl || "/images/default.jpg"}
+                                    src={(() => {
+                                        if (!project.logoUrl || project.logoUrl.trim() === "") {
+                                            return "/images/default.jpg";
+                                        }
+                                        // If logoUrl is a relative path, prepend the ProjectHub domain
+                                        if (project.logoUrl.startsWith("/")) {
+                                            return `https://projecthub.techforpalestine.org${project.logoUrl}`;
+                                        }
+                                        // If it's already a full URL, use as-is
+                                        return project.logoUrl;
+                                    })()}
                                     alt={project.name}
                                     className="rounded-xl w-full aspect-[16/9] object-cover bg-gray-100"
                                     onError={(e) => {
