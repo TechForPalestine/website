@@ -7,7 +7,7 @@ import {
     Link,
     CircularProgress,
 } from "@mui/material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import PublicIcon from "@mui/icons-material/Public";
 
 interface ProjectItem {
     id: number;
@@ -183,7 +183,7 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                                             className="group p-2 rounded-full bg-gray-100 hover:bg-black transition-colors"
                                             title="Visit Website"
                                         >
-                                            <OpenInNewIcon className="h-5 w-5 text-gray-800 group-hover:text-white" />
+                                            <PublicIcon className="h-5 w-5 text-gray-800 group-hover:text-white" />
                                         </Link>
                                     )}
                                     {project.githubUrl && (
