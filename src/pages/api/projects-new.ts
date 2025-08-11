@@ -1,13 +1,29 @@
 import type { APIRoute } from 'astro';
 
+// Explicitly disable prerendering for this API route
+export const prerender = false;
+
 export const GET: APIRoute = async ({ request }) => {
   try {
     console.log('API: Starting fetchProjectsFromApp...');
     
+    // Force fresh fetch with comprehensive cache-busting
     const response = await fetch('https://projecthub.techforpalestine.org/api/public/projects', {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'User-Agent': 'T4P-Website/1.0'
+      },
+      // Cloudflare-specific fetch options to bypass all caching
+      cf: {
+        cacheEverything: false,
+        cacheTtl: 0,
+        cacheTtlByStatus: {}
+      },
+      // Standard fetch cache control
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -40,11 +56,17 @@ export const GET: APIRoute = async ({ request }) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
         'Access-Control-Allow-Headers': 'Content-Type',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        // Comprehensive cache control headers
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
         'Pragma': 'no-cache',
         'Expires': '0',
+        // Cloudflare-specific headers
+        'CF-Cache-Status': 'DYNAMIC',
+        'Vary': '*',
+        // Custom headers for debugging
         'X-Project-Count': projects.length.toString(),
         'X-Fetch-Time': new Date().toISOString(),
+        'X-Cache-Bust': Date.now().toString(),
       },
     });
   } catch (error) {
