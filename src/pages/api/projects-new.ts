@@ -1,11 +1,16 @@
 import type { APIRoute } from 'astro';
 
+// Import environment variables properly for Astro
+const PROJECTHUB_API_KEY = import.meta.env.PROJECTHUB_API_KEY || process.env.PROJECTHUB_API_KEY;
+
 // Explicitly disable prerendering for this API route
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
   try {
     console.log('API: Starting fetchProjectsFromApp...');
+    console.log('API: API Key available:', !!PROJECTHUB_API_KEY);
+    console.log('API: API Key length:', PROJECTHUB_API_KEY?.length || 0);
     
     // Force fresh fetch with comprehensive cache-busting
     const response = await fetch('https://projecthub.techforpalestine.org/api/public/projects', {
@@ -14,7 +19,8 @@ export const GET: APIRoute = async ({ request }) => {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
-        'User-Agent': 'T4P-Website/1.0'
+        'User-Agent': 'T4P-Website/1.0',
+        'X-API-Key': PROJECTHUB_API_KEY || ''
       },
       // Cloudflare-specific fetch options to bypass all caching
       cf: {
