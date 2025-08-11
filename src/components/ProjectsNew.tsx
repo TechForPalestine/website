@@ -7,6 +7,7 @@ import {
     Link,
     CircularProgress,
 } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 interface ProjectItem {
     id: number;
