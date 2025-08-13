@@ -4,10 +4,11 @@ import Socials from "./Socials.astro";
 import TFPLogo from "./TFPLogo.astro";
 
 // Footer navigation matching the new navbar structure
-const footerNavigation = {
+const footerNavigation: Record<string, { href?: string; links: [string, string][] }> = {
     "About": {
         href: "/about",
         links: [
+            ["Our Organization", "/about"],
             // ["Mission & Vision", "/coming-soon"], 
             ["Team", "/team"],
             ["Media", "/media"],
@@ -17,6 +18,7 @@ const footerNavigation = {
     "Incubator": {
         href: "/incubator",
         links: [
+            ["Overview", "/incubator"],
             ["Projects", "/projects"],
             ["Ideas", "/ideas"],
             ["Tools", "/tools"]
@@ -25,6 +27,7 @@ const footerNavigation = {
     "Get Involved": {
         href: "/get-involved",
         links: [
+            ["Overview", "/get-involved"],
             ["Join our Discord", "https://techforpalestine.org/discord-invite"],
             ["Entrepreneurs for Palestine", "/e4p"],
             // ["Investors for Palestine", "/coming-soon"],
