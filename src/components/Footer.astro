@@ -29,7 +29,7 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
         links: [
             ["Overview", "/get-involved"],
             ["Join our Discord", "https://techforpalestine.org/discord-invite"],
-            ["Entrepreneurs for Palestine", "/e4p"],
+            ["E4P", "/e4p"],
             // ["Investors for Palestine", "/coming-soon"],
             ["Be a Mentor", "/mentorship"],
             ["Volunteer", "/volunteer"],
@@ -51,66 +51,77 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
 };
 ---
 
-    <footer class="bg-gray-50 border-t border-gray-200 mt-20">
-        <Container>
-            <div class="py-16">
-                <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
-                    
-                    <!-- Left Column: Logo and description -->
-                    <div class="lg:col-span-2 space-y-6">
-                        <div>
-                            <a href="/" class="inline-block">
-                                <img src="/mark-transparent.png" alt="Tech for Palestine logo" class="h-12 w-auto" />
-                            </a>
-                        </div>
-                        <p class="text-gray-600 text-sm leading-relaxed max-w-md">
-                            Tech for Palestine is a coalition of thousands of founders, engineers, and professionals working in support of Palestinian liberation through technology and advocacy.
-                        </p>
-                        <div class="pt-2">
-                            <Socials/>
-                        </div>
+<footer class="bg-gradient-to-br from-gray-50 to-gray-100 border-t border-gray-200 mt-20">
+    <Container>
+        <div class="py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                
+                <!-- Left Column: Logo and description -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div>
+                        <a href="/" class="inline-block group">
+                            <img src="/mark-transparent.png" alt="Tech for Palestine logo" class="h-16 w-auto transition-transform duration-200 group-hover:scale-105" />
+                        </a>
                     </div>
-
-                    <!-- Right Columns: Site Index -->
-                    <div class="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {Object.entries(footerNavigation).map(([category, {href, links}]) => (
-                            <div class="space-y-4">
-                                <a 
-                                    href={href}
-                                    class="font-semibold text-gray-900 text-sm hover:text-green-700 transition-colors duration-200"
-                                >
-                                    {category}
-                                </a>
-                                <div class="space-y-3">
-                                    {links.map(([label, linkHref]) => (
-                                        <a
-                                            href={linkHref}
-                                            class="block text-gray-600 text-sm hover:text-gray-900 hover:translate-x-1 transition-all duration-200"
-                                            target={linkHref.startsWith('http') || linkHref.startsWith('mailto:') ? '_blank' : '_self'}
-                                            rel={linkHref.startsWith('http') ? 'noopener noreferrer' : undefined}
-                                        >
-                                            {label}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bottom section -->
-            <div class="border-t border-gray-200 py-8">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="text-xs text-gray-500">
-                        &copy; {new Date().getFullYear()} Tech for Palestine. All rights reserved. Tech for Palestine is a registered 501(c)(3) nonprofit.
+                    <p class="text-gray-700 text-base leading-relaxed max-w-lg">
+                        Tech for Palestine is first and foremost an incubator for advocacy projects. We rally thousands of volunteers from across the tech world — founders, engineers, marketers, investors, and more — all committed to Palestinian liberation.
                     </p>
-                    <div class="flex items-center gap-6 text-xs text-gray-500">
-                        <a href="/privacy-policy" class="hover:text-gray-700 transition-colors">Privacy Policy</a>
-                        <a href="/terms" class="hover:text-gray-700 transition-colors">Terms of Service</a>
-                        <a href="/legal" class="hover:text-gray-700 transition-colors">Legal & Financial</a>
+                    <div class="pt-4">
+                        <Socials/>
+                    </div>
+                    <div class="pt-6">
+                        <a
+                            href="/donate"
+                            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
+                        >
+                            Support Our Work
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
+
+                <!-- Right Columns: Site Index -->
+                <div class="lg:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {Object.entries(footerNavigation).map(([category, {href, links}]) => (
+                        <div class="space-y-4">
+                            <a 
+                                href={href}
+                                class="font-bold text-gray-900 text-base hover:text-blue-600 transition-colors duration-200 block"
+                            >
+                                {category}
+                            </a>
+                            <div class="space-y-3">
+                                {links.map(([label, linkHref]) => (
+                                    <a
+                                        href={linkHref}
+                                        class="block text-gray-600 text-sm hover:text-gray-900 hover:translate-x-1 transition-all duration-200 whitespace-nowrap"
+                                        target={linkHref.startsWith('http') || linkHref.startsWith('mailto:') ? '_blank' : '_self'}
+                                        rel={linkHref.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                    >
+                                        {label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </Container>
-    </footer>
+        </div>
+
+        <!-- Bottom section -->
+        <div class="border-t border-gray-200 py-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-sm text-gray-600 text-center md:text-left max-w-2xl">
+                    &copy; 2025 Tech for Palestine, a registered 501(c)(3) nonprofit.
+                </p>
+                <div class="flex items-center gap-8 text-sm text-gray-600 flex-shrink-0">
+                    <a href="/privacy-policy" class="hover:text-gray-900 transition-colors duration-200 whitespace-nowrap">Privacy Policy</a>
+                    <a href="/terms" class="hover:text-gray-900 transition-colors duration-200 whitespace-nowrap">Terms of Service</a>
+                    <a href="/legal" class="hover:text-gray-900 transition-colors duration-200 whitespace-nowrap">Legal & Financial</a>
+                </div>
+            </div>
+        </div>
+    </Container>
+</footer>

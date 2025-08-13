@@ -51,7 +51,7 @@ const socials = [
 
 ---
 
-<ul class="flex space-x-4 relative z-10">
+<ul class="flex space-x-5 relative z-10">
   {
     socials.map((social) => (
       <li>
@@ -59,13 +59,14 @@ const socials = [
           href={social.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-zinc-950/60 hover:text-zinc-950/80"
+          class="text-gray-500 hover:text-blue-600 transition-colors duration-200 group"
+          title={social.name}
         >
           <span class="sr-only">{social.name}</span>
           {social.icon.startsWith('/') ? (
-            <img src={social.icon} alt={social.name} class="h-6 w-6" />
+            <img src={social.icon} alt={social.name} class="h-6 w-6 transition-transform duration-200 group-hover:scale-110" />
           ) : (
-            <Icon name={social.icon} class="h-6 w-6" />
+            <Icon name={social.icon} class="h-6 w-6 transition-transform duration-200 group-hover:scale-110" />
           )}
         </a>
       </li>
