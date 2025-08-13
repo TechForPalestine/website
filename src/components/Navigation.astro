@@ -11,7 +11,7 @@ const toggle = () => {
 
 const currentRoute = Astro.url.pathname;
 
-const navigation = new Map([
+const navigation: Map<string, { href: string; submenu: [string, string][] | null }> = new Map([
   ["Home", {
     href: "/",
     submenu: null
@@ -19,23 +19,26 @@ const navigation = new Map([
   ["About", {
     href: "/about",
     submenu: [
+      ["Our Organization", "/about"],
       // ["Mission & Vision", "/coming-soon"],
       ["Team", "/team"],
       ["Media", "/media"],
       ["Contact Us", "mailto:contact@techforpalestine.org"]
-    ]
+    ] as [string, string][]
   }],
   ["Incubator", {
     href: "/incubator",
     submenu: [
+      ["Overview", "/incubator"],
       ["Projects", "/projects"],
       ["Ideas", "/ideas"],
       ["Tools", "/tools"]
-    ]
+    ] as [string, string][]
   }],
   ["Get Involved", {
     href: "/get-involved",
     submenu: [
+      ["Overview", "/get-involved"],
       ["Join our Discord", "https://techforpalestine.org/discord-invite"],
       ["Entrepreneurs for Palestine", "/e4p"],
       // ["Investors for Palestine", "/coming-soon"],
@@ -43,10 +46,10 @@ const navigation = new Map([
       ["Volunteer", "/volunteer"],
       ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
       ["Hire Palestinians", "/help/hire"]
-    ]
+    ] as [string, string][]
   }],
   ["Learn", {
-    // href: "/coming-soon",
+    href: "/faq",
     submenu: [
       ["Past Updates", "https://updates.techforpalestine.org"],
       ["Past Events", "/events"],
@@ -54,7 +57,7 @@ const navigation = new Map([
       // ["How to Boycott", "/coming-soon"],
       // ["Tech Complicity", "/coming-soon"],
       ["FAQ", "/faq"]
-    ]
+    ] as [string, string][]
   }]
 ]);
 
