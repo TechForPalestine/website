@@ -1,0 +1,415 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+
+// Local data arrays - enhanced based on design feedback
+const projects = [
+  {
+    title: "Gaza Rebuild Tracker",
+    summary: "Real-time infrastructure damage assessment and rebuilding progress",
+    status: "Active",
+    href: "/projects/gaza-rebuild",
+    tags: ["Infrastructure", "Data"],
+    metrics: "5.2K+ daily users"
+  },
+  {
+    title: "Advocacy Campaign Manager",
+    summary: "Tools for organizing grassroots political campaigns",
+    status: "Beta",
+    href: "/projects/campaign-manager",
+    tags: ["Organizing", "Politics"],
+    metrics: "15+ campaigns launched"
+  },
+  {
+    title: "Community Resource Network",
+    summary: "Connect Palestinian families with local mutual aid resources",
+    status: "Launch Ready",
+    href: "/projects/resource-network",
+    tags: ["Community", "Aid"],
+    metrics: "800+ families connected"
+  },
+  {
+    title: "Digital Rights Toolkit",
+    summary: "Privacy and security tools for activists and journalists",
+    status: "Development",
+    href: "/projects/digital-rights",
+    tags: ["Privacy", "Security"],
+    metrics: "Testing phase"
+  }
+];
+
+const kpis = [
+  { label: "Projects Launched", value: "47" },
+  { label: "Volunteers Matched", value: "2,300+" },
+  { label: "Capital Directed", value: "$2.8M" },
+  { label: "Active Partners", value: "85" }
+];
+
+const socialProof = [
+  { type: "media", name: "TechCrunch" },
+  { type: "media", name: "The Verge" },
+  { type: "media", name: "Wired" },
+  { type: "partner", name: "Code for America" },
+  { type: "partner", name: "Tech Workers Coalition" }
+];
+---
+
+<Layout title="Tech for Palestine - Incubating advocacy projects for a free Palestine">
+  <!-- Skip to content link -->
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 bg-red-600 text-white px-4 py-2 z-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+  >
+    Skip to main content
+  </a>
+
+  <main id="main-content">
+    <!-- Hero Section - Enhanced with design feedback -->
+    <section class="bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div class="max-w-xl">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+              Incubating advocacy projects for a free Palestine
+            </h1>
+            <!-- Enhanced subheadline per feedback -->
+            <p class="mt-6 text-xl text-gray-600 leading-relaxed">
+              We connect mission-driven entrepreneurs with mentorship, resources, and funding partners to build tools that make impact.
+            </p>
+            
+            <!-- Enhanced CTAs with clear task split -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+              <a
+                href="/incubator/apply"
+                class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md"
+              >
+                Join the Incubator
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+              <a
+                href="/volunteer"
+                class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-red-600 bg-white border-2 border-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg"
+              >
+                Volunteer
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+            
+            <!-- Tertiary CTA as per feedback -->
+            <div class="mt-4">
+              <a
+                href="/donate"
+                class="inline-flex items-center text-gray-600 hover:text-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-md px-2 py-1"
+              >
+                Support our work
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <div class="flex justify-center">
+            <div class="w-full max-w-md h-80 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center">
+              <div class="text-center">
+                <svg class="w-16 h-16 mx-auto mb-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <p class="text-gray-600 font-medium">Community solidarity</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- "Who you are" section - New based on feedback -->
+    <section class="bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Who you are</h2>
+          <p class="text-lg text-gray-600">
+            Choose your path to Palestinian liberation
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Project Leader</h3>
+            <p class="text-gray-600 mb-6">
+              You have an advocacy idea and want to build it with support from experienced mentors and funding partners.
+            </p>
+            <a 
+              href="/incubator/apply" 
+              class="inline-flex items-center text-red-600 hover:text-red-700 font-semibold transition-colors"
+            >
+              Apply to the incubator
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          </div>
+          
+          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Volunteer</h3>
+            <p class="text-gray-600 mb-6">
+              You have skills to contribute - engineering, design, marketing, legal - and want to help projects succeed.
+            </p>
+            <a 
+              href="/volunteer" 
+              class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            >
+              Start volunteering
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          </div>
+          
+          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Supporter</h3>
+            <p class="text-gray-600 mb-6">
+              You want to financially support advocacy projects and connect mission-aligned entrepreneurs with resources.
+            </p>
+            <a 
+              href="/investors" 
+              class="inline-flex items-center text-green-600 hover:text-green-700 font-semibold transition-colors"
+            >
+              Partner with us
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Projects with metrics - Enhanced per feedback -->
+    <section class="bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Flagship Projects</h2>
+          <p class="text-lg text-gray-600">
+            Real advocacy tools making measurable impact
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {projects.map((project, index) => (
+            <div key={index} class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+              <div class="flex items-start justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 leading-tight">
+                  {project.title}
+                </h3>
+                <span class={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                  project.status === 'Active' ? 'bg-green-100 text-green-800' :
+                  project.status === 'Beta' ? 'bg-blue-100 text-blue-800' :
+                  project.status === 'Launch Ready' ? 'bg-purple-100 text-purple-800' :
+                  'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {project.status}
+                </span>
+              </div>
+              
+              <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                {project.summary}
+              </p>
+              
+              <!-- Metrics for proof of traction -->
+              <div class="text-sm font-medium text-blue-600 mb-4">
+                {project.metrics}
+              </div>
+              
+              <div class="flex flex-wrap gap-1 mb-4">
+                {project.tags.map((tag, tagIndex) => (
+                  <span key={tagIndex} class="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              
+              <a
+                href={project.href}
+                class="inline-flex items-center text-red-600 hover:text-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md px-2 py-1 text-sm font-semibold"
+              >
+                View project
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          ))}
+        </div>
+        
+        <div class="text-center">
+          <a
+            href="/projects"
+            class="inline-flex items-center px-6 py-3 text-base font-semibold text-red-600 bg-white border-2 border-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg"
+          >
+            See all projects
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Proof Band - New based on feedback -->
+    <section class="bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center mb-8">
+          <h3 class="text-lg font-semibold text-gray-600">Trusted by the community</h3>
+        </div>
+        <div class="flex flex-wrap justify-center items-center gap-8 opacity-60">
+          {socialProof.map((item, index) => (
+            <div key={index} class="text-gray-500 font-medium">
+              {item.name}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact & Network -->
+    <section class="bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Impact</h2>
+          <p class="text-lg text-gray-600">
+            Building the infrastructure for Palestinian liberation
+          </p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {kpis.map((kpi, index) => (
+            <div key={index} class="text-center">
+              <div class="text-4xl font-bold text-red-600 mb-2">{kpi.value}</div>
+              <div class="text-sm text-gray-600">{kpi.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Incubator Process - Simplified per feedback -->
+    <section class="bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">How the Incubator Works</h2>
+          <p class="text-lg text-gray-600">
+            From idea to impact in three focused steps
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div class="text-center">
+            <div class="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+              <span class="text-2xl font-bold text-red-600">1</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Apply</h3>
+            <p class="text-gray-600">
+              Share your advocacy project idea and vision for impact.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+              <span class="text-2xl font-bold text-green-600">2</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Build with mentors</h3>
+            <p class="text-gray-600">
+              Work closely with experienced founders and domain experts.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+              <span class="text-2xl font-bold text-blue-600">3</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Launch & grow</h3>
+            <p class="text-gray-600">
+              Deploy your project with ongoing support and network access.
+            </p>
+          </div>
+        </div>
+
+        <!-- Repeated CTA per feedback -->
+        <div class="text-center">
+          <a
+            href="/incubator/apply"
+            class="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md"
+          >
+            Apply to join the incubator
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="bg-gradient-to-r from-red-600 to-red-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-white mb-4">
+            Ready to make impact?
+          </h2>
+          <p class="text-red-100 text-lg mb-8">
+            Join thousands of tech workers building tools for Palestinian liberation.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/incubator/apply"
+              class="inline-flex items-center px-8 py-4 text-lg font-semibold text-red-600 bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-600 rounded-lg"
+            >
+              Start your project
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+            <a
+              href="/volunteer"
+              class="inline-flex items-center px-8 py-4 text-lg font-semibold text-white border-2 border-white hover:bg-white hover:text-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-600 rounded-lg"
+            >
+              Volunteer your skills
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+/* Ensure proper styling inheritance */
+:global(.bg-gradient-to-r) {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+:global(.bg-gradient-to-br) {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+</style>

@@ -84,17 +84,14 @@
       </nav>
     </div>
     
-    <!-- Right side: Socials and Donate -->
-    <div class="hidden lg:flex gap-6 items-center">
-      <slot name="socials" />
-      <div>
-        <a
-          href="/donate"
-          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
-        >
-          Donate
-        </a>
-      </div>
+    <!-- Right side: Donate -->
+    <div class="hidden lg:flex items-center">
+      <a
+        href="/donate"
+        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
+      >
+        Donate
+      </a>
     </div>
 
     <!-- Mobile Header -->
@@ -164,9 +161,6 @@
             {/if}
           </div>
         {/each}
-      </div>
-      <div class="mt-6 flex justify-center">
-        <slot name="socials" />
       </div>
     </nav>
   {/if}
