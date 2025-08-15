@@ -42,7 +42,7 @@ export default function RHFSkillSelector({ name, skills = [], skillLevels = [] }
                         const selectedSkillLevel = watch(name)?.[skill]; // Changed 'skill_name' to 'skill'
 
                         // Get the validation error for the current skill
-                        const skillError = errors[name]?.[skill]; // Changed 'skill_name' to 'skill'
+                        const skillError = (errors as any)[name]?.[skill]; // Changed 'skill_name' to 'skill'
 
                         return (
                             <TableRow key={skill} sx={{ backgroundColor: skillError ? '#f8d7da' : 'transparent' }}> {/* Changed 'skill_name' to 'skill' */}

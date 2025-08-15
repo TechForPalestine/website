@@ -30,7 +30,7 @@ export const GET: APIRoute = async ({ request }) => {
       },
       // Standard fetch cache control
       cache: 'no-store'
-    });
+    } as RequestInit & { cf?: any });
 
     if (!response.ok) {
       throw new Error(`ProjectHub API returned ${response.status}: ${response.statusText}`);

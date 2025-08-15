@@ -24,7 +24,7 @@ const WelcomeView = () => {
                     href={'/'}
                     size="large"
                     variant="contained"
-                    endIcon={<ArrowForwardIosIcon fontSize="small" color={'neutral'} />}
+                    endIcon={<ArrowForwardIosIcon fontSize="small" />}
                 >
                     Back to home
                 </Button>
