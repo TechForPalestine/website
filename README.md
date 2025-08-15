@@ -6,16 +6,10 @@ Help normalize Palestinian humanity in different ways.
 
 ## Getting started
 
-To run this project on your local machine, first install the npm dependencies:
+To run this project on your local machine, first install dependencies:
 
 ```bash
-npm install 
-```
-
-OR
-
-```bash
-yarn install
+npm install
 ```
 
 Next, run the development server:
@@ -25,6 +19,12 @@ npm run dev
 ```
 
 Finally, open [http://localhost:4321](http://localhost:4321) in your browser to view the website.
+
+For CI environments, prefer a clean, reproducible install:
+
+```bash
+npm ci
+```
 
 
 ## Features
