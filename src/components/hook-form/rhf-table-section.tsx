@@ -85,7 +85,6 @@ export default function RHFTableSection({ name, label, columns = [] }: RHFTableS
                                                         control={control}
                                                         errors={fieldState?.error ? { [col.fieldname]: fieldState.error } : {}}
                                                         parentName={`${name}[${index}]`}
-                                                        {...field}
                                                     />
                                                 )}
                                             />
