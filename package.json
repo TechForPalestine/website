@@ -2,13 +2,17 @@
   "name": "web",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "npm@10.0.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
@@ -43,8 +47,7 @@
     "slick-carousel": "^1.8.1",
     "svelte": "^4.2.14",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.4.5",
-    "yarn": "^1.22.22"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@iconify-json/bi": "^1.1.22",
