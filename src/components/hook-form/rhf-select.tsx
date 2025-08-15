@@ -20,6 +20,8 @@ type RHFSelectProps = TextFieldProps & {
     maxHeight?: boolean | number;
     children: React.ReactNode;
     PaperPropsSx?: SxProps<Theme>;
+    rules?: any;
+    label?: React.ReactNode;
 };
 
 export function RHFSelect({
@@ -132,7 +134,7 @@ export function RHFMultiSelect({
             );
         }
 
-        return selectedItems.map((item) => item.label).join(', ');
+        return selectedItems.map((item) => item.title).join(', ');
     };
 
     return (

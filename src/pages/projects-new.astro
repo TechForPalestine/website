@@ -1,12 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ProjectsNew from "../components/ProjectsNew.tsx";
+import ProjectsNewComponent from "../components/ProjectsNew.tsx";
 import PageHeader from "../components/PageHeader.astro";
 import "../styles/base.css";
 
 // Start with empty data, let client-side fetch handle it (similar to events pattern)
-let projects = [];
-let loading = true;
+let projects: any[] = [];
+let loading: boolean = true;
 
 console.log("SSR: Skipping server-side fetch for new projects, letting client load data");
 ---
@@ -18,5 +18,5 @@ console.log("SSR: Skipping server-side fetch for new projects, letting client lo
         subtitle="Testing new project management app integration"
     />
 
-    <ProjectsNew projects={projects} loading={loading} client:only="react" />
+    <ProjectsNewComponent projects={projects} loading={loading} client:only="react" />
 </Layout>

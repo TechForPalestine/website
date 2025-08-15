@@ -6,17 +6,17 @@ import type { StackProps } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { fetchFormFields ,fetchFieldData } from '../store/api'; // ✅ Import API call
 
-const parseOptions = (options) => options.split('\n').filter((option) => option.trim() !== '');
+const parseOptions = (options: string) => options.split('\n').filter((option) => option.trim() !== '');
 
-const transformTableFields = (field) => {
+const transformTableFields = (field: any) => {
     if (!field.table_fields) return [];
     return field.table_fields.map(({ fieldname, label }) => ({
         value: fieldname,
         label,
     }));
 };
-const useAllLinkOptions = (fields) => {
-    const [options, setOptions] = useState({});
+const useAllLinkOptions = (fields: any[]) => {
+    const [options, setOptions] = useState<Record<string, any>>({});
     const [loading, setLoading] = useState(true);
     const fetchedOnce = useRef(false); // ✅ Prevents duplicate API calls
 
@@ -25,7 +25,7 @@ const useAllLinkOptions = (fields) => {
 
         const fetchAllOptions = async () => {
             setLoading(true);
-            const newOptions = {};
+            const newOptions: Record<string, any> = {};
 
             for (const field of fields) {
                 if (field.fieldtype === 'Link' && !newOptions[field.fieldname]) {
@@ -70,7 +70,7 @@ const useAllLinkOptions = (fields) => {
     return { options, loading };
 };
 
-const getRules = (field) => {
+const getRules = (field: any) => {
     return {
         required: field.reqd ? 'This field is required' : false,
         pattern:
@@ -88,10 +88,17 @@ const getRules = (field) => {
     };
 };
 
-export const RenderFormFields = memo(({ fields, control, errors, parentName = '' }) => {
+export interface RenderFormFieldsProps {
+  fields: any[];
+  control: any;
+  errors: any;
+  parentName?: string;
+}
+
+export const RenderFormFields: React.FC<RenderFormFieldsProps> = memo(({ fields, control, errors, parentName = '' }: RenderFormFieldsProps) => {
         const { options, loading } = useAllLinkOptions(fields);
 
-        return fields.map((field) => (
+        return fields.map((field: any) => (
             <RenderInput
                 key={field.fieldname}
                 field={field}
@@ -104,7 +111,16 @@ export const RenderFormFields = memo(({ fields, control, errors, parentName = ''
         ));
     }
 )
-export const RenderInput = ({ field, control, errors, options, loading, parentName }) => {
+export interface RenderInputProps {
+  field: any;
+  control: any;
+  errors: any;
+  options: Record<string, any>;
+  loading: boolean;
+  parentName?: string;
+}
+
+export const RenderInput = ({ field, control, errors, options, loading, parentName }: RenderInputProps) => {
     if (!field) return null; // Prevent errors if field is undefined
 
     // Compute field path based on parentName
@@ -157,7 +173,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
                     >
                         <MenuItem value="">None</MenuItem>
                         <Divider sx={{ borderStyle: 'dashed' }} />
-                        {parseOptions(field.options).map((option) => (
+                        {parseOptions(field.options).map((option: string) => (
                             <MenuItem key={option} value={option}>
                                 {option}
                             </MenuItem>
@@ -222,7 +238,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
                         {loading ? (
                             <MenuItem disabled>Loading...</MenuItem>
                         ) : (
-                            (options[field.fieldname] || []).map((option, index) => (
+                            (options[field.fieldname] || []).map((option: any, index: number) => (
                                 <MenuItem key={index} value={option.name}>
                                     {option.name}
                                 </MenuItem>
@@ -249,6 +265,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
 interface BlockProps extends StackProps {
     label?: string;
     children: React.ReactNode;
+    description?: React.ReactNode;
 }
 
 function Block({ label = 'RHFTextField', sx, children,description }: BlockProps) {

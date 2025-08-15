@@ -28,7 +28,10 @@ export const fetchNotionEvents = async () => {
                 console.log('Using external URL:', headerImage);
             } else if (file.type === "file") {
                 // Create hash from URL to detect when file changes
-                const urlHash = btoa(file.file.url).slice(0, 8);
+                const base64 = (globalThis as any).Buffer
+                  ? (globalThis as any).Buffer.from(file.file.url).toString('base64')
+                  : btoa(file.file.url);
+                const urlHash = base64.slice(0, 8);
                 const timestamp = Date.now();
                 
                 // Add cache busting parameter with both hash and timestamp
@@ -65,8 +68,8 @@ export const fetchNotionEvents = async () => {
         };
     });
 
-    // Sort by date (ascending)
-    return events.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Sort by date (descending)
+    return events.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 export const fetchNotionEventById = async (pageId: string) => {
@@ -83,7 +86,10 @@ export const fetchNotionEventById = async (pageId: string) => {
             headerImage = file.external.url;
         } else if (file.type === "file") {
             // Create hash from URL to detect when file changes
-            const urlHash = btoa(file.file.url).slice(0, 8);
+            const base64 = (globalThis as any).Buffer
+              ? (globalThis as any).Buffer.from(file.file.url).toString('base64')
+              : btoa(file.file.url);
+            const urlHash = base64.slice(0, 8);
             const timestamp = Date.now();
             
             // Add cache busting parameter with both hash and timestamp

@@ -1,25 +1,30 @@
 import React from 'react';
-import {
-    Card,
-    CardContent,
-    CardMedia,
-    Typography,
-    Button,
-    Grid,Box
-} from '@mui/material';
+import { Card, CardContent, Typography, Button, Grid, Box } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
 
-export default function ResourceList({ sections }) {
+type Resource = {
+  name: string;
+  url: string;
+  description?: string;
+  logo: string;
+};
+
+type Section = {
+  name: string;
+  resources: Resource[];
+};
+
+export default function ResourceList({ sections }: { sections: Section[] }) {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
             <div style={{ maxWidth: '1200px', width: '100%', padding: '0 1rem' }}>
-                {sections.map((section) => (
+                {sections.map((section: Section) => (
                     <div key={section.name} style={{ marginBottom: '3rem' }}>
                         <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
                             {section.name}
                         </Typography>
                         <Grid container spacing={3}>
-                            {section.resources.map((res) => (
+                            {section.resources.map((res: Resource) => (
                                 <Grid item xs={12} sm={6} md={4} key={res.name}>
                                     <Card
                                         elevation={2}
@@ -93,8 +98,8 @@ export default function ResourceList({ sections }) {
     );
 }
 
-function generateLabel(name) {
-    const map = {
+function generateLabel(name: string) {
+    const map: Record<string, string> = {
         Upwork: 'Hire on Upwork',
         Dribble: 'View on Dribble',
         TAP: 'View TAP Program',
