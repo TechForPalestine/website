@@ -154,7 +154,7 @@ const ProjectForm = () => {
                                     </>
                                 )}
                                 <Grid container spacing={2}>
-                                    {section.columns.map((column, columnIdx) => (
+                                    {section.columns.map((column: any[], columnIdx: number) => (
                                         <Grid
                                             item
                                             xs={12}
