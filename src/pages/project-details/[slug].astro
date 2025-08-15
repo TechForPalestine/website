@@ -8,7 +8,7 @@ import "../../styles/base.css";
 const { slug } = Astro.params;
 
 // Slugify function (same logic used in the listing page)
-function slugify(name) {
+function slugify(name: string) {
   return name
       .replace(/[^a-zA-Z0-9\s]/g, "")
       .trim()
@@ -29,7 +29,7 @@ const { Content } = await project.render();
 // Export getStaticPaths for static generation
 export async function getStaticPaths() {
   const entries = await getCollection("projects");
-  function slugify(name) {
+  function slugify(name: string) {
     return name
         .replace(/[^a-zA-Z0-9\s]/g, "")
         .trim()

@@ -61,9 +61,9 @@ const VolunteerForm = () => {
     const structuredSections: any[] = [];
     let currentSection: any = { title: '', columns: [[]] };
 
-    fields.forEach((field) => {
+    fields.forEach((field: any) => {
         if (field.fieldtype === "Section Break") {
-            if (currentSection.columns.some(col => col.length > 0)) {
+            if (currentSection.columns.some((col: any[]) => col.length > 0)) {
                 structuredSections.push(currentSection);
             }
             currentSection = { title: field.label || " ", columns: [[]] };
@@ -74,7 +74,7 @@ const VolunteerForm = () => {
         }
     });
 
-    if (currentSection.columns.some(col => col.length > 0)) {
+    if (currentSection.columns.some((col: any[]) => col.length > 0)) {
         structuredSections.push(currentSection);
     }
 

@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Events from "../components/Events.tsx";
+import EventsComponent from "../components/Events.tsx";
 import "../styles/base.css";
 import PageHeader from "../components/PageHeader.astro";
 
@@ -29,5 +29,5 @@ console.log("SSR: Skipping server-side fetch, letting client load data");
             subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
         />
 
-        <Events events={events} loading={loading} client:only="react" />
+        <EventsComponent events={events} loading={loading} client:only="react" />
     </Layout>
