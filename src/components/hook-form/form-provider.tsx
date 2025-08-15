@@ -16,7 +16,7 @@ export default function FormProvider({ children, onSubmit, methods }: Props) {
         onSubmit={(e) => {
           console.log('🔥 Form submit event triggered!');
           methods.handleSubmit(
-            onSubmit,
+            onSubmit ?? (() => {}),
             (errors) => console.log('❌ Validation Errors:', errors) // Log errors
           )(e);
         }}

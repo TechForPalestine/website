@@ -10,7 +10,7 @@ const parseOptions = (options: string) => options.split('\n').filter((option) =>
 
 const transformTableFields = (field: any) => {
     if (!field.table_fields) return [];
-    return field.table_fields.map(({ fieldname, label }) => ({
+    return field.table_fields.map(({ fieldname, label }: { fieldname: string; label: string }) => ({
         value: fieldname,
         label,
     }));
