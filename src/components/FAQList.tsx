@@ -105,7 +105,7 @@ const faqs = [
 
 export default function FAQList() {
     return (
-        <div class={'mt-6'}>
+        <div className={'mt-6'}>
             {faqs.map((faq, index) => (
                 <FAQAccordion key={index} question={faq.question} answer={faq.answer} />
             ))}

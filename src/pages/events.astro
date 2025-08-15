@@ -6,8 +6,8 @@ import PageHeader from "../components/PageHeader.astro";
 
 import { fetchNotionEvents } from "../store/notionClient";
 
-let events = [];
-let loading = true;
+let events: any[] = [];
+let loading: boolean = true;
 
 // Skip SSR fetch for now - let client handle it
 console.log("SSR: Skipping server-side fetch, letting client load data");
