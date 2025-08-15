@@ -138,7 +138,7 @@ const VolunteerForm = () => {
                                         </>
                                     )}
                                     <Grid container spacing={2}>
-                                        {section.columns.map((column, columnIdx) => (
+                                        {section.columns.map((column: any[], columnIdx: number) => (
                                             <Grid item xs={12} sm={section.columns.length === 1 ? 12 : 6} key={`column-${sectionIdx}-${columnIdx}`}>
                                                 {column.map((field: any) => (
                                                     <RenderFormFields key={field.fieldname} fields={[field]} control={control} errors={errors} />

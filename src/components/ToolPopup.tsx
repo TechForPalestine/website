@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const ToolPopup = ({ buttonLabel, children }) => {
+interface ToolPopupProps {
+  buttonLabel: string;
+  children: React.ReactNode;
+}
+
+const ToolPopup = ({ buttonLabel, children }: ToolPopupProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
