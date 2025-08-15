@@ -3,7 +3,7 @@
 // Version: 2.1 - CORS support with forced cache refresh
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, _env, ctx) {
     const url = new URL(request.url);
     
     // Handle CORS preflight requests
