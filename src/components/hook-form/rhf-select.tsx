@@ -97,6 +97,7 @@ type RHFMultiSelectProps = FormControlProps & {
     checkbox?: boolean;
     placeholder?: string;
     helperText?: React.ReactNode;
+    rules?: any;
     options: {
         title: string;
         value: string;

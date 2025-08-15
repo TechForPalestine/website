@@ -202,7 +202,7 @@ export const RenderInput = ({ field, control, errors, options, loading, parentNa
                         // name={fieldName} // Use computed fieldName
                         name={`${field.fieldname}.${key}`} // Use computed fieldName
                         label={field.label}
-                        options={options[field.fieldname] ? options[field.fieldname] : [] || []}
+                        options={options[field.fieldname] || []}
                     />
                 </Block>
             );
