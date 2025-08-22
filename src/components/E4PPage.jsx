@@ -149,7 +149,7 @@ export function E4PPage() {
                         >
                             <iframe
                                 title="Calendly Europe/Asia"
-                                src="https://calendly.com/iva-techforpalestine/30min?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
+                                src="https://calendly.com/megan-techforpalestine/30min?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
                                 width="100%"
                                 height="100%"
                                 frameBorder="0"
