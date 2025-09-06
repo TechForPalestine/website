@@ -40,7 +40,7 @@ src/
 │   └── Layout.astro    # Main layout wrapper
 ├── pages/              # Routes (file-based routing)
 │   ├── api/           # API endpoints
-│   ├── project-details/
+│   ├── project/
 │   └── *.astro        # Page components
 ├── store/             # State management & API clients
 ├── styles/            # CSS files
