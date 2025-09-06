@@ -416,7 +416,7 @@ try {
 
                     return (
                         <div
-                            onclick={`location.href='/project-details/${slug}'`}
+                            onclick={`location.href='/project/${slug}'`}
                             role="link"
                             tabindex="0"
                             class="cursor-pointer relative flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 focus:outline-none"
