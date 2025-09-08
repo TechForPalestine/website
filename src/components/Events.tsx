@@ -286,7 +286,7 @@ export default function Events({ events: initialEvents, loading: initialLoading 
                                 {/* Footer */}
                                 <Box className="flex flex-wrap items-center justify-between pt-2 gap-4">
                                     <Box className="flex gap-3 text-sm">
-                                        {event.registerLink && (
+                                        {event.registerLink && !isPast && (
                                             <Link
                                                 href={event.registerLink}
                                                 target="_blank"
