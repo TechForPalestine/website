@@ -120,7 +120,7 @@ const faqs = [
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            https://github.com/TechForPalestine/antipalestinian-vc-funds
+                            Antipalestinian VC funds list
                         </Link>
                         <Typography component="ul" sx={{ mt: 1, pl: 2, listStyleType: 'circle' }}>
                             <li>Note that the list is not super up-to-date -- we welcome PRs to improve it</li>
