@@ -32,51 +32,23 @@ export function E4PPage() {
                 <BenefitsSection />
 
                 {/* CTA Buttons */}
-
-                {/* <Box textAlign="center" mb={8}>
+                <Box textAlign="center" mb={8}>
                     <Button
                         variant="contained"
                         size="large"
+                        href="/e4p/pledge"
                         sx={{
                             mx: 1,
-                            backgroundColor: '#166534',
+                            backgroundColor: '#dc2626',
                             color: '#fff',
                             '&:hover': {
-                                backgroundColor: '#14532d', // darker shade for hover
+                                backgroundColor: '#b91c1c',
                             },
                         }}
                     >
                         Sign Our Pledge
                     </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        sx={{
-                            mx: 1,
-                            backgroundColor: '#166534',
-                            color: '#fff',
-                            '&:hover': {
-                                backgroundColor: '#14532d',
-                            },
-                        }}
-                    >
-                        Join the Community
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        sx={{
-                            mx: 1,
-                            backgroundColor: '#166534',
-                            color: '#fff',
-                            '&:hover': {
-                                backgroundColor: '#14532d',
-                            },
-                        }}
-                    >
-                        Take Action
-                    </Button>
-                </Box> */}
+                </Box>
 
                 {/* Global Community + Map */}
                 <Box mb={10}>
