@@ -188,7 +188,6 @@ export default function Events({ events: initialEvents, loading: initialLoading 
                                     src={event.image}
                                     alt={event.title}
                                     className="rounded-xl w-full aspect-[4/3] object-contain bg-gray-100"
-                                    crossOrigin="anonymous"
                                     onLoad={(e) => {
                                         const target = e.target as HTMLImageElement;
                                         console.log(`Image loaded successfully for event "${event.title}":`, target.src);
