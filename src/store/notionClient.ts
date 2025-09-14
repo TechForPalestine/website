@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { getProxiedImageUrl } from '../utils/imageProxy.js';
 
-
 const NOTION_SECRET = import.meta.env.NOTION_SECRET;
 const NOTION_DB_ID = import.meta.env.NOTION_DB_ID;
+const NOTION_FAQ_DB_ID = import.meta.env.NOTION_FAQ_DB_ID;
 
 const notionAxios = axios.create({
     baseURL: "https://api.notion.com/v1/",
@@ -114,4 +114,30 @@ export const fetchNotionEventById = async (pageId: string) => {
         registerLink,
         recordingLink,
     };
+};
+
+export const fetchNotionFAQ = async () => {
+    const response = await notionAxios.post(`databases/${NOTION_FAQ_DB_ID}/query`, {
+        sorts: [
+            {
+                property: "Question",
+                direction: "ascending"
+            }
+        ]
+    });
+
+    const faqs = response.data.results.map((page: any) => {
+        const props = page.properties;
+
+        const question = props["Question"]?.title?.[0]?.plain_text || "";
+        const answer = props["Answer"]?.rich_text || [];
+
+        return {
+            id: page.id,
+            question,
+            answer,
+        };
+    });
+
+    return faqs;
 };

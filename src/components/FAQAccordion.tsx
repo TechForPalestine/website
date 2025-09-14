@@ -7,10 +7,12 @@ import {
     Link
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RichTextRenderer from './RichTextRenderer';
+import type { RichTextSegment } from '../types/richText';
 
 type FAQAccordionProps = {
     question: string;
-    answer: React.ReactNode;
+    answer: React.ReactNode | string | RichTextSegment[];
 };
 
 export default function FAQAccordion({ question, answer }: FAQAccordionProps) {
@@ -24,7 +26,13 @@ export default function FAQAccordion({ question, answer }: FAQAccordionProps) {
                 <Typography>{question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-                {answer}
+                {typeof answer === 'string' ? (
+                    <Typography>{answer}</Typography>
+                ) : Array.isArray(answer) ? (
+                    <RichTextRenderer richText={answer} />
+                ) : (
+                    answer
+                )}
             </AccordionDetails>
         </Accordion>
     );
