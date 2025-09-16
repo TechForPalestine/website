@@ -76,13 +76,13 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                                     onClick={(e) => {
                                         e.stopPropagation(); // Prevent modal from opening
                                         window.open(
-                                            "https://app.formbricks.com/s/clzax64r70000v39tqtnvg558",
+                                            "https://projecthub.techforpalestine.org/apply",
                                             "_blank"
                                         );
                                     }}
                                     className="text-white bg-black hover:bg-[#166534] text-xs font-medium px-3 py-1 rounded-full shadow transition"
                                 >
-                                    { activeTab === "new"?  "Get Involved" : "Take the Lead"}
+                                    { activeTab === "new"?  "Apply" : "Take the Lead"}
                                 </button>
                 <span className="text-black text-sm font-medium hover:underline">
                   Read more →
@@ -130,7 +130,7 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                         )}
                         <div className="mt-6 text-right">
                             <a
-                                href="https://app.formbricks.com/s/clzax64r70000v39tqtnvg558"
+                                href="https://projecthub.techforpalestine.org/apply"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-block bg-[#166534] hover:bg-[#14532d] text-white font-semibold px-6 py-2 rounded-full shadow transition"
@@ -175,7 +175,7 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
 
                         </p>
                         <a
-                            href="https://app.formbricks.com/s/clzax64r70000v39tqtnvg558"
+                            href="https://projecthub.techforpalestine.org/apply"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-block bg-[#166534] hover:bg-[#14532d] text-white font-semibold px-6 py-2 rounded-full shadow transition"
