@@ -3,8 +3,11 @@ import { fetchNotionEvents } from '../../store/notionClient';
 
 export const GET: APIRoute = async ({ request }) => {
   try {
-    const events = await fetchNotionEvents();
-    
+      const url = new URL(request.url);
+      const showAll = url.searchParams.get('showAll') === 'yes';
+
+    const events = await fetchNotionEvents(showAll);
+
     return new Response(JSON.stringify(events), {
       status: 200,
       headers: {

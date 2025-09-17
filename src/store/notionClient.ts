@@ -13,8 +13,17 @@ const notionAxios = axios.create({
         "Content-Type": "application/json",
     },
 });
-export const fetchNotionEvents = async () => {
-    const response = await notionAxios.post(`databases/${NOTION_DB_ID}/query`);
+export const fetchNotionEvents = async (showAll: boolean = false) => {
+    const filter = showAll ? {} : {
+        filter: {
+            property: "Visibility",
+            checkbox: {
+                equals: true
+            }
+        }
+    };
+    
+    const response = await notionAxios.post(`databases/${NOTION_DB_ID}/query`, filter);
 
     const events = response.data.results.map((page: any) => {
         const props = page.properties;
@@ -116,15 +125,25 @@ export const fetchNotionEventById = async (pageId: string) => {
     };
 };
 
-export const fetchNotionFAQ = async () => {
-    const response = await notionAxios.post(`databases/${NOTION_FAQ_DB_ID}/query`, {
+export const fetchNotionFAQ = async (showAll: boolean = false) => {
+    const queryBody = {
         sorts: [
             {
                 property: "Question",
                 direction: "ascending"
             }
-        ]
-    });
+        ],
+        ...(showAll ? {} : {
+            filter: {
+                property: "Visibility",
+                checkbox: {
+                    equals: true
+                }
+            }
+        })
+    };
+    
+    const response = await notionAxios.post(`databases/${NOTION_FAQ_DB_ID}/query`, queryBody);
 
     const faqs = response.data.results.map((page: any) => {
         const props = page.properties;
