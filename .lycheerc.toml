@@ -1,0 +1,45 @@
+# Lychee configuration for URL validation
+# This file configures the lychee link checker for CI
+
+# Timeout for requests (in seconds)
+timeout = 30
+
+# Maximum number of concurrent requests
+max_concurrency = 8
+
+# HTTP status codes to accept as valid
+accept = [200, 429]
+
+# User agent to use for requests
+user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0"
+
+# Exclude patterns (regex)
+exclude = [
+    # Discord invites can be temporary/private
+    "discord.com/channels/",
+    # Some social media links may be rate limited
+    "instagram.com/",
+    "tiktok.com/",
+    # Notion URLs that might be private or have complex auth
+    "notion-image-proxy.*",
+    # Local development URLs
+    "localhost",
+    "127.0.0.1",
+    # Email links
+    "mailto:",
+]
+
+# Check local files
+include_local = true
+
+# Check external links
+check_external = true
+
+# Verbose output
+verbose = false
+
+# Don't follow redirects beyond this limit
+max_redirects = 5
+
+# Cache file for performance
+cache = true
