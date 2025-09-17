@@ -1,8 +1,6 @@
 import type { APIRoute } from 'astro';
 import { fetchNotionEvents } from '../../store/notionClient';
 
-export const prerender = false;
-
 export const GET: APIRoute = async ({ request }) => {
   try {
       const url = new URL(request.url);
