@@ -22,9 +22,8 @@ export const GET: APIRoute = async ({ request }) => {
     });
   } catch (error) {
     console.error('Error fetching events:', error);
-    console.log({error})
     
-    return new Response(JSON.stringify({ error: 'Failed to fetch events', errors: error }), {
+    return new Response(JSON.stringify({ error: 'Failed to fetch events'}), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',

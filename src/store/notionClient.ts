@@ -1,9 +1,30 @@
 import axios from 'axios';
 import { getProxiedImageUrl } from '../utils/imageProxy.js';
 
-const NOTION_SECRET = import.meta.env.NOTION_SECRET;
-const NOTION_DB_ID = import.meta.env.NOTION_DB_ID;
-const NOTION_FAQ_DB_ID = import.meta.env.NOTION_FAQ_DB_ID;
+// Helper function to get environment variables with proper fallbacks
+function getEnvVar(name: string): string | undefined {
+  // Try Astro's import.meta.env first
+  const astroEnv = import.meta.env[name];
+  if (astroEnv) return astroEnv;
+  
+  // Try Node.js process.env
+  if (typeof process !== 'undefined' && process.env) {
+    const nodeEnv = process.env[name];
+    if (nodeEnv) return nodeEnv;
+  }
+  
+  // Try global environment (for Cloudflare Workers)
+  if (typeof globalThis !== 'undefined' && (globalThis as any).process?.env) {
+    const globalEnv = (globalThis as any).process.env[name];
+    if (globalEnv) return globalEnv;
+  }
+  
+  return undefined;
+}
+
+const NOTION_SECRET = getEnvVar('NOTION_SECRET');
+const NOTION_DB_ID = getEnvVar('NOTION_DB_ID');
+const NOTION_FAQ_DB_ID = getEnvVar('NOTION_FAQ_DB_ID');
 
 const notionAxios = axios.create({
     baseURL: "https://api.notion.com/v1/",
