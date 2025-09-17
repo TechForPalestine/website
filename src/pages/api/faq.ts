@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({request}) => {
         });
     } catch (error) {
         console.error('Error fetching FAQs:', error);
-        return new Response(JSON.stringify([]), {
+        return new Response(JSON.stringify({ error: 'Failed to fetch FAQs' , err: error}), {
             status: 500,
             headers: {
                 'Content-Type': 'application/json'
