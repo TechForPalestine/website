@@ -1,9 +1,12 @@
 import type { APIRoute } from 'astro';
 import { fetchNotionFAQ } from '../../store/notionClient';
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({request}) => {
     try {
-        const faqs = await fetchNotionFAQ();
+        const url = new URL(request.url);
+        const showAll = url.searchParams.get('showAll') === 'yes';
+
+        const faqs = await fetchNotionFAQ(showAll);
         
         return new Response(JSON.stringify(faqs), {
             status: 200,

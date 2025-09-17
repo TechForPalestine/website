@@ -18,11 +18,17 @@ export default function FAQList({ faqs: initialFaqs = [], loading: initialLoadin
     const [faqs, setFaqs] = useState<FAQItem[]>(initialFaqs);
     const [loading, setLoading] = useState(initialLoading);
 
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const showAll = params?.showAll === 'yes';
+
     const fetchFreshFAQs = async () => {
         setLoading(true);
         try {
             console.log('Fetching fresh FAQs from Notion API...');
-            const response = await fetch('/api/faq', {
+            // Encode the showAll parameter
+            const encodedShowAll = encodeURIComponent(showAll ? 'yes' : 'no');
+            const response = await fetch(showAll ? `/api/faq?showAll=${encodedShowAll}` : '/api/faq', {
                 cache: 'no-cache',
                 headers: {
                     'Cache-Control': 'no-cache',
