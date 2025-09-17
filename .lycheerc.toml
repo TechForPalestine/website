@@ -27,14 +27,6 @@ exclude = [
     "127.0.0.1",
     # Email links
     "mailto:",
-    # YouTube embed URLs that return 404 but work in browsers
-    "youtube.com/embed/",
-    # Sites with certificate/SSL issues
-    "werseen.com",
-    # Sites returning 522 (Cloudflare errors)
-    "wtrmln.info",
-    # UN media links that may be restricted
-    "media.un.org",
 ]
 
 # Check local files
