@@ -2,39 +2,56 @@ import axios from 'axios';
 import { getProxiedImageUrl } from '../utils/imageProxy.js';
 
 // Helper function to get environment variables with proper fallbacks
-function getEnvVar(name: string): string | undefined {
-  // Try Astro's import.meta.env first
-  const astroEnv = import.meta.env[name];
-  if (astroEnv) return astroEnv;
+function getEnvVar(name: string, locals?: any): string | undefined {
+  // Try Cloudflare Pages runtime context first (for production)
+  if (locals?.runtime?.env?.[name]) {
+    return locals.runtime.env[name];
+  }
   
-  // Try Node.js process.env
-  if (typeof process !== 'undefined' && process.env) {
-    const nodeEnv = process.env[name];
-    if (nodeEnv) return nodeEnv;
+  // Try Astro's import.meta.env (for build-time variables)
+  if (import.meta.env[name]) {
+    return import.meta.env[name];
+  }
+  
+  // Try Node.js process.env (for development and server environments)
+  if (typeof process !== 'undefined' && process.env?.[name]) {
+    return process.env[name];
   }
   
   // Try global environment (for Cloudflare Workers)
-  if (typeof globalThis !== 'undefined' && (globalThis as any).process?.env) {
-    const globalEnv = (globalThis as any).process.env[name];
-    if (globalEnv) return globalEnv;
+  if (typeof globalThis !== 'undefined' && (globalThis as any).process?.env?.[name]) {
+    return (globalThis as any).process.env[name];
+  }
+  
+  // Try accessing directly from globalThis (some Cloudflare environments)
+  if (typeof globalThis !== 'undefined' && (globalThis as any)[name]) {
+    return (globalThis as any)[name];
   }
   
   return undefined;
 }
 
-const NOTION_SECRET = getEnvVar('NOTION_SECRET');
-const NOTION_DB_ID = getEnvVar('NOTION_DB_ID');
-const NOTION_FAQ_DB_ID = getEnvVar('NOTION_FAQ_DB_ID');
+// Helper function to create Notion axios instance with runtime environment variables
+function createNotionAxios(secret: string) {
+    return axios.create({
+        baseURL: "https://api.notion.com/v1/",
+        headers: {
+            "Authorization": `Bearer ${secret}`,
+            "Notion-Version": "2022-06-28",
+            "Content-Type": "application/json",
+        },
+    });
+}
 
-const notionAxios = axios.create({
-    baseURL: "https://api.notion.com/v1/",
-    headers: {
-        "Authorization": `Bearer ${NOTION_SECRET}`,
-        "Notion-Version": "2022-06-28",
-        "Content-Type": "application/json",
-    },
-});
-export const fetchNotionEvents = async (showAll: boolean = false) => {
+export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) => {
+    const secret = getEnvVar('NOTION_SECRET', locals);
+    const dbId = getEnvVar('NOTION_DB_ID', locals);
+    
+    if (!secret || !dbId) {
+        throw new Error('Missing Notion credentials: NOTION_SECRET and NOTION_DB_ID are required');
+    }
+    
+    const notionAxios = createNotionAxios(secret);
     const filter = showAll ? {} : {
         filter: {
             property: "Visibility",
@@ -44,7 +61,7 @@ export const fetchNotionEvents = async (showAll: boolean = false) => {
         }
     };
     
-    const response = await notionAxios.post(`databases/${NOTION_DB_ID}/query`, filter);
+    const response = await notionAxios.post(`databases/${dbId}/query`, filter);
 
     const events = response.data.results.map((page: any) => {
         const props = page.properties;
@@ -102,8 +119,14 @@ export const fetchNotionEvents = async (showAll: boolean = false) => {
     return events.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
-export const fetchNotionEventById = async (pageId: string) => {
-
+export const fetchNotionEventById = async (pageId: string, locals?: any) => {
+    const secret = getEnvVar('NOTION_SECRET', locals);
+    
+    if (!secret) {
+        throw new Error('Missing Notion credentials: NOTION_SECRET is required');
+    }
+    
+    const notionAxios = createNotionAxios(secret);
     const response = await notionAxios.get(`pages/${pageId}`);
 
     const props = response.data.properties;
@@ -146,7 +169,15 @@ export const fetchNotionEventById = async (pageId: string) => {
     };
 };
 
-export const fetchNotionFAQ = async (showAll: boolean = false) => {
+export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => {
+    const secret = getEnvVar('NOTION_SECRET', locals);
+    const faqDbId = getEnvVar('NOTION_FAQ_DB_ID', locals);
+    
+    if (!secret || !faqDbId) {
+        throw new Error('Missing Notion credentials: NOTION_SECRET and NOTION_FAQ_DB_ID are required');
+    }
+    
+    const notionAxios = createNotionAxios(secret);
     const queryBody = {
         sorts: [
             {
@@ -164,7 +195,7 @@ export const fetchNotionFAQ = async (showAll: boolean = false) => {
         })
     };
     
-    const response = await notionAxios.post(`databases/${NOTION_FAQ_DB_ID}/query`, queryBody);
+    const response = await notionAxios.post(`databases/${faqDbId}/query`, queryBody);
 
     const faqs = response.data.results.map((page: any) => {
         const props = page.properties;
