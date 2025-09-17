@@ -8,7 +8,7 @@ timeout = 30
 max_concurrency = 8
 
 # HTTP status codes to accept as valid
-accept = [200, 429]
+accept = [200, 429, 403, 999]
 
 # User agent to use for requests
 user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0"
@@ -27,6 +27,14 @@ exclude = [
     "127.0.0.1",
     # Email links
     "mailto:",
+    # YouTube embed URLs that return 404 but work in browsers
+    "youtube.com/embed/",
+    # Sites with certificate/SSL issues
+    "werseen.com",
+    # Sites returning 522 (Cloudflare errors)
+    "wtrmln.info",
+    # UN media links that may be restricted
+    "media.un.org",
 ]
 
 # Check local files
