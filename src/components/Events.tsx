@@ -77,12 +77,16 @@ export default function Events({ events: initialEvents, loading: initialLoading 
     const [loading, setLoading] = useState(initialLoading);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const showAll = params?.showAll === 'yes';
+
     // Function to fetch fresh events (for refresh button)
     const fetchFreshEvents = async () => {
         setLoading(true);
         try {
             console.log('Fetching fresh events from Notion API...');
-            const response = await fetch('/api/events', {
+            const response = await fetch(showAll ? '/api/events?showAll=yes' : '/api/events', {
                 cache: 'no-cache',
                 headers: {
                     'Cache-Control': 'no-cache',
