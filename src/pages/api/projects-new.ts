@@ -1,12 +1,13 @@
 import type { APIRoute } from 'astro';
+import { getEnv } from '../../utils/getEnv.js';
 
 // Import environment variables properly for Astro
-const PROJECTHUB_API_KEY = import.meta.env.PROJECTHUB_API_KEY || process.env.PROJECTHUB_API_KEY;
+const PROJECTHUB_API_KEY = getEnv('PROJECTHUB_API_KEY');
 
 // Explicitly disable prerendering for this API route
 export const prerender = false;
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async () => {
   try {
     console.log('API: Starting fetchProjectsFromApp...');
     console.log('API: API Key available:', !!PROJECTHUB_API_KEY);

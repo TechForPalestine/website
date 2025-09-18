@@ -1,15 +1,16 @@
 import type { APIRoute } from 'astro';
 import { Client } from '@notionhq/client';
+import { getEnv } from '../../utils/getEnv.js';
 
 const notion = new Client({ 
-  auth: import.meta.env.NOTION_SECRET 
+  auth: getEnv('NOTION_SECRET')
 });
 
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
   try {
-    const databaseId = import.meta.env.NOTION_SIGNATORIES_DB_ID;
+    const databaseId = getEnv('NOTION_SIGNATORIES_DB_ID');
     
     if (!databaseId) {
       throw new Error("NOTION_SIGNATORIES_DB_ID not configured");
