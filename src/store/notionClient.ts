@@ -1,35 +1,6 @@
 import axios from 'axios';
 import { getProxiedImageUrl } from '../utils/imageProxy.js';
-
-// Helper function to get environment variables with proper fallbacks
-function getEnvVar(name: string, locals?: any): string | undefined {
-  // Try Cloudflare Pages runtime context first (for production)
-  if (locals?.runtime?.env?.[name]) {
-    return locals.runtime.env[name];
-  }
-  
-  // Try Astro's import.meta.env (for build-time variables)
-  if (import.meta.env[name]) {
-    return import.meta.env[name];
-  }
-  
-  // Try Node.js process.env (for development and server environments)
-  if (typeof process !== 'undefined' && process.env?.[name]) {
-    return process.env[name];
-  }
-  
-  // Try global environment (for Cloudflare Workers)
-  if (typeof globalThis !== 'undefined' && (globalThis as any).process?.env?.[name]) {
-    return (globalThis as any).process.env[name];
-  }
-  
-  // Try accessing directly from globalThis (some Cloudflare environments)
-  if (typeof globalThis !== 'undefined' && (globalThis as any)[name]) {
-    return (globalThis as any)[name];
-  }
-  
-  return undefined;
-}
+import { getEnv } from '../utils/getEnv.js';
 
 // Helper function to create Notion axios instance with runtime environment variables
 function createNotionAxios(secret: string) {
@@ -44,8 +15,8 @@ function createNotionAxios(secret: string) {
 }
 
 export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) => {
-    const secret = getEnvVar('NOTION_SECRET', locals);
-    const dbId = getEnvVar('NOTION_DB_ID', locals);
+    const secret = getEnv('NOTION_SECRET', locals);
+    const dbId = getEnv('NOTION_DB_ID', locals);
     
     if (!secret || !dbId) {
         throw new Error('Missing Notion credentials: NOTION_SECRET and NOTION_DB_ID are required');
@@ -120,7 +91,7 @@ export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) 
 };
 
 export const fetchNotionEventById = async (pageId: string, locals?: any) => {
-    const secret = getEnvVar('NOTION_SECRET', locals);
+    const secret = getEnv('NOTION_SECRET', locals);
     
     if (!secret) {
         throw new Error('Missing Notion credentials: NOTION_SECRET is required');
@@ -170,8 +141,8 @@ export const fetchNotionEventById = async (pageId: string, locals?: any) => {
 };
 
 export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => {
-    const secret = getEnvVar('NOTION_SECRET', locals);
-    const faqDbId = getEnvVar('NOTION_FAQ_DB_ID', locals);
+    const secret = getEnv('NOTION_SECRET', locals);
+    const faqDbId = getEnv('NOTION_FAQ_DB_ID', locals);
     
     if (!secret || !faqDbId) {
         throw new Error('Missing Notion credentials: NOTION_SECRET and NOTION_FAQ_DB_ID are required');
