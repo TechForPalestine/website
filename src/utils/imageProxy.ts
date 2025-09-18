@@ -1,6 +1,8 @@
+import { getEnv } from './getEnv.js';
+
 // Utility for generating proxy URLs for Notion images
 // Replace with your actual worker domain after deployment
-const WORKER_DOMAIN = process.env.NOTION_IMAGE_PROXY_URL || 'https://notion-image-proxy.paul-cf1.workers.dev';
+const WORKER_DOMAIN = getEnv('NOTION_IMAGE_PROXY_URL') || 'https://notion-image-proxy.paul-cf1.workers.dev';
 
 /**
  * Converts a Notion image URL to a proxied URL that won't expire
