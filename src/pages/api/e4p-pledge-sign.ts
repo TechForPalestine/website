@@ -2,13 +2,9 @@ import type { APIRoute } from 'astro';
 import { Client } from '@notionhq/client';
 import { getEnv } from '../../utils/getEnv.js';
 
-const notion = new Client({ 
-  auth: getEnv('NOTION_SECRET')
-});
-
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const formData = await request.formData();
     
@@ -32,7 +28,12 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const databaseId = getEnv('NOTION_SIGNATORIES_DB_ID');
+    const notionSecret = getEnv('NOTION_SECRET', locals);
+    const databaseId = getEnv('NOTION_SIGNATORIES_DB_ID', locals);
+    
+    const notion = new Client({ 
+      auth: notionSecret
+    });
     
     if (!databaseId) {
       throw new Error("NOTION_SIGNATORIES_DB_ID not configured");
