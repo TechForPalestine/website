@@ -179,12 +179,6 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
     
     const notionAxios = createNotionAxios(secret);
     const queryBody = {
-        sorts: [
-            {
-                property: "Question",
-                direction: "ascending"
-            }
-        ],
         ...(showAll ? {} : {
             filter: {
                 property: "Visibility",
@@ -210,5 +204,5 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
         };
     });
 
-    return faqs;
+    return faqs.reverse();
 };
