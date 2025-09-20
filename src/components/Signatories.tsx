@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from '@mui/material';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 interface Signatory {
   id: string;
@@ -99,16 +97,6 @@ export default function Signatories({ initialSignatories = [], loading: initialL
               <span className="text-gray-600">{signatory.position}</span>
               <span className="text-gray-600">at</span>
               <span className="text-gray-600">{signatory.company}</span>
-              {signatory.linkedinUrl && (
-                <Link 
-                  href={signatory.linkedinUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 ml-1"
-                >
-                  <LinkedInIcon fontSize="small" />
-                </Link>
-              )}
             </div>
           </li>
         ))}
