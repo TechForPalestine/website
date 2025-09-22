@@ -1,44 +1,55 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
-import { getCollection } from "astro:content";
-import { marked } from "marked";
+import { fetchNotionIdeas } from "../store/notionClient.js";
 import IdeasWithTabs from "../components/IdeasWithTabs.jsx";
 
-const rawIdeas = await getCollection("ideas");
+let rawIdeas;
+try {
+    rawIdeas = await fetchNotionIdeas(Astro.locals);
+} catch (error) {
+    console.error('Failed to fetch ideas from Notion:', error);
+    rawIdeas = [];
+}
 
-// Simple filter based on tags (or use separate folders)
+// Filter ideas by category from Notion
 const newIdeas = rawIdeas
-    .filter(idea => idea.data.category !== "existing")
+    .filter(idea => idea.category === "new")
     .map(idea => {
-        const firstParagraph = idea.body
-            .split(/\n{2,}/)
-            .find(block => !block.trim().startsWith("###"))
-            ?.replace(/[*_`>#-]/g, "")
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-            .trim();
+        // Create excerpt from rich text (first 150 chars)
+        const plainTextExcerpt = idea.description
+            .map((segment: any) => segment.plain_text)
+            .join("")
+            .substring(0, 150) + (idea.description.map((segment: any) => segment.plain_text).join("").length > 150 ? "..." : "");
 
         return {
-            ...idea,
-            renderedBody: marked.parse(idea.body),
-            excerpt: firstParagraph || ""
+            id: idea.id,
+            data: {
+                title: idea.name,
+                tags: []
+            },
+            richTextDescription: idea.description,
+            excerpt: plainTextExcerpt
         };
     });
 
 const existingIdeas = rawIdeas
-    .filter(idea => idea.data.category === "existing")
+    .filter(idea => idea.category === "existing")
     .map(idea => {
-        const firstParagraph = idea.body
-            .split(/\n{2,}/)
-            .find(block => !block.trim().startsWith("###"))
-            ?.replace(/[*_`>#-]/g, "")
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-            .trim();
+        // Create excerpt from rich text (first 150 chars)
+        const plainTextExcerpt = idea.description
+            .map((segment: any) => segment.plain_text)
+            .join("")
+            .substring(0, 150) + (idea.description.map((segment: any) => segment.plain_text).join("").length > 150 ? "..." : "");
 
         return {
-            ...idea,
-            renderedBody: marked.parse(idea.body),
-            excerpt: firstParagraph || ""
+            id: idea.id,
+            data: {
+                title: idea.name,
+                tags: []
+            },
+            richTextDescription: idea.description,
+            excerpt: plainTextExcerpt
         };
     });
 

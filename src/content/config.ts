@@ -11,16 +11,6 @@ const projectsCollection = defineCollection({
 });
 
 
-const ideasCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    category: z.string().optional(),
-    tags: z.array(z.string()).optional()
-  }),
-});
-
-
 export const collections = {
   projects: projectsCollection,
-  ideas: ideasCollection,
 };
