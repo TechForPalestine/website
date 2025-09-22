@@ -177,3 +177,41 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
 
     return faqs.reverse();
 };
+
+export const fetchNotionIdeas = async (locals?: any) => {
+    const secret = getEnv('NOTION_SECRET', locals);
+    const ideasDbId = '22b97bc03cef80e2af09efb1caed050f';
+    
+    if (!secret) {
+        throw new Error('Missing Notion credentials: NOTION_SECRET is required');
+    }
+    
+    const notionAxios = createNotionAxios(secret);
+    const queryBody = {
+        sorts: [
+            {
+                property: "Name",
+                direction: "ascending"
+            }
+        ]
+    };
+    
+    const response = await notionAxios.post(`databases/${ideasDbId}/query`, queryBody);
+
+    const ideas = response.data.results.map((page: any) => {
+        const props = page.properties;
+
+        const name = props["Name"]?.title?.[0]?.plain_text || "";
+        const category = props["Category"]?.select?.name || "";
+        const description = props["Description"]?.rich_text || [];
+
+        return {
+            id: page.id,
+            name,
+            category,
+            description,
+        };
+    });
+
+    return ideas;
+};
