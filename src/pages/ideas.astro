@@ -14,8 +14,8 @@ try {
 
 // Filter ideas by category from Notion
 const newIdeas = rawIdeas
-    .filter(idea => idea.category === "new")
-    .map(idea => {
+    .filter((idea: any) => idea.category === "new")
+    .map((idea: any) => {
         // Create excerpt from rich text (first 150 chars)
         const plainTextExcerpt = idea.description
             .map((segment: any) => segment.plain_text)
@@ -34,8 +34,8 @@ const newIdeas = rawIdeas
     });
 
 const existingIdeas = rawIdeas
-    .filter(idea => idea.category === "existing")
-    .map(idea => {
+    .filter((idea: any) => idea.category === "existing")
+    .map((idea: any) => {
         // Create excerpt from rich text (first 150 chars)
         const plainTextExcerpt = idea.description
             .map((segment: any) => segment.plain_text)
