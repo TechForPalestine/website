@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Grid, Typography, Paper, useTheme, Container } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
@@ -64,41 +65,54 @@ export function BenefitsSection() {
     return (
         <Box py={10}>
             <Container>
-                <Typography variant="h4" align="center" fontWeight="bold" mb={6}>
+                <Typography variant="h4" align="center" fontWeight="bold" mb={6} sx={{ color: '#15803d' }}>
                     By Joining, You Will Get Access To:
                 </Typography>
 
                 <Grid container spacing={4}>
-                    {benefits.map((item, index) => (
-                        <Grid item xs={12} sm={6} md={4} key={index}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    p: 4,
-                                    height: "100%",
-                                    borderRadius: 3,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    textAlign: "center",
-                                    gap: 2,
-                                    transition: "transform 0.2s, box-shadow 0.2s",
-                                    "&:hover": {
-                                        transform: "translateY(-4px)",
-                                        boxShadow: theme.shadows[6],
-                                    },
-                                }}
-                            >
-                                <Box color="black" mb={2}>
-                                    {item.icon}
-                                </Box>
+                    {benefits.map((item, index) => {
+                        const bgColor = 'bg-amber-100';
+                        const iconColor = '#d97706';
+                        
+                        return (
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <Paper
+                                    elevation={3}
+                                    sx={{
+                                        p: 4,
+                                        height: "100%",
+                                        borderRadius: 3,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        textAlign: "center",
+                                        gap: 2,
+                                        transition: "transform 0.2s, box-shadow 0.2s",
+                                        "&:hover": {
+                                            transform: "translateY(-4px)",
+                                            boxShadow: theme.shadows[6],
+                                        },
+                                    }}
+                                >
+                                    <Box mb={2}>
+                                        <div className={`w-16 h-16 ${bgColor} rounded-full flex items-center justify-center mx-auto`}>
+                                            {React.cloneElement(item.icon, {
+                                                sx: { color: iconColor, fontSize: '2rem' }
+                                            })}
+                                        </div>
+                                    </Box>
 
-                                <Typography variant="body1" color="text.primary">
-                                    {item.description}
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    ))}
+                                    <Typography variant="h6" fontWeight="bold" color="text.primary" mb={1}>
+                                        {item.title}
+                                    </Typography>
+
+                                    <Typography variant="body2" color="text.secondary">
+                                        {item.description}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        );
+                    })}
                 </Grid>
             </Container>
         </Box>
