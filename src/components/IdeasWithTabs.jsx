@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import RichTextRenderer from "./RichTextRenderer.tsx";
 
 export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
     const [activeTab, setActiveTab] = useState("new");
@@ -51,13 +52,13 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {currentList.map(({ id, slug, data, renderedBody, excerpt }) => (
+                    {currentList.map(({ id, slug, data, richTextDescription, excerpt }) => (
                         <div
                             key={id || slug}
                             onClick={() =>
                                 setActiveIdea({
                                     title: data.title,
-                                    body: renderedBody,
+                                    richTextDescription: richTextDescription,
                                     tags: data.tags || [],
                                 })
                             }
@@ -112,10 +113,12 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                         <h2 className="text-2xl font-bold text-[#166534] mb-4">
                             {activeIdea.title}
                         </h2>
-                        <div
-                            className="prose prose-sm prose-stone max-w-none"
-                            dangerouslySetInnerHTML={{ __html: activeIdea.body }}
-                        />
+                        <div className="prose prose-sm prose-stone max-w-none">
+                            <RichTextRenderer 
+                                richText={activeIdea.richTextDescription} 
+                                className="!font-sans"
+                            />
+                        </div>
                         {activeIdea.tags?.length > 0 && (
                             <div className="mt-4 flex flex-wrap gap-2">
                                 {activeIdea.tags.map((tag, index) => (
