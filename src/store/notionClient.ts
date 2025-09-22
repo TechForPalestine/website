@@ -180,10 +180,10 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
 
 export const fetchNotionIdeas = async (locals?: any) => {
     const secret = getEnv('NOTION_SECRET', locals);
-    const ideasDbId = '22b97bc03cef80e2af09efb1caed050f';
-    
-    if (!secret) {
-        throw new Error('Missing Notion credentials: NOTION_SECRET is required');
+    const ideasDbId = getEnv('NOTION_IDEAS_DB_ID', locals);
+
+    if (!secret || !ideasDbId) {
+        throw new Error('Missing Notion credentials: NOTION_SECRET and NOTION_IDEAS_DB_ID are required');
     }
     
     const notionAxios = createNotionAxios(secret);
