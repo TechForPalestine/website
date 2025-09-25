@@ -74,7 +74,9 @@ export default function LondonGathering() {
                             variant="contained"
                             size="large"
                             className="bg-amber-800 hover:bg-amber-900 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                            href="#tickets"
+                            href="https://secure.qgiv.com/for/eventstest/event/t4pcommunitygatheringlondon"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             Buy tickets
                         </Button>
@@ -116,7 +118,9 @@ export default function LondonGathering() {
                                 variant="contained"
                                 size="large"
                                 className="bg-amber-800 hover:bg-amber-900 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                                href="#tickets"
+                                href="https://secure.qgiv.com/for/eventstest/event/t4pcommunitygatheringlondon"
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 Buy tickets
                             </Button>
@@ -172,7 +176,7 @@ export default function LondonGathering() {
                                         London
                                     </Typography>
                                     
-                                    <Box className="space-y-6">
+                                    <Box>
                                         <Box className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
                                             <Box className="p-2 bg-[#168039] rounded-full">
                                                 <AccessTimeIcon className="text-white" />
@@ -206,6 +210,9 @@ export default function LondonGathering() {
                                     <Button 
                                         variant="outlined" 
                                         className="mt-6 border-[#EA4335] text-[#EA4335] hover:bg-[#EA4335] hover:text-white px-6 py-2 rounded-full"
+                                        href="https://maps.app.goo.gl/nhy7XaRrfPh4Usex6"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                     >
                                         Get directions
                                     </Button>
@@ -280,7 +287,7 @@ export default function LondonGathering() {
                     </Box>
                     
                     <Box className="grid grid-cols-2 gap-6">
-                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10">
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10 hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => window.open('/projects', '_blank')}>
                             <RocketLaunchIcon className="text-[#EA4335] mx-auto mb-2" fontSize="large" />
                             <Typography variant="h4" className="font-bold mb-2 text-[#EA4335]">
                                 70+
@@ -293,7 +300,7 @@ export default function LondonGathering() {
                             </Typography>
                         </Card>
                         
-                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10">
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10 hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => window.open('/about', '_blank')}>
                             <PeopleIcon className="text-[#168039] mx-auto mb-2" fontSize="large" />
                             <Typography variant="h4" className="font-bold mb-2 text-[#168039]">
                                 9K+
@@ -306,7 +313,7 @@ export default function LondonGathering() {
                             </Typography>
                         </Card>
                         
-                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10">
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10 hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => window.open('https://techforpalestine.org/volunteer', '_blank')}>
                             <VolunteerActivismIcon className="text-[#EA4335] mx-auto mb-2" fontSize="large" />
                             <Typography variant="h4" className="font-bold mb-2 text-[#EA4335]">
                                 1K+
@@ -319,7 +326,7 @@ export default function LondonGathering() {
                             </Typography>
                         </Card>
                         
-                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10">
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10 hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => window.open('/e4p', '_blank')}>
                             <AccountBalanceIcon className="text-[#168039] mx-auto mb-2" fontSize="large" />
                             <Typography variant="h4" className="font-bold mb-2 text-[#168039]">
                                 250+
@@ -347,20 +354,22 @@ export default function LondonGathering() {
                     
                     <Box className="text-center !mb-8">
                         <Card className="inline-block bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300">
-                            <img 
-                                src="/images/london-gathering/YASOKO.webp" 
-                                alt="YASOKO Sponsor"
-                                className="h-24 w-auto mx-auto"
-                                onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    // Fallback to text if image fails
-                                    target.style.display = 'none';
-                                    const parent = target.parentElement;
-                                    if (parent) {
-                                        parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">YASOKO</Typography>';
-                                    }
-                                }}
-                            />
+                            <a href="https://www.ya-soko.com/" target="_blank" rel="noopener noreferrer" className="block">
+                                <img 
+                                    src="/images/london-gathering/YASOKO.webp" 
+                                    alt="YASOKO Sponsor"
+                                    className="h-24 w-auto mx-auto"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        // Fallback to text if image fails
+                                        target.style.display = 'none';
+                                        const parent = target.parentElement;
+                                        if (parent) {
+                                            parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">YASOKO</Typography>';
+                                        }
+                                    }}
+                                />
+                            </a>
                         </Card>
                     </Box>
                     
@@ -400,6 +409,9 @@ export default function LondonGathering() {
                             size="large"
                             className="bg-amber-800 text-white hover:bg-amber-900 px-12 py-4 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
                             id="tickets"
+                            href="https://secure.qgiv.com/for/eventstest/event/t4pcommunitygatheringlondon"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             Buy tickets
                         </Button>
