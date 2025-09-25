@@ -1,0 +1,9 @@
+---
+import Layout from "../layouts/Layout.astro";
+import LondonGatheringComponent from "../components/LondonGathering.tsx";
+import "../styles/base.css";
+---
+
+<Layout title="T4P Community Gathering - London">
+    <LondonGatheringComponent client:only="react" />
+</Layout>

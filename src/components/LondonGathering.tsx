@@ -1,0 +1,386 @@
+import React from "react";
+import {
+    Box,
+    Typography,
+    Button,
+    Card,
+    CardContent,
+    Chip,
+    Container,
+    ThemeProvider,
+    createTheme,
+} from "@mui/material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import EmailIcon from "@mui/icons-material/Email";
+
+const theme = createTheme();
+
+const themes = [
+    "Scaling Up Boycotts",
+    "Media Bias and Hasbara",
+    "Protests and Activism", 
+    "Palestinian Tech Sector",
+    "MedTech for Palestine",
+    "Hiring Palestinians",
+    "Social Media Censorship",
+    "Investors for Palestine"
+];
+
+export default function LondonGathering() {
+    return (
+        <ThemeProvider theme={theme}>
+            <div className="min-h-screen bg-white">
+            {/* Hero Section */}
+            <Box className="bg-gradient-to-br from-red-50 to-green-50 py-16">
+                <Container maxWidth="lg">
+                    <Box className="text-center">
+                        <Typography 
+                            variant="h1" 
+                            className="font-bold text-5xl md:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-[#EA4335] to-[#168039] bg-clip-text text-transparent"
+                        >
+                            T4P Community Gathering
+                        </Typography>
+                        
+                        <Box className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-2 text-gray-700 text-lg">
+                            <Box className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm">
+                                <LocationOnIcon className="text-[#EA4335]" />
+                                <span className="font-medium">London</span>
+                            </Box>
+                            <Box className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm">
+                                <CalendarTodayIcon className="text-[#168039]" />
+                                <span className="font-medium">November 8, 2025</span>
+                            </Box>
+                        </Box>
+                        
+                        <Typography variant="h5" className="text-gray-700 font-medium !mb-4">
+                            Palestine House
+                        </Typography>
+                        
+                        <Button
+                            variant="contained"
+                            size="large"
+                            className="bg-amber-800 hover:bg-amber-900 text-white px-10 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                            href="#tickets"
+                        >
+                            Buy tickets
+                        </Button>
+                        
+                        <div className="text-center">
+                            <Typography variant="h6" className="text-gray-600 max-w-3xl !mx-auto leading-relaxed !mt-4">
+                                A full day event for T4P community members with workshops and networking opportunities
+                            </Typography>
+                        </div>
+                    </Box>
+                </Container>
+            </Box>
+
+            {/* About the event */}
+            <Container maxWidth="lg" className="py-16">
+                <Box className="text-center !mb-8">
+                    <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                        About the event
+                    </Typography>
+                    <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                </Box>
+                
+                <Box className="grid md:grid-cols-2 gap-12 items-center">
+                    <Box className="space-y-6">
+                        <Typography variant="h6" className="text-gray-800 leading-relaxed text-lg text-left">
+                            The Tech for Palestine Community Gathering will bring together tech professionals who work at the intersection of tech and pro-Palestine activism.
+                        </Typography>
+                        
+                        <Typography variant="body1" className="text-gray-700 leading-relaxed text-lg text-left">
+                            Whether you're creating boycott tech, building advocacy bots, scaling boycotts, making protests safer, or building alternatives to big tech platforms, this gathering will also be open to entrepreneurs, creators and organizers who want to network with innovators and support their work.
+                        </Typography>
+                        
+                        <Typography variant="body1" className="text-gray-700 leading-relaxed text-lg text-left">
+                            The gathering will also be open to entrepreneurs, creators and organizers who want to network with innovators and support their work.
+                        </Typography>
+                        
+                        <Box className="pt-4">
+                            <Button
+                                variant="contained"
+                                size="large"
+                                className="bg-amber-800 hover:bg-amber-900 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                                href="#tickets"
+                            >
+                                Buy tickets
+                            </Button>
+                        </Box>
+                    </Box>
+                    
+                    <Box className="relative">
+                        <Box className="absolute inset-0 bg-gradient-to-br from-[#EA4335]/10 to-[#168039]/10 rounded-2xl transform rotate-3"></Box>
+                        <Box className="relative bg-white rounded-2xl p-2 shadow-xl">
+                            <img 
+                                src="/images/london-gathering/about-image.webp" 
+                                alt="Tech for Palestine community gathering"
+                                className="w-full aspect-[4/3] object-cover rounded-xl"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = "/images/default.jpg";
+                                }}
+                            />
+                        </Box>
+                    </Box>
+                </Box>
+            </Container>
+
+            {/* Location */}
+            <Box className="bg-gray-50 py-16">
+                <Container maxWidth="lg">
+                    <Box className="text-center !mb-8">
+                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                            Location
+                        </Typography>
+                        <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                    </Box>
+                    
+                    <Box className="grid md:grid-cols-2 gap-12 items-center">
+                        <Box className="relative">
+                            <Box className="rounded-2xl aspect-square overflow-hidden shadow-lg">
+                                <img 
+                                    src="/images/london-gathering/location-left-image.webp" 
+                                    alt="Palestine House location in London"
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = "/images/default.jpg";
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                        
+                        <Box>
+                            <Card className="p-8 rounded-2xl border-0 shadow-xl bg-white">
+                                <CardContent className="p-0">
+                                    <Typography variant="h3" className="font-bold mb-6 text-gray-900">
+                                        London
+                                    </Typography>
+                                    
+                                    <Box className="space-y-6">
+                                        <Box className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                            <Box className="p-2 bg-[#168039] rounded-full">
+                                                <AccessTimeIcon className="text-white" />
+                                            </Box>
+                                            <div>
+                                                <Typography variant="body1" className="font-semibold text-gray-900">
+                                                    9:00am - 4:00pm
+                                                </Typography>
+                                                <Typography variant="body2" className="text-gray-600">
+                                                    Full day event
+                                                </Typography>
+                                            </div>
+                                        </Box>
+                                        
+                                        <Box className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+                                            <Box className="p-2 bg-[#EA4335] rounded-full">
+                                                <LocationOnIcon className="text-white" />
+                                            </Box>
+                                            <div>
+                                                <Typography variant="body1" className="font-semibold text-gray-900 mb-1">
+                                                    Palestine House
+                                                </Typography>
+                                                <Typography variant="body2" className="text-gray-600">
+                                                    111 Regent St<br/>
+                                                    London W1B 4JG
+                                                </Typography>
+                                            </div>
+                                        </Box>
+                                    </Box>
+                                    
+                                    <Button 
+                                        variant="outlined" 
+                                        className="mt-6 border-[#EA4335] text-[#EA4335] hover:bg-[#EA4335] hover:text-white px-6 py-2 rounded-full"
+                                    >
+                                        Get directions
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Box>
+                    </Box>
+                </Container>
+            </Box>
+
+            {/* Themes */}
+            <Container maxWidth="lg" className="py-16">
+                <Box className="text-center !mb-8">
+                    <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                        Themes
+                    </Typography>
+                    <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                </Box>
+                
+                <Box className="flex flex-wrap justify-center gap-4">
+                    {themes.map((theme, index) => (
+                        <Chip
+                            key={index}
+                            label={theme}
+                            className="px-6 py-3 text-base font-medium bg-white border-2 border-gray-200 hover:border-[#EA4335] hover:bg-[#EA4335] hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
+                        />
+                    ))}
+                </Box>
+            </Container>
+
+            {/* Agenda */}
+            <Box className="bg-gray-50 py-16">
+                <Container maxWidth="lg">
+                    <Box className="text-center !mb-8">
+                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                            Agenda
+                        </Typography>
+                        <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                    </Box>
+                    
+                    <Box className="text-center">
+                        <Card className="inline-block p-12 rounded-2xl border-0 shadow-xl bg-white">
+                            <Typography variant="h4" className="text-gray-600 !mb-4">
+                                Coming soon!
+                            </Typography>
+                            <Typography variant="body1" className="text-gray-500 max-w-md !mx-auto">
+                                We're putting together an exciting agenda with workshops, networking sessions, and inspiring talks.
+                            </Typography>
+                        </Card>
+                    </Box>
+                </Container>
+            </Box>
+
+            {/* About Tech for Palestine */}
+            <Container maxWidth="lg" className="py-16">
+                <Box className="text-center !mb-8">
+                    <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                        About Tech for Palestine
+                    </Typography>
+                    <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                </Box>
+                
+                <Box className="grid md:grid-cols-2 gap-12 items-center !mb-6">
+                    <Box>
+                        <Typography variant="h6" className="text-gray-800 leading-relaxed text-lg !mb-6 text-left">
+                            We bring together a global community of tech professionals who support the Palestinian liberation movement and want to contribute their expertise to meaningful, impactful tech projects.
+                        </Typography>
+                    </Box>
+                    
+                    <Box className="grid grid-cols-2 gap-6">
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10">
+                            <Typography variant="h4" className="font-bold mb-2 text-[#EA4335]">
+                                70+
+                            </Typography>
+                            <Typography variant="h6" className="font-semibold mb-2 text-gray-900">
+                                Incubator
+                            </Typography>
+                            <Typography variant="body2" className="text-gray-600">
+                                Impactful advocacy projects
+                            </Typography>
+                        </Card>
+                        
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10">
+                            <Typography variant="h4" className="font-bold mb-2 text-[#168039]">
+                                5K+
+                            </Typography>
+                            <Typography variant="h6" className="font-semibold mb-2 text-gray-900">
+                                Community
+                            </Typography>
+                            <Typography variant="body2" className="text-gray-600">
+                                Tech workers worldwide
+                            </Typography>
+                        </Card>
+                        
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10">
+                            <Typography variant="h6" className="font-bold mb-2 text-[#EA4335]">
+                                Volunteer
+                            </Typography>
+                            <Typography variant="body2" className="text-gray-600">
+                                Donate skills to projects you care about
+                            </Typography>
+                        </Card>
+                        
+                        <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10">
+                            <Typography variant="h6" className="font-bold mb-2 text-[#168039]">
+                                250+
+                            </Typography>
+                            <Typography variant="body2" className="text-gray-600">
+                                Pro-Palestine entrepreneurs
+                            </Typography>
+                        </Card>
+                    </Box>
+                </Box>
+            </Container>
+
+            {/* Sponsors */}
+            <Box className="bg-gray-50 py-16">
+                <Container maxWidth="lg">
+                    <Box className="text-center !mb-8">
+                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                            Sponsors
+                        </Typography>
+                        <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                    </Box>
+                    
+                    <Box className="text-center !mb-8">
+                        <Card className="inline-block bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            <img 
+                                src="/images/london-gathering/YASOKO.webp" 
+                                alt="YASOKO Sponsor"
+                                className="h-24 w-auto mx-auto"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    // Fallback to text if image fails
+                                    target.style.display = 'none';
+                                    const parent = target.parentElement;
+                                    if (parent) {
+                                        parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">YASOKO</Typography>';
+                                    }
+                                }}
+                            />
+                        </Card>
+                    </Box>
+                    
+                    <Card className="max-w-2xl !mx-auto p-8 text-center border-0 rounded-2xl shadow-xl bg-white">
+                        <Typography variant="h4" className="font-bold !mb-4 text-gray-900">
+                            Interested in becoming a sponsor?
+                        </Typography>
+                        <Typography variant="body1" className="text-gray-600 !mb-6 text-lg">
+                            Contact us to receive our sponsorship package and learn more about T4P initiatives.
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            startIcon={<EmailIcon />}
+                            size="large"
+                            className="bg-amber-800 hover:bg-amber-900 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                            href="mailto:contact@techforpalestine.org"
+                        >
+                            Contact us
+                        </Button>
+                    </Card>
+                </Container>
+            </Box>
+
+            {/* Call to Action */}
+            <Box className="bg-gradient-to-br from-[#EA4335] to-[#168039] py-20">
+                <Container maxWidth="lg">
+                    <Box className="text-center text-white">
+                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-6">
+                            Ready to join us?
+                        </Typography>
+                        <Typography variant="h6" className="!mb-8 max-w-3xl !mx-auto leading-relaxed opacity-90">
+                            Don't miss this opportunity to connect with fellow tech professionals 
+                            supporting Palestine and learn about impactful projects.
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            size="large"
+                            className="bg-amber-800 text-white hover:bg-amber-900 px-12 py-4 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+                            id="tickets"
+                        >
+                            Buy tickets
+                        </Button>
+                    </Box>
+                </Container>
+            </Box>
+            </div>
+        </ThemeProvider>
+    );
+}
