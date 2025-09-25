@@ -14,18 +14,30 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EmailIcon from "@mui/icons-material/Email";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import GroupsIcon from "@mui/icons-material/Groups";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import WorkIcon from "@mui/icons-material/Work";
+import BlockIcon from "@mui/icons-material/Block";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import BusinessIcon from "@mui/icons-material/Business";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import PeopleIcon from "@mui/icons-material/People";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 
 const theme = createTheme();
 
 const themes = [
-    "Scaling Up Boycotts",
-    "Media Bias and Hasbara",
-    "Protests and Activism", 
-    "Palestinian Tech Sector",
-    "MedTech for Palestine",
-    "Hiring Palestinians",
-    "Social Media Censorship",
-    "Investors for Palestine"
+    { name: "Scaling Up Boycotts", icon: ShoppingCartIcon },
+    { name: "Media Bias and Hasbara", icon: CampaignIcon },
+    { name: "Protests and Activism", icon: GroupsIcon },
+    { name: "Palestinian Tech Sector", icon: BusinessIcon },
+    { name: "MedTech for Palestine", icon: MedicalServicesIcon },
+    { name: "Hiring Palestinians", icon: WorkIcon },
+    { name: "Social Media Censorship", icon: BlockIcon },
+    { name: "Investors for Palestine", icon: TrendingUpIcon }
 ];
 
 export default function LondonGathering() {
@@ -38,12 +50,12 @@ export default function LondonGathering() {
                     <Box className="text-center">
                         <Typography 
                             variant="h1" 
-                            className="font-bold text-5xl md:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-[#EA4335] to-[#168039] bg-clip-text text-transparent"
+                            className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl lg:!text-7xl !mb-6 bg-gradient-to-r from-[#EA4335] to-[#168039] bg-clip-text text-transparent"
                         >
                             T4P Community Gathering
                         </Typography>
                         
-                        <Box className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-2 text-gray-700 text-lg">
+                        <Box className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-2 text-gray-700 text-base sm:text-lg">
                             <Box className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm">
                                 <LocationOnIcon className="text-[#EA4335]" />
                                 <span className="font-medium">London</span>
@@ -54,14 +66,14 @@ export default function LondonGathering() {
                             </Box>
                         </Box>
                         
-                        <Typography variant="h5" className="text-gray-700 font-medium !mb-4">
+                        <Typography variant="h5" className="text-gray-700 font-medium !mb-4 text-lg sm:text-xl">
                             Palestine House
                         </Typography>
                         
                         <Button
                             variant="contained"
                             size="large"
-                            className="bg-amber-800 hover:bg-amber-900 text-white px-10 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="bg-amber-800 hover:bg-amber-900 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                             href="#tickets"
                         >
                             Buy tickets
@@ -77,25 +89,25 @@ export default function LondonGathering() {
             </Box>
 
             {/* About the event */}
-            <Container maxWidth="lg" className="py-16">
+            <Container maxWidth="lg" className="!py-8 sm:!py-16">
                 <Box className="text-center !mb-8">
-                    <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                    <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
                         About the event
                     </Typography>
                     <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
                 </Box>
                 
-                <Box className="grid md:grid-cols-2 gap-12 items-center">
+                <Box className="grid md:grid-cols-2 !gap-6 md:!gap-12 items-center">
                     <Box className="space-y-6">
-                        <Typography variant="h6" className="text-gray-800 leading-relaxed text-lg text-left">
+                        <Typography variant="h6" className="text-gray-800 leading-relaxed !text-lg sm:!text-xl text-left">
                             The Tech for Palestine Community Gathering will bring together tech professionals who work at the intersection of tech and pro-Palestine activism.
                         </Typography>
                         
-                        <Typography variant="body1" className="text-gray-700 leading-relaxed text-lg text-left">
+                        <Typography variant="body1" className="text-gray-700 leading-relaxed !text-lg text-left">
                             Whether you're creating boycott tech, building advocacy bots, scaling boycotts, making protests safer, or building alternatives to big tech platforms, this gathering will also be open to entrepreneurs, creators and organizers who want to network with innovators and support their work.
                         </Typography>
                         
-                        <Typography variant="body1" className="text-gray-700 leading-relaxed text-lg text-left">
+                        <Typography variant="body1" className="text-gray-700 leading-relaxed !text-lg text-left">
                             The gathering will also be open to entrepreneurs, creators and organizers who want to network with innovators and support their work.
                         </Typography>
                         
@@ -132,7 +144,7 @@ export default function LondonGathering() {
             <Box className="bg-gray-50 py-16">
                 <Container maxWidth="lg">
                     <Box className="text-center !mb-8">
-                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                        <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
                             Location
                         </Typography>
                         <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
@@ -207,20 +219,24 @@ export default function LondonGathering() {
             {/* Themes */}
             <Container maxWidth="lg" className="py-16">
                 <Box className="text-center !mb-8">
-                    <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                    <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
                         Themes
                     </Typography>
                     <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
                 </Box>
                 
                 <Box className="flex flex-wrap justify-center gap-4">
-                    {themes.map((theme, index) => (
-                        <Chip
-                            key={index}
-                            label={theme}
-                            className="px-6 py-3 text-base font-medium bg-white border-2 border-gray-200 hover:border-[#EA4335] hover:bg-[#EA4335] hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
-                        />
-                    ))}
+                    {themes.map((theme, index) => {
+                        const IconComponent = theme.icon;
+                        return (
+                            <Chip
+                                key={index}
+                                icon={<IconComponent className="!text-current" />}
+                                label={theme.name}
+                                className="px-6 py-3 text-base font-medium bg-white border-2 border-gray-200 hover:border-[#EA4335] hover:bg-[#EA4335] hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
+                            />
+                        );
+                    })}
                 </Box>
             </Container>
 
@@ -228,7 +244,7 @@ export default function LondonGathering() {
             <Box className="bg-gray-50 py-16">
                 <Container maxWidth="lg">
                     <Box className="text-center !mb-8">
-                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                        <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
                             Agenda
                         </Typography>
                         <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
@@ -250,7 +266,7 @@ export default function LondonGathering() {
             {/* About Tech for Palestine */}
             <Container maxWidth="lg" className="py-16">
                 <Box className="text-center !mb-8">
-                    <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                    <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
                         About Tech for Palestine
                     </Typography>
                     <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
@@ -265,6 +281,7 @@ export default function LondonGathering() {
                     
                     <Box className="grid grid-cols-2 gap-6">
                         <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10">
+                            <RocketLaunchIcon className="text-[#EA4335] mx-auto mb-2" fontSize="large" />
                             <Typography variant="h4" className="font-bold mb-2 text-[#EA4335]">
                                 70+
                             </Typography>
@@ -277,8 +294,9 @@ export default function LondonGathering() {
                         </Card>
                         
                         <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10">
+                            <PeopleIcon className="text-[#168039] mx-auto mb-2" fontSize="large" />
                             <Typography variant="h4" className="font-bold mb-2 text-[#168039]">
-                                5K+
+                                9K+
                             </Typography>
                             <Typography variant="h6" className="font-semibold mb-2 text-gray-900">
                                 Community
@@ -289,8 +307,12 @@ export default function LondonGathering() {
                         </Card>
                         
                         <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#EA4335]/5 to-[#EA4335]/10">
-                            <Typography variant="h6" className="font-bold mb-2 text-[#EA4335]">
-                                Volunteer
+                            <VolunteerActivismIcon className="text-[#EA4335] mx-auto mb-2" fontSize="large" />
+                            <Typography variant="h4" className="font-bold mb-2 text-[#EA4335]">
+                                1K+
+                            </Typography>
+                            <Typography variant="h6" className="font-semibold mb-2 text-gray-900">
+                                Volunteers
                             </Typography>
                             <Typography variant="body2" className="text-gray-600">
                                 Donate skills to projects you care about
@@ -298,8 +320,12 @@ export default function LondonGathering() {
                         </Card>
                         
                         <Card className="p-6 text-center border-0 rounded-2xl shadow-lg bg-gradient-to-br from-[#168039]/5 to-[#168039]/10">
-                            <Typography variant="h6" className="font-bold mb-2 text-[#168039]">
+                            <AccountBalanceIcon className="text-[#168039] mx-auto mb-2" fontSize="large" />
+                            <Typography variant="h4" className="font-bold mb-2 text-[#168039]">
                                 250+
+                            </Typography>
+                            <Typography variant="h6" className="font-semibold mb-2 text-gray-900">
+                                Entrepreneurs
                             </Typography>
                             <Typography variant="body2" className="text-gray-600">
                                 Pro-Palestine entrepreneurs
@@ -313,7 +339,7 @@ export default function LondonGathering() {
             <Box className="bg-gray-50 py-16">
                 <Container maxWidth="lg">
                     <Box className="text-center !mb-8">
-                        <Typography variant="h2" className="font-bold text-4xl md:text-5xl !mb-4 text-gray-900">
+                        <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
                             Sponsors
                         </Typography>
                         <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
