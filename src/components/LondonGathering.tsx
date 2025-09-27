@@ -102,15 +102,15 @@ export default function LondonGathering() {
                 <Box className="grid md:grid-cols-2 !gap-6 md:!gap-12 items-center">
                     <Box className="space-y-6">
                         <Typography variant="h6" className="text-gray-800 leading-relaxed !text-lg sm:!text-xl text-left">
-                            The Tech for Palestine Community Gathering will bring together tech professionals who work at the intersection of tech and pro-Palestine activism.
+                            The Tech for Palestine Community Gathering will bring together 100 professionals who work at the intersection of tech and pro-Palestine activism.
                         </Typography>
                         
                         <Typography variant="body1" className="text-gray-700 leading-relaxed !text-lg text-left">
-                            Whether you're creating boycott tech, building advocacy bots, scaling boycotts, making protests safer, or building alternatives to big tech platforms, this gathering will also be open to entrepreneurs, creators and organizers who want to network with innovators and support their work.
+                            Whether you work in the field of combatting media bias, scaling boycotts, making protests safer, or building alternatives to big tech platforms, this event is for you.
                         </Typography>
                         
                         <Typography variant="body1" className="text-gray-700 leading-relaxed !text-lg text-left">
-                            The gathering will also be open to entrepreneurs, creators and organizers who want to network with innovators and support their work.
+                            The gathering will also be open to entrepreneurs, investors and organizers who want to network with innovators and support their work.
                         </Typography>
                         
                         <Box className="pt-4">
