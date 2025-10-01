@@ -26,6 +26,8 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import PeopleIcon from "@mui/icons-material/People";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import CoffeeIcon from "@mui/icons-material/Coffee";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 const theme = createTheme();
 
@@ -262,7 +264,7 @@ export default function LondonGathering() {
                         <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
                             <Box className="flex items-center gap-4 mb-2">
                                 <Box className="p-3 bg-[#EA4335] rounded-full min-w-fit">
-                                    <AccessTimeIcon className="text-white" />
+                                    <CoffeeIcon className="text-white" />
                                 </Box>
                                 <Box>
                                     <Typography variant="h5" className="font-bold text-gray-900">
@@ -296,7 +298,7 @@ export default function LondonGathering() {
                         <Card className="p-6 rounded-2xl border-0 shadow-lg bg-gradient-to-r from-[#EA4335]/5 to-[#168039]/5 hover:shadow-xl transition-all duration-300">
                             <Box className="flex items-start gap-4 mb-4">
                                 <Box className="p-3 bg-gradient-to-r from-[#EA4335] to-[#168039] rounded-full min-w-fit">
-                                    <WorkIcon className="text-white" />
+                                    <GroupsIcon className="text-white" />
                                 </Box>
                                 <Box className="flex-1">
                                     <Typography variant="h5" className="font-bold text-gray-900">
@@ -330,7 +332,7 @@ export default function LondonGathering() {
                         <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
                             <Box className="flex items-center gap-4 mb-2">
                                 <Box className="p-3 bg-amber-800 rounded-full min-w-fit">
-                                    <AccessTimeIcon className="text-white" />
+                                    <RestaurantIcon className="text-white" />
                                 </Box>
                                 <Box>
                                     <Typography variant="h5" className="font-bold text-gray-900">
@@ -381,7 +383,7 @@ export default function LondonGathering() {
                         <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
                             <Box className="flex items-center gap-4 mb-2">
                                 <Box className="p-3 bg-[#EA4335] rounded-full min-w-fit">
-                                    <AccessTimeIcon className="text-white" />
+                                    <CoffeeIcon className="text-white" />
                                 </Box>
                                 <Box>
                                     <Typography variant="h5" className="font-bold text-gray-900">
