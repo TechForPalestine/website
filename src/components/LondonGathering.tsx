@@ -384,6 +384,7 @@ export default function LondonGathering() {
                             <Box className="flex items-center gap-4 mb-2">
                                 <Box className="p-3 bg-[#EA4335] rounded-full min-w-fit">
                                     <CoffeeIcon className="text-white" />
+                                </Box>
                                 <Box>
                                     <Typography variant="h5" className="font-bold text-gray-900">
                                         15:00 - 16:00
