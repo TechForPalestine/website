@@ -202,17 +202,17 @@ export default function LondonGathering() {
                                                     Palestine House
                                                 </Typography>
                                                 <Typography variant="body2" className="text-gray-600">
-                                                    111 Regent St<br/>
-                                                    London W1B 4JG
+                                                    113 High Holborn<br/>
+                                                    London WC1V 6JQ
                                                 </Typography>
                                             </div>
                                         </Box>
                                     </Box>
                                     
-                                    <Button 
-                                        variant="outlined" 
+                                    <Button
+                                        variant="outlined"
                                         className="mt-6 border-[#EA4335] text-[#EA4335] hover:bg-[#EA4335] hover:text-white px-6 py-2 rounded-full"
-                                        href="https://maps.app.goo.gl/nhy7XaRrfPh4Usex6"
+                                        href="https://maps.app.goo.gl/yzdjzqE5PvYLjpX49"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
