@@ -212,7 +212,7 @@ export default function LondonGathering() {
                                     <Button
                                         variant="outlined"
                                         className="mt-6 border-[#EA4335] text-[#EA4335] hover:bg-[#EA4335] hover:text-white px-6 py-2 rounded-full"
-                                        href="https://maps.app.goo.gl/yzdjzqE5PvYLjpX49"
+                                        href="https://maps.app.goo.gl/nhy7XaRrfPh4Usex6"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
