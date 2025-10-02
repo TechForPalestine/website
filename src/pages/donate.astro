@@ -116,13 +116,15 @@ import "../styles/base.css";
             </div>
         </div>
 
-        <script>
+        <script is:inline>
             document.addEventListener("DOMContentLoaded", function () {
                 // A/B test: randomly assign 50% to each form
                 const showCharityStack = Math.random() < 0.5;
 
                 const charitystackWrapper = document.getElementById("charitystack-form-wrapper");
                 const bloomerangWrapper = document.getElementById("bloomerang-form-wrapper");
+
+                if (!charitystackWrapper || !bloomerangWrapper) return;
 
                 if (showCharityStack) {
                     // Show CharityStack, hide Bloomerang
