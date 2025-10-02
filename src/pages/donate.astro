@@ -55,7 +55,13 @@ import "../styles/base.css";
                         <div class="bg-white/80 backdrop-blur rounded-2xl border border-gray-200 shadow-md p-6 sm:p-8">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Make a donation</h2>
                             <div class="w-full max-w-lg mx-auto">
-                                <div data-entity="EMBED_FORM" data-source="CharityStack" id="1546c2c2-a580-4994-bbb3-9e643aed1309"></div>
+                                <!-- CharityStack Form -->
+                                <div id="charitystack-form-wrapper">
+                                    <div data-entity="EMBED_FORM" data-source="CharityStack" id="1546c2c2-a580-4994-bbb3-9e643aed1309"></div>
+                                </div>
+
+                                <!-- Bloomerang Form -->
+                                <div id="bloomerang-form-wrapper" class="qgiv-embed-container" data-qgiv-embed="true" data-embed-id="83460" data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/" data-width="630"></div>
                             </div>
                             <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm text-gray-600">
                                 <div class="flex items-center">
@@ -112,12 +118,33 @@ import "../styles/base.css";
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const script = document.createElement("script");
-                script.defer = true;
-                script.id = "charitystack-embed";
-                script.dataset.id = "M_lDGj72xT61";
-                script.src = "https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js";
-                document.body.appendChild(script);
+                // A/B test: randomly assign 50% to each form
+                const showCharityStack = Math.random() < 0.5;
+
+                const charitystackWrapper = document.getElementById("charitystack-form-wrapper");
+                const bloomerangWrapper = document.getElementById("bloomerang-form-wrapper");
+
+                if (showCharityStack) {
+                    // Show CharityStack, hide Bloomerang
+                    bloomerangWrapper.style.display = "none";
+
+                    // Load CharityStack script
+                    const script = document.createElement("script");
+                    script.defer = true;
+                    script.id = "charitystack-embed";
+                    script.dataset.id = "M_lDGj72xT61";
+                    script.src = "https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js";
+                    document.body.appendChild(script);
+                } else {
+                    // Show Bloomerang, hide CharityStack
+                    charitystackWrapper.style.display = "none";
+
+                    // Load Bloomerang (qgiv) script
+                    const script = document.createElement("script");
+                    script.id = "qgiv-embedjs";
+                    script.src = "https://secure.qgiv.com/resources/core/js/embed.js";
+                    document.body.appendChild(script);
+                }
             });
         </script>
     </Layout>
