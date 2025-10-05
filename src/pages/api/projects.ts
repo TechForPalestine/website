@@ -1,19 +1,12 @@
 import type { APIRoute } from 'astro';
 import { getEnv } from '../../utils/getEnv.js';
 
-// Import environment variables properly for Astro
-
-// Explicitly disable prerendering for this API route
-export const prerender = false;
+export const prerender = true;
 
 export const GET: APIRoute = async ({ locals }) => {
   try {
     const PROJECTHUB_API_KEY = getEnv('PROJECTHUB_API_KEY', locals);
 
-    console.log('API: Starting fetchProjectsFromApp...');
-    console.log('API: API Key available:', !!PROJECTHUB_API_KEY);
-    console.log('API: API Key length:', PROJECTHUB_API_KEY?.length || 0);
-    
     // Force fresh fetch with comprehensive cache-busting
     const response = await fetch('https://projecthub.techforpalestine.org/api/public/projects', {
       method: 'GET',
@@ -53,9 +46,6 @@ export const GET: APIRoute = async ({ locals }) => {
       console.error('API: Unexpected response structure:', data);
       projects = [];
     }
-    
-    console.log(`API: Processed ${projects.length} projects from ProjectHub`);
-    console.log('API: First project sample:', projects[0] ? JSON.stringify(projects[0], null, 2) : 'No projects found');
     
     return new Response(JSON.stringify(projects), {
       status: 200,
