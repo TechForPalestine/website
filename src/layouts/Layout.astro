@@ -68,16 +68,5 @@ const {
 </div>
 <Footer />
 
-<script is:inline>
-    // A/B test for donate links: 50% redirect to /donate, 50% to /donate-2
-    document.addEventListener('click', function(e) {
-        const target = e.target.closest('a[href="/donate"]');
-        if (target) {
-            e.preventDefault();
-            const destination = Math.random() < 0.5 ? '/donate' : '/donate-2';
-            window.location.href = destination;
-        }
-    });
-</script>
 </body>
 </html>
