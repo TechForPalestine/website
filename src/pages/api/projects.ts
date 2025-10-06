@@ -66,9 +66,13 @@ export const GET: APIRoute = async ({ locals }) => {
       },
     });
   } catch (error) {
-    console.error('API: Error fetching projects from app:', error);
-    
-    return new Response(JSON.stringify({ error: 'Failed to fetch projects' }), {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('API: Error fetching projects from app:', errorMessage);
+
+    return new Response(JSON.stringify({
+      error: 'Failed to fetch projects',
+      details: errorMessage
+    }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
