@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getEnv } from '../../utils/getEnv.js';
 
-export const prerender = true;
+export const prerender = false;
 
 export const GET: APIRoute = async ({ locals }) => {
   try {
