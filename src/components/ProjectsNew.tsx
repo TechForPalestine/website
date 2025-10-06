@@ -58,15 +58,21 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
     const [loading, setLoading] = useState(initialLoading);
     const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+    const [dialogImageFailed, setDialogImageFailed] = useState(false);
 
     const handleCardClick = (project: ProjectItem) => {
         setSelectedProject(project);
+        setDialogImageFailed(false);
         setDialogOpen(true);
     };
 
     const handleCloseDialog = () => {
         setDialogOpen(false);
-        setTimeout(() => setSelectedProject(null), 200);
+        setTimeout(() => {
+            setSelectedProject(null);
+            setDialogImageFailed(false);
+        }, 200);
     };
 
     const fetchProjects = async () => {
@@ -140,6 +146,7 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                     const logoSrc = hasLogo && project.logoUrl?.startsWith("/")
                         ? `https://projecthub.techforpalestine.org${project.logoUrl}`
                         : project.logoUrl;
+                    const shouldShowInitials = !hasLogo || failedImages.has(project.id);
 
                     return (
                         <Card
@@ -162,25 +169,7 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
 
                             {/* Logo and header */}
                             <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center' }}>
-                                {hasLogo ? (
-                                    <Box
-                                        component="img"
-                                        src={logoSrc}
-                                        alt={project.name}
-                                        sx={{
-                                            width: 48,
-                                            height: 48,
-                                            borderRadius: '50%',
-                                            objectFit: 'cover',
-                                            bgcolor: '#f5f5f5',
-                                            flexShrink: 0
-                                        }}
-                                        onError={(e) => {
-                                            // Hide the image and show initials instead
-                                            (e.target as HTMLImageElement).style.display = 'none';
-                                        }}
-                                    />
-                                ) : (
+                                {shouldShowInitials ? (
                                     <Box
                                         sx={{
                                             width: 48,
@@ -198,6 +187,23 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                                     >
                                         {getInitials(project.name)}
                                     </Box>
+                                ) : (
+                                    <Box
+                                        component="img"
+                                        src={logoSrc}
+                                        alt={project.name}
+                                        sx={{
+                                            width: 48,
+                                            height: 48,
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            bgcolor: '#f5f5f5',
+                                            flexShrink: 0
+                                        }}
+                                        onError={() => {
+                                            setFailedImages(prev => new Set(prev).add(project.id));
+                                        }}
+                                    />
                                 )}
                                 <Box sx={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                     <Typography
@@ -297,7 +303,7 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                     <>
                         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pr: 1 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                {selectedProject.logoUrl && selectedProject.logoUrl !== "/images/default.jpg" ? (
+                                {(selectedProject.logoUrl && selectedProject.logoUrl !== "/images/default.jpg" && !dialogImageFailed) ? (
                                     <Box
                                         component="img"
                                         src={selectedProject.logoUrl?.startsWith("/")
@@ -311,8 +317,8 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                                             objectFit: 'cover',
                                             bgcolor: '#f5f5f5'
                                         }}
-                                        onError={(e) => {
-                                            (e.target as HTMLImageElement).style.display = 'none';
+                                        onError={() => {
+                                            setDialogImageFailed(true);
                                         }}
                                     />
                                 ) : (
