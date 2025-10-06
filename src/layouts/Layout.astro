@@ -50,7 +50,7 @@ const {
 <!-- Floating Donate Button -->
 <a
     href="/donate"
-    class="fixed right-0 top-1/2 transform -translate-y-1/2 text-white px-2 py-6 shadow-lg hover:bg-green-900 transition z-50 bg-green-800"
+    class="donate-link fixed right-0 top-1/2 transform -translate-y-1/2 text-white px-2 py-6 shadow-lg hover:bg-green-900 transition z-50 bg-green-800"
     style="
     writing-mode: sideways-lr;
     text-orientation: mixed;
@@ -67,5 +67,17 @@ const {
 <slot />
 </div>
 <Footer />
+
+<script is:inline>
+    // A/B test for donate links: 50% redirect to /donate, 50% to /donate-2
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('a[href="/donate"]');
+        if (target) {
+            e.preventDefault();
+            const destination = Math.random() < 0.5 ? '/donate' : '/donate-2';
+            window.location.href = destination;
+        }
+    });
+</script>
 </body>
 </html>
