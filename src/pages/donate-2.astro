@@ -111,4 +111,10 @@ import "../styles/base.css";
     </div>
 
     <script>(function(w, d, s, id){var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;(js as HTMLScriptElement).src = "https://secure.qgiv.com/resources/core/js/embed.js";fjs.parentNode?.insertBefore(js, fjs);})(window, document, 'script', 'qgiv-embedjs');</script>
+
+    <script is:inline>
+        // Track which donate form variant the user sees
+        window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) };
+        window.plausible('pageview', { props: { donate_form_variant: 'qgiv' } });
+    </script>
 </Layout>
