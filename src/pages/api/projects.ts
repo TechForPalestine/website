@@ -20,9 +20,7 @@ export const GET: APIRoute = async ({ locals }) => {
       // Cloudflare-specific fetch options to bypass all caching
       cf: {
         cacheEverything: false
-      },
-      // Standard fetch cache control
-      cache: 'no-store'
+      }
     } as RequestInit & { cf?: any });
 
     if (!response.ok) {
