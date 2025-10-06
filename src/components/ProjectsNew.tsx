@@ -43,6 +43,16 @@ interface ProjectsNewProps {
     loading?: boolean;
 }
 
+const getInitials = (name: string): string => {
+    const words = name.trim().split(/\s+/);
+    if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+    } else if (words.length === 1) {
+        return words[0][0].toUpperCase();
+    }
+    return 'P'; // fallback
+};
+
 export default function ProjectsNew({ projects: initialProjects, loading: initialLoading = false }: ProjectsNewProps) {
     const [projects, setProjects] = useState<ProjectItem[]>(initialProjects);
     const [loading, setLoading] = useState(initialLoading);
@@ -126,9 +136,10 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                 gap: 2
             }}>
                 {projects.map((project) => {
-                    const logoSrc = project.logoUrl?.startsWith("/")
+                    const hasLogo = project.logoUrl && project.logoUrl !== "/images/default.jpg";
+                    const logoSrc = hasLogo && project.logoUrl?.startsWith("/")
                         ? `https://projecthub.techforpalestine.org${project.logoUrl}`
-                        : project.logoUrl || "/images/default.jpg";
+                        : project.logoUrl;
 
                     return (
                         <Card
@@ -150,42 +161,62 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                         >
 
                             {/* Logo and header */}
-                            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                                <Box
-                                    component="img"
-                                    src={logoSrc}
-                                    alt={project.name}
-                                    sx={{
-                                        width: 48,
-                                        height: 48,
-                                        borderRadius: '50%',
-                                        objectFit: 'cover',
-                                        bgcolor: '#f5f5f5',
-                                        flexShrink: 0
-                                    }}
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = "/images/default.jpg";
-                                    }}
-                                />
-                                <Box sx={{ minWidth: 0, flex: 1 }}>
+                            <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center' }}>
+                                {hasLogo ? (
+                                    <Box
+                                        component="img"
+                                        src={logoSrc}
+                                        alt={project.name}
+                                        sx={{
+                                            width: 48,
+                                            height: 48,
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            bgcolor: '#f5f5f5',
+                                            flexShrink: 0
+                                        }}
+                                        onError={(e) => {
+                                            // Hide the image and show initials instead
+                                            (e.target as HTMLImageElement).style.display = 'none';
+                                        }}
+                                    />
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            width: 48,
+                                            height: 48,
+                                            borderRadius: '50%',
+                                            bgcolor: '#E3F9ED',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0,
+                                            fontSize: '1rem',
+                                            fontWeight: 500,
+                                            color: '#666'
+                                        }}
+                                    >
+                                        {getInitials(project.name)}
+                                    </Box>
+                                )}
+                                <Box sx={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                     <Typography
                                         variant="h6"
                                         sx={{
-                                            fontSize: '1rem',
+                                            fontSize: '1.125rem',
                                             fontWeight: 600,
-                                            mb: 0.5,
+                                            mb: 0,
                                             overflow: 'hidden',
                                             display: '-webkit-box',
                                             WebkitLineClamp: 2,
                                             WebkitBoxOrient: 'vertical',
-                                            minHeight: '2.5em',
                                             lineHeight: 1.25
                                         }}
                                     >
                                         {project.name}
                                     </Typography>
                                     {project.leadName && (
-                                        <Typography variant="body2" sx={{ fontSize: '0.875rem', color: 'text.secondary' }}>
+                                        <Typography variant="body2" sx={{ fontSize: '0.875rem', color: 'text.secondary', mt: 0.25 }}>
                                             Led by {project.leadName}
                                         </Typography>
                                     )}
@@ -247,7 +278,7 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                                         '&:hover': { color: 'primary.main' }
                                     }}
                                 >
-                                    Click to view details
+                                    More info
                                 </Typography>
                             </Box>
                         </Card>
@@ -266,23 +297,42 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                     <>
                         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pr: 1 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                <Box
-                                    component="img"
-                                    src={selectedProject.logoUrl?.startsWith("/")
-                                        ? `https://projecthub.techforpalestine.org${selectedProject.logoUrl}`
-                                        : selectedProject.logoUrl || "/images/default.jpg"}
-                                    alt={selectedProject.name}
-                                    sx={{
-                                        width: 56,
-                                        height: 56,
-                                        borderRadius: '50%',
-                                        objectFit: 'cover',
-                                        bgcolor: '#f5f5f5'
-                                    }}
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = "/images/default.jpg";
-                                    }}
-                                />
+                                {selectedProject.logoUrl && selectedProject.logoUrl !== "/images/default.jpg" ? (
+                                    <Box
+                                        component="img"
+                                        src={selectedProject.logoUrl?.startsWith("/")
+                                            ? `https://projecthub.techforpalestine.org${selectedProject.logoUrl}`
+                                            : selectedProject.logoUrl}
+                                        alt={selectedProject.name}
+                                        sx={{
+                                            width: 56,
+                                            height: 56,
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            bgcolor: '#f5f5f5'
+                                        }}
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).style.display = 'none';
+                                        }}
+                                    />
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            width: 56,
+                                            height: 56,
+                                            borderRadius: '50%',
+                                            bgcolor: '#E3F9ED',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '1.25rem',
+                                            fontWeight: 500,
+                                            color: '#666'
+                                        }}
+                                    >
+                                        {getInitials(selectedProject.name)}
+                                    </Box>
+                                )}
                                 <Box>
                                     <Typography variant="h5" sx={{ fontWeight: 600 }}>
                                         {selectedProject.name}
@@ -303,34 +353,6 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
                             <Typography variant="body1" sx={{ lineHeight: 1.8, mb: 4, fontSize: '1rem', color: 'text.primary' }}>
                                 {selectedProject.elevatorPitch || selectedProject.description}
                             </Typography>
-
-                            {/* Info Chips */}
-                            {(selectedProject.categoryName || selectedProject.mentor) && (
-                                <Box sx={{ mb: 3 }}>
-                                    <Typography variant="body2" sx={{ mb: 1, fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                                        About
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                                        {selectedProject.categoryName && (
-                                            <Chip
-                                                label={selectedProject.categoryName}
-                                                sx={{
-                                                    bgcolor: '#f3e5f5',
-                                                    color: '#7b1fa2',
-                                                    fontWeight: 500
-                                                }}
-                                            />
-                                        )}
-                                        {selectedProject.mentor && (
-                                            <Chip
-                                                label={`Mentor: ${selectedProject.mentor}`}
-                                                variant="outlined"
-                                                sx={{ fontWeight: 500 }}
-                                            />
-                                        )}
-                                    </Box>
-                                </Box>
-                            )}
 
                             {/* Social Media Links */}
                             {(selectedProject.discordUsername || selectedProject.githubUrl || selectedProject.twitterUrl || selectedProject.linkedinUrl ||
