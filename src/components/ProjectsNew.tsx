@@ -66,12 +66,9 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
             if (response.ok) {
                 const data = await response.json();
                 setProjects(data);
-            } else {
-                const errorData = await response.json();
-                console.error('Failed to fetch projects - Status:', response.status, 'Error:', errorData);
             }
         } catch (error) {
-            console.error('Failed to fetch projects:', error);
+            // Silently handle error
         } finally {
             setLoading(false);
         }
