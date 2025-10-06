@@ -111,11 +111,5 @@ import "../styles/base.css";
             </div>
         </div>
 
-        <script is:inline>
-            // A/B test redirect: 50% of users go to /donate-2 (Bloomerang)
-            if (Math.random() < 0.5) {
-                window.location.href = '/donate-2';
-            }
-        </script>
         <script is:inline defer id="charitystack-embed" data-id="M_lDGj72xT61" src="https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js"></script>
     </Layout>
