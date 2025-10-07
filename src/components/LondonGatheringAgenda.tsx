@@ -42,14 +42,20 @@ const getAgendaItemStyle = (title: string) => {
 };
 
 const sortAgendaItems = (items: AgendaItem[]) => {
-    // Group breakouts by session
+    // Extract breakout number for numeric sorting
+    const getBreakoutNumber = (title: string) => {
+        const match = title.match(/Breakout (\d+)/);
+        return match ? parseInt(match[1]) : 0;
+    };
+
+    // Group breakouts by session and sort numerically by breakout number
     const session1Breakouts = items.filter(item =>
         item.title.includes('Breakout') && item.time === '10:30 - 12:00'
-    ).sort((a, b) => a.title.localeCompare(b.title));
+    ).sort((a, b) => getBreakoutNumber(a.title) - getBreakoutNumber(b.title));
 
     const session2Breakouts = items.filter(item =>
         item.title.includes('Breakout') && item.time === '13:30 - 15:00'
-    ).sort((a, b) => a.title.localeCompare(b.title));
+    ).sort((a, b) => getBreakoutNumber(a.title) - getBreakoutNumber(b.title));
 
     // Other items
     const otherItems = items.filter(item => !item.title.includes('Breakout'));
