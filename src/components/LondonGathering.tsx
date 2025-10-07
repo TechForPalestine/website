@@ -28,6 +28,8 @@ import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CoffeeIcon from "@mui/icons-material/Coffee";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
+import LondonGatheringSpeakers from "./LondonGatheringSpeakers";
+import LondonGatheringAgenda from "./LondonGatheringAgenda";
 
 const theme = createTheme();
 
@@ -42,7 +44,14 @@ const themes = [
     { name: "Investors for Palestine", icon: TrendingUpIcon }
 ];
 
-export default function LondonGathering() {
+interface LondonGatheringProps {
+    initialAgendaData?: {
+        agendaItems: any[];
+        speakers: any[];
+    };
+}
+
+export default function LondonGathering({ initialAgendaData }: LondonGatheringProps = { initialAgendaData: { agendaItems: [], speakers: [] } }) {
     return (
         <ThemeProvider theme={theme}>
             <div className="min-h-screen bg-white">
@@ -249,155 +258,11 @@ export default function LondonGathering() {
                 </Box>
             </Container>
 
+            {/* Speakers */}
+            <LondonGatheringSpeakers initialSpeakers={initialAgendaData?.speakers || []} />
+
             {/* Agenda */}
-            <Box className="bg-gray-50 py-16">
-                <Container maxWidth="lg">
-                    <Box className="text-center !mb-12">
-                        <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
-                            Agenda
-                        </Typography>
-                        <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
-                    </Box>
-                    
-                    <Box className="max-w-4xl !mx-auto space-y-6">
-                        {/* Registration */}
-                        <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
-                            <Box className="flex items-center gap-4 mb-2">
-                                <Box className="p-3 bg-[#EA4335] rounded-full min-w-fit">
-                                    <CoffeeIcon className="text-white" />
-                                </Box>
-                                <Box>
-                                    <Typography variant="h5" className="font-bold text-gray-900">
-                                        9:00 - 10:00
-                                    </Typography>
-                                    <Typography variant="h6" className="text-[#EA4335] font-semibold">
-                                        Registration and welcome coffee
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Card>
-
-                        {/* Opening */}
-                        <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
-                            <Box className="flex items-center gap-4 mb-2">
-                                <Box className="p-3 bg-[#168039] rounded-full min-w-fit">
-                                    <AccessTimeIcon className="text-white" />
-                                </Box>
-                                <Box>
-                                    <Typography variant="h5" className="font-bold text-gray-900">
-                                        10:00 - 10:30
-                                    </Typography>
-                                    <Typography variant="h6" className="text-[#168039] font-semibold">
-                                        Opening of the event
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Card>
-
-                        {/* Workshop Session 1 */}
-                        <Card className="p-6 rounded-2xl border-0 shadow-lg bg-gradient-to-r from-[#EA4335]/5 to-[#168039]/5 hover:shadow-xl transition-all duration-300">
-                            <Box className="flex items-start gap-4 mb-4">
-                                <Box className="p-3 bg-gradient-to-r from-[#EA4335] to-[#168039] rounded-full min-w-fit">
-                                    <GroupsIcon className="text-white" />
-                                </Box>
-                                <Box className="flex-1">
-                                    <Typography variant="h5" className="font-bold text-gray-900">
-                                        10:30 - 12:00
-                                    </Typography>
-                                    <Typography variant="h6" className="bg-gradient-to-r from-[#EA4335] to-[#168039] bg-clip-text text-transparent font-bold mb-3">
-                                        Workshop Session 1
-                                    </Typography>
-                                    <Box className="space-y-2">
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 1: Pro-Palestine Activism in the UK
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 2: The Palestinian Tech Sector Today and Tomorrow
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 3: MedTech for Palestine
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 4: Scaling Boycotts through Tech
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 5: Combatting Media Bias and Hasbara
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Card>
-
-                        {/* Lunch */}
-                        <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
-                            <Box className="flex items-center gap-4 mb-2">
-                                <Box className="p-3 bg-amber-800 rounded-full min-w-fit">
-                                    <RestaurantIcon className="text-white" />
-                                </Box>
-                                <Box>
-                                    <Typography variant="h5" className="font-bold text-gray-900">
-                                        12:00 - 13:30
-                                    </Typography>
-                                    <Typography variant="h6" className="text-amber-800 font-semibold">
-                                        Lunch
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Card>
-
-                        {/* Workshop Session 2 */}
-                        <Card className="p-6 rounded-2xl border-0 shadow-lg bg-gradient-to-r from-[#168039]/5 to-[#EA4335]/5 hover:shadow-xl transition-all duration-300">
-                            <Box className="flex items-start gap-4 mb-4">
-                                <Box className="p-3 bg-gradient-to-r from-[#168039] to-[#EA4335] rounded-full min-w-fit">
-                                    <GroupsIcon className="text-white" />
-                                </Box>
-                                <Box className="flex-1">
-                                    <Typography variant="h5" className="font-bold text-gray-900">
-                                        13:30 - 15:00
-                                    </Typography>
-                                    <Typography variant="h6" className="bg-gradient-to-r from-[#168039] to-[#EA4335] bg-clip-text text-transparent font-bold mb-3">
-                                        Workshop Session 2
-                                    </Typography>
-                                    <Box className="space-y-2">
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 6: Social Media Activism and Censorship
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 7: Investors for Palestine
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 8: Hiring Palestinian Talent
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 9: Tech and Humanitarian Aid
-                                        </Typography>
-                                        <Typography variant="body1" className="text-gray-800">
-                                            • Breakout 10: Data and AI for Palestine
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Card>
-
-                        {/* Closing */}
-                        <Card className="p-6 rounded-2xl border-0 shadow-lg bg-white hover:shadow-xl transition-all duration-300">
-                            <Box className="flex items-center gap-4 mb-2">
-                                <Box className="p-3 bg-[#EA4335] rounded-full min-w-fit">
-                                    <CoffeeIcon className="text-white" />
-                                </Box>
-                                <Box>
-                                    <Typography variant="h5" className="font-bold text-gray-900">
-                                        15:00 - 16:00
-                                    </Typography>
-                                    <Typography variant="h6" className="text-[#EA4335] font-semibold">
-                                        Closing and coffee
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Card>
-                    </Box>
-                </Container>
-            </Box>
+            <LondonGatheringAgenda initialAgendaItems={initialAgendaData?.agendaItems || []} />
 
             {/* About Tech for Palestine */}
             <Container maxWidth="lg" className="py-16">
