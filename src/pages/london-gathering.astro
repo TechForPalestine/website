@@ -5,7 +5,7 @@ import { fetchNotionAgenda } from "../store/notionClient";
 import "../styles/base.css";
 
 // Fetch data server-side for faster initial load
-let agendaData = { agendaItems: [], speakers: [] };
+let agendaData: any = { agendaItems: [], speakers: [] };
 try {
     agendaData = await fetchNotionAgenda(Astro.locals);
 } catch (error) {
