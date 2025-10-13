@@ -43,6 +43,10 @@ Key features:
 - [Events System](docs/EVENTS.md) - Complete guide to the events page functionality
 - [Image Proxy Deployment](DEPLOYMENT.md) - Cloudflare Worker setup instructions
 
+## Code of Conduct
+
+This project follows the Tech for Palestine Code of Conduct. Please read it before contributing: [http://github.com/techforpalestine/code-of-conduct](http://github.com/techforpalestine/code-of-conduct)
+
 ## Contributions
 
 Contributions of all kind are welcome. Fork this repo, clone, create branch and make the first commit for change. Open a PR with appropriate title.
