@@ -167,15 +167,18 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
 
         const question = props["Question"]?.title?.[0]?.plain_text || "";
         const answer = props["Answer"]?.rich_text || [];
+        const position = props["Position"]?.number ?? 999999; // Default to high number if no position
 
         return {
             id: page.id,
             question,
             answer,
+            position,
         };
     });
 
-    return faqs.reverse();
+    // Sort by position ascending
+    return faqs.sort((a: any, b: any) => a.position - b.position);
 };
 
 export const fetchNotionIdeas = async (locals?: any) => {
