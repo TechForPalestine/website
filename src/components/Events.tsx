@@ -172,11 +172,12 @@ export default function Events({ events: initialEvents, loading: initialLoading 
 
             <div className="space-y-6">
                 {events.map((event, i) => {
-                    const eventDate = new Date(event.date);
-                    const day = eventDate.getDate();
-                    const month = eventDate.toLocaleString("default", {
-                        month: "short",
-                    }).toUpperCase();
+                    // Parse date string without timezone conversion
+                    const [year, month, day] = event.date.split('-');
+                    const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+                    const monthName = monthNames[parseInt(month) - 1];
+                    const dayNum = parseInt(day);
+
                     const isPast = event.status?.toLowerCase() === "past";
                     const eventUrl = `/event-details?id=${event.id}`;
 
@@ -260,7 +261,7 @@ export default function Events({ events: initialEvents, loading: initialLoading 
                                 <Box className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                   <span className="flex items-center gap-1">
                     <CalendarTodayIcon fontSize="small" />
-                      {month} {day}, {eventDate.getFullYear()}
+                      {monthName} {dayNum}, {year}
                   </span>
                                     {event.time && (
                                         <span className="flex items-center gap-1">
