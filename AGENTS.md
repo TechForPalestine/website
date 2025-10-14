@@ -11,11 +11,11 @@
 - `cloudflare-worker/`: Worker that proxies Notion images (deployed separately via Wrangler).
 
 ## Build, Test, and Development Commands
-- `npm install`: Install dependencies.
-- `npm run dev` (alias `npm start`): Run Astro dev server at `http://localhost:4321`.
-- `npm run build`: Build static site to `dist/`.
-- `npm run preview`: Preview the production build locally.
-- `npx astro check` (or `npm run astro -- check`): Type checking and diagnostics for Astro/TS.
+- `pnpm install`: Install dependencies.
+- `pnpm dev` (alias `pnpm start`): Run Astro dev server at `http://localhost:4321`.
+- `pnpm build`: Build static site to `dist/`.
+- `pnpm preview`: Preview the production build locally.
+- `pnpm dlx astro check` (or `pnpm astro -- check`): Type checking and diagnostics for Astro/TS.
 - Worker: `cd cloudflare-worker && wrangler dev|deploy` (runs/deploys the image proxy).
 
 ## Coding Style & Naming Conventions
@@ -34,7 +34,7 @@
 ## Commit & Pull Request Guidelines
 - **Commits**: Small, scoped, imperative mood (e.g., `fix: handle expired Notion URLs`).
 - **PRs**: Include a clear description, linked issues, and screenshots for UI changes. Note any schema/content updates.
-- **Checks**: Run `npm run build` and `npx astro check` locally before opening a PR.
+- **Checks**: Run `pnpm build` and `npx astro check` locally before opening a PR.
 - **Secrets**: Never commit `.env` or keys. Use platform secrets (Cloudflare Pages/GitHub Actions).
 
 ## Security & Configuration Tips

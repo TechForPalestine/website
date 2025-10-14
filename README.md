@@ -9,13 +9,13 @@ Help normalize Palestinian humanity in different ways.
 To run this project on your local machine, first install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 Next, run the development server:
 
 ```bash
-npm run dev
+pnpm dev # pnpm run dev 
 ```
 
 Finally, open [http://localhost:4321](http://localhost:4321) in your browser to view the website.
@@ -23,7 +23,7 @@ Finally, open [http://localhost:4321](http://localhost:4321) in your browser to 
 For CI environments, prefer a clean, reproducible install:
 
 ```bash
-npm ci
+pnpm ci
 ```
 
 

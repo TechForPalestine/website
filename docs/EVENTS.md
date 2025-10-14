@@ -136,7 +136,7 @@ useEffect(() => {
 ### Website Deployment
 Standard Astro build deployed to Cloudflare Pages:
 ```bash
-npm run build
+pnpm build
 ```
 
 ### Worker Deployment
@@ -220,7 +220,7 @@ Returns array of event objects sorted by date (newest first).
 
 ### Local Development
 ```bash
-npm run dev  # Start Astro dev server on :4321
+pnpm dev  # Start Astro dev server on :4321
 ```
 
 ### Testing Worker Locally
