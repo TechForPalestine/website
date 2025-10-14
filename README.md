@@ -23,7 +23,7 @@ Finally, open [http://localhost:4321](http://localhost:4321) in your browser to 
 For CI environments, prefer a clean, reproducible install:
 
 ```bash
-pnpm ci
+npm ci
 ```
 
 
