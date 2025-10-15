@@ -12,7 +12,7 @@
   },
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": ">=10.18.2"
+    "pnpm": ">=9.0.0"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
