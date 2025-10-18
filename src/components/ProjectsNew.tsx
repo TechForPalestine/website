@@ -79,7 +79,6 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
         setLoading(true);
         try {
             const response = await fetch('/api/projects', { cache: 'no-cache' });
-            console.log('Fetch response:', response);
             if (response.ok) {
                 const data = await response.json();
                 setProjects(data);
