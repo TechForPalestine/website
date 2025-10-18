@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
+import LondonGatheringPopup from "../components/LondonGatheringPopup.tsx";
 import "../styles/base.css";
 import ArrowIcon from "../components/ArrowIcon.astro";
 ---
 
 <Layout title="Tech For Palestine">
+  <LondonGatheringPopup client:only="react" />
   <main>
     <section class="grid grid-cols-1 lg:grid-cols-2 items-center bg-white">
       <div
