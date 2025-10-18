@@ -46,9 +46,9 @@ interface ProjectsNewProps {
 const getInitials = (name: string): string => {
     const words = name.trim().split(/\s+/);
     if (words.length >= 2) {
-        return (words[0][0] + words[1][0]).toUpperCase();
+        return (words[0][0] + words[1][0])?.toUpperCase();
     } else if (words.length === 1) {
-        return words[0][0].toUpperCase();
+        return words[0][0]?.toUpperCase();
     }
     return 'P'; // fallback
 };
@@ -79,6 +79,7 @@ export default function ProjectsNew({ projects: initialProjects, loading: initia
         setLoading(true);
         try {
             const response = await fetch('/api/projects', { cache: 'no-cache' });
+            console.log('Fetch response:', response);
             if (response.ok) {
                 const data = await response.json();
                 setProjects(data);
