@@ -1,8 +1,6 @@
 import type { APIRoute } from 'astro';
 import { fetchNotionAgenda } from '../../store/notionClient';
 
-export const prerender = true;
-
 export const GET: APIRoute = async ({ locals }) => {
   try {
     const data = await fetchNotionAgenda(locals);
