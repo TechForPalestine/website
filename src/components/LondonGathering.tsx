@@ -59,11 +59,11 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
             <Box className="bg-gradient-to-br from-red-50 to-green-50 py-16">
                 <Container maxWidth="lg">
                     <Box className="text-center">
-                        <Typography 
-                            variant="h1" 
+                        <Typography
+                            variant="h1"
                             className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl lg:!text-7xl !mb-6 bg-gradient-to-r from-[#EA4335] to-[#168039] bg-clip-text text-transparent"
                         >
-                            T4P Community Gathering
+                            Tech for Palestine Gathering
                         </Typography>
                         
                         <Box className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-2 text-gray-700 text-base sm:text-lg">
@@ -100,6 +100,30 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
                     </Box>
                 </Container>
             </Box>
+
+            {/* Themes */}
+            <Container maxWidth="lg" className="py-16">
+                <Box className="text-center !mb-8">
+                    <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
+                        Themes
+                    </Typography>
+                    <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
+                </Box>
+
+                <Box className="flex flex-wrap justify-center gap-4">
+                    {themes.map((theme, index) => {
+                        const IconComponent = theme.icon;
+                        return (
+                            <Chip
+                                key={index}
+                                icon={<IconComponent className="!text-current" />}
+                                label={theme.name}
+                                className="px-6 py-3 text-base font-medium bg-white border-2 border-gray-200 hover:border-[#EA4335] hover:bg-[#EA4335] hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
+                            />
+                        );
+                    })}
+                </Box>
+            </Container>
 
             {/* About the event */}
             <Container maxWidth="lg" className="!py-8 sm:!py-16">
@@ -233,30 +257,6 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
                     </Box>
                 </Container>
             </Box>
-
-            {/* Themes */}
-            <Container maxWidth="lg" className="py-16">
-                <Box className="text-center !mb-8">
-                    <Typography variant="h2" className="!font-bold !text-4xl sm:!text-5xl md:!text-6xl !mb-4 text-gray-900">
-                        Themes
-                    </Typography>
-                    <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
-                </Box>
-                
-                <Box className="flex flex-wrap justify-center gap-4">
-                    {themes.map((theme, index) => {
-                        const IconComponent = theme.icon;
-                        return (
-                            <Chip
-                                key={index}
-                                icon={<IconComponent className="!text-current" />}
-                                label={theme.name}
-                                className="px-6 py-3 text-base font-medium bg-white border-2 border-gray-200 hover:border-[#EA4335] hover:bg-[#EA4335] hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
-                            />
-                        );
-                    })}
-                </Box>
-            </Container>
 
             {/* Speakers */}
             <LondonGatheringSpeakers initialSpeakers={initialAgendaData?.speakers || []} />
