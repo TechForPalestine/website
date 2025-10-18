@@ -4,3 +4,12 @@ compatibility_date = "2024-09-23"
 
 # Cloudflare Pages configuration
 pages_build_output_dir = "dist"
+
+[vars]
+NOTION_IMAGE_PROXY_URL = "http://localhost:8787"
+NOTION_DB_ID = "20d97bc03cef80b58549fca9c9ed671d"
+NOTION_SIGNATORIES_DB_ID = "26997bc03cef80c0be42c3785d964a99"
+NOTION_FAQ_DB_ID = "24297bc03cef8075b57fe163ba68724b"
+NOTION_IDEAS_DB_ID = "22b97bc03cef80e2af09efb1caed050f"
+NOTION_SPEAKERS_DB_ID = "26b97bc03cef803da151c49da30eb8c7"
+NOTION_AGENDA_DB_ID = "26b97bc03cef803da151c49da30eb8c7"
