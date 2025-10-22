@@ -131,5 +131,136 @@ import "../styles/base.css";
 
         // Track which variant was shown with Plausible custom property
         window.plausible('pageview', { props: { donate_form_variant: variant } });
+
+        // Add Plausible event tracking to donation buttons
+        function addPlausibleTracking() {
+            if (variant === 'qgiv') {
+                // QGiv form is in an iframe - we need to track clicks on the iframe container
+                // and listen for form submissions
+                const qgivContainer = document.querySelector('[data-embed-id="83460"]');
+                const qgivIframe = document.querySelector('iframe[id="qgiv-embed-83460"]');
+
+                if (qgivContainer && qgivIframe) {
+                    console.log('QGiv iframe found, setting up tracking listeners');
+
+                    // Track clicks on the iframe area
+                    let lastInteraction = null;
+
+                    qgivIframe.addEventListener('load', function() {
+                        console.log('QGiv iframe loaded');
+
+                        // Try to access iframe content (will fail due to CORS but worth trying)
+                        try {
+                            const iframeDoc = qgivIframe.contentDocument || qgivIframe.contentWindow.document;
+
+                            // If we can access it, add direct listeners
+                            const oneTimeBtn = iframeDoc.querySelector('#one-time, button[id*="one-time"]');
+                            const monthlyBtn = iframeDoc.querySelector('#ongoing, button[id*="ongoing"], button[id*="monthly"]');
+
+                            if (oneTimeBtn) {
+                                oneTimeBtn.addEventListener('click', function() {
+                                    window.plausible('One-time-donate');
+                                    console.log('Tracked: One-time-donate (QGiv)');
+                                });
+                            }
+
+                            if (monthlyBtn) {
+                                monthlyBtn.addEventListener('click', function() {
+                                    window.plausible('Monthly-donate');
+                                    console.log('Tracked: Monthly-donate (QGiv)');
+                                });
+                            }
+                        } catch (e) {
+                            console.log('Cannot access iframe content (expected due to CORS), using postMessage listener');
+                            console.log({e})
+                        }
+                    });
+
+                    // Listen for postMessage events from QGiv iframe
+                    window.addEventListener('message', function(event) {
+                        // Check if message is from QGiv
+                        if (event.origin.includes('qgiv.com')) {
+                            const data = event.data;
+                            console.log('Message from QGiv:', data);
+
+                            // Try to detect donation type from message data
+                            if (typeof data === 'string') {
+                                const dataLower = data.toLowerCase();
+                                if (dataLower.includes('recurring') || dataLower.includes('monthly')) {
+                                    window.plausible('Monthly-donate');
+                                    console.log('Tracked: Monthly-donate (QGiv via postMessage)');
+                                } else if (dataLower.includes('one') || dataLower.includes('single')) {
+                                    window.plausible('One-time-donate');
+                                    console.log('Tracked: One-time-donate (QGiv via postMessage)');
+                                }
+                            } else if (typeof data === 'object' && data.type) {
+                                if (data.type.includes('submit') || data.type.includes('complete')) {
+                                    // Check for recurring flag
+                                    if (data.recurring || data.frequency === 'monthly') {
+                                        window.plausible('Monthly-donate');
+                                        console.log('Tracked: Monthly-donate (QGiv)');
+                                    } else {
+                                        window.plausible('One-time-donate');
+                                        console.log('Tracked: One-time-donate (QGiv)');
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } else {
+                // CharityStack form - check if it's also in an iframe
+                const charitystackContainer = document.querySelector('#\\31 546c2c2-a580-4994-bbb3-9e643aed1309');
+                const charitystackIframe = charitystackContainer?.querySelector('iframe');
+
+                if (charitystackContainer) {
+                    console.log('CharityStack container found');
+
+                    if (charitystackIframe) {
+                        console.log('CharityStack uses iframe, setting up listeners');
+
+                        // Listen for postMessage from CharityStack
+                        window.addEventListener('message', function(event) {
+                            if (event.origin.includes('charitystack')) {
+                                const data = event.data;
+                                console.log('Message from CharityStack:', data);
+
+                                if (typeof data === 'object' && data.type) {
+                                    if (data.type.includes('submit') || data.type.includes('donation')) {
+                                        if (data.recurring || data.frequency === 'monthly') {
+                                            window.plausible('Monthly-donate');
+                                            console.log('Tracked: Monthly-donate (CharityStack)');
+                                        } else {
+                                            window.plausible('One-time-donate');
+                                            console.log('Tracked: One-time-donate (CharityStack)');
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        // If not iframe, try direct button access
+                        const buttons = charitystackContainer.querySelectorAll('button, input[type="submit"], a[role="button"]');
+                        buttons.forEach(btn => {
+                            const text = (btn.textContent || btn.value || '').toLowerCase();
+                            const hasOneTimeClass = btn.className.toLowerCase().includes('one') || btn.className.toLowerCase().includes('single');
+                            const hasMonthlyClass = btn.className.toLowerCase().includes('month') || btn.className.toLowerCase().includes('recurring');
+
+                            if (text.includes('one time') || text.includes('once') || text.includes('single') || hasOneTimeClass) {
+                                btn.classList.add('plausible-event-name=One-time-donate');
+                                console.log('Added One-time-donate CSS class to Charitystack button:', btn);
+                            } else if (text.includes('month') || text.includes('recurring') || hasMonthlyClass) {
+                                btn.classList.add('plausible-event-name=Monthly-donate');
+                                console.log('Added Monthly-donate CSS class to Charitystack button:', btn);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        // Wait for forms to load, then add tracking
+        setTimeout(addPlausibleTracking, 2000);
+        setTimeout(addPlausibleTracking, 4000);
     </script>
     </Layout>
