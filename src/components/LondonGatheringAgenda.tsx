@@ -60,11 +60,21 @@ const sortAgendaItems = (items: AgendaItem[]) => {
     // Other items
     const otherItems = items.filter(item => !item.title.includes('Breakout'));
 
-    // Sort by time
+    // Sort by time (convert to minutes for proper numeric comparison)
     const sorted = otherItems.sort((a, b) => {
-        const timeA = a.time.split(' - ')[0];
-        const timeB = b.time.split(' - ')[0];
-        return timeA.localeCompare(timeB);
+        const getStartMinutes = (timeStr: string) => {
+            if (!timeStr) return 0;
+            const startTime = timeStr.split(' - ')[0];
+            const match = startTime.match(/^(\d{1,2}):(\d{2})/);
+            if (!match) return 0;
+            const hours = parseInt(match[1], 10);
+            const minutes = parseInt(match[2], 10);
+            return hours * 60 + minutes;
+        };
+
+        const timeA = getStartMinutes(a.time);
+        const timeB = getStartMinutes(b.time);
+        return timeA - timeB;
     });
 
     // Insert breakouts in the right place
