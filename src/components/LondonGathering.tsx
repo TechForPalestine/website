@@ -345,26 +345,73 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
                         </Typography>
                         <Box className="w-24 h-1 bg-gradient-to-r from-[#EA4335] to-[#168039] !mx-auto rounded-full"></Box>
                     </Box>
-                    
-                    <Box className="text-center !mb-8">
-                        <Card className="inline-block bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300">
-                            <a href="https://www.ya-soko.com/" target="_blank" rel="noopener noreferrer" className="block">
-                                <img 
-                                    src="/images/london-gathering/YASOKO.webp" 
-                                    alt="YASOKO Sponsor"
-                                    className="h-24 w-auto mx-auto"
+
+                    {/* Premium Sponsor */}
+                    <Box className="text-center !mb-12">
+                        <Typography variant="h4" className="!font-bold !mb-6 text-gray-700">
+                            Premium Sponsor
+                        </Typography>
+                        <Card className="inline-block bg-white p-12 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            <a href="https://www.dna.online/" target="_blank" rel="noopener noreferrer" className="block">
+                                <img
+                                    src="/images/london-gathering/DNA.webp"
+                                    alt="DNA Premium Sponsor"
+                                    className="h-32 w-auto mx-auto"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
-                                        // Fallback to text if image fails
                                         target.style.display = 'none';
                                         const parent = target.parentElement;
                                         if (parent) {
-                                            parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">YASOKO</Typography>';
+                                            parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">DNA</Typography>';
                                         }
                                     }}
                                 />
                             </a>
                         </Card>
+                    </Box>
+
+                    {/* Gold Sponsors */}
+                    <Box className="text-center !mb-8">
+                        <Typography variant="h4" className="!font-bold !mb-6 text-gray-700">
+                            Gold Sponsors
+                        </Typography>
+                        <Box className="flex flex-wrap justify-center gap-8">
+                            <Card className="bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                                <a href="https://allyforaction.org/" target="_blank" rel="noopener noreferrer" className="block">
+                                    <img
+                                        src="/images/london-gathering/Host_Logo_Artworks_RGB_Colour_Blue.webp"
+                                        alt="Host Gold Sponsor"
+                                        className="h-24 w-auto mx-auto"
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            target.style.display = 'none';
+                                            const parent = target.parentElement;
+                                            if (parent) {
+                                                parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">Host</Typography>';
+                                            }
+                                        }}
+                                    />
+                                </a>
+                            </Card>
+
+                            <Card className="bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                                <a href="https://www.ya-soko.com/" target="_blank" rel="noopener noreferrer" className="block">
+                                    <img
+                                        src="/images/london-gathering/YASOKO.webp"
+                                        alt="YASOKO Gold Sponsor"
+                                        className="h-24 w-auto mx-auto"
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            target.style.display = 'none';
+                                            const parent = target.parentElement;
+                                            if (parent) {
+                                                parent.innerHTML = '<Typography variant="h3" className="font-bold text-black">YASOKO</Typography>';
+                                            }
+                                        }}
+                                    />
+                                </a>
+                            </Card>
+                        </Box>
                     </Box>
                     
                     <Card className="max-w-2xl !mx-auto p-8 text-center border-0 rounded-2xl shadow-xl bg-white">
