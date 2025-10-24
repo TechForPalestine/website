@@ -10,27 +10,27 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     console.log('QGiv webhook received:', JSON.stringify(payload, null, 2));
 
-    // Determine donation type based on QGiv event
-    // QGiv sends different events: "Recurring Donation Created" for monthly, regular donation events for one-time
+    // Determine donation type based on QGiv payload
     let donationType: 'monthly' | 'onetime' | null = null;
 
-    // Check various fields that might indicate recurring donation
+    // Check QGiv's actual field formats
+    // isRecurring: "y" or "n" (string)
+    // type: "one time" or "recurring" (string with space)
     if (
+      payload.isRecurring === 'y' ||
+      payload.type === 'recurring' ||
+      payload.type === 'monthly' ||
       payload.eventType === 'Recurring Donation Created' ||
-      payload.eventType === 'Recurring Donation Billed' ||
-      payload.recurringDonation === true ||
-      payload.recurring === true ||
-      payload.isRecurring === true ||
-      payload.donationType === 'recurring' ||
-      payload.frequency === 'monthly'
+      payload.eventType === 'Recurring Donation Billed'
     ) {
       donationType = 'monthly';
     } else if (
+      payload.isRecurring === 'n' ||
+      payload.type === 'one time' ||
+      payload.type === 'onetime' ||
+      payload.type === 'one-time' ||
       payload.eventType === 'Donation Created' ||
-      payload.eventType === 'Transaction Successful' ||
-      payload.recurring === false ||
-      payload.isRecurring === false ||
-      payload.donationType === 'one-time'
+      payload.eventType === 'Transaction Successful'
     ) {
       donationType = 'onetime';
     }
