@@ -122,7 +122,9 @@ import "../styles/base.css";
 
     <script is:inline>
         // A/B test: randomly show one of two donation forms
+        // Initialize plausible queue if not already defined
         window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) };
+        window.plausible.q = window.plausible.q || [];
 
         const variant = Math.random() < 0.5 ? 'charitystack' : 'qgiv';
 
@@ -133,6 +135,9 @@ import "../styles/base.css";
         window.plausible('pageview', { props: { donate_form_variant: variant } });
 
         // Check for donation completion cookie (set by webhook)
+        let pollInterval = null;
+        let pollTimeout = null;
+
         function checkDonationCompletion() {
             const cookies = document.cookie.split(';').reduce((acc, cookie) => {
                 const [key, value] = cookie.trim().split('=');
@@ -154,16 +159,56 @@ import "../styles/base.css";
 
                 // Clear the cookie so we don't track again
                 document.cookie = 'donation_completed=; path=/; max-age=0';
+
+                // Stop polling after successful tracking
+                stopPolling();
             }
         }
 
-        // Check immediately on page load
-        checkDonationCompletion();
+        function startPolling() {
+            // Clear any existing polling
+            stopPolling();
 
-        // Also poll every 2 seconds to catch webhook responses
-        const pollInterval = setInterval(checkDonationCompletion, 2000);
+            console.log('Started polling for donation completion');
 
-        // Stop polling after 60 seconds
-        setTimeout(() => clearInterval(pollInterval), 60000);
+            // Check immediately
+            checkDonationCompletion();
+
+            // Poll every 2 seconds
+            pollInterval = setInterval(checkDonationCompletion, 2000);
+
+            // Stop polling after 2 minutes
+            pollTimeout = setTimeout(() => {
+                stopPolling();
+                console.log('Stopped polling after 2 minutes');
+            }, 120000);
+        }
+
+        function stopPolling() {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+            if (pollTimeout) {
+                clearTimeout(pollTimeout);
+                pollTimeout = null;
+            }
+        }
+
+        // Start polling on page load
+        startPolling();
+
+        // Restart polling when user interacts with the donation form
+        // This handles cases where user stays on page > 2 minutes before donating
+        const formContainers = document.querySelectorAll('#form-variant-qgiv, #form-variant-charitystack');
+        formContainers.forEach(container => {
+            container.addEventListener('click', () => {
+                // Only restart if not already polling
+                if (!pollInterval) {
+                    console.log('Donation form interaction detected, restarting polling');
+                    startPolling();
+                }
+            }, { once: false });
+        });
     </script>
     </Layout>
