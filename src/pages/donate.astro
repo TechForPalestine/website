@@ -131,5 +131,39 @@ import "../styles/base.css";
 
         // Track which variant was shown with Plausible custom property
         window.plausible('pageview', { props: { donate_form_variant: variant } });
+
+        // Check for donation completion cookie (set by webhook)
+        function checkDonationCompletion() {
+            const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+                const [key, value] = cookie.trim().split('=');
+                acc[key] = value;
+                return acc;
+            }, {});
+
+            const donationType = cookies['donation_completed'];
+
+            if (donationType) {
+                // Fire the appropriate Plausible event
+                if (donationType === 'monthly') {
+                    window.plausible('Monthly-donate');
+                    console.log('✅ Tracked: Monthly-donate (via webhook)');
+                } else if (donationType === 'onetime') {
+                    window.plausible('One-time-donate');
+                    console.log('✅ Tracked: One-time-donate (via webhook)');
+                }
+
+                // Clear the cookie so we don't track again
+                document.cookie = 'donation_completed=; path=/; max-age=0';
+            }
+        }
+
+        // Check immediately on page load
+        checkDonationCompletion();
+
+        // Also poll every 2 seconds to catch webhook responses
+        const pollInterval = setInterval(checkDonationCompletion, 2000);
+
+        // Stop polling after 60 seconds
+        setTimeout(() => clearInterval(pollInterval), 60000);
     </script>
     </Layout>
