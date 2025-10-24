@@ -122,7 +122,9 @@ import "../styles/base.css";
 
     <script is:inline>
         // A/B test: randomly show one of two donation forms
+        // Initialize plausible queue if not already defined
         window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) };
+        window.plausible.q = window.plausible.q || [];
 
         const variant = Math.random() < 0.5 ? 'charitystack' : 'qgiv';
 
