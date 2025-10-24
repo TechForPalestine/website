@@ -4,7 +4,7 @@ export const prerender = false;
 
 // QGiv webhook endpoint to receive donation notifications
 // Form: T4P Website Donation Form (embed ID: 83460)
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const payload = await request.json();
 
@@ -35,29 +35,73 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       donationType = 'onetime';
     }
 
-    // If we detected a donation type, store it in a cookie for the frontend to read
+    // If we detected a donation type, send event to Plausible directly
     if (donationType) {
-      // Set a short-lived cookie (30 seconds) that the frontend can check
-      cookies.set('donation_completed', donationType, {
-        path: '/',
-        maxAge: 30,
-        httpOnly: false, // Make it accessible to JavaScript
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-      });
+      const eventName = donationType === 'monthly' ? 'Monthly-donate' : 'One-time-donate';
 
-      console.log(`Donation webhook processed: ${donationType} donation`);
+      // Call Plausible Events API
+      try {
+        const plausibleResponse = await fetch('https://plausible.io/api/event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'QGiv-Webhook/1.0',
+          },
+          body: JSON.stringify({
+            domain: 'techforpalestine.org',
+            name: eventName,
+            url: 'https://techforpalestine.org/donate',
+            props: {
+              source: 'webhook',
+              form: payload.form?.name || 'Unknown',
+              amount: payload.value || payload.donationAmount || '0',
+              transactionId: payload.id || payload.transactionId || ''
+            }
+          })
+        });
 
-      return new Response(JSON.stringify({
-        success: true,
-        donationType,
-        message: 'Donation tracked successfully'
-      }), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+        if (plausibleResponse.ok) {
+          console.log(`✅ Plausible event sent: ${eventName}`);
+
+          return new Response(JSON.stringify({
+            success: true,
+            donationType,
+            eventName,
+            message: 'Donation tracked successfully in Plausible'
+          }), {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        } else {
+          console.error('Plausible API error:', await plausibleResponse.text());
+
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Failed to send event to Plausible',
+            donationType
+          }), {
+            status: 500,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        }
+      } catch (plausibleError) {
+        console.error('Error calling Plausible API:', plausibleError);
+
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Failed to call Plausible API',
+          details: plausibleError instanceof Error ? plausibleError.message : 'Unknown error'
+        }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
     }
 
     // If we couldn't determine the donation type, log the payload for debugging
