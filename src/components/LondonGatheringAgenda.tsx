@@ -79,9 +79,11 @@ const sortAgendaItems = (items: AgendaItem[]) => {
 
     // Insert breakouts in the right place
     const result: AgendaItem[] = [];
+    let session1Added = false;
     sorted.forEach(item => {
         result.push(item);
-        if (item.title.toLowerCase().includes('logistics')) {
+        // Add session 1 after welcome address and keynotes (not just "welcome coffee")
+        if (!session1Added && item.title.toLowerCase().includes('keynote')) {
             // Add session 1 marker and breakouts
             result.push({
                 id: 'session1-header',
@@ -91,6 +93,7 @@ const sortAgendaItems = (items: AgendaItem[]) => {
                 moderator: null,
             });
             result.push(...session1Breakouts);
+            session1Added = true;
         } else if (item.title.toLowerCase().includes('lunch')) {
             // Add session 2 marker and breakouts
             result.push({
