@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { tick } from 'svelte';
+
   export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
   export let currentRoute: string;
 
@@ -15,6 +17,72 @@
 
   const closeDropdown = () => {
     activeDropdown = null;
+  };
+
+  // navigate within an open dropdown menu
+  const handleMenuKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      closeDropdown();
+      // Return focus to trigger button
+      const trigger = document.querySelector(`[data-dropdown="${activeDropdown}"]`) as HTMLElement;
+      trigger?.focus();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const currentTarget = e.target as HTMLElement;
+      const nextItem = currentTarget.nextElementSibling as HTMLElement;
+      if (nextItem) {
+        nextItem.focus();
+      } else {
+        // Wrap to first item
+        const menu = currentTarget.parentElement;
+        const firstItem = menu?.querySelector('a:first-of-type') as HTMLElement;
+        firstItem?.focus();
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const currentTarget = e.target as HTMLElement;
+      const prevItem = currentTarget.previousElementSibling as HTMLElement;
+      if (prevItem) {
+        prevItem.focus();
+      } else {
+        // Wrap to last item
+        const menu = currentTarget.parentElement;
+        const lastItem = menu?.querySelector('a:last-of-type') as HTMLElement;
+        lastItem?.focus();
+      }
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const currentTarget = e.target as HTMLElement;
+      const menu = currentTarget.parentElement;
+      const firstItem = menu?.querySelector('a:first-of-type') as HTMLElement;
+      firstItem?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const currentTarget = e.target as HTMLElement;
+      const menu = currentTarget.parentElement;
+      const lastItem = menu?.querySelector('a:last-of-type') as HTMLElement;
+      lastItem?.focus();
+    }
+  };
+
+  // Control the dropdown button
+  const handleButtonKeydown = async (e: KeyboardEvent, label: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleDropdown(label);
+    } else if (e.key === 'Escape' && activeDropdown) {
+      closeDropdown();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (activeDropdown !== label) {
+        activeDropdown = label;
+        await tick();
+      }
+      const dropdown = document.querySelector(`[data-dropdown="${label}"]`)
+        ?.closest('.relative')
+        ?.querySelector('[role="menu"] a') as HTMLElement;
+      dropdown?.focus();
+    }
   };
 </script>
 
@@ -36,16 +104,26 @@
               <!-- Dropdown Menu Item -->
               <div
                 class="flex items-center group"
+                role="none"
                 on:mouseover={() => activeDropdown = label}
+                on:focus={() => activeDropdown = label}
               >
                 <a
                   href={item.href}
+                  on:focus={() => activeDropdown = label}
                   class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
                 >
                   {label}
                 </a>
                 <button
+                  type="button"
                   on:click={() => toggleDropdown(label)}
+                  on:keydown={(e) => handleButtonKeydown(e, label)}
+                  on:focus={() => activeDropdown = label}
+                  data-dropdown={label}
+                  aria-label="Toggle {label} dropdown menu"
+                  aria-expanded={activeDropdown === label}
+                  aria-haspopup="menu"
                   class="ml-1 text-gray-400 group-hover:text-blue-600 transition-colors duration-200"
                 >
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,16 +131,21 @@
                   </svg>
                 </button>
               </div>
-              
+
               <!-- Dropdown Content -->
               {#if activeDropdown === label}
-                <div 
+                <div
                   class="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden"
+                  role="menu"
+                  tabindex="-1"
+                  aria-label="{label} submenu"
                   on:mouseleave={() => activeDropdown = null}
                 >
                   {#each item.submenu as [subLabel, subHref]}
                     <a
                       href={subHref}
+                      role="menuitem"
+                      on:keydown={handleMenuKeydown}
                       class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 {currentRoute.replace(/\/$/, '') === subHref ? 'bg-blue-50 text-blue-600 font-medium' : ''}"
                     >
                       {subLabel}
@@ -105,7 +188,14 @@
       >
         Donate
       </a>
-      <button on:click={toggle} class="text-gray-500 hover:text-gray-700 focus:outline-none p-2">
+      <button
+        type="button"
+        on:click={toggle}
+        aria-label={toggleFlag ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={toggleFlag}
+        aria-controls="mobile-menu"
+        class="text-gray-500 hover:text-gray-700 focus:outline-none p-2"
+      >
         {#if toggleFlag}
           <slot name="close" />
         {:else}
@@ -117,7 +207,11 @@
 
   <!-- Mobile Navigation Menu -->
   {#if toggleFlag}
-    <nav class="lg:hidden bg-white border-t border-gray-200 mx-4 my-2 p-6 rounded-xl shadow-lg animate-fadeIn">
+    <nav
+      id="mobile-menu"
+      class="lg:hidden bg-white border-t border-gray-200 mx-4 my-2 p-6 rounded-xl shadow-lg animate-fadeIn"
+      aria-label="Mobile navigation"
+    >
       <div class="flex flex-col items-start space-y-4">
         {#each navigation as [label, item]}
           <div class="w-full">
@@ -131,7 +225,13 @@
                   {label}
                 </a>
                 <button
+                  type="button"
                   on:click={() => toggleDropdown(label)}
+                  on:keydown={(e) => handleButtonKeydown(e, label)}
+                  data-dropdown={label}
+                  aria-label="Toggle {label} dropdown menu"
+                  aria-expanded={activeDropdown === label}
+                  aria-haspopup="menu"
                   class="ml-2 text-gray-600 hover:text-blue-600 transition-colors duration-200"
                 >
                   <svg class="h-5 w-5 transform {activeDropdown === label ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,13 +239,20 @@
                   </svg>
                 </button>
               </div>
-              
+
               <!-- Mobile Dropdown Content -->
               {#if activeDropdown === label}
-                <div class="mt-3 ml-4 space-y-2 bg-gray-50 p-4 rounded-lg">
+                <div
+                  class="mt-3 ml-4 space-y-2 bg-gray-50 p-4 rounded-lg"
+                  role="menu"
+                  tabindex="-1"
+                  aria-label="{label} submenu"
+                >
                   {#each item.submenu as [subLabel, subHref]}
                     <a
                       href={subHref}
+                      role="menuitem"
+                      on:keydown={handleMenuKeydown}
                       class="block text-base text-gray-700 hover:text-blue-600 transition-colors duration-200 {currentRoute.replace(/\/$/, '') === subHref ? 'font-medium text-blue-600' : ''}"
                     >
                       {subLabel}
