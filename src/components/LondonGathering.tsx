@@ -81,16 +81,11 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
                             Palestine House
                         </Typography>
                         
-                        <Button
-                            variant="contained"
-                            size="large"
-                            className="bg-amber-800 hover:bg-amber-900 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                            href="https://secure.qgiv.com/for/eventstest/event/t4pcommunitygatheringlondon"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buy tickets
-                        </Button>
+                        <img
+                            src="/images/london-gathering/sold-out-png-12.png"
+                            alt="Sold Out"
+                            className="h-24 w-auto mx-auto"
+                        />
                         
                         <div className="text-center">
                             <Typography variant="h6" className="text-gray-600 max-w-3xl !mx-auto leading-relaxed !mt-4">
@@ -149,16 +144,11 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
                         </Typography>
                         
                         <Box className="pt-4">
-                            <Button
-                                variant="contained"
-                                size="large"
-                                className="bg-amber-800 hover:bg-amber-900 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                                href="https://secure.qgiv.com/for/eventstest/event/t4pcommunitygatheringlondon"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Buy tickets
-                            </Button>
+                            <img
+                                src="/images/london-gathering/sold-out-png-12.png"
+                                alt="Sold Out"
+                                className="h-24 w-auto"
+                            />
                         </Box>
                     </Box>
                     
@@ -445,17 +435,11 @@ export default function LondonGathering({ initialAgendaData }: LondonGatheringPr
                             Don't miss this opportunity to connect with fellow tech professionals 
                             supporting Palestine and learn about impactful projects.
                         </Typography>
-                        <Button
-                            variant="contained"
-                            size="large"
-                            className="bg-amber-800 text-white hover:bg-amber-900 px-12 py-4 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-                            id="tickets"
-                            href="https://secure.qgiv.com/for/eventstest/event/t4pcommunitygatheringlondon"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buy tickets
-                        </Button>
+                        <img
+                            src="/images/london-gathering/sold-out-png-12.png"
+                            alt="Sold Out"
+                            className="h-32 w-auto mx-auto"
+                        />
                     </Box>
                 </Container>
             </Box>
