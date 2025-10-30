@@ -1,13 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
-import LondonGatheringPopup from "../components/LondonGatheringPopup.tsx";
 import "../styles/base.css";
 import ArrowIcon from "../components/ArrowIcon.astro";
 ---
 
 <Layout title="Tech For Palestine">
-  <LondonGatheringPopup client:only="react" />
   <!-- Vercel Accountability Banner -->
   <div class="bg-red-100 border-b-2 border-red-800 py-3 px-4">
     <div class="max-w-7xl mx-auto text-center">
