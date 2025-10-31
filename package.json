@@ -9,7 +9,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "engines": {
     "node": ">=20.0.0",
@@ -57,6 +59,9 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/solar": "^1.2.4",
     "@iconify-json/tabler": "^1.2.23",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.1",
     "wrangler": "^4.42.1"
   }
 }

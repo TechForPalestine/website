@@ -5,12 +5,12 @@ export default {
     extend: {
       keyframes: {
         fadeIn: {
-          '0%': { opacity: 0, transform: 'translateY(20px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
+          "0%": { opacity: 0, transform: "translateY(20px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
       },
       animation: {
-        fadeIn: 'fadeIn 0.5s ease-out forwards',
+        fadeIn: "fadeIn 0.5s ease-out forwards",
       },
       red: {
         50: "#fff1f3",

@@ -1,12 +1,12 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from "react-hook-form";
 
-import Radio from '@mui/material/Radio';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import type { RadioGroupProps } from '@mui/material';
+import Radio from "@mui/material/Radio";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import type { RadioGroupProps } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
@@ -18,10 +18,18 @@ type Props = RadioGroupProps & {
   helperText?: React.ReactNode;
 };
 
-export default function RHFRadioGroup({ row, name, label, options, spacing, helperText, ...other }: Props) {
+export default function RHFRadioGroup({
+  row,
+  name,
+  label,
+  options,
+  spacing,
+  helperText,
+  ...other
+}: Props) {
   const { control } = useFormContext();
 
-  const labelledby = label ? `${name}-${label}` : '';
+  const labelledby = label ? `${name}-${label}` : "";
 
   return (
     <Controller
@@ -30,7 +38,7 @@ export default function RHFRadioGroup({ row, name, label, options, spacing, help
       render={({ field, fieldState: { error } }) => (
         <FormControl component="fieldset">
           {label && (
-            <FormLabel component="legend" id={labelledby} sx={{ typography: 'body2' }}>
+            <FormLabel component="legend" id={labelledby} sx={{ typography: "body2" }}>
               {label}
             </FormLabel>
           )}
@@ -43,12 +51,12 @@ export default function RHFRadioGroup({ row, name, label, options, spacing, help
                 control={<Radio />}
                 label={option.label}
                 sx={{
-                  '&:not(:last-of-type)': {
+                  "&:not(:last-of-type)": {
                     mb: spacing || 0,
                   },
                   ...(row && {
                     mr: 0,
-                    '&:not(:last-of-type)': {
+                    "&:not(:last-of-type)": {
                       mr: spacing || 2,
                     },
                   }),

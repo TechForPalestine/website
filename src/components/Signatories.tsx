@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface Signatory {
   id: string;
@@ -15,7 +15,10 @@ interface SignatoriesProps {
   loading?: boolean;
 }
 
-export default function Signatories({ initialSignatories = [], loading: initialLoading = false }: SignatoriesProps) {
+export default function Signatories({
+  initialSignatories = [],
+  loading: initialLoading = false,
+}: SignatoriesProps) {
   const [signatories, setSignatories] = useState<Signatory[]>(initialSignatories);
   const [loading, setLoading] = useState(initialLoading);
   const [error, setError] = useState<string | null>(null);
@@ -24,17 +27,17 @@ export default function Signatories({ initialSignatories = [], loading: initialL
     try {
       setLoading(true);
       setError(null);
-      
-      const response = await fetch('/api/e4p-signatories');
+
+      const response = await fetch("/api/e4p-signatories");
       if (!response.ok) {
-        throw new Error('Failed to fetch signatories');
+        throw new Error("Failed to fetch signatories");
       }
-      
+
       const data = await response.json();
       setSignatories(data);
     } catch (err) {
-      console.error('Error fetching signatories:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch signatories');
+      console.error("Error fetching signatories:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch signatories");
     } finally {
       setLoading(false);
     }
@@ -51,7 +54,7 @@ export default function Signatories({ initialSignatories = [], loading: initialL
       <div className="space-y-2">
         {[...Array(5)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 w-3/4 rounded bg-gray-200"></div>
           </div>
         ))}
       </div>
@@ -60,11 +63,11 @@ export default function Signatories({ initialSignatories = [], loading: initialL
 
   if (error) {
     return (
-      <div className="text-center py-8">
-        <p className="text-red-600 mb-4">{error}</p>
-        <button 
+      <div className="py-8 text-center">
+        <p className="mb-4 text-red-600">{error}</p>
+        <button
           onClick={fetchSignatories}
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+          className="rounded bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
         >
           Try Again
         </button>
@@ -75,20 +78,18 @@ export default function Signatories({ initialSignatories = [], loading: initialL
   if (signatories.length === 0) {
     return (
       <div className="py-8">
-        <p className="text-gray-600">
-          No signatories yet. Be the first to sign the pledge!
-        </p>
+        <p className="text-gray-600">No signatories yet. Be the first to sign the pledge!</p>
       </div>
     );
   }
 
   return (
     <div>
-      <p className="text-gray-600 mb-4">
-        {signatories.length} {signatories.length === 1 ? 'signatory' : 'signatories'}
+      <p className="mb-4 text-gray-600">
+        {signatories.length} {signatories.length === 1 ? "signatory" : "signatories"}
       </p>
-      
-      <ul className="list-disc marker:text-red-600 pl-6 space-y-2">
+
+      <ul className="list-disc space-y-2 pl-6 marker:text-red-600">
         {signatories.map((signatory) => (
           <li key={signatory.id} className="text-gray-900">
             <div className="flex items-center gap-1">

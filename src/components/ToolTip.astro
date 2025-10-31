@@ -1,10 +1,10 @@
 ---
-const { text = 'I am a tooltip info!' } = Astro.props;
+const { text = "I am a tooltip info!" } = Astro.props;
 ---
 
-<div class='tooltip'>
+<div class="tooltip">
   <slot />
-  <span class='tooltiptext'>{text}</span>
+  <span class="tooltiptext">{text}</span>
 </div>
 <style>
   .tooltip {
@@ -14,9 +14,9 @@ const { text = 'I am a tooltip info!' } = Astro.props;
   .tooltip .tooltiptext {
     @apply invisible;
     @apply w-full bg-black;
-    @apply text-white text-center;
+    @apply text-center text-white;
     @apply rounded-md;
-    @apply absolute left-0 bottom-11;
+    @apply absolute bottom-11 left-0;
     @apply p-2;
     @apply z-10;
   }

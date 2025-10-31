@@ -7,7 +7,7 @@
   a {
     @apply text-blue-900;
   }
-  .tool-box{
+  .tool-box {
     height: 220px;
     display: flex;
     flex-direction: column;

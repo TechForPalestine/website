@@ -2,60 +2,67 @@
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 interface Props {
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 }
 
-const {
-    title,
-    description = "T4P is an incubator for Palestine advocacy projects.",
-} = Astro.props;
+const { title, description = "T4P is an incubator for Palestine advocacy projects." } = Astro.props;
 ---
 
-    <!doctype html>
+<!doctype html>
 <html lang="en">
-    <head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-<meta name="viewport" content="width=device-width" />
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
-<link rel="me" href="https://infosec.exchange/@tech4palestine" />
-<script type="speculationrules">
-    {
-        "prerender": [{"urls": ["/", "/about", "/incubator", "/tools", "/help/hire"]}]
-    }
-</script>
-<meta name="generator" content={Astro.generator} />
-<title>{title}</title>
-<meta property="twitter:card" name="twitter:card" content="summary_large_image" />
-<meta property="twitter:site" name="twitter:site" content="@tech4palestine" />
-<meta property="twitter:description" name="twitter:description" content={description} />
-<meta property="twitter:image" name="twitter:image" content={"https://techforpalestine.org/t4p-social-logo.png"} />
-<meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={"https://techforpalestine.org/t4p-social-logo.png"} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <link rel="me" href="https://infosec.exchange/@tech4palestine" />
+    <script type="speculationrules">
+      {
+        "prerender": [{ "urls": ["/", "/about", "/incubator", "/tools", "/help/hire"] }]
+      }
+    </script>
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta property="twitter:card" name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:site" name="twitter:site" content="@tech4palestine" />
+    <meta property="twitter:description" name="twitter:description" content={description} />
+    <meta
+      property="twitter:image"
+      name="twitter:image"
+      content={"https://techforpalestine.org/t4p-social-logo.png"}
+    />
+    <meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={"https://techforpalestine.org/t4p-social-logo.png"} />
 
-<script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
-<!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-gMn1NrWB3uBANu6ua9M8N.js"></script>
-<script>
-    (window as any).plausible = (window as any).plausible || function() {
-      (((window as any).plausible as any).q = (((window as any).plausible as any).q || [])).push(arguments)
-    };
-    ((window as any).plausible as any).init = ((window as any).plausible as any).init || function(i: any) {
-      ((window as any).plausible as any).o = i || {}
-    };
-    ((window as any).plausible as any).init()
-</script>
-</head>
-<body class="text-gray-900 bg-white min-h-screen relative flex flex-col">
-<Navigation />
+    <script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://plausible.io/js/pa-gMn1NrWB3uBANu6ua9M8N.js"></script>
+    <script>
+      (window as any).plausible =
+        (window as any).plausible ||
+        function () {
+          (((window as any).plausible as any).q = ((window as any).plausible as any).q || []).push(
+            arguments
+          );
+        };
+      ((window as any).plausible as any).init =
+        ((window as any).plausible as any).init ||
+        function (i: any) {
+          ((window as any).plausible as any).o = i || {};
+        };
+      ((window as any).plausible as any).init();
+    </script>
+  </head>
+  <body class="relative flex min-h-screen flex-col bg-white text-gray-900">
+    <Navigation />
 
-<!-- Floating Donate Button -->
-<a
-    href="/donate"
-    class="donate-link fixed right-0 top-1/2 transform -translate-y-1/2 text-white px-2 py-6 shadow-lg hover:bg-green-900 transition z-50 bg-green-800"
-    style="
+    <!-- Floating Donate Button -->
+    <a
+      href="/donate"
+      class="donate-link fixed right-0 top-1/2 z-50 -translate-y-1/2 transform bg-green-800 px-2 py-6 text-white shadow-lg transition hover:bg-green-900"
+      style="
     writing-mode: sideways-lr;
     text-orientation: mixed;
     border-top-left-radius: 0.5rem;
@@ -63,14 +70,13 @@ const {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   "
->
-    Donate
-</a>
+    >
+      Donate
+    </a>
 
-<div class="flex-grow">
-<slot />
-</div>
-<Footer />
-
-</body>
+    <div class="flex-grow">
+      <slot />
+    </div>
+    <Footer />
+  </body>
 </html>

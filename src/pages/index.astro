@@ -7,78 +7,71 @@ import ArrowIcon from "../components/ArrowIcon.astro";
 
 <Layout title="Tech For Palestine">
   <!-- Vercel Accountability Banner -->
-  <div class="bg-red-100 border-b-2 border-red-800 py-3 px-4">
-    <div class="max-w-7xl mx-auto text-center">
-      <a href="/vercel" class="text-red-900 hover:text-red-800 hover:underline font-medium">
-        Vercel CEO aligned with genocide by supporting Netanyahu. Conference speakers chose complicity. Learn more →
+  <div class="border-b-2 border-red-800 bg-red-100 px-4 py-3">
+    <div class="mx-auto max-w-7xl text-center">
+      <a href="/vercel" class="font-medium text-red-900 hover:text-red-800 hover:underline">
+        Vercel CEO aligned with genocide by supporting Netanyahu. Conference speakers chose
+        complicity. Learn more →
       </a>
     </div>
   </div>
   <main>
-    <section class="grid grid-cols-1 lg:grid-cols-2 items-center bg-white">
-      <div
-        class="text-center items-center justify-center min-h-fit py-16 space-y-12"
-      >
-        <div class="w-full mx-auto max-w-screen-md space-y-8 px-6 md:px-8">
+    <section class="grid grid-cols-1 items-center bg-white lg:grid-cols-2">
+      <div class="min-h-fit items-center justify-center space-y-12 py-16 text-center">
+        <div class="mx-auto w-full max-w-screen-md space-y-8 px-6 md:px-8">
           <h1 class="text-6xl font-bold tracking-tight">Tech for Palestine</h1>
           <p class="text-lg md:text-xl">
-            Tech for Palestine (“T4P”) is a coalition of thousands of founders, engineers, product marketers, investors and other professionals who are working in support of Palestinian liberation.
+            Tech for Palestine (“T4P”) is a coalition of thousands of founders, engineers, product
+            marketers, investors and other professionals who are working in support of Palestinian
+            liberation.
           </p>
           <p>
-            The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine. We support projects — whether collections of individuals, registered non-profits, or even companies — whose mission helps Palestine, especially advocacy groups building technical products or in the tech space.
-
+            The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work
+            towards a Free Palestine. We support projects — whether collections of individuals,
+            registered non-profits, or even companies — whose mission helps Palestine, especially
+            advocacy groups building technical products or in the tech space.
           </p>
           <p>
-            The Incubator is free, and provides volunteers, marketing support, mentorship, and connections to the broader Palestinian advocacy ecosystem.
-
-
+            The Incubator is free, and provides volunteers, marketing support, mentorship, and
+            connections to the broader Palestinian advocacy ecosystem.
           </p>
 
-          <h2
-            class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
-          >
+          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Want to get involved?
           </h2>
           <p class="text-lg md:text-xl">
-            What started as an aligned collective on a Discord server has grown
-            into a non-profit incubator that supports projects from idea to
-            launch.
+            What started as an aligned collective on a Discord server has grown into a non-profit
+            incubator that supports projects from idea to launch.
           </p>
 
-          <div class="flex flex-col md:flex-row gap-4 justify-center">
+          <div class="flex flex-col justify-center gap-4 md:flex-row">
             <a
               href="/get-involved"
-              class="p-2 group rounded-md border border-gray-300 hover:bg-gray-100 hover:text-gray-800 flex-1 bg-green-800 text-white relative"
+              class="group relative flex-1 rounded-md border border-gray-300 bg-green-800 p-2 text-white hover:bg-gray-100 hover:text-gray-800"
             >
               <span
-                class="pointer-events-none text-gray-300 group-hover:text-gray-400 absolute top-2 right-2"
+                class="pointer-events-none absolute right-2 top-2 text-gray-300 group-hover:text-gray-400"
                 aria-hidden="true"
               >
                 <ArrowIcon />
               </span>
-              <h4 class="font-medium text-xl mb-2">Get Involved</h4>
-              <p>
-                Volunteer your skills, join our Discord, or start a project of your own
-              </p>
+              <h4 class="mb-2 text-xl font-medium">Get Involved</h4>
+              <p>Volunteer your skills, join our Discord, or start a project of your own</p>
             </a>
           </div>
         </div>
       </div>
-      <figure class="bg-zinc-50 relative">
+      <figure class="relative bg-zinc-50">
         <img
           src="/happy-kids.jpg"
-          class="object-cover w-full h-[32rem] lg:h-[42rem]"
+          class="h-[32rem] w-full object-cover lg:h-[42rem]"
           alt="Happy kids in Palestine"
         />
-        <figcaption class="absolute right-2 bottom-2 text-xs text-white">
-          ®Motaz Azaiza
-        </figcaption>
+        <figcaption class="absolute bottom-2 right-2 text-xs text-white">®Motaz Azaiza</figcaption>
       </figure>
     </section>
     <section>
-      <div
-        class="mx-auto max-w-screen-md px-6 md:px-8 -m-12 relative pb-24 z-0"
-      >
+      <div class="relative z-0 -m-12 mx-auto max-w-screen-md px-6 pb-24 md:px-8">
         <SignUpForm />
       </div>
     </section>

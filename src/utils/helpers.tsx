@@ -5,7 +5,7 @@ export const transformObject = (data: any): any => {
       const value = data[key];
 
       // If the value is an object and contains an array, transform it
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
         // Check each key in the sub-object
         for (const subKey in value) {
           if (Array.isArray(value[subKey])) {
@@ -18,7 +18,7 @@ export const transformObject = (data: any): any => {
       }
 
       // Recursively process nested objects
-      if (typeof data[key] === 'object' && !Array.isArray(data[key])) {
+      if (typeof data[key] === "object" && !Array.isArray(data[key])) {
         data[key] = transformObject(data[key]);
       }
     }

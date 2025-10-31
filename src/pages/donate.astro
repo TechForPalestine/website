@@ -3,135 +3,235 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
 ---
 
-    <Layout title="Donate">
-        <div class="relative bg-gradient-to-b from-green-50 via-white to-blue-50">
-            <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-                <!-- Hero -->
-                <div class="text-center">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-                        Support Tech for Palestine
-                    </h1>
-                    <p class="mt-5 text-lg text-gray-700 max-w-3xl mx-auto">
-                        Since launching Tech for Palestine, we've helped bring impactful projects to life:
-                        Media Bias Meter, Boycat, Find a Protest, Newscord, and many more.
-                    </p>
-                    <p class="mt-3 text-lg text-gray-600 max-w-3xl mx-auto">
-                        Your donation helps us hire professionals, strengthen existing projects, and launch new initiatives for a free Palestine.
-                    </p>
+<Layout title="Donate">
+  <div class="relative bg-gradient-to-b from-green-50 via-white to-blue-50">
+    <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <!-- Hero -->
+      <div class="text-center">
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
+          Support Tech for Palestine
+        </h1>
+        <p class="mx-auto mt-5 max-w-3xl text-lg text-gray-700">
+          Since launching Tech for Palestine, we've helped bring impactful projects to life: Media
+          Bias Meter, Boycat, Find a Protest, Newscord, and many more.
+        </p>
+        <p class="mx-auto mt-3 max-w-3xl text-lg text-gray-600">
+          Your donation helps us hire professionals, strengthen existing projects, and launch new
+          initiatives for a free Palestine.
+        </p>
 
-                    <!-- Highlights -->
-                    <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                        <div class="flex items-center space-x-3 bg-white/70 border border-gray-200 rounded-lg px-4 py-3">
-                            <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium">Hire professionals</span>
-                        </div>
-                        <div class="flex items-center space-x-3 bg-white/70 border border-gray-200 rounded-lg px-4 py-3">
-                            <div class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h4l3 10 4-18 3 8h4" />
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium">Strengthen projects</span>
-                        </div>
-                        <div class="flex items-center space-x-3 bg-white/70 border border-gray-200 rounded-lg px-4 py-3">
-                            <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-purple-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium">Launch new initiatives</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Content -->
-                <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Donation Card -->
-                    <div class="lg:col-span-2">
-                        <div class="bg-white/80 backdrop-blur rounded-2xl border border-gray-200 shadow-md p-6 sm:p-8">
-                            <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Make a donation</h2>
-                            <div class="w-full max-w-lg mx-auto">
-                                <!-- CharityStack Form (Variant A) -->
-                                <div id="form-variant-charitystack" style="display: none;">
-                                    <div data-entity="EMBED_FORM" data-source="CharityStack" id="1546c2c2-a580-4994-bbb3-9e643aed1309"></div>
-                                </div>
-                                <!-- Qgiv Form (Variant B) -->
-                                <div id="form-variant-qgiv" style="display: none;">
-                                    <div class="qgiv-embed-container" data-qgiv-embed="true" data-embed-id="83460" data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/" data-width="630"></div>
-                                </div>
-                            </div>
-                            <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm text-gray-600">
-                                <div class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    501(c)(3) nonprofit
-                                </div>
-                                <span class="hidden sm:inline">•</span>
-                                <div>Tax-deductible in the U.S.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sidebar -->
-                    <div class="space-y-6">
-                        <div class="bg-white/70 rounded-xl border border-gray-200 p-6">
-                            <h3 class="text-lg font-semibold text-gray-800">Why your donation matters</h3>
-                            <ul class="mt-4 space-y-3 text-gray-700">
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-700 mr-2 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Accelerates projects already making impact
-                                </li>
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-700 mr-2 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Funds critical skills: engineering, design, marketing
-                                </li>
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-700 mr-2 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Helps launch new initiatives quickly and effectively
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-white/70 rounded-xl border border-gray-200 p-6">
-                            <h3 class="text-lg font-semibold text-gray-800">Alternative ways to give</h3>
-                            <p class="mt-3 text-gray-700">
-                                Donate through a Donor-Advised Fund (DAF), family trust, or other structured giving methods.
-                            </p>
-                            <p class="mt-3 text-gray-700">
-                                Email <b>donations@techforpalestine.org</b> and we’ll assist you.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Highlights -->
+        <div class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+          <div
+            class="flex items-center space-x-3 rounded-lg border border-gray-200 bg-white/70 px-4 py-3"
+          >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-green-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-green-700"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
             </div>
+            <span class="font-medium text-gray-700">Hire professionals</span>
+          </div>
+          <div
+            class="flex items-center space-x-3 rounded-lg border border-gray-200 bg-white/70 px-4 py-3"
+          >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-blue-700"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h4l3 10 4-18 3 8h4"
+                ></path>
+              </svg>
+            </div>
+            <span class="font-medium text-gray-700">Strengthen projects</span>
+          </div>
+          <div
+            class="flex items-center space-x-3 rounded-lg border border-gray-200 bg-white/70 px-4 py-3"
+          >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-purple-700"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span class="font-medium text-gray-700">Launch new initiatives</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <!-- Donation Card -->
+        <div class="lg:col-span-2">
+          <div
+            class="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-md backdrop-blur sm:p-8"
+          >
+            <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">Make a donation</h2>
+            <div class="mx-auto w-full max-w-lg">
+              <!-- CharityStack Form (Variant A) -->
+              <div id="form-variant-charitystack" style="display: none;">
+                <div
+                  data-entity="EMBED_FORM"
+                  data-source="CharityStack"
+                  id="1546c2c2-a580-4994-bbb3-9e643aed1309"
+                >
+                </div>
+              </div>
+              <!-- Qgiv Form (Variant B) -->
+              <div id="form-variant-qgiv" style="display: none;">
+                <div
+                  class="qgiv-embed-container"
+                  data-qgiv-embed="true"
+                  data-embed-id="83460"
+                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                  data-width="630"
+                >
+                </div>
+              </div>
+            </div>
+            <div
+              class="mt-5 flex flex-col items-center justify-center gap-3 text-sm text-gray-600 sm:flex-row"
+            >
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-2 h-4 w-4 text-green-700"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                501(c)(3) nonprofit
+              </div>
+              <span class="hidden sm:inline">•</span>
+              <div>Tax-deductible in the U.S.</div>
+            </div>
+          </div>
         </div>
 
-        <script is:inline defer id="charitystack-embed" data-id="M_lDGj72xT61" src="https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js"></script>
-    <script is:inline>(function(w, d, s, id){var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "https://secure.qgiv.com/resources/core/js/embed.js";fjs.parentNode?.insertBefore(js, fjs);})(window, document, 'script', 'qgiv-embedjs');</script>
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <div class="rounded-xl border border-gray-200 bg-white/70 p-6">
+            <h3 class="text-lg font-semibold text-gray-800">Why your donation matters</h3>
+            <ul class="mt-4 space-y-3 text-gray-700">
+              <li class="flex items-start">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-2 mt-0.5 h-5 w-5 text-green-700"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Accelerates projects already making impact
+              </li>
+              <li class="flex items-start">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-2 mt-0.5 h-5 w-5 text-green-700"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Funds critical skills: engineering, design, marketing
+              </li>
+              <li class="flex items-start">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-2 mt-0.5 h-5 w-5 text-green-700"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Helps launch new initiatives quickly and effectively
+              </li>
+            </ul>
+          </div>
 
-    <script is:inline>
-        // A/B test: randomly show one of two donation forms
-        // Initialize plausible queue if not already defined
-        window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) };
-        window.plausible.q = window.plausible.q || [];
+          <div class="rounded-xl border border-gray-200 bg-white/70 p-6">
+            <h3 class="text-lg font-semibold text-gray-800">Alternative ways to give</h3>
+            <p class="mt-3 text-gray-700">
+              Donate through a Donor-Advised Fund (DAF), family trust, or other structured giving
+              methods.
+            </p>
+            <p class="mt-3 text-gray-700">
+              Email <b>donations@techforpalestine.org</b> and we’ll assist you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        const variant = Math.random() < 0.5 ? 'charitystack' : 'qgiv';
+  <script
+    is:inline
+    defer
+    id="charitystack-embed"
+    data-id="M_lDGj72xT61"
+    src="https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js"
+  ></script>
+  <script is:inline>
+    (function (w, d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
+      fjs.parentNode?.insertBefore(js, fjs);
+    })(window, document, "script", "qgiv-embedjs");
+  </script>
 
-        // Show the selected form
-        document.getElementById('form-variant-' + variant).style.display = 'block';
+  <script is:inline>
+    // A/B test: randomly show one of two donation forms
+    // Initialize plausible queue if not already defined
+    window.plausible =
+      window.plausible ||
+      function () {
+        (window.plausible.q = window.plausible.q || []).push(arguments);
+      };
+    window.plausible.q = window.plausible.q || [];
 
-        // Track which variant was shown with Plausible custom property
-        window.plausible('pageview', { props: { donate_form_variant: variant } });
-    </script>
-    </Layout>
+    const variant = Math.random() < 0.5 ? "charitystack" : "qgiv";
+
+    // Show the selected form
+    document.getElementById("form-variant-" + variant).style.display = "block";
+
+    // Track which variant was shown with Plausible custom property
+    window.plausible("pageview", { props: { donate_form_variant: variant } });
+  </script>
+</Layout>

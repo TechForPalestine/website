@@ -4,229 +4,267 @@ import { Icon } from "astro-icon/components";
 import "../styles/base.css";
 
 const articles = [
-    {
-        title: "Tech for Palestine Launches Coalition",
-        source: "TechCrunch",
-        url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
-        date: "January 2, 2024",
-        description: "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
-        image: "https://techcrunch.com/wp-content/uploads/2024/01/GettyImages-1367359752.jpg?resize=2048,1365"
-    },
-    {
-        title: "Tech for Palestine – A Global Call",
-        source: "Incarabia",
-        url: "https://muslimtechwire.com/tech-for-palestine-launches",
-        date: "January 5, 2024",
-        description: "Coverage of the initiative's mission to support Palestine through open-source tools.",
-        image: "https://www.muslimtechwire.com/_next/image?url=%2Fimages%2Fposts%2Farchive-66.webp&w=1536&q=75"
-    },
-    {
-        title: "‘Tech for Palestine’ Aims to Boost Global Palestinian Advocacy",
-        source: "Palestine Chronicle",
-        url: "https://www.palestinechronicle.com/tech-for-palestine-aims-to-boost-global-palestinian-advocacy/",
-        date: "January 3, 2024",
-        description: "Focus on how the initiative empowers tech workers to speak up for Palestine.",
-        image: "https://www.palestinechronicle.com/wp-content/uploads/2024/01/Techfor-Palestine_SOCIAL.png"
-    },
-    {
-        title: "'Tech for Palestine' Initiative Launched to Support Palestinians",
-        source: "The Daily Star",
-        url: "https://www.thedailystar.net/tech-startup/news/tech-palestine-initiative-launched-support-palestinians-3510791",
-        date: "January 4, 2024",
-        description: "Reporting on the launch and global reach of the Tech for Palestine movement.",
-        image: "https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/images/2024/01/04/palestine.jpg"
-    },
-
+  {
+    title: "Tech for Palestine Launches Coalition",
+    source: "TechCrunch",
+    url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
+    date: "January 2, 2024",
+    description:
+      "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
+    image:
+      "https://techcrunch.com/wp-content/uploads/2024/01/GettyImages-1367359752.jpg?resize=2048,1365",
+  },
+  {
+    title: "Tech for Palestine – A Global Call",
+    source: "Incarabia",
+    url: "https://muslimtechwire.com/tech-for-palestine-launches",
+    date: "January 5, 2024",
+    description:
+      "Coverage of the initiative's mission to support Palestine through open-source tools.",
+    image:
+      "https://www.muslimtechwire.com/_next/image?url=%2Fimages%2Fposts%2Farchive-66.webp&w=1536&q=75",
+  },
+  {
+    title: "‘Tech for Palestine’ Aims to Boost Global Palestinian Advocacy",
+    source: "Palestine Chronicle",
+    url: "https://www.palestinechronicle.com/tech-for-palestine-aims-to-boost-global-palestinian-advocacy/",
+    date: "January 3, 2024",
+    description: "Focus on how the initiative empowers tech workers to speak up for Palestine.",
+    image:
+      "https://www.palestinechronicle.com/wp-content/uploads/2024/01/Techfor-Palestine_SOCIAL.png",
+  },
+  {
+    title: "'Tech for Palestine' Initiative Launched to Support Palestinians",
+    source: "The Daily Star",
+    url: "https://www.thedailystar.net/tech-startup/news/tech-palestine-initiative-launched-support-palestinians-3510791",
+    date: "January 4, 2024",
+    description: "Reporting on the launch and global reach of the Tech for Palestine movement.",
+    image:
+      "https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/images/2024/01/04/palestine.jpg",
+  },
 ];
 
 const interviews = [
-    {
-        title: "Gaza Diaries: Paul Biggar & Dr. Omar Suleiman",
-        source: "YouTube",
-        url: "https://www.youtube.com/embed/SZYxUoHYPIg",
-        date: "11 months ago",
-        description: "A profound conversation discussing the misuse of technology in the genocide in Gaza.",
-        embed: true
-    },
-    {
-        title: "How Big Tech Enables Israel's Crimes",
-        source: "YouTube",
-        url: "https://www.youtube.com/embed/LzXASFo-cf0",
-        date: "1.4 years ago",
-        description: "Paul Biggar explores the role of major tech companies in facilitating actions against Palestinians.",
-        embed: true
-    },
-    {
-        title: "Voices of Impact: Tech for Palestine's Journey",
-        source: "YouTube",
-        url: "https://www.youtube.com/embed/lQ5DLKLqUtg",
-        date: "6 months ago",
-        description: "An exploration of the journey and ethical considerations behind Tech for Palestine.",
-        embed: true
-    },
-    {
-        title: "TRT World Interview",
-        source: "TRT World",
-        url: "https://www.youtube.com/embed/8mdYIozAgBw",
-        date: "Recent",
-        description: "Paul Biggar discusses Tech for Palestine and the role of AI in the conflict.",
-        embed: true
-    }
+  {
+    title: "Gaza Diaries: Paul Biggar & Dr. Omar Suleiman",
+    source: "YouTube",
+    url: "https://www.youtube.com/embed/SZYxUoHYPIg",
+    date: "11 months ago",
+    description:
+      "A profound conversation discussing the misuse of technology in the genocide in Gaza.",
+    embed: true,
+  },
+  {
+    title: "How Big Tech Enables Israel's Crimes",
+    source: "YouTube",
+    url: "https://www.youtube.com/embed/LzXASFo-cf0",
+    date: "1.4 years ago",
+    description:
+      "Paul Biggar explores the role of major tech companies in facilitating actions against Palestinians.",
+    embed: true,
+  },
+  {
+    title: "Voices of Impact: Tech for Palestine's Journey",
+    source: "YouTube",
+    url: "https://www.youtube.com/embed/lQ5DLKLqUtg",
+    date: "6 months ago",
+    description:
+      "An exploration of the journey and ethical considerations behind Tech for Palestine.",
+    embed: true,
+  },
+  {
+    title: "TRT World Interview",
+    source: "TRT World",
+    url: "https://www.youtube.com/embed/8mdYIozAgBw",
+    date: "Recent",
+    description: "Paul Biggar discusses Tech for Palestine and the role of AI in the conflict.",
+    embed: true,
+  },
 ];
 
 const newsletters = [
-    {
-        title: "Newsletter Archive",
-        description: "Browse past updates from Tech for Palestine to stay informed on recent campaigns and progress.",
-        url: "https://updates.techforpalestine.org/"
-    }
+  {
+    title: "Newsletter Archive",
+    description:
+      "Browse past updates from Tech for Palestine to stay informed on recent campaigns and progress.",
+    url: "https://updates.techforpalestine.org/",
+  },
 ];
 ---
 
-    <Layout title="Media">
-        <main>
+<Layout title="Media">
+  <main>
+    <section class="relative isolate bg-white px-6 py-10 sm:py-16 lg:px-8">
+      <div class="mx-auto max-w-4xl text-center">
+        <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Media & Press</h2>
+        <p class="mt-4 text-lg text-gray-600">
+          Interviews, news coverage, and thought leadership about Tech for Palestine
+        </p>
+        <hr class="mx-auto mb-4 mt-6 h-1 w-1/2 border-none bg-gray-700" />
+      </div>
 
-            <section class="relative isolate bg-white px-6 py-10 sm:py-16 lg:px-8">
-                <div class="mx-auto max-w-4xl text-center">
-                    <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Media & Press</h2>
-                    <p class="mt-4 text-lg text-gray-600">Interviews, news coverage, and thought leadership about
-                        Tech for Palestine</p>
-                    <hr class="mt-6 mb-4 w-1/2 mx-auto border-none h-1 bg-gray-700"/>
+      <!-- Press Kit Section -->
+      <div class="mx-auto mt-12 max-w-6xl">
+        <h3 class="mb-4 text-2xl font-semibold text-gray-900">🧰 Media Press Kit</h3>
+
+        <!-- About Summary -->
+        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <p class="text-sm text-gray-700">
+            Tech for Palestine (“T4P”) is a coalition of thousands of founders, engineers, product
+            marketers, investors and other professionals who are working in support of Palestinian
+            liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their
+            work towards a Free Palestine. We support projects — whether collections of individuals,
+            registered non-profits, or even companies — whose mission helps Palestine, especially
+            advocacy groups building technical products or in the tech space.
+          </p>
+        </div>
+
+        <!-- Logos Section -->
+        <div class="mb-8">
+          <h4 class="mb-2 text-lg font-semibold text-gray-800">Official Logos</h4>
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            <div class="group relative overflow-hidden rounded-lg border shadow-sm">
+              <img
+                src="/t4p-full.png"
+                alt="Logo Light"
+                class="h-28 w-full bg-gray-50 object-contain p-2"
+              />
+              <a
+                href="/t4p-full.png"
+                download
+                class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+              >
+                Download
+              </a>
+            </div>
+            <div class="group relative overflow-hidden rounded-lg border shadow-sm">
+              <img
+                src="/t4p-logo.png"
+                alt="Logo Icon"
+                class="h-28 w-full bg-white object-contain p-2"
+              />
+              <a
+                href="/t4p-logo.png"
+                download
+                class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+              >
+                Download
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Headshots -->
+        {/*<div class="mb-8">*/}
+        {/*    <h4 class="text-lg font-semibold text-gray-800 mb-2">Team Headshots</h4>*/}
+        {/*    <div class="flex flex-wrap justify-start gap-6">*/}
+        {
+          /*        <img src="/paul-founder.jpg" alt="Team Member 1" class="h-28 w-28 object-cover rounded-full shadow" />*/
+        }
+        {
+          /*        <img src="/press/headshot2.jpg" alt="Team Member 2" class="h-28 w-28 object-cover rounded-full shadow" />*/
+        }
+        {
+          /*        <img src="/press/headshot3.jpg" alt="Team Member 3" class="h-28 w-28 object-cover rounded-full shadow" />*/
+        }
+        {/*    </div>*/}
+        {/*</div>*/}
+
+        <!-- Press Kit PDF -->
+        <div class="mt-6">
+          <a
+            href="/tech_for_palestine_press_kit.pdf"
+            download
+            class="inline-block rounded-full bg-black px-6 py-3 text-white shadow transition hover:bg-zinc-800"
+          >
+            Download Full Press Kit (PDF)
+          </a>
+        </div>
+      </div>
+
+      <!-- Articles Section -->
+      <div class="mx-auto mt-12 max-w-6xl">
+        <h3 class="mb-4 text-2xl font-semibold text-gray-900">📰 Articles</h3>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            articles.map((item) => (
+              <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+                <img src={item.image} alt={item.title} class="h-48 w-full object-cover" />
+                <div class="flex flex-1 flex-col p-5">
+                  <h3 class="mb-1 text-lg font-semibold text-gray-900">{item.title}</h3>
+                  <p class="mb-2 text-sm italic text-gray-500">
+                    {item.source} • {item.date}
+                  </p>
+                  <p class="flex-grow text-sm text-gray-600">{item.description}</p>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-4 text-sm font-medium text-blue-600 hover:underline"
+                  >
+                    Read More →
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Interviews Section -->
+      <div class="mx-auto mt-16 max-w-6xl">
+        <h3 class="mb-4 text-2xl font-semibold text-gray-900">🎙️ Interviews</h3>
+        <div class="flex flex-col gap-10">
+          {
+            interviews.map((item) => (
+              <div class="relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 shadow-md transition-all hover:shadow-lg md:flex-row">
+                <div class="hidden w-2 bg-[#cd3b26] md:block" />
+
+                <div class="aspect-video w-full bg-black md:w-1/2">
+                  <iframe
+                    src={item.url}
+                    title={item.title}
+                    class="h-full w-full"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
                 </div>
 
-                <!-- Press Kit Section -->
-                <div class="mx-auto mt-12 max-w-6xl">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">🧰 Media Press Kit</h3>
-
-                    <!-- About Summary -->
-                    <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm mb-6">
-                        <p class="text-sm text-gray-700">
-                             Tech for Palestine (“T4P”) is a coalition of thousands of founders, engineers, product marketers, investors and other professionals who are working in support of Palestinian liberation.
-                             The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine. We support projects — whether collections of individuals, registered non-profits, or even companies — whose mission helps Palestine, especially advocacy groups building technical products or in the tech space.                        </p>
-                    </div>
-
-                    <!-- Logos Section -->
-                    <div class="mb-8">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Official Logos</h4>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-
-                            <div class="relative group border rounded-lg shadow-sm overflow-hidden">
-                                <img src="/t4p-full.png" alt="Logo Light" class="w-full h-28 object-contain bg-gray-50 p-2" />
-                                <a href="/t4p-full.png" download
-                                   class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 group-hover:opacity-100 transition">
-                                    Download
-                                </a>
-                            </div>
-                            <div class="relative group border rounded-lg shadow-sm overflow-hidden">
-                                <img src="/t4p-logo.png" alt="Logo Icon" class="w-full h-28 object-contain bg-white p-2" />
-                                <a href="/t4p-logo.png" download
-                                   class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 group-hover:opacity-100 transition">
-                                    Download
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Headshots -->
-                    {/*<div class="mb-8">*/}
-                    {/*    <h4 class="text-lg font-semibold text-gray-800 mb-2">Team Headshots</h4>*/}
-                    {/*    <div class="flex flex-wrap justify-start gap-6">*/}
-                    {/*        <img src="/paul-founder.jpg" alt="Team Member 1" class="h-28 w-28 object-cover rounded-full shadow" />*/}
-                    {/*        <img src="/press/headshot2.jpg" alt="Team Member 2" class="h-28 w-28 object-cover rounded-full shadow" />*/}
-                    {/*        <img src="/press/headshot3.jpg" alt="Team Member 3" class="h-28 w-28 object-cover rounded-full shadow" />*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
-                    <!-- Press Kit PDF -->
-                    <div class="mt-6">
-                        <a href="/tech_for_palestine_press_kit.pdf" download
-                           class="inline-block px-6 py-3 bg-black text-white rounded-full hover:bg-zinc-800 transition shadow">
-                            Download Full Press Kit (PDF)
-                        </a>
-                    </div>
+                <div class="flex w-full flex-col justify-center bg-white p-6 md:w-1/2">
+                  <h3 class="mb-1 text-xl font-semibold text-gray-900">{item.title}</h3>
+                  <p class="mb-2 text-sm italic text-gray-500">
+                    {item.source} • {item.date}
+                  </p>
+                  <p class="text-sm text-gray-700">{item.description}</p>
                 </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
 
+      <!-- Newsletter Section -->
+      <div class="mx-auto mt-16 max-w-6xl">
+        <h3 class="mb-4 text-2xl font-semibold text-gray-900">📬 Newsletter Archive</h3>
 
-                <!-- Articles Section -->
-                <div class="mx-auto mt-12 max-w-6xl">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">📰 Articles</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {articles.map((item) => (
-                            <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200">
-                                <img src={item.image} alt={item.title} class="h-48 w-full object-cover" />
-                                <div class="p-5 flex flex-col flex-1">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-1">{item.title}</h3>
-                                    <p class="text-sm text-gray-500 mb-2 italic">{item.source} • {item.date}</p>
-                                    <p class="text-sm text-gray-600 flex-grow">{item.description}</p>
-                                    <a
-                                        href={item.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="mt-4 text-sm font-medium text-blue-600 hover:underline"
-                                    >
-                                        Read More →
-                                    </a>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <!-- Interviews Section -->
-                <div class="mx-auto mt-16 max-w-6xl">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">🎙️ Interviews</h3>
-                    <div class="flex flex-col gap-10">
-                        {interviews.map((item) => (
-                            <div
-                                class="relative flex flex-col md:flex-row border border-gray-200 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all">
-                                <!-- Left colored accent bar -->
-                                <div class="w-2 bg-[#cd3b26] md:block hidden"></div>
-
-                                <!-- Video Embed -->
-                                <div class="md:w-1/2 w-full aspect-video bg-black">
-                                    <iframe
-                                        src={item.url}
-                                        title={item.title}
-                                        class="w-full h-full"
-                                        frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen
-                                    ></iframe>
-                                </div>
-
-                                <!-- Text content -->
-                                <div class="p-6 md:w-1/2 w-full bg-white flex flex-col justify-center">
-                                    <h3 class="text-xl font-semibold text-gray-900 mb-1">{item.title}</h3>
-                                    <p class="text-sm text-gray-500 italic mb-2">{item.source} • {item.date}</p>
-                                    <p class="text-sm text-gray-700">{item.description}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                </div>
-
-                <!-- Newsletter Section -->
-                <div class="mx-auto mt-16 max-w-6xl">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">📬 Newsletter Archive</h3>
-
-
-                    {newsletters.map((item) => (
-                        <div class="border border-gray-200 rounded-xl p-5 bg-gray-50 shadow-sm">
-                            <h4 class="text-lg font-semibold text-gray-800">{item.title}</h4>
-                            <p class="text-sm text-gray-600 mt-1">{item.description}</p>
-                            <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-block mt-3 text-sm font-medium text-blue-600 hover:underline"
-                            >
-                                View Newsletters →
-                            </a>
-                        </div>
-                    ))}
-                </div>
-
-            </section>
-        </main>
-    </Layout>
+        {
+          newsletters.map((item) => (
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-800">{item.title}</h4>
+              <p class="mt-1 text-sm text-gray-600">{item.description}</p>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline"
+              >
+                View Newsletters →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</Layout>
