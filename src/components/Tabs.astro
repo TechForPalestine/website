@@ -3,24 +3,26 @@ const { tabs } = Astro.props;
 let activeTab = 0;
 ---
 
-    <div class="w-full">
-        <div class="flex border-b border-gray-300 mb-4">
-            {(tabs as any[]).map((tab: any, index: number) => (
-                <button
-                    class={`py-2 px-4 -mb-px border-b-2 transition ${
-                        index === activeTab
-                            ? 'border-blue-500 text-blue-500 font-semibold'
-                            : 'border-transparent text-gray-500 hover:text-blue-500'
-                    }`}
-                    type="button"
-                >
-                    {tab.label}
-                </button>
-            ))}
-        </div>
+<div class="w-full">
+  <div class="mb-4 flex border-b border-gray-300">
+    {
+      (tabs as any[]).map((tab: any, index: number) => (
+        <button
+          class={`-mb-px border-b-2 px-4 py-2 transition ${
+            index === activeTab
+              ? "border-blue-500 font-semibold text-blue-500"
+              : "border-transparent text-gray-500 hover:text-blue-500"
+          }`}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))
+    }
+  </div>
 
-        <div class="p-4 bg-white border rounded shadow">
-            <h2 class="text-xl font-bold mb-2">{tabs[activeTab].content.title}</h2>
-            <p>{tabs[activeTab].content.description}</p>
-        </div>
-    </div>
+  <div class="rounded border bg-white p-4 shadow">
+    <h2 class="mb-2 text-xl font-bold">{tabs[activeTab].content.title}</h2>
+    <p>{tabs[activeTab].content.description}</p>
+  </div>
+</div>

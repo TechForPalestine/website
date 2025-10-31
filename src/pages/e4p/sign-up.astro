@@ -5,48 +5,46 @@ import "../../styles/base.css";
 ---
 
 <Layout title="E4P Sign Up">
-    <div class="container mx-auto px-4 py-10 max-w-6xl">
-        {/* Title + Intro */}
-        <h2 class="text-4xl font-bold text-center mb-4">
-            Entrepreneurs for Palestine - Sign Up
-        </h2>
-        <p class="text-lg text-center max-w-3xl mx-auto mb-12 text-gray-700">
-            If you are an entrepreneur and you wish to become part of our community, you can sign up using one of the form below to schedule an introductory call, depending on your location and time zone. Please insert your company, position, and Linkedin URL for verification purposes.
-        </p>
+  <div class="container mx-auto max-w-6xl px-4 py-10">
+    {/* Title + Intro */}
+    <h2 class="mb-4 text-center text-4xl font-bold">Entrepreneurs for Palestine - Sign Up</h2>
+    <p class="mx-auto mb-12 max-w-3xl text-center text-lg text-gray-700">
+      If you are an entrepreneur and you wish to become part of our community, you can sign up using
+      one of the form below to schedule an introductory call, depending on your location and time
+      zone. Please insert your company, position, and Linkedin URL for verification purposes.
+    </p>
 
-        {/* Sign Up + Calendars */}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-            <div>
-                <h3 class="text-xl font-semibold text-center mb-4">
-                    Americas
-                </h3>
-                <div class="h-[600px] w-full rounded-lg overflow-hidden shadow-lg">
-                    <iframe
-                        title="Calendly Americas"
-                        src="https://calendly.com/hsyed-hsyedlegal/entrepreneurs-for-palestine?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
-                        width="100%"
-                        height="100%"
-                        frameborder="0"
-                        allow="fullscreen">
-                    </iframe>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-xl font-semibold text-center mb-4">
-                    Europe / Asia
-                </h3>
-                <div class="h-[600px] w-full rounded-lg overflow-hidden shadow-lg">
-                    <iframe
-                        title="Calendly Europe/Asia"
-                        src="https://calendly.com/megan-techforpalestine/30min?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
-                        width="100%"
-                        height="100%"
-                        frameborder="0"
-                        allow="fullscreen">
-                    </iframe>
-                </div>
-            </div>
+    {/* Sign Up + Calendars */}
+    <div class="mb-10 grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div>
+        <h3 class="mb-4 text-center text-xl font-semibold">Americas</h3>
+        <div class="h-[600px] w-full overflow-hidden rounded-lg shadow-lg">
+          <iframe
+            title="Calendly Americas"
+            src="https://calendly.com/hsyed-hsyedlegal/entrepreneurs-for-palestine?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            allow="fullscreen"
+          >
+          </iframe>
         </div>
+      </div>
+
+      <div>
+        <h3 class="mb-4 text-center text-xl font-semibold">Europe / Asia</h3>
+        <div class="h-[600px] w-full overflow-hidden rounded-lg shadow-lg">
+          <iframe
+            title="Calendly Europe/Asia"
+            src="https://calendly.com/megan-techforpalestine/30min?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            allow="fullscreen"
+          >
+          </iframe>
+        </div>
+      </div>
     </div>
+  </div>
 </Layout>

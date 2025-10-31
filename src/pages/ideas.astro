@@ -6,82 +6,91 @@ import IdeasWithTabs from "../components/IdeasWithTabs.jsx";
 
 let rawIdeas;
 try {
-    rawIdeas = await fetchNotionIdeas(Astro.locals);
+  rawIdeas = await fetchNotionIdeas(Astro.locals);
 } catch (error) {
-    console.error('Failed to fetch ideas from Notion:', error);
-    rawIdeas = [];
+  console.error("Failed to fetch ideas from Notion:", error);
+  rawIdeas = [];
 }
 
 // Filter ideas by category from Notion
 const newIdeas = rawIdeas
-    .filter((idea: any) => idea.category === "new")
-    .map((idea: any) => {
-        // Create excerpt from rich text (first 150 chars)
-        const plainTextExcerpt = idea.description
-            .map((segment: any) => segment.plain_text)
-            .join("")
-            .substring(0, 150) + (idea.description.map((segment: any) => segment.plain_text).join("").length > 150 ? "..." : "");
+  .filter((idea: any) => idea.category === "new")
+  .map((idea: any) => {
+    // Create excerpt from rich text (first 150 chars)
+    const plainTextExcerpt =
+      idea.description
+        .map((segment: any) => segment.plain_text)
+        .join("")
+        .substring(0, 150) +
+      (idea.description.map((segment: any) => segment.plain_text).join("").length > 150
+        ? "..."
+        : "");
 
-        return {
-            id: idea.id,
-            data: {
-                title: idea.name,
-                tags: []
-            },
-            richTextDescription: idea.description,
-            excerpt: plainTextExcerpt
-        };
-    });
+    return {
+      id: idea.id,
+      data: {
+        title: idea.name,
+        tags: [],
+      },
+      richTextDescription: idea.description,
+      excerpt: plainTextExcerpt,
+    };
+  });
 
 const existingIdeas = rawIdeas
-    .filter((idea: any) => idea.category === "existing")
-    .map((idea: any) => {
-        // Create excerpt from rich text (first 150 chars)
-        const plainTextExcerpt = idea.description
-            .map((segment: any) => segment.plain_text)
-            .join("")
-            .substring(0, 150) + (idea.description.map((segment: any) => segment.plain_text).join("").length > 150 ? "..." : "");
+  .filter((idea: any) => idea.category === "existing")
+  .map((idea: any) => {
+    // Create excerpt from rich text (first 150 chars)
+    const plainTextExcerpt =
+      idea.description
+        .map((segment: any) => segment.plain_text)
+        .join("")
+        .substring(0, 150) +
+      (idea.description.map((segment: any) => segment.plain_text).join("").length > 150
+        ? "..."
+        : "");
 
-        return {
-            id: idea.id,
-            data: {
-                title: idea.name,
-                tags: []
-            },
-            richTextDescription: idea.description,
-            excerpt: plainTextExcerpt
-        };
-    });
-
+    return {
+      id: idea.id,
+      data: {
+        title: idea.name,
+        tags: [],
+      },
+      richTextDescription: idea.description,
+      excerpt: plainTextExcerpt,
+    };
+  });
 ---
 
-    <Layout title="Ideas">
-        <main>
-            <div class="relative isolate">
-                <div class="px-6 py-4 sm:py-4 lg:px-8">
-                    <div class="mx-auto max-w-4xl">
-                        <h1 class="mt-2 text-4xl sm:text-6xl font-extrabold tracking-tight text-gray-900 text-center">
-                            Welcome to the <br class="hidden sm:block" />
-                            <span class="text-green-800">Tech for Palestine Ideas</span>
-                        </h1>
+<Layout title="Ideas">
+  <main>
+    <div class="relative isolate">
+      <div class="px-6 py-4 sm:py-4 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <h1
+            class="mt-2 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
+          >
+            Welcome to the <br class="hidden sm:block" />
+            <span class="text-green-800">Tech for Palestine Ideas</span>
+          </h1>
 
-                        <p class="mt-2 text-lg leading-8 text-gray-600 text-center">
-                            Tech for Palestine builds bold projects to support Palestinian freedom and counter pro-Israel propaganda.
-                        </p>
+          <p class="mt-2 text-center text-lg leading-8 text-gray-600">
+            Tech for Palestine builds bold projects to support Palestinian freedom and counter
+            pro-Israel propaganda.
+          </p>
 
+          <p class="mt-2 text-center text-lg leading-8 text-gray-600">
+            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to
+            help make them real.
+          </p>
 
-                        <p class="mt-2 text-lg leading-8 text-gray-600 text-center">
-                            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to help make them real.
-                        </p>
+          <p class="mt-2 text-center text-lg leading-8 text-gray-600">
+            Explore the ideas below and get involved.
+          </p>
+        </div>
+      </div>
 
-                        <p class="mt-2 text-lg leading-8 text-gray-600 text-center">
-                            Explore the ideas below and get involved.
-                        </p>
-                    </div>
-                </div>
-
-                <IdeasWithTabs newIdeas={newIdeas} existingIdeas={existingIdeas} client:only="react" />
-
-            </div>
-        </main>
-    </Layout>
+      <IdeasWithTabs newIdeas={newIdeas} existingIdeas={existingIdeas} client:only="react" />
+    </div>
+  </main>
+</Layout>

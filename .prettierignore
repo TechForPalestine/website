@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.astro/
+.vercel/
+.netlify/
+.output/
+
+# Cache directories
+.cache/
+.temp/
+
+# Lock files
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Cloudflare
+cloudflare-worker/dist/
+
+# Public assets (user-uploaded or external)
+public/images/
+public/projectIcons/
+
+# Documentation with code examples
+TECHNICAL_OVERVIEW.md

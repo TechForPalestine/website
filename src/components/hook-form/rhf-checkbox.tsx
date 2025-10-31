@@ -1,12 +1,12 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from "react-hook-form";
 
-import {FormControl,FormLabel,FormGroup,Checkbox,FormHelperText} from '@mui/material';
-import {FormControlLabel} from '@mui/material';
-import type { FormControlLabelProps } from '@mui/material/FormControlLabel';
-import { formControlLabelClasses } from '@mui/material/FormControlLabel';
+import { FormControl, FormLabel, FormGroup, Checkbox, FormHelperText } from "@mui/material";
+import { FormControlLabel } from "@mui/material";
+import type { FormControlLabelProps } from "@mui/material/FormControlLabel";
+import { formControlLabelClasses } from "@mui/material/FormControlLabel";
 // ----------------------------------------------------------------------
 
-interface RHFCheckboxProps extends Omit<FormControlLabelProps, 'control'> {
+interface RHFCheckboxProps extends Omit<FormControlLabelProps, "control"> {
   name: string;
   helperText?: React.ReactNode;
 }
@@ -33,7 +33,7 @@ export function RHFCheckbox({ name, helperText, ...other }: RHFCheckboxProps) {
 
 // ----------------------------------------------------------------------
 
-interface RHFMultiCheckboxProps extends Omit<FormControlLabelProps, 'control' | 'label'> {
+interface RHFMultiCheckboxProps extends Omit<FormControlLabelProps, "control" | "label"> {
   name: string;
   options: { label: string; value: any }[];
   row?: boolean;
@@ -55,7 +55,9 @@ export function RHFMultiCheckbox({
   const { control } = useFormContext();
 
   const getSelected = (selectedItems: string[], item: string) =>
-    selectedItems.includes(item) ? selectedItems.filter((value) => value !== item) : [...selectedItems, item];
+    selectedItems.includes(item)
+      ? selectedItems.filter((value) => value !== item)
+      : [...selectedItems, item];
 
   return (
     <Controller
@@ -64,7 +66,7 @@ export function RHFMultiCheckbox({
       render={({ field, fieldState: { error } }) => (
         <FormControl component="fieldset">
           {label && (
-            <FormLabel component="legend" sx={{ typography: 'body2' }}>
+            <FormLabel component="legend" sx={{ typography: "body2" }}>
               {label}
             </FormLabel>
           )}
@@ -72,15 +74,15 @@ export function RHFMultiCheckbox({
           <FormGroup
             sx={{
               ...(row && {
-                flexDirection: 'row',
+                flexDirection: "row",
               }),
               [`& .${formControlLabelClasses.root}`]: {
-                '&:not(:last-of-type)': {
+                "&:not(:last-of-type)": {
                   mb: spacing || 0,
                 },
                 ...(row && {
                   mr: 0,
-                  '&:not(:last-of-type)': {
+                  "&:not(:last-of-type)": {
                     mr: spacing || 2,
                   },
                 }),

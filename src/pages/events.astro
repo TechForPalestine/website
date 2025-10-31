@@ -22,12 +22,13 @@ console.log("SSR: Skipping server-side fetch, letting client load data");
 //     console.error("SSR: Error fetching events:", err);
 // }
 ---
-    <Layout title="Events">
-        <PageHeader
-            overline="Tech for Palestine"
-            title="Events"
-            subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
-        />
 
-        <EventsComponent events={events} loading={loading} client:only="react" />
-    </Layout>
+<Layout title="Events">
+  <PageHeader
+    overline="Tech for Palestine"
+    title="Events"
+    subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
+  />
+
+  <EventsComponent events={events} loading={loading} client:only="react" />
+</Layout>

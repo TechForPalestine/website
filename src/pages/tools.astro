@@ -5,151 +5,161 @@ import ToolPopup from "../components/ToolPopup";
 import "../styles/base.css";
 
 const topLeft = [
-    {
-        name: "Newscord",
-        desc: "Get comprehensive news coverage with AI-powered insights from multiple sources in one place.",
-        link: "https://newscord.org/",
-        logo: "/newscord.svg",
-        button: "Newscord"
-    },
-    {
-        name: "Boycat",
-        desc: "Search brands, scan products, and make ethical shopping choices with confidence.",
-        link: "https://www.boycat.io/",
-        logo: "/Boycat.png",
-        button: "Boycat"
-    },
-    {
-        name: "Find A Protest",
-        desc: "Discover protests and actions across the world",
-        link: "https://www.findaprotest.info/",
-        logo: "/findprotest.svg",
-        button: "Find A Protest"
-    }
+  {
+    name: "Newscord",
+    desc: "Get comprehensive news coverage with AI-powered insights from multiple sources in one place.",
+    link: "https://newscord.org/",
+    logo: "/newscord.svg",
+    button: "Newscord",
+  },
+  {
+    name: "Boycat",
+    desc: "Search brands, scan products, and make ethical shopping choices with confidence.",
+    link: "https://www.boycat.io/",
+    logo: "/Boycat.png",
+    button: "Boycat",
+  },
+  {
+    name: "Find A Protest",
+    desc: "Discover protests and actions across the world",
+    link: "https://www.findaprotest.info/",
+    logo: "/findprotest.svg",
+    button: "Find A Protest",
+  },
 ];
 
 const rightCard = {
-    name: "Pal Chat",
-    desc: "A secure chat system for Palestine.",
-    img: "/logo-stone-thrower-bot-transparent.png"
+  name: "Pal Chat",
+  desc: "A secure chat system for Palestine.",
+  img: "/logo-stone-thrower-bot-transparent.png",
 };
 
 const bottomRow = [
-    {
-        name: "T4P Datasets",
-        desc: "Tracking the human toll. Use the data from our APIs to tell-their story.",
-        link: "https://data.techforpalestine.org/",
-        logo: "/mark-transparent.png",
-        button: "T4P Datasets"
-    },
-    {
-        name: "The Wall",
-        desc: "A browser plugin to detect and block more than Israel related websites and their social accounts.",
-        link: "https://thewallproject.github.io/",
-        logo: "/thewall.svg",
-        button: "The Wall"
-    },
-    {
-        name: "Profile Pic Maker",
-        desc: "Wrap your profile pic in the colors of Palestine.",
-        link: "https://ppm.techforpalestine.org/",
-        logo: "/profile-maker.png",
-        button: "Profile Pic Maker"
-    },
-    {
-        name: "Anti-Palestinian VC funds",
-        desc: "A database of anti-Palestinian VC funds.",
-        link: "https://github.com/TechForPalestine/antipalestinian-vc-funds/",
-        logo: "/mark-transparent.png",
-        button: "Anti-Palestinian VC funds"
-    },
-    {
-	name: "Israeli Tech Alternatives",
-	desc: "Find alternatives to Israeli tech.",
-	link: "https://www.israelitechalternatives.com/",
-	logo: "/mark-transparent.png",
-	button: "Israeli Tech Alternatives"
-    },
-    {
-	name: "Jaywalk",
-	desc: "Stay safe and informed during protests with an interactive map.",
-	link: "https://jaywalkapp.org",
-	logo: "/jaywalk.png",
-	button: "Jaywalk"
-    },
-    {
+  {
+    name: "T4P Datasets",
+    desc: "Tracking the human toll. Use the data from our APIs to tell-their story.",
+    link: "https://data.techforpalestine.org/",
+    logo: "/mark-transparent.png",
+    button: "T4P Datasets",
+  },
+  {
+    name: "The Wall",
+    desc: "A browser plugin to detect and block more than Israel related websites and their social accounts.",
+    link: "https://thewallproject.github.io/",
+    logo: "/thewall.svg",
+    button: "The Wall",
+  },
+  {
+    name: "Profile Pic Maker",
+    desc: "Wrap your profile pic in the colors of Palestine.",
+    link: "https://ppm.techforpalestine.org/",
+    logo: "/profile-maker.png",
+    button: "Profile Pic Maker",
+  },
+  {
+    name: "Anti-Palestinian VC funds",
+    desc: "A database of anti-Palestinian VC funds.",
+    link: "https://github.com/TechForPalestine/antipalestinian-vc-funds/",
+    logo: "/mark-transparent.png",
+    button: "Anti-Palestinian VC funds",
+  },
+  {
+    name: "Israeli Tech Alternatives",
+    desc: "Find alternatives to Israeli tech.",
+    link: "https://www.israelitechalternatives.com/",
+    logo: "/mark-transparent.png",
+    button: "Israeli Tech Alternatives",
+  },
+  {
+    name: "Jaywalk",
+    desc: "Stay safe and informed during protests with an interactive map.",
+    link: "https://jaywalkapp.org",
+    logo: "/jaywalk.png",
+    button: "Jaywalk",
+  },
+  {
     name: "BuycatVPN",
     desc: "Be safe on public Wi-Fi, block trackers, and browse freely.",
     link: "https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch",
     logo: "/Boycat.png",
-    button: "BuycatVPN"
-    },
-    {
+    button: "BuycatVPN",
+  },
+  {
     name: "UpScrolled",
     desc: "Simply, social without limits.",
     link: "https://upscrolled.com/en/",
     logo: "/upscrolled-icon.svg",
-    button: "UpScrolled"
-    },
-    {
+    button: "UpScrolled",
+  },
+  {
     name: "UK University Repression League Table 2025",
     desc: "See how UK universities rank in repressing activism and ties to arms industries.",
     link: "https://si4j.org/universityrepression",
     logo: "/mark-transparent.png",
-    button: "UK University Repression League Table 2025"
-    }
+    button: "UK University Repression League Table 2025",
+  },
 ];
 ---
 
-    <Layout title="Tools">
-        <main class=" min-h-screen py-16 px-4">
-            <h2 class="text-4xl font-bold text-center text-green-900 mb-12">Available Tools</h2>
-            <p class="text-center text-gray-600 mt-2">
-                A growing list of tools to support advocacy for Palestinian liberation.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mt-12">
-                <!-- Right Featured Card -->
-                <div class="bg-white p-6 rounded-xl shadow border flex flex-col justify-center">
-                    <img src={rightCard.img} alt={rightCard.name} class="mb-4 w-full max-h-48 object-contain"/>
-                    <h3 class="text-green-900 text-2xl font-bold mb-2">{rightCard.name}</h3>
-                    <p class="text-sm text-gray-700 mb-4">{rightCard.desc}</p>
-                    <ToolPopup client:load buttonLabel="Open Chat">
-                        <chat-box />
-                    </ToolPopup>
-                </div>
-                <!-- Left Column -->
-                <div class="flex flex-col gap-6">
-                    {topLeft.map(tool => (
-                        <div class="bg-white p-6 rounded-xl shadow border flex items-start gap-4">
-                            <img src={tool.logo} alt={tool.name} class="w-8 h-8"/>
-                            <div>
-                                <h3 class="font-bold text-green-900">{tool.name}</h3>
-                                <p class="text-sm text-gray-700">{tool.desc}</p>
-                                <a href={tool.link} target="_blank" class="inline-block mt-2 px-4 py-1 bg-green-800 text-white rounded-full text-sm hover:bg-green-900 transition">
-                                    {tool.button}
-                                </a>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-
+<Layout title="Tools">
+  <main class="min-h-screen px-4 py-16">
+    <h2 class="mb-12 text-center text-4xl font-bold text-green-900">Available Tools</h2>
+    <p class="mt-2 text-center text-gray-600">
+      A growing list of tools to support advocacy for Palestinian liberation.
+    </p>
+    <div class="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2">
+      <!-- Right Featured Card -->
+      <div class="flex flex-col justify-center rounded-xl border bg-white p-6 shadow">
+        <img src={rightCard.img} alt={rightCard.name} class="mb-4 max-h-48 w-full object-contain" />
+        <h3 class="mb-2 text-2xl font-bold text-green-900">{rightCard.name}</h3>
+        <p class="mb-4 text-sm text-gray-700">{rightCard.desc}</p>
+        <ToolPopup client:load buttonLabel="Open Chat">
+          <chat-box></chat-box>
+        </ToolPopup>
+      </div>
+      <!-- Left Column -->
+      <div class="flex flex-col gap-6">
+        {
+          topLeft.map((tool) => (
+            <div class="flex items-start gap-4 rounded-xl border bg-white p-6 shadow">
+              <img src={tool.logo} alt={tool.name} class="h-8 w-8" />
+              <div>
+                <h3 class="font-bold text-green-900">{tool.name}</h3>
+                <p class="text-sm text-gray-700">{tool.desc}</p>
+                <a
+                  href={tool.link}
+                  target="_blank"
+                  class="mt-2 inline-block rounded-full bg-green-800 px-4 py-1 text-sm text-white transition hover:bg-green-900"
+                >
+                  {tool.button}
+                </a>
+              </div>
             </div>
+          ))
+        }
+      </div>
+    </div>
 
-            <!-- Bottom Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-6xl mx-auto">
-                {bottomRow.map(tool => (
-                    <div class="bg-white p-6 rounded-xl shadow border flex items-start gap-4">
-                        <img src={tool.logo} alt={tool.name} class="w-8 h-8"/>
-                        <div>
-                            <h3 class="font-bold text-green-900">{tool.name}</h3>
-                            <p class="text-sm text-gray-700">{tool.desc}</p>
-                            <a href={tool.link} target="_blank" class="inline-block mt-2 px-4 py-1 bg-green-800 text-white rounded-full text-sm hover:bg-green-900 transition">
-                                {tool.button}
-                            </a>
-                        </div>
-                    </div>
-                ))}
+    <!-- Bottom Cards -->
+    <div class="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        bottomRow.map((tool) => (
+          <div class="flex items-start gap-4 rounded-xl border bg-white p-6 shadow">
+            <img src={tool.logo} alt={tool.name} class="h-8 w-8" />
+            <div>
+              <h3 class="font-bold text-green-900">{tool.name}</h3>
+              <p class="text-sm text-gray-700">{tool.desc}</p>
+              <a
+                href={tool.link}
+                target="_blank"
+                class="mt-2 inline-block rounded-full bg-green-800 px-4 py-1 text-sm text-white transition hover:bg-green-900"
+              >
+                {tool.button}
+              </a>
             </div>
-        </main>
-    </Layout>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

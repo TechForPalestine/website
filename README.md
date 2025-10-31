@@ -26,13 +26,14 @@ For CI environments, prefer a clean, reproducible install:
 npm ci
 ```
 
-
 ## Features
 
 ### Events System
+
 The `/events` page displays real-time events from a Notion database with automatic image caching. See [docs/EVENTS.md](docs/EVENTS.md) for detailed documentation.
 
 Key features:
+
 - Real-time polling for event updates
 - Cloudflare Worker proxy for persistent image caching
 - Graceful fallbacks for failed images

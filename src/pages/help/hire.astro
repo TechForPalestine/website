@@ -30,120 +30,123 @@ const contacts = [
 
 const resourceSections = [
   {
-    name: 'Recruitment Platforms',
+    name: "Recruitment Platforms",
     resources: [
       {
-        name: 'Apricot',
-        url: 'https://apricotinternational.org/',
-        logo: '/apricot.jpg',
+        name: "Apricot",
+        url: "https://apricotinternational.org/",
+        logo: "/apricot.jpg",
         description: `Apricot connects engineering talent in Palestine with international teams.`,
       },
       {
-        name: 'MENA Alliances',
-        url: 'https://menaalliances.com/jobsforpalestine/',
-        logo: '/mena-alliances-logo.webp',
+        name: "MENA Alliances",
+        url: "https://menaalliances.com/jobsforpalestine/",
+        logo: "/mena-alliances-logo.webp",
         description: `MENA Alliance sources tech talent from Palestine for global companies.`,
       },
       {
-        name: 'Gaza Sky Geeks',
-        url: 'https://gazaskygeeks.com/',
-        logo: '/gaza-sky-geeks-logo.png',
+        name: "Gaza Sky Geeks",
+        url: "https://gazaskygeeks.com/",
+        logo: "/gaza-sky-geeks-logo.png",
         description: `A leading tech hub in Gaza and the West Bank, fostering future tech leaders since 2011.`,
       },
       {
-        name: 'Manara.tech',
-        url: 'https://manara.tech/tech-jobs-for-palestine',
-        logo: '/manara.png',
+        name: "Manara.tech",
+        url: "https://manara.tech/tech-jobs-for-palestine",
+        logo: "/manara.png",
         description: `Connecting top tech talent in the MENA region to global jobs.`,
       },
       {
-        name: 'Rising from Ashes',
-        url: 'https://bees.to/hire-ps/',
-        logo: '/bees-logo-horizontal.webp',
+        name: "Rising from Ashes",
+        url: "https://bees.to/hire-ps/",
+        logo: "/bees-logo-horizontal.webp",
         description: `Rising Bees connects Palestinians with remote IT jobs.`,
       },
       {
-        name: 'TAP',
-        url: 'https://www.tapcareers.io/',
-        logo: '/tap-logo.svg',
+        name: "TAP",
+        url: "https://www.tapcareers.io/",
+        logo: "/tap-logo.svg",
         description: `TAP offers career acceleration in Palestine and Jordan with remote-ready talent.`,
       },
       {
-        name: 'Techtative',
-        url: 'https://techtative.io/',
-        logo: '/techtative-logo.png',
+        name: "Techtative",
+        url: "https://techtative.io/",
+        logo: "/techtative-logo.png",
         description: `Premier EOR in Palestine, helping global orgs tap into local expertise.`,
       },
       {
-        name: 'Olives and Heather',
-        url: 'https://www.olivesandheather.com/',
-        logo: '/olives-and-heather.png',
+        name: "Olives and Heather",
+        url: "https://www.olivesandheather.com/",
+        logo: "/olives-and-heather.png",
         description: `Empowering Palestinian marketers through global marketing excellence.`,
       },
       {
-        name: 'Gaza Talents',
-        url: 'https://gazatalents.com/en',
-        logo: '/gazatalents.png',
+        name: "Gaza Talents",
+        url: "https://gazatalents.com/en",
+        logo: "/gazatalents.png",
         description: `Quick access to skilled professionals from Gaza.`,
       },
       {
-        name: 'Youmna',
-        url: 'https://www.withyoumna.com/',
-        logo: '/youmna.png',
+        name: "Youmna",
+        url: "https://www.withyoumna.com/",
+        logo: "/youmna.png",
         description: `Remote Executive Assistants from Palestine — your "right hand".`,
       },
-    ]
+    ],
   },
   {
-    name: 'Freelance Networks',
+    name: "Freelance Networks",
     resources: [
       {
-        name: 'Dribble',
-        url: 'https://dribbble.com/freelance-ux-designers-for-hire-gaza-ps',
-        logo: '/dribbble-logo.png',
+        name: "Dribble",
+        url: "https://dribbble.com/freelance-ux-designers-for-hire-gaza-ps",
+        logo: "/dribbble-logo.png",
         description: `UX designers from Gaza offering freelance services.`,
       },
       {
-        name: 'Upwork',
-        url: 'https://www.upwork.com/hire/ps/',
-        logo: '/upwork.png',
+        name: "Upwork",
+        url: "https://www.upwork.com/hire/ps/",
+        logo: "/upwork.png",
         description: `Find Palestinian freelancers for your projects on Upwork.`,
       },
-    ]
-  }
+    ],
+  },
 ];
 
-const logoClasses = `h-10 w-auto md:h-12 lg:h-14`
+const logoClasses = `h-10 w-auto md:h-12 lg:h-14`;
 ---
 
-    <Layout title="Jobs for Palestinians" description="Find organizations that connect Palestinian job seekers with employers.">
-      <main>
-        <section class="py-24 px-6 sm:py-40 sm:px-16 md:px-20 lg:flex lg:flex-col lg:items-center">
-          <div class="lg:max-w-2xl">
-            <h1 class="text-4xl font-normal sm:text-5xl md:text-6xl">
-              Hire <span class="font-bold">top talent</span> from Palestine and the Middle East
-            </h1>
-            <p class="mt-4 text-xl sm:text-2xl md:text-3xl">
-              Get help hiring engineers, designers, and technologists from across the region.
-            </p>
-            <p class="mt-12 text-lg md:mt-20 md:text-xl">
-              Know another good resource? Let us know at:
-              {
-                contacts.map((contact) => (
-                    <a
-                        href={contact.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-block relative top-1.5 ml-1 text-zinc-950/60 hover:text-zinc-950/80"
-                    >
-                      <span class="sr-only">{contact.name}</span>
-                      <Icon name={contact.icon} class="h-6 w-6" />
-                    </a>
-                ))
-              }
-            </p>
-          </div>
-          <ResourceList client:only="react" sections={resourceSections} />
-        </section>
-      </main>
-    </Layout>
+<Layout
+  title="Jobs for Palestinians"
+  description="Find organizations that connect Palestinian job seekers with employers."
+>
+  <main>
+    <section class="px-6 py-24 sm:px-16 sm:py-40 md:px-20 lg:flex lg:flex-col lg:items-center">
+      <div class="lg:max-w-2xl">
+        <h1 class="text-4xl font-normal sm:text-5xl md:text-6xl">
+          Hire <span class="font-bold">top talent</span> from Palestine and the Middle East
+        </h1>
+        <p class="mt-4 text-xl sm:text-2xl md:text-3xl">
+          Get help hiring engineers, designers, and technologists from across the region.
+        </p>
+        <p class="mt-12 text-lg md:mt-20 md:text-xl">
+          Know another good resource? Let us know at:
+          {
+            contacts.map((contact) => (
+              <a
+                href={contact.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="relative top-1.5 ml-1 inline-block text-zinc-950/60 hover:text-zinc-950/80"
+              >
+                <span class="sr-only">{contact.name}</span>
+                <Icon name={contact.icon} class="h-6 w-6" />
+              </a>
+            ))
+          }
+        </p>
+      </div>
+      <ResourceList client:only="react" sections={resourceSections} />
+    </section>
+  </main>
+</Layout>

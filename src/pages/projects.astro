@@ -12,41 +12,45 @@ console.log("SSR: Skipping server-side fetch for new projects, letting client lo
 ---
 
 <Layout title="Projects">
-    <main>
-        <PageHeader
-            overline="Tech for Palestine"
-            title="Incubator Projects"
-            subtitle="What is the incubator?"
-            subtitleLink="/incubator"
-        />
-    </main>
+  <main>
+    <PageHeader
+      overline="Tech for Palestine"
+      title="Incubator Projects"
+      subtitle="What is the incubator?"
+      subtitleLink="/incubator"
+    />
+  </main>
 
-    <ProjectsNewComponent projects={projects} loading={loading} client:only="react" />
+  <ProjectsNewComponent projects={projects} loading={loading} client:only="react" />
 
-    <!-- Call to Action -->
-    <div class="mt-16 mb-8 relative">
-        <div class="absolute inset-0 flex justify-center items-center">
-            <div class="w-full border-t border-gray-300"></div>
-        </div>
-
-        <div class="relative flex justify-center">
-            <a
-                href="https://techforpalestine.org/project-application-form"
-                target="_blank"
-                class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 transform hover:scale-105 ease-in-out z-10 text-lg sm:text-xl md:text-2xl"
-            >
-                Apply to the T4P Incubator Today!
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 ml-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-            </a>
-        </div>
+  <!-- Call to Action -->
+  <div class="relative mb-8 mt-16">
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-full border-t border-gray-300"></div>
     </div>
+
+    <div class="relative flex justify-center">
+      <a
+        href="https://techforpalestine.org/project-application-form"
+        target="_blank"
+        class="z-10 inline-flex transform items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-3 text-lg font-semibold text-white shadow-xl transition-colors duration-300 ease-in-out hover:scale-105 hover:from-blue-600 hover:to-blue-800 sm:text-xl md:text-2xl"
+      >
+        Apply to the T4P Incubator Today!
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="ml-2 h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
 </Layout>
