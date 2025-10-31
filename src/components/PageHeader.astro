@@ -1,41 +1,39 @@
 ---
-    interface Props {
-    overline?: string;         // Small label above the heading
-    title: string;             // Main heading (bold and large)
-    subtitle?: string;         // Optional subtitle or link
-    subtitleLink?: string;     // Optional URL for subtitle
+interface Props {
+  overline?: string; // Small label above the heading
+  title: string; // Main heading (bold and large)
+  subtitle?: string; // Optional subtitle or link
+  subtitleLink?: string; // Optional URL for subtitle
 }
 
-const {
-    overline = "",
-    title,
-    subtitle = "",
-    subtitleLink = "",
-} = Astro.props;
+const { overline = "", title, subtitle = "", subtitleLink = "" } = Astro.props;
 ---
 
-    <div class="text-center max-w-5xl mx-auto px-4 py-10 sm:py-12">
-        {overline && (
-            <p class="text-green-700 text-xl sm:text-2xl font-medium mb-2">
-                {overline}
-            </p>
+<div class="mx-auto max-w-5xl px-4 py-10 text-center sm:py-12">
+  {overline && <p class="mb-2 text-xl font-medium text-green-700 sm:text-2xl">{overline}</p>}
+
+  <h1
+    class="text-4xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-5xl md:text-6xl"
+  >
+    {title}
+  </h1>
+
+  {
+    subtitle && (
+      <p class="mt-6 text-lg text-zinc-600 sm:text-xl">
+        {subtitleLink ? (
+          <a
+            href={subtitleLink}
+            class="underline decoration-dotted underline-offset-4 transition hover:text-zinc-900"
+          >
+            {subtitle}
+          </a>
+        ) : (
+          subtitle
         )}
+      </p>
+    )
+  }
 
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-            {title}
-        </h1>
-
-        {subtitle && (
-            <p class="mt-6 text-lg sm:text-xl text-zinc-600">
-                {subtitleLink ? (
-                    <a href={subtitleLink} class="underline underline-offset-4 decoration-dotted hover:text-zinc-900 transition">
-                        {subtitle}
-                    </a>
-                ) : (
-                    subtitle
-                )}
-            </p>
-        )}
-
-        <hr class="mt-10 w-24 h-1 mx-auto bg-zinc-800 border-none rounded-full" />
-    </div>
+  <hr class="mx-auto mt-10 h-1 w-24 rounded-full border-none bg-zinc-800" />
+</div>

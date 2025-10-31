@@ -9,24 +9,31 @@ import "../styles/base.css";
     <section class="relative bg-gradient-to-r from-green-100 to-blue-100">
       <div class="container mx-auto px-6 py-20 text-center">
         <h1 class="text-5xl font-bold text-gray-800">The Tech for Palestine Incubator</h1>
-        <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-700">
-          Tech for Palestine's mission is to create a vast ecosystem of projects for Palestinian liberation that push back against racism and occupation and address every part of the hasbara ecosystem, as well as promoting, advocating, and sharing the unique aspects of Palestine's struggle for liberation.
+        <p class="mx-auto mt-6 max-w-2xl text-xl text-gray-700">
+          Tech for Palestine's mission is to create a vast ecosystem of projects for Palestinian
+          liberation that push back against racism and occupation and address every part of the
+          hasbara ecosystem, as well as promoting, advocating, and sharing the unique aspects of
+          Palestine's struggle for liberation.
         </p>
       </div>
     </section>
 
     <!-- Theory of Change Section -->
     <section class="container mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         <div>
-          <h2 class="text-3xl font-semibold text-gray-800 mb-4">Our Theory of Change</h2>
+          <h2 class="mb-4 text-3xl font-semibold text-gray-800">Our Theory of Change</h2>
           <p class="text-lg text-gray-700">
-            Our theory of change is that thousands of high-impact, pro-Palestinian advocacy projects are needed to counter the massive flood of anti-Palestinian propaganda, especially in the west. We started a project incubator because we saw many highly motivated, dedicated people with great ideas struggling to bring their ideas to life and produce the outcomes they were after. Our main purpose is to provide support.
+            Our theory of change is that thousands of high-impact, pro-Palestinian advocacy projects
+            are needed to counter the massive flood of anti-Palestinian propaganda, especially in
+            the west. We started a project incubator because we saw many highly motivated, dedicated
+            people with great ideas struggling to bring their ideas to life and produce the outcomes
+            they were after. Our main purpose is to provide support.
           </p>
         </div>
         <div class="flex justify-center">
           <!-- Replace the image source with an appropriate visual if available -->
-          <img src="/incubator-vision.jpg" alt="Incubator Vision" class="rounded-lg shadow-lg">
+          <img src="/incubator-vision.jpg" alt="Incubator Vision" class="rounded-lg shadow-lg" />
         </div>
       </div>
     </section>
@@ -34,41 +41,49 @@ import "../styles/base.css";
     <!-- How It Works Section -->
     <section class="bg-gray-50">
       <div class="container mx-auto px-6 py-16">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">How It Works</h2>
-        <p class="text-lg text-gray-700 mb-8 text-center">
-          We accept a limited number of projects to support with our expertise, network, and funding, but are happy to promote other community and affiliated projects that could use some airtime.
+        <h2 class="mb-6 text-center text-3xl font-semibold text-gray-800">How It Works</h2>
+        <p class="mb-8 text-center text-lg text-gray-700">
+          We accept a limited number of projects to support with our expertise, network, and
+          funding, but are happy to promote other community and affiliated projects that could use
+          some airtime.
         </p>
-        <div class="space-y-6 max-w-3xl mx-auto">
-          {[
-            "Fill out and submit the incubator application",
-            "If we understand and appreciate your project, we will request an interview",
-            "If we don't understand or think it isn't a fit, we may ask for more info or send a rejection email (no harm/foul)",
-            "If accepted: onboarding email, book a strategy call, attend an onboarding meeting, and gain access to Discord channels and Notion"
-          ].map((step) => (
-            <div class="flex items-start">
-              <div class="flex-shrink-0">
-                <span class="inline-block bg-green-500 text-white rounded-full p-2">
-                  <!-- Check Icon -->
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </span>
+        <div class="mx-auto max-w-3xl space-y-6">
+          {
+            [
+              "Fill out and submit the incubator application",
+              "If we understand and appreciate your project, we will request an interview",
+              "If we don't understand or think it isn't a fit, we may ask for more info or send a rejection email (no harm/foul)",
+              "If accepted: onboarding email, book a strategy call, attend an onboarding meeting, and gain access to Discord channels and Notion",
+            ].map((step) => (
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <span class="inline-block rounded-full bg-green-500 p-2 text-white">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <div class="ml-4">
+                  <p class="text-lg text-gray-700">{step}</p>
+                </div>
               </div>
-              <div class="ml-4">
-                <p class="text-lg text-gray-700">{step}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
       </div>
     </section>
 
     <!-- What You Get & What We Expect Section -->
     <section class="container mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
         <div>
-          <h2 class="text-3xl font-semibold text-gray-800 mb-4">What You Get</h2>
-          <ul class="list-disc pl-8 text-lg text-gray-700 space-y-2">
+          <h2 class="mb-4 text-3xl font-semibold text-gray-800">What You Get</h2>
+          <ul class="list-disc space-y-2 pl-8 text-lg text-gray-700">
             <li>Join the Discord community</li>
             <li>Office Hours or 1v1 Mentorship</li>
             <li>Volunteering/Marketing help</li>
@@ -76,8 +91,8 @@ import "../styles/base.css";
           </ul>
         </div>
         <div>
-          <h2 class="text-3xl font-semibold text-gray-800 mb-4">What We Expect</h2>
-          <ul class="list-disc pl-8 text-lg text-gray-700 space-y-2">
+          <h2 class="mb-4 text-3xl font-semibold text-gray-800">What We Expect</h2>
+          <ul class="list-disc space-y-2 pl-8 text-lg text-gray-700">
             <li>Dedication to impact</li>
             <li>Office hours attendance</li>
             <li>Community engagement</li>
@@ -90,8 +105,8 @@ import "../styles/base.css";
     <!-- We Don't Require Section -->
     <section class="bg-gray-50">
       <div class="container mx-auto px-6 py-16">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-4 text-center">We Don't Require</h2>
-        <ul class="list-disc pl-8 text-lg text-gray-700 space-y-2 max-w-md mx-auto">
+        <h2 class="mb-4 text-center text-3xl font-semibold text-gray-800">We Don't Require</h2>
+        <ul class="mx-auto max-w-md list-disc space-y-2 pl-8 text-lg text-gray-700">
           <li>t4p branding</li>
           <li>a cut of your profit</li>
           <li>use of our resources for organization</li>

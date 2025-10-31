@@ -12,54 +12,69 @@ const toggle = () => {
 const currentRoute = Astro.url.pathname;
 
 const navigation: Map<string, { href: string; submenu: [string, string][] | null }> = new Map([
-  ["Home", {
-    href: "/",
-    submenu: null
-  }],
-  ["About", {
-    href: "/about",
-    submenu: [
-      ["Our Organization", "/about"],
-      // ["Mission & Vision", "/coming-soon"],
-      ["Team", "/team"],
-      ["Media", "/media"],
-      ["Contact Us", "mailto:contact@techforpalestine.org"]
-    ] as [string, string][]
-  }],
-  ["Incubator", {
-    href: "/incubator",
-    submenu: [
-      ["Overview", "/incubator"],
-      ["Projects", "/projects"],
-      ["Ideas", "/ideas"],
-      ["Tools", "/tools"]
-    ] as [string, string][]
-  }],
-  ["Get Involved", {
-    href: "/get-involved",
-    submenu: [
-      ["Overview", "/get-involved"],
-      ["Join our Discord", "https://techforpalestine.org/discord-invite"],
-      ["Entrepreneurs for Palestine", "/e4p"],
-      // ["Investors for Palestine", "/coming-soon"],
-      ["Be a Mentor", "/mentorship"],
-      ["Volunteer", "/volunteer"],
-      ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
-      ["Hire Palestinians", "/help/hire"]
-    ] as [string, string][]
-  }],
-  ["Community Events and Updates", {
-    href: "/faq",
-    submenu: [
-      ["Past Updates", "https://updates.techforpalestine.org"],
-      ["London Community Gathering", "/london-gathering"],
-      ["Past Events", "/events"],
-      // ["Shopping Ethically", "/coming-soon"],
-      // ["How to Boycott", "/coming-soon"],
-      // ["Tech Complicity", "/coming-soon"],
-      ["FAQ", "/faq"]
-    ] as [string, string][]
-  }]
+  [
+    "Home",
+    {
+      href: "/",
+      submenu: null,
+    },
+  ],
+  [
+    "About",
+    {
+      href: "/about",
+      submenu: [
+        ["Our Organization", "/about"],
+        // ["Mission & Vision", "/coming-soon"],
+        ["Team", "/team"],
+        ["Media", "/media"],
+        ["Contact Us", "mailto:contact@techforpalestine.org"],
+      ] as [string, string][],
+    },
+  ],
+  [
+    "Incubator",
+    {
+      href: "/incubator",
+      submenu: [
+        ["Overview", "/incubator"],
+        ["Projects", "/projects"],
+        ["Ideas", "/ideas"],
+        ["Tools", "/tools"],
+      ] as [string, string][],
+    },
+  ],
+  [
+    "Get Involved",
+    {
+      href: "/get-involved",
+      submenu: [
+        ["Overview", "/get-involved"],
+        ["Join our Discord", "https://techforpalestine.org/discord-invite"],
+        ["Entrepreneurs for Palestine", "/e4p"],
+        // ["Investors for Palestine", "/coming-soon"],
+        ["Be a Mentor", "/mentorship"],
+        ["Volunteer", "/volunteer"],
+        ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
+        ["Hire Palestinians", "/help/hire"],
+      ] as [string, string][],
+    },
+  ],
+  [
+    "Community Events and Updates",
+    {
+      href: "/faq",
+      submenu: [
+        ["Past Updates", "https://updates.techforpalestine.org"],
+        ["London Community Gathering", "/london-gathering"],
+        ["Past Events", "/events"],
+        // ["Shopping Ethically", "/coming-soon"],
+        // ["How to Boycott", "/coming-soon"],
+        // ["Tech Complicity", "/coming-soon"],
+        ["FAQ", "/faq"],
+      ] as [string, string][],
+    },
+  ],
 ]);
 
 // TODO: MOVE BANNER TO LAYOUT

@@ -14,51 +14,47 @@ export function capitalizeFirstLetter(string: string) {
 
 // Get all entries from the projects collection
 const projectEntries = await getCollection("projects");
-const project_items = projectEntries.map(entry => {
-  return {
-    name: entry.data.title,
-    description: entry.body || " ",
-    discord_channel_url: entry.data.channel,
-    website_url: entry.data.url || " "
-  };
-}).sort((a, b) => a.name.localeCompare(b.name));
+const project_items = projectEntries
+  .map((entry) => {
+    return {
+      name: entry.data.title,
+      description: entry.body || " ",
+      discord_channel_url: entry.data.channel,
+      website_url: entry.data.url || " ",
+    };
+  })
+  .sort((a, b) => a.name.localeCompare(b.name));
 ---
 
-<section class="py-24 bg-white" id="projects-list">
+<section class="bg-white py-24" id="projects-list">
   <Container>
     <div class="space-y-8">
-      <div class="text-center space-y-2">
-        <h2 class="font-medium text-4xl">Browse our projects</h2>
+      <div class="space-y-2 text-center">
+        <h2 class="text-4xl font-medium">Browse our projects</h2>
         <div class="py-2">
           <DiscordButton>Join our Discord to explore projects</DiscordButton>
         </div>
       </div>
-      <div
-        class="divide-y divide-solid border rounded-md overflow-hidden bg-white shadow-sm"
-      >
+      <div class="divide-y divide-solid overflow-hidden rounded-md border bg-white shadow-sm">
         {
           project_items.map(({ name, description, discord_channel_url }) => (
-            <div class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50">
-              <div class="flex-grow flex gap-4 items-center">
+            <div class="flex items-center justify-between gap-4 p-4 text-zinc-900 hover:bg-zinc-50">
+              <div class="flex flex-grow items-center gap-4">
                 <img
-                  src={
-                    "https://avatars.githubusercontent.com/u/151086389?s=200&v=4"
-                  }
-                  class="w-10 h-10 rounded-lg"
+                  src={"https://avatars.githubusercontent.com/u/151086389?s=200&v=4"}
+                  class="h-10 w-10 rounded-lg"
                 />
                 <div>
                   <h3 class="font-semibold">{name}</h3>
-                  <p class="text-ellipsis overflow-hidden text-sm text-zinc-600">
-                    {description.length > 120
-                      ? description.slice(0, 120) + "..."
-                      : description}
+                  <p class="overflow-hidden text-ellipsis text-sm text-zinc-600">
+                    {description.length > 120 ? description.slice(0, 120) + "..." : description}
                   </p>
                 </div>
               </div>
               <div class="flex flex-col md:flex-row">
                 {discord_channel_url && (
                   <a
-                    class="flex justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50"
+                    class="flex items-center justify-between p-4 text-zinc-900 hover:bg-zinc-50"
                     href={discord_channel_url}
                     target="_blank"
                   >

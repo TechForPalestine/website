@@ -4,38 +4,26 @@ import DiscordButton from "../structures/DiscordButton.astro";
 import { Icon } from "astro-icon/components";
 import "../styles/base.css";
 
-const streaming = [
-  "https://www.icj-cij.org/home"
-];
+const streaming = ["https://www.icj-cij.org/home"];
 ---
 
 <Layout title="ICJ Hearing Information">
-  <script
-    src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2"
-    async
-    defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
   <main class="bg-white">
     <section class="w-full">
       <div
         class="bg-[url('https://nvvn.nl/wp-content/uploads/2013/08/The-International-Court-of-Justice-ICJ-min.png')] bg-cover bg-center"
       >
-        <div
-          class="relative isolate bg-gray-900/60 px-6 py-24 sm:py-32 lg:px-8"
-        >
-          <div class="mx-auto max-w-2xl text-center space-y-8">
-            <h2
-              class="text-4xl font-bold tracking-tight text-white sm:text-6xl"
-            >
+        <div class="relative isolate bg-gray-900/60 px-6 py-24 sm:py-32 lg:px-8">
+          <div class="mx-auto max-w-2xl space-y-8 text-center">
+            <h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">
               Watch ICJ Hearing
             </h2>
             <p class="text-lg leading-8 text-white">
-              Support South Africa's call for an end to #GazaGenocide by tuning
-              into the International Court of Justice hearing this Thursday,
-              January 11th 2024
+              Support South Africa's call for an end to #GazaGenocide by tuning into the
+              International Court of Justice hearing this Thursday, January 11th 2024
             </p>
-            <div
-              class="flex flex-col md:flex-row gap-2 items-center justify-center relative"
-            >
+            <div class="relative flex flex-col items-center justify-center gap-2 md:flex-row">
               <add-to-calendar-button
                 styleLight="--btn-background: #01B861; --btn-border: #00ca58; --btn-padding-y: 7px; --btn-padding-x: 7px;  --btn-text: #fff; --font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';"
                 styleDark="--btn-background: #01B861;"
@@ -50,9 +38,7 @@ const streaming = [
                 timeZone="Europe/Amsterdam"
                 hideBranding={true}></add-to-calendar-button>
               <span class="text-white">Or</span>
-              <DiscordButton
-                href="https://discord.com/invite/wkgAPFnQ?event=1194405485500170261"
-              >
+              <DiscordButton href="https://discord.com/invite/wkgAPFnQ?event=1194405485500170261">
                 Listen Discord
               </DiscordButton>
             </div>
@@ -60,25 +46,21 @@ const streaming = [
         </div>
       </div>
     </section>
-    <section
-      class="w-full mx-auto max-w-screen-md space-y-12 py-12 md:py-24 px-6 md:px-8 bg-white"
-    >
-      <div class="space-y-6 text-sm text-justify">
+    <section class="mx-auto w-full max-w-screen-md space-y-12 bg-white px-6 py-12 md:px-8 md:py-24">
+      <div class="space-y-6 text-justify text-sm">
         <p>
-          On Thursday, January 11th 2024, the International Court of Justice
-          will hold a public hearing at the Peace Palace in The Hague, the seat
-          of the Court, in the proceedings instituted by South Africa against
-          Israel on 29 December 2023.
+          On Thursday, January 11th 2024, the International Court of Justice will hold a public
+          hearing at the Peace Palace in The Hague, the seat of the Court, in the proceedings
+          instituted by South Africa against Israel on 29 December 2023.
         </p>
         <p>
-          The hearing will be devoted to the Request for the indication of
-          provisional measures contained in South Africa’s Application. <b
-            >In its Request, South Africa asks the Court to indicate provisional
-            measures in order to “protect against further, severe and
-            irreparable harm to the rights of the Palestinian people under the
-            Genocide Convention” and “to ensure Israel’s compliance with its
-            obligations under the Genocide Convention not to engage in genocide,
-            and to prevent and to punish genocide”.</b
+          The hearing will be devoted to the Request for the indication of provisional measures
+          contained in South Africa’s Application. <b
+            >In its Request, South Africa asks the Court to indicate provisional measures in order
+            to “protect against further, severe and irreparable harm to the rights of the
+            Palestinian people under the Genocide Convention” and “to ensure Israel’s compliance
+            with its obligations under the Genocide Convention not to engage in genocide, and to
+            prevent and to punish genocide”.</b
           >
         </p>
         <p>
@@ -89,25 +71,23 @@ const streaming = [
         </p>
       </div>
       <div class="space-y-4">
-        <h2 class="font-medium text-xl">Streams</h2>
-        <div
-          class="divide-y divide-solid border rounded-md overflow-hidden bg-white shadow-sm"
-        >
+        <h2 class="text-xl font-medium">Streams</h2>
+        <div class="divide-y divide-solid overflow-hidden rounded-md border bg-white shadow-sm">
           {
             streaming.map((item) => (
-              <div class="flex gap-4 justify-between items-center text-zinc-900 p-4 hover:bg-zinc-50">
-                <div class="flex-grow flex gap-4 items-center">
+              <div class="flex items-center justify-between gap-4 p-4 text-zinc-900 hover:bg-zinc-50">
+                <div class="flex flex-grow items-center gap-4">
                   <div>
                     <h3 class="font-semibold">{item}</h3>
                   </div>
                 </div>
                 <div class="flex flex-col md:flex-row">
                   <a
-                    class="flex gap-2 justify-between items-center text-zinc-900 px-2 py-1 rounded border hover:border-gray-300 hover:shadow-sm bg-white"
+                    class="flex items-center justify-between gap-2 rounded border bg-white px-2 py-1 text-zinc-900 hover:border-gray-300 hover:shadow-sm"
                     href={item}
                     target="_blank"
                   >
-                    <Icon name="tabler:video" class="w-4 h-4" />
+                    <Icon name="tabler:video" class="h-4 w-4" />
                     Watch
                   </a>
                 </div>

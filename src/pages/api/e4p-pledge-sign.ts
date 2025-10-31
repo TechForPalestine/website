@@ -1,123 +1,135 @@
-import type { APIRoute } from 'astro';
-import { Client } from '@notionhq/client';
-import { getEnv } from '../../utils/getEnv.js';
+import type { APIRoute } from "astro";
+import { Client } from "@notionhq/client";
+import { getEnv } from "../../utils/getEnv.js";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const formData = await request.formData();
-    
+
     const pledgeData = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      company: formData.get('company') as string,
-      position: formData.get('position') as string,
-      linkedin: formData.get('linkedin') as string,
-      agreement: formData.get('agreement') === 'on',
-      submittedAt: new Date().toISOString()
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      company: formData.get("company") as string,
+      position: formData.get("position") as string,
+      linkedin: formData.get("linkedin") as string,
+      agreement: formData.get("agreement") === "on",
+      submittedAt: new Date().toISOString(),
     };
 
-    if (!pledgeData.name || !pledgeData.email || !pledgeData.company || !pledgeData.position || !pledgeData.linkedin || !pledgeData.agreement) {
-      return new Response(JSON.stringify({ error: 'All fields are required and agreement must be checked' }), {
-        status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
+    if (
+      !pledgeData.name ||
+      !pledgeData.email ||
+      !pledgeData.company ||
+      !pledgeData.position ||
+      !pledgeData.linkedin ||
+      !pledgeData.agreement
+    ) {
+      return new Response(
+        JSON.stringify({ error: "All fields are required and agreement must be checked" }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
     }
 
-    const notionSecret = getEnv('NOTION_SECRET', locals);
-    const databaseId = getEnv('NOTION_SIGNATORIES_DB_ID', locals);
-    
-    const notion = new Client({ 
-      auth: notionSecret
+    const notionSecret = getEnv("NOTION_SECRET", locals);
+    const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);
+
+    const notion = new Client({
+      auth: notionSecret,
     });
-    
+
     if (!databaseId) {
       throw new Error("NOTION_SIGNATORIES_DB_ID not configured");
     }
 
     const response = await notion.pages.create({
       parent: {
-        database_id: databaseId
+        database_id: databaseId,
       },
       properties: {
-        "Name": {
+        Name: {
           title: [
             {
               text: {
-                content: pledgeData.name
-              }
-            }
-          ]
+                content: pledgeData.name,
+              },
+            },
+          ],
         },
-        "Email": {
-          email: pledgeData.email
+        Email: {
+          email: pledgeData.email,
         },
-        "Company": {
+        Company: {
           rich_text: [
             {
               text: {
-                content: pledgeData.company
-              }
-            }
-          ]
+                content: pledgeData.company,
+              },
+            },
+          ],
         },
-        "Position": {
+        Position: {
           rich_text: [
             {
               text: {
-                content: pledgeData.position
-              }
-            }
-          ]
+                content: pledgeData.position,
+              },
+            },
+          ],
         },
         "LinkedIn URL": {
-          url: pledgeData.linkedin
+          url: pledgeData.linkedin,
         },
-        "Approved": {
-          checkbox: false
+        Approved: {
+          checkbox: false,
         },
         "Signed At": {
           date: {
-            start: new Date().toISOString()
-          }
-        }
-      }
+            start: new Date().toISOString(),
+          },
+        },
+      },
     });
 
     const signatory = {
       id: response.id,
-      url: `https://notion.so/${response.id.replace(/-/g, '')}`,
+      url: `https://notion.so/${response.id.replace(/-/g, "")}`,
       name: pledgeData.name,
       company: pledgeData.company,
-      position: pledgeData.position
+      position: pledgeData.position,
     };
 
-    return new Response(JSON.stringify({ 
-      success: true, 
-      message: 'Pledge signed successfully',
-      signatory
-    }), {
-      status: 201,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    });
-
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Pledge signed successfully",
+        signatory,
+      }),
+      {
+        status: 201,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
+    );
   } catch (error) {
-    console.error('Error processing pledge:', error);
-    
-    return new Response(JSON.stringify({ error: 'Failed to process pledge' }), {
+    console.error("Error processing pledge:", error);
+
+    return new Response(JSON.stringify({ error: "Failed to process pledge" }), {
       status: 500,
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     });
   }

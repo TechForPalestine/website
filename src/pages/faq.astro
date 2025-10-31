@@ -1,33 +1,30 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import FAQList from '../components/FAQList.tsx';
+import Layout from "../layouts/Layout.astro";
+import FAQList from "../components/FAQList.tsx";
 import "../styles/base.css";
-
 ---
 
-    <Layout title="FAQ">
-        <main>
-            <div class="relative isolate">
-                <div class="px-6 py-10 sm:py-16 lg:px-8">
-                    <div class="mx-auto max-w-4xl">
-                        <!-- Title -->
-                        <h1 class="mt-2 text-4xl sm:text-6xl font-extrabold tracking-tight text-gray-900 text-center">
-                            <span class="text-green-800">Frequently Asked Questions</span>
-                        </h1>
+<Layout title="FAQ">
+  <main>
+    <div class="relative isolate">
+      <div class="px-6 py-10 sm:py-16 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <!-- Title -->
+          <h1
+            class="mt-2 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
+          >
+            <span class="text-green-800">Frequently Asked Questions</span>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </main>
 
-                    </div>
-
-                </div>
-            </div>
-        </main>
-
-        <!-- FAQ List Section -->
-        <section
-            style="
+  <!-- FAQ List Section -->
+  <section style="
     max-width: 700px;
     margin: 2rem auto;
     padding: 0 1rem;">
-            <FAQList faqs={[]} client:only="react" />
-        </section>
-
-    </Layout>
+    <FAQList faqs={[]} client:only="react" />
+  </section>
+</Layout>

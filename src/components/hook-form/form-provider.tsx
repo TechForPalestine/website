@@ -1,5 +1,5 @@
-import {  FormProvider as Form } from 'react-hook-form';
-import type { UseFormReturn, SubmitHandler } from 'react-hook-form';
+import { FormProvider as Form } from "react-hook-form";
+import type { UseFormReturn, SubmitHandler } from "react-hook-form";
 
 // ----------------------------------------------------------------------
 
@@ -14,10 +14,10 @@ export default function FormProvider({ children, onSubmit, methods }: Props) {
     <Form {...methods}>
       <form
         onSubmit={(e) => {
-          console.log('🔥 Form submit event triggered!');
+          console.log("🔥 Form submit event triggered!");
           methods.handleSubmit(
             onSubmit ?? (() => {}),
-            (errors) => console.log('❌ Validation Errors:', errors) // Log errors
+            (errors) => console.log("❌ Validation Errors:", errors) // Log errors
           )(e);
         }}
       >

@@ -1,40 +1,40 @@
-import axios from 'axios';
-import { getEnv } from '../utils/getEnv.js';
+import axios from "axios";
+import { getEnv } from "../utils/getEnv.js";
 
-const API_URL = getEnv('PUBLIC_API_URL');
-const SECRET_KEY = getEnv('PUBLIC_SECRET_KEY');
+const API_URL = getEnv("PUBLIC_API_URL");
+const SECRET_KEY = getEnv("PUBLIC_SECRET_KEY");
 
-console.log('PUBLIC_API_URL:', API_URL);
-console.log('PUBLIC_SECRET_KEY:', SECRET_KEY);
+console.log("PUBLIC_API_URL:", API_URL);
+console.log("PUBLIC_SECRET_KEY:", SECRET_KEY);
 
 // Define Axios instance with headers
 const axiosInstance = axios.create({
   baseURL: API_URL, // Set the base URL here
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     Authorization: SECRET_KEY,
   },
 });
 
 // ✅ Fetch form fields from API
-export const fetchFormFields = async (url:any) => {
+export const fetchFormFields = async (url: any) => {
   try {
     const response = await axiosInstance.get(`/api/method${url}`); // Endpoint relative to the base URL
     return response.data;
   } catch (error: any) {
-    throw error.response?.data?.message || 'Failed to load form fields';
+    throw error.response?.data?.message || "Failed to load form fields";
   }
-};// ✅ Fetch form fields from API
-export const fetchFieldData = async (url:any) => {
+}; // ✅ Fetch form fields from API
+export const fetchFieldData = async (url: any) => {
   try {
     const response = await axiosInstance.get(url); // Endpoint relative to the base URL
     return response.data;
   } catch (error: any) {
-    throw error.response?.data?.message || 'Failed to load form fields';
+    throw error.response?.data?.message || "Failed to load form fields";
   }
 };
 
-export const convertToFormData = (data: any, form = new FormData(), parentKey = '') => {
+export const convertToFormData = (data: any, form = new FormData(), parentKey = "") => {
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
       const value = data[key];
@@ -44,7 +44,7 @@ export const convertToFormData = (data: any, form = new FormData(), parentKey = 
         form.append(newKey, value);
       }
 
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
         // If the value is an object, stringify it
         form.append(newKey, JSON.stringify(value));
       } else if (Array.isArray(value)) {
@@ -67,7 +67,7 @@ export const submitForm = async (url: any, formData: any) => {
     // Send the FormData object via POST
     const response = await axiosInstance.post(`/api/method${url}`, form, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
 

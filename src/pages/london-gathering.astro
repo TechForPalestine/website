@@ -7,15 +7,12 @@ import "../styles/base.css";
 // Fetch data server-side for faster initial load
 let agendaData: any = { agendaItems: [], speakers: [] };
 try {
-    agendaData = await fetchNotionAgenda(Astro.locals);
+  agendaData = await fetchNotionAgenda(Astro.locals);
 } catch (error) {
-    console.error('Error fetching agenda data:', error);
+  console.error("Error fetching agenda data:", error);
 }
 ---
 
 <Layout title="Tech for Palestine Gathering - London">
-    <LondonGatheringComponent
-        client:only="react"
-        initialAgendaData={agendaData}
-    />
+  <LondonGatheringComponent client:only="react" initialAgendaData={agendaData} />
 </Layout>

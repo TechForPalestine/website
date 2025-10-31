@@ -6,53 +6,63 @@ import "../styles/base.css";
 <Layout title="Tech For Palestine">
   <main class="bg-white">
     <!-- Hero Section -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 items-center min-h-screen px-6 lg:px-8">
-      <div class="space-y-8 max-w-2xl">
-        <h1 class="text-5xl lg:text-6xl font-bold tracking-tight text-black">Tech for Palestine</h1>
-        <p class="text-lg text-black leading-relaxed">
+    <section class="grid min-h-screen grid-cols-1 items-center px-6 lg:grid-cols-2 lg:px-8">
+      <div class="max-w-2xl space-y-8">
+        <h1 class="text-5xl font-bold tracking-tight text-black lg:text-6xl">Tech for Palestine</h1>
+        <p class="text-lg leading-relaxed text-black">
           Tech for Palestine ("T4P") is first and foremost an incubator for advocacy projects.
         </p>
-        <p class="text-lg text-black leading-relaxed">
-          We rally thousands of volunteers from across the tech world — founders, engineers, marketers, investors, and more — all committed to Palestinian liberation. Our projects get what they need to win: volunteers, mentorship, marketing, funding, and a values-aligned network. We also run dedicated communities that connect entrepreneurs and investors so they can back each other in building high-impact advocacy work.
+        <p class="text-lg leading-relaxed text-black">
+          We rally thousands of volunteers from across the tech world — founders, engineers,
+          marketers, investors, and more — all committed to Palestinian liberation. Our projects get
+          what they need to win: volunteers, mentorship, marketing, funding, and a values-aligned
+          network. We also run dedicated communities that connect entrepreneurs and investors so
+          they can back each other in building high-impact advocacy work.
         </p>
         <div class="pt-4">
           <a
             href="/get-involved"
-            class="inline-block px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+            class="inline-block rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             Get Involved
           </a>
         </div>
       </div>
       <div class="hidden lg:block">
-        <div class="w-full h-96 border-2 border-black rounded-lg bg-gray-50 flex items-center justify-center">
+        <div
+          class="flex h-96 w-full items-center justify-center rounded-lg border-2 border-black bg-gray-50"
+        >
           <span class="text-gray-500">Image Placeholder</span>
         </div>
       </div>
     </section>
 
     <!-- The T4P Incubator Section -->
-    <section class="py-20 px-6 lg:px-8 text-center">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-bold text-black mb-8">The T4P Incubator</h2>
-        <div class="text-left space-y-6 mb-12">
-          <p class="text-lg text-black leading-relaxed">
-            The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine. We support projects — whether collections of individuals, registered non-profits, or even companies — whose mission helps Palestine, especially advocacy groups building technical products or in the tech space.
+    <section class="px-6 py-20 text-center lg:px-8">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="mb-8 text-4xl font-bold text-black lg:text-5xl">The T4P Incubator</h2>
+        <div class="mb-12 space-y-6 text-left">
+          <p class="text-lg leading-relaxed text-black">
+            The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work
+            towards a Free Palestine. We support projects — whether collections of individuals,
+            registered non-profits, or even companies — whose mission helps Palestine, especially
+            advocacy groups building technical products or in the tech space.
           </p>
-          <p class="text-lg text-black leading-relaxed">
-            The Incubator is free, and provides volunteers, marketing support, mentorship, and connections to the broader Palestinian advocacy ecosystem.
+          <p class="text-lg leading-relaxed text-black">
+            The Incubator is free, and provides volunteers, marketing support, mentorship, and
+            connections to the broader Palestinian advocacy ecosystem.
           </p>
         </div>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col justify-center gap-4 sm:flex-row">
           <a
             href="/incubator"
-            class="px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+            class="rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             Apply now
           </a>
           <a
             href="/projects"
-            class="px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+            class="rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             See Projects
           </a>
@@ -61,77 +71,89 @@ import "../styles/base.css";
     </section>
 
     <!-- Get Involved Section -->
-    <section class="py-20 px-6 lg:px-8 bg-gray-50">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-bold text-black text-center mb-16">Get involved</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+    <section class="bg-gray-50 px-6 py-20 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <h2 class="mb-16 text-center text-4xl font-bold text-black lg:text-5xl">Get involved</h2>
+        <div class="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <!-- Card 1 -->
-          <div class="bg-white rounded-lg border-2 border-black p-6 text-center">
-            <div class="w-16 h-16 border-2 border-black rounded-full mx-auto mb-4 bg-gray-50"></div>
-            <p class="text-black mb-4 font-medium">Do you want to be part of the tech for Palestine community?</p>
+          <div class="rounded-lg border-2 border-black bg-white p-6 text-center">
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full border-2 border-black bg-gray-50"></div>
+            <p class="mb-4 font-medium text-black">
+              Do you want to be part of the tech for Palestine community?
+            </p>
             <a
               href="https://techforpalestine.org/discord-invite"
-              class="inline-block px-6 py-2 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-6 py-2 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               Join our Discord server
             </a>
           </div>
 
           <!-- Card 2 -->
-          <div class="bg-white rounded-lg border-2 border-black p-6 text-center">
-            <div class="w-16 h-16 border-2 border-black rounded-full mx-auto mb-4 bg-gray-50"></div>
-            <p class="text-black mb-4 font-medium">Do you have an idea for a tech project which advocates for Palestine?</p>
+          <div class="rounded-lg border-2 border-black bg-white p-6 text-center">
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full border-2 border-black bg-gray-50"></div>
+            <p class="mb-4 font-medium text-black">
+              Do you have an idea for a tech project which advocates for Palestine?
+            </p>
             <a
               href="/incubator"
-              class="inline-block px-6 py-2 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-6 py-2 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               Apply to the T4P Incubator
             </a>
           </div>
 
           <!-- Card 3 -->
-          <div class="bg-white rounded-lg border-2 border-black p-6 text-center">
-            <div class="w-16 h-16 border-2 border-black rounded-full mx-auto mb-4 bg-gray-50"></div>
-            <p class="text-black mb-4 font-medium">Do you have skills which you want to contribute?</p>
+          <div class="rounded-lg border-2 border-black bg-white p-6 text-center">
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full border-2 border-black bg-gray-50"></div>
+            <p class="mb-4 font-medium text-black">
+              Do you have skills which you want to contribute?
+            </p>
             <a
               href="/volunteer"
-              class="inline-block px-6 py-2 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-6 py-2 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               Apply to our Volunteer Program
             </a>
           </div>
 
           <!-- Card 4 -->
-          <div class="bg-white rounded-lg border-2 border-black p-6 text-center">
-            <div class="w-16 h-16 border-2 border-black rounded-full mx-auto mb-4 bg-gray-50"></div>
-            <p class="text-black mb-4 font-medium">Are you an experienced industry leader and mentor?</p>
+          <div class="rounded-lg border-2 border-black bg-white p-6 text-center">
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full border-2 border-black bg-gray-50"></div>
+            <p class="mb-4 font-medium text-black">
+              Are you an experienced industry leader and mentor?
+            </p>
             <a
               href="/mentorship"
-              class="inline-block px-6 py-2 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-6 py-2 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               Apply to our Mentor Program
             </a>
           </div>
 
           <!-- Card 5 -->
-          <div class="bg-white rounded-lg border-2 border-black p-6 text-center">
-            <div class="w-16 h-16 border-2 border-black rounded-full mx-auto mb-4 bg-gray-50"></div>
-            <p class="text-black mb-4 font-medium">Are you a founder or CEO who supports the Palestinian cause?</p>
+          <div class="rounded-lg border-2 border-black bg-white p-6 text-center">
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full border-2 border-black bg-gray-50"></div>
+            <p class="mb-4 font-medium text-black">
+              Are you a founder or CEO who supports the Palestinian cause?
+            </p>
             <a
               href="/e4p"
-              class="inline-block px-6 py-2 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-6 py-2 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               Join Entrepreneurs for Palestine
             </a>
           </div>
 
           <!-- Card 6 -->
-          <div class="bg-white rounded-lg border-2 border-black p-6 text-center">
-            <div class="w-16 h-16 border-2 border-black rounded-full mx-auto mb-4 bg-gray-50"></div>
-            <p class="text-black mb-4 font-medium">Are you a VC or angel investor who is pro-Palestine?</p>
+          <div class="rounded-lg border-2 border-black bg-white p-6 text-center">
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full border-2 border-black bg-gray-50"></div>
+            <p class="mb-4 font-medium text-black">
+              Are you a VC or angel investor who is pro-Palestine?
+            </p>
             <a
               href="/coming-soon"
-              class="inline-block px-6 py-2 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-6 py-2 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               Join Investors for Palestine
             </a>
@@ -140,7 +162,7 @@ import "../styles/base.css";
         <div class="text-center">
           <a
             href="/donate"
-            class="inline-block px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+            class="inline-block rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             Donate to support our work
           </a>
@@ -149,42 +171,44 @@ import "../styles/base.css";
     </section>
 
     <!-- Who We Are Section -->
-    <section class="py-20 px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-bold text-black text-center mb-8">Who we are</h2>
-        <div class="text-left space-y-6 mb-12">
-          <p class="text-lg text-black leading-relaxed">
-            Tech for Palestine is a non-profit at the intersection of Palestine and tech. We are building the infrastructure and community needed to support Palestinian liberation through technology and advocacy.
+    <section class="px-6 py-20 lg:px-8">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="mb-8 text-center text-4xl font-bold text-black lg:text-5xl">Who we are</h2>
+        <div class="mb-12 space-y-6 text-left">
+          <p class="text-lg leading-relaxed text-black">
+            Tech for Palestine is a non-profit at the intersection of Palestine and tech. We are
+            building the infrastructure and community needed to support Palestinian liberation
+            through technology and advocacy.
           </p>
           <ul class="space-y-3 text-black">
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="mr-3 mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-black"></span>
               The Tech for Palestine Incubator with 50+ tech projects working towards Palestinian liberation
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="mr-3 mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-black"></span>
               A vibrant Discord community with 10,000+ members
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="mr-3 mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-black"></span>
               A volunteering program with 1000+ registered volunteers contributing to T4P projects
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="mr-3 mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-black"></span>
               A community of 200+ founders and investors, and much more
             </li>
           </ul>
         </div>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col justify-center gap-4 sm:flex-row">
           <a
             href="/team"
-            class="px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+            class="rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             Meet our team
           </a>
           <a
             href="/about"
-            class="px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+            class="rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             Learn more about us
           </a>
@@ -193,19 +217,21 @@ import "../styles/base.css";
     </section>
 
     <!-- Events and Updates Section -->
-    <section class="py-20 px-6 lg:px-8 bg-gray-50">
-      <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <section class="bg-gray-50 px-6 py-20 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
           <!-- Events Column -->
           <div class="text-center">
-            <h2 class="text-4xl lg:text-5xl font-bold text-black mb-8">Events</h2>
-            <div class="w-full h-64 border-2 border-black rounded-lg bg-gray-50 mb-6 flex items-center justify-center">
+            <h2 class="mb-8 text-4xl font-bold text-black lg:text-5xl">Events</h2>
+            <div
+              class="mb-6 flex h-64 w-full items-center justify-center rounded-lg border-2 border-black bg-gray-50"
+            >
               <span class="text-gray-500">Event Image</span>
             </div>
-            <p class="text-lg text-black mb-6">E4P Webinar: Palestine in media and film</p>
+            <p class="mb-6 text-lg text-black">E4P Webinar: Palestine in media and film</p>
             <a
               href="/events"
-              class="inline-block px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               See more events
             </a>
@@ -213,14 +239,16 @@ import "../styles/base.css";
 
           <!-- Updates Column -->
           <div class="text-center">
-            <h2 class="text-4xl lg:text-5xl font-bold text-black mb-8">Updates</h2>
-            <div class="w-full h-64 border-2 border-black rounded-lg bg-gray-50 mb-6 flex items-center justify-center">
+            <h2 class="mb-8 text-4xl font-bold text-black lg:text-5xl">Updates</h2>
+            <div
+              class="mb-6 flex h-64 w-full items-center justify-center rounded-lg border-2 border-black bg-gray-50"
+            >
               <span class="text-gray-500">Update Image</span>
             </div>
-            <p class="text-lg text-black mb-6">Announcing: Jaywalk, the app which keeps you safe</p>
+            <p class="mb-6 text-lg text-black">Announcing: Jaywalk, the app which keeps you safe</p>
             <a
               href="https://updates.techforpalestine.org"
-              class="inline-block px-8 py-3 rounded-lg border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-colors duration-200"
+              class="inline-block rounded-lg border-2 border-black px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-black hover:text-white"
             >
               See more updates
             </a>
