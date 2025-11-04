@@ -89,25 +89,13 @@ import "../styles/base.css";
           >
             <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">Make a donation</h2>
             <div class="mx-auto w-full max-w-lg">
-              <!-- CharityStack Form (Variant A) -->
-              <div id="form-variant-charitystack" style="display: none;">
-                <div
-                  data-entity="EMBED_FORM"
-                  data-source="CharityStack"
-                  id="1546c2c2-a580-4994-bbb3-9e643aed1309"
-                >
-                </div>
-              </div>
-              <!-- Qgiv Form (Variant B) -->
-              <div id="form-variant-qgiv" style="display: none;">
-                <div
-                  class="qgiv-embed-container"
-                  data-qgiv-embed="true"
-                  data-embed-id="83460"
-                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
-                  data-width="630"
-                >
-                </div>
+              <div
+                class="qgiv-embed-container"
+                data-qgiv-embed="true"
+                data-embed-id="83460"
+                data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                data-width="630"
+              >
               </div>
             </div>
             <div
@@ -197,13 +185,6 @@ import "../styles/base.css";
     </div>
   </div>
 
-  <script
-    is:inline
-    defer
-    id="charitystack-embed"
-    data-id="M_lDGj72xT61"
-    src="https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js"
-  ></script>
   <script is:inline>
     (function (w, d, s, id) {
       var js,
@@ -217,21 +198,12 @@ import "../styles/base.css";
   </script>
 
   <script is:inline>
-    // A/B test: randomly show one of two donation forms
-    // Initialize plausible queue if not already defined
+    // Track which donate form variant the user sees
     window.plausible =
       window.plausible ||
       function () {
         (window.plausible.q = window.plausible.q || []).push(arguments);
       };
-    window.plausible.q = window.plausible.q || [];
-
-    const variant = Math.random() < 0.5 ? "charitystack" : "qgiv";
-
-    // Show the selected form
-    document.getElementById("form-variant-" + variant).style.display = "block";
-
-    // Track which variant was shown with Plausible custom property
-    window.plausible("pageview", { props: { donate_form_variant: variant } });
+    window.plausible("pageview", { props: { donate_form_variant: "qgiv" } });
   </script>
 </Layout>
