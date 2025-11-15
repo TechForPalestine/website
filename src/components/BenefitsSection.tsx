@@ -10,7 +10,22 @@ import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import MoneyIcon from "@mui/icons-material/Money";
 
-const benefits = [
+interface Benefit {
+  /**
+   * Title of the benefit
+   */
+  title: string;
+  /**
+   * Description of the benefit
+   */
+  description: string;
+  /**
+   * Icon representing the benefit
+   */
+  icon: React.ReactElement;
+}
+
+const benefits: Benefit[] = [
   {
     title: "Community",
     description: "A supportive community of peers who share the same values",
@@ -99,7 +114,7 @@ export function BenefitsSection() {
                     <div
                       className={`h-16 w-16 ${bgColor} mx-auto flex items-center justify-center rounded-full`}
                     >
-                      {React.cloneElement(item.icon, {
+                      {React.cloneElement(item.icon as React.ReactElement<any>, {
                         sx: { color: iconColor, fontSize: "2rem" },
                       })}
                     </div>
