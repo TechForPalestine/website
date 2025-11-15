@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Container, Typography, Grid, Button } from "@mui/material";
 import Map from "./Map.jsx";
 import FoundersCarousel from "./foundersSection.jsx";
-import { BenefitsSection } from "./BenefitsSection.jsx";
+import { BenefitsSection } from "./BenefitsSection.tsx";
 
 export function E4PPage() {
   return (
