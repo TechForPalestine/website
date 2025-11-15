@@ -1,12 +1,19 @@
 ---
-interface Props {
-  overline?: string; // Small label above the heading
-  title: string; // Main heading (bold and large)
-  subtitle?: string; // Optional subtitle or link
-  subtitleLink?: string; // Optional URL for subtitle
+export interface PageHeaderProps {
+  /** Small label displayed above the main heading */
+  overline?: string;
+
+  /** Main heading text - bold and large, primary focus of the page */
+  title: string;
+
+  /** Optional subtitle providing additional context or description */
+  subtitle?: string;
+
+  /** Optional URL to make the subtitle clickable as a link */
+  subtitleLink?: string;
 }
 
-const { overline = "", title, subtitle = "", subtitleLink = "" } = Astro.props;
+const { overline = "", title, subtitle = "", subtitleLink = "" } = Astro.props as PageHeaderProps;
 ---
 
 <div class="mx-auto max-w-5xl px-4 py-10 text-center sm:py-12">
