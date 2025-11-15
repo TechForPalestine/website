@@ -1,5 +1,28 @@
 import React from "react";
 
+interface Tool {
+  /**
+   * Title of the tool
+   */
+  title: string;
+  /**
+   * Description of the tool
+   */
+  description: string;
+  /**
+   * Text for the button
+   */
+  buttonText: string;
+  /**
+   * Link to the tool
+   */
+  link: string;
+  /**
+   * Logo URL of the tool, SVG format
+   */
+  logo: string;
+}
+
 const tools = [
   {
     title: "Pal-chat",
