@@ -151,7 +151,7 @@ headers.set('Access-Control-Allow-Origin', '*');
 - File upload handling with progress indicators
 - Multi-step form flow with state persistence
 
-**Content Display (`IdeasWithTabs.jsx`):**
+**Content Display (`IdeasWithTabs.tsx`):**
 - Interactive tabbed interface with modal overlays
 - Dynamic content filtering and categorization
 - Responsive grid layouts with infinite scroll potential

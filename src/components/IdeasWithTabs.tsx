@@ -1,23 +1,60 @@
 import React, { useState, useEffect, useRef } from "react";
 import RichTextRenderer from "./RichTextRenderer.tsx";
+import type { RichTextSegment } from "../types/richText";
 
-export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
-  const [activeTab, setActiveTab] = useState("new");
-  const [activeIdea, setActiveIdea] = useState(null);
-  const overlayRef = useRef(null);
+interface IdeaData {
+  /** Title of the idea/project */
+  title: string;
+  /** Associated tags for categorization */
+  tags: string[];
+}
+
+interface Idea {
+  /** Unique identifier from Notion */
+  id: string;
+  /** Optional slug for URL routing */
+  slug?: string;
+  /** Core data about the idea */
+  data: IdeaData;
+  /** Rich text description from Notion */
+  richTextDescription: RichTextSegment[];
+  /** Plain text excerpt for preview (150 chars max) */
+  excerpt: string;
+}
+
+interface ActiveIdea {
+  /** Title of the selected idea */
+  title: string;
+  /** Full rich text description */
+  richTextDescription: RichTextSegment[];
+  /** Associated tags */
+  tags: string[];
+}
+
+interface IdeasWithTabsProps {
+  /** List of new project ideas */
+  newIdeas: Idea[];
+  /** List of existing projects needing leaders */
+  existingIdeas: Idea[];
+}
+
+export default function IdeasWithTabs({ newIdeas, existingIdeas }: IdeasWithTabsProps) {
+  const [activeTab, setActiveTab] = useState<"new" | "existing">("new");
+  const [activeIdea, setActiveIdea] = useState<ActiveIdea | null>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const currentList = activeTab === "new" ? newIdeas : existingIdeas;
 
   // Close on ESC
   useEffect(() => {
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setActiveIdea(null);
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const handleOverlayClick = (e) => {
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) {
       setActiveIdea(null);
     }
