@@ -8,6 +8,8 @@ import {
   Button,
   Link,
   CircularProgress,
+  Skeleton,
+  Fade,
 } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -15,6 +17,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
 
 interface EventItem {
   id: string;
@@ -79,6 +83,7 @@ export default function Events({
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialLoading);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [showEvents, setShowEvents] = useState(initialEvents.length > 0);
 
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
@@ -86,6 +91,7 @@ export default function Events({
 
   // Function to fetch fresh events (for refresh button)
   const fetchFreshEvents = async () => {
+    const wasRefreshing = events.length > 0; // Track if we're refreshing existing events
     setLoading(true);
     try {
       console.log("Fetching fresh events from Notion API...");
@@ -102,6 +108,14 @@ export default function Events({
         console.log(`Refreshed: Loaded ${newEvents.length} events from Notion`);
         setEvents(newEvents);
         setLastUpdated(new Date());
+        if (newEvents.length > 0) {
+          // Only trigger fade-in if this is initial load, not a refresh
+          if (!wasRefreshing) {
+            setShowEvents(true);
+          }
+        } else {
+          setShowEvents(false);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch fresh events:", error);
@@ -126,6 +140,9 @@ export default function Events({
         `Using ${initialEvents.length} initial events from SSR, setting loading to false`
       );
       setLoading(false);
+      if (initialEvents.length > 0) {
+        setShowEvents(true);
+      }
     }
   }, []);
 
@@ -141,6 +158,39 @@ export default function Events({
     });
   }, [events]);
 
+  // Skeleton loading component
+  const EventSkeleton = () => (
+    <Card className="flex flex-col items-start gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:flex-row">
+      {/* Image skeleton */}
+      <Box className="w-full md:w-1/3">
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={200}
+          className="rounded-xl"
+          animation="wave"
+        />
+      </Box>
+      {/* Content skeleton */}
+      <Box className="flex-1 space-y-2 px-2">
+        <Box className="flex flex-wrap items-center gap-2">
+          <Skeleton variant="text" width="60%" height={32} animation="wave" />
+          <Skeleton variant="rectangular" width={80} height={24} className="rounded-full" animation="wave" />
+        </Box>
+        <Box className="flex flex-wrap items-center gap-4">
+          <Skeleton variant="text" width={120} height={20} animation="wave" />
+          <Skeleton variant="text" width={100} height={20} animation="wave" />
+          <Skeleton variant="text" width={150} height={20} animation="wave" />
+        </Box>
+        <Skeleton variant="text" width="100%" height={20} animation="wave" />
+        <Skeleton variant="text" width="80%" height={20} animation="wave" />
+        <Box className="pt-2">
+          <Skeleton variant="text" width={100} height={20} animation="wave" />
+        </Box>
+      </Box>
+    </Card>
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       {/* Status indicator */}
@@ -154,60 +204,95 @@ export default function Events({
             variant="outlined"
             onClick={fetchFreshEvents}
             disabled={loading}
-            className="text-xs"
+            startIcon={
+              loading ? (
+                <CircularProgress size={14} thickness={4} />
+              ) : (
+                <RefreshIcon fontSize="small" />
+              )
+            }
+            className="text-xs transition-opacity"
+            sx={{
+              opacity: loading ? 0.7 : 1,
+              "&:hover": {
+                opacity: loading ? 0.7 : 1,
+              },
+            }}
           >
-            Refresh
+            {loading ? "Refreshing..." : "Refresh"}
           </Button>
-          {loading && (
-            <Box className="flex items-center gap-2">
-              <CircularProgress size={16} />
-              <Typography variant="caption" className="text-gray-500">
-                Loading...
-              </Typography>
-            </Box>
-          )}
         </Box>
       </Box>
 
+      {/* Skeleton loading state */}
       {loading && events.length === 0 && (
-        <Box className="py-6 text-center">
-          <CircularProgress size={32} color="success" />
-          <Typography variant="body2" className="mt-4 text-gray-600">
-            Loading events from Notion...
-          </Typography>
-        </Box>
+        <div className="space-y-6">
+          {[...Array(3)].map((_, index) => (
+            <EventSkeleton key={`skeleton-${index}`} />
+          ))}
+        </div>
       )}
 
-      <div className="space-y-6">
-        {events.map((event, i) => {
-          // Parse date string without timezone conversion
-          const [year, month, day] = event.date.split("-");
-          const monthNames = [
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV",
-            "DEC",
-          ];
-          const monthName = monthNames[parseInt(month) - 1];
-          const dayNum = parseInt(day);
+      {/* Empty state */}
+      {!loading && events.length === 0 && (
+        <Fade in={!loading && events.length === 0}>
+          <Box className="py-12 text-center">
+            <EventBusyIcon
+              sx={{
+                fontSize: 64,
+                color: "text.secondary",
+                marginBottom: 2,
+                opacity: 0.5,
+              }}
+            />
+            <Typography variant="h6" className="mb-2 text-gray-700">
+              No events found
+            </Typography>
+            <Typography variant="body2" className="text-gray-500">
+              There are no events available at the moment. Check back later!
+            </Typography>
+          </Box>
+        </Fade>
+      )}
 
-          const isPast = event.status?.toLowerCase() === "past";
-          const eventUrl = `/event-details?id=${event.id}`;
+      {/* Events list with fade-in animation */}
+      {events.length > 0 && (
+        <Fade in={showEvents} timeout={500}>
+          <div className="space-y-6">
+            {events.map((event, i) => {
+              // Parse date string without timezone conversion
+              const [year, month, day] = event.date.split("-");
+              const monthNames = [
+                "JAN",
+                "FEB",
+                "MAR",
+                "APR",
+                "MAY",
+                "JUN",
+                "JUL",
+                "AUG",
+                "SEP",
+                "OCT",
+                "NOV",
+                "DEC",
+              ];
+              const monthName = monthNames[parseInt(month) - 1];
+              const dayNum = parseInt(day);
 
-          console.log("event.image :", event.image);
-          return (
-            <Card
-              key={i}
-              className="group flex flex-col items-start gap-4 rounded-2xl border border-gray-200 bg-white p-6 no-underline shadow-sm transition hover:shadow-md md:flex-row"
-            >
+              const isPast = event.status?.toLowerCase() === "past";
+              const eventUrl = `/event-details?id=${event.id}`;
+
+              console.log("event.image :", event.image);
+              return (
+                <Fade
+                  key={event.id}
+                  in={showEvents}
+                  timeout={300}
+                  style={{ transitionDelay: `${i * 50}ms` }}
+                >
+                <Card
+                  className="group flex flex-col items-start gap-4 rounded-2xl border border-gray-200 bg-white p-6 no-underline shadow-sm transition-all duration-300 hover:shadow-md md:flex-row"
+                >
               {/* Image */}
               <Box className="relative w-full md:w-1/3">
                 <img
@@ -345,9 +430,12 @@ export default function Events({
                 </Box>
               </Box>
             </Card>
-          );
-        })}
-      </div>
+                </Fade>
+              );
+            })}
+          </div>
+        </Fade>
+      )}
     </div>
   );
 }
