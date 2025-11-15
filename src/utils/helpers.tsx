@@ -1,4 +1,10 @@
-export const transformObject = (data: any): any => {
+type TransformableValue = string | number | boolean | null | undefined;
+
+interface NestedObject {
+  [key: string]: TransformableValue | TransformableValue[] | NestedObject | NestedObject[];
+}
+
+export const transformObject = (data: NestedObject): NestedObject => {
   // Loop through each key in the object
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
@@ -18,8 +24,8 @@ export const transformObject = (data: any): any => {
       }
 
       // Recursively process nested objects
-      if (typeof data[key] === "object" && !Array.isArray(data[key])) {
-        data[key] = transformObject(data[key]);
+      if (typeof data[key] === "object" && !Array.isArray(data[key]) && data[key] !== null) {
+        data[key] = transformObject(data[key] as NestedObject);
       }
     }
   }
