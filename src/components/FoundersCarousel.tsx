@@ -2,9 +2,15 @@ import React from "react";
 import Slider from "react-slick";
 import { Card, CardContent, Typography, Avatar, Box, Link, Container } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+interface Founder {
+  name: string;
+  title: string;
+  image: string;
+  linkedin: string;
+}
 
 // founders array
-const founders = [
+const founders: Founder[] = [
   {
     name: "Aline Sara",
     title: "Co-Founder, Entrepreneurs for Palestine",
