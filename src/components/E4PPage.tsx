@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Container, Typography, Grid, Button } from "@mui/material";
 import Map from "./Map";
-import FoundersCarousel from "./FoundersCarousel";
+import FoundersCarousel from "./FoundersSection";
 import { BenefitsSection } from "./BenefitsSection";
 
 export function E4PPage() {
