@@ -88,7 +88,6 @@ export default function Events({
   const fetchFreshEvents = async () => {
     setLoading(true);
     try {
-      console.log("Fetching fresh events from Notion API...");
       const response = await fetch(showAll ? "/api/events?showAll=yes" : "/api/events", {
         cache: "no-cache",
         headers: {
@@ -99,12 +98,20 @@ export default function Events({
 
       if (response.ok) {
         const newEvents = await response.json();
-        console.log(`Refreshed: Loaded ${newEvents.length} events from Notion`);
         setEvents(newEvents);
         setLastUpdated(new Date());
       }
     } catch (error) {
-      console.error("Failed to fetch fresh events:", error);
+      /*
+       * intentional silent error handling: user sees existing/cached events on fetch failure.
+       * console.error provides no value in production at this stage; users don't
+       * see it, monitoring systems don't capture it; it's purely a debugging tool.
+       * if error visibility is needed, potential implementation suggestions could include:
+       * - user-facing feedback: Material-UI Snackbar/Alert component
+       * - production monitoring: Sentry/LogRocket integration in catch block
+       * - error state management: const [error, setError] = useState<string | null>(null)
+       *   (although I really do not like using useState for this, or at all)
+       */
     } finally {
       setLoading(false);
     }
@@ -112,34 +119,12 @@ export default function Events({
 
   // Only fetch fresh events if we don't have initial data
   useEffect(() => {
-    console.log("Events component mounted:", {
-      initialEventsLength: initialEvents.length,
-      initialLoading,
-      currentLoadingState: loading,
-    });
-
     if (initialEvents.length === 0 && initialLoading) {
-      console.log("No initial events, fetching from API...");
       fetchFreshEvents();
     } else {
-      console.log(
-        `Using ${initialEvents.length} initial events from SSR, setting loading to false`
-      );
       setLoading(false);
     }
   }, []);
-
-  // Debug logging for state changes
-  useEffect(() => {
-    console.log("Loading state changed:", loading);
-  }, [loading]);
-
-  useEffect(() => {
-    console.log("Events state changed:", {
-      count: events.length,
-      firstEventTitle: events[0]?.title,
-    });
-  }, [events]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -202,7 +187,6 @@ export default function Events({
           const isPast = event.status?.toLowerCase() === "past";
           const eventUrl = `/event-details?id=${event.id}`;
 
-          console.log("event.image :", event.image);
           return (
             <Card
               key={i}
@@ -214,50 +198,24 @@ export default function Events({
                   src={event.image}
                   alt={event.title}
                   className="aspect-[4/3] w-full rounded-xl bg-gray-100 object-contain"
-                  onLoad={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    console.log(
-                      `Image loaded successfully for event "${event.title}":`,
-                      target.src
-                    );
-                  }}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     const currentSrc = target.src;
 
-                    // Try fallback strategies
+                    // fallback strategy: proxy → original Notion URL → default image
                     if (
                       currentSrc.includes("notion-image-proxy") &&
                       currentSrc !== "/images/default.jpg"
                     ) {
-                      console.error(
-                        `Proxy image failed for event "${event.title}". Trying original Notion URL:`,
-                        {
-                          proxySrc: currentSrc,
-                          eventImage: event.image,
-                          eventId: event.id,
-                        }
-                      );
-
-                      // Try to decode the original URL from the proxy URL
+                      // trying to decode the original URL from the proxy URL
                       try {
                         const proxyPath = currentSrc.split("/proxy/")[1];
                         const originalUrl = atob(proxyPath);
-                        console.log(`Trying original Notion URL: ${originalUrl}`);
                         target.src = originalUrl;
                         return;
                       } catch (decodeError) {
-                        console.error("Could not decode original URL from proxy:", decodeError);
+                        // decode failed, fall through to default image
                       }
-                    } else if (!currentSrc.includes("/images/default.jpg")) {
-                      console.error(
-                        `Direct Notion URL failed for event "${event.title}". Using default:`,
-                        {
-                          originalSrc: currentSrc,
-                          eventImage: event.image,
-                          eventId: event.id,
-                        }
-                      );
                     }
 
                     // Final fallback to default image
