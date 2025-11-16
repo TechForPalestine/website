@@ -202,30 +202,20 @@ export default function Events({
                     const target = e.target as HTMLImageElement;
                     const currentSrc = target.src;
 
-                    // Try fallback strategies
+                    // fallback strategy: proxy → original Notion URL → default image
                     if (
                       currentSrc.includes("notion-image-proxy") &&
                       currentSrc !== "/images/default.jpg"
                     ) {
-                      // Try to decode the original URL from the proxy URL
+                      // trying to decode the original URL from the proxy URL
                       try {
                         const proxyPath = currentSrc.split("/proxy/")[1];
                         const originalUrl = atob(proxyPath);
-                        console.log(`Trying original Notion URL: ${originalUrl}`);
                         target.src = originalUrl;
                         return;
                       } catch (decodeError) {
-                        console.error("Could not decode original URL from proxy:", decodeError);
+                        // decode failed, fall through to default image
                       }
-                    } else if (!currentSrc.includes("/images/default.jpg")) {
-                      console.error(
-                        `Direct Notion URL failed for event "${event.title}". Using default:`,
-                        {
-                          originalSrc: currentSrc,
-                          eventImage: event.image,
-                          eventId: event.id,
-                        }
-                      );
                     }
 
                     // Final fallback to default image
