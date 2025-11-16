@@ -35,6 +35,69 @@ interface EventsProps {
   loading?: boolean;
 }
 
+/**
+ * Handles image load errors with a fallback strategy.
+ *
+ * Fallback sequence:
+ * 1. If proxy image fails → try original Notion URL
+ * 2. If original Notion URL fails → fallback to default image
+ *
+ * @param e - Image error event
+ * @param event - Event item (for logging purposes)
+ */
+const handleImageError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  event: EventItem
+): void => {
+  const target = e.target as HTMLImageElement;
+  const currentSrc = target.src;
+  const defaultImage = "/images/default.jpg";
+
+  // Prevent infinite loop if already using default image
+  if (currentSrc === defaultImage) {
+    return;
+  }
+
+  // Step 1: If proxy image failed, try original Notion URL
+  if (currentSrc.includes("notion-image-proxy")) {
+    console.error(
+      `Proxy image failed for event "${event.title}". Trying original Notion URL:`,
+      {
+        proxySrc: currentSrc,
+        eventImage: event.image,
+        eventId: event.id,
+      }
+    );
+
+    try {
+      // Attempt to decode original URL from proxy URL
+      const proxyPath = currentSrc.split("/proxy/")[1];
+      if (proxyPath) {
+        const originalUrl = atob(proxyPath);
+        console.log(`Trying original Notion URL: ${originalUrl}`);
+        target.src = originalUrl;
+        return;
+      }
+    } catch (decodeError) {
+      console.error("Could not decode original URL from proxy:", decodeError);
+      // If decoding fails, fallback to default image
+    }
+  } else {
+    // Step 2: Direct Notion URL failed
+    console.error(
+      `Direct Notion URL failed for event "${event.title}". Using default:`,
+      {
+        originalSrc: currentSrc,
+        eventImage: event.image,
+        eventId: event.id,
+      }
+    );
+  }
+
+  // Step 3: Final fallback - use default image
+  target.src = defaultImage;
+};
+
 // Helper function to compare events arrays for changes
 const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolean => {
   if (oldEvents.length !== newEvents.length) {
@@ -221,50 +284,7 @@ export default function Events({
                       target.src
                     );
                   }}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    const currentSrc = target.src;
-
-                    // Try fallback strategies
-                    if (
-                      currentSrc.includes("notion-image-proxy") &&
-                      currentSrc !== "/images/default.jpg"
-                    ) {
-                      console.error(
-                        `Proxy image failed for event "${event.title}". Trying original Notion URL:`,
-                        {
-                          proxySrc: currentSrc,
-                          eventImage: event.image,
-                          eventId: event.id,
-                        }
-                      );
-
-                      // Try to decode the original URL from the proxy URL
-                      try {
-                        const proxyPath = currentSrc.split("/proxy/")[1];
-                        const originalUrl = atob(proxyPath);
-                        console.log(`Trying original Notion URL: ${originalUrl}`);
-                        target.src = originalUrl;
-                        return;
-                      } catch (decodeError) {
-                        console.error("Could not decode original URL from proxy:", decodeError);
-                      }
-                    } else if (!currentSrc.includes("/images/default.jpg")) {
-                      console.error(
-                        `Direct Notion URL failed for event "${event.title}". Using default:`,
-                        {
-                          originalSrc: currentSrc,
-                          eventImage: event.image,
-                          eventId: event.id,
-                        }
-                      );
-                    }
-
-                    // Final fallback to default image
-                    if (target.src !== "/images/default.jpg") {
-                      target.src = "/images/default.jpg";
-                    }
-                  }}
+                  onError={(e) => handleImageError(e, event)}
                 />
               </Box>
 
