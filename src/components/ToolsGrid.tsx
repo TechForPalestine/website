@@ -1,6 +1,13 @@
 import React from "react";
+type Tool = {
+  title: string;
+  description: string;
+  buttonText: string;
+  link: string;
+  logo: string;
+};
 
-const tools = [
+const tools: Tool[] = [
   {
     title: "Pal-chat",
     description: "A secure group chat system for Palestine.",
