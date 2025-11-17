@@ -1,7 +1,13 @@
 import { Box, Typography, Avatar, Grid, Paper, Stack } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-
-const founders = [
+type Founder = {
+  name: string;
+  title: string;
+  image: string;
+  linkedin: string;
+  quote: string;
+};
+const founders: Founder[] = [
   {
     name: "Chris Musei-Sequeira",
     title: "Founder, CJSC — USA",
