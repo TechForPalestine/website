@@ -45,29 +45,23 @@ interface EventsProps {
  * @param e - Image error event
  * @param event - Event item (for logging purposes)
  */
-const handleImageError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  event: EventItem
-): void => {
+const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>, event: EventItem): void => {
   const target = e.target as HTMLImageElement;
   const currentSrc = target.src;
   const defaultImage = "/images/default.jpg";
 
   // Prevent infinite loop if already using default image
-  if (currentSrc === defaultImage) {
+  if (currentSrc.includes(defaultImage)) {
     return;
   }
 
   // Step 1: If proxy image failed, try original Notion URL
   if (currentSrc.includes("notion-image-proxy")) {
-    console.error(
-      `Proxy image failed for event "${event.title}". Trying original Notion URL:`,
-      {
-        proxySrc: currentSrc,
-        eventImage: event.image,
-        eventId: event.id,
-      }
-    );
+    console.error(`Proxy image failed for event "${event.title}". Trying original Notion URL:`, {
+      proxySrc: currentSrc,
+      eventImage: event.image,
+      eventId: event.id,
+    });
 
     try {
       // Attempt to decode original URL from proxy URL
@@ -84,14 +78,11 @@ const handleImageError = (
     }
   } else {
     // Step 2: Direct Notion URL failed
-    console.error(
-      `Direct Notion URL failed for event "${event.title}". Using default:`,
-      {
-        originalSrc: currentSrc,
-        eventImage: event.image,
-        eventId: event.id,
-      }
-    );
+    console.error(`Direct Notion URL failed for event "${event.title}". Using default:`, {
+      originalSrc: currentSrc,
+      eventImage: event.image,
+      eventId: event.id,
+    });
   }
 
   // Step 3: Final fallback - use default image
