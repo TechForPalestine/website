@@ -17,7 +17,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
     let combinedContent = "";
     const segmentMap = new Map<number, RichTextSegment>();
 
-    segments.forEach((segment, index) => {
+    segments.forEach((segment) => {
       const startPos = combinedContent.length;
       combinedContent += segment.text.content;
 

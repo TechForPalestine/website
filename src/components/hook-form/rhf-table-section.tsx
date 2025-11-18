@@ -79,7 +79,7 @@ export default function RHFTableSection({ name, label, columns = [] }: RHFTableS
                       <Controller
                         name={`${name}[${index}].${col.fieldname}`}
                         control={control}
-                        render={({ field, fieldState }) => (
+                        render={({ fieldState }) => (
                           <RenderFormFields
                             fields={[col]}
                             control={control}
