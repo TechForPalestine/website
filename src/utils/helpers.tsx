@@ -1,4 +1,15 @@
-export const transformObject = (data: any): any => {
+type TransformableValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | TransformableValue[]
+  | { [key: string]: TransformableValue };
+
+type TransformableObject = { [key: string]: TransformableValue };
+
+export const transformObject = (data: TransformableObject): TransformableObject => {
   // Loop through each key in the object
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
@@ -10,7 +21,7 @@ export const transformObject = (data: any): any => {
         for (const subKey in value) {
           if (Array.isArray(value[subKey])) {
             // Replace the original object with an array of objects
-            data[key] = value[subKey].map((item: any) => ({
+            data[key] = value[subKey].map((item: TransformableValue) => ({
               [subKey]: item,
             }));
           }
@@ -18,8 +29,8 @@ export const transformObject = (data: any): any => {
       }
 
       // Recursively process nested objects
-      if (typeof data[key] === "object" && !Array.isArray(data[key])) {
-        data[key] = transformObject(data[key]);
+      if (data[key] !== null && typeof data[key] === "object" && !Array.isArray(data[key])) {
+        data[key] = transformObject(data[key] as TransformableObject);
       }
     }
   }
