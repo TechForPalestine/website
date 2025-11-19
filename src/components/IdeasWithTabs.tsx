@@ -1,23 +1,48 @@
 import React, { useState, useEffect, useRef } from "react";
 import RichTextRenderer from "./RichTextRenderer.tsx";
+import type { RichTextSegment, NotionRichText } from "../types/richText";
 
-export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
-  const [activeTab, setActiveTab] = useState("new");
-  const [activeIdea, setActiveIdea] = useState(null);
-  const overlayRef = useRef(null);
+type Idea = {
+  id?: string;
+  slug?: string;
+  data: {
+    title: string;
+    tags?: string[];
+  };
+  richTextDescription?: RichTextSegment[] | NotionRichText | null;
+  excerpt?: string;
+};
+
+type IdeasWithTabsProps = {
+  newIdeas: Idea[];
+  existingIdeas: Idea[];
+};
+
+type ActiveIdeaType = {
+  title: string;
+  richTextDescription: RichTextSegment[] | NotionRichText;
+  tags: string[];
+} | null;
+
+export default function IdeasWithTabs({ newIdeas, existingIdeas }: IdeasWithTabsProps) {
+  const [activeTab, setActiveTab] = useState<"new" | "existing">("new");
+  const [activeIdea, setActiveIdea] = useState<ActiveIdeaType>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
 
   const currentList = activeTab === "new" ? newIdeas : existingIdeas;
 
-  // Close on ESC
+  // Close modal on ESC
   useEffect(() => {
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setActiveIdea(null);
     };
+
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const handleOverlayClick = (e) => {
+  // Close modal when clicking outside
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) {
       setActiveIdea(null);
     }
@@ -39,6 +64,7 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
             >
               Ideas for new projects
             </button>
+
             <button
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 activeTab === "existing"
@@ -59,7 +85,13 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                 onClick={() =>
                   setActiveIdea({
                     title: data.title,
-                    richTextDescription: richTextDescription,
+                    // SAFEST possible guarding
+                    richTextDescription:
+                      richTextDescription && Array.isArray(richTextDescription)
+                        ? richTextDescription
+                        : richTextDescription && "rich_text" in (richTextDescription as any)
+                          ? richTextDescription
+                          : [], // fallback
                     tags: data.tags || [],
                   })
                 }
@@ -69,16 +101,18 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                   <h3 className="mb-2 text-base font-semibold text-[#166534]">{data.title}</h3>
                   {excerpt && <p className="line-clamp-2 text-sm text-gray-600">{excerpt}</p>}
                 </div>
+
                 <div className="mt-4 flex items-center justify-between">
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent modal from opening
+                      e.stopPropagation();
                       window.open("https://projecthub.techforpalestine.org/apply", "_blank");
                     }}
                     className="rounded-full bg-black px-3 py-1 text-xs font-medium text-white shadow transition hover:bg-[#166534]"
                   >
                     {activeTab === "new" ? "Apply" : "Take the Lead"}
                   </button>
+
                   <span className="text-sm font-medium text-black hover:underline">
                     Read more →
                   </span>
@@ -103,13 +137,16 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
               >
                 ×
               </button>
+
               <h2 className="mb-4 text-2xl font-bold text-[#166534]">{activeIdea.title}</h2>
+
               <div className="prose prose-sm prose-stone max-w-none">
                 <RichTextRenderer
                   richText={activeIdea.richTextDescription}
                   className="!font-sans"
                 />
               </div>
+
               {activeIdea.tags?.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {activeIdea.tags.map((tag, index) => (
@@ -122,6 +159,7 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
                   ))}
                 </div>
               )}
+
               <div className="mt-6 text-right">
                 <a
                   href="https://projecthub.techforpalestine.org/apply"
@@ -137,15 +175,17 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
         )}
       </div>
 
+      {/* Bottom section */}
       <section className="mt-24 px-4 sm:px-6 lg:px-16">
         <div className="flex flex-col items-start gap-8 rounded-2xl border border-gray-100 bg-white p-8 shadow-lg md:flex-row md:gap-12 md:p-10">
-          {/* Left Column: Generating new ideas */}
+          {/* Left */}
           <div className="flex-1">
             <h2 className="mb-4 text-2xl font-bold text-[#166534]">Generating new ideas</h2>
             <p className="mb-4 text-gray-700">
               There are endless amounts of pro-Israel initiatives that need to be countered.
               Consider an initiative to fight:
             </p>
+
             <ul className="list-disc space-y-2 pl-5 text-sm text-gray-700">
               <li>a politician’s complicity / ties to Israel</li>
               <li>someone who committed violence against protestors</li>
@@ -155,15 +195,15 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }) {
             </ul>
           </div>
 
-          {/* Divider */}
           <div className="hidden w-px self-stretch bg-gray-200 md:block"></div>
 
-          {/* Right Column: How to apply */}
+          {/* Right */}
           <div className="flex-1">
             <h2 className="mb-4 text-2xl font-bold text-[#166534]">How to apply</h2>
             <p className="mb-6 text-gray-700">
               Want to lead an existing project or bring a new idea to life? Let us know below.
             </p>
+
             <a
               href="https://projecthub.techforpalestine.org/apply"
               target="_blank"
