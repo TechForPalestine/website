@@ -1,29 +1,13 @@
 import React from "react";
-
-interface Tool {
-  /**
-   * Title of the tool
-   */
+type Tool = {
   title: string;
-  /**
-   * Description of the tool
-   */
   description: string;
-  /**
-   * Text for the button
-   */
   buttonText: string;
-  /**
-   * Link to the tool
-   */
   link: string;
-  /**
-   * Logo URL of the tool, SVG format
-   */
   logo: string;
-}
+};
 
-const tools = [
+const tools: Tool[] = [
   {
     title: "Pal-chat",
     description: "A secure group chat system for Palestine.",

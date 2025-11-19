@@ -1,19 +1,8 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import L, { Icon } from "leaflet";
 
-interface Location {
-  /**
-   * Name of the location
-   */
-  name: string;
-  /**
-   * Coordinates of the location [latitude, longitude]
-   */
-  coords: L.LatLngExpression;
-}
-
-const locations: Location[] = [
+const locations: { name: string; coords: [number, number] }[] = [
   { name: "Prague", coords: [50.0755, 14.4378] },
   { name: "Paris", coords: [48.8566, 2.3522] },
   { name: "New York", coords: [40.7128, -74.006] },
@@ -96,7 +85,7 @@ const locations: Location[] = [
   { name: "Vienna", coords: [48.2081, 16.3713] },
 ];
 
-const greenCircleMarker = new L.Icon({
+const greenCircleMarker: Icon = new L.Icon({
   iconUrl:
     "data:image/svg+xml;base64," +
     btoa(`
@@ -120,7 +109,7 @@ export default function MyLeafletMap() {
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'
       />
       {locations.map((loc, idx) => (
-        <Marker key={idx} position={loc.coords as L.LatLngExpression} icon={greenCircleMarker}>
+        <Marker key={idx} position={loc.coords as [number, number]} icon={greenCircleMarker}>
           <Popup>{loc.name}</Popup>
         </Marker>
       ))}
