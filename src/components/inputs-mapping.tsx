@@ -6,7 +6,6 @@ import {
   RHFMultiSelect,
   RHFFileUpload,
   RHFTableSection,
-  RHFSkillSelector,
 } from "../components/hook-form";
 import Stack from "@mui/material/Stack";
 import type { StackProps } from "@mui/material";
@@ -16,13 +15,6 @@ import { fetchFormFields, fetchFieldData } from "../store/api"; // ✅ Import AP
 const parseOptions = (options: string) =>
   options.split("\n").filter((option) => option.trim() !== "");
 
-const transformTableFields = (field: any) => {
-  if (!field.table_fields) return [];
-  return field.table_fields.map(({ fieldname, label }: { fieldname: string; label: string }) => ({
-    value: fieldname,
-    label,
-  }));
-};
 const useAllLinkOptions = (fields: any[]) => {
   const [options, setOptions] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
@@ -131,14 +123,7 @@ export interface RenderInputProps {
   parentName?: string;
 }
 
-export const RenderInput = ({
-  field,
-  control,
-  errors,
-  options,
-  loading,
-  parentName,
-}: RenderInputProps) => {
+export const RenderInput = ({ field, options, loading, parentName }: RenderInputProps) => {
   if (!field) return null; // Prevent errors if field is undefined
 
   // Compute field path based on parentName
@@ -279,7 +264,7 @@ interface BlockProps extends StackProps {
   description?: React.ReactNode;
 }
 
-function Block({ label = "RHFTextField", sx, children, description }: BlockProps) {
+function Block({ sx, children, description }: BlockProps) {
   return (
     <Stack spacing={1} sx={{ mb: 2, width: 1, ...sx }}>
       {children}

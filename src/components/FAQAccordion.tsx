@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Link } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RichTextRenderer from "./RichTextRenderer";
 import type { RichTextSegment } from "../types/richText";

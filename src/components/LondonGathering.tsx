@@ -26,8 +26,6 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import PeopleIcon from "@mui/icons-material/People";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import CoffeeIcon from "@mui/icons-material/Coffee";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LondonGatheringSpeakers from "./LondonGatheringSpeakers";
 import LondonGatheringAgenda from "./LondonGatheringAgenda";
 

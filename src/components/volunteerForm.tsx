@@ -64,7 +64,7 @@ const VolunteerForm = () => {
       "/incubator_management.api.applications.volunteering.apply",
       transformObject(records)
     );
-    const { message, hasErrors, errors: apiErrors } = res;
+    const { hasErrors, errors: apiErrors } = res;
 
     if (hasErrors) {
       setSubmissionErrors(apiErrors);

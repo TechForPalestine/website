@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
 import ProjectLogo from "../components/ProjectLogo";
 import PageHeader from "../components/PageHeader.astro";
 import "../styles/base.css";
@@ -31,13 +30,6 @@ const projects = projectEntries.map((entry) => ({
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
         projects.map((project: any) => {
-          const nameParts = project.project_name
-            .replace(/[^a-zA-Z0-9\s]/g, "") // Clean name
-            .trim()
-            .split(/\s+/);
-
-          const logoName = nameParts.slice(0, 2).join("");
-          const logoPath = `/projectIcons/${logoName}.png`;
           const slug = project.project_name
             .replace(/[^a-zA-Z0-9\s]/g, "")
             .trim()

@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Card,
-  CardMedia,
-  Chip,
-  Button,
-  Link,
-  CircularProgress,
-  Skeleton,
-  Fade,
-} from "@mui/material";
+import { Box, Typography, Card, Chip, Button, Link, CircularProgress, Fade } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 
@@ -247,7 +235,10 @@ export default function Events({
       {loading && events.length === 0 && (
         <div className="space-y-6">
           {[...Array(3)].map((_, index) => (
-            <Box key={`skeleton-${index}`} className="animate-pulse rounded-lg bg-gray-100 p-6 shadow">
+            <Box
+              key={`skeleton-${index}`}
+              className="animate-pulse rounded-lg bg-gray-100 p-6 shadow"
+            >
               <div className="mb-2 h-4 w-2/3 rounded bg-gray-200"></div>
               <div className="mb-2 h-3 w-1/3 rounded bg-gray-200"></div>
               <div className="h-24 w-full rounded bg-gray-200"></div>
@@ -303,8 +294,7 @@ export default function Events({
               const dayNum = parseInt(day);
 
               const isPast = event.status?.toLowerCase() === "past";
-              const eventUrl = `/event-details?id=${event.id}`;
-              
+
               return (
                 <Card
                   key={i}
