@@ -16,6 +16,7 @@ type Idea = {
 type IdeasWithTabsProps = {
   newIdeas: Idea[];
   existingIdeas: Idea[];
+  startedIdeas: Idea[];
 };
 
 type ActiveIdeaType = {
@@ -24,12 +25,12 @@ type ActiveIdeaType = {
   tags: string[];
 } | null;
 
-export default function IdeasWithTabs({ newIdeas, existingIdeas }: IdeasWithTabsProps) {
-  const [activeTab, setActiveTab] = useState<"new" | "existing">("new");
+export default function IdeasWithTabs({ newIdeas, existingIdeas, startedIdeas }: IdeasWithTabsProps) {
+  const [activeTab, setActiveTab] = useState<"new" | "existing" | "started">("new");
   const [activeIdea, setActiveIdea] = useState<ActiveIdeaType>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
-  const currentList = activeTab === "new" ? newIdeas : existingIdeas;
+  const currentList = activeTab === "new" ? newIdeas : activeTab === "existing" ? existingIdeas : startedIdeas;
 
   // Close modal on ESC
   useEffect(() => {
@@ -74,6 +75,17 @@ export default function IdeasWithTabs({ newIdeas, existingIdeas }: IdeasWithTabs
               onClick={() => setActiveTab("existing")}
             >
               Existing projects needing leaders
+            </button>
+
+            <button
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                activeTab === "started"
+                  ? "bg-[#166534] text-white"
+                  : "border border-[#166534] bg-white text-[#166534]"
+              }`}
+              onClick={() => setActiveTab("started")}
+            >
+              Started projects
             </button>
           </div>
 

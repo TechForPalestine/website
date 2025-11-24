@@ -60,6 +60,30 @@ const existingIdeas = rawIdeas
       excerpt: plainTextExcerpt,
     };
   });
+
+const startedIdeas = rawIdeas
+  .filter((idea: any) => idea.category === "started")
+  .map((idea: any) => {
+    // Create excerpt from rich text (first 150 chars)
+    const plainTextExcerpt =
+      idea.description
+        .map((segment: any) => segment.plain_text)
+        .join("")
+        .substring(0, 150) +
+      (idea.description.map((segment: any) => segment.plain_text).join("").length > 150
+        ? "..."
+        : "");
+
+    return {
+      id: idea.id,
+      data: {
+        title: idea.name,
+        tags: [],
+      },
+      richTextDescription: idea.description,
+      excerpt: plainTextExcerpt,
+    };
+  });
 ---
 
 <Layout title="Ideas">
@@ -90,7 +114,12 @@ const existingIdeas = rawIdeas
         </div>
       </div>
 
-      <IdeasWithTabs newIdeas={newIdeas} existingIdeas={existingIdeas} client:only="react" />
+      <IdeasWithTabs
+        newIdeas={newIdeas}
+        existingIdeas={existingIdeas}
+        startedIdeas={startedIdeas}
+        client:only="react"
+      />
     </div>
   </main>
 </Layout>
