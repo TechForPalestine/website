@@ -90,11 +90,9 @@ import "../styles/base.css";
             <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">Make a donation</h2>
             <div class="mx-auto w-full max-w-lg">
               <div
-                class="qgiv-embed-container"
-                data-qgiv-embed="true"
-                data-embed-id="83460"
-                data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
-                data-width="630"
+                data-entity="EMBED_FORM"
+                data-source="CharityStack"
+                id="1546c2c2-a580-4994-bbb3-9e643aed1309"
               >
               </div>
             </div>
@@ -186,24 +184,22 @@ import "../styles/base.css";
   </div>
 
   <script>
-    (function (w, d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      (js as HTMLScriptElement).src = "https://secure.qgiv.com/resources/core/js/embed.js";
-      fjs.parentNode?.insertBefore(js, fjs);
-    })(window, document, "script", "qgiv-embedjs");
-  </script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Track which donate form variant the user sees
+      (window as any).plausible =
+        (window as any).plausible ||
+        function () {
+          ((window as any).plausible.q = (window as any).plausible.q || []).push(arguments);
+        };
+      (window as any).plausible("pageview", { props: { donate_form_variant: "charitystack" } });
 
-  <script is:inline>
-    // Track which donate form variant the user sees
-    window.plausible =
-      window.plausible ||
-      function () {
-        (window.plausible.q = window.plausible.q || []).push(arguments);
-      };
-    window.plausible("pageview", { props: { donate_form_variant: "qgiv" } });
+      const script = document.createElement("script");
+      script.defer = true;
+      script.id = "charitystack-embed";
+      script.dataset.id = "M_lDGj72xT61";
+      (script as HTMLScriptElement).src =
+        "https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com/bundle.js";
+      document.body.appendChild(script);
+    });
   </script>
 </Layout>
