@@ -3,14 +3,14 @@ import Layout from "../../layouts/Layout.astro";
 import "../../styles/base.css";
 ---
 
-<Layout title="Migrating from Vercel to Netlify">
+<Layout title="Migrating from Vercel to Netlify - example using Next.js">
   <main>
     <div class="relative isolate">
       <div class="overflow-hidden">
         <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
           <div class="mx-auto max-w-4xl">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-              Migrating from Vercel to Netlify
+              Migrating from Vercel to Netlify - example using Next.js
             </h1>
 
             <div class="prose prose-lg mt-8 max-w-none text-gray-700">
@@ -32,7 +32,9 @@ import "../../styles/base.css";
                 (such as a production web server).
               </p>
               <p class="mb-4">
-                The process is relatively straightforward as Netlify provides zero-configuration
+                The guide uses Next.js which has a few more gotchas due to it's tight integration with Vercel.
+                If you've got another project on Vercel, you should be able to follow along and simply skip the Next.js parts when doing your migration.
+                Having said that, the process with Next.js should still be relatively straightforward as Netlify provides zero-configuration
                 deployment for Next.js 13.5+ with full support for App Router, SSR, ISR, and all
                 modern Next.js features. Earlier versions use the legacy runtime.
               </p>
