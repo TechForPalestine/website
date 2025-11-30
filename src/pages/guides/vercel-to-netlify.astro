@@ -1,0 +1,249 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/base.css";
+---
+
+<Layout title="Migrating from Vercel to Netlify - example using Next.js">
+  <main>
+    <div class="relative isolate">
+      <div class="overflow-hidden">
+        <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
+          <div class="mx-auto max-w-4xl">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+              Migrating from Vercel to Netlify - example using Next.js
+            </h1>
+
+            <div class="prose prose-lg mt-8 max-w-none text-gray-700">
+              <h2 class="mb-4 mt-8 text-2xl font-bold">TLDR</h2>
+              <ol class="list-decimal space-y-2 pl-6">
+                <li>Sign up to Netlify</li>
+                <li>Link your git repo</li>
+                <li>Copy env vars across</li>
+                <li>Test on a preview domain</li>
+                <li>Transfer your production domain</li>
+              </ol>
+
+              <p class="mt-6 text-lg">For more details and gotchas, carry on reading.</p>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">Introduction</h2>
+              <p class="mb-4">Before we start it's important to understand a few concepts.</p>
+              <p class="mb-4">
+                Vercel and Netlify are simply ways of deploying code from a git repo to servers
+                (such as a production web server).
+              </p>
+              <p class="mb-4">
+                The guide uses Next.js which has a few more gotchas due to it's tight integration with Vercel.
+                If you've got another project on Vercel, you should be able to follow along and simply skip the Next.js parts when doing your migration.
+                Having said that, the process with Next.js should still be relatively straightforward as Netlify provides zero-configuration
+                deployment for Next.js 13.5+ with full support for App Router, SSR, ISR, and all
+                modern Next.js features. Earlier versions use the legacy runtime.
+              </p>
+              <p class="mb-4">
+                You'll be setting up a Preview environment anyway so you can do some thorough
+                testing on Netlify before cutting over.
+              </p>
+              <p class="mb-4">
+                If you want Priority email support immediately upgrade to Pro. That way you'll get
+                tech support during the cutover process.
+              </p>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">0. Pre-migration checklist</h2>
+              <ul class="list-disc space-y-2 pl-6">
+                <li>
+                  Check your version of Next.js
+                  <ul class="list-disc pl-6">
+                    <li>
+                      see <code>package.json</code> (e.g. <code>"next": "15.3.3"</code>) and make
+                      sure it's
+                      <code>13.5+</code>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Check build commands and settings
+                  <ul class="list-disc pl-6">
+                    <li>
+                      e.g. see <code>vercel.json</code> (if it does not exist, you're not using any Vercel-specific
+                      features)
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Review your Vercel dashboard settings
+                  <ul class="list-disc pl-6">
+                    <li>Settings &gt; Build and Deployment</li>
+                  </ul>
+                </li>
+                <li>
+                  Plan the time you'll need
+                  <ul class="list-disc pl-6">
+                    <li>
+                      The entire process only takes a few hours but, to factor in DNS delays,
+                      testing and questions to Netlify support if required, I'd plan for a few days
+                      (small to medium) to a couple of weeks (enterprise) depending on the scale of
+                      your project whilst you wait for things to happen.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">1. Preparation</h2>
+              <ul class="list-disc space-y-2 pl-6">
+                <li>Plan the migration at the start of a sprint for larger projects</li>
+                <li>Inform your team about the upcoming changes</li>
+                <li>Ensure your project is in a git repository</li>
+                <li>Commit all pending changes</li>
+                <li>Verify Next.js features in use</li>
+                <li>Set up comprehensive testing</li>
+                <li>
+                  Read the DNS migration guidance document from Netlify (<a
+                    href="https://answers.netlify.com/t/support-guide-minimal-downtime-for-a-live-site-dns-migration/141"
+                    class="text-red-800 hover:text-red-900"
+                    >answers.netlify.com/t/support-guide-minimal-downtime-for-a-live-site-dns-migration/141</a
+                  >)
+                </li>
+              </ul>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">
+                2. Sign Up and Create a New Site on Netlify
+              </h2>
+              <ol class="list-decimal space-y-4 pl-6">
+                <li>
+                  Go to <a href="https://app.netlify.com" class="text-red-800 hover:text-red-900"
+                    >app.netlify.com</a
+                  > and create an account
+                </li>
+                <li>
+                  Click <strong>Add new project</strong> > <strong
+                    >Import an existing project</strong
+                  >
+                </li>
+                <li>Connect your Git provider and select the repository/branch</li>
+                <li>
+                  Configure build settings (Netlify usually auto-detects these for Next.js projects)
+                </li>
+                <li>
+                  Deploy the site - Netlify will provide a `*.netlify.app` subdomain for preview
+                </li>
+              </ol>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">3. Migrate Environment Variables</h2>
+              <p class="mb-4">
+                For environment variables that differ between environments (like Stripe keys), you
+                can set different values for production and preview environments:
+              </p>
+              <img
+                src="/images/vercel-to-netlify/Netlify.projects.configuration.env.NEXT_PUBLIC_APP_URL.png"
+                alt="Netlify Environment Variables - Different values per environment"
+                class="my-4 rounded-lg border border-gray-200 shadow-sm"
+              />
+              <ol class="list-decimal space-y-4 pl-6">
+                <li>Copy all environment variables from Vercel Dashboard</li>
+                <li>
+                  In Netlify: Go to <strong>Project configuration</strong> > <strong
+                    >Environment variables</strong
+                  > and add them
+                  <img
+                    src="/images/vercel-to-netlify/Netlify.projects.configuration.env.png"
+                    alt="Netlify Environment Variables Configuration"
+                    class="my-4 rounded-lg border border-gray-200 shadow-sm"
+                  />
+                </li>
+                <li>Use scoped variables for different environments (production vs. preview)</li>
+              </ol>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">
+                4. Migrate Build, Redirects, Rewrites, Headers
+              </h2>
+              <p class="mb-2">You can also configure these settings through the Netlify UI:</p>
+              <img
+                src="/images/vercel-to-netlify/Netlify.projects.configuration.deploys.build.png"
+                alt="Netlify Build Settings Configuration"
+                class="my-4 rounded-lg border border-gray-200 shadow-sm"
+              />
+              <p class="mb-4">Create a <code>netlify.toml</code> file in your project root:</p>
+              <pre
+                class="overflow-x-auto rounded-md bg-gray-100 p-4"><code>
+[build]
+  command = "next build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+              </code></pre>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">5. Migrate Serverless/Edge Functions</h2>
+              <p>Next.js API routes should work automatically with no changes needed.</p>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">6. Add Domain</h2>
+              <ol class="list-decimal space-y-4 pl-6">
+                <li>
+                  In Netlify: <strong>Projects</strong> > <strong>Domain Management</strong>, add
+                  your production domain
+                </li>
+                <li>Copy across all DNS records from Vercel</li>
+                <li>Verify TLS certificate setup</li>
+              </ol>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">7. Test Thoroughly</h2>
+              <p class="mb-2">
+                Netlify's Preview Deployments let you test changes before they go live:
+              </p>
+              <p>
+                Use Netlify's <strong>Deploy Previews</strong> for branches/PRs to test before going
+                live.
+              </p>
+
+              <h2 class="mb-4 mt-12 text-2xl font-bold">8. Go Live and Clean Up</h2>
+              <ol class="list-decimal space-y-4 pl-6">
+                <li>
+                  Whilst changing nameservers, you can test DNS propagation using: <code
+                    >dig NS &lt;your domain&gt; +short</code
+                  > or <a href="https://www.whatsmydns.net/" class="text-red-800 hover:text-red-900"
+                    >https://www.whatsmydns.net/</a
+                  >
+                  <li>Update nameservers to point to Netlify</li>
+                  <li>Test thoroughly after DNS propagation</li>
+                  <li>
+                    You can check the status of your site’s certificates in Domain management &gt;
+                    HTTPS
+                  </li>
+                  <li>Update TTL settings if needed (to old values)</li>
+                  <li>Once verified, you can pause or delete the Vercel project</li>
+                  <li>
+                    Note, if you want to restrict TLS certificates to LetsEncrypt then you'll need
+                    to create a CAA record (<a
+                      href="https://docs.netlify.com/manage/domains/secure-domains-with-https/https-ssl/"
+                      class="text-red-800 hover:text-red-900"
+                      >https://docs.netlify.com/manage/domains/secure-domains-with-https/https-ssl/</a
+                    >)
+                  </li>
+
+                  <h2 class="mb-4 mt-12 text-2xl font-bold">Netlify Next.js Plugin Details</h2>
+                  <p>
+                    The <code>@netlify/plugin-nextjs</code> handles most of the heavy lifting:
+                  </p>
+                  <ul class="mt-4 list-disc space-y-2 pl-6">
+                    <li>Static pages: Served directly from Netlify CDN</li>
+                    <li>Dynamic SSR pages: Converted to Netlify Functions</li>
+                    <li>API routes: Become Netlify Functions</li>
+                    <li>Image Optimization: Powered by Netlify Image CDN</li>
+                    <li>ISR: Handled via On-demand Builders</li>
+                    <li>Middleware: Runs as Netlify Edge Functions</li>
+                  </ul>
+
+                  <p class="mt-8 text-sm text-gray-500">
+                    For the most up-to-date information, refer to
+                    <a
+                      href="https://docs.netlify.com/resources/checklists/vercel-to-netlify-migration/"
+                      class="text-red-800 hover:text-red-900">Netlify's official migration guide</a
+                    >.
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
