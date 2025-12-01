@@ -293,7 +293,12 @@ export default function Events({
               const monthName = monthNames[parseInt(month) - 1];
               const dayNum = parseInt(day);
 
-              const isPast = event.status?.toLowerCase() === "past";
+              // Automatically determine if event is past or upcoming based on date
+              const eventDate = new Date(event.date);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const isPast = eventDate < today;
+              const autoStatus = isPast ? "Past" : "Upcoming";
 
               return (
                 <Card
@@ -340,17 +345,15 @@ export default function Events({
                       <Typography variant="h6" className="font-bold tracking-tight text-gray-900">
                         {event.title}
                       </Typography>
-                      {event.status && (
-                        <Chip
-                          size="small"
-                          label={event.status}
-                          sx={{
-                            backgroundColor: isPast ? "#EA4335" : "#168039",
-                            color: "#fff",
-                            fontWeight: 500,
-                          }}
-                        />
-                      )}
+                      <Chip
+                        size="small"
+                        label={autoStatus}
+                        sx={{
+                          backgroundColor: isPast ? "#EA4335" : "#168039",
+                          color: "#fff",
+                          fontWeight: 500,
+                        }}
+                      />
                     </Box>
 
                     {/* Meta */}
