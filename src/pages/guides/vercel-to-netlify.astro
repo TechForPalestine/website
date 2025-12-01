@@ -1,9 +1,101 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import "../../styles/base.css";
+
+const pageTitle = "Migrating from Vercel to Netlify - Complete Next.js Migration Guide";
+const pageDescription = "Step-by-step guide to migrate your Next.js application from Vercel to Netlify. Learn how to transfer domains, environment variables, redirects, and deploy with zero downtime.";
+const pageUrl = "https://techforpalestine.org/guides/vercel-to-netlify";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": pageTitle,
+  "description": pageDescription,
+  "image": "https://techforpalestine.org/t4p-social-logo.png",
+  "totalTime": "PT3H",
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "value": "0"
+  },
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "Netlify Account"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "Git Repository"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Pre-migration checklist",
+      "text": "Check your Next.js version (13.5+), review build commands and Vercel settings, and plan the migration timeline.",
+      "position": 1
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Preparation",
+      "text": "Plan the migration, inform your team, ensure your project is in git, commit changes, and read Netlify's DNS migration guidance.",
+      "position": 2
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Sign Up and Create a New Site on Netlify",
+      "text": "Create a Netlify account, import your existing project from git, configure build settings, and deploy to a preview domain.",
+      "position": 3
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Migrate Environment Variables",
+      "text": "Copy all environment variables from Vercel Dashboard to Netlify's Project configuration, using scoped variables for different environments.",
+      "position": 4
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Migrate Build, Redirects, Rewrites, Headers",
+      "text": "Create a netlify.toml file with build commands and install the @netlify/plugin-nextjs plugin.",
+      "position": 5
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Migrate Serverless/Edge Functions",
+      "text": "Next.js API routes work automatically with no changes needed on Netlify.",
+      "position": 6
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Add Domain",
+      "text": "Add your production domain in Netlify's Domain Management, copy DNS records from Vercel, and verify TLS certificate setup.",
+      "position": 7
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Test Thoroughly",
+      "text": "Use Netlify's Deploy Previews for branches and PRs to test all functionality before going live.",
+      "position": 8
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Go Live and Clean Up",
+      "text": "Update nameservers to Netlify, test DNS propagation, verify certificates, and once confirmed, pause or delete the Vercel project.",
+      "position": 9
+    }
+  ]
+};
 ---
 
-<Layout title="Migrating from Vercel to Netlify - example using Next.js">
+<Layout title={pageTitle} description={pageDescription}>
+  <Fragment slot="head">
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:title" content={pageTitle} />
+    <link rel="canonical" href={pageUrl} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </Fragment>
   <main>
     <div class="relative isolate">
       <div class="overflow-hidden">
