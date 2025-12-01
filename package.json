@@ -35,7 +35,7 @@
     "@tabler/icons": "^2.47.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
-    "astro": "^5.14.4",
+    "astro": "^5.15.9",
     "astro-heroicons": "^2.1.5",
     "astro-icon": "^1.1.5",
     "axios": "^1.12.2",
