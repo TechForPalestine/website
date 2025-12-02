@@ -27,7 +27,13 @@ export default defineConfig({
       // Disable injecting a basic `base.css` import on every page.
       applyBaseStyles: false,
     }),
-    svelte(),
+    svelte({
+      compilerOptions: {
+        experimental: {
+          async: true,
+        },
+      },
+    }),
     sitemap(),
   ],
 });
