@@ -19,6 +19,9 @@ export default defineConfig({
         "react-dom/server": "react-dom/server.edge",
       },
     },
+    ssr: {
+      external: ["node:fs/promises", "node:path", "node:url", "node:crypto"],
+    },
   },
   integrations: [
     icon(),
