@@ -4,9 +4,16 @@ import Footer from "../components/Footer.astro";
 interface Props {
   title: string;
   description?: string;
+  image?: string;
 }
 
-const { title, description = "T4P is an incubator for Palestine advocacy projects." } = Astro.props;
+const {
+  title,
+  description = "T4P is an incubator for Palestine advocacy projects.",
+  image = "https://techforpalestine.org/t4p-social-logo.png"
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://techforpalestine.org").toString();
 ---
 
 <!doctype html>
@@ -24,17 +31,17 @@ const { title, description = "T4P is an incubator for Palestine advocacy project
     </script>
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
     <meta property="twitter:card" name="twitter:card" content="summary_large_image" />
     <meta property="twitter:site" name="twitter:site" content="@tech4palestine" />
+    <meta property="twitter:title" name="twitter:title" content={title} />
     <meta property="twitter:description" name="twitter:description" content={description} />
-    <meta
-      property="twitter:image"
-      name="twitter:image"
-      content={"https://techforpalestine.org/t4p-social-logo.png"}
-    />
+    <meta property="twitter:image" name="twitter:image" content={image} />
     <meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={"https://techforpalestine.org/t4p-social-logo.png"} />
 
     <slot name="head" />
 
