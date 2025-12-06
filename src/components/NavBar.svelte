@@ -92,7 +92,7 @@
     <div class="flex gap-8">
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center group">
-          <img src="/images/new-homepage/Logo_less_padding.webp" alt="T4P logo" class="object-cover transition-transform duration-200 group-hover:scale-105" style="height: 4.5rem; width: 125px;" />
+          <img src="/images/new-homepage/Logo_less_padding.png" alt="T4P logo" class="object-cover transition-transform duration-200 group-hover:scale-105" style="height: 4.5rem; width: 125px;" />
         </a>
       </div>
 
