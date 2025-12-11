@@ -86,13 +86,13 @@
   };
 </script>
 
-<header class="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm" style="z-index: 1000;">
+<header class="sticky top-0 bg-white/90 border-b border-gray-200 shadow-sm" style="z-index: 1000;">
   <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
     <!-- Logo -->
     <div class="flex gap-8">
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center group">
-          <img src="/mark-transparent.png" alt="T4P logo" class="h-14 transition-transform duration-200 group-hover:scale-105" />
+          <img src="/images/new-homepage/t4p-logo.webp" alt="T4P logo" class="transition-transform duration-200 group-hover:scale-105" style="height: 4.5rem;" />
         </a>
       </div>
 
@@ -173,7 +173,7 @@
       <div>
         <a
           href="/donate"
-          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
+          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-10 text-lg rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
         >
           Donate
         </a>
@@ -184,7 +184,7 @@
     <div class="flex lg:hidden items-center space-x-3">
       <a
         href="/donate"
-        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
       >
         Donate
       </a>
