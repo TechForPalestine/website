@@ -86,13 +86,13 @@
   };
 </script>
 
-<header class="sticky top-0 bg-white border-b border-gray-200 shadow-sm" style="z-index: 1000;">
+<header class="sticky top-0 bg-white/90 border-b border-gray-200 shadow-sm" style="z-index: 1000;">
   <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
     <!-- Logo -->
     <div class="flex gap-8">
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center group">
-          <img src="/images/new-homepage/t4p-logo.png" alt="T4P logo" class="transition-transform duration-200 group-hover:scale-105" style="height: 4.5rem;" />
+          <img src="/images/new-homepage/t4p-logo.webp" alt="T4P logo" class="transition-transform duration-200 group-hover:scale-105" style="height: 4.5rem;" />
         </a>
       </div>
 
