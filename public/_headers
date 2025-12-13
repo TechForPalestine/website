@@ -1,0 +1,21 @@
+# Security Headers for Cloudflare Pages
+# See: https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  # HSTS - Force HTTPS for 1 year, include subdomains, enable preload
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # Content Security Policy - Allow self and required external services
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://pal-chat.net https://plausible.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https://plausible.io https://pal-chat.net https://*.notion.so; font-src 'self' data:; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; upgrade-insecure-requests
+
+  # Referrer Policy - Don't leak referrer information
+  Referrer-Policy: no-referrer
+
+  # Prevent MIME-type sniffing attacks
+  X-Content-Type-Options: nosniff
+
+  # Prevent clickjacking
+  X-Frame-Options: DENY
+
+  # Disable unused browser features for privacy/security
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
