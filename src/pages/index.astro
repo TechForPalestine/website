@@ -10,25 +10,25 @@ import ArrowIcon from "../components/ArrowIcon.astro";
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
   image="https://techforpalestine.org/happy-kids.jpg"
 >
-<style is:global>
-  /* Style the external form submit button to match our color scheme */
-  .eomail-form button[type="submit"],
-  .eomail-form input[type="submit"] {
-    background-color: #166534 !important; /* green-800 */
-    color: white !important;
-    border: none !important;
-    padding: 0.75rem 2rem !important;
-    border-radius: 0.375rem !important;
-    font-weight: 500 !important;
-    cursor: pointer !important;
-    transition: background-color 0.2s !important;
-  }
+  <style is:global>
+    /* Style the external form submit button to match our color scheme */
+    .eomail-form button[type="submit"],
+    .eomail-form input[type="submit"] {
+      background-color: #166534 !important; /* green-800 */
+      color: white !important;
+      border: none !important;
+      padding: 0.75rem 2rem !important;
+      border-radius: 0.375rem !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      transition: background-color 0.2s !important;
+    }
 
-  .eomail-form button[type="submit"]:hover,
-  .eomail-form input[type="submit"]:hover {
-    background-color: #15803d !important; /* green-700 */
-  }
-</style>
+    .eomail-form button[type="submit"]:hover,
+    .eomail-form input[type="submit"]:hover {
+      background-color: #15803d !important; /* green-700 */
+    }
+  </style>
   <main>
     <section class="flex flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center">
       <div class="min-h-fit items-center justify-center space-y-12 py-16 text-center">
@@ -71,19 +71,104 @@ import ArrowIcon from "../components/ArrowIcon.astro";
           </h2>
         </div>
 
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-wrap justify-center gap-8">
+          <!-- Apricot -->
+          <a
+            href="https://apricotinternational.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+          >
+            <div>
+              <div class="mx-auto mb-4 flex h-32 w-32 items-center justify-center">
+                <img
+                  src="/images/new-homepage/Apricot.webp"
+                  alt="Apricot logo"
+                  class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                  style="border-radius: 2.2rem;"
+                />
+              </div>
+              <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
+                Apricot
+              </h3>
+              <p class="text-sm leading-relaxed text-gray-600">
+                A nonprofit connecting displaced Palestinian tech professionals with global
+                companies, resulting in $1M in salary to Palestinians.
+              </p>
+            </div>
+            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
+              Visit Website →
+            </span>
+          </a>
+
+          <!-- Media Bias Meter -->
+          <a
+            href="https://www.mediabiasmeter.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+          >
+            <div>
+              <div class="mx-auto mb-4 flex h-32 w-32 items-center justify-center">
+                <img
+                  src="/images/new-homepage/Media_Bias.webp"
+                  alt="Media Bias Meter logo"
+                  class="w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                  style="border-radius: 2.2rem;"
+                />
+              </div>
+              <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
+                Media Bias Meter
+              </h3>
+              <p class="text-sm leading-relaxed text-gray-600">
+                A research initiative exposing anti-Palestine media bias from major news outlets
+                through detailed research reports.
+              </p>
+            </div>
+            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
+              Visit Website →
+            </span>
+          </a>
+
+          <!-- A Ween Rayeh -->
+          <a
+            href="https://aweenrayeh.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+          >
+            <div class="mb-4 flex h-32 w-32 items-center justify-center">
+              <img
+                src="/images/new-homepage/a-ween-raeh.jpeg"
+                alt="A Ween Rayeh logo"
+                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+              />
+            </div>
+            <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
+              A Ween Rayeh
+            </h3>
+            <p class="min-h-[4.5rem] text-sm leading-relaxed text-gray-600">
+              A smart, community-powered platform that gives Palestinians real-time updates on road
+              and checkpoint conditions in the West Bank.
+            </p>
+            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
+              Visit Website →
+            </span>
+          </a>
+
           <!-- Boycat -->
           <a
             href="https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex flex-col items-center rounded-xl border-2 border-gray-200 bg-white p-6 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
           >
             <div class="mb-4 flex h-32 w-32 items-center justify-center">
               <img
                 src="/images/new-homepage/Boycat_logo.webp"
                 alt="Boycat logo"
                 class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                style="border-radius: 2.2rem;"
               />
             </div>
             <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">Boycat</h3>
@@ -100,13 +185,14 @@ import ArrowIcon from "../components/ArrowIcon.astro";
             href="https://www.findaprotest.info/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex flex-col items-center rounded-xl border-2 border-gray-200 bg-white p-6 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
           >
             <div class="mb-4 flex h-32 w-32 items-center justify-center">
               <img
-                src="/images/new-homepage/find_a_protest_logo.webp"
+                src="/images/new-homepage/findaprotest_b.webp"
                 alt="Find a Protest logo"
-                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                class="h-full w-full object-contain px-5 transition-transform duration-300 group-hover:scale-110"
+                style="border-radius: 2.2rem; background-color: #9FBAA9;"
               />
             </div>
             <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
@@ -125,13 +211,14 @@ import ArrowIcon from "../components/ArrowIcon.astro";
             href="https://upscrolled.com/en/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex flex-col items-center rounded-xl border-2 border-gray-200 bg-white p-6 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
           >
             <div class="mb-4 flex h-32 w-32 items-center justify-center">
               <img
                 src="/images/new-homepage/upscrolled_logo.webp"
                 alt="Upscrolled logo"
                 class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                style="border-radius: 2.2rem;"
               />
             </div>
             <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
@@ -150,13 +237,14 @@ import ArrowIcon from "../components/ArrowIcon.astro";
             href="https://www.thaura.ai/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex flex-col items-center rounded-xl border-2 border-gray-200 bg-white p-6 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl"
+            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
           >
             <div class="mb-4 flex h-32 w-32 items-center justify-center">
               <img
                 src="https://projecthub.techforpalestine.org/public-objects/logos/logo-9348af38-d0a9-43-1763404080798.svg"
                 alt="Thaura logo"
                 class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                style="border-radius: 2.2rem;"
               />
             </div>
             <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">Thaura</h3>
@@ -193,6 +281,5 @@ import ArrowIcon from "../components/ArrowIcon.astro";
         <SignUpForm />
       </div>
     </section>
-
   </main>
 </Layout>
