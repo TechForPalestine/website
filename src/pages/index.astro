@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
+import SummitPopup from "../components/SummitPopup.tsx";
 import "../styles/base.css";
 import ArrowIcon from "../components/ArrowIcon.astro";
 ---
@@ -29,6 +30,7 @@ import ArrowIcon from "../components/ArrowIcon.astro";
       background-color: #15803d !important; /* green-700 */
     }
   </style>
+  <SummitPopup client:only="react" />
   <main>
     <section class="flex flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center">
       <div class="min-h-fit items-center justify-center space-y-12 py-16 text-center">
