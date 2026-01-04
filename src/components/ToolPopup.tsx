@@ -52,7 +52,7 @@ const ToolPopup = ({ buttonLabel, children }: ToolPopupProps) => {
             </button>
 
             {/* ChatBox (or any tool inside) */}
-            <div className="h-full w-full overflow-auto">
+            <div className="h-full w-full overflow-y-auto overflow-x-hidden">
               {children}
             </div>
           </div>
