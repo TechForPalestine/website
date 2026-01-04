@@ -33,26 +33,26 @@ const ToolPopup = ({ buttonLabel, children }: ToolPopupProps) => {
       {/* Popup Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm"
           onClick={handleClose}
         >
           {/* Popup Box */}
           <div
-            className="relative w-full max-w-3xl overflow-hidden rounded-lg shadow-2xl"
-            style={{ height: "90vh", maxHeight: "900px" }}
+            className="relative w-full overflow-hidden rounded-lg shadow-2xl"
+            style={{ width: "min(600px, 90vw)", height: "800px" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
               onClick={handleClose}
-              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow-lg transition-colors hover:bg-white hover:text-gray-900"
+              className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow-lg transition-colors hover:bg-white hover:text-gray-900"
               aria-label="Close"
             >
               ✖
             </button>
 
             {/* ChatBox (or any tool inside) */}
-            <div className="h-full w-full overflow-y-auto overflow-x-hidden">
+            <div className="h-full w-full">
               {children}
             </div>
           </div>
