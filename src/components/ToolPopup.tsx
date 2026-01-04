@@ -21,23 +21,24 @@ const ToolPopup = ({ buttonLabel, children }: ToolPopupProps) => {
 
       {/* Popup Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black bg-opacity-50 p-4">
-          {/* Popup Box (5% less than full height) */}
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          {/* Popup Box */}
           <div
-            className="relative w-full max-w-lg rounded bg-white p-6 shadow-lg"
-            style={{ height: "85vh", overflow: "hidden", marginTop: "5%" }} // ✅ 95% of the viewport height
+            className="relative w-full max-w-3xl rounded-lg bg-white shadow-2xl"
+            style={{ height: "90vh", maxHeight: "900px" }}
           >
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
+              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900"
+              aria-label="Close"
             >
               ✖
             </button>
 
             {/* ChatBox (or any tool inside) */}
-            <div className="flex h-full items-center justify-center">
-              <div className="origin-top scale-90 transform">{children}</div>
+            <div className="h-full w-full overflow-hidden rounded-lg p-4">
+              {children}
             </div>
           </div>
         </div>
