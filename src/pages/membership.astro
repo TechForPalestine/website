@@ -1,0 +1,131 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import MembershipCalculator from "../components/MembershipCalculator.tsx";
+import "../styles/base.css";
+---
+
+<Layout
+  title="Membership - Tech for Palestine"
+  description="Join Tech for Palestine's community of professionals using their skills to launch and scale critical tech and advocacy projects for Palestine."
+>
+  <main>
+    <PageHeader
+      overline="Tech for Palestine"
+      title="Membership"
+      subtitle="Join our community of professionals building tech for Palestine"
+    />
+
+    <div class="mx-auto max-w-4xl px-6 pb-24 sm:px-8">
+      <!-- Introduction -->
+      <div class="prose prose-lg mx-auto mb-12">
+        <p class="mb-6 text-lg leading-8 text-gray-700">
+          Tech for Palestine is a community of professionals using our skills to launch and scale
+          critical tech and advocacy projects for Palestine, such as initiatives for BDS, hiring
+          Palestinians, combating misinformation, and more.
+        </p>
+
+        <p class="mb-6 text-lg leading-8 text-gray-700">
+          Members are the core of our movement. Through our collaboration, we build long-term
+          grassroots power to sustain current projects, onboard new projects for Palestine, and
+          maintain the infrastructure that makes this work possible.
+        </p>
+
+        <p class="mb-6 text-lg leading-8 text-gray-700">
+          Membership dues are pay-what-you-can. We ask members to contribute meaningfully based on
+          their income. Use the widget below to enter your income and see a suggested monthly
+          amount.
+        </p>
+
+        <p class="text-base italic leading-7 text-gray-600">
+          *Tech for Palestine aims for inclusivity. If you are unable to access banking services,
+          please reach out to <a
+            href="mailto:membership@techforpalestine.org"
+            class="text-green-700 underline hover:text-green-800"
+            >membership@techforpalestine.org</a
+          > to request a waiver of dues.
+        </p>
+      </div>
+
+      <!-- Calculator Widget -->
+      <div class="mb-16">
+        <MembershipCalculator client:only="react" />
+      </div>
+
+      <!-- Form Placeholder -->
+      <div class="mb-16 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center">
+        <p class="text-lg text-gray-600">
+          [Membership form widget will be added here]
+        </p>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="mt-16">
+        <h2 class="mb-8 text-3xl font-bold tracking-tight text-gray-900">Membership FAQ</h2>
+
+        <div class="space-y-8">
+          <!-- FAQ Item 1 -->
+          <div>
+            <h3 class="mb-3 text-xl font-semibold text-gray-900">How can I get involved?</h3>
+            <p class="mb-3 text-lg leading-8 text-gray-700">
+              Once you're a member, there are multiple ways to get involved:
+            </p>
+            <ul class="ml-6 list-disc space-y-2 text-lg leading-8 text-gray-700">
+              <li>Meet with us one-on-one to see how your skills and interests can support the mission</li>
+              <li>Join one of our working committees, or start your own</li>
+              <li>Stay up-to-date by reading and sharing member updates</li>
+              <li>
+                If you have experience with bringing products to life, apply to become a <a
+                  href="/mentorship"
+                  class="text-green-700 underline hover:text-green-800">project mentor</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div>
+            <h3 class="mb-3 text-xl font-semibold text-gray-900">How are dues used?</h3>
+            <p class="text-lg leading-8 text-gray-700">
+              Dues help us progress towards our goal of 10,000 projects for Palestine by supporting
+              project work itself: grants for advocacy projects, accessing experts to provide
+              trainings, hosting networking and learning events, etc. - and by supporting the
+              infrastructure that lets us get work done, such as paying for software and employees.
+            </p>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div>
+            <h3 class="mb-3 text-xl font-semibold text-gray-900">
+              What are the benefits of membership?
+            </h3>
+            <p class="mb-3 text-lg leading-8 text-gray-700">Members receive:</p>
+            <ul class="ml-6 list-disc space-y-2 text-lg leading-8 text-gray-700">
+              <li>Access to a community of like-minded members and activists</li>
+              <li>Opportunities to lead, co-lead or support projects</li>
+              <li>
+                Connection to Pro-Palestinian tech, businesses and social impact networks
+              </li>
+              <li>Opportunities to provide input and shape T4P priorities and strategy</li>
+              <li>
+                Skill development and hands-on experience in tech, research, organizing, or project
+                management
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="mt-12 rounded-lg bg-green-50 p-6">
+          <p class="text-lg leading-8 text-gray-700">
+            For additional questions about membership, please email <a
+              href="mailto:membership@techforpalestine.org"
+              class="font-semibold text-green-700 underline hover:text-green-800"
+              >membership@techforpalestine.org</a
+            >.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
