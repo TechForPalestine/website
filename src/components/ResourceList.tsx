@@ -51,7 +51,7 @@ export default function ResourceList({ sections }: { sections: Section[] }) {
                     {/*/>*/}
                     <Box
                       sx={{
-                        height: 60,
+                        height: 80,
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -60,7 +60,7 @@ export default function ResourceList({ sections }: { sections: Section[] }) {
                       <img
                         src={res.logo}
                         alt={res.name}
-                        style={{ maxHeight: "100%", maxWidth: "80%" }}
+                        style={{ maxHeight: "100%", maxWidth: "100%" }}
                       />
                     </Box>
                     <CardContent sx={{ paddingBottom: 0 }}>
