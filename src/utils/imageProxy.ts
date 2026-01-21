@@ -12,11 +12,20 @@ const WORKER_DOMAIN =
  */
 export function getProxiedImageUrl(notionUrl: string): string {
   // Return original URL if it's already a local path or external URL
+  // Only proxy Notion S3 images by host, not by substring match
+  let host = "";
+  try {
+    const parsedUrl = new URL(notionUrl);
+    host = parsedUrl.host;
+  } catch {
+    // If invalid URL, treat as non-proxyable
+    return notionUrl;
+  }
   if (
     !notionUrl ||
     notionUrl.startsWith("/") ||
-    (!notionUrl.includes("s3.us-west-2.amazonaws.com") &&
-      !notionUrl.includes("prod-files-secure.s3"))
+    (host !== "s3.us-west-2.amazonaws.com" &&
+     host !== "prod-files-secure.s3.amazonaws.com")
   ) {
     return notionUrl;
   }
