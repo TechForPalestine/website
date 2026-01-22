@@ -23,27 +23,33 @@ const faqData = [
         >
           We will send you an email about the ways to get involved as a member:
         </Typography>
-        <Box component="ul" sx={{ ml: 3, color: "text.secondary" }}>
-          <li style={{ marginBottom: "8px" }}>
+        <Box
+          component="ul"
+          sx={{
+            ml: 3,
+            pl: 2,
+            color: "text.secondary",
+            listStyleType: "disc",
+            "& li": {
+              mb: 1,
+              lineHeight: 1.75,
+            },
+          }}
+        >
+          <li>
             Get T4P support on leveling up personal and corporate boycotts, using ethical
             alternatives, and learning how to activate against tech complicity.
           </li>
-          <li style={{ marginBottom: "8px" }}>
-            Bring T4P resources into your companies for hiring and policy support.
-          </li>
-          <li style={{ marginBottom: "8px" }}>
+          <li>Bring T4P resources into your companies for hiring and policy support.</li>
+          <li>
             Meet with us one-on-one to see how your skills and interests can support the mission
           </li>
-          <li style={{ marginBottom: "8px" }}>
+          <li>
             Join working committees of fellow advocates taking direct action for Palestinian
             liberation.
           </li>
-          <li style={{ marginBottom: "8px" }}>
-            Attend meetups and webinars to connect and learn from other activists.
-          </li>
-          <li style={{ marginBottom: "8px" }}>
-            Stay up-to-date by reading and sharing movement updates
-          </li>
+          <li>Attend meetups and webinars to connect and learn from other activists.</li>
+          <li>Stay up-to-date by reading and sharing movement updates</li>
         </Box>
       </>
     ),
@@ -194,6 +200,26 @@ export default function MembershipFAQ() {
           </a>
           .
         </Typography>
+      </Box>
+
+      {/* Community Image */}
+      <Box
+        sx={{
+          mt: 6,
+          maxWidth: 600,
+          mx: "auto",
+        }}
+      >
+        <img
+          src="/images/membership-event.webp"
+          alt="Tech for Palestine community event"
+          style={{
+            width: "100%",
+            height: "auto",
+            borderRadius: "8px",
+            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+          }}
+        />
       </Box>
     </Box>
   );
