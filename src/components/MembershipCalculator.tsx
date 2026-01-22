@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
-  Card,
-  CardContent,
+  Box,
   TextField,
   FormControl,
   FormLabel,
@@ -9,10 +8,8 @@ import {
   FormControlLabel,
   Radio,
   Typography,
-  Box,
   Select,
   MenuItem,
-  InputLabel,
 } from "@mui/material";
 
 const CURRENCIES = [
@@ -31,13 +28,25 @@ const CURRENCIES = [
 ];
 
 export default function MembershipCalculator() {
-  const [incomeType, setIncomeType] = useState<"annual" | "monthly">("annual");
+  const [incomeType, setIncomeType] = useState<"annual" | "monthly">("monthly");
   const [income, setIncome] = useState<string>("");
   const [currency, setCurrency] = useState<string>("USD");
   const [suggestedAmount, setSuggestedAmount] = useState<number | null>(null);
 
   const getCurrencySymbol = () => {
     return CURRENCIES.find((c) => c.code === currency)?.symbol || "$";
+  };
+
+  const getCurrencyName = () => {
+    const curr = CURRENCIES.find((c) => c.code === currency);
+    return curr ? `${curr.symbol} ${curr.name} (${curr.code})` : "$ US Dollar (USD)";
+  };
+
+  const getIncomeLabel = () => {
+    const currSymbol = getCurrencySymbol();
+    return incomeType === "annual"
+      ? `Annual Income (in thousands ${currSymbol})`
+      : `Monthly Income (in thousands ${currSymbol})`;
   };
 
   const calculateSuggestion = (value: string) => {
@@ -80,33 +89,59 @@ export default function MembershipCalculator() {
   };
 
   return (
-    <Card
-      elevation={3}
+    <Box
       sx={{
         maxWidth: 600,
         mx: "auto",
-        borderRadius: 2,
-        border: "2px solid",
-        borderColor: "success.main",
+        borderRadius: 3,
+        border: "4px solid #168039",
+        backgroundColor: "white",
+        p: 3,
       }}
     >
-      <CardContent sx={{ p: 4 }}>
-        <Typography
-          variant="h5"
-          component="h2"
-          gutterBottom
-          sx={{ fontWeight: "bold", color: "text.primary", mb: 3 }}
-        >
-          Calculate Your Suggested Contribution
-        </Typography>
+      <Typography
+        variant="h5"
+        component="h2"
+        sx={{
+          fontWeight: "bold",
+          color: "#1f2937",
+          mb: 2.5,
+          fontSize: "1.75rem",
+        }}
+      >
+        Calculate Your Suggested Contribution
+      </Typography>
 
-        <FormControl fullWidth sx={{ mb: 3 }}>
-          <InputLabel id="currency-select-label">Currency</InputLabel>
+      {/* Currency */}
+      <Box sx={{ mb: 2 }}>
+        <FormLabel
+          sx={{
+            display: "block",
+            mb: 1,
+            fontWeight: 600,
+            color: "#1f2937",
+            fontSize: "0.95rem",
+          }}
+        >
+          Currency
+        </FormLabel>
+        <FormControl fullWidth>
           <Select
-            labelId="currency-select-label"
             value={currency}
-            label="Currency"
             onChange={handleCurrencyChange}
+            displayEmpty
+            sx={{
+              backgroundColor: "white",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#d1d5db",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#9ca3af",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#168039",
+              },
+            }}
           >
             {CURRENCIES.map((curr) => (
               <MenuItem key={curr.code} value={curr.code}>
@@ -115,88 +150,147 @@ export default function MembershipCalculator() {
             ))}
           </Select>
         </FormControl>
+      </Box>
 
-        <FormControl component="fieldset" sx={{ mb: 3, width: "100%" }}>
-          <FormLabel component="legend" sx={{ mb: 1, fontWeight: 600 }}>
-            Income Period
-          </FormLabel>
+      {/* Income Period */}
+      <Box sx={{ mb: 2 }}>
+        <FormLabel
+          component="legend"
+          sx={{
+            display: "block",
+            mb: 1,
+            fontWeight: 600,
+            color: "#1f2937",
+            fontSize: "0.95rem",
+          }}
+        >
+          Income Period
+        </FormLabel>
+        <FormControl component="fieldset">
           <RadioGroup
             row
             value={incomeType}
             onChange={handleIncomeTypeChange}
-            sx={{ gap: 2 }}
+            sx={{
+              gap: 1,
+              "& .MuiFormControlLabel-label": {
+                fontSize: "0.95rem",
+                color: "#374151",
+              },
+              "& .MuiRadio-root": {
+                color: "#9ca3af",
+                "&.Mui-checked": {
+                  color: "#168039",
+                },
+              },
+            }}
           >
-            <FormControlLabel
-              value="annual"
-              control={<Radio />}
-              label="Annual Income"
-            />
-            <FormControlLabel
-              value="monthly"
-              control={<Radio />}
-              label="Monthly Income"
-            />
+            <FormControlLabel value="annual" control={<Radio />} label="Annual Income" />
+            <FormControlLabel value="monthly" control={<Radio />} label="Monthly Income" />
           </RadioGroup>
         </FormControl>
+      </Box>
 
+      {/* Income Input */}
+      <Box sx={{ mb: 2 }}>
         <TextField
           fullWidth
-          label={
-            incomeType === "annual"
-              ? `Annual Income (in thousands ${getCurrencySymbol()})`
-              : `Monthly Income (in thousands ${getCurrencySymbol()})`
-          }
           type="number"
           value={income}
           onChange={handleIncomeChange}
-          variant="outlined"
           placeholder="e.g., 50 for 50k"
-          sx={{ mb: 4 }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "white",
+              "& fieldset": {
+                borderColor: "#d1d5db",
+              },
+              "&:hover fieldset": {
+                borderColor: "#9ca3af",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#168039",
+              },
+            },
+          }}
           InputProps={{
             inputProps: { min: 0, step: "any" },
           }}
-          helperText="Enter your income in thousands (e.g., 50 = 50,000)"
         />
+        <Typography
+          variant="caption"
+          sx={{
+            display: "block",
+            mt: 0.5,
+            color: "#6b7280",
+            fontStyle: "italic",
+            fontSize: "0.875rem",
+          }}
+        >
+          Enter your income in thousands (e.g., 50 = 50,000)
+        </Typography>
+      </Box>
 
-        {suggestedAmount !== null && (
-          <Box
+      {/* Suggested Amount Result */}
+      {suggestedAmount !== null && (
+        <Box
+          sx={{
+            mt: 2.5,
+            p: 2.5,
+            backgroundColor: "#f0fdf4",
+            borderRadius: 2,
+            border: "2px solid #168039",
+          }}
+        >
+          <Typography
+            variant="h6"
             sx={{
-              mt: 3,
-              p: 3,
-              backgroundColor: "success.50",
-              borderRadius: 2,
-              border: "2px solid",
-              borderColor: "success.main",
+              fontWeight: 600,
+              color: "#166534",
+              mb: 0.5,
+              fontSize: "1.125rem",
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 600, color: "success.dark", mb: 1 }}
-            >
-              Suggested Monthly Contribution:
-            </Typography>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: "bold", color: "success.main" }}
-            >
-              {getCurrencySymbol()}{suggestedAmount.toFixed(2)}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mt: 2, color: "text.secondary", fontStyle: "italic" }}
-            >
-              This is a suggested amount based on your income. Please contribute what feels
-              meaningful to you.
-            </Typography>
-          </Box>
-        )}
-
-        {income && suggestedAmount === null && (
-          <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-            Please enter a valid positive number
+            Suggested Monthly Contribution:
           </Typography>
-        )}
-      </CardContent>
-    </Card>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: "bold",
+              color: "#168039",
+              fontSize: "2rem",
+            }}
+          >
+            {getCurrencySymbol()}
+            {suggestedAmount.toFixed(2)}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              mt: 1.5,
+              color: "#4b5563",
+              fontStyle: "italic",
+              fontSize: "0.875rem",
+            }}
+          >
+            This is a suggested amount based on your income. Please contribute what feels
+            meaningful to you.
+          </Typography>
+        </Box>
+      )}
+
+      {income && suggestedAmount === null && (
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 1.5,
+            color: "#dc2626",
+            fontSize: "0.875rem",
+          }}
+        >
+          Please enter a valid positive number
+        </Typography>
+      )}
+    </Box>
   );
 }

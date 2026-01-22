@@ -10,10 +10,13 @@ interface Props {
 const {
   title,
   description = "T4P is an incubator for Palestine advocacy projects.",
-  image = "https://techforpalestine.org/t4p-social-logo.png"
+  image = "https://techforpalestine.org/t4p-social-logo.png",
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://techforpalestine.org").toString();
+const canonicalUrl = new URL(
+  Astro.url.pathname,
+  Astro.site || "https://techforpalestine.org"
+).toString();
 ---
 
 <!doctype html>
@@ -70,14 +73,15 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://techforp
     <!-- Floating Donate Button -->
     <a
       href="/donate"
-      class="donate-link fixed right-0 top-1/2 z-50 -translate-y-1/2 transform bg-green-800 px-2 py-6 text-white shadow-lg transition hover:bg-green-900"
+      class="donate-link fixed right-0 top-1/2 z-50 bg-green-800 px-3 py-5 text-white shadow-lg transition hover:bg-green-900"
       style="
-    writing-mode: sideways-lr;
-    text-orientation: mixed;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    writing-mode: vertical-rl;
+    transform: translateY(-50%) rotate(180deg);
+    transform-origin: center center;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   "
     >
       Donate
