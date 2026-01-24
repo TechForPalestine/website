@@ -119,12 +119,11 @@ export const GET: APIRoute = async ({ locals }) => {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`[API /api/projects] Fatal error:`, error);
+    console.error(`[API /api/projects] Fatal error:`, errorMessage, error);
 
     return new Response(
       JSON.stringify({
         error: "Failed to fetch projects",
-        details: errorMessage,
       }),
       {
         status: 500,
