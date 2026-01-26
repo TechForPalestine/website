@@ -96,10 +96,15 @@ export default function ProjectsNew({
       const response = await fetch("/api/projects", { cache: "no-cache" });
       if (response.ok) {
         const data = await response.json();
+        console.log(`[ProjectsNew] Successfully fetched ${data.length} projects`);
         setProjects(data);
+      } else {
+        console.error(`[ProjectsNew] API returned status ${response.status}:`, response.statusText);
+        const errorText = await response.text();
+        console.error('[ProjectsNew] Error response:', errorText);
       }
     } catch (error) {
-      // Silently handle error
+      console.error('[ProjectsNew] Fetch error:', error);
     } finally {
       setLoading(false);
     }
