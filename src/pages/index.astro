@@ -29,8 +29,8 @@ import "../styles/base.css";
     }
   </style>
   <main>
-    <section class="flex flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center">
-      <div class="min-h-fit items-center justify-center space-y-8 py-16 text-left">
+    <section class="flex min-h-[calc(100vh-5rem)] flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center">
+      <div class="flex min-h-fit flex-col items-center justify-center space-y-8 py-16 text-left">
         <div class="w-full space-y-6 px-6 md:px-12 lg:px-16 lg:pr-8 2xl:px-28">
           <!-- Colored bars -->
           <div class="flex items-center gap-1.5">
@@ -103,10 +103,10 @@ import "../styles/base.css";
           </p>
         </div>
       </div>
-      <figure class="relative bg-zinc-50">
+      <figure class="relative h-[32rem] bg-zinc-50 lg:h-full">
         <img
           src="/happy-kids.jpg"
-          class="h-[32rem] w-full object-cover lg:h-[42rem]"
+          class="h-full w-full object-cover"
           alt="Happy kids in Palestine"
         />
         <figcaption class="absolute bottom-2 right-2 text-xs text-white">®Motaz Azaiza</figcaption>
