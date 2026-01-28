@@ -166,14 +166,14 @@
         {/each}
       </nav>
     </div>
-    
+
     <!-- Right side: Socials and Donate -->
-    <div class="hidden lg:flex gap-6 items-center">
+    <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
       <slot name="socials" />
       <div>
         <a
           href="/donate"
-          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-10 text-lg rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 text-base 2xl:py-4 2xl:px-10 2xl:text-lg 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
         >
           Donate
         </a>
@@ -284,7 +284,7 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  
+
   .animate-fadeIn {
     animation: fadeIn 0.2s ease-out;
   }

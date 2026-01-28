@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
-import ArrowIcon from "../components/ArrowIcon.astro";
 ---
 
 <Layout
@@ -30,32 +29,84 @@ import ArrowIcon from "../components/ArrowIcon.astro";
     }
   </style>
   <main>
-    <section class="flex flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center">
-      <div class="min-h-fit items-center justify-center space-y-12 py-16 text-center">
-        <div class="mx-auto w-full max-w-screen-md space-y-6 px-6 md:px-8">
-          <h1 class="text-4xl font-bold tracking-tight">
-            HARNESSING TECHNOLOGY FOR A FREE PALESTINE
+    <section class="flex min-h-[calc(100vh-5rem)] flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center">
+      <div class="flex min-h-fit flex-col items-center justify-center space-y-8 py-16 text-left">
+        <div class="w-full space-y-6 px-6 md:px-12 lg:px-16 lg:pr-8 2xl:px-28">
+          <!-- Colored bars -->
+          <div class="flex items-center gap-1.5">
+            <div class="lg:w-22 h-2 w-24 rounded-full" style="background-color: #268024;"></div>
+            <div class="h-2 w-8 rounded-full lg:w-8" style="background-color: #e4312b;"></div>
+            <div class="h-2 w-5 rounded-full lg:w-5" style="background-color: #000000;"></div>
+          </div>
+
+          <h1 class="text-4xl font-bold md:text-5xl">
+            Harnessing Technology for a
+            <span class="text-[#268024] lg:my-2 lg:inline-block">Free Palestine</span>
           </h1>
-          <p class="text-base">
+          <p class="text-lg text-gray-700 2xl:text-xl">
             Tech for Palestine is a 501(c)(3) nonprofit operating a free incubator for pro-Palestine
             initiatives. We connect project leaders with:
           </p>
-          <ul class="inline-block list-disc space-y-2 pl-6 text-left text-base">
-            <li>One-on-one mentorship from experienced startup founders</li>
-            <li>A network of technically skilled volunteers via our Discord</li>
-            <li>Regular drop-in calls and webinars for live support and upskilling</li>
-            <li>Monthly grants to fuel early-stage growth</li>
+          <ul class="space-y-2 text-lg text-gray-700 2xl:text-xl">
+            <li class="flex items-start gap-3">
+              <svg
+                class="mt-1.5 h-4 w-4 flex-shrink-0"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="8" cy="8" r="8" fill="#e4312b" fill-opacity="0.2"></circle>
+                <circle cx="8" cy="8" r="5" fill="#e4312b"></circle>
+              </svg>
+              <span>One-on-one mentorship from experienced startup founders</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="mt-1.5 h-4 w-4 flex-shrink-0"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="8" cy="8" r="8" fill="#000000" fill-opacity="0.2"></circle>
+                <circle cx="8" cy="8" r="5" fill="#000000"></circle>
+              </svg>
+              <span>A network of technically skilled volunteers via our Discord</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="mt-1.5 h-4 w-4 flex-shrink-0"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="8" cy="8" r="8" fill="#268024" fill-opacity="0.2"></circle>
+                <circle cx="8" cy="8" r="5" fill="#268024"></circle>
+              </svg>
+              <span>Regular drop-in calls and webinars for live support and upskilling</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="mt-1.5 h-4 w-4 flex-shrink-0"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="8" cy="8" r="8" fill="#9ca3af" fill-opacity="0.2"></circle>
+                <circle cx="8" cy="8" r="5" fill="#9ca3af"></circle>
+              </svg>
+              <span>Monthly grants to fuel early-stage growth</span>
+            </li>
           </ul>
-          <p class="text-base">
+          <p class="text-lg text-gray-700 2xl:text-xl">
             Our goal is to counter tech industry complicity in Palestinian oppression by using tech
             for good, empowering changemakers with support for their liberating projects.
           </p>
         </div>
       </div>
-      <figure class="relative bg-zinc-50">
+      <figure class="relative h-[32rem] bg-zinc-50 lg:h-full">
         <img
           src="/happy-kids.jpg"
-          class="h-[32rem] w-full object-cover lg:h-[42rem]"
+          class="h-full w-full object-cover"
           alt="Happy kids in Palestine"
         />
         <figcaption class="absolute bottom-2 right-2 text-xs text-white">®Motaz Azaiza</figcaption>
