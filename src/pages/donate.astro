@@ -204,7 +204,7 @@ import "../styles/base.css";
 
   <script is:inline>
     // A/B Test Logic
-    (function() {
+    document.addEventListener('DOMContentLoaded', function() {
       // Check for URL parameter override (for testing: ?variant=qgiv or ?variant=validaid)
       var urlParams = new URLSearchParams(window.location.search);
       var forceVariant = urlParams.get('variant');
@@ -222,20 +222,10 @@ import "../styles/base.css";
       var qgivForm = document.getElementById('form-qgiv');
       var validaidForm = document.getElementById('form-validaid');
 
-      if (variant === 'qgiv') {
+      if (variant === 'qgiv' && qgivForm) {
         qgivForm.style.display = 'block';
-      } else {
-        validaidForm.style.display = 'block';
-      }
 
-      // Track pageview with variant
-      window.plausible = window.plausible || function() {
-        (window.plausible.q = window.plausible.q || []).push(arguments);
-      };
-      window.plausible('pageview', { props: { donate_form_variant: variant } });
-
-      // Load Qgiv script if needed
-      if (variant === 'qgiv') {
+        // Load Qgiv script
         (function (w, d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
           if (d.getElementById(id)) return;
@@ -244,10 +234,10 @@ import "../styles/base.css";
           js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
           fjs.parentNode?.insertBefore(js, fjs);
         })(window, document, "script", "qgiv-embedjs");
-      }
+      } else if (validaidForm) {
+        validaidForm.style.display = 'block';
 
-      // Handle ValidAid iframe resize
-      if (variant === 'validaid') {
+        // Handle ValidAid iframe resize
         window.addEventListener('message', function (event) {
           if (event.origin !== "https://validaid.org") return;
           if (event.data.type === 'validaid-resize' && event.data.iframeId === 'validaid-iframe-event-236') {
@@ -258,6 +248,11 @@ import "../styles/base.css";
           }
         });
       }
-    })();
+
+      // Track pageview with variant (safely)
+      if (typeof window.plausible !== 'undefined') {
+        window.plausible('pageview', { props: { donate_form_variant: variant } });
+      }
+    });
   </script>
 </Layout>
