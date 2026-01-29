@@ -89,18 +89,29 @@ import "../styles/base.css";
           >
             <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">Make a donation</h2>
             <div class="mx-auto w-full max-w-lg">
-              <div
-                class="qgiv-embed-container"
-                data-qgiv-embed="true"
-                data-embed-id="83460"
-                data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
-                data-width="630"
-              >
+              <!-- Variant A: Qgiv Form -->
+              <div id="form-qgiv" style="display: none;">
+                <div
+                  class="qgiv-embed-container"
+                  data-qgiv-embed="true"
+                  data-embed-id="83460"
+                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                  data-width="630"
+                >
+                </div>
+              </div>
+
+              <!-- Variant B: ValidAid Form -->
+              <div id="form-validaid" style="display: none;">
+                <iframe
+                  id="validaid-iframe-event-236"
+                  src="https://validaid.org/embed/event/236"
+                  title="Tech for Palestine"
+                  style="width:100%; border:none;"
+                  allow="payment"
+                ></iframe>
               </div>
             </div>
-            <p class="mt-4 text-center text-sm text-gray-500">
-              If this page isn't loading, please use <a href="/donate-2" class="text-green-700 underline hover:text-green-800">this form</a>.
-            </p>
             <div
               class="mt-5 flex flex-col items-center justify-center gap-3 text-sm text-gray-600 sm:flex-row"
             >
@@ -189,24 +200,61 @@ import "../styles/base.css";
   </div>
 
   <script is:inline>
-    (function (w, d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
-      fjs.parentNode?.insertBefore(js, fjs);
-    })(window, document, "script", "qgiv-embedjs");
-  </script>
+    // A/B Test Logic
+    (function() {
+      // Check for URL parameter override (for testing: ?variant=qgiv or ?variant=validaid)
+      var urlParams = new URLSearchParams(window.location.search);
+      var forceVariant = urlParams.get('variant');
 
-  <script is:inline>
-    // Track which donate form variant the user sees
-    window.plausible =
-      window.plausible ||
-      function () {
+      var variant;
+
+      if (forceVariant === 'qgiv' || forceVariant === 'validaid') {
+        variant = forceVariant;
+      } else {
+        // Randomly assign variant (50/50 split)
+        variant = Math.random() < 0.5 ? 'qgiv' : 'validaid';
+      }
+
+      // Show the appropriate form
+      var qgivForm = document.getElementById('form-qgiv');
+      var validaidForm = document.getElementById('form-validaid');
+
+      if (variant === 'qgiv') {
+        qgivForm.style.display = 'block';
+      } else {
+        validaidForm.style.display = 'block';
+      }
+
+      // Track pageview with variant
+      window.plausible = window.plausible || function() {
         (window.plausible.q = window.plausible.q || []).push(arguments);
       };
-    window.plausible("pageview", { props: { donate_form_variant: "qgiv" } });
+      window.plausible('pageview', { props: { donate_form_variant: variant } });
+
+      // Load Qgiv script if needed
+      if (variant === 'qgiv') {
+        (function (w, d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
+          fjs.parentNode?.insertBefore(js, fjs);
+        })(window, document, "script", "qgiv-embedjs");
+      }
+
+      // Handle ValidAid iframe resize
+      if (variant === 'validaid') {
+        window.addEventListener('message', function (event) {
+          if (event.origin !== "https://validaid.org") return;
+          if (event.data.type === 'validaid-resize' && event.data.iframeId === 'validaid-iframe-event-236') {
+            var iframe = document.getElementById('validaid-iframe-event-236');
+            if (iframe) {
+              iframe.style.height = event.data.height + 'px';
+            }
+          }
+        });
+      }
+    })();
   </script>
 </Layout>
