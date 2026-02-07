@@ -1,6 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+
+// Get country from Cloudflare headers
+const country = Astro.request.headers.get('cf-ipcountry') || 'UNKNOWN';
+const isUK = country === 'GB';
 ---
 
 <Layout title="Donate">
@@ -89,13 +93,45 @@ import "../styles/base.css";
           >
             <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">Make a donation</h2>
             <div class="mx-auto w-full max-w-lg">
-              <div
-                class="qgiv-embed-container"
-                data-qgiv-embed="true"
-                data-embed-id="83460"
-                data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
-                data-width="630"
-              >
+              <!-- Variant A: Qgiv Form Only (no link) -->
+              <div id="form-qgiv-only" style="display: none;">
+                <div
+                  class="qgiv-embed-container"
+                  data-qgiv-embed="true"
+                  data-embed-id="83460"
+                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                  data-width="630"
+                >
+                </div>
+              </div>
+
+              <!-- Variant B Non-UK: Qgiv Form + Link to ValidAid -->
+              <div id="form-qgiv-link" style="display: none;">
+                <p class="mb-4 text-center text-sm text-gray-700">
+                  If you are in the UK, <a href="?variant=validaid" class="font-semibold text-green-700 underline hover:text-green-800">click here to donate with Gift Aid</a>.
+                </p>
+                <div
+                  class="qgiv-embed-container"
+                  data-qgiv-embed="true"
+                  data-embed-id="83460"
+                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                  data-width="630"
+                >
+                </div>
+              </div>
+
+              <!-- Variant B UK: ValidAid Form + Link to Qgiv -->
+              <div id="form-validaid-link" style="display: none;">
+                <p class="mb-4 text-center text-sm text-gray-700">
+                  Not in the UK? <a href="?variant=qgiv" class="font-semibold text-green-700 underline hover:text-green-800">Click here to donate</a>.
+                </p>
+                <iframe
+                  id="validaid-iframe-event-236"
+                  src="https://validaid.org/embed/event/236"
+                  title="Tech for Palestine"
+                  style="width:100%; border:none;"
+                  allow="payment"
+                ></iframe>
               </div>
             </div>
             <p class="mt-4 text-center text-sm text-gray-500">
@@ -188,25 +224,80 @@ import "../styles/base.css";
     </div>
   </div>
 
-  <script is:inline>
-    (function (w, d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
-      fjs.parentNode?.insertBefore(js, fjs);
-    })(window, document, "script", "qgiv-embedjs");
-  </script>
+  <script is:inline define:vars={{ isUK }}>
+    // A/B Test Logic
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check for URL parameter override (for testing)
+      var urlParams = new URLSearchParams(window.location.search);
+      var forceVariant = urlParams.get('variant');
 
-  <script is:inline>
-    // Track which donate form variant the user sees
-    window.plausible =
-      window.plausible ||
-      function () {
-        (window.plausible.q = window.plausible.q || []).push(arguments);
-      };
-    window.plausible("pageview", { props: { donate_form_variant: "qgiv" } });
+      var trackingVariant;
+      var formToShow;
+
+      if (forceVariant === 'qgiv') {
+        // Force show qgiv form with link
+        formToShow = 'form-qgiv-link';
+        trackingVariant = 'qgiv + link';
+      } else if (forceVariant === 'validaid') {
+        // Force show ValidAid form with link
+        formToShow = 'form-validaid-link';
+        trackingVariant = 'Validaid + link';
+      } else {
+        // Randomly assign A/B test variant (50/50 split)
+        var testGroup = Math.random() < 0.5 ? 'A' : 'B';
+
+        if (testGroup === 'A') {
+          // Control: qgiv only, no link
+          formToShow = 'form-qgiv-only';
+          trackingVariant = 'qgiv';
+        } else {
+          // Variant B: Geo-targeted
+          if (isUK) {
+            // UK visitors: ValidAid form + link to qgiv
+            formToShow = 'form-validaid-link';
+            trackingVariant = 'Validaid + link';
+          } else {
+            // Non-UK visitors: qgiv form + link to ValidAid
+            formToShow = 'form-qgiv-link';
+            trackingVariant = 'qgiv + link';
+          }
+        }
+      }
+
+      // Show the appropriate form
+      var targetForm = document.getElementById(formToShow);
+      if (targetForm) {
+        targetForm.style.display = 'block';
+      }
+
+      // Load appropriate scripts based on which form is shown
+      if (formToShow === 'form-qgiv-only' || formToShow === 'form-qgiv-link') {
+        // Load qgiv script
+        (function (w, d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
+          fjs.parentNode?.insertBefore(js, fjs);
+        })(window, document, "script", "qgiv-embedjs");
+      } else if (formToShow === 'form-validaid-link') {
+        // Handle ValidAid iframe resize
+        window.addEventListener('message', function (event) {
+          if (event.origin !== "https://validaid.org") return;
+          if (event.data.type === 'validaid-resize' && event.data.iframeId === 'validaid-iframe-event-236') {
+            var iframe = document.getElementById('validaid-iframe-event-236');
+            if (iframe) {
+              iframe.style.height = event.data.height + 'px';
+            }
+          }
+        });
+      }
+
+      // Track pageview with variant (safely)
+      if (typeof window.plausible !== 'undefined') {
+        window.plausible('pageview', { props: { donate_form_variant: trackingVariant } });
+      }
+    });
   </script>
 </Layout>
