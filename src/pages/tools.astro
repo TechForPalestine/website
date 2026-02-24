@@ -105,6 +105,13 @@ const bottomRow = [
     logo: "/mark-transparent.png",
     button: "Built with Apartheid",
   },
+  {
+    name: "Accountable Media",
+    desc: "Track media accountability and bias in coverage of Palestine.",
+    link: "https://accountable-media.com/",
+    logo: "/accountable-media.png",
+    button: "Accountable Media",
+  },
 ];
 ---
 
@@ -129,7 +136,7 @@ const bottomRow = [
         {
           topLeft.map((tool) => (
             <div class="flex items-start gap-4 rounded-xl border bg-white p-6 shadow">
-              <img src={tool.logo} alt={tool.name} class="h-8 w-8" />
+              <img src={tool.logo} alt={tool.name} class="h-12 w-12 object-contain" />
               <div>
                 <h3 class="font-bold text-green-900">{tool.name}</h3>
                 <p class="text-sm text-gray-700">{tool.desc}</p>
@@ -152,7 +159,7 @@ const bottomRow = [
       {
         bottomRow.map((tool) => (
           <div class="flex items-start gap-4 rounded-xl border bg-white p-6 shadow">
-            <img src={tool.logo} alt={tool.name} class="h-8 w-8" />
+            <img src={tool.logo} alt={tool.name} class="h-12 w-12 object-contain" />
             <div>
               <h3 class="font-bold text-green-900">{tool.name}</h3>
               <p class="text-sm text-gray-700">{tool.desc}</p>
