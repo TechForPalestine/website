@@ -489,7 +489,7 @@ export default function LondonGathering(
                 startIcon={<EmailIcon />}
                 size="large"
                 className="rounded-full bg-amber-800 px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:bg-amber-900 hover:shadow-xl"
-                href="mailto:contact@techforpalestine.org"
+                href="/contact"
               >
                 Contact us
               </Button>
