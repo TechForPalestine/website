@@ -1,0 +1,148 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EndorsementForm from "../components/EndorsementForm.tsx";
+import "../styles/base.css";
+---
+
+<Layout title="Contact Us">
+  <main>
+    <div class="relative isolate">
+      <svg
+        class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern
+            id="contact-pattern"
+            width="200"
+            height="200"
+            x="50%"
+            y="-1"
+            patternUnits="userSpaceOnUse"
+          >
+            <path d="M.5 200V.5H200" fill="none"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" stroke-width="0" fill="url(#contact-pattern)"></rect>
+      </svg>
+
+      <div class="px-6 py-24 sm:py-32 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <!-- Page Header -->
+          <div class="mb-16 text-center">
+            <p class="text-base font-semibold uppercase tracking-widest text-green-700">
+              Tech for Palestine
+            </p>
+            <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              Contact Us
+            </h1>
+            <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+              Have a question, media inquiry, or want to request an endorsement? We'd love to hear
+              from you.
+            </p>
+          </div>
+
+          <!-- Contact Cards -->
+          <div class="mb-16 grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <!-- General Questions -->
+            <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+              <div
+                class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-green-50"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="h-6 w-6 text-green-700"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="mb-2 text-xl font-bold text-gray-900">General Questions</h2>
+              <p class="mb-4 text-gray-600">
+                For general inquiries about Tech for Palestine, our projects, or how to get
+                involved.
+              </p>
+              <a
+                href="mailto:contact@techforpalestine.org"
+                class="font-medium text-green-700 transition-colors hover:text-green-900"
+              >
+                contact@techforpalestine.org
+              </a>
+            </div>
+
+            <!-- Media & Press -->
+            <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+              <div
+                class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-green-50"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="h-6 w-6 text-green-700"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="mb-2 text-xl font-bold text-gray-900">Media & Press</h2>
+              <p class="mb-4 text-gray-600">
+                Journalists and media professionals can find press resources and contact information
+                on our media page.
+              </p>
+              <a
+                href="/media"
+                class="font-medium text-green-700 transition-colors hover:text-green-900"
+              >
+                Visit our Media page &rarr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Endorsement Request Section -->
+          <div class="rounded-xl border border-gray-200 bg-gray-50 p-8 shadow-sm">
+            <div class="mb-8">
+              <div
+                class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-green-50"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="h-6 w-6 text-green-700"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.745 3.745 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-900">Request an Endorsement</h2>
+              <p class="mt-2 max-w-2xl text-gray-600">
+                Is your organization or campaign seeking an endorsement from Tech for Palestine?
+                Fill out the form below and our team will review your request.
+              </p>
+            </div>
+
+            <EndorsementForm client:only="react" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
