@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import EndorsementForm from "../components/EndorsementForm.tsx";
 import "../styles/base.css";
 ---
 
@@ -46,7 +45,7 @@ import "../styles/base.css";
           </div>
 
           <!-- Contact Cards -->
-          <div class="mb-16 grid grid-cols-1 gap-8 sm:grid-cols-2">
+          <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
             <!-- General Questions -->
             <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
               <div
@@ -68,7 +67,7 @@ import "../styles/base.css";
                 </svg>
               </div>
               <h2 class="mb-2 text-xl font-bold text-gray-900">General Questions</h2>
-              <p class="mb-4 text-gray-600">
+              <p class="mb-4 text-sm text-gray-600">
                 For general inquiries about Tech for Palestine, our projects, or how to get
                 involved.
               </p>
@@ -101,7 +100,7 @@ import "../styles/base.css";
                 </svg>
               </div>
               <h2 class="mb-2 text-xl font-bold text-gray-900">Media & Press</h2>
-              <p class="mb-4 text-gray-600">
+              <p class="mb-4 text-sm text-gray-600">
                 Journalists and media professionals can find press resources and contact information
                 on our media page.
               </p>
@@ -112,11 +111,9 @@ import "../styles/base.css";
                 Visit our Media page &rarr;
               </a>
             </div>
-          </div>
 
-          <!-- Endorsement Request Section -->
-          <div class="rounded-xl border border-gray-200 bg-gray-50 p-8 shadow-sm">
-            <div class="mb-8">
+            <!-- Endorsements -->
+            <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
               <div
                 class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-green-50"
               >
@@ -135,14 +132,18 @@ import "../styles/base.css";
                   ></path>
                 </svg>
               </div>
-              <h2 class="text-2xl font-bold text-gray-900">Request an Endorsement</h2>
-              <p class="mt-2 max-w-2xl text-gray-600">
-                Is your organization or campaign seeking an endorsement from Tech for Palestine?
-                Fill out the form below and our team will review your request.
+              <h2 class="mb-2 text-xl font-bold text-gray-900">Endorsements</h2>
+              <p class="mb-4 text-sm text-gray-600">
+                Seeking a T4P endorsement for your campaign or organization? Learn what we look for
+                and submit a request.
               </p>
+              <a
+                href="/endorsements"
+                class="font-medium text-green-700 transition-colors hover:text-green-900"
+              >
+                Request an endorsement &rarr;
+              </a>
             </div>
-
-            <EndorsementForm client:only="react" />
           </div>
         </div>
       </div>
