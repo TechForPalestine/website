@@ -101,10 +101,10 @@ export default function ProjectsNew({
       } else {
         console.error(`[ProjectsNew] API returned status ${response.status}:`, response.statusText);
         const errorText = await response.text();
-        console.error('[ProjectsNew] Error response:', errorText);
+        console.error("[ProjectsNew] Error response:", errorText);
       }
     } catch (error) {
-      console.error('[ProjectsNew] Fetch error:', error);
+      console.error("[ProjectsNew] Fetch error:", error);
     } finally {
       setLoading(false);
     }

@@ -25,12 +25,17 @@ type ActiveIdeaType = {
   tags: string[];
 } | null;
 
-export default function IdeasWithTabs({ newIdeas, existingIdeas, startedIdeas }: IdeasWithTabsProps) {
+export default function IdeasWithTabs({
+  newIdeas,
+  existingIdeas,
+  startedIdeas,
+}: IdeasWithTabsProps) {
   const [activeTab, setActiveTab] = useState<"new" | "existing" | "started">("new");
   const [activeIdea, setActiveIdea] = useState<ActiveIdeaType>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
-  const currentList = activeTab === "new" ? newIdeas : activeTab === "existing" ? existingIdeas : startedIdeas;
+  const currentList =
+    activeTab === "new" ? newIdeas : activeTab === "existing" ? existingIdeas : startedIdeas;
 
   // Close modal on ESC
   useEffect(() => {

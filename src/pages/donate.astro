@@ -3,8 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
 
 // Get country from Cloudflare headers
-const country = Astro.request.headers.get('cf-ipcountry') || 'UNKNOWN';
-const isUK = country === 'GB';
+const country = Astro.request.headers.get("cf-ipcountry") || "UNKNOWN";
+const isUK = country === "GB";
 ---
 
 <Layout title="Donate">
@@ -108,7 +108,11 @@ const isUK = country === 'GB';
               <!-- Variant B Non-UK: Qgiv Form + Link to ValidAid -->
               <div id="form-qgiv-link" style="display: none;">
                 <p class="mb-4 text-center text-sm text-gray-700">
-                  If you are in the UK, <a href="?variant=validaid" class="font-semibold text-green-700 underline hover:text-green-800">click here to donate with Gift Aid</a>.
+                  If you are in the UK, <a
+                    href="?variant=validaid"
+                    class="font-semibold text-green-700 underline hover:text-green-800"
+                    >click here to donate with Gift Aid</a
+                  >.
                 </p>
                 <div
                   class="qgiv-embed-container"
@@ -123,19 +127,25 @@ const isUK = country === 'GB';
               <!-- Variant B UK: ValidAid Form + Link to Qgiv -->
               <div id="form-validaid-link" style="display: none;">
                 <p class="mb-4 text-center text-sm text-gray-700">
-                  Not in the UK? <a href="?variant=qgiv" class="font-semibold text-green-700 underline hover:text-green-800">Click here to donate</a>.
+                  Not in the UK? <a
+                    href="?variant=qgiv"
+                    class="font-semibold text-green-700 underline hover:text-green-800"
+                    >Click here to donate</a
+                  >.
                 </p>
                 <iframe
                   id="validaid-iframe-event-236"
                   src="https://validaid.org/embed/event/236"
                   title="Tech for Palestine"
                   style="width:100%; border:none;"
-                  allow="payment"
-                ></iframe>
+                  allow="payment"></iframe>
               </div>
             </div>
             <p class="mt-4 text-center text-sm text-gray-500">
-              If this page isn't loading, please use <a href="/donate-2" class="text-green-700 underline hover:text-green-800">this form</a>.
+              If this page isn't loading, please use <a
+                href="/donate-2"
+                class="text-green-700 underline hover:text-green-800">this form</a
+              >.
             </p>
             <div
               class="mt-5 flex flex-col items-center justify-center gap-3 text-sm text-gray-600 sm:flex-row"
@@ -226,40 +236,40 @@ const isUK = country === 'GB';
 
   <script is:inline define:vars={{ isUK }}>
     // A/B Test Logic
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener("DOMContentLoaded", function () {
       // Check for URL parameter override (for testing)
       var urlParams = new URLSearchParams(window.location.search);
-      var forceVariant = urlParams.get('variant');
+      var forceVariant = urlParams.get("variant");
 
       var trackingVariant;
       var formToShow;
 
-      if (forceVariant === 'qgiv') {
+      if (forceVariant === "qgiv") {
         // Force show qgiv form with link
-        formToShow = 'form-qgiv-link';
-        trackingVariant = 'qgiv + link';
-      } else if (forceVariant === 'validaid') {
+        formToShow = "form-qgiv-link";
+        trackingVariant = "qgiv + link";
+      } else if (forceVariant === "validaid") {
         // Force show ValidAid form with link
-        formToShow = 'form-validaid-link';
-        trackingVariant = 'Validaid + link';
+        formToShow = "form-validaid-link";
+        trackingVariant = "Validaid + link";
       } else {
         // Randomly assign A/B test variant (50/50 split)
-        var testGroup = Math.random() < 0.5 ? 'A' : 'B';
+        var testGroup = Math.random() < 0.5 ? "A" : "B";
 
-        if (testGroup === 'A') {
+        if (testGroup === "A") {
           // Control: qgiv only, no link
-          formToShow = 'form-qgiv-only';
-          trackingVariant = 'qgiv';
+          formToShow = "form-qgiv-only";
+          trackingVariant = "qgiv";
         } else {
           // Variant B: Geo-targeted
           if (isUK) {
             // UK visitors: ValidAid form + link to qgiv
-            formToShow = 'form-validaid-link';
-            trackingVariant = 'Validaid + link';
+            formToShow = "form-validaid-link";
+            trackingVariant = "Validaid + link";
           } else {
             // Non-UK visitors: qgiv form + link to ValidAid
-            formToShow = 'form-qgiv-link';
-            trackingVariant = 'qgiv + link';
+            formToShow = "form-qgiv-link";
+            trackingVariant = "qgiv + link";
           }
         }
       }
@@ -267,36 +277,40 @@ const isUK = country === 'GB';
       // Show the appropriate form
       var targetForm = document.getElementById(formToShow);
       if (targetForm) {
-        targetForm.style.display = 'block';
+        targetForm.style.display = "block";
       }
 
       // Load appropriate scripts based on which form is shown
-      if (formToShow === 'form-qgiv-only' || formToShow === 'form-qgiv-link') {
+      if (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link") {
         // Load qgiv script
         (function (w, d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
+          var js,
+            fjs = d.getElementsByTagName(s)[0];
           if (d.getElementById(id)) return;
           js = d.createElement(s);
           js.id = id;
           js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
           fjs.parentNode?.insertBefore(js, fjs);
         })(window, document, "script", "qgiv-embedjs");
-      } else if (formToShow === 'form-validaid-link') {
+      } else if (formToShow === "form-validaid-link") {
         // Handle ValidAid iframe resize
-        window.addEventListener('message', function (event) {
+        window.addEventListener("message", function (event) {
           if (event.origin !== "https://validaid.org") return;
-          if (event.data.type === 'validaid-resize' && event.data.iframeId === 'validaid-iframe-event-236') {
-            var iframe = document.getElementById('validaid-iframe-event-236');
+          if (
+            event.data.type === "validaid-resize" &&
+            event.data.iframeId === "validaid-iframe-event-236"
+          ) {
+            var iframe = document.getElementById("validaid-iframe-event-236");
             if (iframe) {
-              iframe.style.height = event.data.height + 'px';
+              iframe.style.height = event.data.height + "px";
             }
           }
         });
       }
 
       // Track pageview with variant (safely)
-      if (typeof window.plausible !== 'undefined') {
-        window.plausible('pageview', { props: { donate_form_variant: trackingVariant } });
+      if (typeof window.plausible !== "undefined") {
+        window.plausible("pageview", { props: { donate_form_variant: trackingVariant } });
       }
     });
   </script>

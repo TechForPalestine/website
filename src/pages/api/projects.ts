@@ -13,7 +13,9 @@ async function fetchWithRetry(url: string, options: RequestInit & { cf?: any }, 
       const response = await fetch(url, options);
       const fetchTime = Date.now() - attemptStart;
 
-      console.log(`[API /api/projects] Attempt ${attempt + 1}/${maxRetries + 1}: ${response.status} in ${fetchTime}ms`);
+      console.log(
+        `[API /api/projects] Attempt ${attempt + 1}/${maxRetries + 1}: ${response.status} in ${fetchTime}ms`
+      );
 
       // If successful or client error (4xx), return immediately
       if (response.ok || (response.status >= 400 && response.status < 500)) {
@@ -23,12 +25,15 @@ async function fetchWithRetry(url: string, options: RequestInit & { cf?: any }, 
       // For server errors (5xx), retry unless it's the last attempt
       if (response.status >= 500 && attempt < maxRetries) {
         const errorText = await response.text();
-        console.warn(`[API /api/projects] Server error on attempt ${attempt + 1}, retrying...`, errorText);
+        console.warn(
+          `[API /api/projects] Server error on attempt ${attempt + 1}, retrying...`,
+          errorText
+        );
         lastError = new Error(`ProjectHub API returned ${response.status}: ${response.statusText}`);
 
         // Wait before retrying (exponential backoff: 500ms, 1000ms)
         const delay = 500 * (attempt + 1);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
 
@@ -39,13 +44,13 @@ async function fetchWithRetry(url: string, options: RequestInit & { cf?: any }, 
 
       if (attempt < maxRetries) {
         const delay = 500 * (attempt + 1);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
     }
   }
 
-  throw lastError || new Error('All retry attempts failed');
+  throw lastError || new Error("All retry attempts failed");
 }
 
 export const GET: APIRoute = async ({ locals }) => {
@@ -95,7 +100,9 @@ export const GET: APIRoute = async ({ locals }) => {
     }
 
     const totalTime = Date.now() - startTime;
-    console.log(`[API /api/projects] Returning ${projects.length} projects (total time: ${totalTime}ms)`);
+    console.log(
+      `[API /api/projects] Returning ${projects.length} projects (total time: ${totalTime}ms)`
+    );
 
     return new Response(JSON.stringify(projects), {
       status: 200,
