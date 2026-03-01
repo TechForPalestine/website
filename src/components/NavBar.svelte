@@ -146,6 +146,8 @@
                       href={subHref}
                       role="menuitem"
                       on:keydown={handleMenuKeydown}
+                      target={subHref.startsWith('http') ? '_blank' : undefined}
+                      rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
                       class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 {currentRoute.replace(/\/$/, '') === subHref ? 'bg-blue-50 text-blue-600 font-medium' : ''}"
                     >
                       {subLabel}
@@ -253,6 +255,8 @@
                       href={subHref}
                       role="menuitem"
                       on:keydown={handleMenuKeydown}
+                      target={subHref.startsWith('http') ? '_blank' : undefined}
+                      rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
                       class="block text-base text-gray-700 hover:text-blue-600 transition-colors duration-200 {currentRoute.replace(/\/$/, '') === subHref ? 'font-medium text-blue-600' : ''}"
                     >
                       {subLabel}
