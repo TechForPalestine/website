@@ -65,6 +65,6 @@
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "wrangler": "^4.42.1"
+    "wrangler": "^4.70.0"
   }
 }
