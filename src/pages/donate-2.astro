@@ -191,7 +191,7 @@ import "../styles/base.css";
         function () {
           ((window as any).plausible.q = (window as any).plausible.q || []).push(arguments);
         };
-      (window as any).plausible("Donate Form", { props: { donate_form_variant: "charitystack" } });
+      (window as any).plausible("pageview", { props: { donate_form_variant: "charitystack" } });
 
       const script = document.createElement("script");
       script.defer = true;
