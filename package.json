@@ -38,7 +38,7 @@
     "astro": "^5.15.9",
     "astro-heroicons": "^2.1.5",
     "astro-icon": "^1.1.5",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "install": "^0.13.0",
     "leaflet": "^1.9.4",
     "marked": "^15.0.12",
@@ -54,6 +54,11 @@
     "tailwindcss": "^3.4.18",
     "typescript": "^5.9.3"
   },
+  "pnpm": {
+    "overrides": {
+      "rollup": "^4.59.0"
+    }
+  },
   "devDependencies": {
     "@iconify-json/bi": "^1.2.6",
     "@iconify-json/ic": "^1.2.4",
@@ -65,6 +70,6 @@
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "wrangler": "^4.42.1"
+    "wrangler": "^4.70.0"
   }
 }
