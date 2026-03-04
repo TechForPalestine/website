@@ -294,9 +294,9 @@ const isUK = country === 'GB';
         });
       }
 
-      // Track form variant (safely)
+      // Track pageview with variant (safely)
       if (typeof window.plausible !== 'undefined') {
-        window.plausible('Donate Form', { props: { donate_form_variant: trackingVariant } });
+        window.plausible('pageview', { props: { donate_form_variant: trackingVariant } });
       }
     });
   </script>
