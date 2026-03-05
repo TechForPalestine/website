@@ -28,6 +28,66 @@ import "../styles/base.css";
       background-color: #15803d !important; /* green-700 */
     }
   </style>
+  <!-- Barcelona Event Popup -->
+  <div
+    id="barcelona-popup"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Barcelona 2026 Event"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+    style="display: none !important;"
+  >
+    <div class="relative max-w-2xl w-full">
+      <button
+        id="barcelona-popup-close"
+        class="absolute -top-3 -right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-800 shadow-lg hover:bg-gray-100 focus:outline-none"
+        aria-label="Close popup"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <a href="https://barcelona2026.techforpalestine.org/" target="_blank" rel="noopener noreferrer">
+        <img
+          src="/images/Barcelona Event.png"
+          alt="Tech for Palestine Barcelona 2026 Event"
+          class="w-full rounded-xl shadow-2xl"
+          loading="lazy"
+          width="1200"
+          height="1200"
+        />
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "barcelona-popup-dismissed";
+    const popup = document.getElementById("barcelona-popup");
+    const closeBtn = document.getElementById("barcelona-popup-close");
+
+    if (popup && !localStorage.getItem(STORAGE_KEY)) {
+      popup.style.removeProperty("display");
+      closeBtn?.focus();
+    }
+
+    function dismissPopup() {
+      if (popup) popup.style.display = "none";
+      localStorage.setItem(STORAGE_KEY, "1");
+    }
+
+    const ac = new AbortController();
+    const { signal } = ac;
+
+    closeBtn?.addEventListener("click", dismissPopup, { signal });
+    popup?.addEventListener("click", (e) => {
+      if (e.target === popup) dismissPopup();
+    }, { signal });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") dismissPopup();
+    }, { signal });
+    popup?.addEventListener("hidden", () => ac.abort(), { signal });
+  </script>
+
   <main>
     <section
       class="flex min-h-[calc(100vh-5rem)] flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center"
