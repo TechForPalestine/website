@@ -13,9 +13,11 @@ type FormData = {
   contactEmail: string;
   organizationName: string;
   organizationWebsite: string;
+  campaignName: string;
   request: string;
   campaignPurpose: string;
   campaignLink: string;
+  notableSupporters: string;
   isT4PProject: boolean;
 };
 
@@ -136,6 +138,20 @@ export default function EndorsementForm() {
           />
         </Box>
 
+        {/* Campaign name */}
+        <TextField
+          label={
+            <span>
+              Campaign name <span style={{ color: "red" }}>*</span>
+            </span>
+          }
+          fullWidth
+          sx={inputSx}
+          error={!!errors.campaignName}
+          helperText={errors.campaignName?.message}
+          {...register("campaignName", { required: "Campaign name is required" })}
+        />
+
         {/* Request */}
         <TextField
           label={
@@ -187,6 +203,15 @@ export default function EndorsementForm() {
               message: "Must be a valid URL starting with http:// or https://",
             },
           })}
+        />
+
+        {/* Notable supporters */}
+        <TextField
+          label="Are there any notable supporters of your campaign who have already signed on?"
+          fullWidth
+          sx={inputSx}
+          helperText="Optional"
+          {...register("notableSupporters")}
         />
 
         {/* T4P project checkbox */}

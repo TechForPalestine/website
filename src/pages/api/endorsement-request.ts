@@ -13,9 +13,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
       contactEmail: body.contactEmail as string,
       organizationName: body.organizationName as string,
       organizationWebsite: body.organizationWebsite as string,
+      campaignName: body.campaignName as string,
       request: body.request as string,
       campaignPurpose: body.campaignPurpose as string,
       campaignLink: body.campaignLink as string,
+      notableSupporters: (body.notableSupporters as string) || "",
       isT4PProject: body.isT4PProject as boolean,
       submittedAt: new Date().toISOString(),
     };
@@ -26,6 +28,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       !endorsementData.contactEmail ||
       !endorsementData.organizationName ||
       !endorsementData.organizationWebsite ||
+      !endorsementData.campaignName ||
       !endorsementData.request ||
       !endorsementData.campaignPurpose ||
       !endorsementData.campaignLink
@@ -79,6 +82,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
         "Org Website": {
           url: endorsementData.organizationWebsite,
         },
+        "Campaign Name": {
+          rich_text: [
+            {
+              text: {
+                content: endorsementData.campaignName,
+              },
+            },
+          ],
+        },
         Request: {
           rich_text: [
             {
@@ -99,6 +111,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
         },
         "Campaign Link": {
           url: endorsementData.campaignLink,
+        },
+        "Notable Supporters": {
+          rich_text: [
+            {
+              text: {
+                content: endorsementData.notableSupporters,
+              },
+            },
+          ],
         },
         "Is T4P Project": {
           checkbox: endorsementData.isT4PProject,
