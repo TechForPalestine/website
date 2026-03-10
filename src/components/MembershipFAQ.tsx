@@ -17,10 +17,7 @@ const faqData = [
     question: "How do I get involved after signup?",
     answer: (
       <>
-        <Typography
-          variant="body1"
-          sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}
-        >
+        <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}>
           We will send you an email about the ways to get involved as a member:
         </Typography>
         <Box
@@ -58,10 +55,7 @@ const faqData = [
     question: "Why are there membership dues?",
     answer: (
       <>
-        <Typography
-          variant="body1"
-          sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}
-        >
+        <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}>
           Dues are pay-what-you-can and help us progress towards our goal of 10,000 projects for
           Palestine by supporting project work itself - grants for advocacy projects, access to
           expert trainings, mentorship from startup founders, and other developmental opportunities
