@@ -273,8 +273,8 @@ export default function MembershipCalculator() {
               fontSize: "0.875rem",
             }}
           >
-            This is a suggested amount based on your income. Please contribute what feels
-            meaningful to you.
+            This is a suggested amount based on your income. Please contribute what feels meaningful
+            to you.
           </Typography>
         </Box>
       )}

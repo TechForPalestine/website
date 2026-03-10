@@ -1,0 +1,204 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EndorsementForm from "../components/EndorsementForm.tsx";
+import "../styles/base.css";
+---
+
+<Layout
+  title="Endorsements | Tech for Palestine"
+  description="Request an endorsement from Tech for Palestine for your campaign or organization. Learn what we look for and how the review process works."
+>
+  <main>
+    <div class="relative isolate">
+      <svg
+        class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern
+            id="endorsements-pattern"
+            width="200"
+            height="200"
+            x="50%"
+            y="-1"
+            patternUnits="userSpaceOnUse"
+          >
+            <path d="M.5 200V.5H200" fill="none"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" stroke-width="0" fill="url(#endorsements-pattern)"></rect>
+      </svg>
+
+      <div class="px-6 py-24 sm:py-32 lg:px-8">
+        <div class="mx-auto max-w-3xl">
+          <!-- Page Header -->
+          <div class="mb-16 text-center">
+            <p class="text-base font-semibold uppercase tracking-widest text-green-700">
+              Tech for Palestine
+            </p>
+            <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+              Endorsement Requests
+            </h1>
+            <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+              T4P endorsements signal to the broader tech and Palestine advocacy community that your
+              campaign aligns with our values and goals. Here's what you need to know before
+              applying.
+            </p>
+          </div>
+
+          <!-- What we look for -->
+          <div class="mb-12">
+            <h2 class="mb-6 text-2xl font-bold text-gray-900">What we look for</h2>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div class="rounded-lg border border-green-100 bg-green-50 p-6">
+                <div class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-green-700">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                </div>
+                <h3 class="mb-2 font-semibold text-green-900">Will it be impactful?</h3>
+                <p class="text-sm text-green-800/70">
+                  We look for campaigns and initiatives with meaningful potential to advance
+                  Palestinian rights or hold tech companies accountable.
+                </p>
+              </div>
+              <div class="rounded-lg border border-blue-100 bg-blue-50 p-6">
+                <div class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-blue-700">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3" />
+                  </svg>
+                </div>
+                <h3 class="mb-2 font-semibold text-blue-900">Does it relate to tech?</h3>
+                <p class="text-sm text-blue-800/70">
+                  Our endorsements carry the most weight in the tech industry, and we prioritize
+                  campaigns where that community connection matters.
+                </p>
+              </div>
+              <div class="rounded-lg border border-purple-100 bg-purple-50 p-6">
+                <div class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-purple-700">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                  </svg>
+                </div>
+                <h3 class="mb-2 font-semibold text-purple-900">Who are the other supporters?</h3>
+                <p class="text-sm text-purple-800/70">
+                  We also consider other endorsing orgs and groups to assess the potential reach and
+                  impact of the campaign. Showing strong support from others in the movement
+                  strengthens your request.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div class="mb-12">
+            <h2 class="mb-6 text-2xl font-bold text-gray-900">Frequently asked questions</h2>
+            <div class="space-y-4">
+              <details class="group rounded-lg border border-gray-200 bg-white">
+                <summary
+                  class="flex cursor-pointer items-center justify-between p-6 font-semibold text-gray-900"
+                >
+                  What does a T4P endorsement mean?
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <p class="px-6 pb-6 text-sm text-gray-600">
+                  A T4P endorsement is a public statement of support for a specific campaign or
+                  initiative. It signals to our community of thousands of tech workers that the
+                  campaign aligns with our values. It does not imply financial support or ongoing
+                  partnership. Note that we don't fully vet every endorsement — our review is based
+                  on available information and community knowledge, not exhaustive due diligence.
+                </p>
+              </details>
+
+              <details class="group rounded-lg border border-gray-200 bg-white">
+                <summary
+                  class="flex cursor-pointer items-center justify-between p-6 font-semibold text-gray-900"
+                >
+                  How long does the review process take?
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <p class="px-6 pb-6 text-sm text-gray-600">
+                  We aim to review all requests within 5–7 days. We'll reach out if we need
+                  additional information.
+                </p>
+              </details>
+
+              <details class="group rounded-lg border border-gray-200 bg-white">
+                <summary
+                  class="flex cursor-pointer items-center justify-between p-6 font-semibold text-gray-900"
+                >
+                  Can T4P projects apply for endorsements?
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <p class="px-6 pb-6 text-sm text-gray-600">
+                  Yes. If you're already a T4P incubator project and are launching a specific
+                  campaign, you can request an endorsement. Check the "T4P project" box in the form
+                  and our review will reflect that context.
+                </p>
+              </details>
+
+              <details class="group rounded-lg border border-gray-200 bg-white">
+                <summary
+                  class="flex cursor-pointer items-center justify-between p-6 font-semibold text-gray-900"
+                >
+                  What happens if our request is declined?
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <p class="px-6 pb-6 text-sm text-gray-600">
+                  We'll let you know and, where possible, share the reason. Declinations are not
+                  permanent. If your campaign evolves or new information is available, you're
+                  welcome to reapply.
+                </p>
+              </details>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="rounded-xl border border-gray-200 bg-gray-50 p-8">
+            <h2 class="mb-2 text-2xl font-bold text-gray-900">Submit a request</h2>
+            <p class="mb-8 text-gray-600">
+              Fill out the form below and our team will be in touch.
+            </p>
+            <EndorsementForm client:only="react" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -3,87 +3,88 @@ import Layout from "../../layouts/Layout.astro";
 import "../../styles/base.css";
 
 const pageTitle = "Migrating from Vercel to Netlify - Complete Next.js Migration Guide";
-const pageDescription = "Step-by-step guide to migrate your Next.js application from Vercel to Netlify. Learn how to transfer domains, environment variables, redirects, and deploy with zero downtime.";
+const pageDescription =
+  "Step-by-step guide to migrate your Next.js application from Vercel to Netlify. Learn how to transfer domains, environment variables, redirects, and deploy with zero downtime.";
 const pageUrl = "https://techforpalestine.org/guides/vercel-to-netlify";
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": pageTitle,
-  "description": pageDescription,
-  "image": "https://techforpalestine.org/t4p-social-logo.png",
-  "totalTime": "PT3H",
-  "estimatedCost": {
+  name: pageTitle,
+  description: pageDescription,
+  image: "https://techforpalestine.org/t4p-social-logo.png",
+  totalTime: "PT3H",
+  estimatedCost: {
     "@type": "MonetaryAmount",
-    "currency": "USD",
-    "value": "0"
+    currency: "USD",
+    value: "0",
   },
-  "tool": [
+  tool: [
     {
       "@type": "HowToTool",
-      "name": "Netlify Account"
+      name: "Netlify Account",
     },
     {
       "@type": "HowToTool",
-      "name": "Git Repository"
-    }
+      name: "Git Repository",
+    },
   ],
-  "step": [
+  step: [
     {
       "@type": "HowToStep",
-      "name": "Pre-migration checklist",
-      "text": "Check your Next.js version (13.5+), review build commands and Vercel settings, and plan the migration timeline.",
-      "position": 1
+      name: "Pre-migration checklist",
+      text: "Check your Next.js version (13.5+), review build commands and Vercel settings, and plan the migration timeline.",
+      position: 1,
     },
     {
       "@type": "HowToStep",
-      "name": "Preparation",
-      "text": "Plan the migration, inform your team, ensure your project is in git, commit changes, and read Netlify's DNS migration guidance.",
-      "position": 2
+      name: "Preparation",
+      text: "Plan the migration, inform your team, ensure your project is in git, commit changes, and read Netlify's DNS migration guidance.",
+      position: 2,
     },
     {
       "@type": "HowToStep",
-      "name": "Sign Up and Create a New Site on Netlify",
-      "text": "Create a Netlify account, import your existing project from git, configure build settings, and deploy to a preview domain.",
-      "position": 3
+      name: "Sign Up and Create a New Site on Netlify",
+      text: "Create a Netlify account, import your existing project from git, configure build settings, and deploy to a preview domain.",
+      position: 3,
     },
     {
       "@type": "HowToStep",
-      "name": "Migrate Environment Variables",
-      "text": "Copy all environment variables from Vercel Dashboard to Netlify's Project configuration, using scoped variables for different environments.",
-      "position": 4
+      name: "Migrate Environment Variables",
+      text: "Copy all environment variables from Vercel Dashboard to Netlify's Project configuration, using scoped variables for different environments.",
+      position: 4,
     },
     {
       "@type": "HowToStep",
-      "name": "Migrate Build, Redirects, Rewrites, Headers",
-      "text": "Create a netlify.toml file with build commands and install the @netlify/plugin-nextjs plugin.",
-      "position": 5
+      name: "Migrate Build, Redirects, Rewrites, Headers",
+      text: "Create a netlify.toml file with build commands and install the @netlify/plugin-nextjs plugin.",
+      position: 5,
     },
     {
       "@type": "HowToStep",
-      "name": "Migrate Serverless/Edge Functions",
-      "text": "Next.js API routes work automatically with no changes needed on Netlify.",
-      "position": 6
+      name: "Migrate Serverless/Edge Functions",
+      text: "Next.js API routes work automatically with no changes needed on Netlify.",
+      position: 6,
     },
     {
       "@type": "HowToStep",
-      "name": "Add Domain",
-      "text": "Add your production domain in Netlify's Domain Management, copy DNS records from Vercel, and verify TLS certificate setup.",
-      "position": 7
+      name: "Add Domain",
+      text: "Add your production domain in Netlify's Domain Management, copy DNS records from Vercel, and verify TLS certificate setup.",
+      position: 7,
     },
     {
       "@type": "HowToStep",
-      "name": "Test Thoroughly",
-      "text": "Use Netlify's Deploy Previews for branches and PRs to test all functionality before going live.",
-      "position": 8
+      name: "Test Thoroughly",
+      text: "Use Netlify's Deploy Previews for branches and PRs to test all functionality before going live.",
+      position: 8,
     },
     {
       "@type": "HowToStep",
-      "name": "Go Live and Clean Up",
-      "text": "Update nameservers to Netlify, test DNS propagation, verify certificates, and once confirmed, pause or delete the Vercel project.",
-      "position": 9
-    }
-  ]
+      name: "Go Live and Clean Up",
+      text: "Update nameservers to Netlify, test DNS propagation, verify certificates, and once confirmed, pause or delete the Vercel project.",
+      position: 9,
+    },
+  ],
 };
 ---
 
@@ -124,11 +125,13 @@ const structuredData = {
                 (such as a production web server).
               </p>
               <p class="mb-4">
-                The guide uses Next.js which has a few more gotchas due to it's tight integration with Vercel.
-                If you've got another project on Vercel, you should be able to follow along and simply skip the Next.js parts when doing your migration.
-                Having said that, the process with Next.js should still be relatively straightforward as Netlify provides zero-configuration
-                deployment for Next.js 13.5+ with full support for App Router, SSR, ISR, and all
-                modern Next.js features. Earlier versions use the legacy runtime.
+                The guide uses Next.js which has a few more gotchas due to it's tight integration
+                with Vercel. If you've got another project on Vercel, you should be able to follow
+                along and simply skip the Next.js parts when doing your migration. Having said that,
+                the process with Next.js should still be relatively straightforward as Netlify
+                provides zero-configuration deployment for Next.js 13.5+ with full support for App
+                Router, SSR, ISR, and all modern Next.js features. Earlier versions use the legacy
+                runtime.
               </p>
               <p class="mb-4">
                 You'll be setting up a Preview environment anyway so you can do some thorough
