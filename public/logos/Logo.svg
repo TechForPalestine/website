@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #268024;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #e4312b;
+      }
+
+      .cls-4 {
+        font-family: LEMONMILK-Medium, 'LEMON MILK';
+        font-size: 138.65px;
+        font-weight: 500;
+      }
+
+      .cls-3, .cls-5 {
+        fill: #000;
+      }
+
+      .cls-6 {
+        mix-blend-mode: darken;
+        opacity: .8;
+      }
+
+      .cls-7 {
+        isolation: isolate;
+      }
+
+      .cls-8 {
+        font-family: LEMONMILK-Light, 'LEMON MILK';
+        font-size: 83.66px;
+        font-weight: 300;
+      }
+    </style>
+  </defs>
+  <g class="cls-7">
+    <g id="Layer_1" data-name="Layer 1">
+      <g>
+        <g>
+          <g class="cls-6">
+            <path class="cls-3" d="M580.44,709.52h-31.6c0-93.46-76.03-169.49-169.49-169.49v-31.6c110.88,0,201.09,90.21,201.09,201.09Z"/>
+          </g>
+          <path class="cls-1" d="M548.81,709.41h-31.6c0-110.88,90.21-201.09,201.09-201.09v31.6c-93.46,0-169.49,76.03-169.49,169.49Z"/>
+          <path class="cls-2" d="M379.35,571.57v-31.6c93.46,0,169.49-76.03,169.49-169.49h31.6c0,110.88-90.21,201.09-201.09,201.09Z"/>
+          <g class="cls-6">
+            <path class="cls-3" d="M718.3,571.57c-110.88,0-201.09-90.21-201.09-201.09h31.6c0,93.46,76.03,169.49,169.49,169.49v31.6Z"/>
+          </g>
+        </g>
+        <text class="cls-5" transform="translate(800.7 485.86)"><tspan class="cls-8"><tspan x="0" y="0">Tech for</tspan></tspan><tspan class="cls-4"><tspan x="0" y="166.38">Palestine</tspan></tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

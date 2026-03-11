@@ -40,7 +40,7 @@ const articles = [
     date: "January 4, 2024",
     description: "Reporting on the launch and global reach of the Tech for Palestine movement.",
     image:
-      "https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/images/2024/01/04/palestine.jpg",
+      "https://www.thedailystar.net/sites/default/files/styles/big_1/public/images/2024/01/04/palestine.jpg",
   },
 ];
 
@@ -140,34 +140,44 @@ const newsletters = [
         <div class="mb-8">
           <h4 class="mb-2 text-lg font-semibold text-gray-800">Official Logos</h4>
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            <div class="group relative overflow-hidden rounded-lg border shadow-sm">
-              <img
-                src="/t4p-full.png"
-                alt="Logo Light"
-                class="h-28 w-full bg-gray-50 object-contain p-2"
-              />
+            {[
+              { src: "/logos/Logo.png", label: "Logo (PNG)", bg: "bg-gray-50" },
+              { src: "/logos/Logo---Transparent.png", label: "Logo Transparent (PNG)", bg: "bg-gray-200" },
+              { src: "/logos/Mark.png", label: "Mark (PNG)", bg: "bg-gray-50" },
+              { src: "/logos/Mark---Transparent.png", label: "Mark Transparent (PNG)", bg: "bg-gray-200" },
+              { src: "/logos/Colors.png", label: "Color Palette", bg: "bg-white" },
+              { src: "/logos/Logo.svg", label: "Logo (SVG)", bg: "bg-gray-50" },
+            ].map(({ src, label, bg }) => (
+              <div class="group relative overflow-hidden rounded-lg border shadow-sm">
+                <img src={src} alt={label} class={`h-28 w-full object-contain p-2 ${bg}`} />
+                <div class="px-2 py-1 text-center text-xs text-gray-500">{label}</div>
+                <a
+                  href={src}
+                  download
+                  class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+                >
+                  Download
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <!-- Non-image downloads -->
+          <div class="mt-4 flex flex-wrap gap-3">
+            {[
+              { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
+              { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
+              { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
+            ].map(({ href, label }) => (
               <a
-                href="/t4p-full.png"
+                href={href}
                 download
-                class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+                class="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:bg-gray-50"
               >
-                Download
+                <Icon name="mdi:download" class="h-4 w-4" />
+                {label}
               </a>
-            </div>
-            <div class="group relative overflow-hidden rounded-lg border shadow-sm">
-              <img
-                src="/t4p-logo.png"
-                alt="Logo Icon"
-                class="h-28 w-full bg-white object-contain p-2"
-              />
-              <a
-                href="/t4p-logo.png"
-                download
-                class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
-              >
-                Download
-              </a>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -188,13 +198,20 @@ const newsletters = [
         {/*</div>*/}
 
         <!-- Press Kit PDF -->
-        <div class="mt-6">
+        <div class="mt-6 flex flex-wrap gap-4">
           <a
             href="/tech_for_palestine_press_kit.pdf"
             download
             class="inline-block rounded-full bg-black px-6 py-3 text-white shadow transition hover:bg-zinc-800"
           >
             Download Full Press Kit (PDF)
+          </a>
+          <a
+            href="/logos.zip"
+            download
+            class="inline-block rounded-full bg-black px-6 py-3 text-white shadow transition hover:bg-zinc-800"
+          >
+            Download All Logos (ZIP)
           </a>
         </div>
       </div>
