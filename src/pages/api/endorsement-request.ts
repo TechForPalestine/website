@@ -121,6 +121,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
             },
           ],
         },
+        "Decision": {
+          select: {
+            name: "Pending",
+          },
+        },
         "Is T4P Project": {
           checkbox: endorsementData.isT4PProject,
         },
