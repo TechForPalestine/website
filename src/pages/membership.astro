@@ -1,61 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/PageHeader.astro";
-import MembershipCalculator from "../components/MembershipCalculator.tsx";
-import MembershipFAQ from "../components/MembershipFAQ.tsx";
+import MembershipPage from "../components/MembershipPage.tsx";
 import "../styles/base.css";
 ---
 
 <Layout
   title="Membership - Tech for Palestine"
-  description="Join Tech for Palestine's community of professionals using their skills to launch and scale critical tech and advocacy projects for Palestine."
+  description="Join the coalition working on impactful initiatives for Palestinian liberation. Browse activism initiatives looking for your skills, or start an initiative of your own with T4P support."
 >
   <main>
     <PageHeader
       overline="Tech for Palestine"
       title="Membership"
-      subtitle="Join our community of professionals building tech for Palestine"
+      subtitle="Join the coalition working on impactful initiatives for Palestinian liberation"
     />
 
     <div class="mx-auto max-w-4xl px-6 pb-24 sm:px-8">
-      <!-- Introduction -->
-      <div class="prose prose-lg mx-auto mb-12">
-        <p class="mb-6 text-lg leading-8 text-gray-700">
-          Tech for Palestine is a community of professionals using our skills to launch and scale
-          critical tech and advocacy projects for Palestine, including initiatives for BDS, hiring
-          Palestinians, combating misinformation and more.
-        </p>
-
-        <p class="mb-4 text-lg leading-8 text-gray-700">
-          Members power our grassroots movement. Members can:
-        </p>
-
-        <ul class="mb-8 ml-6 list-disc space-y-2 text-lg leading-8 text-gray-700">
-          <li>
-            Get T4P support on leveling up personal and corporate boycotts, using ethical
-            alternatives, and learning how to activate against tech complicity.
-          </li>
-          <li>Bring T4P resources into your companies for hiring and policy support.</li>
-          <li>
-            Join working committees of fellow advocates taking action for Palestinian liberation.
-          </li>
-          <li>Attend meetups and webinars to connect and learn from other activists.</li>
-        </ul>
-      </div>
-
-      <!-- EmailOctopus Form -->
-      <div class="mx-auto mb-12 max-w-2xl text-center">
-        <h2 class="mb-6 text-2xl font-bold text-gray-900">Sign up for membership:</h2>
-        <div class="flex justify-center">
-          <script
-            async
-            src="https://eomail4.com/form/4a2b90dc-f3d7-11f0-afeb-53c3328688ba.js"
-            data-form="4a2b90dc-f3d7-11f0-afeb-53c3328688ba"></script>
-        </div>
-      </div>
-
-      <!-- FAQ Section -->
-      <MembershipFAQ client:only="react" />
+      <MembershipPage client:only="react" />
     </div>
   </main>
 </Layout>
