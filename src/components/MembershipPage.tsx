@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   Alert,
-  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -36,77 +35,8 @@ const teams = [
 ];
 
 function QgivEmbed() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const scriptLoadedRef = useRef(false);
-  const [postPaymentState, setPostPaymentState] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-  const [registrationUrl, setRegistrationUrl] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const handlePaymentComplete = async (email: string, paymentReference?: string) => {
-    setPostPaymentState("loading");
-    try {
-      const response = await fetch("/api/membership-invite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, type: "paid", paymentReference }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        const msg: string =
-          response.status === 409
-            ? "It looks like you already have an account. Please check your email for a setup link, or contact membership@techforpalestine.org."
-            : (data.message ?? "Something went wrong. Please contact membership@techforpalestine.org.");
-        setErrorMessage(msg);
-        setPostPaymentState("error");
-        return;
-      }
-      setRegistrationUrl(data.registrationUrl);
-      setPostPaymentState("success");
-      window.location.href = data.registrationUrl;
-    } catch {
-      setErrorMessage(
-        "Unable to reach our servers. Please contact membership@techforpalestine.org and we'll set up your account manually."
-      );
-      setPostPaymentState("error");
-    }
-  };
-
-  useEffect(() => {
-    // Listen for Qgiv postMessage events signalling donation completion
-    const handleMessage = (event: MessageEvent) => {
-      if (!event.data) return;
-
-      // Qgiv sends various postMessage shapes — normalise them
-      const raw = typeof event.data === "string" ? (() => { try { return JSON.parse(event.data); } catch { return null; } })() : event.data;
-      if (!raw) return;
-
-      // Qgiv embed completion events typically look like:
-      //   { type: "qgivDonationComplete", email: "...", transactionId: "..." }
-      // or nested under a `payload` key — handle both shapes
-      const payload = raw.payload ?? raw;
-      const type: string = (raw.type ?? raw.event ?? "").toString().toLowerCase();
-
-      if (
-        type.includes("qgiv") ||
-        type.includes("donation") ||
-        type.includes("complete") ||
-        payload.transactionId ||
-        payload.transaction_id
-      ) {
-        const email: string = payload.email ?? payload.donorEmail ?? "";
-        const txId: string =
-          payload.transactionId ?? payload.transaction_id ?? payload.confirmationNumber ?? "";
-        if (email) {
-          handlePaymentComplete(email, txId || undefined);
-        }
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     if (scriptLoadedRef.current) return;
@@ -121,42 +51,45 @@ function QgivEmbed() {
 
   return (
     <Box sx={{ mt: 3 }}>
-      {postPaymentState === "idle" && (
-        <div
-          ref={containerRef}
-          className="qgiv-embed-container"
-          data-qgiv-embed="true"
-          data-embed-id="88902"
-          data-embed="https://secure.qgiv.com/for/dafize/embed/88902/"
-          data-width="630"
-        />
-      )}
+      <div
+        className="qgiv-embed-container"
+        data-qgiv-embed="true"
+        data-embed-id="88902"
+        data-embed="https://secure.qgiv.com/for/dafize/embed/88902/"
+        data-width="630"
+      />
 
-      {postPaymentState === "loading" && (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, py: 3 }}>
-          <CircularProgress size={24} sx={{ color: "#168039" }} />
-          <Typography sx={{ color: "#374151" }}>Setting up your account…</Typography>
+      {!confirmed ? (
+        <Box sx={{ mt: 3 }}>
+          <button
+            onClick={() => setConfirmed(true)}
+            style={{
+              backgroundColor: "#168039",
+              color: "#fff",
+              border: "none",
+              borderRadius: "8px",
+              padding: "12px 24px",
+              fontSize: "1rem",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            I've completed my payment
+          </button>
         </Box>
-      )}
-
-      {postPaymentState === "success" && registrationUrl && (
-        <Alert severity="success" sx={{ mt: 2 }}>
+      ) : (
+        <Alert severity="success" sx={{ mt: 3 }}>
           <Typography sx={{ mb: 1 }}>
-            <strong>Payment received — welcome to T4P!</strong>
+            <strong>Welcome to T4P!</strong>
           </Typography>
           <Typography>
-            Redirecting you to complete your account setup…{" "}
-            <a href={registrationUrl} style={{ color: "#168039", fontWeight: 600 }}>
-              Click here if you are not redirected
+            Check your email for a link to set up your Hub account. If you don't see it within a
+            few minutes, check your spam folder or contact{" "}
+            <a href="mailto:membership@techforpalestine.org" style={{ color: "#168039", fontWeight: 600 }}>
+              membership@techforpalestine.org
             </a>
             .
           </Typography>
-        </Alert>
-      )}
-
-      {postPaymentState === "error" && errorMessage && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {errorMessage}
         </Alert>
       )}
     </Box>
