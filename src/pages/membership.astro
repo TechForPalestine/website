@@ -16,7 +16,17 @@ import "../styles/base.css";
       subtitle="Join the coalition working on impactful initiatives for Palestinian liberation"
     />
 
-    <div class="mx-auto max-w-4xl px-6 pb-24 sm:px-8">
+    <!-- Hero banner -->
+    <div class="w-full overflow-hidden" style="height: 420px;">
+      <img
+        src="/images/membership-hero.jpg"
+        alt="Tech for Palestine community members applauding at an event"
+        class="h-full w-full object-cover object-center"
+        style="object-position: center 30%;"
+      />
+    </div>
+
+    <div class="mx-auto max-w-4xl px-6 pb-24 sm:px-8 pt-12">
       <MembershipPage client:only="react" />
     </div>
   </main>
