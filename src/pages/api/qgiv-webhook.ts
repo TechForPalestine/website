@@ -14,14 +14,12 @@ export const POST: APIRoute = async ({ request }) => {
     console.log("QGiv webhook received:", JSON.stringify(payload, null, 2));
 
     // Check if this is a membership dues payment (recurring donation on the membership form)
-    const formId = payload["Form Id"] ?? payload["form:Form Id"] ?? payload["formId"] ?? null;
+    const formId = payload["formId"] ?? payload["Form Id"] ?? null;
     const isMembershipForm = String(formId) === MEMBERSHIP_FORM_ID;
-    const isRecurring = payload["Is Recurring"] === "y" || payload["is Recurring"] === "y";
-
-    console.log("Form ID debug:", { formId, isMembershipForm, isRecurring, allKeys: Object.keys(payload) });
+    const isRecurring = payload["isRecurring"] === "y";
 
     if (isMembershipForm && isRecurring) {
-      const email: string = payload["Contact Email"] ?? "";
+      const email: string = payload["contactEmail"] ?? "";
       if (email) {
         const hubApiUrl = import.meta.env.HUB_API_URL;
         const hubApiKey = import.meta.env.HUB_API_KEY;
@@ -63,26 +61,9 @@ export const POST: APIRoute = async ({ request }) => {
     // Check QGiv's actual field formats
     // isRecurring: "y" or "n" (string)
     // type: "one time" or "recurring" (string with space)
-    if (
-      payload.isRecurring === "y" ||
-      payload["Is Recurring"] === "y" ||
-      payload["is Recurring"] === "y" ||
-      payload.type === "recurring" ||
-      payload.type === "monthly" ||
-      payload.eventType === "Recurring Donation Created" ||
-      payload.eventType === "Recurring Donation Billed"
-    ) {
+    if (payload.isRecurring === "y" || payload.type === "recurring") {
       donationType = "monthly";
-    } else if (
-      payload.isRecurring === "n" ||
-      payload["Is Recurring"] === "n" ||
-      payload["is Recurring"] === "n" ||
-      payload.type === "one time" ||
-      payload.type === "onetime" ||
-      payload.type === "one-time" ||
-      payload.eventType === "Donation Created" ||
-      payload.eventType === "Transaction Successful"
-    ) {
+    } else if (payload.isRecurring === "n" || payload.type === "one time") {
       donationType = "onetime";
     }
 
