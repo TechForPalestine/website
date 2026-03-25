@@ -1,8 +1,9 @@
 export const prerender = false;
 
-export async function POST({ request }: { request: Request }) {
-  const hubApiUrl = import.meta.env.HUB_API_URL;
-  const hubApiKey = import.meta.env.HUB_API_KEY;
+export async function POST({ request, locals }: { request: Request; locals: App.Locals }) {
+  const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
+  const hubApiUrl = runtime?.HUB_API_URL ?? import.meta.env.HUB_API_URL;
+  const hubApiKey = runtime?.HUB_API_KEY ?? import.meta.env.HUB_API_KEY;
 
   if (!hubApiUrl || !hubApiKey) {
     return new Response(JSON.stringify({ message: "Hub API not configured" }), {
