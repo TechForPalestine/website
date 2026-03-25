@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -7,7 +7,6 @@ import {
   AccordionDetails,
   Card,
   CardContent,
-  Alert,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -36,7 +35,6 @@ const teams = [
 
 function QgivEmbed() {
   const scriptLoadedRef = useRef(false);
-  const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     if (scriptLoadedRef.current) return;
@@ -58,40 +56,6 @@ function QgivEmbed() {
         data-embed="https://secure.qgiv.com/for/dafize/embed/88902/"
         data-width="630"
       />
-
-      {!confirmed ? (
-        <Box sx={{ mt: 3 }}>
-          <button
-            onClick={() => setConfirmed(true)}
-            style={{
-              backgroundColor: "#168039",
-              color: "#fff",
-              border: "none",
-              borderRadius: "8px",
-              padding: "12px 24px",
-              fontSize: "1rem",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            I've completed my payment
-          </button>
-        </Box>
-      ) : (
-        <Alert severity="success" sx={{ mt: 3 }}>
-          <Typography sx={{ mb: 1 }}>
-            <strong>Welcome to T4P!</strong>
-          </Typography>
-          <Typography>
-            Check your email for a link to set up your Hub account. If you don't see it within a
-            few minutes, check your spam folder or contact{" "}
-            <a href="mailto:membership@techforpalestine.org" style={{ color: "#168039", fontWeight: 600 }}>
-              membership@techforpalestine.org
-            </a>
-            .
-          </Typography>
-        </Alert>
-      )}
     </Box>
   );
 }
