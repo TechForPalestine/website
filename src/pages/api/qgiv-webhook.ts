@@ -15,7 +15,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Check if this is a membership dues payment (recurring donation on the membership form)
     const isMembershipForm = String(payload["Form Id"]) === MEMBERSHIP_FORM_ID;
-    const isRecurring = payload["is Recurring"] === "y";
+    const isRecurring = payload["Is Recurring"] === "y" || payload["is Recurring"] === "y";
 
     if (isMembershipForm && isRecurring) {
       const email: string = payload["Contact Email"] ?? "";
@@ -62,6 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
     // type: "one time" or "recurring" (string with space)
     if (
       payload.isRecurring === "y" ||
+      payload["Is Recurring"] === "y" ||
       payload["is Recurring"] === "y" ||
       payload.type === "recurring" ||
       payload.type === "monthly" ||
@@ -71,6 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
       donationType = "monthly";
     } else if (
       payload.isRecurring === "n" ||
+      payload["Is Recurring"] === "n" ||
       payload["is Recurring"] === "n" ||
       payload.type === "one time" ||
       payload.type === "onetime" ||
