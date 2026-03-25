@@ -14,8 +14,11 @@ export const POST: APIRoute = async ({ request }) => {
     console.log("QGiv webhook received:", JSON.stringify(payload, null, 2));
 
     // Check if this is a membership dues payment (recurring donation on the membership form)
-    const isMembershipForm = String(payload["Form Id"]) === MEMBERSHIP_FORM_ID;
+    const formId = payload["Form Id"] ?? payload["form:Form Id"] ?? payload["formId"] ?? null;
+    const isMembershipForm = String(formId) === MEMBERSHIP_FORM_ID;
     const isRecurring = payload["Is Recurring"] === "y" || payload["is Recurring"] === "y";
+
+    console.log("Form ID debug:", { formId, isMembershipForm, isRecurring, allKeys: Object.keys(payload) });
 
     if (isMembershipForm && isRecurring) {
       const email: string = payload["Contact Email"] ?? "";
@@ -116,6 +119,7 @@ export const POST: APIRoute = async ({ request }) => {
               success: true,
               donationType,
               eventName,
+              formId,
               message: "Donation tracked successfully in Plausible",
             }),
             {
