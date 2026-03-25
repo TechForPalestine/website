@@ -7,7 +7,7 @@ const MEMBERSHIP_FORM_ID = "1116610";
 // QGiv webhook endpoint to receive donation notifications
 // Form: T4P Website Donation Form (embed ID: 83460)
 // Form: T4P Membership Form (Form Id: 1116610)
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const payload = await request.json();
 
@@ -21,8 +21,9 @@ export const POST: APIRoute = async ({ request }) => {
     if (isMembershipForm && isRecurring) {
       const email: string = payload["contactEmail"] ?? "";
       if (email) {
-        const hubApiUrl = import.meta.env.HUB_API_URL;
-        const hubApiKey = import.meta.env.HUB_API_KEY;
+        const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
+        const hubApiUrl = runtime?.HUB_API_URL ?? import.meta.env.HUB_API_URL;
+        const hubApiKey = runtime?.HUB_API_KEY ?? import.meta.env.HUB_API_KEY;
         if (hubApiUrl && hubApiKey) {
           try {
             const hubResponse = await fetch(`${hubApiUrl}/api/auth/invite`, {
