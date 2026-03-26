@@ -61,7 +61,7 @@ function QgivEmbed() {
 }
 
 export default function MembershipPage() {
-  const [expanded, setExpanded] = useState<string | false>("dues");
+  const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange =
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
