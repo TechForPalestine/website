@@ -45,7 +45,7 @@ function QgivEmbed() {
   }, []);
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, overflow: "hidden" }}>
       <div
         className="qgiv-embed-container"
         data-qgiv-embed="true"
@@ -137,7 +137,7 @@ export default function MembershipPage() {
       {/* Inclusivity / waiver note */}
       <Box
         sx={{
-          mt: 4,
+          mt: 1,
           p: 3,
           borderRadius: 2,
           backgroundColor: "#f9fafb",
