@@ -127,69 +127,6 @@ export default function MembershipPage() {
         ))}
       </Box>
 
-      {/* Membership Dues accordion */}
-      <Accordion expanded={expanded === "dues"} onChange={handleChange("dues")} sx={accordionSx}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ "& .MuiAccordionSummary-content": { my: 2 } }}>
-          <Typography sx={summaryTitleSx}>Membership Dues</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ pt: 0, pb: 3, px: 3 }}>
-          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 2 }}>
-            Membership dues fund training, financial grants, and volunteers for breakthrough
-            projects like Upscrolled, Boycat, Thaura, Jaywalk, Newscord, and more.
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 2 }}>
-            Dues are pay-what-you-can, starting at $1 per month. We suggest a contribution equal
-            to one hour's salary.
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 2 }}>
-            If you are in the US, your dues are tax deductible. If you are in the UK, contact us
-            at{" "}
-            <a
-              href="mailto:membership@techforpalestine.org"
-              style={{ color: "#168039", textDecoration: "underline" }}
-            >
-              membership@techforpalestine.org
-            </a>{" "}
-            after signup and we will ensure that future donations are processed through our gift
-            aid partner.
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 1 }}>
-            Tech for Palestine aims for inclusivity. Please reach out to{" "}
-            <a
-              href="mailto:membership@techforpalestine.org"
-              style={{ color: "#168039", textDecoration: "underline" }}
-            >
-              membership@techforpalestine.org
-            </a>{" "}
-            to request a waiver of dues in the following circumstances:
-          </Typography>
-          <Box
-            component="ul"
-            sx={{
-              ml: 3,
-              pl: 2,
-              mb: 2,
-              color: "#374151",
-              listStyleType: "disc",
-              "& li": { mb: 0.5, lineHeight: 1.75 },
-            }}
-          >
-            <li>Not having access to banking services/debit card</li>
-            <li>Being located in Gaza or the West Bank</li>
-            <li>Being a refugee from Gaza or the West Bank evacuated during the genocide</li>
-            <li>Not being able to afford membership due to personal circumstances</li>
-            <li>Being a T4P paid staff member</li>
-          </Box>
-          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 3 }}>
-            Options to pay via DAF, cryptocurrency, foundations, and other methods will be
-            supported in the future. We will help you migrate to your preferred method of giving
-            once available.
-          </Typography>
-
-          <QgivEmbed />
-        </AccordionDetails>
-      </Accordion>
-
       {/* Mobilizing for Palestine accordion */}
       <Accordion
         expanded={expanded === "mobilizing"}
@@ -247,6 +184,70 @@ export default function MembershipPage() {
           </Box>
         </AccordionDetails>
       </Accordion>
+
+      {/* Membership Dues accordion */}
+      <Accordion expanded={expanded === "dues"} onChange={handleChange("dues")} sx={accordionSx}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ "& .MuiAccordionSummary-content": { my: 2 } }}>
+          <Typography sx={summaryTitleSx}>Membership Dues</Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ pt: 0, pb: 3, px: 3 }}>
+          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 2 }}>
+            Membership dues fund training, financial grants, and volunteers for breakthrough
+            projects like Upscrolled, Boycat, Thaura, Jaywalk, Newscord, and more.
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 2 }}>
+            Dues are pay-what-you-can, starting at $1 per month. We suggest a contribution equal
+            to one hour's salary.
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 2 }}>
+            If you are in the US, your dues are tax deductible. If you are in the UK, contact us
+            at{" "}
+            <a
+              href="mailto:membership@techforpalestine.org"
+              style={{ color: "#168039", textDecoration: "underline" }}
+            >
+              membership@techforpalestine.org
+            </a>{" "}
+            after signup and we will ensure that future donations are processed through our gift
+            aid partner.
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 1 }}>
+            Tech for Palestine aims for inclusivity. Please reach out to{" "}
+            <a
+              href="mailto:membership@techforpalestine.org"
+              style={{ color: "#168039", textDecoration: "underline" }}
+            >
+              membership@techforpalestine.org
+            </a>{" "}
+            to request a waiver of dues in the following circumstances:
+          </Typography>
+          <Box
+            component="ul"
+            sx={{
+              ml: 3,
+              pl: 2,
+              mb: 2,
+              color: "#374151",
+              listStyleType: "disc",
+              "& li": { mb: 0.5, lineHeight: 1.75 },
+            }}
+          >
+            <li>Not having access to banking services/debit card</li>
+            <li>Being located in Gaza or the West Bank</li>
+            <li>Being a refugee from Gaza or the West Bank evacuated during the genocide</li>
+            <li>Not being able to afford membership due to personal circumstances</li>
+            <li>Being a T4P paid staff member</li>
+          </Box>
+          <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75, mb: 0 }}>
+            Options to pay via DAF, cryptocurrency, foundations, and other methods will be
+            supported in the future. We will help you migrate to your preferred method of giving
+            once available.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Dues payment form */}
+      <QgivEmbed />
 
       {/* Contact */}
       <Box
