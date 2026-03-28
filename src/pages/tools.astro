@@ -1,7 +1,6 @@
 ---
 // src/pages/tools.astro
 import Layout from "../layouts/Layout.astro";
-import ToolPopup from "../components/ToolPopup";
 import "../styles/base.css";
 
 const topLeft = [
@@ -29,12 +28,20 @@ const topLeft = [
 ];
 
 const rightCard = {
-  name: "Pal Chat",
-  desc: "A secure chat system for Palestine.",
-  img: "/logo-stone-thrower-bot-transparent.png",
+  name: "Thaura",
+  desc: "A privacy-first AI assistant built by Syrian engineers — ethical AI that never trains on your data and stands with Palestine.",
+  link: "https://thaura.ai/",
+  logo: "/thaura.svg",
 };
 
 const bottomRow = [
+  {
+    name: "UpScrolled",
+    desc: "Simply, social without limits.",
+    link: "https://upscrolled.com/en/",
+    logo: "/upscrolled-icon.svg",
+    button: "UpScrolled",
+  },
   {
     name: "T4P Datasets",
     desc: "Tracking the human toll. Use the data from our APIs to tell-their story.",
@@ -85,13 +92,6 @@ const bottomRow = [
     button: "BuycatVPN",
   },
   {
-    name: "UpScrolled",
-    desc: "Simply, social without limits.",
-    link: "https://upscrolled.com/en/",
-    logo: "/upscrolled-icon.svg",
-    button: "UpScrolled",
-  },
-  {
     name: "UK University Repression League Table 2025",
     desc: "See how UK universities rank in repressing activism and ties to arms industries.",
     link: "https://si4j.org/universityrepression",
@@ -124,12 +124,16 @@ const bottomRow = [
     <div class="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2">
       <!-- Right Featured Card -->
       <div class="flex flex-col justify-center rounded-xl border bg-white p-6 shadow">
-        <img src={rightCard.img} alt={rightCard.name} class="mb-4 max-h-48 w-full object-contain" />
+        <img src={rightCard.logo} alt={rightCard.name} class="mb-4 max-h-48 w-full object-contain" />
         <h3 class="mb-2 text-2xl font-bold text-green-900">{rightCard.name}</h3>
         <p class="mb-4 text-sm text-gray-700">{rightCard.desc}</p>
-        <ToolPopup client:load buttonLabel="Open Chat">
-          <chat-box mode="inline" base-url="https://pal-chat.net" theme="light"></chat-box>
-        </ToolPopup>
+        <a
+          href={rightCard.link}
+          target="_blank"
+          class="inline-block rounded-full bg-green-800 px-4 py-1 text-sm text-white transition hover:bg-green-900 text-center"
+        >
+          {rightCard.name}
+        </a>
       </div>
       <!-- Left Column -->
       <div class="flex flex-col gap-6">
