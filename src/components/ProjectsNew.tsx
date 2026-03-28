@@ -11,7 +11,11 @@ import {
   DialogActions,
   Button,
   IconButton,
+  InputAdornment,
+  TextField,
+  Autocomplete,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CloseIcon from "@mui/icons-material/Close";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -21,6 +25,12 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import InstagramIcon from "@mui/icons-material/Instagram";
+
+interface Tag {
+  id: number;
+  name: string;
+  type: string;
+}
 
 interface ProjectItem {
   id: number;
@@ -48,11 +58,14 @@ interface ProjectItem {
   tiktokUrl?: string;
   signalUrl?: string;
   upscrolledUrl?: string;
+  tags?: Tag[];
+  featured?: boolean;
 }
 
 interface ProjectsNewProps {
   projects: ProjectItem[];
   loading?: boolean;
+  availableTags?: Tag[];
 }
 
 const getInitials = (name: string): string => {
@@ -68,13 +81,17 @@ const getInitials = (name: string): string => {
 export default function ProjectsNew({
   projects: initialProjects,
   loading: initialLoading = false,
+  availableTags: initialTags = [],
 }: ProjectsNewProps) {
   const [projects, setProjects] = useState<ProjectItem[]>(initialProjects);
+  const [availableTags, setAvailableTags] = useState<Tag[]>(initialTags);
   const [loading, setLoading] = useState(initialLoading);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
   const [dialogImageFailed, setDialogImageFailed] = useState(false);
+  const [activeTags, setActiveTags] = useState<Tag[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleCardClick = (project: ProjectItem) => {
     setSelectedProject(project);
@@ -96,8 +113,11 @@ export default function ProjectsNew({
       const response = await fetch("/api/projects", { cache: "no-cache" });
       if (response.ok) {
         const data = await response.json();
-        console.log(`[ProjectsNew] Successfully fetched ${data.length} projects`);
-        setProjects(data);
+        const projects = data.projects ?? data;
+        const tags = data.tags ?? [];
+        console.log(`[ProjectsNew] Successfully fetched ${projects.length} projects, ${tags.length} tags`);
+        setProjects(projects);
+        setAvailableTags(tags);
       } else {
         console.error(`[ProjectsNew] API returned status ${response.status}:`, response.statusText);
         const errorText = await response.text();
@@ -154,8 +174,169 @@ export default function ProjectsNew({
     );
   }
 
+  const activeTagIds = new Set(activeTags.map((t) => t.id));
+  const isFiltering = searchQuery !== "" || activeTags.length > 0;
+  const featuredProjects = projects.filter((p) => p.featured);
+
+  const filteredProjects = projects.filter((project) => {
+    if (!isFiltering && project.featured) return false; // shown in hero instead
+
+    const matchesSearch =
+      searchQuery === "" ||
+      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (project.elevatorPitch ?? project.description ?? "").toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesTags =
+      activeTagIds.size === 0 ||
+      project.tags?.some((t) => activeTagIds.has(t.id));
+
+    return matchesSearch && matchesTags;
+  });
+
   return (
     <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2, py: 5 }}>
+      {/* Search and tag filters */}
+      <Box sx={{ mb: 4, display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
+        <TextField
+          placeholder="Search projects…"
+          size="small"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" />
+                </InputAdornment>
+              ),
+            },
+          }}
+          sx={{ flex: 1 }}
+        />
+        {availableTags.length > 0 && (
+          <Autocomplete
+            multiple
+            options={availableTags}
+            getOptionLabel={(option) => option.name}
+            value={activeTags}
+            onChange={(_, newValue) => setActiveTags(newValue)}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            renderInput={(params) => (
+              <TextField {...params} placeholder="Filter by tag…" size="small" />
+            )}
+            sx={{ flex: 1, minWidth: 220 }}
+          />
+        )}
+      </Box>
+
+      {/* Featured hero section */}
+      {!isFiltering && featuredProjects.length > 0 && (
+        <Box sx={{ mb: 6 }}>
+          <Typography variant="overline" sx={{ color: "text.secondary", fontWeight: 600, letterSpacing: 1 }}>
+            Featured Projects
+          </Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
+              gap: 3,
+              mt: 1,
+            }}
+          >
+            {featuredProjects.map((project) => {
+              const hasLogo = project.logoUrl && project.logoUrl !== "/images/default.jpg";
+              const logoSrc =
+                hasLogo && project.logoUrl?.startsWith("/")
+                  ? `https://projecthub.techforpalestine.org${project.logoUrl}`
+                  : project.logoUrl;
+              const showInitials = !hasLogo || failedImages.has(project.id);
+
+              return (
+                <Card
+                  key={project.id}
+                  onClick={() => handleCardClick(project)}
+                  sx={{
+                    p: 3,
+                    border: "2px solid",
+                    borderColor: "primary.main",
+                    boxShadow: 3,
+                    "&:hover": { boxShadow: 6 },
+                    transition: "box-shadow 0.2s",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 2, mb: 2, alignItems: "center" }}>
+                    {showInitials ? (
+                      <Box
+                        sx={{
+                          width: 52,
+                          height: 52,
+                          borderRadius: "50%",
+                          bgcolor: "#E3F9ED",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                          fontSize: "1.1rem",
+                          fontWeight: 500,
+                          color: "#666",
+                        }}
+                      >
+                        {getInitials(project.name)}
+                      </Box>
+                    ) : (
+                      <Box
+                        component="img"
+                        src={logoSrc}
+                        alt={project.name}
+                        sx={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                        onError={() => setFailedImages((prev) => new Set(prev).add(project.id))}
+                      />
+                    )}
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography variant="h6" sx={{ fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.25 }}>
+                        {project.name}
+                      </Typography>
+                      {project.leadName && (
+                        <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
+                          Led by {project.leadName}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                  <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.6, flexGrow: 1 }}>
+                    {project.elevatorPitch || project.description}
+                  </Typography>
+                  {project.websiteUrl && (
+                    <Box sx={{ mt: 2 }}>
+                      <Link
+                        href={project.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        sx={{ fontSize: "0.875rem" }}
+                      >
+                        Visit site →
+                      </Link>
+                    </Box>
+                  )}
+                </Card>
+              );
+            })}
+          </Box>
+        </Box>
+      )}
+
+      {filteredProjects.length === 0 && (
+        <Box sx={{ textAlign: "center", py: 6 }}>
+          <Typography variant="body1" sx={{ color: "text.secondary" }}>
+            No projects match your search.
+          </Typography>
+        </Box>
+      )}
+
       <Box
         sx={{
           display: "grid",
@@ -167,7 +348,7 @@ export default function ProjectsNew({
           gap: 2,
         }}
       >
-        {projects.map((project) => {
+        {filteredProjects.map((project) => {
           const hasLogo = project.logoUrl && project.logoUrl !== "/images/default.jpg";
           const logoSrc =
             hasLogo && project.logoUrl?.startsWith("/")

@@ -99,12 +99,14 @@ export const GET: APIRoute = async ({ locals }) => {
       projects = [];
     }
 
+    const tags = Array.isArray(data.tags) ? data.tags : [];
+
     const totalTime = Date.now() - startTime;
     console.log(
-      `[API /api/projects] Returning ${projects.length} projects (total time: ${totalTime}ms)`
+      `[API /api/projects] Returning ${projects.length} projects, ${tags.length} tags (total time: ${totalTime}ms)`
     );
 
-    return new Response(JSON.stringify(projects), {
+    return new Response(JSON.stringify({ projects, tags }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -120,6 +122,7 @@ export const GET: APIRoute = async ({ locals }) => {
         Vary: "*",
         // Custom headers for debugging
         "X-Project-Count": projects.length.toString(),
+        "X-Tag-Count": tags.length.toString(),
         "X-Fetch-Time": new Date().toISOString(),
         "X-Cache-Bust": Date.now().toString(),
       },
