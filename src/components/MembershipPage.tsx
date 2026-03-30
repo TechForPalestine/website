@@ -45,7 +45,7 @@ function QgivEmbed() {
   }, []);
 
   return (
-    <Box sx={{ mt: 3, overflow: "hidden" }}>
+    <Box sx={{ overflow: "hidden" }}>
       <div
         className="qgiv-embed-container"
         data-qgiv-embed="true"
@@ -132,91 +132,109 @@ export default function MembershipPage() {
 
       <MembershipCalculator />
 
-      <QgivEmbed />
-
-      {/* Inclusivity / waiver note */}
+      {/* Payment form + side info */}
       <Box
         sx={{
-          mt: 1,
-          p: 3,
-          borderRadius: 2,
-          backgroundColor: "#f9fafb",
-          border: "1px solid #e5e7eb",
-        }}
-      >
-        <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
-          Tech for Palestine aims for inclusivity. Please reach out to{" "}
-          <a
-            href="mailto:membership@techforpalestine.org"
-            style={{ color: "#168039", textDecoration: "underline" }}
-          >
-            membership@techforpalestine.org
-          </a>{" "}
-          to request a waiver of dues in the following circumstances:
-        </Typography>
-        <Box
-          component="ul"
-          sx={{
-            ml: 3,
-            pl: 2,
-            mb: 2,
-            color: "#374151",
-            listStyleType: "disc",
-            "& li": { mb: 0.5, lineHeight: 1.75, fontSize: "0.875rem" },
-          }}
-        >
-          <li>Not having access to banking services/debit card</li>
-          <li>Being located in Gaza or the West Bank</li>
-          <li>Being a refugee from Gaza or the West Bank evacuated during the genocide</li>
-          <li>Not being able to afford membership due to personal circumstances</li>
-          <li>Being a T4P paid staff member</li>
-        </Box>
-        <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
-          If you are in the US, your dues are tax deductible. If you are in the UK, contact us at{" "}
-          <a
-            href="mailto:membership@techforpalestine.org"
-            style={{ color: "#168039", textDecoration: "underline" }}
-          >
-            membership@techforpalestine.org
-          </a>{" "}
-          after signup and we will ensure that future donations are processed through our gift aid
-          partner.
-        </Typography>
-        <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 0 }}>
-          Options to pay via DAF, cryptocurrency, foundations, and other methods will be supported
-          in the future. We will help you migrate to your preferred method of giving once available.
-        </Typography>
-      </Box>
-
-      {/* Contact */}
-      <Box
-        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 340px" },
+          gap: 3,
           mt: 3,
-          p: 3,
-          borderRadius: 2,
-          backgroundColor: "#f0fdf4",
-          textAlign: "center",
+          alignItems: "start",
         }}
       >
-        <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.75 }}>
-          If you have questions, set up an{" "}
-          <a
-            href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
-            style={{ color: "#168039", textDecoration: "underline", fontWeight: 600 }}
-            target="_blank"
-            rel="noopener noreferrer"
+        <QgivEmbed />
+
+        {/* Side info */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {/* Inclusivity / waiver note */}
+          <Box
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              backgroundColor: "#f9fafb",
+              border: "1px solid #e5e7eb",
+            }}
           >
-            intro call
-          </a>{" "}
-          or reach out to us at{" "}
-          <a
-            href="mailto:membership@techforpalestine.org"
-            style={{ color: "#168039", textDecoration: "underline", fontWeight: 600 }}
+            <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}>
+              Inclusivity &amp; waivers
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
+              Tech for Palestine aims for inclusivity. Please contact{" "}
+              <a
+                href="mailto:membership@techforpalestine.org"
+                style={{ color: "#168039", textDecoration: "underline" }}
+              >
+                membership@techforpalestine.org
+              </a>{" "}
+              to request a waiver of dues in the following circumstances:
+            </Typography>
+            <Box
+              component="ul"
+              sx={{
+                ml: 3,
+                pl: 2,
+                mb: 2,
+                color: "#374151",
+                listStyleType: "disc",
+                "& li": { mb: 0.5, lineHeight: 1.75, fontSize: "0.875rem" },
+              }}
+            >
+              <li>Not having access to banking services/debit card</li>
+              <li>Being located in Gaza or the West Bank</li>
+              <li>Being a refugee from Gaza or the West Bank evacuated during the genocide</li>
+              <li>Not being able to afford membership due to personal circumstances</li>
+              <li>Being a T4P paid staff member</li>
+            </Box>
+            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
+              If you are in the US, your dues are tax deductible. If you are in the UK, contact us at{" "}
+              <a
+                href="mailto:membership@techforpalestine.org"
+                style={{ color: "#168039", textDecoration: "underline" }}
+              >
+                membership@techforpalestine.org
+              </a>{" "}
+              after signup and we will ensure that future donations are processed through our gift aid
+              partner.
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 0 }}>
+              Options to pay via DAF, cryptocurrency, foundations, and other methods will be supported
+              in the future. We will help you migrate to your preferred method of giving once available.
+            </Typography>
+          </Box>
+
+          {/* Contact */}
+          <Box
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              backgroundColor: "#f0fdf4",
+              border: "1px solid #d1fae5",
+            }}
           >
-            membership@techforpalestine.org
-          </a>
-          !
-        </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}>
+              Get in touch
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75 }}>
+              If you have questions, set up an{" "}
+              <a
+                href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
+                style={{ color: "#168039", textDecoration: "underline", fontWeight: 600 }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                intro call
+              </a>{" "}
+              or reach out to us at{" "}
+              <a
+                href="mailto:membership@techforpalestine.org"
+                style={{ color: "#168039", textDecoration: "underline", fontWeight: 600 }}
+              >
+                membership@techforpalestine.org
+              </a>
+              !
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

@@ -69,7 +69,7 @@ export default function MembershipCalculator() {
 
   const resultBoxSx = {
     flex: 1,
-    p: 2.5,
+    p: 2,
     backgroundColor: "#f0fdf4",
     borderRadius: 2,
     border: "2px solid #168039",
@@ -80,22 +80,22 @@ export default function MembershipCalculator() {
       sx={{
         maxWidth: 600,
         mx: "auto",
-        borderRadius: 3,
-        border: "4px solid #168039",
+        borderRadius: 2,
+        border: "2px solid #168039",
         backgroundColor: "white",
-        p: 3,
+        p: 2,
       }}
     >
       <Typography
-        variant="h5"
+        variant="body1"
         component="h2"
-        sx={{ fontWeight: "bold", color: "#1f2937", mb: 2.5, fontSize: "1.75rem" }}
+        sx={{ fontWeight: "bold", color: "#1f2937", mb: 1.5, fontSize: "0.95rem" }}
       >
         Calculate Your Suggested Contribution
       </Typography>
 
       {/* Currency */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 1.5 }}>
         <FormLabel sx={{ display: "block", mb: 1, fontWeight: 600, color: "#1f2937", fontSize: "0.95rem" }}>
           Currency
         </FormLabel>
@@ -121,7 +121,7 @@ export default function MembershipCalculator() {
       </Box>
 
       {/* Income Period */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 1.5 }}>
         <FormLabel
           component="legend"
           sx={{ display: "block", mb: 1, fontWeight: 600, color: "#1f2937", fontSize: "0.95rem" }}
@@ -146,7 +146,7 @@ export default function MembershipCalculator() {
       </Box>
 
       {/* Income Input */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 1.5 }}>
         <TextField
           fullWidth
           type="number"
@@ -167,7 +167,7 @@ export default function MembershipCalculator() {
 
       {/* Results */}
       {suggestedAmount !== null && (
-        <Box sx={{ mt: 2.5, display: "flex", gap: 2, flexWrap: "wrap" }}>
+        <Box sx={{ mt: 1.5, display: "flex", gap: 2, flexWrap: "wrap" }}>
           {/* Monthly */}
           <Box sx={resultBoxSx}>
             <Typography variant="h6" sx={{ fontWeight: 600, color: "#166534", mb: 0.5, fontSize: "1rem" }}>
@@ -203,7 +203,7 @@ export default function MembershipCalculator() {
       )}
 
       {suggestedAmount !== null && (
-        <Typography variant="body2" sx={{ mt: 1.5, color: "#4b5563", fontStyle: "italic", fontSize: "0.875rem" }}>
+        <Typography variant="body2" sx={{ mt: 1, color: "#4b5563", fontStyle: "italic", fontSize: "0.875rem" }}>
           This is a suggested amount based on your income. Please contribute what feels meaningful to you.
           {!isUSD && " USD equivalent is approximate."}
         </Typography>
