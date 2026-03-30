@@ -238,11 +238,11 @@ const isUK = country === "GB";
     // A/B Test Logic
     document.addEventListener("DOMContentLoaded", function () {
       // Check for URL parameter override (for testing)
-      var urlParams = new URLSearchParams(window.location.search);
-      var forceVariant = urlParams.get("variant");
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceVariant = urlParams.get("variant");
 
-      var trackingVariant;
-      var formToShow;
+      let trackingVariant;
+      let formToShow;
 
       if (forceVariant === "qgiv") {
         // Force show qgiv form with link
@@ -254,7 +254,7 @@ const isUK = country === "GB";
         trackingVariant = "Validaid + link";
       } else {
         // Randomly assign A/B test variant (50/50 split)
-        var testGroup = Math.random() < 0.5 ? "A" : "B";
+        const testGroup = Math.random() < 0.5 ? "A" : "B";
 
         if (testGroup === "A") {
           // Control: qgiv only, no link
@@ -275,7 +275,7 @@ const isUK = country === "GB";
       }
 
       // Show the appropriate form
-      var targetForm = document.getElementById(formToShow);
+      const targetForm = document.getElementById(formToShow);
       if (targetForm) {
         targetForm.style.display = "block";
       }
@@ -284,7 +284,7 @@ const isUK = country === "GB";
       if (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link") {
         // Load qgiv script
         (function (w, d, s, id) {
-          var js,
+          let js,
             fjs = d.getElementsByTagName(s)[0];
           if (d.getElementById(id)) return;
           js = d.createElement(s);
@@ -300,9 +300,10 @@ const isUK = country === "GB";
             event.data.type === "validaid-resize" &&
             event.data.iframeId === "validaid-iframe-event-236"
           ) {
-            var iframe = document.getElementById("validaid-iframe-event-236");
+            const iframe = document.getElementById("validaid-iframe-event-236");
             if (iframe) {
-              iframe.style.height = event.data.height + "px";
+              const height = Math.min(Math.max(parseInt(event.data.height, 10) || 0, 100), 5000);
+              iframe.style.height = height + "px";
             }
           }
         });

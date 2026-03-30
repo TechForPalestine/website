@@ -165,7 +165,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
     contentOverride?: string
   ): React.ReactNode => {
     const { text, annotations, href } = segment;
-    let content = contentOverride || text.content;
+    const content = contentOverride || text.content;
 
     // Build style object based on annotations
     const style: React.CSSProperties = {};
@@ -205,7 +205,10 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
     }
 
     // Determine if this is a link
-    const linkUrl = text.link?.url || href;
+    const rawLinkUrl = text.link?.url || href;
+    // Only allow http/https/mailto URLs to prevent javascript: and data: injection
+    const isSafeUrl = (url: string) => /^(https?:|mailto:)/i.test(url);
+    const linkUrl = rawLinkUrl && isSafeUrl(rawLinkUrl) ? rawLinkUrl : null;
 
     if (linkUrl) {
       return (

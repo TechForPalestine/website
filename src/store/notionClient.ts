@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getProxiedImageUrl } from "../utils/imageProxy.js";
 import { getEnv } from "../utils/getEnv.js";
 
 // Helper function to create Notion axios instance with runtime environment variables
@@ -42,34 +41,11 @@ export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) 
     let headerImage = "";
     if (props["Header"]?.files?.length > 0) {
       const file = props["Header"].files[0];
-      console.log("Event header file found:", {
-        eventTitle: props["Title"]?.title?.[0]?.plain_text,
-        fileType: file.type,
-        file,
-      });
       if (file.type === "external") {
         headerImage = file.external.url;
-        console.log("Using external URL:", headerImage);
       } else if (file.type === "file") {
-        // Create hash from URL to detect when file changes
-        const base64 = (globalThis as any).Buffer
-          ? (globalThis as any).Buffer.from(file.file.url).toString("base64")
-          : btoa(file.file.url);
-        const urlHash = base64.slice(0, 8);
-        const timestamp = Date.now();
-
-        // Add cache busting parameter with both hash and timestamp
-        const baseProxyUrl = getProxiedImageUrl(file.file.url);
-        headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
-        console.log("Using proxied URL with aggressive cache bust:", {
-          original: file.file.url,
-          proxied: headerImage,
-          urlHash,
-          timestamp: new Date(timestamp).toISOString(),
-        });
+        headerImage = file.file.url;
       }
-    } else {
-      console.log("No header image found for event:", props["Title"]?.title?.[0]?.plain_text);
     }
 
     const description = props["Description"]?.rich_text?.[0]?.plain_text || "";
@@ -114,16 +90,7 @@ export const fetchNotionEventById = async (pageId: string, locals?: any) => {
     if (file.type === "external") {
       headerImage = file.external.url;
     } else if (file.type === "file") {
-      // Create hash from URL to detect when file changes
-      const base64 = (globalThis as any).Buffer
-        ? (globalThis as any).Buffer.from(file.file.url).toString("base64")
-        : btoa(file.file.url);
-      const urlHash = base64.slice(0, 8);
-      const timestamp = Date.now();
-
-      // Add cache busting parameter with both hash and timestamp
-      const baseProxyUrl = getProxiedImageUrl(file.file.url);
-      headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
+      headerImage = file.file.url;
     }
   }
 
@@ -269,7 +236,7 @@ export const fetchNotionAgenda = async (locals?: any) => {
         if (file.type === "external") {
           photo = file.external.url;
         } else if (file.type === "file") {
-          photo = getProxiedImageUrl(file.file.url);
+          photo = file.file.url;
         }
       }
 

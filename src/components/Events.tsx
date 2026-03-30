@@ -27,97 +27,13 @@ interface EventsProps {
   loading?: boolean;
 }
 
-/**
- * Handles image load errors with a fallback strategy.
- *
- * Fallback sequence:
- * 1. If proxy image fails → try original Notion URL
- * 2. If original Notion URL fails → fallback to default image
- *
- * @param e - Image error event
- * @param event - Event item (for logging purposes)
- */
-const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>, event: EventItem): void => {
+const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>): void => {
   const target = e.target as HTMLImageElement;
-  const currentSrc = target.src;
-  const defaultImage = "/images/default.jpg";
-
-  // Prevent infinite loop if already using default image
-  if (currentSrc.includes(defaultImage)) {
-    return;
+  if (target.src !== "/images/default.jpg") {
+    target.src = "/images/default.jpg";
   }
-
-  // Step 1: If proxy image failed, try original Notion URL
-  if (currentSrc.includes("notion-image-proxy")) {
-    console.error(`Proxy image failed for event "${event.title}". Trying original Notion URL:`, {
-      proxySrc: currentSrc,
-      eventImage: event.image,
-      eventId: event.id,
-    });
-
-    try {
-      // Attempt to decode original URL from proxy URL
-      const proxyPath = currentSrc.split("/proxy/")[1];
-      if (proxyPath) {
-        const originalUrl = atob(proxyPath);
-        console.log(`Trying original Notion URL: ${originalUrl}`);
-        target.src = originalUrl;
-        return;
-      }
-    } catch (decodeError) {
-      console.error("Could not decode original URL from proxy:", decodeError);
-      // If decoding fails, fallback to default image
-    }
-  } else {
-    // Step 2: Direct Notion URL failed
-    console.error(`Direct Notion URL failed for event "${event.title}". Using default:`, {
-      originalSrc: currentSrc,
-      eventImage: event.image,
-      eventId: event.id,
-    });
-  }
-
-  // Step 3: Final fallback - use default image
-  target.src = defaultImage;
 };
 
-// Helper function to compare events arrays for changes
-const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolean => {
-  if (oldEvents.length !== newEvents.length) {
-    return true;
-  }
-
-  // Create maps for efficient lookup
-  const oldEventMap = new Map(oldEvents.map((event) => [event.id, event]));
-  const newEventMap = new Map(newEvents.map((event) => [event.id, event]));
-
-  // Check if any old event has been deleted
-  for (const oldEvent of oldEvents) {
-    if (!newEventMap.has(oldEvent.id)) {
-      return true; // Event was deleted
-    }
-  }
-
-  // Check if any new event was added or existing event was modified
-  return newEvents.some((newEvent) => {
-    const oldEvent = oldEventMap.get(newEvent.id);
-    if (!oldEvent) {
-      return true; // New event
-    }
-
-    // Compare key properties that might change
-    return (
-      oldEvent.title !== newEvent.title ||
-      oldEvent.date !== newEvent.date ||
-      oldEvent.status !== newEvent.status ||
-      oldEvent.location !== newEvent.location ||
-      oldEvent.description !== newEvent.description ||
-      oldEvent.registerLink !== newEvent.registerLink ||
-      oldEvent.recordingLink !== newEvent.recordingLink ||
-      oldEvent.image !== newEvent.image
-    );
-  });
-};
 
 export default function Events({
   events: initialEvents,
@@ -158,7 +74,7 @@ export default function Events({
           setShowEvents(false);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       /*
        * intentional silent error handling: user sees existing/cached events on fetch failure.
        * console.error provides no value in production at this stage; users don't
@@ -185,18 +101,6 @@ export default function Events({
       }
     }
   }, []);
-
-  // Debug logging for state changes
-  useEffect(() => {
-    console.log("Loading state changed:", loading);
-  }, [loading]);
-
-  useEffect(() => {
-    console.log("Events state changed:", {
-      count: events.length,
-      firstEventTitle: events[0]?.title,
-    });
-  }, [events]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -311,31 +215,7 @@ export default function Events({
                       src={event.image}
                       alt={event.title}
                       className="aspect-[4/3] w-full rounded-xl bg-gray-100 object-contain"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        const currentSrc = target.src;
-
-                        // fallback strategy: proxy → original Notion URL → default image
-                        if (
-                          currentSrc.includes("notion-image-proxy") &&
-                          currentSrc !== "/images/default.jpg"
-                        ) {
-                          // trying to decode the original URL from the proxy URL
-                          try {
-                            const proxyPath = currentSrc.split("/proxy/")[1];
-                            const originalUrl = atob(proxyPath);
-                            target.src = originalUrl;
-                            return;
-                          } catch (decodeError) {
-                            // decode failed, fall through to default image
-                          }
-                        }
-
-                        // Final fallback to default image
-                        if (target.src !== "/images/default.jpg") {
-                          target.src = "/images/default.jpg";
-                        }
-                      }}
+                      onError={handleImageError}
                     />
                   </Box>
 

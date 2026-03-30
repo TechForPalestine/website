@@ -10,6 +10,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -67,9 +69,15 @@
     "@iconify-json/tabler": "^1.2.23",
     "@types/leaflet": "^1.9.21",
     "@types/react-slick": "^0.23.13",
+    "@typescript-eslint/parser": "^8.57.1",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.6.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.1",
+    "typescript-eslint": "^8.57.1",
     "wrangler": "^4.70.0"
   }
 }

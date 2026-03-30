@@ -49,7 +49,7 @@ const useAllLinkOptions = (fields: any[]) => {
         // }
         else if (field.fieldtype === "Table MultiSelect") {
           newOptions[field.fieldname] = {};
-          let key = field.table_fields[0].endpoint;
+          const key = field.table_fields[0].endpoint;
 
           console.log(key, "key");
           try {
@@ -191,7 +191,7 @@ export const RenderInput = ({ field, options, loading, parentName }: RenderInput
         </Block>
       );
     case "Table MultiSelect":
-      let key = field.table_fields[0].fieldname;
+      const key = field.table_fields[0].fieldname;
 
       return (
         <Block label={field.label} description={field.description}>

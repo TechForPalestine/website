@@ -37,17 +37,6 @@ export default function MembershipCalculator() {
     return CURRENCIES.find((c) => c.code === currency)?.symbol || "$";
   };
 
-  const getCurrencyName = () => {
-    const curr = CURRENCIES.find((c) => c.code === currency);
-    return curr ? `${curr.symbol} ${curr.name} (${curr.code})` : "$ US Dollar (USD)";
-  };
-
-  const getIncomeLabel = () => {
-    const currSymbol = getCurrencySymbol();
-    return incomeType === "annual"
-      ? `Annual Income (in thousands ${currSymbol})`
-      : `Monthly Income (in thousands ${currSymbol})`;
-  };
 
   const calculateSuggestion = (value: string) => {
     const numericValue = parseFloat(value);
