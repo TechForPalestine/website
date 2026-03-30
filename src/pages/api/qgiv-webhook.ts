@@ -2,13 +2,59 @@ import type { APIRoute } from "astro";
 
 export const prerender = false;
 
+const MEMBERSHIP_FORM_ID = "1116610";
+
 // QGiv webhook endpoint to receive donation notifications
 // Form: T4P Website Donation Form (embed ID: 83460)
-export const POST: APIRoute = async ({ request }) => {
+// Form: T4P Membership Form (Form Id: 1116610)
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const payload = await request.json();
 
     console.log("QGiv webhook received:", JSON.stringify(payload, null, 2));
+
+    // Check if this is a membership dues payment (recurring donation on the membership form)
+    const formId = payload["formId"] ?? payload["Form Id"] ?? null;
+    const isMembershipForm = String(formId) === MEMBERSHIP_FORM_ID;
+    const isRecurring = payload["isRecurring"] === "y";
+
+    if (isMembershipForm && isRecurring) {
+      const email: string = payload["contactEmail"] ?? "";
+      if (email) {
+        const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
+        const hubApiUrl = runtime?.HUB_API_URL ?? import.meta.env.HUB_API_URL;
+        const hubApiKey = runtime?.HUB_API_KEY ?? import.meta.env.HUB_API_KEY;
+        if (hubApiUrl && hubApiKey) {
+          try {
+            const hubResponse = await fetch(`${hubApiUrl}/api/auth/invite`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${hubApiKey}`,
+              },
+              body: JSON.stringify({ email, type: "paid" }),
+            });
+            if (hubResponse.ok) {
+              console.log(`✅ Hub invite sent to ${email}`);
+            } else {
+              const hubData = await hubResponse.json().catch(() => ({}));
+              console.error(`Hub invite failed for ${email}:`, hubResponse.status, hubData);
+            }
+          } catch (hubError) {
+            console.error("Error calling Hub API:", hubError);
+          }
+        } else {
+          console.warn("Hub API not configured — skipping invite for", email);
+        }
+      } else {
+        console.warn("Membership webhook received but no Contact Email in payload");
+      }
+
+      return new Response(JSON.stringify({ success: true, message: "Membership invite processed" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     // Determine donation type based on QGiv payload
     let donationType: "monthly" | "onetime" | null = null;
@@ -16,22 +62,9 @@ export const POST: APIRoute = async ({ request }) => {
     // Check QGiv's actual field formats
     // isRecurring: "y" or "n" (string)
     // type: "one time" or "recurring" (string with space)
-    if (
-      payload.isRecurring === "y" ||
-      payload.type === "recurring" ||
-      payload.type === "monthly" ||
-      payload.eventType === "Recurring Donation Created" ||
-      payload.eventType === "Recurring Donation Billed"
-    ) {
+    if (payload.isRecurring === "y" || payload.type === "recurring") {
       donationType = "monthly";
-    } else if (
-      payload.isRecurring === "n" ||
-      payload.type === "one time" ||
-      payload.type === "onetime" ||
-      payload.type === "one-time" ||
-      payload.eventType === "Donation Created" ||
-      payload.eventType === "Transaction Successful"
-    ) {
+    } else if (payload.isRecurring === "n" || payload.type === "one time") {
       donationType = "onetime";
     }
 
@@ -68,6 +101,7 @@ export const POST: APIRoute = async ({ request }) => {
               success: true,
               donationType,
               eventName,
+              formId,
               message: "Donation tracked successfully in Plausible",
             }),
             {
