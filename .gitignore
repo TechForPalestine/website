@@ -1,3 +1,6 @@
+# local wrangler secrets
+.dev.vars
+
 # build output
 dist/
 
