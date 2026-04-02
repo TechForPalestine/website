@@ -8,6 +8,19 @@ const MEMBERSHIP_FORM_ID = "1116610";
 // Form: T4P Website Donation Form (embed ID: 83460)
 // Form: T4P Membership Form (Form Id: 1116610)
 export const POST: APIRoute = async ({ request, locals }) => {
+  const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
+  const webhookSecret = runtime?.QGIV_WEBHOOK_SECRET ?? import.meta.env.QGIV_WEBHOOK_SECRET;
+
+  const url = new URL(request.url);
+  const token = url.searchParams.get("secret");
+
+  if (!webhookSecret || !token || token !== webhookSecret) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const payload = await request.json();
 
