@@ -1,8 +1,11 @@
 import type { APIRoute } from "astro";
+import { getEnv } from "../../utils/getEnv";
 
 export const prerender = false;
 
 const MEMBERSHIP_FORM_ID = "1116610";
+const EO_MEMBERS_LIST_URL =
+  "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
 
 // QGiv webhook endpoint to receive donation notifications
 // Form: T4P Website Donation Form (embed ID: 83460)
@@ -34,31 +37,52 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (isMembershipForm && isRecurring) {
       const email: string = payload["contactEmail"] ?? "";
       if (email) {
-        const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
-        const hubApiUrl = runtime?.HUB_API_URL ?? import.meta.env.HUB_API_URL;
-        const hubApiKey = runtime?.HUB_API_KEY ?? import.meta.env.HUB_API_KEY;
-        if (hubApiUrl && hubApiKey) {
-          try {
-            const hubResponse = await fetch(`${hubApiUrl}/api/auth/invite`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${hubApiKey}`,
-              },
-              body: JSON.stringify({ email, type: "paid" }),
-            });
-            if (hubResponse.ok) {
-              console.log(`✅ Hub invite sent to ${email}`);
-            } else {
-              const hubData = await hubResponse.json().catch(() => ({}));
-              console.error(`Hub invite failed for ${email}:`, hubResponse.status, hubData);
-            }
-          } catch (hubError) {
-            console.error("Error calling Hub API:", hubError);
-          }
-        } else {
-          console.warn("Hub API not configured — skipping invite for", email);
-        }
+        const hubApiUrl = getEnv("HUB_API_URL", locals);
+        const hubApiKey = getEnv("HUB_API_KEY", locals);
+        const eoApiKey = getEnv("EO_API_KEY", locals);
+
+        await Promise.allSettled([
+          hubApiUrl && hubApiKey
+            ? fetch(`${hubApiUrl}/api/auth/invite`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${hubApiKey}` },
+                body: JSON.stringify({ email, type: "paid" }),
+              })
+                .then(async (res) => {
+                  if (res.ok) {
+                    console.log(`✅ Hub invite sent to ${email}`);
+                  } else {
+                    console.error(`Hub invite failed for ${email}:`, res.status, await res.json().catch(() => ({})));
+                  }
+                })
+                .catch((err) => console.error("Error calling Hub API:", err))
+            : Promise.resolve(console.warn("Hub API not configured — skipping invite for", email)),
+
+          eoApiKey
+            ? fetch(EO_MEMBERS_LIST_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  api_key: eoApiKey,
+                  email_address: email,
+                  fields: {
+                    FirstName: payload["firstName"] ?? payload["contactFirstName"] ?? "",
+                    LastName: payload["lastName"] ?? payload["contactLastName"] ?? "",
+                  },
+                  tags: ["member"],
+                  status: "SUBSCRIBED",
+                }),
+              })
+                .then(async (res) => {
+                  if (res.ok) {
+                    console.log(`✅ EmailOctopus contact added for ${email}`);
+                  } else {
+                    console.error(`EmailOctopus failed for ${email}:`, res.status, await res.json().catch(() => ({})));
+                  }
+                })
+                .catch((err) => console.error("Error calling EmailOctopus API:", err))
+            : Promise.resolve(console.warn("EO_API_KEY not configured — skipping EmailOctopus for", email)),
+        ]);
       } else {
         console.warn("Membership webhook received but no Contact Email in payload");
       }
