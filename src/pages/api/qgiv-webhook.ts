@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       const email: string = payload["contactEmail"] ?? "";
       if (email) {
         const hubApiUrl = getEnv("HUB_API_URL", locals);
-        const hubApiKey = getEnv("MEMBERSHIP_INVITE_SECRET", locals);
+        const hubApiKey = getEnv("HUB_API_KEY", locals);
         const eoApiKey = getEnv("EO_API_KEY", locals);
 
         await Promise.allSettled([
