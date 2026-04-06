@@ -4,9 +4,6 @@ import { getEnv } from "../utils/getEnv.js";
 const API_URL = getEnv("PUBLIC_API_URL");
 const SECRET_KEY = getEnv("PUBLIC_SECRET_KEY");
 
-console.log("PUBLIC_API_URL:", API_URL);
-console.log("PUBLIC_SECRET_KEY:", SECRET_KEY);
-
 // Define Axios instance with headers
 const axiosInstance = axios.create({
   baseURL: API_URL, // Set the base URL here

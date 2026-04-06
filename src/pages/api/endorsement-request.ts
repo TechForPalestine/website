@@ -37,7 +37,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         status: 400,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "https://techforpalestine.org",
         },
       });
     }
@@ -141,7 +141,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         status: 201,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "https://techforpalestine.org",
           "Access-Control-Allow-Methods": "POST",
           "Access-Control-Allow-Headers": "Content-Type",
         },
@@ -154,7 +154,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       status: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://techforpalestine.org",
       },
     });
   }

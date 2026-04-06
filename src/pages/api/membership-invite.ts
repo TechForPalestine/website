@@ -1,15 +1,17 @@
+import { constantTimeEqual } from "../../utils/crypto";
+import { getEnv } from "../../utils/getEnv";
+
 export const prerender = false;
 
 export async function POST({ request, locals }: { request: Request; locals: App.Locals }) {
-  const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
-  const hubApiUrl = runtime?.HUB_API_URL ?? import.meta.env.HUB_API_URL;
-  const hubApiKey = runtime?.HUB_API_KEY ?? import.meta.env.HUB_API_KEY;
-  const inviteSecret = runtime?.MEMBERSHIP_INVITE_SECRET ?? import.meta.env.MEMBERSHIP_INVITE_SECRET;
+  const hubApiUrl = getEnv("HUB_API_URL", locals);
+  const hubApiKey = getEnv("HUB_API_KEY", locals);
+  const inviteSecret = getEnv("MEMBERSHIP_INVITE_SECRET", locals);
 
   const authHeader = request.headers.get("Authorization");
   const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
-  if (!inviteSecret || !token || token !== inviteSecret) {
+  if (!inviteSecret || !token || !constantTimeEqual(token, inviteSecret)) {
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -23,7 +25,7 @@ export async function POST({ request, locals }: { request: Request; locals: App.
     });
   }
 
-  let body: unknown;
+  let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
@@ -33,13 +35,39 @@ export async function POST({ request, locals }: { request: Request; locals: App.
     });
   }
 
+  const { email, type, paymentReference } = body as Record<string, unknown>;
+
+  if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return new Response(JSON.stringify({ message: "Invalid or missing email" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (type !== "paid" && type !== "exemption") {
+    return new Response(JSON.stringify({ message: "type must be \"paid\" or \"exemption\"" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (paymentReference !== undefined && typeof paymentReference !== "string") {
+    return new Response(JSON.stringify({ message: "paymentReference must be a string" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const payload: Record<string, string> = { email, type };
+  if (paymentReference !== undefined) payload.paymentReference = paymentReference;
+
   const upstream = await fetch(`${hubApiUrl}/api/auth/invite`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${hubApiKey}`,
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
 
   const data = await upstream.json();
