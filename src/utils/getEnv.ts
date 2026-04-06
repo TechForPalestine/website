@@ -15,15 +15,5 @@ export function getEnv(name: string, locals?: any): string | undefined {
     return process.env[name];
   }
 
-  // Try global environment (for Cloudflare Workers)
-  if (typeof globalThis !== "undefined" && (globalThis as any).process?.env?.[name]) {
-    return (globalThis as any).process.env[name];
-  }
-
-  // Try accessing directly from globalThis (some Cloudflare environments)
-  if (typeof globalThis !== "undefined" && (globalThis as any)[name]) {
-    return (globalThis as any)[name];
-  }
-
   return undefined;
 }
