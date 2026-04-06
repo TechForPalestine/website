@@ -25,7 +25,7 @@ export async function POST({ request, locals }: { request: Request; locals: App.
     });
   }
 
-  let body: unknown;
+  let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
@@ -35,13 +35,39 @@ export async function POST({ request, locals }: { request: Request; locals: App.
     });
   }
 
+  const { email, type, paymentReference } = body as Record<string, unknown>;
+
+  if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return new Response(JSON.stringify({ message: "Invalid or missing email" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (type !== "paid" && type !== "exemption") {
+    return new Response(JSON.stringify({ message: "type must be \"paid\" or \"exemption\"" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (paymentReference !== undefined && typeof paymentReference !== "string") {
+    return new Response(JSON.stringify({ message: "paymentReference must be a string" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const payload: Record<string, string> = { email, type };
+  if (paymentReference !== undefined) payload.paymentReference = paymentReference;
+
   const upstream = await fetch(`${hubApiUrl}/api/auth/invite`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${hubApiKey}`,
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
 
   const data = await upstream.json();
