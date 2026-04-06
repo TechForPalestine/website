@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { constantTimeEqual } from "../../utils/crypto";
 import { getEnv } from "../../utils/getEnv";
 
 export const prerender = false;
@@ -14,10 +15,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
   const webhookSecret = runtime?.QGIV_WEBHOOK_SECRET ?? import.meta.env.QGIV_WEBHOOK_SECRET;
 
-  const url = new URL(request.url);
-  const token = url.searchParams.get("secret");
+  const token = request.headers.get("X-Webhook-Secret");
 
-  if (!webhookSecret || !token || token !== webhookSecret) {
+  if (!webhookSecret || !token || !constantTimeEqual(token, webhookSecret)) {
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -26,8 +26,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     const payload = await request.json();
-
-    console.log("QGiv webhook received:", JSON.stringify(payload, null, 2));
 
     // Check if this is a membership dues payment (recurring donation on the membership form)
     const formId = payload["formId"] ?? payload["Form Id"] ?? null;
@@ -172,7 +170,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
           JSON.stringify({
             success: false,
             error: "Failed to call Plausible API",
-            details: plausibleError instanceof Error ? plausibleError.message : "Unknown error",
           }),
           {
             status: 500,
@@ -183,9 +180,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
         );
       }
     }
-
-    // If we couldn't determine the donation type, log the payload for debugging
-    console.warn("Could not determine donation type from payload:", payload);
 
     return new Response(
       JSON.stringify({
@@ -206,7 +200,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return new Response(
       JSON.stringify({
         error: "Failed to process webhook",
-        details: error instanceof Error ? error.message : "Unknown error",
       }),
       {
         status: 500,
@@ -223,9 +216,9 @@ export const OPTIONS: APIRoute = async () => {
   return new Response(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "https://techforpalestine.org",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, X-Webhook-Secret",
     },
   });
 };

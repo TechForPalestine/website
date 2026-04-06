@@ -42,14 +42,8 @@ export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) 
     let headerImage = "";
     if (props["Header"]?.files?.length > 0) {
       const file = props["Header"].files[0];
-      console.log("Event header file found:", {
-        eventTitle: props["Title"]?.title?.[0]?.plain_text,
-        fileType: file.type,
-        file,
-      });
       if (file.type === "external") {
         headerImage = file.external.url;
-        console.log("Using external URL:", headerImage);
       } else if (file.type === "file") {
         // Create hash from URL to detect when file changes
         const base64 = (globalThis as any).Buffer
@@ -61,15 +55,7 @@ export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) 
         // Add cache busting parameter with both hash and timestamp
         const baseProxyUrl = getProxiedImageUrl(file.file.url);
         headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
-        console.log("Using proxied URL with aggressive cache bust:", {
-          original: file.file.url,
-          proxied: headerImage,
-          urlHash,
-          timestamp: new Date(timestamp).toISOString(),
-        });
       }
-    } else {
-      console.log("No header image found for event:", props["Title"]?.title?.[0]?.plain_text);
     }
 
     const description = props["Description"]?.rich_text?.[0]?.plain_text || "";

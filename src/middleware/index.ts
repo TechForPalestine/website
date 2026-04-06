@@ -3,7 +3,9 @@ import { defineMiddleware } from "astro:middleware";
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
 
-  response.headers.set("Cache-Control", "public, max-age=600");
+  const isApi = context.url.pathname.startsWith("/api/");
+  const isGet = context.request.method === "GET";
+  response.headers.set("Cache-Control", !isGet || isApi ? "no-store" : "public, max-age=600");
 
   return response;
 });
