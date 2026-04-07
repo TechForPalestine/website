@@ -1,3 +1,4 @@
+/// <reference types="@cloudflare/workers-types" />
 import { defineMiddleware } from "astro:middleware";
 
 export const onRequest = defineMiddleware(async (context, next) => {

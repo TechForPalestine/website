@@ -13,12 +13,14 @@ declare global {
   }
 }
 
-declare namespace App {
-  interface Locals {
-    cspNonce: string;
-    runtime?: {
-      env?: Record<string, string>;
-    };
+declare global {
+  namespace App {
+    interface Locals {
+      cspNonce: string;
+      runtime?: {
+        env?: Record<string, string>;
+      };
+    }
   }
 }
 
