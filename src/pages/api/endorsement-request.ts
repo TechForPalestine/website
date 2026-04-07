@@ -30,7 +30,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       submittedAt: new Date().toISOString(),
     };
 
-    // Validation
+    // Validation — presence
     if (
       !endorsementData.contactName ||
       !endorsementData.contactEmail ||
@@ -48,6 +48,47 @@ export const POST: APIRoute = async ({ request, locals }) => {
           "Access-Control-Allow-Origin": "https://techforpalestine.org",
         },
       });
+    }
+
+    // Validation — format and length
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRx.test(endorsementData.contactEmail)) {
+      return new Response(JSON.stringify({ error: "Invalid email address" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+      });
+    }
+
+    try { new URL(endorsementData.organizationWebsite); } catch {
+      return new Response(JSON.stringify({ error: "Invalid organization website URL" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+      });
+    }
+
+    try { new URL(endorsementData.campaignLink); } catch {
+      return new Response(JSON.stringify({ error: "Invalid campaign link URL" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+      });
+    }
+
+    const MAX = 2000;
+    const textFields: [string, string][] = [
+      ["contactName", endorsementData.contactName],
+      ["organizationName", endorsementData.organizationName],
+      ["campaignName", endorsementData.campaignName],
+      ["request", endorsementData.request],
+      ["campaignPurpose", endorsementData.campaignPurpose],
+      ["notableSupporters", endorsementData.notableSupporters],
+    ];
+    for (const [field, value] of textFields) {
+      if (value.length > MAX) {
+        return new Response(JSON.stringify({ error: `Field '${field}' exceeds maximum length of ${MAX} characters` }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+        });
+      }
     }
 
     const notionSecret = getEnv("NOTION_SECRET", locals);

@@ -46,6 +46,37 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Validation — format and length
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRx.test(pledgeData.email)) {
+      return new Response(JSON.stringify({ error: "Invalid email address" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+      });
+    }
+
+    try { new URL(pledgeData.linkedin); } catch {
+      return new Response(JSON.stringify({ error: "Invalid LinkedIn URL" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+      });
+    }
+
+    const MAX = 2000;
+    const textFields: [string, string][] = [
+      ["name", pledgeData.name],
+      ["company", pledgeData.company],
+      ["position", pledgeData.position],
+    ];
+    for (const [field, value] of textFields) {
+      if (value.length > MAX) {
+        return new Response(JSON.stringify({ error: `Field '${field}' exceeds maximum length of ${MAX} characters` }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+        });
+      }
+    }
+
     const notionSecret = getEnv("NOTION_SECRET", locals);
     const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);
 
