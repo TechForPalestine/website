@@ -182,16 +182,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Webhook received but donation type unclear",
-        payload,
-      }),
+      JSON.stringify({ success: true, message: "Webhook received but donation type unclear" }),
       {
         status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (error) {
