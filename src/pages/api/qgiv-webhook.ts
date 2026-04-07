@@ -48,13 +48,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
               })
                 .then(async (res) => {
                   if (res.ok) {
-                    console.log(`✅ Hub invite sent to ${email}`);
+                    console.log(`✅ Hub invite sent to [redacted]@${email.split("@")[1]}`);
                   } else {
-                    console.error(`Hub invite failed for ${email}:`, res.status, await res.json().catch(() => ({})));
+                    console.error(`Hub invite failed for [redacted]@${email.split("@")[1]}:`, res.status, await res.json().catch(() => ({})));
                   }
                 })
                 .catch((err) => console.error("Error calling Hub API:", err))
-            : Promise.resolve(console.warn("Hub API not configured — skipping invite for", email)),
+            : Promise.resolve(console.warn(`Hub API not configured — skipping invite for [redacted]@${email.split("@")[1]}`)),
 
           eoApiKey
             ? fetch(EO_MEMBERS_LIST_URL, {
@@ -73,13 +73,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
               })
                 .then(async (res) => {
                   if (res.ok) {
-                    console.log(`✅ EmailOctopus contact added for ${email}`);
+                    console.log(`✅ EmailOctopus contact added for [redacted]@${email.split("@")[1]}`);
                   } else {
-                    console.error(`EmailOctopus failed for ${email}:`, res.status, await res.json().catch(() => ({})));
+                    console.error(`EmailOctopus failed for [redacted]@${email.split("@")[1]}:`, res.status, await res.json().catch(() => ({})));
                   }
                 })
                 .catch((err) => console.error("Error calling EmailOctopus API:", err))
-            : Promise.resolve(console.warn("EO_API_KEY not configured — skipping EmailOctopus for", email)),
+            : Promise.resolve(console.warn(`EO_API_KEY not configured — skipping EmailOctopus for [redacted]@${email.split("@")[1]}`)),
         ]);
       } else {
         console.warn("Membership webhook received but no Contact Email in payload");
