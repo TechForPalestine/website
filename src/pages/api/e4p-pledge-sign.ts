@@ -5,6 +5,14 @@ import { getEnv } from "../../utils/getEnv.js";
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  const origin = request.headers.get("Origin");
+  if (origin !== "https://techforpalestine.org") {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const formData = await request.formData();
 
