@@ -13,4 +13,13 @@ declare global {
   }
 }
 
+declare namespace App {
+  interface Locals {
+    cspNonce: string;
+    runtime?: {
+      env?: Record<string, string>;
+    };
+  }
+}
+
 export {};
