@@ -1,5 +1,10 @@
-/// <reference types="@cloudflare/workers-types" />
 import { defineMiddleware } from "astro:middleware";
+
+// HTMLRewriter is a Cloudflare Workers global — not available in Node types
+declare const HTMLRewriter: new () => {
+  on(selector: string, handlers: { element(el: { setAttribute(name: string, value: string): void }): void }): typeof HTMLRewriter.prototype;
+  transform(response: Response): Response;
+};
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const nonce = crypto.randomUUID().replace(/-/g, "");
