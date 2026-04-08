@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Delete preview deployments for merged branch
+      - name: List preview deployments for merged branch (dry run)
         env:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -20,24 +20,26 @@ jobs:
           BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           PAGE=1
-          DELETED=0
+          FOUND=0
 
           while true; do
             RESPONSE=$(curl -s \
               -H "Authorization: Bearer $CF_API_TOKEN" \
               "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments?page=$PAGE&per_page=25")
 
+            if ! echo "$RESPONSE" | jq -e '.result' > /dev/null 2>&1; then
+              echo "API error: $RESPONSE"
+              exit 1
+            fi
+
             IDS=$(echo "$RESPONSE" | jq -r \
               --arg branch "$BRANCH" \
               '.result[] | select(.environment == "preview") | select(.deployment_trigger.metadata.branch == $branch) | .id')
 
             for id in $IDS; do
-              echo "Deleting deployment $id (branch: $BRANCH)"
-              curl -s -X DELETE \
-                -H "Authorization: Bearer $CF_API_TOKEN" \
-                "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments/$id?force=true" \
-                | jq -r 'if .success then "Deleted." else "Failed: \(.errors)" end'
-              DELETED=$((DELETED + 1))
+              URL=$(echo "$RESPONSE" | jq -r --arg id "$id" '.result[] | select(.id == $id) | .url')
+              echo "[DRY RUN] Would delete: $URL (id: $id, branch: $BRANCH)"
+              FOUND=$((FOUND + 1))
             done
 
             TOTAL=$(echo "$RESPONSE" | jq '.result | length')
@@ -47,4 +49,4 @@ jobs:
             PAGE=$((PAGE + 1))
           done
 
-          echo "Done. Deleted $DELETED preview deployment(s) for branch '$BRANCH'."
+          echo "Done. Would have deleted $FOUND preview deployment(s) for branch '$BRANCH'."
