@@ -1,30 +1,35 @@
 import axios from "axios";
-import { getEnv } from "../utils/getEnv.js";
 
-const API_URL = getEnv("PUBLIC_API_URL");
-const SECRET_KEY = getEnv("PUBLIC_SECRET_KEY");
-
-// Define Axios instance with headers
-const axiosInstance = axios.create({
-  baseURL: API_URL, // Set the base URL here
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: SECRET_KEY,
-  },
+// All requests go through the server-side proxy at /api/project-proxy.
+// The proxy adds the Authorization header — the secret key is never bundled
+// into client-side JavaScript.
+const proxyInstance = axios.create({
+  baseURL: "/api/project-proxy",
+  headers: { "Content-Type": "application/json" },
 });
 
 // ✅ Fetch form fields from API
 export const fetchFormFields = async (url: any) => {
   try {
-    const response = await axiosInstance.get(`/api/method${url}`); // Endpoint relative to the base URL
+    const response = await proxyInstance.get("", {
+      params: { path: `/api/method${url}` },
+    });
     return response.data;
   } catch (error: any) {
     throw error.response?.data?.message || "Failed to load form fields";
   }
-}; // ✅ Fetch form fields from API
+};
+
 export const fetchFieldData = async (url: any) => {
   try {
-    const response = await axiosInstance.get(url); // Endpoint relative to the base URL
+    // url may be a full URL or a relative path — normalise to a relative path
+    let path: string;
+    try {
+      path = new URL(url).pathname;
+    } catch {
+      path = url.startsWith("/") ? url : `/${url}`;
+    }
+    const response = await proxyInstance.get("", { params: { path } });
     return response.data;
   } catch (error: any) {
     throw error.response?.data?.message || "Failed to load form fields";
@@ -37,18 +42,14 @@ export const convertToFormData = (data: any, form = new FormData(), parentKey = 
       const value = data[key];
       const newKey = parentKey ? `${parentKey}[${key}]` : key;
       if (value instanceof File) {
-        // ✅ Append files directly
         form.append(newKey, value);
       }
 
       if (value && typeof value === "object" && !Array.isArray(value)) {
-        // If the value is an object, stringify it
         form.append(newKey, JSON.stringify(value));
       } else if (Array.isArray(value)) {
-        // If it's an array, stringify each array element (if it's an object)
         form.append(newKey, JSON.stringify(value));
       } else {
-        // If it's a simple value, append it directly
         form.append(newKey, value);
       }
     }
@@ -58,19 +59,13 @@ export const convertToFormData = (data: any, form = new FormData(), parentKey = 
 
 export const submitForm = async (url: any, formData: any) => {
   try {
-    // Convert the data object to FormData
     const form = convertToFormData(formData);
-
-    // Send the FormData object via POST
-    const response = await axiosInstance.post(`/api/method${url}`, form, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const response = await proxyInstance.post("", form, {
+      params: { path: `/api/method${url}` },
+      headers: { "Content-Type": "multipart/form-data" },
     });
-
     return response.data;
   } catch (error: any) {
-    //throw error.response?.data?.message || 'An error occurred';
     return error.response?.data;
   }
 };
