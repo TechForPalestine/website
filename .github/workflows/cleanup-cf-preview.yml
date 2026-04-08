@@ -27,6 +27,11 @@ jobs:
               -H "Authorization: Bearer $CF_API_TOKEN" \
               "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments?page=$PAGE&per_page=25")
 
+            if ! echo "$RESPONSE" | jq -e '.result' > /dev/null 2>&1; then
+              echo "API error: $RESPONSE"
+              exit 1
+            fi
+
             IDS=$(echo "$RESPONSE" | jq -r \
               --arg branch "$BRANCH" \
               '.result[] | select(.environment == "preview") | select(.deployment_trigger.metadata.branch == $branch) | .id')
