@@ -1,14 +1,11 @@
 name: Cleanup Cloudflare Preview Deployments
 
-permissions:
-  contents: read
-
-permissions:
-  contents: read
-
 on:
   pull_request:
     types: [closed]
+
+permissions:
+  contents: read
 
 jobs:
   cleanup:
