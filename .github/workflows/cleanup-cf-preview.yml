@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: List preview deployments for merged branch (dry run)
+      - name: Delete preview deployments for merged branch
         env:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -20,7 +20,7 @@ jobs:
           BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           PAGE=1
-          FOUND=0
+          DELETED=0
 
           while true; do
             RESPONSE=$(curl -s \
@@ -38,8 +38,12 @@ jobs:
 
             for id in $IDS; do
               URL=$(echo "$RESPONSE" | jq -r --arg id "$id" '.result[] | select(.id == $id) | .url')
-              echo "[DRY RUN] Would delete: $URL (id: $id, branch: $BRANCH)"
-              FOUND=$((FOUND + 1))
+              echo "Deleting: $URL (id: $id)"
+              curl -s -X DELETE \
+                -H "Authorization: Bearer $CF_API_TOKEN" \
+                "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments/$id?force=true" \
+                | jq -r 'if .success then "Deleted." else "Failed: \(.errors)" end'
+              DELETED=$((DELETED + 1))
             done
 
             TOTAL=$(echo "$RESPONSE" | jq '.result | length')
@@ -49,4 +53,4 @@ jobs:
             PAGE=$((PAGE + 1))
           done
 
-          echo "Done. Would have deleted $FOUND preview deployment(s) for branch '$BRANCH'."
+          echo "Done. Deleted $DELETED preview deployment(s) for branch '$BRANCH'."
