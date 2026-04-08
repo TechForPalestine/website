@@ -2,14 +2,14 @@ name: Cleanup Cloudflare Preview Deployments
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize]
 
 permissions:
   contents: read
 
 jobs:
   cleanup:
-    if: github.event.pull_request.merged == true
+    if: true
     runs-on: ubuntu-latest
     steps:
       - name: List preview deployments for merged branch (dry run)
