@@ -2,17 +2,16 @@ name: Cleanup Cloudflare Preview Deployments
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize]
 
 permissions:
   contents: read
 
 jobs:
   cleanup:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: List preview deployments for merged branch (dry run)
+      - name: List preview deployments for branch (dry run)
         env:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
