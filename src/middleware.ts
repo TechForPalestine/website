@@ -30,6 +30,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "base-uri 'self'",
   ].join("; ");
 
+  // HTMLRewriter is only available in Cloudflare Workers (not Node/dev).
+  // Without it we can't inject nonces into scripts, so enforcing a nonce-based
+  // CSP would block all JS — skip it in dev.
+  if (typeof HTMLRewriter === "undefined") {
+    return response;
+  }
+
   // Inject nonce into every <script> tag so Astro's hydration scripts and
   // inline scripts are all covered by the nonce-based allowlist.
   const rewriter = new HTMLRewriter().on("script", {
