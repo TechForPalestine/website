@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getProxiedImageUrl } from "../utils/imageProxy.js";
 import { getEnv } from "../utils/getEnv.js";
 
 // Helper function to create Notion axios instance with runtime environment variables
@@ -45,16 +44,7 @@ export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) 
       if (file.type === "external") {
         headerImage = file.external.url;
       } else if (file.type === "file") {
-        // Create hash from URL to detect when file changes
-        const base64 = (globalThis as any).Buffer
-          ? (globalThis as any).Buffer.from(file.file.url).toString("base64")
-          : btoa(file.file.url);
-        const urlHash = base64.slice(0, 8);
-        const timestamp = Date.now();
-
-        // Add cache busting parameter with both hash and timestamp
-        const baseProxyUrl = getProxiedImageUrl(file.file.url);
-        headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
+        headerImage = file.file.url;
       }
     }
 
@@ -100,16 +90,7 @@ export const fetchNotionEventById = async (pageId: string, locals?: any) => {
     if (file.type === "external") {
       headerImage = file.external.url;
     } else if (file.type === "file") {
-      // Create hash from URL to detect when file changes
-      const base64 = (globalThis as any).Buffer
-        ? (globalThis as any).Buffer.from(file.file.url).toString("base64")
-        : btoa(file.file.url);
-      const urlHash = base64.slice(0, 8);
-      const timestamp = Date.now();
-
-      // Add cache busting parameter with both hash and timestamp
-      const baseProxyUrl = getProxiedImageUrl(file.file.url);
-      headerImage = `${baseProxyUrl}?cb=${timestamp}&hash=${urlHash}`;
+      headerImage = file.file.url;
     }
   }
 
@@ -255,7 +236,7 @@ export const fetchNotionAgenda = async (locals?: any) => {
         if (file.type === "external") {
           photo = file.external.url;
         } else if (file.type === "file") {
-          photo = getProxiedImageUrl(file.file.url);
+          photo = file.file.url;
         }
       }
 
