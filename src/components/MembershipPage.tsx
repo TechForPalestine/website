@@ -131,6 +131,12 @@ export default function MembershipPage() {
       <MembershipCalculator />
 
       {/* Payment form + side info */}
+      <Typography variant="h5" component="h2" sx={{ mb: 1, fontWeight: 700, color: "#111827" }}>
+        Join T4P!
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+        Complete the dues form below to become a member and gain access to the Hub.
+      </Typography>
       <Box
         sx={{
           display: "grid",
