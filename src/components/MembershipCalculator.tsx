@@ -84,6 +84,7 @@ export default function MembershipCalculator() {
         border: "2px solid #168039",
         backgroundColor: "white",
         p: 2,
+        mb: 4,
       }}
     >
       <Typography
