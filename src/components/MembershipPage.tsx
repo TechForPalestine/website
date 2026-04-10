@@ -16,12 +16,12 @@ const teams = [
   {
     name: "Tech Accountability",
     description:
-      "Developing content to hold tech companies and founders accountable for supporting Israel's war crimes.",
+      "Develop content like blogs, social media posts, and more to hold tech companies accountable for supporting Israel's war crimes.",
   },
   {
-    name: "Legal Aid Platform",
+    name: "Legal Aid",
     description:
-      "This team is coordinating efforts to bring pro-bono resources from law firms to bear on cases of discrimination against the Palestinian identity or pro-Palestinian speech.",
+      "Help connect pro-bono resources from law firms to cases of discrimination against the Palestinian identity or pro-Palestinian speech.",
   },
   {
     name: "US Events",
@@ -62,11 +62,11 @@ export default function MembershipPage() {
     <Box sx={{ maxWidth: 800, mx: "auto" }}>
       {/* Intro */}
       <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Membership dues fund training, financial grants, and volunteers for breakthrough projects
+        Becoming a member is the best way to donate to Tech for Palestine. Your membership dues fund training, financial grants, and volunteers for pro-Palestine projects
         like Upscrolled, Boycat, and Newscord.
       </Typography>
       <Typography variant="body1" sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        As a member, you are invited to join the T4P <strong>HUB</strong>. On the <strong>HUB</strong>, you can:
+        As a member, you are invited to join our portal, the <strong>Hub</strong>, where you can:
       </Typography>
       <Box
         component="ul"
@@ -80,18 +80,13 @@ export default function MembershipPage() {
           "& li": { mb: 0.75, lineHeight: 1.75 },
         }}
       >
-        <li>Browse and join teams to advocate and help with Palestinian liberation</li>
-        <li>Start an initiative of your own, with T4P support and resources</li>
-        <li>
-          <em>Coming soon:</em> Activism Journey missions to guide you through small actions like
-          trialing ethical tech tools or building awareness in your community.
-        </li>
-        <li><em>Coming soon:</em> Community meetups</li>
+        <li>Join teams to scale the movement, advocate for non-complicit tech and fight for Palestinian liberation</li>
+        <li>Start an initiative of your own, with T4P support and resources to help you grow</li>
       </Box>
 
       {/* Team cards */}
       <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
-        See just a few examples of our teams:
+        A few examples of our teams on the Hub:
       </Typography>
 
       <Box
@@ -126,13 +121,19 @@ export default function MembershipPage() {
 
       {/* Membership Dues */}
       <Typography variant="body1" sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Membership dues are pay-what-you-can. We suggest a contribution equal to one hour's salary,
+        You can choose your own membership dues amount. We suggest a contribution equal to one hour's salary,
         which you can calculate below:
       </Typography>
 
       <MembershipCalculator />
 
       {/* Payment form + side info */}
+      <Typography variant="h5" component="h2" sx={{ mb: 1, fontWeight: 700, color: "#111827" }}>
+        Join T4P!
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+        Complete the dues form below to become a member and gain access to the Hub.
+      </Typography>
       <Box
         sx={{
           display: "grid",
