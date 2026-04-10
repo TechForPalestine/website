@@ -11,7 +11,7 @@ const teams = [
   {
     name: "Coaching for Palestinian Entrepreneurs",
     description:
-      "Supporting Palestinian entrepreneurs in their personal and professional growth, resilience, and success, through coaching programs run in collaboration with Coaching Minds and BVisionRY.",
+      "Support Palestinian entrepreneurs with job skills for professional growth.",
   },
   {
     name: "Tech Accountability",
@@ -26,7 +26,7 @@ const teams = [
   {
     name: "US Events",
     description:
-      "This team is organizing in-person events in the US for T4P members and others to come together, connect, build relationships, feel part of a larger community, educate people, and grow the T4P network.",
+      "Organize in-person T4P events in the US to help grow the movement.",
   },
 ];
 
@@ -62,7 +62,7 @@ export default function MembershipPage() {
     <Box sx={{ maxWidth: 800, mx: "auto" }}>
       {/* Intro */}
       <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Becoming a member is the best way to donate to Tech for Palestine. Your membership dues fund training, financial grants, and volunteers for pro-Palestine projects
+        <strong>Becoming a member is the best way to donate to Tech for Palestine.</strong> Your membership dues fund training, financial grants, and volunteers for pro-Palestine projects
         like Upscrolled, Boycat, and Newscord.
       </Typography>
       <Typography variant="body1" sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
@@ -73,7 +73,7 @@ export default function MembershipPage() {
         sx={{
           ml: 3,
           pl: 2,
-          mb: 5,
+          mb: 2,
           color: "#374151",
           fontSize: "1.125rem",
           listStyleType: "disc",
@@ -83,6 +83,9 @@ export default function MembershipPage() {
         <li>Join teams to scale the movement, advocate for non-complicit tech and fight for Palestinian liberation</li>
         <li>Start an initiative of your own, with T4P support and resources to help you grow</li>
       </Box>
+      <Typography variant="body1" sx={{ mb: 5, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+        Whether you're a thinker, builder, leader, software developer, marketer, or activist, there's a place for you to contribute in your own way.
+      </Typography>
 
       {/* Team cards */}
       <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
@@ -121,19 +124,13 @@ export default function MembershipPage() {
 
       {/* Membership Dues */}
       <Typography variant="body1" sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        You can choose your own membership dues amount. We suggest a contribution equal to one hour's salary,
+        You can choose to donate any amount you want for membership dues. We suggest a contribution equal to one hour's salary,
         which you can calculate below:
       </Typography>
 
       <MembershipCalculator />
 
       {/* Payment form + side info */}
-      <Typography variant="h5" component="h2" sx={{ mb: 1, fontWeight: 700, color: "#111827" }}>
-        Join T4P!
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Complete the dues form below to become a member and gain access to the Hub.
-      </Typography>
       <Box
         sx={{
           display: "grid",
