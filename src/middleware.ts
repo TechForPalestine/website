@@ -25,7 +25,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
     "connect-src 'self' https://plausible.io https://pal-chat.net",
-    "frame-src https://secure.qgiv.com",
+    "frame-src https://secure.qgiv.com https://calendly.com",
     "object-src 'none'",
     "base-uri 'self'",
   ].join("; ");
