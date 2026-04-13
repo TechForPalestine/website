@@ -46,7 +46,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
       },
     })
     .on("style", {
-      element(el) {
+      element(el: { setAttribute(name: string, value: string): void }) {
         el.setAttribute("nonce", nonce);
       },
     });
