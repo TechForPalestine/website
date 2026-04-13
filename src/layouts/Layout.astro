@@ -33,6 +33,81 @@ const canonicalUrl = new URL(
       }
     </script>
     <meta name="generator" content={Astro.generator} />
+    <meta name="csp-nonce" content={Astro.locals.cspNonce} />
+    <script is:inline>
+      (function () {
+        function applyStyleString(el, value) {
+          while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
+          if (!value) return;
+          value.split(';').forEach(function (part) {
+            var idx = part.indexOf(':');
+            if (idx > 0) {
+              var prop = part.slice(0, idx).trim();
+              var val = part.slice(idx + 1).trim();
+              if (!prop) return;
+              var priority = '';
+              if (/!important\s*$/.test(val)) {
+                priority = 'important';
+                val = val.replace(/\s*!important\s*$/, '').trim();
+              }
+              el.style.setProperty(prop, val, priority);
+            }
+          });
+        }
+
+        /* Patch 1: auto-nonce <style> elements created by JS (emotion/MUI) */
+        var m = document.querySelector('meta[name="csp-nonce"]');
+        var n = m && m.getAttribute('content');
+        if (n) {
+          var origCreate = document.createElement.bind(document);
+          document.createElement = function (tag) {
+            var el = origCreate.apply(this, arguments);
+            if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
+            return el;
+          };
+        }
+
+        /* Patch 2: convert setAttribute('style', ...) to individual setProperty() calls.
+           Handles third-party scripts that mutate style via setAttribute. */
+        var origSetAttr = Element.prototype.setAttribute;
+        Element.prototype.setAttribute = function (name, value) {
+          if (name === 'style') { applyStyleString(this, value); return; }
+          origSetAttr.apply(this, arguments);
+        };
+
+        /* Patch 3: strip style="..." from innerHTML before the browser parses it.
+           Handles third-party scripts (e.g. Email Octopus) that inject styled HTML
+           via innerHTML — the browser blocks style attributes at parse time before
+           any setAttribute intercept can fire. We rename them to data-csp-style,
+           then re-apply via CSSOM after insertion. */
+        var origInnerHTMLDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+        if (origInnerHTMLDesc && origInnerHTMLDesc.set) {
+          Object.defineProperty(Element.prototype, 'innerHTML', {
+            get: origInnerHTMLDesc.get,
+            set: function (value) {
+              if (typeof value !== 'string' || value.indexOf('style=') === -1) {
+                origInnerHTMLDesc.set.call(this, value);
+                return;
+              }
+              // Rename style="..." / style='...' → data-csp-style so the parser never sees them
+              var cleaned = value
+                .replace(/\bstyle\s*=\s*"([^"]*)"/gi, 'data-csp-style="$1"')
+                .replace(/\bstyle\s*=\s*'([^']*)'/gi, "data-csp-style='$1'");
+              origInnerHTMLDesc.set.call(this, cleaned);
+              // Re-apply stored styles via CSSOM
+              var els = this.querySelectorAll('[data-csp-style]');
+              for (var i = 0; i < els.length; i++) {
+                var sv = els[i].getAttribute('data-csp-style');
+                els[i].removeAttribute('data-csp-style');
+                applyStyleString(els[i], sv);
+              }
+            },
+            configurable: true,
+            enumerable: origInnerHTMLDesc.enumerable,
+          });
+        }
+      })();
+    </script>
     <title>{title}</title>
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -73,16 +148,7 @@ const canonicalUrl = new URL(
     <!-- Floating Donate Button -->
     <a
       href="/donate"
-      class="donate-link hidden md:block fixed right-0 top-1/2 z-50 bg-green-800 px-3 py-5 text-white shadow-lg transition hover:bg-green-900"
-      style="
-    writing-mode: vertical-rl;
-    transform: translateY(-50%) rotate(180deg);
-    transform-origin: center center;
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  "
+      class="donate-link hidden md:block fixed right-0 top-1/2 z-50 bg-green-800 px-3 py-5 text-white shadow-lg transition hover:bg-green-900 [writing-mode:vertical-rl] -translate-y-1/2 rotate-180 origin-center rounded-tr-lg rounded-br-lg rounded-tl-none rounded-bl-none"
     >
       Donate
     </a>

@@ -21,11 +21,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "default-src 'self'",
     // 'strict-dynamic' trusts scripts loaded by nonced scripts; removes need for 'unsafe-inline'
     `script-src 'nonce-${nonce}' 'strict-dynamic' https://secure.qgiv.com https://plausible.io https://pal-chat.net https://techforpalestine.org/cdn-cgi/`,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
+    `style-src 'nonce-${nonce}' 'self' https://fonts.googleapis.com https://secure.qgiv.com`,
+    "font-src 'self' https://fonts.gstatic.com https://gallery.eo.page",
     "img-src 'self' data: https:",
     "connect-src 'self' https://plausible.io https://pal-chat.net",
-    "frame-src https://secure.qgiv.com https://calendly.com https://www.youtube.com https://www.youtube-nocookie.com",
+    "frame-src https://secure.qgiv.com https://calendly.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://validaid.org",
     "object-src 'none'",
     "base-uri 'self'",
   ].join("; ");
@@ -37,13 +37,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return response;
   }
 
-  // Inject nonce into every <script> tag so Astro's hydration scripts and
-  // inline scripts are all covered by the nonce-based allowlist.
-  const rewriter = new HTMLRewriter().on("script", {
-    element(el) {
-      el.setAttribute("nonce", nonce);
-    },
-  });
+  // Inject nonce into every <script> and <style> tag so Astro's hydration
+  // scripts and any server-rendered inline styles are covered by the nonce.
+  const rewriter = new HTMLRewriter()
+    .on("script", {
+      element(el) {
+        el.setAttribute("nonce", nonce);
+      },
+    })
+    .on("style", {
+      element(el: { setAttribute(name: string, value: string): void }) {
+        el.setAttribute("nonce", nonce);
+      },
+    });
 
   const transformed = rewriter.transform(response);
   transformed.headers.set("Content-Security-Policy", csp);

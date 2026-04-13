@@ -94,7 +94,7 @@ const isUK = country === "GB";
             <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">Make a donation</h2>
             <div class="mx-auto w-full max-w-lg">
               <!-- Variant A: Qgiv Form Only (no link) -->
-              <div id="form-qgiv-only" style="display: none;">
+              <div id="form-qgiv-only" hidden>
                 <div
                   class="qgiv-embed-container"
                   data-qgiv-embed="true"
@@ -106,7 +106,7 @@ const isUK = country === "GB";
               </div>
 
               <!-- Variant B Non-UK: Qgiv Form + Link to ValidAid -->
-              <div id="form-qgiv-link" style="display: none;">
+              <div id="form-qgiv-link" hidden>
                 <p class="mb-4 text-center text-sm text-gray-700">
                   If you are in the UK, <a
                     href="?variant=validaid"
@@ -125,7 +125,7 @@ const isUK = country === "GB";
               </div>
 
               <!-- Variant B UK: ValidAid Form + Link to Qgiv -->
-              <div id="form-validaid-link" style="display: none;">
+              <div id="form-validaid-link" hidden>
                 <p class="mb-4 text-center text-sm text-gray-700">
                   Not in the UK? <a
                     href="?variant=qgiv"
@@ -137,7 +137,7 @@ const isUK = country === "GB";
                   id="validaid-iframe-event-236"
                   src="https://validaid.org/embed/event/236"
                   title="Tech for Palestine"
-                  style="width:100%; border:none;"
+                  class="w-full border-0"
                   allow="payment"></iframe>
               </div>
             </div>
