@@ -35,16 +35,44 @@ const canonicalUrl = new URL(
     <meta name="generator" content={Astro.generator} />
     <meta name="csp-nonce" content={Astro.locals.cspNonce} />
     <script is:inline>
-      /* Auto-nonce <style> elements created by JS (e.g. emotion/MUI) for CSP compliance */
       (function () {
+        /* Patch 1: auto-nonce <style> elements created by JS (emotion/MUI) */
         var m = document.querySelector('meta[name="csp-nonce"]');
         var n = m && m.getAttribute('content');
-        if (!n) return;
-        var orig = document.createElement.bind(document);
-        document.createElement = function (tag) {
-          var el = orig.apply(this, arguments);
-          if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
-          return el;
+        if (n) {
+          var origCreate = document.createElement.bind(document);
+          document.createElement = function (tag) {
+            var el = origCreate.apply(this, arguments);
+            if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
+            return el;
+          };
+        }
+
+        /* Patch 2: convert setAttribute('style', ...) to individual setProperty() calls.
+           Prevents "Applying inline style" CSP violations from third-party scripts
+           (e.g. Email Octopus form) that use setAttribute instead of the CSSOM API. */
+        function applyStyleString(el, value) {
+          while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
+          if (!value) return;
+          value.split(';').forEach(function (part) {
+            var idx = part.indexOf(':');
+            if (idx > 0) {
+              var prop = part.slice(0, idx).trim();
+              var val = part.slice(idx + 1).trim();
+              if (!prop) return;
+              var priority = '';
+              if (/!important\s*$/.test(val)) {
+                priority = 'important';
+                val = val.replace(/\s*!important\s*$/, '').trim();
+              }
+              el.style.setProperty(prop, val, priority);
+            }
+          });
+        }
+        var origSetAttr = Element.prototype.setAttribute;
+        Element.prototype.setAttribute = function (name, value) {
+          if (name === 'style') { applyStyleString(this, value); return; }
+          origSetAttr.apply(this, arguments);
         };
       })();
     </script>

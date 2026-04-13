@@ -22,10 +22,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
     // 'strict-dynamic' trusts scripts loaded by nonced scripts; removes need for 'unsafe-inline'
     `script-src 'nonce-${nonce}' 'strict-dynamic' https://secure.qgiv.com https://plausible.io https://pal-chat.net https://techforpalestine.org/cdn-cgi/`,
     `style-src 'nonce-${nonce}' 'self' https://fonts.googleapis.com`,
-    "font-src 'self' https://fonts.gstatic.com",
+    "font-src 'self' https://fonts.gstatic.com https://gallery.eo.page",
     "img-src 'self' data: https:",
     "connect-src 'self' https://plausible.io https://pal-chat.net",
-    "frame-src https://secure.qgiv.com https://calendly.com https://www.youtube.com https://www.youtube-nocookie.com",
+    "frame-src https://secure.qgiv.com https://calendly.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com",
     "object-src 'none'",
     "base-uri 'self'",
   ].join("; ");
