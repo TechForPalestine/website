@@ -5,9 +5,9 @@ The events page (`/events`) displays Tech for Palestine events fetched from a No
 ## Architecture Overview
 
 ```
-Notion Database → API Route → Frontend Component → Image Proxy Worker
-                     ↓              ↓                    ↓
-              /api/events    Events.tsx         Cloudflare Worker
+Notion Database → API Route → Frontend Component
+                     ↓              ↓
+              /api/events    Events.tsx
 ```
 
 ## Components
@@ -65,7 +65,7 @@ interface EventItem {
   date: string; // ISO date string
   status: string; // "Past" or "Upcoming"
   location: string; // Event type/location
-  image: string; // Header image URL (proxied)
+  image: string; // Header image URL (direct Notion URL or default)
   link: string; // Notion page URL
   description?: string; // Event description
   registerLink?: string; // Registration URL
@@ -73,34 +73,9 @@ interface EventItem {
 }
 ```
 
-## Image Handling System
+## Image Handling
 
-### Problem
-
-Notion stores images in AWS S3 with URLs that expire after ~1 hour, causing broken images.
-
-### Solution
-
-**Cloudflare Worker Proxy** (`cloudflare-worker/worker.js`)
-
-#### URL Format
-
-- **Original**: `https://s3.us-west-2.amazonaws.com/...?expires=...`
-- **Proxied**: `https://notion-image-proxy.paul-cf1.workers.dev/proxy/{base64-encoded-url}`
-
-#### Worker Logic
-
-1. **Decode** base64 URL parameter to get original Notion S3 URL
-2. **Fetch** image from S3 with caching (2 weeks)
-3. **Fallback** to T4P logo if S3 fetch fails
-4. **Return** actual image content (not error responses)
-
-#### Cache Strategy
-
-- **Max-age**: 2 weeks (1,209,600 seconds)
-- **S-maxage**: 4 weeks (2,419,200 seconds)
-- **Stale-while-revalidate**: 4 weeks
-- **CORS**: Full cross-origin support
+Notion images are served directly as Notion-hosted URLs. On error, the component falls back to the default image.
 
 ### Frontend Fallback
 
@@ -121,9 +96,6 @@ Notion stores images in AWS S3 with URLs that expire after ~1 hour, causing brok
 # Required for Notion integration
 NOTION_SECRET=secret_xxx
 NOTION_DB_ID=database-id
-
-# Required for image proxy
-NOTION_IMAGE_PROXY_URL=https://notion-image-proxy.paul-cf1.workers.dev
 ```
 
 ## Real-time Updates
@@ -153,17 +125,6 @@ Standard Astro build deployed to Cloudflare Pages:
 pnpm build
 ```
 
-### Worker Deployment
-
-Separate deployment required for image proxy:
-
-```bash
-cd cloudflare-worker
-wrangler deploy
-```
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed worker setup instructions.
-
 ## File Structure
 
 ```
@@ -175,35 +136,22 @@ src/
 ├── components/
 │   ├── Events.tsx               # Main events component
 │   └── EventDetails.tsx         # Event detail component
-├── store/
-│   └── notionClient.ts          # Notion API integration
-└── utils/
-    └── imageProxy.ts            # Image URL transformation
-
-cloudflare-worker/
-├── worker.js                    # Image proxy worker
-└── wrangler.toml               # Worker configuration
+└── store/
+    └── notionClient.ts          # Notion API integration
 ```
 
 ## Troubleshooting
 
 ### Images Not Loading
 
-1. Check worker deployment: `wrangler deployments list`
-2. Verify environment variable: `NOTION_IMAGE_PROXY_URL`
-3. Test worker directly: `curl https://your-worker.domain/proxy/{base64-url}`
+1. Notion-hosted images may expire after ~1 hour — this is a Notion limitation
+2. The component falls back to `/images/default.jpg` on error
 
 ### Events Not Updating
 
 1. Check Notion API credentials
 2. Verify database permissions
 3. Check browser console for API errors
-
-### CORS Errors
-
-1. Ensure worker has CORS headers on all responses
-2. Check worker domain configuration
-3. Verify browser network tab for blocked requests
 
 ## API Reference
 
@@ -221,23 +169,13 @@ Returns array of event objects sorted by date (newest first).
     "date": "2025-07-23",
     "status": "Upcoming",
     "location": "Virtual",
-    "image": "https://notion-image-proxy.domain/proxy/...",
+    "image": "https://notion-hosted-url.com/...",
     "description": "Event description",
     "registerLink": "https://register.url",
     "recordingLink": null
   }
 ]
 ```
-
-### Worker Proxy Endpoint
-
-**GET** `https://worker.domain/proxy/{base64-encoded-notion-url}`
-
-**Headers:**
-
-- `Access-Control-Allow-Origin: *`
-- `Cache-Control: public, max-age=1209600`
-- `X-Cached-By: CF-Worker` (for cached responses)
 
 ## Development
 
@@ -247,15 +185,7 @@ Returns array of event objects sorted by date (newest first).
 pnpm dev  # Start Astro dev server on :4321
 ```
 
-### Testing Worker Locally
-
-```bash
-cd cloudflare-worker
-wrangler dev  # Start local worker on :8787
-```
-
 ### Environment Setup
 
 1. Copy `.env.example` to `.env`
 2. Add Notion credentials
-3. Set worker URL (use localhost:8787 for local development)

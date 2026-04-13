@@ -9,7 +9,6 @@
 - `src/store/`: Clients and data utilities (e.g., Notion client).
 - `src/styles/`: Tailwind entry (`base.css`).
 - `public/`: Static assets. Build output goes to `dist/`.
-- `cloudflare-worker/`: Worker that proxies Notion images (deployed separately via Wrangler).
 
 ## Build, Test, and Development Commands
 
@@ -18,7 +17,6 @@
 - `pnpm build`: Build static site to `dist/`.
 - `pnpm preview`: Preview the production build locally.
 - `pnpm dlx astro check` (or `pnpm astro -- check`): Type checking and diagnostics for Astro/TS.
-- Worker: `cd cloudflare-worker && wrangler dev|deploy` (runs/deploys the image proxy).
 
 ## Coding Style & Naming Conventions
 
@@ -44,6 +42,5 @@
 
 ## Security & Configuration Tips
 
-- Required env vars: `NOTION_SECRET`, `NOTION_DB_ID`, `PROJECTHUB_API_KEY`, `NOTION_IMAGE_PROXY_URL`.
+- Required env vars: `NOTION_SECRET`, `NOTION_DB_ID`, `PROJECTHUB_API_KEY`.
 - Do not expose secrets to the client; only `PUBLIC_*` env vars are browser-visible. For client utilities, prefer `import.meta.env.PUBLIC_…`.
-- The image proxy Worker is a separate deployment; update its domain via env and `src/utils/imageProxy.ts`.

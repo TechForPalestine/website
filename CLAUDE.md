@@ -25,7 +25,6 @@ This file contains comprehensive information about the Tech for Palestine websit
 ### Integrations
 
 - **Notion API** - Content management for events and projects
-- **Cloudflare Worker** - Image proxy for Notion images
 - **Astro Icon** - Icon management
 - **Svelte** - Some legacy components
 
@@ -49,7 +48,6 @@ src/
 └── utils/             # Helper functions
 
 public/                # Static assets
-cloudflare-worker/     # Image proxy worker
 docs/                  # Project documentation
 ```
 
@@ -116,9 +114,6 @@ yarn preview         # Preview production build
 # Notion Integration
 NOTION_SECRET=secret_xxx
 NOTION_DB_ID=database-id
-
-# Image Proxy
-NOTION_IMAGE_PROXY_URL=https://notion-image-proxy.paul-cf1.workers.dev
 ```
 
 ## Content Management
@@ -133,21 +128,6 @@ NOTION_IMAGE_PROXY_URL=https://notion-image-proxy.paul-cf1.workers.dev
 
 - **Events**: Fetched from Notion database via API
 - **New Projects**: Fetched from external project management app (test integration)
-
-## Image Handling
-
-### The Problem
-
-Notion images are stored in S3 with expiring URLs (~1 hour), causing broken images.
-
-### The Solution
-
-**Cloudflare Worker Proxy** (`cloudflare-worker/worker.js`):
-
-- Converts: `notion-s3-url` → `worker-domain/proxy/{base64-encoded-url}`
-- Caches images for 2+ weeks
-- Fallback to T4P logo on S3 failures
-- CORS-enabled for cross-origin access
 
 ## Database Integration
 
@@ -272,16 +252,9 @@ export default function Component({ initialData, loading: initialLoading = false
 - Build command: `yarn build`
 - Output directory: `dist/`
 
-### Cloudflare Worker
-
-- Separate deployment: `cd cloudflare-worker && wrangler deploy`
-- Required for image proxy functionality
-- Must be deployed before website to ensure image URLs work
-
 ## Security & Best Practices
 
 - **No API keys in frontend code** - Use server-side API routes
-- **Image proxy prevents exposure** of Notion S3 URLs
 - **CORS properly configured** for cross-origin requests
 - **Environment variables** for sensitive configuration
 

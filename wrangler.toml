@@ -5,7 +5,5 @@ compatibility_date = "2024-09-23"
 # Cloudflare Pages configuration
 pages_build_output_dir = "dist"
 
-[vars]
-NOTION_IMAGE_PROXY_URL = "http://localhost:8787"
 # Notion DB IDs are set via Cloudflare Pages dashboard environment variables.
 # For local dev, add them to .env (see .env.example).

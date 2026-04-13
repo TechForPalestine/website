@@ -20,8 +20,6 @@ exclude = [
     # Some social media links may be rate limited
     "instagram.com/",
     "tiktok.com/",
-    # Notion URLs that might be private or have complex auth
-    "notion-image-proxy.*",
     # Local development URLs
     "localhost",
     "127.0.0.1",

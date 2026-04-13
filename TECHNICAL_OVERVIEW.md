@@ -9,7 +9,7 @@ The Tech for Palestine (T4P) website is a sophisticated advocacy platform built 
 - **Architecture**: JAMstack with selective hydration and static generation
 - **Content Management**: Git-based workflow with type-safe content collections
 - **Performance**: Optimized for speed with minimal JavaScript footprint
-- **Infrastructure**: Cloudflare Workers for edge computing and image proxy
+- **Infrastructure**: Cloudflare Pages for static hosting
 
 ---
 
@@ -27,7 +27,6 @@ The Tech for Palestine (T4P) website is a sophisticated advocacy platform built 
 | | Material-UI | 6.4.5 | React component library |
 | **Content** | Markdown + Collections | - | Git-based content management |
 | **APIs** | Notion API | - | Events system integration |
-| **Infrastructure** | Cloudflare Workers | - | Image proxy and edge computing |
 
 ### Directory Architecture
 
@@ -43,7 +42,6 @@ The Tech for Palestine (T4P) website is a sophisticated advocacy platform built 
 │   ├── store/              # API clients and state management
 │   └── styles/             # CSS and styling
 ├── public/                 # Static assets (24MB+ images)
-├── cloudflare-worker/      # Image proxy service
 └── dist/                   # Build output
 ```
 
@@ -97,11 +95,6 @@ The project excellently implements **Astro's Islands Architecture**, combining s
    React Hook Form → External API → Success Response
    ```
 
-4. **Image Proxy Flow**:
-   ```
-   Notion S3 URLs → Cloudflare Worker → Cached Delivery
-   ```
-
 ### API Design Assessment
 
 **Strengths:**
@@ -114,14 +107,6 @@ The project excellently implements **Astro's Islands Architecture**, combining s
 - No API versioning strategy
 - Limited rate limiting implementation
 - Inconsistent caching policies across endpoints
-
-**Cloudflare Worker Excellence:**
-The image proxy demonstrates sophisticated edge computing:
-```javascript
-// Advanced caching with fallback strategy
-headers.set('Cache-Control', 'public, max-age=1209600, s-maxage=2419200');
-headers.set('Access-Control-Allow-Origin', '*');
-```
 
 ---
 
@@ -202,19 +187,12 @@ export default defineConfig({
 - **Missing**: No automated CI/CD pipeline
 - **Target Platform**: Cloudflare Pages (inferred from worker setup)
 
-**Cloudflare Worker Deployment:**
-```bash
-# Separate deployment for image proxy
-cd cloudflare-worker && wrangler deploy
-```
-
 ### Environment Configuration
 
 **Development Environment:**
 ```bash
 NOTION_SECRET=secret_***
 NOTION_DB_ID=***
-NOTION_IMAGE_PROXY_URL=https://notion-image-proxy.paul-cf1.workers.dev
 ```
 
 **Security Concerns:**
@@ -232,11 +210,9 @@ NOTION_IMAGE_PROXY_URL=https://notion-image-proxy.paul-cf1.workers.dev
 - Pre-rendered HTML for optimal loading speeds
 - Minimal JavaScript footprint with selective hydration
 - CDN-friendly static asset delivery
-- Edge computing with Cloudflare Workers
 
 **Caching Strategy:**
 - 10-minute API response caching
-- 2-week image caching with 4-week stale-while-revalidate
 - Static asset caching through CDN
 
 **Optimization Opportunities:**
@@ -269,7 +245,7 @@ NOTION_IMAGE_PROXY_URL=https://notion-image-proxy.paul-cf1.workers.dev
 2. **Developer Experience**: Multi-framework flexibility with TypeScript safety
 3. **Content Management**: Git-based workflow with type-safe collections
 4. **Performance-First Design**: Minimal JavaScript with static generation
-5. **Scalable Infrastructure**: Edge computing ready with Cloudflare Workers
+5. **Scalable Infrastructure**: Cloudflare Pages for fast global delivery
 
 ### Critical Recommendations
 
@@ -359,7 +335,7 @@ The Tech for Palestine website demonstrates **excellent modern web development p
 - **Performance-First Design**: Static generation with selective hydration
 - **Modern Tooling**: TypeScript, Tailwind CSS, and cutting-edge frameworks
 - **Scalable Content Management**: Git-based workflow with type safety
-- **Edge Computing**: Sophisticated Cloudflare Worker implementation
+- **Static Delivery**: Cloudflare Pages for fast global asset delivery
 
 **Primary Focus Areas:**
 - **Deployment Automation**: Critical need for CI/CD pipeline
