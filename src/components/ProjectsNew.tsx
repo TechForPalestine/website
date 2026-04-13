@@ -68,9 +68,9 @@ interface ProjectsNewProps {
   availableTags?: Tag[];
 }
 
-/** Only allow http: and https: URLs to prevent javascript: / data: XSS vectors. */
-const sanitizeUrl = (url: string | undefined): string | undefined => {
-  if (!url) return undefined;
+/** Only allow http: and https: URLs to prevent javascript: / data: XSS vectors. Returns empty string for unsafe/invalid URLs. */
+const sanitizeUrl = (url: string | undefined): string => {
+  if (!url) return "";
   try {
     const parsed = new URL(url, "https://placeholder.invalid");
     if (parsed.protocol === "http:" || parsed.protocol === "https:") {
@@ -79,7 +79,7 @@ const sanitizeUrl = (url: string | undefined): string | undefined => {
   } catch {
     // malformed URL
   }
-  return undefined;
+  return "";
 };
 
 const getInitials = (name: string): string => {
