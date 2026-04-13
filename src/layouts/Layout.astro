@@ -36,21 +36,6 @@ const canonicalUrl = new URL(
     <meta name="csp-nonce" content={Astro.locals.cspNonce} />
     <script is:inline>
       (function () {
-        /* Patch 1: auto-nonce <style> elements created by JS (emotion/MUI) */
-        var m = document.querySelector('meta[name="csp-nonce"]');
-        var n = m && m.getAttribute('content');
-        if (n) {
-          var origCreate = document.createElement.bind(document);
-          document.createElement = function (tag) {
-            var el = origCreate.apply(this, arguments);
-            if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
-            return el;
-          };
-        }
-
-        /* Patch 2: convert setAttribute('style', ...) to individual setProperty() calls.
-           Prevents "Applying inline style" CSP violations from third-party scripts
-           (e.g. Email Octopus form) that use setAttribute instead of the CSSOM API. */
         function applyStyleString(el, value) {
           while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
           if (!value) return;
@@ -69,11 +54,58 @@ const canonicalUrl = new URL(
             }
           });
         }
+
+        /* Patch 1: auto-nonce <style> elements created by JS (emotion/MUI) */
+        var m = document.querySelector('meta[name="csp-nonce"]');
+        var n = m && m.getAttribute('content');
+        if (n) {
+          var origCreate = document.createElement.bind(document);
+          document.createElement = function (tag) {
+            var el = origCreate.apply(this, arguments);
+            if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
+            return el;
+          };
+        }
+
+        /* Patch 2: convert setAttribute('style', ...) to individual setProperty() calls.
+           Handles third-party scripts that mutate style via setAttribute. */
         var origSetAttr = Element.prototype.setAttribute;
         Element.prototype.setAttribute = function (name, value) {
           if (name === 'style') { applyStyleString(this, value); return; }
           origSetAttr.apply(this, arguments);
         };
+
+        /* Patch 3: strip style="..." from innerHTML before the browser parses it.
+           Handles third-party scripts (e.g. Email Octopus) that inject styled HTML
+           via innerHTML — the browser blocks style attributes at parse time before
+           any setAttribute intercept can fire. We rename them to data-csp-style,
+           then re-apply via CSSOM after insertion. */
+        var origInnerHTMLDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+        if (origInnerHTMLDesc && origInnerHTMLDesc.set) {
+          Object.defineProperty(Element.prototype, 'innerHTML', {
+            get: origInnerHTMLDesc.get,
+            set: function (value) {
+              if (typeof value !== 'string' || value.indexOf('style=') === -1) {
+                origInnerHTMLDesc.set.call(this, value);
+                return;
+              }
+              // Rename style="..." / style='...' → data-csp-style so the parser never sees them
+              var cleaned = value
+                .replace(/\bstyle\s*=\s*"([^"]*)"/gi, 'data-csp-style="$1"')
+                .replace(/\bstyle\s*=\s*'([^']*)'/gi, "data-csp-style='$1'");
+              origInnerHTMLDesc.set.call(this, cleaned);
+              // Re-apply stored styles via CSSOM
+              var els = this.querySelectorAll('[data-csp-style]');
+              for (var i = 0; i < els.length; i++) {
+                var sv = els[i].getAttribute('data-csp-style');
+                els[i].removeAttribute('data-csp-style');
+                applyStyleString(els[i], sv);
+              }
+            },
+            configurable: true,
+            enumerable: origInnerHTMLDesc.enumerable,
+          });
+        }
       })();
     </script>
     <title>{title}</title>
