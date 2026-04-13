@@ -33,6 +33,21 @@ const canonicalUrl = new URL(
       }
     </script>
     <meta name="generator" content={Astro.generator} />
+    <meta name="csp-nonce" content={Astro.locals.cspNonce} />
+    <script is:inline>
+      /* Auto-nonce <style> elements created by JS (e.g. emotion/MUI) for CSP compliance */
+      (function () {
+        var m = document.querySelector('meta[name="csp-nonce"]');
+        var n = m && m.getAttribute('content');
+        if (!n) return;
+        var orig = document.createElement.bind(document);
+        document.createElement = function (tag) {
+          var el = orig.apply(this, arguments);
+          if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
+          return el;
+        };
+      })();
+    </script>
     <title>{title}</title>
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -73,16 +88,7 @@ const canonicalUrl = new URL(
     <!-- Floating Donate Button -->
     <a
       href="/donate"
-      class="donate-link hidden md:block fixed right-0 top-1/2 z-50 bg-green-800 px-3 py-5 text-white shadow-lg transition hover:bg-green-900"
-      style="
-    writing-mode: vertical-rl;
-    transform: translateY(-50%) rotate(180deg);
-    transform-origin: center center;
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  "
+      class="donate-link hidden md:block fixed right-0 top-1/2 z-50 bg-green-800 px-3 py-5 text-white shadow-lg transition hover:bg-green-900 [writing-mode:vertical-rl] -translate-y-1/2 rotate-180 origin-center rounded-tr-lg rounded-br-lg rounded-tl-none rounded-bl-none"
     >
       Donate
     </a>

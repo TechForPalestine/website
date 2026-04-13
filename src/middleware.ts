@@ -21,7 +21,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "default-src 'self'",
     // 'strict-dynamic' trusts scripts loaded by nonced scripts; removes need for 'unsafe-inline'
     `script-src 'nonce-${nonce}' 'strict-dynamic' https://secure.qgiv.com https://plausible.io https://pal-chat.net https://techforpalestine.org/cdn-cgi/`,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    `style-src 'nonce-${nonce}' 'self' https://fonts.googleapis.com`,
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
     "connect-src 'self' https://plausible.io https://pal-chat.net",
@@ -37,13 +37,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return response;
   }
 
-  // Inject nonce into every <script> tag so Astro's hydration scripts and
-  // inline scripts are all covered by the nonce-based allowlist.
-  const rewriter = new HTMLRewriter().on("script", {
-    element(el) {
-      el.setAttribute("nonce", nonce);
-    },
-  });
+  // Inject nonce into every <script> and <style> tag so Astro's hydration
+  // scripts and any server-rendered inline styles are covered by the nonce.
+  const rewriter = new HTMLRewriter()
+    .on("script", {
+      element(el) {
+        el.setAttribute("nonce", nonce);
+      },
+    })
+    .on("style", {
+      element(el) {
+        el.setAttribute("nonce", nonce);
+      },
+    });
 
   const transformed = rewriter.transform(response);
   transformed.headers.set("Content-Security-Policy", csp);
