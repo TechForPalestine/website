@@ -26,9 +26,9 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
   const url = new URL(request.url);
   const path = url.searchParams.get("path");
 
-  if (!path || !path.startsWith("/")) {
-    return new Response(JSON.stringify({ error: "Invalid path" }), {
-      status: 400,
+  if (!path || !path.startsWith("/api/method/")) {
+    return new Response(JSON.stringify({ error: "Path not allowed" }), {
+      status: 403,
       headers: { "Content-Type": "application/json" },
     });
   }
