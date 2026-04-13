@@ -3,6 +3,29 @@ import { getEnv } from "../../utils/getEnv.js";
 
 export const prerender = false;
 
+const URL_FIELDS = [
+  "websiteUrl", "logoUrl", "twitterUrl", "linkedinUrl", "githubUrl",
+  "instagramUrl", "facebookUrl", "youtubeUrl", "telegramUrl",
+  "mastodonUrl", "blueskyUrl", "tiktokUrl", "signalUrl", "upscrolledUrl",
+] as const;
+
+/** Strip any URL field that isn't http(s) to prevent XSS via javascript: or data: URIs. */
+function sanitizeProjectUrls(project: Record<string, unknown>): Record<string, unknown> {
+  for (const field of URL_FIELDS) {
+    const val = project[field];
+    if (typeof val !== "string") continue;
+    try {
+      const parsed = new URL(val, "https://placeholder.invalid");
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+        project[field] = undefined;
+      }
+    } catch {
+      project[field] = undefined;
+    }
+  }
+  return project;
+}
+
 // Retry helper for handling cold starts
 async function fetchWithRetry(url: string, options: RequestInit & { cf?: any }, maxRetries = 2) {
   let lastError: Error | null = null;
@@ -100,6 +123,8 @@ export const GET: APIRoute = async ({ locals }) => {
     }
 
     const tags = Array.isArray(data.tags) ? data.tags : [];
+
+    projects.forEach(sanitizeProjectUrls);
 
     const totalTime = Date.now() - startTime;
     console.log(

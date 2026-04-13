@@ -68,6 +68,20 @@ interface ProjectsNewProps {
   availableTags?: Tag[];
 }
 
+/** Only allow http: and https: URLs to prevent javascript: / data: XSS vectors. */
+const sanitizeUrl = (url: string | undefined): string | undefined => {
+  if (!url) return undefined;
+  try {
+    const parsed = new URL(url, "https://placeholder.invalid");
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return url;
+    }
+  } catch {
+    // malformed URL
+  }
+  return undefined;
+};
+
 const getInitials = (name: string): string => {
   const words = name.trim().split(/\s+/);
   if (words.length >= 2) {
@@ -309,10 +323,10 @@ export default function ProjectsNew({
                   <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.6, flexGrow: 1 }}>
                     {project.elevatorPitch || project.description}
                   </Typography>
-                  {project.websiteUrl && (
+                  {sanitizeUrl(project.websiteUrl) && (
                     <Box sx={{ mt: 2 }}>
                       <Link
-                        href={project.websiteUrl}
+                        href={sanitizeUrl(project.websiteUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
@@ -481,7 +495,7 @@ export default function ProjectsNew({
                   >
                     📅 {formatDate(project.createdAt)}
                   </Typography>
-                  {project.websiteUrl && (
+                  {sanitizeUrl(project.websiteUrl) && (
                     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                       <Typography
                         variant="caption"
@@ -490,7 +504,7 @@ export default function ProjectsNew({
                         🔗
                       </Typography>
                       <Link
-                        href={project.websiteUrl}
+                        href={sanitizeUrl(project.websiteUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
@@ -639,10 +653,10 @@ export default function ProjectsNew({
                         Discord
                       </Button>
                     )}
-                    {selectedProject.githubUrl && (
+                    {sanitizeUrl(selectedProject.githubUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.githubUrl}
+                        href={sanitizeUrl(selectedProject.githubUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<GitHubIcon />}
@@ -651,10 +665,10 @@ export default function ProjectsNew({
                         GitHub
                       </Button>
                     )}
-                    {selectedProject.twitterUrl && (
+                    {sanitizeUrl(selectedProject.twitterUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.twitterUrl}
+                        href={sanitizeUrl(selectedProject.twitterUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<TwitterIcon />}
@@ -663,10 +677,10 @@ export default function ProjectsNew({
                         Twitter
                       </Button>
                     )}
-                    {selectedProject.linkedinUrl && (
+                    {sanitizeUrl(selectedProject.linkedinUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.linkedinUrl}
+                        href={sanitizeUrl(selectedProject.linkedinUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<LinkedInIcon />}
@@ -675,10 +689,10 @@ export default function ProjectsNew({
                         LinkedIn
                       </Button>
                     )}
-                    {selectedProject.instagramUrl && (
+                    {sanitizeUrl(selectedProject.instagramUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.instagramUrl}
+                        href={sanitizeUrl(selectedProject.instagramUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<InstagramIcon />}
@@ -687,10 +701,10 @@ export default function ProjectsNew({
                         Instagram
                       </Button>
                     )}
-                    {selectedProject.facebookUrl && (
+                    {sanitizeUrl(selectedProject.facebookUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.facebookUrl}
+                        href={sanitizeUrl(selectedProject.facebookUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<FacebookIcon />}
@@ -699,10 +713,10 @@ export default function ProjectsNew({
                         Facebook
                       </Button>
                     )}
-                    {selectedProject.youtubeUrl && (
+                    {sanitizeUrl(selectedProject.youtubeUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.youtubeUrl}
+                        href={sanitizeUrl(selectedProject.youtubeUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<YouTubeIcon />}
@@ -711,10 +725,10 @@ export default function ProjectsNew({
                         YouTube
                       </Button>
                     )}
-                    {selectedProject.telegramUrl && (
+                    {sanitizeUrl(selectedProject.telegramUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.telegramUrl}
+                        href={sanitizeUrl(selectedProject.telegramUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<TelegramIcon />}
@@ -723,10 +737,10 @@ export default function ProjectsNew({
                         Telegram
                       </Button>
                     )}
-                    {selectedProject.mastodonUrl && (
+                    {sanitizeUrl(selectedProject.mastodonUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.mastodonUrl}
+                        href={sanitizeUrl(selectedProject.mastodonUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<span style={{ fontSize: "18px" }}>🐘</span>}
@@ -735,10 +749,10 @@ export default function ProjectsNew({
                         Mastodon
                       </Button>
                     )}
-                    {selectedProject.blueskyUrl && (
+                    {sanitizeUrl(selectedProject.blueskyUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.blueskyUrl}
+                        href={sanitizeUrl(selectedProject.blueskyUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<span style={{ fontSize: "18px" }}>🦋</span>}
@@ -747,10 +761,10 @@ export default function ProjectsNew({
                         Bluesky
                       </Button>
                     )}
-                    {selectedProject.tiktokUrl && (
+                    {sanitizeUrl(selectedProject.tiktokUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.tiktokUrl}
+                        href={sanitizeUrl(selectedProject.tiktokUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<span style={{ fontSize: "18px" }}>🎵</span>}
@@ -759,10 +773,10 @@ export default function ProjectsNew({
                         TikTok
                       </Button>
                     )}
-                    {selectedProject.signalUrl && (
+                    {sanitizeUrl(selectedProject.signalUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.signalUrl}
+                        href={sanitizeUrl(selectedProject.signalUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<span style={{ fontSize: "18px" }}>💬</span>}
@@ -771,10 +785,10 @@ export default function ProjectsNew({
                         Signal
                       </Button>
                     )}
-                    {selectedProject.upscrolledUrl && (
+                    {sanitizeUrl(selectedProject.upscrolledUrl) && (
                       <Button
                         variant="outlined"
-                        href={selectedProject.upscrolledUrl}
+                        href={sanitizeUrl(selectedProject.upscrolledUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={
@@ -801,10 +815,10 @@ export default function ProjectsNew({
               >
                 Close
               </Button>
-              {selectedProject.websiteUrl && (
+              {sanitizeUrl(selectedProject.websiteUrl) && (
                 <Button
                   variant="contained"
-                  href={selectedProject.websiteUrl}
+                  href={sanitizeUrl(selectedProject.websiteUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   endIcon={<OpenInNewIcon />}
