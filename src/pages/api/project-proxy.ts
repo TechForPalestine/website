@@ -39,10 +39,15 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
 
   const upstream = `${apiUrl.replace(/\/$/, "")}${normalizedPath}`;
 
-  const headers = new Headers(request.headers);
+  // Explicit allowlist — never forward cookies, IP headers, or other
+  // browser-supplied headers that could influence upstream access controls.
+  const FORWARD_HEADERS = ["content-type", "accept", "accept-language", "accept-encoding"];
+  const headers = new Headers();
+  for (const name of FORWARD_HEADERS) {
+    const val = request.headers.get(name);
+    if (val) headers.set(name, val);
+  }
   headers.set("Authorization", secretKey);
-  // Don't forward host header to the upstream
-  headers.delete("host");
 
   const upstreamResponse = await fetch(upstream, {
     method: request.method,
