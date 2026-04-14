@@ -1,11 +1,8 @@
-import { defineMiddleware } from "astro:middleware";
+import { sequence } from "astro:middleware";
+import { cacheControl } from "./cache-control.js";
+import { csp } from "./csp.js";
 
-export const onRequest = defineMiddleware(async (context, next) => {
-  const response = await next();
-
-  const isApi = context.url.pathname.startsWith("/api/");
-  const isGet = context.request.method === "GET";
-  response.headers.set("Cache-Control", !isGet || isApi ? "no-store" : "public, max-age=600");
-
-  return response;
-});
+// cacheControl runs first so the header is set on every response.
+// csp runs second and may replace the response via HTMLRewriter; the
+// cache-control header is preserved on the transformed response.
+export const onRequest = sequence(cacheControl, csp);

@@ -6,7 +6,7 @@ declare const HTMLRewriter: new () => {
   transform(response: Response): Response;
 };
 
-export const onRequest = defineMiddleware(async (context, next) => {
+export const csp = defineMiddleware(async (context, next) => {
   const nonce = crypto.randomUUID().replace(/-/g, "");
   context.locals.cspNonce = nonce;
 
@@ -17,7 +17,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return response;
   }
 
-  const csp = [
+  const cspHeader = [
     "default-src 'self'",
     // 'strict-dynamic' trusts scripts loaded by nonced scripts; removes need for 'unsafe-inline'
     `script-src 'nonce-${nonce}' 'strict-dynamic' https://secure.qgiv.com https://plausible.io https://pal-chat.net https://techforpalestine.org/cdn-cgi/`,
@@ -52,6 +52,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
 
   const transformed = rewriter.transform(response);
-  transformed.headers.set("Content-Security-Policy", csp);
+  transformed.headers.set("Content-Security-Policy", cspHeader);
   return transformed;
 });
