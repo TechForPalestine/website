@@ -26,14 +26,18 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
   const url = new URL(request.url);
   const path = url.searchParams.get("path");
 
-  if (!path || !path.startsWith("/api/method/")) {
+  // Normalise dot-segments (../, ./) before the prefix check so a crafted
+  // path like /api/method/../../api/auth/admin cannot bypass the guard.
+  const normalizedPath = path ? new URL(path, "http://localhost").pathname : null;
+
+  if (!normalizedPath || !normalizedPath.startsWith("/api/method/")) {
     return new Response(JSON.stringify({ error: "Path not allowed" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },
     });
   }
 
-  const upstream = `${apiUrl.replace(/\/$/, "")}${path}`;
+  const upstream = `${apiUrl.replace(/\/$/, "")}${normalizedPath}`;
 
   const headers = new Headers(request.headers);
   headers.set("Authorization", secretKey);
