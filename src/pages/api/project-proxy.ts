@@ -26,19 +26,28 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
   const url = new URL(request.url);
   const path = url.searchParams.get("path");
 
-  if (!path || !path.startsWith("/api/method/")) {
+  // Normalise dot-segments (../, ./) before the prefix check so a crafted
+  // path like /api/method/../../api/auth/admin cannot bypass the guard.
+  const normalizedPath = path ? new URL(path, "http://localhost").pathname : null;
+
+  if (!normalizedPath || !normalizedPath.startsWith("/api/method/")) {
     return new Response(JSON.stringify({ error: "Path not allowed" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },
     });
   }
 
-  const upstream = `${apiUrl.replace(/\/$/, "")}${path}`;
+  const upstream = `${apiUrl.replace(/\/$/, "")}${normalizedPath}`;
 
-  const headers = new Headers(request.headers);
+  // Explicit allowlist — never forward cookies, IP headers, or other
+  // browser-supplied headers that could influence upstream access controls.
+  const FORWARD_HEADERS = ["content-type", "accept", "accept-language", "accept-encoding"];
+  const headers = new Headers();
+  for (const name of FORWARD_HEADERS) {
+    const val = request.headers.get(name);
+    if (val) headers.set(name, val);
+  }
   headers.set("Authorization", secretKey);
-  // Don't forward host header to the upstream
-  headers.delete("host");
 
   const upstreamResponse = await fetch(upstream, {
     method: request.method,
