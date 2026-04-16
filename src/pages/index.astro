@@ -414,7 +414,7 @@ import "../styles/base.css";
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-[#268024] py-24">
+    <section class="bg-green-800 py-24">
       <div class="mx-auto max-w-4xl px-6 text-center md:px-8">
         <h2 class="mb-5 text-4xl font-bold leading-tight text-white sm:text-5xl">
           You've seen what we've built.<br />Now build with us.
@@ -426,7 +426,7 @@ import "../styles/base.css";
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <!-- Become a member -->
-          <div class="flex flex-col rounded-2xl bg-[#1e6b1c] p-8 text-left">
+          <div class="flex flex-col rounded-2xl bg-green-900 p-8 text-left">
             <h3 class="mb-3 text-xl font-bold text-white">Become a member</h3>
             <p class="mb-8 flex-1 text-sm leading-relaxed text-green-100">
               Access the T4P Hub. Join impactful working teams. Create an initiative of your own
@@ -434,14 +434,14 @@ import "../styles/base.css";
             </p>
             <a
               href="/get-involved"
-              class="block rounded-lg bg-white px-6 py-3 text-center text-base font-semibold text-[#268024] transition hover:bg-green-50"
+              class="block rounded-lg bg-white px-6 py-3 text-center text-base font-semibold text-green-800 transition hover:bg-green-50"
             >
               Become a member
             </a>
           </div>
 
           <!-- Support us -->
-          <div class="flex flex-col rounded-2xl bg-[#1e6b1c] p-8 text-left">
+          <div class="flex flex-col rounded-2xl bg-green-900 p-8 text-left">
             <h3 class="mb-3 text-xl font-bold text-white">Support us</h3>
             <p class="mb-8 flex-1 text-sm leading-relaxed text-green-100">
               Not ready to join? You can still help by donating. One-time or recurring. Every dollar
@@ -449,17 +449,19 @@ import "../styles/base.css";
             </p>
             <a
               href="/donate"
-              class="block rounded-lg border border-white bg-transparent px-6 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-[#268024]"
+              class="block rounded-lg border border-white bg-transparent px-6 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-green-800"
             >
               Donate
             </a>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="mt-10">
-          <p class="mb-4 text-base font-medium text-green-100">Or join our mailing list</p>
-          <SignUpForm />
-        </div>
+    <!-- Mailing List Section -->
+    <section class="bg-white py-16">
+      <div class="flex items-center justify-center">
+        <SignUpForm />
       </div>
     </section>
   </main>
