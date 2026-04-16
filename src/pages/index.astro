@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 ---
 
@@ -9,26 +8,8 @@ import "../styles/base.css";
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
   image="https://techforpalestine.org/happy-kids.jpg"
 >
-  <style is:global>
-    /* Style the external form submit button to match our color scheme */
-    .eomail-form button[type="submit"],
-    .eomail-form input[type="submit"] {
-      background-color: #166534 !important; /* green-800 */
-      color: white !important;
-      border: none !important;
-      padding: 0.75rem 2rem !important;
-      border-radius: 0.375rem !important;
-      font-weight: 500 !important;
-      cursor: pointer !important;
-      transition: background-color 0.2s !important;
-    }
-
-    .eomail-form button[type="submit"]:hover,
-    .eomail-form input[type="submit"]:hover {
-      background-color: #15803d !important; /* green-700 */
-    }
-  </style>
   <main>
+    <!-- Hero Section -->
     <section
       class="flex min-h-[calc(100vh-5rem)] flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center"
     >
@@ -42,67 +23,32 @@ import "../styles/base.css";
           </div>
 
           <h1 class="text-4xl font-bold md:text-5xl">
-            Harnessing Technology for a
-            <span class="text-[#268024] lg:my-2 lg:inline-block">Free Palestine</span>
+            Join the tech movement behind
+            <span class="text-[#268024] lg:my-2 lg:inline-block">90+ projects for Palestine</span>
           </h1>
           <p class="text-lg text-gray-700 2xl:text-xl">
-            Tech for Palestine is a 501(c)(3) nonprofit operating a free incubator for pro-Palestine
-            initiatives. We connect project leaders with:
+            Tech for Palestine (T4P) is a 501(c)(3) nonprofit starting and scaling initiatives for
+            Palestinian liberation.
           </p>
-          <ul class="space-y-2 text-lg text-gray-700 2xl:text-xl">
-            <li class="flex items-start gap-3">
-              <svg
-                class="mt-1.5 h-4 w-4 flex-shrink-0"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="8" cy="8" r="8" fill="#e4312b" fill-opacity="0.2"></circle>
-                <circle cx="8" cy="8" r="5" fill="#e4312b"></circle>
-              </svg>
-              <span>One-on-one mentorship from experienced startup founders</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg
-                class="mt-1.5 h-4 w-4 flex-shrink-0"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="8" cy="8" r="8" fill="#000000" fill-opacity="0.2"></circle>
-                <circle cx="8" cy="8" r="5" fill="#000000"></circle>
-              </svg>
-              <span>A network of technically skilled volunteers via our Discord</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg
-                class="mt-1.5 h-4 w-4 flex-shrink-0"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="8" cy="8" r="8" fill="#268024" fill-opacity="0.2"></circle>
-                <circle cx="8" cy="8" r="5" fill="#268024"></circle>
-              </svg>
-              <span>Regular drop-in calls and webinars for live support and upskilling</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg
-                class="mt-1.5 h-4 w-4 flex-shrink-0"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="8" cy="8" r="8" fill="#9ca3af" fill-opacity="0.2"></circle>
-                <circle cx="8" cy="8" r="5" fill="#9ca3af"></circle>
-              </svg>
-              <span>Monthly grants to fuel early-stage growth</span>
-            </li>
-          </ul>
           <p class="text-lg text-gray-700 2xl:text-xl">
-            Our goal is to counter tech industry complicity in Palestinian oppression by using tech
-            for good, empowering changemakers with support for their liberating projects.
+            We support anyone with a meaningful idea, whether it's working against media censorship,
+            using tech to aid protests, scaling boycotts, pushing for tech divestment, supporting
+            Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
           </p>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a
+              href="/incubator"
+              class="rounded-md bg-green-800 px-8 py-3 text-center text-lg font-medium text-white hover:bg-green-700"
+            >
+              Apply to the Incubator
+            </a>
+            <a
+              href="/get-involved"
+              class="rounded-md border-2 border-green-800 px-8 py-3 text-center text-lg font-medium text-green-800 hover:bg-green-50"
+            >
+              Get Involved
+            </a>
+          </div>
         </div>
       </div>
       <figure class="relative h-[32rem] bg-zinc-50 lg:h-full">
@@ -115,145 +61,67 @@ import "../styles/base.css";
       </figure>
     </section>
 
-    <!-- Featured Projects Section -->
-    <section class="bg-white py-16">
+    <!-- Stats Row -->
+    <section class="border-y border-gray-200 bg-gray-50 py-10">
       <div class="mx-auto max-w-7xl px-6 md:px-8">
-        <div class="mb-12 text-center">
+        <div class="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
+          <div class="space-y-2">
+            <p class="text-4xl font-bold text-[#268024]">90+</p>
+            <p class="text-base text-gray-600">Projects incubated</p>
+          </div>
+          <div class="space-y-2">
+            <p class="text-4xl font-bold text-[#268024]">3,000+</p>
+            <p class="text-base text-gray-600">Worldwide volunteers</p>
+          </div>
+          <div class="space-y-2">
+            <p class="text-4xl font-bold text-[#268024]">350+</p>
+            <p class="text-base text-gray-600">Entrepreneurs for Palestine</p>
+          </div>
+          <div class="space-y-2">
+            <p class="text-4xl font-bold text-[#268024]">50+</p>
+            <p class="text-base text-gray-600">Investors for Palestine</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Projects Section -->
+    <section class="bg-white py-20">
+      <div class="mx-auto max-w-7xl px-6 md:px-8">
+        <div class="mb-14 text-center">
           <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            T4P supports 80+ projects, including:
+            Projects that came through T4P
           </h2>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-8">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <!-- Upscrolled -->
           <a
             href="https://upscrolled.com/en/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
           >
-            <div class="mb-4 flex h-32 w-32 items-center justify-center">
-              <img
-                src="/images/new-homepage/upscrolled_logo.webp"
-                alt="Upscrolled logo"
-                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 rounded-[2.2rem]"
-              />
-            </div>
-            <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
-              Upscrolled
-            </h3>
-            <p class="min-h-[4.5rem] text-sm leading-relaxed text-gray-600">
-              A Meta alternative without shadow banning or algorithmic biases.
-            </p>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
-          </a>
-
-          <!-- Thaura -->
-          <a
-            href="https://www.thaura.ai/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
-          >
-            <div class="mb-4 flex h-32 w-32 items-center justify-center">
-              <img
-                src="/images/new-homepage/thaura.jpeg"
-                alt="Thaura logo"
-                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 rounded-[2.2rem]"
-              />
-            </div>
-            <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">Thaura</h3>
-            <p class="min-h-[4.5rem] text-sm leading-relaxed text-gray-600">
-              Ethical AI platform that decolonizes artificial intelligence with ethics-first
-              approach.
-            </p>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
-          </a>
-
-          <!-- Apricot -->
-          <a
-            href="https://apricotinternational.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
-          >
-            <div>
-              <div class="mx-auto mb-4 flex h-32 w-32 items-center justify-center">
+            <div class="mb-4 flex items-center gap-3">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white">
                 <img
-                  src="/images/new-homepage/Apricot.webp"
-                  alt="Apricot logo"
-                  class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 rounded-[2.2rem]"
+                  src="/images/new-homepage/upscrolled_logo.webp"
+                  alt="Upscrolled logo"
+                  class="h-full w-full object-contain"
                 />
               </div>
-              <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
-                Apricot
-              </h3>
-              <p class="text-sm leading-relaxed text-gray-600">
-                A nonprofit connecting displaced Palestinian tech professionals with global
-                companies, resulting in $1M in salary to Palestinians.
-              </p>
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Upscrolled</h3>
             </div>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
-          </a>
-
-          <!-- Media Bias Meter -->
-          <a
-            href="https://www.mediabiasmeter.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
-          >
-            <div>
-              <div class="mx-auto mb-4 flex h-32 w-32 items-center justify-center">
-                <img
-                  src="/images/new-homepage/Media_Bias.webp"
-                  alt="Media Bias Meter logo"
-                  class="w-full object-contain transition-transform duration-300 group-hover:scale-110 rounded-[2.2rem]"
-                />
-              </div>
-              <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
-                Media Bias Meter
-              </h3>
-              <p class="text-sm leading-relaxed text-gray-600">
-                A research initiative exposing anti-Palestine media bias from major news outlets
-                through detailed research reports.
-              </p>
+            <div class="mb-4 space-y-1">
+              <p class="text-xl font-bold leading-tight text-gray-900">#1 on the global App Store</p>
+              <p class="text-xl font-bold leading-tight text-gray-900">0 → 5M users in 7 months</p>
             </div>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
-          </a>
-
-          <!-- A Ween Rayeh -->
-          <a
-            href="https://aweenrayeh.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
-          >
-            <div class="mb-4 flex h-32 w-32 items-center justify-center">
-              <img
-                src="/images/new-homepage/a-ween-raeh.jpeg"
-                alt="A Ween Rayeh logo"
-                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
-            <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
-              A Ween Rayeh
-            </h3>
-            <p class="min-h-[4.5rem] text-sm leading-relaxed text-gray-600">
-              A smart, community-powered platform that gives Palestinians real-time updates on road
-              and checkpoint conditions in the West Bank.
+            <p class="mb-3 text-sm leading-relaxed text-gray-600">
+              The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach.
             </p>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
+            <p class="mt-auto text-sm text-gray-500">
+              Launched and scaled via T4P incubator and ecosystem partners.
+            </p>
           </a>
 
           <!-- Boycat -->
@@ -261,22 +129,56 @@ import "../styles/base.css";
             href="https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
           >
-            <div class="mb-4 flex h-32 w-32 items-center justify-center">
-              <img
-                src="/images/new-homepage/Boycat_logo.webp"
-                alt="Boycat logo"
-                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 rounded-[2.2rem]"
-              />
+            <div class="mb-4 flex items-center gap-3">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white">
+                <img
+                  src="/images/new-homepage/Boycat_logo.webp"
+                  alt="Boycat logo"
+                  class="h-full w-full object-contain"
+                />
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Boycat</h3>
             </div>
-            <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">Boycat</h3>
-            <p class="min-h-[4.5rem] text-sm leading-relaxed text-gray-600">
-              Search for ethical product alternatives. 500MM in Israeli goods boycotted.
+            <div class="mb-4 space-y-1">
+              <p class="text-xl font-bold leading-tight text-gray-900">$200M in products boycotted</p>
+              <p class="text-xl font-bold leading-tight text-gray-900">2M+ users</p>
+            </div>
+            <p class="mb-3 text-sm leading-relaxed text-gray-600">
+              Scan any product to check its ethical compliance and find alternatives in real time. Official BDS partner app.
             </p>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
+            <p class="mt-auto text-sm text-gray-500">
+              Connected to BDS partnership through T4P.
+            </p>
+          </a>
+
+          <!-- Thaura.ai -->
+          <a
+            href="https://www.thaura.ai/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <div class="mb-4 flex items-center gap-3">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white">
+                <img
+                  src="/images/new-homepage/thaura.jpeg"
+                  alt="Thaura logo"
+                  class="h-full w-full object-contain"
+                />
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Thaura.ai</h3>
+            </div>
+            <div class="mb-4 space-y-1">
+              <p class="text-xl font-bold leading-tight text-gray-900">The ethical alternative to traditional LLMs</p>
+            </div>
+            <p class="mb-3 text-sm leading-relaxed text-gray-600">
+              AI built ethically, designed around environmental, social, and privacy concerns.
+            </p>
+            <p class="mt-auto text-sm text-gray-500">
+              Launched via T4P network to profitability.
+            </p>
           </a>
 
           <!-- Find a Protest -->
@@ -284,48 +186,274 @@ import "../styles/base.css";
             href="https://www.findaprotest.info/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group flex min-h-[380px] w-full flex-col items-center justify-center rounded-xl border-2 border-gray-200 bg-white p-8 text-center shadow-md transition-all duration-300 hover:border-green-600 hover:shadow-xl md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
           >
-            <div class="mb-4 flex h-32 w-32 items-center justify-center">
-              <img
-                src="/images/new-homepage/findaprotest_b.webp"
-                alt="Find a Protest logo"
-                class="h-full w-full object-contain px-5 transition-transform duration-300 group-hover:scale-110 rounded-[2.2rem] bg-[#9FBAA9]"
-              />
+            <div class="mb-4 flex items-center gap-3">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-[#9FBAA9]">
+                <img
+                  src="/images/new-homepage/findaprotest_b.webp"
+                  alt="Find a Protest logo"
+                  class="h-full w-full object-contain px-1"
+                />
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Find a Protest</h3>
             </div>
-            <h3 class="mb-3 text-xl font-bold text-gray-900 group-hover:text-green-800">
-              Find a Protest
-            </h3>
-            <p class="min-h-[4.5rem] text-sm leading-relaxed text-gray-600">
-              Crowdsourcing tens of thousands of protests across 62 countries around the world.
+            <div class="mb-4 space-y-1">
+              <p class="text-xl font-bold leading-tight text-gray-900">500k visits per week</p>
+            </div>
+            <p class="mb-3 text-sm leading-relaxed text-gray-600">
+              Find and subscribe to protests in your area, powered by organizers, communities, and volunteer data collectors.
             </p>
-            <span class="mt-4 text-sm font-medium text-green-800 group-hover:underline">
-              Visit Website →
-            </span>
+            <p class="mt-auto text-sm text-gray-500">
+              Refocused and volunteer-powered through T4P.
+            </p>
+          </a>
+
+          <!-- Newscord -->
+          <a
+            href="#"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <div class="mb-4 flex items-center gap-3">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white">
+                <img
+                  src="/images/new-homepage/newscord.webp"
+                  alt="Newscord logo"
+                  class="h-full w-full object-contain"
+                />
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Newscord</h3>
+            </div>
+            <div class="mb-4 space-y-1">
+              <p class="text-xl font-bold leading-tight text-gray-900">40k+ messages to accountable media for biased reporting</p>
+            </div>
+            <p class="mb-3 text-sm leading-relaxed text-gray-600">
+              A platform for AI-powered news summaries across hundreds of sources, exposing media bias in every language.
+            </p>
+            <p class="mt-auto text-sm text-gray-500">
+              MVP refocused and partnered with T4P ecosystem partners.
+            </p>
           </a>
         </div>
 
-        <div class="mt-12 flex flex-col justify-center gap-4 sm:flex-row">
+        <div class="mt-12 flex justify-center">
           <a
             href="/projects"
             class="rounded-md bg-green-800 px-8 py-3 text-center text-lg font-medium text-white hover:bg-green-700"
           >
-            BROWSE PROJECTS
-          </a>
-          <a
-            href="/get-involved"
-            class="rounded-md bg-green-800 px-8 py-3 text-center text-lg font-medium text-white hover:bg-green-700"
-          >
-            GET INVOLVED
+            Browse All Projects
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Join Our Mailing List Section -->
-    <section class="bg-white py-16">
-      <div class="flex items-center justify-center">
-        <SignUpForm />
+    <!-- How We Help Section -->
+    <section class="bg-gray-50 py-20">
+      <div class="mx-auto max-w-7xl px-6 md:px-8">
+        <div class="mb-14 text-center">
+          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            How we help projects succeed
+          </h2>
+          <p class="mt-4 text-lg text-gray-600">
+            We provide the support needed to ship, scale, and make an impact:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Volunteer Network -->
+          <div class="rounded-2xl bg-white p-8 shadow-sm">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
+              <svg class="h-6 w-6 text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="mb-3 text-lg font-bold text-gray-900">Volunteer Network</h3>
+            <p class="text-gray-600">
+              Access to 3,000+ skilled volunteers — engineers, marketers, designers and more — with
+              a dedicated recruitment team to match you.
+            </p>
+          </div>
+
+          <!-- Funding -->
+          <div class="rounded-2xl bg-white p-8 shadow-sm">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
+              <svg class="h-6 w-6 text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="mb-3 text-lg font-bold text-gray-900">Funding</h3>
+            <p class="text-gray-600">
+              Small grants for most accepted projects. Simple process, no strings attached. We fund
+              what works.
+            </p>
+          </div>
+
+          <!-- Mentorship -->
+          <div class="rounded-2xl bg-white p-8 shadow-sm">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
+              <svg class="h-6 w-6 text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <h3 class="mb-3 text-lg font-bold text-gray-900">Mentorship</h3>
+            <p class="text-gray-600">
+              Strategy sessions and optional weekly dedicated mentors. Real guidance from people
+              who've built before.
+            </p>
+          </div>
+
+          <!-- Launch Support -->
+          <div class="rounded-2xl bg-white p-8 shadow-sm">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
+              <svg class="h-6 w-6 text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="mb-3 text-lg font-bold text-gray-900">Launch Support</h3>
+            <p class="text-gray-600">
+              Access to engineering, security, and marketing expertise, marketing launches, and a
+              network of 10k+ early testers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- In the Press Section -->
+    <section class="bg-white py-20">
+      <div class="mx-auto max-w-7xl px-6 md:px-8">
+        <div class="mb-14 text-center">
+          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            In the press
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Stanford Social Innovation Review -->
+          <a
+            href="https://ssir.org/articles/entry/tech-against-genocide"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
+              Stanford Social Innovation Review
+            </p>
+            <p class="flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800">
+              Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights
+            </p>
+            <span class="mt-4 text-sm text-gray-500 group-hover:text-green-700">Read article →</span>
+          </a>
+
+          <!-- TRT World -->
+          <a
+            href="https://www.trtworld.com/video/18268907"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
+              TRT World
+            </p>
+            <p class="flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800">
+              Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI
+            </p>
+            <span class="mt-4 text-sm text-gray-500 group-hover:text-green-700">Read article →</span>
+          </a>
+
+          <!-- Al Jazeera -->
+          <a
+            href="https://www.aljazeera.com/news/2026/1/29/whats-upscrolled-the-app-gaining-popularity-after-tiktoks-us-takeover"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
+              Al Jazeera
+            </p>
+            <p class="flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800">
+              What's UpScrolled, the app gaining popularity after TikTok's US takeover?
+            </p>
+            <span class="mt-4 text-sm text-gray-500 group-hover:text-green-700">Read article →</span>
+          </a>
+
+          <!-- TechCrunch -->
+          <a
+            href="https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
+              TechCrunch
+            </p>
+            <p class="flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800">
+              Tech for Palestine launches to provide tools to help support Palestinians
+            </p>
+            <span class="mt-4 text-sm text-gray-500 group-hover:text-green-700">Read article →</span>
+          </a>
+
+          <!-- Tech Times -->
+          <a
+            href="https://www.techtimes.com/articles/300271/20240102/pro-palestinian-tech-workers-rally-behind-tech-for-palestine-coalition.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
+          >
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
+              Tech Times
+            </p>
+            <p class="flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800">
+              Pro-Palestinian Tech Workers Rally Behind 'Tech for Palestine' Coalition
+            </p>
+            <span class="mt-4 text-sm text-gray-500 group-hover:text-green-700">Read article →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-[#268024] py-24">
+      <div class="mx-auto max-w-4xl px-6 text-center md:px-8">
+        <h2 class="mb-5 text-4xl font-bold leading-tight text-white sm:text-5xl">
+          You've seen what we've built.<br />Now build with us.
+        </h2>
+        <p class="mb-12 text-base leading-relaxed text-green-100 sm:text-lg">
+          Join the coalition of tech professionals turning their skills into tools for liberation.<br class="hidden sm:block" />
+          Membership is free. The impact is real.
+        </p>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <!-- Become a member -->
+          <div class="flex flex-col rounded-2xl bg-[#1e6b1c] p-8 text-left">
+            <h3 class="mb-3 text-xl font-bold text-white">Become a member</h3>
+            <p class="mb-8 flex-1 text-sm leading-relaxed text-green-100">
+              Access the T4P Hub. Join impactful working teams. Create an initiative of your own
+              with T4P support behind you.
+            </p>
+            <a
+              href="/get-involved"
+              class="block rounded-lg bg-white px-6 py-3 text-center text-base font-semibold text-[#268024] transition hover:bg-green-50"
+            >
+              Become a member
+            </a>
+          </div>
+
+          <!-- Support us -->
+          <div class="flex flex-col rounded-2xl bg-[#1e6b1c] p-8 text-left">
+            <h3 class="mb-3 text-xl font-bold text-white">Support us</h3>
+            <p class="mb-8 flex-1 text-sm leading-relaxed text-green-100">
+              Not ready to join? You can still help by donating. One-time or recurring. Every dollar
+              goes directly to keeping the incubator running.
+            </p>
+            <a
+              href="/donate"
+              class="block rounded-lg border border-white bg-transparent px-6 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-[#268024]"
+            >
+              Donate
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
