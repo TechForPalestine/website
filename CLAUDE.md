@@ -254,9 +254,49 @@ export default function Component({ initialData, loading: initialLoading = false
 
 ## Security & Best Practices
 
-- **No API keys in frontend code** - Use server-side API routes
-- **CORS properly configured** for cross-origin requests
-- **Environment variables** for sensitive configuration
+This project has undergone six rounds of security auditing. The rules below are derived directly from findings that were discovered and fixed. Do not regress them.
+
+### Secrets & Environment Variables
+
+- **Never hardcode secrets, API keys, or database IDs** in any committed file — not in `wrangler.toml`, `astro.config.mjs`, or source code. All secrets live exclusively in the Cloudflare Pages dashboard environment variables. Use `getEnv(name, locals)` (`src/utils/getEnv.ts`) to resolve them at runtime.
+- **Never put credentials in client-side code.** `src/store/api.ts` and any browser-executed file must never import or reference secret keys. If a client-side component needs to call an authenticated API, add a server-side proxy route under `src/pages/api/` that adds the credential server-side.
+- **Never log full secrets or PII.** When logging emails, use `[redacted]@${email.split("@")[1]}` (domain only). Never log raw API keys, tokens, or full request payloads.
+
+### Authentication & Authorisation
+
+- **All webhook endpoints must authenticate via HTTP header**, not URL query parameters. Use `X-Webhook-Secret` or `Authorization: Bearer`. Query params appear in server logs and CDN access logs — never put secrets there.
+- **Always use constant-time comparison for secrets.** Use `constantTimeEqual(a, b)` from `src/utils/crypto.ts` — never `===` or `!==` for token comparison. This prevents timing oracle attacks.
+- **New API proxy routes must validate and normalise the upstream path before forwarding.** Always normalise dot-segments with `new URL(path, "http://localhost").pathname` before any prefix check. Only forward to an explicit allowed prefix (e.g. `/api/method/`). Never forward blindly based on a leading-slash check alone.
+- **Proxy routes must use an explicit header allowlist.** When forwarding requests to an upstream API, build a new `Headers()` object with only the necessary headers (`content-type`, `accept`, etc.). Never copy all incoming browser headers — this would forward `Cookie`, `X-Forwarded-For`, and other headers that can influence upstream access controls.
+
+### Input Validation (Form & API Endpoints)
+
+- **All public POST endpoints that write data must validate input** before processing. Required checks:
+  - Presence of all required fields
+  - Email format: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+  - URL format: `try { new URL(value) } catch { return 400 }`
+  - Length limits: cap free-text fields at 2 000 characters
+- **All public form endpoints must check the `Origin` header.** Return 403 immediately if `Origin !== "https://techforpalestine.org"`. Do this before parsing the request body.
+
+### CORS
+
+- **Never use `Access-Control-Allow-Origin: *` on write endpoints** (POST/PUT/PATCH/DELETE). Wildcard CORS on write routes removes the browser's same-origin protection. Use `Access-Control-Allow-Origin: https://techforpalestine.org` explicitly.
+- Read-only GET endpoints that serve public data (events, FAQs, projects) may use `*`.
+
+### Content Security Policy
+
+- **The CSP is managed in `src/middleware/csp.ts`.** Do not add a static `Content-Security-Policy` header in `public/_headers` — it will conflict with the dynamic per-request nonce.
+- **Do not add `'unsafe-inline'` to `script-src` or `style-src`.** Scripts and styles are covered by per-request nonces injected via Cloudflare `HTMLRewriter`. If a new inline script or style is needed, ensure it gets the nonce attribute.
+- **Do not add new external script origins to `script-src` without review.** Each addition expands the trusted execution surface.
+
+### Middleware
+
+- **Do not create a second top-level `src/middleware.ts` file.** The middleware entry point is `src/middleware/index.ts`, which chains `cacheControl` and `csp` via `sequence()`. Adding a parallel `src/middleware.ts` will silently shadow `src/middleware/index.ts` and break both cache headers and CSP nonces.
+- **All API responses must be non-cacheable.** The `cacheControl` middleware sets `Cache-Control: no-store` on all API routes automatically. Do not override this with a permissive cache header on a new API route.
+
+### Error Handling
+
+- **Never return raw error objects or stack traces to clients.** Use generic messages: `"Failed to process request"`. Log the full error server-side with `console.error`. A 500 response body should never contain internal details.
 
 ---
 
