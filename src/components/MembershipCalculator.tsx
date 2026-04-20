@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { Box, Slider, Typography, Select, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import {
+  Box,
+  Slider,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Typography,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 const CURRENCIES = [
   { code: "USD", symbol: "$", name: "US Dollar", usdRate: 1 },
@@ -16,33 +27,41 @@ const CURRENCIES = [
   { code: "ZAR", symbol: "R", name: "South African Rand", usdRate: 0.055 },
 ];
 
-const MIN_INCOME = 0;
 const MAX_MONTHLY = 20000;
 const MAX_ANNUAL = 240000;
-const STEP_MONTHLY = 100;
-const STEP_ANNUAL = 1000;
-const DEFAULT_MONTHLY = 5000;
-const DEFAULT_ANNUAL = 60000;
 
 export default function MembershipCalculator() {
-  const [incomeType, setIncomeType] = useState<"monthly" | "annual">("monthly");
-  const [income, setIncome] = useState<number>(DEFAULT_MONTHLY);
+  const [incomeType, setIncomeType] = useState<"annual" | "monthly">("monthly");
+  const [income, setIncome] = useState<number>(5000);
   const [currency, setCurrency] = useState<string>("USD");
 
   const max = incomeType === "monthly" ? MAX_MONTHLY : MAX_ANNUAL;
-  const step = incomeType === "monthly" ? STEP_MONTHLY : STEP_ANNUAL;
+  const step = incomeType === "monthly" ? 100 : 1000;
+
+  const handleIncomeTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newType = e.target.value as "annual" | "monthly";
+    setIncomeType(newType);
+    setIncome(newType === "monthly" ? 5000 : 60000);
+  };
+
+  const handleCurrencyChange = (e: any) => {
+    setCurrency(e.target.value);
+  };
 
   const currencyData = CURRENCIES.find((c) => c.code === currency) || CURRENCIES[0];
-  const monthlyIncome = incomeType === "monthly" ? income : income / 12;
-  const suggested = Math.round((monthlyIncome / 167) * 100) / 100;
-  const annualSuggested = Math.round(suggested * 12 * 100) / 100;
   const isUSD = currency === "USD";
-  const usdSuggested = Math.round(suggested * currencyData.usdRate);
-  const usdAnnualSuggested = Math.round(annualSuggested * currencyData.usdRate);
+  const monthlyIncome = incomeType === "monthly" ? income : income / 12;
+  const suggestedAmount = Math.round((monthlyIncome / 167) * 100) / 100;
+  const usdMonthly = Math.round(suggestedAmount * currencyData.usdRate);
+  const annualAmount = Math.round(suggestedAmount * 12 * 100) / 100;
+  const usdAnnual = Math.round(annualAmount * currencyData.usdRate);
 
-  const handleIncomeTypeChange = (newType: "monthly" | "annual") => {
-    setIncomeType(newType);
-    setIncome(newType === "monthly" ? DEFAULT_MONTHLY : DEFAULT_ANNUAL);
+  const resultBoxSx = {
+    flex: 1,
+    p: 2,
+    backgroundColor: "#f0fdf4",
+    borderRadius: 2,
+    border: "2px solid #168039",
   };
 
   return (
@@ -51,82 +70,85 @@ export default function MembershipCalculator() {
         maxWidth: 600,
         mx: "auto",
         borderRadius: 2,
-        border: "1px solid #e5e7eb",
+        border: "2px solid #168039",
         backgroundColor: "white",
-        p: 3,
+        p: 2,
         mb: 4,
       }}
     >
       <Typography
         variant="body1"
         component="h2"
-        sx={{ fontWeight: "bold", color: "#1f2937", mb: 2.5, fontSize: "0.95rem" }}
+        sx={{ fontWeight: "bold", color: "#1f2937", mb: 1.5, fontSize: "0.95rem" }}
       >
         Calculate Your Suggested Contribution
       </Typography>
 
-      {/* Income Period */}
-      <Box sx={{ mb: 2 }}>
-        <FormLabel component="legend" sx={{ display: "block", mb: 1, fontWeight: 600, color: "#1f2937", fontSize: "0.875rem" }}>
-          Income Period
-        </FormLabel>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            value={incomeType}
-            onChange={(e) => handleIncomeTypeChange(e.target.value as "monthly" | "annual")}
-            sx={{
-              gap: 1,
-              "& .MuiFormControlLabel-label": { fontSize: "0.875rem", color: "#374151" },
-              "& .MuiRadio-root": { color: "#9ca3af", "&.Mui-checked": { color: "#168039" } },
-            }}
-          >
-            <FormControlLabel value="monthly" control={<Radio size="small" />} label="Monthly Income" />
-            <FormControlLabel value="annual" control={<Radio size="small" />} label="Annual Income" />
-          </RadioGroup>
-        </FormControl>
-      </Box>
-
       {/* Currency */}
-      <Box sx={{ mb: 2.5 }}>
-        <FormLabel sx={{ display: "block", mb: 1, fontWeight: 600, color: "#1f2937", fontSize: "0.875rem" }}>
+      <Box sx={{ mb: 1.5 }}>
+        <FormLabel sx={{ display: "block", mb: 1, fontWeight: 600, color: "#1f2937", fontSize: "0.95rem" }}>
           Currency
         </FormLabel>
-        <FormControl size="small" fullWidth>
+        <FormControl fullWidth>
           <Select
             value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
+            onChange={handleCurrencyChange}
+            displayEmpty
             sx={{
               backgroundColor: "white",
-              fontSize: "0.875rem",
               "& .MuiOutlinedInput-notchedOutline": { borderColor: "#d1d5db" },
               "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#9ca3af" },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#6b7280" },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#168039" },
             }}
           >
-            {CURRENCIES.map((c) => (
-              <MenuItem key={c.code} value={c.code} sx={{ fontSize: "0.875rem" }}>
-                {c.symbol} {c.name} ({c.code})
+            {CURRENCIES.map((curr) => (
+              <MenuItem key={curr.code} value={curr.code}>
+                {curr.symbol} {curr.name} ({curr.code})
               </MenuItem>
             ))}
           </Select>
         </FormControl>
       </Box>
 
-      {/* Slider */}
-      <Box sx={{ mb: 1 }}>
+      {/* Income Period */}
+      <Box sx={{ mb: 1.5 }}>
+        <FormLabel
+          component="legend"
+          sx={{ display: "block", mb: 1, fontWeight: 600, color: "#1f2937", fontSize: "0.95rem" }}
+        >
+          Income Period
+        </FormLabel>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            value={incomeType}
+            onChange={handleIncomeTypeChange}
+            sx={{
+              gap: 1,
+              "& .MuiFormControlLabel-label": { fontSize: "0.95rem", color: "#374151" },
+              "& .MuiRadio-root": { color: "#9ca3af", "&.Mui-checked": { color: "#168039" } },
+            }}
+          >
+            <FormControlLabel value="annual" control={<Radio />} label="Annual Income" />
+            <FormControlLabel value="monthly" control={<Radio />} label="Monthly Income" />
+          </RadioGroup>
+        </FormControl>
+      </Box>
+
+      {/* Income Slider */}
+      <Box sx={{ mb: 1.5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 1 }}>
-          <FormLabel sx={{ fontWeight: 600, color: "#1f2937", fontSize: "0.875rem" }}>
+          <FormLabel sx={{ fontWeight: 600, color: "#1f2937", fontSize: "0.95rem" }}>
             {incomeType === "monthly" ? "Monthly" : "Annual"} Income
           </FormLabel>
-          <Typography sx={{ fontSize: "1rem", fontWeight: 600, color: "#374151" }}>
+          <Typography sx={{ fontSize: "0.95rem", fontWeight: 600, color: "#374151" }}>
             {currencyData.symbol}{income.toLocaleString()}{income === max ? "+" : ""}
           </Typography>
         </Box>
         <Box sx={{ px: 0.5 }}>
           <Slider
             value={income}
-            min={MIN_INCOME}
+            min={0}
             max={max}
             step={step}
             onChange={(_, val) => setIncome(val as number)}
@@ -152,33 +174,35 @@ export default function MembershipCalculator() {
         </Box>
       </Box>
 
-      {/* Result */}
+      {/* Results */}
       {income > 0 && (
-        <Box sx={{ mt: 2.5, display: "flex", gap: 2, flexWrap: "wrap" }}>
-          <Box sx={{ flex: 1, p: 2, backgroundColor: "#f0fdf4", borderRadius: 2, border: "1px solid #bbf7d0" }}>
-            <Typography sx={{ fontWeight: 600, color: "#166534", mb: 0.5, fontSize: "0.875rem" }}>
-              Suggested Monthly Contribution
+        <Box sx={{ mt: 1.5, display: "flex", gap: 2, flexWrap: "wrap" }}>
+          {/* Monthly */}
+          <Box sx={resultBoxSx}>
+            <Typography variant="h6" sx={{ fontWeight: 600, color: "#166534", mb: 0.5, fontSize: "1rem" }}>
+              Suggested Monthly Contribution:
             </Typography>
-            <Typography sx={{ fontSize: "1.75rem", fontWeight: "bold", color: "#168039" }}>
-              {currencyData.symbol}{suggested.toFixed(2)}
+            <Typography variant="h4" sx={{ fontWeight: "bold", color: "#168039", fontSize: "1.75rem" }}>
+              {currencyData.symbol}{suggestedAmount.toFixed(2)}
               {!isUSD && (
                 <Typography component="span" sx={{ fontWeight: 400, color: "#6b7280", fontSize: "1rem", ml: 1 }}>
-                  (~${usdSuggested})
+                  (~${usdMonthly})
                 </Typography>
               )}
             </Typography>
           </Box>
 
+          {/* Annual — only when user selected annual income */}
           {incomeType === "annual" && (
-            <Box sx={{ flex: 1, p: 2, backgroundColor: "#f0fdf4", borderRadius: 2, border: "1px solid #bbf7d0" }}>
-              <Typography sx={{ fontWeight: 600, color: "#166534", mb: 0.5, fontSize: "0.875rem" }}>
-                Suggested Annual Contribution
+            <Box sx={resultBoxSx}>
+              <Typography variant="h6" sx={{ fontWeight: 600, color: "#166534", mb: 0.5, fontSize: "1rem" }}>
+                Suggested Annual Contribution:
               </Typography>
-              <Typography sx={{ fontSize: "1.75rem", fontWeight: "bold", color: "#168039" }}>
-                {currencyData.symbol}{annualSuggested.toFixed(2)}
+              <Typography variant="h4" sx={{ fontWeight: "bold", color: "#168039", fontSize: "1.75rem" }}>
+                {currencyData.symbol}{annualAmount.toFixed(2)}
                 {!isUSD && (
                   <Typography component="span" sx={{ fontWeight: 400, color: "#6b7280", fontSize: "1rem", ml: 1 }}>
-                    (~${usdAnnualSuggested})
+                    (~${usdAnnual})
                   </Typography>
                 )}
               </Typography>
@@ -188,8 +212,9 @@ export default function MembershipCalculator() {
       )}
 
       {income > 0 && (
-        <Typography sx={{ fontSize: "0.8rem", color: "#4b5563", mt: 1.5, fontStyle: "italic" }}>
-          ≈ one hour of your time. Contribute what feels right to you.
+        <Typography variant="body2" sx={{ mt: 1, color: "#4b5563", fontStyle: "italic", fontSize: "0.875rem" }}>
+          This is a suggested amount based on your income. Please contribute what feels meaningful to you.
+          {!isUSD && " USD equivalent is approximate."}
         </Typography>
       )}
     </Box>
