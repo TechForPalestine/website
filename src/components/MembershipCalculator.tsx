@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   Box,
-  Slider,
+  TextField,
   FormControl,
   RadioGroup,
   FormControlLabel,
@@ -26,9 +26,6 @@ const CURRENCIES = [
   { code: "ZAR", symbol: "R", name: "South African Rand", usdRate: 0.055 },
 ];
 
-const MAX_MONTHLY = 20000;
-const MAX_ANNUAL = 240000;
-
 const rowSx = {
   display: "flex",
   alignItems: "center",
@@ -46,21 +43,18 @@ const labelSx = {
 
 export default function MembershipCalculator() {
   const [incomeType, setIncomeType] = useState<"annual" | "monthly">("monthly");
-  const [income, setIncome] = useState<number>(5000);
+  const [income, setIncome] = useState<string>("");
   const [currency, setCurrency] = useState<string>("USD");
 
-  const max = incomeType === "monthly" ? MAX_MONTHLY : MAX_ANNUAL;
-  const step = incomeType === "monthly" ? 100 : 1000;
-
   const handleIncomeTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newType = e.target.value as "annual" | "monthly";
-    setIncomeType(newType);
-    setIncome(newType === "monthly" ? 5000 : 60000);
+    setIncomeType(e.target.value as "annual" | "monthly");
   };
 
   const currencyData = CURRENCIES.find((c) => c.code === currency) || CURRENCIES[0];
   const isUSD = currency === "USD";
-  const monthlyIncome = incomeType === "monthly" ? income : income / 12;
+  const numericIncome = parseFloat(income);
+  const hasValidIncome = !isNaN(numericIncome) && numericIncome > 0;
+  const monthlyIncome = hasValidIncome ? (incomeType === "monthly" ? numericIncome : numericIncome / 12) : 0;
   const suggestedMonthly = Math.round((monthlyIncome / 167) * 100) / 100;
   const suggestedAnnual = Math.round(suggestedMonthly * 12 * 100) / 100;
 
@@ -122,39 +116,27 @@ export default function MembershipCalculator() {
             </RadioGroup>
           </FormControl>
         </Box>
-        <Box sx={{ flex: 1, display: "flex", alignItems: "center", gap: 1 }}>
-          <Box sx={{ flex: 1, px: 0.5 }}>
-            <Slider
-              value={income}
-              min={0}
-              max={max}
-              step={step}
-              onChange={(_, val) => setIncome(val as number)}
-              sx={{
-                color: "#9ca3af",
-                height: 4,
-                py: "10px",
-                "& .MuiSlider-thumb": {
-                  width: 18,
-                  height: 18,
-                  backgroundColor: "#fff",
-                  border: "none",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.25)",
-                  "&:hover, &.Mui-focusVisible": { boxShadow: "0 1px 6px rgba(0,0,0,0.35)" },
-                },
-                "& .MuiSlider-track": { height: 4, border: "none", color: "#6b7280" },
-                "& .MuiSlider-rail": { height: 4, color: "#e5e7eb" },
-              }}
-            />
-          </Box>
-          <Typography sx={{ fontSize: "0.875rem", fontWeight: 600, color: "#374151", whiteSpace: "nowrap", minWidth: 70, textAlign: "right" }}>
-            {currencyData.symbol}{income.toLocaleString()}{income === max ? "+" : ""}
-          </Typography>
-        </Box>
+        <TextField
+          size="small"
+          type="number"
+          value={income}
+          onChange={(e) => setIncome(e.target.value)}
+          placeholder={incomeType === "annual" ? "e.g. 60000" : "e.g. 5000"}
+          sx={{
+            flex: 1,
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "white",
+              "& fieldset": { borderColor: "#d1d5db" },
+              "&:hover fieldset": { borderColor: "#9ca3af" },
+              "&.Mui-focused fieldset": { borderColor: "#168039" },
+            },
+          }}
+          InputProps={{ inputProps: { min: 0, step: "any" } }}
+        />
       </Box>
 
       {/* Results row */}
-      {income > 0 && (
+      {hasValidIncome && (
         <Box
           sx={{
             display: "flex",
