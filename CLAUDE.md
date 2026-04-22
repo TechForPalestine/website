@@ -287,6 +287,7 @@ This project has undergone six rounds of security auditing. The rules below are 
 
 - **The CSP is managed in `src/middleware/csp.ts`.** Do not add a static `Content-Security-Policy` header in `public/_headers` — it will conflict with the dynamic per-request nonce.
 - **Do not add `'unsafe-inline'` to `script-src` or `style-src`.** Scripts and styles are covered by per-request nonces injected via Cloudflare `HTMLRewriter`. If a new inline script or style is needed, ensure it gets the nonce attribute.
+- **Never use `style=""` attributes on HTML elements.** The production CSP (`style-src` has no `'unsafe-inline'`) silently blocks inline style attributes — they appear to work in browser devtools (which bypass CSP) but do nothing on the deployed site. Use Tailwind utility classes or arbitrary values (e.g. `[object-position:center_20%]`) instead.
 - **Do not add new external script origins to `script-src` without review.** Each addition expands the trusted execution surface.
 
 ### Middleware
