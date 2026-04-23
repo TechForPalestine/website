@@ -60,7 +60,10 @@
       "vite": "^6.4.2",
       "h3": "^1.15.5",
       "tar": "^7.5.4",
-      "minimatch": "^9.0.6"
+      "minimatch": "^9.0.6",
+      "defu": "^6.1.5",
+      "picomatch": "^2.3.2",
+      "brace-expansion": "^2.0.3"
     }
   },
   "devDependencies": {
