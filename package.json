@@ -50,7 +50,7 @@
     "react-router-dom": "^7.9.4",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
-    "svelte": "^5.39.12",
+    "svelte": "^5.53.5",
     "tailwindcss": "^3.4.18",
     "typescript": "^5.9.3"
   },
@@ -63,7 +63,13 @@
       "minimatch": "^9.0.6",
       "defu": "^6.1.5",
       "picomatch": "^2.3.2",
-      "brace-expansion": "^2.0.3"
+      "brace-expansion": "^2.0.3",
+      "undici": "^6.24.0",
+      "svgo": "^3.3.3",
+      "follow-redirects": "^1.16.0",
+      "smol-toml": "^1.6.1",
+      "devalue": "^5.6.4",
+      "ajv": "^8.18.0"
     }
   },
   "devDependencies": {
