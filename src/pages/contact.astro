@@ -78,7 +78,8 @@ import "../styles/base.css";
               ></a>
               <script>
                 (function () {
-                  var el = document.getElementById("contact-email");
+                  var el = document.getElementById("contact-email") as HTMLAnchorElement | null;
+                  if (!el) return;
                   var e = "contact" + "@" + "techforpalestine.org";
                   el.href = "mailto:" + e;
                   el.textContent = e;
