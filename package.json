@@ -38,7 +38,7 @@
     "astro": "^5.15.9",
     "astro-heroicons": "^2.1.5",
     "astro-icon": "^1.1.5",
-    "axios": "^1.13.5",
+    "axios": "^1.15.0",
     "install": "^0.13.0",
     "leaflet": "^1.9.4",
     "marked": "^15.0.12",
