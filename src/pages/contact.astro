@@ -72,11 +72,18 @@ import "../styles/base.css";
                 involved.
               </p>
               <a
-                href="mailto:contact@techforpalestine.org"
+                id="contact-email"
+                href="#"
                 class="font-medium text-green-700 transition-colors hover:text-green-900"
-              >
-                contact@techforpalestine.org
-              </a>
+              ></a>
+              <script>
+                (function () {
+                  var el = document.getElementById("contact-email");
+                  var e = "contact" + "@" + "techforpalestine.org";
+                  el.href = "mailto:" + e;
+                  el.textContent = e;
+                })();
+              </script>
             </div>
 
             <!-- Media & Press -->
