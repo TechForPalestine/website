@@ -4,6 +4,13 @@
   export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
   export let currentRoute: string;
 
+  interface $$Slots {
+    'tfp-logo': Record<string, never>;
+    'socials': Record<string, never>;
+    'burger-icon': Record<string, never>;
+    'close': Record<string, never>;
+  }
+
   let toggleFlag = false;
   let activeDropdown: string | null = null;
 
