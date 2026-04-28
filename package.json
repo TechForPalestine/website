@@ -14,15 +14,15 @@
     "format:check": "prettier --check ."
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.0.0",
     "pnpm": ">=9.0.0"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/cloudflare": "^12.6.10",
+    "@astrojs/cloudflare": "^13.2.1",
     "@astrojs/react": "^4.4.0",
-    "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/svelte": "^7.2.0",
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/svelte": "^8.0.5",
     "@astrojs/tailwind": "^6.0.2",
     "@astropub/icons": "^0.2.0",
     "@emotion/react": "^11.14.0",
@@ -35,7 +35,7 @@
     "@tabler/icons": "^2.47.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
-    "astro": "^5.18.1",
+    "astro": "^6.1.9",
     "astro-heroicons": "^2.1.5",
     "astro-icon": "^1.1.5",
     "axios": "^1.15.0",
@@ -57,7 +57,7 @@
   "pnpm": {
     "overrides": {
       "rollup": "^4.59.0",
-      "vite": "^6.4.2",
+      "vite": "^7.3.2",
       "h3": "^1.15.5",
       "tar": "^7.5.4",
       "minimatch": "^9.0.6",

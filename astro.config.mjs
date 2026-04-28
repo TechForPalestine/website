@@ -12,17 +12,8 @@ export default defineConfig({
   output: "server",
   adapter: cloudflare({
     imageService: "cloudflare",
+    prerenderEnvironment: "node",
   }),
-  vite: {
-    resolve: {
-      alias: import.meta.env.PROD && {
-        "react-dom/server": "react-dom/server.edge",
-      },
-    },
-    ssr: {
-      external: ["node:fs/promises", "node:path", "node:url", "node:crypto"],
-    },
-  },
   integrations: [
     icon(),
     react(),
