@@ -1,15 +1,22 @@
 <script lang="ts">
   import { tick } from 'svelte';
+  import type { Snippet } from 'svelte';
 
-  export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
-  export let currentRoute: string;
-
-  interface $$Slots {
-    'tfp-logo': Record<string, never>;
-    'socials': Record<string, never>;
-    'burger-icon': Record<string, never>;
-    'close': Record<string, never>;
-  }
+  let {
+    navigation,
+    currentRoute,
+    'tfp-logo': tfpLogo,
+    socials,
+    'burger-icon': burgerIcon,
+    close,
+  }: {
+    navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
+    currentRoute: string;
+    'tfp-logo'?: Snippet;
+    socials?: Snippet;
+    'burger-icon'?: Snippet;
+    close?: Snippet;
+  } = $props();
 
   let toggleFlag = false;
   let activeDropdown: string | null = null;
@@ -178,7 +185,7 @@
 
     <!-- Right side: Socials and Donate -->
     <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
-      <slot name="socials" />
+      {@render socials?.()}
       <div>
         <a
           href="/donate"
@@ -206,9 +213,9 @@
         class="text-gray-500 hover:text-gray-700 focus:outline-none p-2"
       >
         {#if toggleFlag}
-          <slot name="close" />
+          {@render close?.()}
         {:else}
-          <slot name="burger-icon" />
+          {@render burgerIcon?.()}
         {/if}
       </button>
     </div>
@@ -284,7 +291,7 @@
         {/each}
       </div>
       <div class="mt-6 flex justify-center">
-        <slot name="socials" />
+        {@render socials?.()}
       </div>
     </nav>
   {/if}
