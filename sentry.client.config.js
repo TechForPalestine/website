@@ -8,5 +8,5 @@ Sentry.init({
     Sentry.captureConsoleIntegration({ levels: ["error"] }),
   ],
   tracesSampleRate: 0.1,
-  allowUrls: [/techforpalestine\.org/],
+  allowUrls: [/techforpalestine\.org/, /pages\.dev/],
 });
