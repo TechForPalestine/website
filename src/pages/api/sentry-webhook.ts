@@ -83,10 +83,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const secret = getEnv("SENTRY_WEBHOOK_SECRET", locals);
-  const mmUrl = getEnv("MATTERMOST_WEBHOOK_URL", locals);
+  const mmUrl = getEnv("MATTERMOST_URL", locals);
+  const mmToken = getEnv("MATTERMOST_BOT_TOKEN", locals);
+  const mmChannelId = getEnv("MATTERMOST_CHANNEL_ID", locals);
 
-  if (!secret || !mmUrl) {
-    console.error("SENTRY_WEBHOOK_SECRET or MATTERMOST_WEBHOOK_URL not configured");
+  if (!secret || !mmUrl || !mmToken || !mmChannelId) {
+    console.error("Missing SENTRY_WEBHOOK_SECRET, MATTERMOST_URL, MATTERMOST_BOT_TOKEN, or MATTERMOST_CHANNEL_ID");
     return new Response(JSON.stringify({ error: "Not configured" }), { status: 500 });
   }
 
@@ -107,14 +109,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const text = formatMessage(body);
 
   try {
-    const res = await fetch(mmUrl, {
+    const res = await fetch(`${mmUrl}/api/v4/posts`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${mmToken}`,
+      },
+      body: JSON.stringify({ channel_id: mmChannelId, message: text }),
     });
 
     if (!res.ok) {
-      console.error("Mattermost webhook failed:", res.status, await res.text());
+      console.error("Mattermost API failed:", res.status, await res.text());
       return new Response(JSON.stringify({ error: "Failed to notify Mattermost" }), {
         status: 502,
       });
