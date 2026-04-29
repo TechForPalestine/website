@@ -32,6 +32,8 @@
     "@mui/material": "^6.5.0",
     "@mui/system": "^6.5.0",
     "@notionhq/client": "^2.3.0",
+    "@sentry/astro": "^10.50.0",
+    "@sentry/cloudflare": "^10.50.0",
     "@tabler/icons": "^2.47.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",

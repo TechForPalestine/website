@@ -5,6 +5,7 @@ import svelte from "@astrojs/svelte";
 import react from "@astrojs/react";
 import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
+import sentry from "@sentry/astro";
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,8 +23,20 @@ export default defineConfig({
     ssr: {
       external: ["node:fs/promises", "node:path", "node:url", "node:crypto"],
     },
+    build: {
+      // "hidden" generates source maps but doesn't serve them publicly
+      sourcemap: "hidden",
+    },
   },
   integrations: [
+    sentry({
+      org: "tech-for-palestine",
+      project: "javascript-astro",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      sourceMapsUploadOptions: {
+        enabled: !!process.env.SENTRY_AUTH_TOKEN,
+      },
+    }),
     icon(),
     react(),
     tailwind({

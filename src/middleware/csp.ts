@@ -24,7 +24,7 @@ export const csp = defineMiddleware(async (context, next) => {
     `style-src 'nonce-${nonce}' 'self' https://fonts.googleapis.com https://secure.qgiv.com`,
     "font-src 'self' https://fonts.gstatic.com https://gallery.eo.page",
     "img-src 'self' data: https:",
-    "connect-src 'self' https://plausible.io https://pal-chat.net https://eomail4.com https://www.google.com https://1k0gztb8b2.execute-api.us-east-2.amazonaws.com https://www.charitystack.com https://www.donation.charitystack.com",
+    "connect-src 'self' https://plausible.io https://pal-chat.net https://eomail4.com https://www.google.com https://1k0gztb8b2.execute-api.us-east-2.amazonaws.com https://www.charitystack.com https://www.donation.charitystack.com https://*.ingest.sentry.io https://*.ingest.de.sentry.io",
     "frame-src https://secure.qgiv.com https://calendly.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://validaid.org https://www.charitystack.com",
     "object-src 'none'",
     "base-uri 'self'",
