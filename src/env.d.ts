@@ -5,7 +5,12 @@ interface ImportMeta {
   env: ImportMetaEnv;
 }
 
-interface ImportMetaEnv {}
+interface ImportMetaEnv {
+  readonly SENTRY_DSN?: string;
+  readonly SENTRY_ENVIRONMENT?: string;
+  readonly PUBLIC_SENTRY_DSN?: string;
+  readonly PUBLIC_SENTRY_ENVIRONMENT?: string;
+}
 
 declare global {
   interface Window {
