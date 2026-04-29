@@ -108,7 +108,7 @@ const getInitials = (name: string): string => {
 };
 
 const getProjectText = (project: ProjectItem): string =>
-  project.impactStatement || project.elevatorPitch || project.description || "";
+  project.description || project.elevatorPitch || project.impactStatement || "";
 
 const TAG_COLORS = [
   { bgcolor: "#1565c0", color: "#fff" }, // dark blue
@@ -399,7 +399,7 @@ export default function ProjectsNew({
       {/* Featured hero section — layout unchanged per spec */}
       {!isFiltering && featuredProjects.length > 0 && (
         <Box sx={{ mb: 6 }}>
-          <Typography variant="overline" sx={{ color: "text.secondary", fontWeight: 600, letterSpacing: 1 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
             Featured Projects
           </Typography>
           <Box
@@ -842,7 +842,15 @@ export default function ProjectsNew({
                   </Box>
                 )}
 
-                {/* Impact callout */}
+                {/* About the project */}
+                <Typography
+                  variant="body1"
+                  sx={{ lineHeight: 1.8, mb: 3, fontSize: "1rem", color: "text.primary" }}
+                >
+                  {selectedProject.description}
+                </Typography>
+
+                {/* Our Impact callout */}
                 {selectedProject.impactStatement && (
                   <Box
                     sx={{
@@ -853,19 +861,17 @@ export default function ProjectsNew({
                       mb: 3,
                     }}
                   >
+                    <Typography
+                      variant="body2"
+                      sx={{ mb: 0.5, fontWeight: 600, color: "#168039", textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: 1 }}
+                    >
+                      Our Impact
+                    </Typography>
                     <Typography variant="body1" sx={{ lineHeight: 1.7, color: "text.primary" }}>
                       {selectedProject.impactStatement}
                     </Typography>
                   </Box>
                 )}
-
-                {/* About the project */}
-                <Typography
-                  variant="body1"
-                  sx={{ lineHeight: 1.8, mb: 3, fontSize: "1rem", color: "text.primary" }}
-                >
-                  {selectedProject.description}
-                </Typography>
 
                 {/* About the leader */}
                 {selectedProject.leaderBio && (
