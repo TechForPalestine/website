@@ -143,6 +143,56 @@ const canonicalUrl = new URL(
     </script>
   </head>
   <body class="relative flex min-h-screen flex-col bg-white text-gray-900">
+    <!-- Brussels 2026 Save-the-Date Banner -->
+    <div
+      class="relative z-40 w-full bg-[#2D4A36] text-[#F2EFE2]"
+      role="region"
+      aria-label="Brussels 2026 Conference announcement"
+    >
+      <div
+        class="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-3 text-center md:flex-row md:items-stretch md:gap-5 md:py-2.5 md:text-left"
+      >
+        <!-- Brand pillar -->
+        <div
+          class="hidden shrink-0 items-center md:flex"
+        >
+          <span class="text-[0.7rem] font-extrabold uppercase tracking-[0.22em]">
+            Tech for Palestine
+          </span>
+          <span
+            aria-hidden="true"
+            class="ml-5 hidden h-8 w-px self-center bg-[#F2EFE2]/30 md:inline-block"
+          ></span>
+        </div>
+
+        <!-- Event details -->
+        <div class="flex flex-1 flex-col items-center gap-1 md:items-start">
+          <span
+            class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-[#F2EFE2]/80 md:text-[0.7rem]"
+          >
+            Brussels 2026 Conference
+          </span>
+          <div class="flex flex-wrap items-baseline justify-center gap-x-5 gap-y-1 md:justify-start">
+            <span class="text-xl font-black uppercase tracking-wide md:text-2xl">
+              Save the Date
+            </span>
+            <span class="text-sm font-extrabold uppercase tracking-wider md:text-base">
+              June 6, 2026
+              <span aria-hidden="true" class="mx-2 text-[#F2EFE2]/70">·</span>
+              Brussels
+            </span>
+          </div>
+        </div>
+
+        <!-- Tagline -->
+        <div class="hidden shrink-0 items-center lg:flex">
+          <span class="text-sm italic text-[#F2EFE2]/80">
+            More details about the event TBA soon
+          </span>
+        </div>
+      </div>
+    </div>
+
     <Navigation />
 
     <!-- Floating Donate Button -->
