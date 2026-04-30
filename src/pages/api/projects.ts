@@ -7,6 +7,7 @@ const URL_FIELDS = [
   "websiteUrl", "logoUrl", "twitterUrl", "linkedinUrl", "githubUrl",
   "instagramUrl", "facebookUrl", "youtubeUrl", "telegramUrl",
   "mastodonUrl", "blueskyUrl", "tiktokUrl", "signalUrl", "upscrolledUrl",
+  "leaderPhoto", "donationUrl", "involvementUrl",
 ] as const;
 
 /** Strip any URL field that isn't http(s) to prevent XSS via javascript: or data: URIs. */
