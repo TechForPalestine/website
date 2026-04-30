@@ -50,7 +50,7 @@ function formatMessage(body: Record<string, any>): string {
     const label = actionLabel[action] ?? `Issue ${action}`;
 
     return [
-      `**${label}** in **${project}**${envTag}`,
+      `**[Website]** ${label} in **${project}**${envTag}`,
       `**${title}**`,
       url ? `[View in Sentry](${url})` : "",
     ]
@@ -65,7 +65,7 @@ function formatMessage(body: Record<string, any>): string {
     const envTag = env ? ` \`${env}\`` : "";
 
     return [
-      `**🚨 Alert triggered**${rule ? `: ${rule}` : ""}${envTag}`,
+      `**[Website]** 🚨 Alert triggered${rule ? `: ${rule}` : ""}${envTag}`,
       `**${title}**`,
       url ? `[View in Sentry](${url})` : "",
     ]
