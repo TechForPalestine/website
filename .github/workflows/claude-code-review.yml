@@ -2,7 +2,7 @@ name: Security Scan
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ready_for_review]
     paths:
       - "src/pages/api/**"
       - "src/middleware/**"
@@ -11,6 +11,10 @@ on:
       - "public/_headers"
       - "wrangler.toml"
       - "*.config.*"
+
+concurrency:
+  group: security-scan-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   security-scan:
