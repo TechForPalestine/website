@@ -18,10 +18,17 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      issues: write
-      id-token: write
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+
       - uses: anthropics/claude-code-security-review@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude-model: claude-sonnet-4-6
+          claudecode-timeout: 10
+          exclude-directories: "node_modules,dist,.astro"
+          run-every-commit: false
