@@ -55,7 +55,7 @@ export default function MembershipCalculator() {
   const numericIncome = parseFloat(income);
   const hasValidIncome = !isNaN(numericIncome) && numericIncome > 0;
   const monthlyIncome = hasValidIncome ? (incomeType === "monthly" ? numericIncome : numericIncome / 12) : 0;
-  const suggestedMonthly = Math.round((monthlyIncome / 167) * 100) / 100;
+  const suggestedMonthly = Math.round((monthlyIncome * 0.006) * 100) / 100;
   const suggestedAnnual = Math.round(suggestedMonthly * 12 * 100) / 100;
 
   return (
