@@ -1,0 +1,38 @@
+name: Security Scan
+
+on:
+  pull_request:
+    types: [ready_for_review]
+    paths:
+      - "src/pages/api/**"
+      - "src/middleware/**"
+      - "src/store/**"
+      - "src/utils/**"
+      - "public/_headers"
+      - "wrangler.toml"
+      - "*.config.*"
+
+concurrency:
+  group: security-scan-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+
+      - uses: anthropics/claude-code-security-review@v1
+        with:
+          claude-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude-model: claude-sonnet-4-6
+          claudecode-timeout: 10
+          exclude-directories: "node_modules,dist,.astro"
+          run-every-commit: false
