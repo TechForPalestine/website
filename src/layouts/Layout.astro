@@ -39,16 +39,16 @@ const canonicalUrl = new URL(
         function applyStyleString(el, value) {
           while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
           if (!value) return;
-          value.split(';').forEach(function (part) {
-            var idx = part.indexOf(':');
+          value.split(";").forEach(function (part) {
+            var idx = part.indexOf(":");
             if (idx > 0) {
               var prop = part.slice(0, idx).trim();
               var val = part.slice(idx + 1).trim();
               if (!prop) return;
-              var priority = '';
+              var priority = "";
               if (/!important\s*$/.test(val)) {
-                priority = 'important';
-                val = val.replace(/\s*!important\s*$/, '').trim();
+                priority = "important";
+                val = val.replace(/\s*!important\s*$/, "").trim();
               }
               el.style.setProperty(prop, val, priority);
             }
@@ -57,12 +57,12 @@ const canonicalUrl = new URL(
 
         /* Patch 1: auto-nonce <style> elements created by JS (emotion/MUI) */
         var m = document.querySelector('meta[name="csp-nonce"]');
-        var n = m && m.getAttribute('content');
+        var n = m && m.getAttribute("content");
         if (n) {
           var origCreate = document.createElement.bind(document);
           document.createElement = function (tag) {
             var el = origCreate.apply(this, arguments);
-            if (typeof tag === 'string' && tag.toLowerCase() === 'style') el.nonce = n;
+            if (typeof tag === "string" && tag.toLowerCase() === "style") el.nonce = n;
             return el;
           };
         }
@@ -71,7 +71,10 @@ const canonicalUrl = new URL(
            Handles third-party scripts that mutate style via setAttribute. */
         var origSetAttr = Element.prototype.setAttribute;
         Element.prototype.setAttribute = function (name, value) {
-          if (name === 'style') { applyStyleString(this, value); return; }
+          if (name === "style") {
+            applyStyleString(this, value);
+            return;
+          }
           origSetAttr.apply(this, arguments);
         };
 
@@ -80,12 +83,12 @@ const canonicalUrl = new URL(
            via innerHTML — the browser blocks style attributes at parse time before
            any setAttribute intercept can fire. We rename them to data-csp-style,
            then re-apply via CSSOM after insertion. */
-        var origInnerHTMLDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+        var origInnerHTMLDesc = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
         if (origInnerHTMLDesc && origInnerHTMLDesc.set) {
-          Object.defineProperty(Element.prototype, 'innerHTML', {
+          Object.defineProperty(Element.prototype, "innerHTML", {
             get: origInnerHTMLDesc.get,
             set: function (value) {
-              if (typeof value !== 'string' || value.indexOf('style=') === -1) {
+              if (typeof value !== "string" || value.indexOf("style=") === -1) {
                 origInnerHTMLDesc.set.call(this, value);
                 return;
               }
@@ -95,10 +98,10 @@ const canonicalUrl = new URL(
                 .replace(/\bstyle\s*=\s*'([^']*)'/gi, "data-csp-style='$1'");
               origInnerHTMLDesc.set.call(this, cleaned);
               // Re-apply stored styles via CSSOM
-              var els = this.querySelectorAll('[data-csp-style]');
+              var els = this.querySelectorAll("[data-csp-style]");
               for (var i = 0; i < els.length; i++) {
-                var sv = els[i].getAttribute('data-csp-style');
-                els[i].removeAttribute('data-csp-style');
+                var sv = els[i].getAttribute("data-csp-style");
+                els[i].removeAttribute("data-csp-style");
                 applyStyleString(els[i], sv);
               }
             },
@@ -153,16 +156,13 @@ const canonicalUrl = new URL(
         class="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-3 text-center md:flex-row md:items-stretch md:gap-5 md:py-2.5 md:text-left"
       >
         <!-- Brand pillar -->
-        <div
-          class="hidden shrink-0 items-center md:flex"
-        >
+        <div class="hidden shrink-0 items-center md:flex">
           <span class="text-[0.7rem] font-extrabold uppercase tracking-[0.22em]">
             Tech for Palestine
           </span>
           <span
             aria-hidden="true"
-            class="ml-5 hidden h-8 w-px self-center bg-[#F2EFE2]/30 md:inline-block"
-          ></span>
+            class="ml-5 hidden h-8 w-px self-center bg-[#F2EFE2]/30 md:inline-block"></span>
         </div>
 
         <!-- Event details -->
@@ -172,10 +172,9 @@ const canonicalUrl = new URL(
           >
             Brussels 2026 Conference
           </span>
-          <div class="flex flex-wrap items-baseline justify-center gap-x-5 gap-y-1 md:justify-start">
-            <span class="text-xl font-black uppercase tracking-wide md:text-2xl">
-              Save the Date
-            </span>
+          <div
+            class="flex flex-wrap items-baseline justify-center gap-x-5 gap-y-1 md:justify-start"
+          >
             <span class="text-sm font-extrabold uppercase tracking-wider md:text-base">
               June 6, 2026
               <span aria-hidden="true" class="mx-2 text-[#F2EFE2]/70">·</span>
@@ -187,7 +186,14 @@ const canonicalUrl = new URL(
         <!-- Tagline -->
         <div class="flex shrink-0 items-center justify-center lg:justify-start">
           <span class="text-xs italic text-[#F2EFE2]/80 md:text-sm">
-            More details about the event TBA soon
+            More details visit <a
+              href="https://brussels2026.techforpalestine.org"
+              class="font-bold text-[#F2EFE2]/80 underline transition hover:text-[#F2EFE2]"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Brussels 2026 Conference website
+            </a>
           </span>
         </div>
       </div>
@@ -198,7 +204,7 @@ const canonicalUrl = new URL(
     <!-- Floating Donate Button -->
     <a
       href="/donate"
-      class="donate-link hidden md:block fixed right-0 top-1/2 z-50 bg-green-800 px-3 py-5 text-white shadow-lg transition hover:bg-green-900 [writing-mode:vertical-rl] -translate-y-1/2 rotate-180 origin-center rounded-tr-lg rounded-br-lg rounded-tl-none rounded-bl-none"
+      class="donate-link fixed right-0 top-1/2 z-50 hidden origin-center -translate-y-1/2 rotate-180 rounded-bl-none rounded-br-lg rounded-tl-none rounded-tr-lg bg-green-800 px-3 py-5 text-white shadow-lg transition [writing-mode:vertical-rl] hover:bg-green-900 md:block"
     >
       Donate
     </a>
