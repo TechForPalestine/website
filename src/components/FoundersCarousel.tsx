@@ -14,71 +14,61 @@ const founders: Founder[] = [
   {
     name: "Aline Sara",
     title: "Co-Founder, Entrepreneurs for Palestine",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/5.png",
+    image: "/images/founders/aline-sara.png",
     linkedin: "https://www.linkedin.com/in/alinesara/",
   },
   {
     name: "Iva Gumnishka",
     title: "Co-Founder",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2024/12/15ce5e18-3dc8-4178-9051-ef9dac71effa.png",
+    image: "/images/founders/iva-gumnishka.png",
     linkedin: "https://www.linkedin.com/in/ivagumnishka/",
   },
   {
     name: "Paul Biggar",
     title: "Founder, Tech for Palestine",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/7.png",
+    image: "/images/founders/paul-biggar.png",
     linkedin: "https://www.linkedin.com/in/paulbiggar/",
   },
   {
     name: "Miguel de Icaza",
     title: "CEO, Xibbon",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/9.png",
+    image: "/images/founders/miguel-de-icaza.png",
     linkedin: "https://www.linkedin.com/in/migueld1/",
   },
   {
     name: "Fadi Ghandour",
     title: "Executive Chairman, Wamda Group",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/1-2.png",
+    image: "/images/founders/fadi-ghandour.png",
     linkedin: "https://www.linkedin.com/in/fadi-ghandour-52353b/",
   },
   {
     name: "Amir Nathoo",
     title: "Co-Founder and CEO, Outschool",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/3.png",
+    image: "/images/founders/amir-nathoo.png",
     linkedin: "https://www.linkedin.com/in/amirnathoo/",
   },
   {
     name: "Stephanie Nadi Olson",
     title: "Founder and Executive Chair of the Board, We Are Rosie",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/2.png",
+    image: "/images/founders/stephanie-nadi-olson.png",
     linkedin: "https://www.linkedin.com/in/snadi/",
   },
   {
     name: "Reem Qawasmi",
     title: "Venture Partner, Ibtikar Fund",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/10.png",
+    image: "/images/founders/reem-qawasmi.png",
     linkedin: "https://www.linkedin.com/in/reemqawasmi/",
   },
   {
     name: "Essma Bengabsia",
     title: "Founder, Bengabsia Consulting",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/6.png",
+    image: "/images/founders/essma-bengabsia.png",
     linkedin: "https://www.linkedin.com/in/essmabengabsia/",
   },
   {
     name: "Arshan Ahmad",
     title: "Co-Founder, Friday Ventures",
-    image:
-      "https://entrepreneursforpalestine.com/boondigitalsolut/wp-content/uploads/2025/02/Photos-2.png",
+    image: "/images/founders/arshan-ahmad.png",
     linkedin: "https://www.linkedin.com/in/arshanahmad/",
   },
 ];
