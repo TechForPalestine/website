@@ -85,14 +85,19 @@ export default function MembershipPage() {
     <Box sx={{ maxWidth: 800, mx: "auto" }}>
       {/* Intro */}
       <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
-        Becoming a member is the best way to donate to Tech for Palestine
+        Becoming a member is the best way to support Tech for Palestine
       </Typography>
       <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Your membership dues fund training, financial grants, and volunteers for pro-Palestine projects
-        like Upscrolled, Boycat, and Newscord. We suggest monthly dues equal to one hour's salary.
+        Members support T4P's work directly through dues and by joining teams to scale the movement,
+        advocate for non-complicit tech and collaborate for Palestinian liberation.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+        Membership dues support all T4P initiatives, including the Incubator, the 90+ external projects
+        we support, and teams & campaigns working on tech complicity. Our best known successes include
+        UpScrolled, Boycat, Find a Protest, Apricot, and Thaura AI.
       </Typography>
       <Typography variant="body1" sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        As a member, you are invited to join our portal, the <strong>Hub</strong>, where you can:
+        After joining, you'll be invited to join <strong>Hub</strong>, our member portal, where you can:
       </Typography>
       <Box
         component="ul"
@@ -106,10 +111,8 @@ export default function MembershipPage() {
           "& li": { mb: 0.75, lineHeight: 1.75 },
         }}
       >
-        <li>Join teams working on advocacy projects for Palestinian liberation</li>
-        <li>Start an initiative of your own, with T4P support and resources to help you grow</li>
-        <li>Connect with our member network</li>
-        <li>Receive a monthly newsletter with updates about T4P's work</li>
+        <li>Join our advocacy and support teams, working directly on Palestinian liberation</li>
+        <li>Start a team of your own, with T4P support and resources to help you grow</li>
       </Box>
       <Typography variant="body1" sx={{ mb: 5, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
         Whether you're a thinker, builder, leader, software developer, marketer, or activist, there's a place for you to contribute in your own way.
