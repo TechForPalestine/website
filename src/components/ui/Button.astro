@@ -1,0 +1,35 @@
+---
+interface Props {
+  variant?: "primary" | "ghost" | "text";
+  href?: string;
+  arrow?: boolean;
+  class?: string;
+}
+
+const { variant = "primary", href, arrow = false, class: className = "" } = Astro.props;
+
+const base =
+  "ts-label inline-flex items-center gap-2 transition-all duration-150 cursor-pointer border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+
+const variants = {
+  primary:
+    "bg-brand text-white border-transparent rounded-pill px-5 py-3.5 hover:bg-[#D35464] active:scale-[0.98]",
+  ghost:
+    "bg-transparent text-ink border-ink rounded-pill px-5 py-3.5 hover:bg-ink/5 active:scale-[0.98]",
+  text: "bg-transparent text-brand border-transparent p-0 rounded-none hover:underline",
+};
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  class={`${base} ${variants[variant]} ${className}`}
+>
+  <slot />
+  {arrow && (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  )}
+</Tag>

@@ -1,0 +1,164 @@
+---
+import Footer from "../components/Footer.astro";
+import "../styles/base.css";
+import "../styles/design-system.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description = "T4P is an incubator for Palestine advocacy projects.",
+  image = "https://techforpalestine.org/t4p-social-logo.png",
+} = Astro.props;
+
+const canonicalUrl = new URL(
+  Astro.url.pathname,
+  Astro.site || "https://techforpalestine.org"
+).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <link rel="me" href="https://infosec.exchange/@tech4palestine" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Outfit:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="csp-nonce" content={Astro.locals.cspNonce} />
+    <script is:inline>
+      (function () {
+        function applyStyleString(el, value) {
+          while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
+          if (!value) return;
+          value.split(";").forEach(function (part) {
+            var idx = part.indexOf(":");
+            if (idx > 0) {
+              var prop = part.slice(0, idx).trim();
+              var val = part.slice(idx + 1).trim();
+              if (!prop) return;
+              var priority = "";
+              if (/!important\s*$/.test(val)) {
+                priority = "important";
+                val = val.replace(/\s*!important\s*$/, "").trim();
+              }
+              el.style.setProperty(prop, val, priority);
+            }
+          });
+        }
+
+        var m = document.querySelector('meta[name="csp-nonce"]');
+        var n = m && m.getAttribute("content");
+        if (n) {
+          var origCreate = document.createElement.bind(document);
+          document.createElement = function (tag) {
+            var el = origCreate.apply(this, arguments);
+            if (typeof tag === "string" && tag.toLowerCase() === "style") el.nonce = n;
+            return el;
+          };
+        }
+
+        var origSetAttr = Element.prototype.setAttribute;
+        Element.prototype.setAttribute = function (name, value) {
+          if (name === "style") {
+            applyStyleString(this, value);
+            return;
+          }
+          origSetAttr.apply(this, arguments);
+        };
+
+        var origInnerHTMLDesc = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+        if (origInnerHTMLDesc && origInnerHTMLDesc.set) {
+          Object.defineProperty(Element.prototype, "innerHTML", {
+            get: origInnerHTMLDesc.get,
+            set: function (value) {
+              if (typeof value !== "string" || value.indexOf("style=") === -1) {
+                origInnerHTMLDesc.set.call(this, value);
+                return;
+              }
+              var cleaned = value
+                .replace(/\bstyle\s*=\s*"([^"]*)"/gi, 'data-csp-style="$1"')
+                .replace(/\bstyle\s*=\s*'([^']*)'/gi, "data-csp-style='$1'");
+              origInnerHTMLDesc.set.call(this, cleaned);
+              var els = this.querySelectorAll("[data-csp-style]");
+              for (var i = 0; i < els.length; i++) {
+                var sv = els[i].getAttribute("data-csp-style");
+                els[i].removeAttribute("data-csp-style");
+                applyStyleString(els[i], sv);
+              }
+            },
+            configurable: true,
+            enumerable: origInnerHTMLDesc.enumerable,
+          });
+        }
+      })();
+    </script>
+    <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="twitter:card" name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:site" name="twitter:site" content="@tech4palestine" />
+    <meta property="twitter:title" name="twitter:title" content={title} />
+    <meta property="twitter:description" name="twitter:description" content={description} />
+    <meta property="twitter:image" name="twitter:image" content={image} />
+    <meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
+
+    <slot name="head" />
+
+    <script>
+      import Lenis from "lenis";
+
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const lenis = new Lenis({
+          duration: 1.8,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+
+        function raf(time: number) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
+    </script>
+
+    <script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
+    <script async src="https://plausible.io/js/pa-gMn1NrWB3uBANu6ua9M8N.js"></script>
+    <script>
+      (window as any).plausible =
+        (window as any).plausible ||
+        function () {
+          (((window as any).plausible as any).q = ((window as any).plausible as any).q || []).push(
+            arguments
+          );
+        };
+      ((window as any).plausible as any).init =
+        ((window as any).plausible as any).init ||
+        function (i: any) {
+          ((window as any).plausible as any).o = i || {};
+        };
+      ((window as any).plausible as any).init();
+    </script>
+  </head>
+  <body class="relative flex min-h-screen flex-col bg-page text-ink">
+    <div class="flex-grow">
+      <slot />
+    </div>
+    <Footer />
+  </body>
+</html>
