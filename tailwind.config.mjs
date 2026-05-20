@@ -16,6 +16,7 @@ export default {
         page: "#FFFBF5",
         cream: "#FBF2ED",
         butter: "#F7EAD4",
+        sand: "#F7F2E8",
         ink: {
           DEFAULT: "#201D1E",
           secondary: "#73656E",
