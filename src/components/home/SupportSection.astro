@@ -1,0 +1,55 @@
+---
+import Section from "./Section.astro";
+
+const pillars = [
+  {
+    num: "01",
+    title: "Funding",
+    description:
+      "Small grants for most accepted projects. Simple process, no strings attached. We fund what works — not what looks good on a deck.",
+    meta: "Rolling basis",
+  },
+  {
+    num: "02",
+    title: "Mentorship",
+    description:
+      "Strategy sessions and optional weekly dedicated mentors. Real guidance from people who've built, shipped, and scaled before.",
+    meta: "30+ expert mentors · async + live",
+  },
+  {
+    num: "03",
+    title: "Volunteers",
+    description:
+      "Access to a global network of skilled volunteers: engineers, marketers, designers and more, with a dedicated recruitment team to match you.",
+    meta: "400+ global volunteers",
+  },
+  {
+    num: "04",
+    title: "Operations",
+    description:
+      "Engineering expertise, security support, marketing and early users through press, influencers, ecosystem partners, and the T4P community.",
+    meta: "Tailored for your needs",
+  },
+];
+---
+
+<Section id="support" class="bg-cream">
+  <div class="mb-12">
+    <p class="ts-eyebrow mb-3 text-brand">Our support</p>
+    <h2 class="ts-heading mb-4 text-ink">How do we enable projects to succeed?</h2>
+    <p class="ts-body-large text-ink-secondary max-w-2xl">
+      We give teams and projects the support they need to ship, scale, and make an impact.
+    </p>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    {pillars.map((p) => (
+      <div class="flex flex-col gap-4 rounded-md bg-page p-6 md:p-8">
+        <span class="ts-caption text-brand">{p.num}</span>
+        <h3 class="ts-subheading text-ink">{p.title}</h3>
+        <p class="ts-body text-ink-secondary flex-grow">{p.description}</p>
+        <p class="ts-body-small text-ink-muted border-t border-ink-divider pt-4">{p.meta}</p>
+      </div>
+    ))}
+  </div>
+</Section>

@@ -1,0 +1,34 @@
+---
+const stats = [
+  { value: "90+", label: "Projects Incubated" },
+  { value: "400+", label: "Global Volunteers" },
+  { value: "30+", label: "Expert Mentors" },
+  { value: "50+", label: "Investors for Palestine" },
+  { value: "350+", label: "Entrepreneurs for Palestine" },
+];
+---
+
+<section class="border-y border-ink-divider bg-cream">
+  <div class="mx-auto max-w-5xl px-6 py-10 md:px-10">
+    <!-- Stats row -->
+    <div class="mb-8 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+      {stats.map((s) => (
+        <div class="flex flex-col gap-1">
+          <span class="ts-stat text-ink">{s.value}</span>
+          <span class="ts-body-small text-ink-secondary">{s.label}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Photo collage strip -->
+    <div class="grid grid-cols-4 gap-3 md:grid-cols-5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div class="aspect-square overflow-hidden rounded-sm bg-ink-divider">
+          <div class="flex h-full items-center justify-center">
+            <span class="ts-caption text-ink-muted text-center px-1">Photo {i}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+---
+import Section from "./Section.astro";
+import Button from "../ui/Button.astro";
+
+const openings = [
+  {
+    project: "Boycat",
+    role: "Senior Full-Stack Engineer",
+    stack: "React · Node · Postgres",
+    time: "~8 hrs / week",
+    location: "Remote",
+  },
+  {
+    project: "Boycat",
+    role: "Senior Full-Stack Engineer",
+    stack: "React · Node · Postgres",
+    time: "~8 hrs / week",
+    location: "Remote",
+  },
+  {
+    project: "Boycat",
+    role: "Senior Full-Stack Engineer",
+    stack: "React · Node · Postgres",
+    time: "~8 hrs / week",
+    location: "Remote",
+  },
+  {
+    project: "Boycat",
+    role: "Senior Full-Stack Engineer",
+    stack: "React · Node · Postgres",
+    time: "~8 hrs / week",
+    location: "Remote",
+  },
+];
+---
+
+<Section id="openings" class="bg-cream">
+  <div class="mb-10">
+    <p class="ts-eyebrow mb-3 text-brand">Current team openings</p>
+    <h2 class="ts-heading mb-4 text-ink">Teams waiting for their next volunteer</h2>
+    <p class="ts-body-large text-ink-secondary max-w-2xl">
+      This could be you. Become a member to fill one of these impactful openings.
+    </p>
+  </div>
+
+  <div class="flex flex-col divide-y divide-ink-divider rounded-md bg-page overflow-hidden">
+    {openings.map((o) => (
+      <div class="flex flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:gap-6">
+        <div class="flex-grow">
+          <p class="ts-label text-ink">{o.project}</p>
+          <p class="ts-body text-ink-secondary mt-0.5">{o.role}</p>
+          <p class="ts-caption text-ink-muted mt-1">{o.stack} · {o.time} · {o.location}</p>
+        </div>
+        <Button href="/volunteer" variant="ghost" class="shrink-0 self-start sm:self-center">
+          Apply
+        </Button>
+      </div>
+    ))}
+  </div>
+
+  <div class="mt-8">
+    <Button href="/volunteer" variant="primary" arrow>Fill an opening now</Button>
+  </div>
+</Section>

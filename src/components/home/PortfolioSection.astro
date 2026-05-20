@@ -1,0 +1,79 @@
+---
+import Section from "./Section.astro";
+import ProjectCard from "./ProjectCard.astro";
+import Button from "../ui/Button.astro";
+
+const projects = [
+  {
+    name: "UpScrolled",
+    description:
+      "The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach. Launched and scaled via the T4P incubator and ecosystem partners.",
+    stats: [
+      { value: "#1", label: "Global App Store" },
+      { value: "5M+", label: "Users in 7 months" },
+    ],
+  },
+  {
+    name: "Boycat",
+    description:
+      "Scan any product to check its ethical compliance and find alternatives in real time. Official BDS partner app — connected through T4P.",
+    stats: [
+      { value: "3M+", label: "Users worldwide" },
+      { value: "$500M+", label: "Redirected to ethical brands" },
+    ],
+  },
+  {
+    name: "Thaura.ai",
+    description:
+      "AI built ethically, designed around environmental, social, and privacy concerns. Launched via the T4P network to profitability.",
+    stats: [
+      { value: "94%", label: "Less energy than ChatGPT" },
+      { value: "0", label: "Data sold to third parties" },
+    ],
+  },
+  {
+    name: "Apricot",
+    description:
+      "Connecting top tech talent from the Middle East — including Palestinian refugees — with US tech companies. Customer introductions and strategic refocus via T4P.",
+    stats: [
+      { value: "$1M", label: "Paid to placed talent" },
+      { value: "10k+", label: "Candidates" },
+    ],
+  },
+  {
+    name: "Newscord",
+    description:
+      "AI-powered news summaries across hundreds of sources, exposing media bias in every language. Refocused and connected with T4P ecosystem partners.",
+    stats: [{ value: "10M+", label: "Accounts reached monthly" }],
+  },
+  {
+    name: "Find a Protest",
+    description:
+      "Find and subscribe to protests in your area, powered by organizers, communities, and volunteer data collectors. Refocused and volunteer-powered through T4P.",
+    stats: [
+      { value: "200k+", label: "Monthly users" },
+      { value: "10k+", label: "Protests & solidarity events listed" },
+    ],
+  },
+];
+---
+
+<Section id="portfolio" class="bg-page">
+  <div class="mb-12">
+    <p class="ts-eyebrow mb-3 text-brand">Our portfolio</p>
+    <h2 class="ts-heading mb-4 text-ink">Projects that came through T4P</h2>
+    <p class="ts-body-large text-ink-secondary max-w-2xl">
+      Every one of these projects was scaled through T4P. Powered by volunteers, mentors,
+      and people like you.
+    </p>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {projects.map((p) => <ProjectCard {...p} />)}
+  </div>
+
+  <div class="mt-10 flex flex-wrap gap-4">
+    <Button href="/projects" variant="ghost">Browse all projects</Button>
+    <Button href="/get-involved" variant="primary" arrow>Apply to incubator</Button>
+  </div>
+</Section>
