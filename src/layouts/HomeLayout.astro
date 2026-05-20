@@ -122,17 +122,19 @@ const canonicalUrl = new URL(
     <script>
       import Lenis from "lenis";
 
-      const lenis = new Lenis({
-        duration: 1.8,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-      });
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const lenis = new Lenis({
+          duration: 1.8,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
 
-      function raf(time: number) {
-        lenis.raf(time);
+        function raf(time: number) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
         requestAnimationFrame(raf);
       }
-      requestAnimationFrame(raf);
     </script>
 
     <script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
