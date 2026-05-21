@@ -16,8 +16,11 @@ import Button from "../ui/Button.astro";
       <div class="hero-logo">
         <img src="/images/new-homepage/t4p-logo.webp" alt="Tech for Palestine" class="h-[8.2rem]" />
       </div>
-      <a href="#mobile-content" class="hero-cta-a ts-label text-brand flex items-center">
+      <a href="#mobile-content" class="hero-cta-a ts-label text-brand flex flex-col items-center gap-2">
         Scroll down
+        <svg class="scroll-indicator" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M12 5v14M5 13l7 7 7-7" />
+        </svg>
       </a>
     </div>
 

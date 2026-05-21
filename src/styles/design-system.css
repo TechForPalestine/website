@@ -198,6 +198,15 @@ html.no-js {
   .collage-card-3 { transform: rotate(5deg); }
 }
 
+/* Scroll indicator bounce */
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(6px); opacity: 0.6; }
+}
+.scroll-indicator {
+  animation: scrollBounce 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }

@@ -44,11 +44,11 @@ const photos = [
 
   <!-- Stats + collage wrapper -->
   <div class="mx-auto max-w-[1400px]">
-    <dl class="grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 md:px-12 md:pt-12 lg:grid-cols-5 lg:pb-64">
+    <dl class="stats-grid grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 md:px-12 md:pt-12 lg:grid-cols-5 lg:pb-64">
       {stats.map((s) => (
         <div>
           <dt class="ts-stat text-ink">
-            {s.value}<span class="text-brand">+</span>
+            <span class="stat-value" data-target={s.value}>0</span><span class="text-brand">+</span>
           </dt>
           <dd class="ts-body-large mt-1.5 text-ink-secondary">{s.label}</dd>
         </div>
@@ -112,5 +112,42 @@ const photos = [
       { threshold: 0.3 }
     );
     headlineObserver.observe(headline);
+  }
+
+  function animateCount(el: HTMLElement) {
+    const target = parseInt(el.dataset.target || "0", 10);
+    if (isNaN(target)) {
+      el.textContent = el.dataset.target || "0";
+      return;
+    }
+    const duration = 1600;
+    const start = performance.now();
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target).toString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const statsGrid = document.querySelector(".stats-grid");
+  if (statsGrid) {
+    const statsObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const values = statsGrid.querySelectorAll<HTMLElement>(".stat-value");
+            values.forEach((el, i) => {
+              setTimeout(() => animateCount(el), i * 120);
+            });
+            statsObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    statsObserver.observe(statsGrid);
   }
 </script>

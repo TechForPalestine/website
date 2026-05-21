@@ -139,25 +139,72 @@ const projects = [
   }
 
   .portfolio-card {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+  }
+
+  .portfolio-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .portfolio-card-wrap {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  .portfolio-card-wrap.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
   }
 
   @media (min-width: 768px) {
     .portfolio-card-wrap {
       position: sticky;
       transform-origin: top center;
+      opacity: 0;
     }
-    .portfolio-card-wrap[data-i="0"] { top: 40px; transform: scale(0.875); }
-    .portfolio-card-wrap[data-i="1"] { top: 64px; transform: scale(0.90); }
-    .portfolio-card-wrap[data-i="2"] { top: 88px; transform: scale(0.925); }
-    .portfolio-card-wrap[data-i="3"] { top: 112px; transform: scale(0.95); }
-    .portfolio-card-wrap[data-i="4"] { top: 136px; transform: scale(0.975); }
-    .portfolio-card-wrap[data-i="5"] { top: 160px; transform: scale(1); }
+    .portfolio-card-wrap.in-view { opacity: 1; }
+    .portfolio-card-wrap[data-i="0"] { top: 40px; }
+    .portfolio-card-wrap[data-i="1"] { top: 64px; }
+    .portfolio-card-wrap[data-i="2"] { top: 88px; }
+    .portfolio-card-wrap[data-i="3"] { top: 112px; }
+    .portfolio-card-wrap[data-i="4"] { top: 136px; }
+    .portfolio-card-wrap[data-i="5"] { top: 160px; }
+    .portfolio-card-wrap.in-view[data-i="0"] { transform: scale(0.875); }
+    .portfolio-card-wrap.in-view[data-i="1"] { transform: scale(0.90); }
+    .portfolio-card-wrap.in-view[data-i="2"] { transform: scale(0.925); }
+    .portfolio-card-wrap.in-view[data-i="3"] { transform: scale(0.95); }
+    .portfolio-card-wrap.in-view[data-i="4"] { transform: scale(0.975); }
+    .portfolio-card-wrap.in-view[data-i="5"] { transform: scale(1); }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .portfolio-card-wrap {
       position: static;
+      opacity: 1;
+      transform: none;
     }
+    .portfolio-card { transition: none; }
   }
 </style>
+
+<script>
+  const cards = document.querySelectorAll(".portfolio-card-wrap");
+  if (cards.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add("in-view");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    cards.forEach((card, i) => {
+      (card as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
+      observer.observe(card);
+    });
+  }
+</script>
