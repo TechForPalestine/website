@@ -70,7 +70,17 @@ function QgivEmbed() {
 export default function MembershipPage() {
   const [showCalculator] = useState<boolean>(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get("calculator") !== "no";
+    const urlParam = urlParams.get("calculator");
+    if (urlParam === "yes") return true;
+    if (urlParam === "no") return false;
+
+    const stored = localStorage.getItem("membership_ab_variant");
+    if (stored === "Calculator") return true;
+    if (stored === "No Calculator") return false;
+
+    const assigned = Math.random() < 0.5;
+    localStorage.setItem("membership_ab_variant", assigned ? "Calculator" : "No Calculator");
+    return assigned;
   });
 
   useEffect(() => {
