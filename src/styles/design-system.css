@@ -13,7 +13,7 @@
 }
 .ts-display {
   font-family: "Fraunces", "Fraunces Placeholder", serif;
-  font-weight: 450;
+  font-weight: 400;
   line-height: 1.22;
   font-size: 42px;
 }
@@ -104,7 +104,7 @@
   .ts-subheading    { font-size: 30px; }
   .ts-quote         { font-size: 24px; }
   .ts-eyebrow-serif { font-size: 19px; }
-  .ts-body-large    { font-size: 18px; }
+  .ts-body-large    { font-size: 20px; }
   .ts-body          { font-size: 18px; }
   .ts-label         { font-size: 18px; }
   .ts-body-small    { font-size: 16px; }

@@ -18,7 +18,7 @@ export default {
         butter: "#F7EAD4",
         sand: "#F7F2E8",
         ink: {
-          DEFAULT: "#201D1E",
+          DEFAULT: "#2A2428",
           secondary: "#73656E",
           muted: "#B5B5B5",
           divider: "#D6D6D6",
