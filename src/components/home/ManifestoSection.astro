@@ -10,19 +10,19 @@ const stats = [
 const photos = [
   {
     alt: "Tech for Palestine speaker at a Building Ethical Technology event",
-    src: "/images/new-homepage/Who%20are%20we%20(4).jpg",
+    src: "/images/new-homepage/who-are-we-4.webp",
   },
   {
     alt: "Pro-Palestine protest outside a neoclassical government building",
-    src: "/images/new-homepage/Who%20are%20we%20(2).jpg",
+    src: "/images/new-homepage/who-are-we-2.webp",
   },
   {
     alt: "Immigration lawyer holding flowers at a Tech for Palestine event",
-    src: "/images/new-homepage/Who%20are%20we%20(1).jpg",
+    src: "/images/new-homepage/who-are-we-1.webp",
   },
   {
     alt: "Demonstrator in traditional Palestinian embroidery raising flowers at a street protest",
-    src: "/images/new-homepage/Who%20are%20we%20(3).jpg",
+    src: "/images/new-homepage/who-are-we-3.webp",
   },
 ];
 ---
@@ -30,14 +30,14 @@ const photos = [
 <section class="overflow-x-clip bg-page px-6 pt-20 pb-0 md:px-10 md:pt-28">
   <div class="mx-auto max-w-[1400px]">
     <!-- Motif row -->
-    <div class="mb-10 flex items-center -space-x-[30px] motif-row" role="presentation" aria-hidden="true">
+    <div class="mb-10 flex items-center -space-x-[18px] sm:-space-x-[22px] md:-space-x-[30px] motif-row" role="presentation" aria-hidden="true">
       {[1, 2, 3, 4].map((_, i) => (
-        <img src="/images/logo.avif" alt="" class={`w-32 opacity-0 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
+        <img src="/images/logo.avif" alt="" class={`w-20 sm:w-28 md:w-32 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
       ))}
     </div>
 
     <!-- Editorial headline -->
-    <h2 class="ts-editorial mb-14 max-w-[52ch] text-ink md:mb-20 manifesto-headline opacity-0">
+    <h2 class="ts-editorial mb-14 max-w-[52ch] text-ink md:mb-20 manifesto-headline">
       <span class="manifesto-text-a">Thousands of founders, tech workers, business professionals and advocates building tools and products that </span><span class="manifesto-text-b text-brand">protect, inform, resist, and rebuild.</span>
     </h2>
   </div>
@@ -50,7 +50,7 @@ const photos = [
           <dt class="ts-stat text-ink">
             {s.value}<span class="text-brand">+</span>
           </dt>
-          <dd class="ts-body-small mt-1.5 text-ink-secondary">{s.label}</dd>
+          <dd class="ts-body-large mt-1.5 text-ink-secondary">{s.label}</dd>
         </div>
       ))}
     </dl>
@@ -78,11 +78,12 @@ const photos = [
 <script>
   const row = document.querySelector(".motif-row");
   if (row) {
+    const icons = row.querySelectorAll(".motif-icon");
+    icons.forEach((icon) => icon.classList.add("animate"));
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const icons = row.querySelectorAll(".motif-icon");
             icons.forEach((icon, i) => {
               (icon as HTMLElement).style.animationDelay = `${i * 0.15}s`;
               icon.classList.add("visible");
@@ -98,6 +99,7 @@ const photos = [
 
   const headline = document.querySelector(".manifesto-headline");
   if (headline) {
+    headline.classList.add("animate");
     const headlineObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

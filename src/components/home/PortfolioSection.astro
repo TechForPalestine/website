@@ -1,0 +1,163 @@
+---
+const LOGO_DEFAULTS = {
+  bg: "bg-white",
+  padding: "p-8 md:p-4 lg:p-8",
+  imgClass: "max-h-[170px] w-full max-w-[340px] object-contain",
+};
+
+const projects = [
+  {
+    name: "UpScrolled",
+    description:
+      "The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach. Launched and scaled via the T4P incubator and ecosystem partners.",
+    logo: { src: "/images/new-homepage/proj-logo-5.webp", alt: "UpScrolled logo" },
+    stats: [
+      { label: "Global App Store", value: "#1" },
+      { label: "Users in 7 months", value: "5M+" },
+    ],
+  },
+  {
+    name: "Boycat",
+    description:
+      "Scan any product to check its ethical compliance and find alternatives in real time. Official BDS partner app, connected through T4P.",
+    logo: { src: "/images/new-homepage/proj-logo-3.webp", alt: "Boycat logo" },
+    stats: [
+      { label: "Users worldwide", value: "3M+" },
+      { label: "Redirected to ethical brands", value: "$500M+" },
+    ],
+  },
+  {
+    name: "Thaura.ai",
+    description:
+      "AI built ethically, designed around environmental, social, and privacy concerns. Launched via the T4P network to profitability.",
+    logo: { src: "/images/new-homepage/proj-logo-4.webp", alt: "Thaura.ai logo" },
+    stats: [
+      { label: "Less energy than ChatGPT", value: "94%" },
+      { label: "Data sold to third parties", value: "0" },
+    ],
+  },
+  {
+    name: "Apricot",
+    description:
+      "Connecting top tech talent from the Middle East, including Palestinian refugees, with US tech companies. Customer introductions and strategic refocus via T4P.",
+    logo: { src: "/images/new-homepage/proj-logo-2.webp", alt: "Apricot logo" },
+    stats: [
+      { label: "Paid to placed talent", value: "$1M" },
+      { label: "Candidates", value: "10k+" },
+    ],
+  },
+  {
+    name: "Newscord",
+    description:
+      "AI-powered news summaries across hundreds of sources, exposing media bias in every language. Refocused and connected with T4P ecosystem partners.",
+    logo: {
+      src: "/images/new-homepage/proj-logo-1.webp",
+      alt: "Newscord logo",
+      bg: "bg-black",
+      padding: "px-14 py-0",
+      imgClass: "max-h-[170px] w-[180px] max-w-full object-cover",
+    },
+    stats: [{ label: "Accounts reached monthly", value: "10M+" }],
+  },
+  {
+    name: "Find a Protest",
+    description:
+      "Find and subscribe to protests in your area, powered by organizers, communities, and volunteer data collectors. Refocused and volunteer-powered through T4P.",
+    logo: { src: "/images/new-homepage/proj-logo-findaprotest.webp", alt: "Find a Protest logo" },
+    stats: [
+      { label: "Monthly users", value: "200k+" },
+      { label: "Protests & solidarity events listed", value: "10k+" },
+    ],
+  },
+];
+---
+
+<section id="portfolio" class="bg-page px-6 pt-24 pb-20 md:px-10 md:pt-32 md:pb-28">
+  <div class="mx-auto max-w-[1400px]">
+    <p class="ts-eyebrow mb-10 text-ink-secondary">— Our portfolio</p>
+
+    <div class="grid grid-cols-1 gap-8 pb-10 md:grid-cols-2 md:gap-16 md:pb-14">
+      <h2 class="ts-editorial text-ink">
+        Projects that came through <span class="text-brand">T4P</span>
+      </h2>
+      <div>
+        <p class="ts-body-large text-ink-secondary">
+          Every one of these projects was scaled through T4P. Powered by volunteers, mentors, and people like you.
+        </p>
+      </div>
+    </div>
+
+    <div class="mb-6 h-px w-full bg-ink-divider md:mb-8"></div>
+
+    <ul class="portfolio-stack list-none p-0">
+      {projects.map((p, i) => (
+        <li
+          class="portfolio-card-wrap"
+          data-i={i}
+        >
+          <article class="portfolio-card grid grid-cols-1 gap-8 rounded-[20px] bg-sand p-6 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10 md:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
+            <div class="flex flex-col">
+              <h3 class="ts-editorial text-ink">{p.name}</h3>
+              <p class="ts-body mt-5 text-ink-secondary">
+                {p.description}
+              </p>
+              <dl class="mt-10 flex flex-col gap-y-6 lg:mt-auto lg:flex-row lg:gap-x-10 lg:pt-12">
+                {p.stats.map((s) => (
+                  <div>
+                    <dt class="ts-body-large text-ink-secondary">{s.label}</dt>
+                    <dd class="ts-stat-large mt-2 text-brand">
+                      {s.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div class:list={["flex items-center justify-center rounded-[16px] w-full md:h-[190px] md:w-[90%] md:ml-auto", p.logo.padding ?? LOGO_DEFAULTS.padding, p.logo.bg ?? LOGO_DEFAULTS.bg]}>
+              <img
+                src={p.logo.src}
+                alt={p.logo.alt}
+                loading="lazy"
+                width="340"
+                height="170"
+                sizes="(max-width: 768px) 280px, 340px"
+                class={p.logo.imgClass ?? LOGO_DEFAULTS.imgClass}
+              />
+            </div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .portfolio-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .portfolio-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  @media (min-width: 768px) {
+    .portfolio-card-wrap {
+      position: sticky;
+      transform-origin: top center;
+    }
+    .portfolio-card-wrap[data-i="0"] { top: 40px; transform: scale(0.875); }
+    .portfolio-card-wrap[data-i="1"] { top: 64px; transform: scale(0.90); }
+    .portfolio-card-wrap[data-i="2"] { top: 88px; transform: scale(0.925); }
+    .portfolio-card-wrap[data-i="3"] { top: 112px; transform: scale(0.95); }
+    .portfolio-card-wrap[data-i="4"] { top: 136px; transform: scale(0.975); }
+    .portfolio-card-wrap[data-i="5"] { top: 160px; transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portfolio-card-wrap {
+      position: static;
+    }
+  }
+</style>

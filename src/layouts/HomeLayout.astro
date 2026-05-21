@@ -22,7 +22,7 @@ const canonicalUrl = new URL(
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -122,11 +122,25 @@ const canonicalUrl = new URL(
     <script>
       import Lenis from "lenis";
 
+      document.documentElement.classList.remove("no-js");
+
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         const lenis = new Lenis({
           duration: 1.8,
           easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true,
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", (e) => {
+            const href = (anchor as HTMLAnchorElement).getAttribute("href");
+            if (!href) return;
+            const target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              lenis.scrollTo(target as HTMLElement);
+            }
+          });
         });
 
         function raf(time: number) {

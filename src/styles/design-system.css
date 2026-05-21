@@ -8,7 +8,7 @@
   font-family: "Fraunces", "Fraunces Placeholder", serif;
   font-weight: 400;
   line-height: 1.18;
-  font-size: 32px;
+  font-size: 36px;
   letter-spacing: -0.01em;
 }
 .ts-display {
@@ -22,6 +22,12 @@
   font-weight: 400;
   line-height: 1.22;
   font-size: 36px;
+}
+.ts-stat-large {
+  font-family: "Fraunces", "Fraunces Placeholder", serif;
+  font-weight: 400;
+  line-height: 1;
+  font-size: 42px;
 }
 .ts-heading {
   font-family: "Fraunces", "Fraunces Placeholder", serif;
@@ -92,11 +98,13 @@
   .ts-editorial     { font-size: 42px; }
   .ts-display       { font-size: 52px; }
   .ts-stat          { font-size: 42px; }
+  .ts-stat-large    { font-size: 52px; }
+
   .ts-heading       { font-size: 36px; }
   .ts-subheading    { font-size: 30px; }
   .ts-quote         { font-size: 24px; }
   .ts-eyebrow-serif { font-size: 19px; }
-  .ts-body-large    { font-size: 20px; }
+  .ts-body-large    { font-size: 18px; }
   .ts-body          { font-size: 18px; }
   .ts-label         { font-size: 18px; }
   .ts-body-small    { font-size: 16px; }
@@ -107,13 +115,15 @@
   .ts-editorial     { font-size: 48px; }
   .ts-display       { font-size: 60px; }
   .ts-stat          { font-size: 48px; }
+  .ts-stat-large    { font-size: 60px; }
   .ts-heading       { font-size: 38px; }
   .ts-subheading    { font-size: 32px; }
   .ts-quote         { font-size: 26px; }
   .ts-eyebrow-serif { font-size: 24px; }
+  .ts-body-large    { font-size: 20px; }
 }
 
-html {
+html.no-js {
   scroll-behavior: smooth;
 }
 
@@ -150,17 +160,23 @@ html {
   from { opacity: 0; transform: translateX(-16px); }
   to   { opacity: 1; transform: translateX(0); }
 }
-.motif-icon.visible {
+.motif-icon.animate {
+  opacity: 0;
+}
+.motif-icon.animate.visible {
   animation: fadeLeft 0.6s ease-out both;
 }
 
-.manifesto-headline.visible {
+.manifesto-headline.animate {
+  opacity: 0;
+}
+.manifesto-headline.animate.visible {
   opacity: 1;
 }
-.manifesto-headline.visible .manifesto-text-a {
+.manifesto-headline.animate.visible .manifesto-text-a {
   animation: blurIn 1.2s ease-out 0.2s both;
 }
-.manifesto-headline.visible .manifesto-text-b {
+.manifesto-headline.animate.visible .manifesto-text-b {
   animation: blurIn 1.2s ease-out 0.6s both;
 }
 
