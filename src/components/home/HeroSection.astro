@@ -2,7 +2,7 @@
 import Button from "../ui/Button.astro";
 ---
 
-<section class="px-4 pt-4 pb-24 sm:px-6 sm:pt-6 md:pb-32">
+<section class="px-4 pt-4 pb-24 sm:px-6 sm:pt-6 min-[810px]:pb-32">
   <div class="relative overflow-hidden rounded-3xl">
     <!-- Background image -->
     <img
@@ -29,13 +29,13 @@ import Button from "../ui/Button.astro";
 
     <!-- Desktop overlay (810px+): full hero card -->
     <div class="absolute inset-0 hidden items-center justify-center min-[810px]:flex">
-      <div class="hero-card mx-auto w-[90%] max-w-[1008px] rounded-3xl bg-[#ffffffa3] px-3 py-4 md:px-5 md:py-6">
+      <div class="hero-card mx-auto w-[90%] max-w-[1008px] rounded-3xl bg-[#ffffffa3] px-3 py-4 min-[900px]:px-5 min-[900px]:py-6">
         <!-- Logo: top-left below 1200px, bottom-right at 1200px+ -->
         <div class="hero-logo mb-4 min-[1200px]:hidden">
           <img src="/images/new-homepage/t4p-logo.webp" alt="Tech for Palestine" class="h-[3.5rem]" />
         </div>
 
-        <p class="ts-display mb-7 text-left text-ink tracking-wide" aria-hidden="true">
+        <p class="ts-display mb-7 text-left text-ink" aria-hidden="true">
           <span class="hero-h1-a inline">Join the movement behind 90+ projects for </span><span class="hero-h1-b inline text-brand">Palestinian liberation</span>
         </p>
         <div class="flex flex-wrap items-center justify-start gap-5 min-[1200px]:justify-between">

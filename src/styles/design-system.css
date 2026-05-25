@@ -3,6 +3,16 @@
    Fraunces for editorial, Outfit for UI.
    Fonts are loaded via <link> in the layout head. */
 
+/* CSS custom property bridge — exposes design tokens to scoped <style> blocks */
+:root {
+  --color-ink: #2A2428;
+  --color-ink-secondary: #73656E;
+  --color-ink-divider: #D6D6D6;
+  --color-butter: #F7EAD4;
+  --color-logo-frame: #EFE3D4;
+  --color-ink-ring: rgba(42, 36, 40, 0.12);
+}
+
 /* Brand hover utility — defined here so JIT scanning is not required */
 .hover\:bg-brand-hover:hover {
   background-color: theme('colors.brand.hover');

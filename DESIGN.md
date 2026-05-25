@@ -7,7 +7,7 @@ colors:
   butter: "#F7EAD4"
   sand: "#F7F2E8"
   ink: "#2A2428"
-  ink-secondary: "#908486"
+  ink-secondary: "#73656E"
   ink-muted: "#B5B5B5"
   ink-divider: "#D6D6D6"
   brand: "#AB4956"
@@ -117,7 +117,7 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 - **Butter** (`#F7EAD4`): Card borders, warm dividers, the rotated accent behind logo frames.
 - **Sand** (`#F7F2E8`): Recessed surfaces — stats grids, input backgrounds.
 - **Ink** (`#2A2428`): All primary text. Warm near-black, never pure black.
-- **Ink Secondary** (`#908486`): Body copy, descriptions, supporting text.
+- **Ink Secondary** (`#73656E`): Body copy, descriptions, supporting text.
 - **Ink Muted** (`#B5B5B5`): Placeholders, disabled states, metadata.
 - **Ink Divider** (`#D6D6D6`): Horizontal rules, section separators.
 

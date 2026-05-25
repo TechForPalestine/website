@@ -82,22 +82,22 @@ const projects = [
 ];
 ---
 
-<section id="portfolio" class="bg-page px-6 pt-24 pb-24 md:px-10 md:pt-32 md:pb-32">
+<section id="portfolio" class="bg-page px-6 pt-24 pb-24 min-[810px]:px-10 min-[810px]:pt-32 min-[810px]:pb-32">
   <div class="mx-auto max-w-[1400px]">
     <p class="ts-overline mb-10 text-ink-secondary">— Our portfolio</p>
 
-    <div class="grid grid-cols-1 gap-8 pb-10 md:grid-cols-2 md:gap-16 md:pb-14">
+    <div class="grid grid-cols-1 gap-8 pb-10 min-[810px]:grid-cols-2 min-[810px]:gap-16 min-[810px]:pb-14">
       <h2 class="ts-editorial text-ink">
         Projects that came through <span class="text-brand">T4P</span>
       </h2>
       <div>
         <p class="ts-body-large text-ink-secondary">
-          Every one of these projects was scaled through T4P. Powered by volunteers, mentors, and people like you.
+          Funded, mentored, and scaled by T4P volunteers and people like you.
         </p>
       </div>
     </div>
 
-    <div class="mb-6 h-px w-full bg-ink-divider md:mb-8"></div>
+    <div class="mb-6 h-px w-full bg-ink-divider min-[810px]:mb-8"></div>
   </div>
 
   <div class="mx-auto max-w-[1400px]">
@@ -107,10 +107,10 @@ const projects = [
           class="portfolio-card-wrap"
           data-i={i}
         >
-          <article class="portfolio-card grid w-full grid-cols-1 gap-8 rounded-[20px] border border-butter bg-sand p-6 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10 md:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
+          <article class="portfolio-card grid w-full grid-cols-1 gap-8 rounded-[20px] border border-butter bg-sand p-6 min-[810px]:grid-cols-[1.2fr_1fr] min-[810px]:items-center min-[810px]:gap-10 min-[810px]:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
             <div class="flex min-w-0 flex-col">
               <h3 class="ts-heading text-ink break-words">{p.name}</h3>
-              <p class="ts-body mt-5 text-ink-secondary break-words">
+              <p class="ts-body mt-5 max-w-[65ch] text-ink-secondary break-words">
                 {p.description}
               </p>
               <dl class="mt-10 flex flex-col gap-y-6 lg:mt-auto lg:flex-row lg:gap-x-10 lg:pt-12">
@@ -128,7 +128,7 @@ const projects = [
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="ts-label mt-8 inline-flex items-center gap-2 text-brand hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                  class="ts-label mt-8 inline-flex items-center gap-2 min-h-[44px] py-2 text-brand hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   Visit {p.name}
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -138,7 +138,7 @@ const projects = [
               )}
             </div>
 
-            <div class="logo-frame relative w-full min-h-[150px] md:min-h-0 md:h-[190px]">
+            <div class="logo-frame relative w-full min-h-[150px] min-[810px]:min-h-0 min-[810px]:h-[190px]">
               <div class="logo-frame-back" aria-hidden="true"></div>
               <div class:list={["logo-frame-front relative flex items-center justify-center rounded-[16px] w-full h-full", p.logo.padding ?? LOGO_DEFAULTS.padding, p.logo.bg ?? LOGO_DEFAULTS.bg]}>
               <img
@@ -148,7 +148,7 @@ const projects = [
                 decoding="async"
                 width="340"
                 height="170"
-                sizes="(max-width: 768px) 280px, 340px"
+                sizes="(max-width: 810px) 280px, 340px"
                 class={p.logo.imgClass ?? LOGO_DEFAULTS.imgClass}
               />
               </div>
@@ -175,7 +175,7 @@ const projects = [
     position: absolute;
     inset: 0;
     border-radius: 16px;
-    background: #EFE3D4;
+    background: var(--color-logo-frame);
     transform: rotate(-3deg);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   }
@@ -194,7 +194,7 @@ const projects = [
     transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 810px) {
     .portfolio-card-wrap {
       position: sticky;
       transform-origin: top center;
@@ -247,7 +247,7 @@ const projects = [
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    const isDesktop = window.matchMedia("(min-width: 810px)").matches;
 
     if (!prefersReducedMotion && isDesktop) {
       const SCALE_STEP = 0.025;

@@ -19,7 +19,7 @@ export default {
         sand: "#F7F2E8",
         ink: {
           DEFAULT: "#2A2428",
-          secondary: "#908486",
+          secondary: "#73656E",
           muted: "#B5B5B5",
           divider: "#D6D6D6",
         },

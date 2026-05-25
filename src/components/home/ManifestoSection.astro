@@ -27,26 +27,26 @@ const photos = [
 ];
 ---
 
-<section class="overflow-x-clip bg-page px-6 pt-24 pb-24 md:px-10 md:pt-32 md:pb-32">
+<section class="overflow-x-clip bg-page px-6 pt-24 pb-24 min-[810px]:px-10 min-[810px]:pt-32 min-[810px]:pb-32">
   <div class="mx-auto max-w-[1400px]">
     <!-- Motif row -->
-    <div class="mb-10 flex items-center -space-x-[18px] sm:-space-x-[22px] md:-space-x-[30px] motif-row" role="presentation" aria-hidden="true">
+    <div class="mb-10 flex items-center -space-x-[18px] sm:-space-x-[22px] min-[810px]:-space-x-[30px] motif-row" role="presentation" aria-hidden="true">
       {[1, 2, 3, 4].map((_, i) => (
-        <img src="/images/logo.avif" alt="" class={`w-20 sm:w-28 md:w-32 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
+        <img src="/images/logo.avif" alt="" class={`w-20 sm:w-28 min-[810px]:w-32 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
       ))}
     </div>
 
     <!-- Editorial headline -->
-    <h2 class="ts-editorial mb-14 max-w-[52ch] text-ink md:mb-20 manifesto-headline">
+    <h2 class="ts-editorial mb-14 max-w-[52ch] text-ink min-[810px]:mb-20 manifesto-headline">
       <span class="manifesto-text-a">Thousands of founders, tech workers, business professionals and advocates building tools and products that </span><span class="manifesto-text-b text-brand">protect, inform, resist, and rebuild.</span>
     </h2>
   </div>
 
   <!-- Stats + collage wrapper -->
   <div class="mx-auto max-w-[1400px]">
-    <dl class="stats-grid grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 md:px-12 md:pt-12 lg:grid-cols-5 lg:pb-64">
+    <dl class="stats-grid grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 min-[810px]:px-12 min-[810px]:pt-12 lg:grid-cols-5 lg:pb-64">
       {stats.map((s) => (
-        <div>
+        <div class="last:col-span-2 sm:last:col-span-1">
           <dt class="ts-stat text-ink" aria-label={`${s.value}+`}>
             <span class="stat-value" data-target={s.value} aria-hidden="true">0</span><span class="text-brand" aria-hidden="true">+</span>
           </dt>
