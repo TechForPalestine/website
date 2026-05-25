@@ -8,14 +8,16 @@ import Button from "../ui/Button.astro";
     <img
       src="/images/new-homepage/hero.webp"
       alt="Palestinian children playing near the separation wall"
+      width="1106"
+      height="1113"
       fetchpriority="high"
-    class="h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center animate-ken-burns motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
+      class="h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center animate-ken-burns motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
     />
 
     <!-- Mobile overlay (below 810px): logo + scroll down -->
     <div class="absolute inset-0 flex flex-col items-center pt-16 min-[810px]:hidden">
       <div class="hero-logo">
-        <img src="/images/new-homepage/t4p-logo.webp" alt="Tech for Palestine" class="h-[8.2rem]" />
+        <img src="/images/new-homepage/t4p-logo.webp" alt="Tech for Palestine" width="3136" height="1376" class="h-[8.2rem] w-auto" />
       </div>
       <a href="#mobile-content" class="hero-cta-a ts-label text-brand flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm">
         Scroll down
