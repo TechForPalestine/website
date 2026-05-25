@@ -1,0 +1,153 @@
+---
+const items = [
+  {
+    number: "01",
+    heading: "Funding",
+    body: "Small grants for most accepted projects. Simple process, no strings attached. We fund what works — not what looks good on a deck.",
+    label: "Rolling basis",
+  },
+  {
+    number: "02",
+    heading: "Mentorship",
+    body: "Strategy sessions and optional weekly dedicated mentors. Real guidance from people who've built, shipped, and scaled before.",
+    label: "30+ expert mentors · async + live",
+  },
+  {
+    number: "03",
+    heading: "Volunteers",
+    body: "Access to a global network of skilled volunteers: engineers, marketers, designers and more, with a dedicated recruitment team to match you to the people you need.",
+    label: "400+ global volunteers",
+  },
+  {
+    number: "04",
+    heading: "Operations",
+    body: "Engineering expertise, security support, marketing and early users through press, influencers, ecosystem partners, and the T4P community. We help projects reach the people who need them.",
+    label: "Tailored for your needs",
+  },
+];
+---
+
+<section class="bg-page px-6 pt-24 pb-24 md:px-10 md:pt-32 md:pb-32">
+  <div class="mx-auto max-w-[1400px]">
+    <p class="ts-overline mb-10 text-ink-secondary">— Our support</p>
+
+    <div class="grid grid-cols-1 gap-8 pb-10 md:grid-cols-2 md:gap-16 md:pb-14">
+      <h2 class="ts-editorial text-ink">
+        How do we enable projects to <span class="text-brand">succeed?</span>
+      </h2>
+      <p class="ts-body-large text-ink-secondary">
+        We give teams and projects the support they need to ship, scale, and make an impact.
+      </p>
+    </div>
+
+    <div class="mb-14 h-px w-full bg-ink-divider md:mb-16"></div>
+
+    <div class="support-photo mb-16 overflow-hidden rounded-2xl md:mb-24">
+      <img
+        src="/images/new-homepage/team.webp"
+        alt="Tech for Palestine community gathered at the Barcelona conference, April 2026"
+        width="2400"
+        height="1600"
+        loading="lazy"
+        decoding="async"
+        class="w-full h-[480px] object-cover object-center md:h-[560px] animate-ken-burns motion-reduce:animate-none"
+      />
+    </div>
+
+    <ul class="list-none p-0" role="list">
+      {items.map((item, i) => (
+        <li
+          class="support-item rounded-[20px] bg-sand px-8 py-10 md:grid md:grid-cols-[4.5rem_1fr] md:gap-x-6 md:px-12 md:py-12"
+          data-i={i}
+        >
+          <span class="ts-body-large mb-3 block text-ink-secondary md:mb-0 md:pt-1">{item.number}</span>
+          <div>
+            <h3 class="ts-subheading text-ink">{item.heading}</h3>
+            <p class="ts-body mt-4 max-w-[52ch] text-ink-secondary">{item.body}</p>
+            <p class="ts-label mt-6 text-brand">{item.label}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .support-photo {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .support-photo.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .support-item {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s ease;
+    margin-bottom: 12px;
+  }
+  .support-item.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  @media (hover: hover) and (min-width: 768px) {
+    .support-item:hover {
+      background-color: #F7EAD4;
+      transform: translateX(8px);
+    }
+    .support-item.in-view:hover {
+      transform: translateX(8px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .support-photo,
+    .support-item {
+      opacity: 1;
+      transform: none;
+      transition: background-color 0.2s ease;
+    }
+  }
+</style>
+
+<script>
+  const photo = document.querySelector<HTMLElement>(".support-photo");
+  if (photo) {
+    const photoObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            photoObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    photoObserver.observe(photo);
+  }
+
+  const supportItems = Array.from(
+    document.querySelectorAll<HTMLElement>(".support-item")
+  );
+  if (supportItems.length) {
+    const itemObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            itemObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    supportItems.forEach((item, i) => {
+      item.style.transitionDelay = `${i * 0.12}s`;
+      itemObserver.observe(item);
+    });
+  }
+</script>

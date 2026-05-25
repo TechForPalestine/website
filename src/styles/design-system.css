@@ -3,6 +3,11 @@
    Fraunces for editorial, Outfit for UI.
    Fonts are loaded via <link> in the layout head. */
 
+/* Brand hover utility — defined here so JIT scanning is not required */
+.hover\:bg-brand-hover:hover {
+  background-color: theme('colors.brand.hover');
+}
+
 /* Fraunces — editorial */
 .ts-editorial {
   font-family: "Fraunces", "Fraunces Placeholder", serif;
@@ -47,7 +52,7 @@
   line-height: 1.32;
   font-size: 22px;
 }
-.ts-eyebrow-serif {
+.ts-eyebrow {
   font-family: "Fraunces", "Fraunces Placeholder", serif;
   font-weight: 400;
   line-height: 1.32;
@@ -85,7 +90,7 @@
   line-height: 1;
   font-size: 14px;
 }
-.ts-eyebrow {
+.ts-overline {
   font-family: "Outfit", system-ui, sans-serif;
   font-weight: 500;
   font-size: 12px;
@@ -103,7 +108,7 @@
   .ts-heading       { font-size: 36px; }
   .ts-subheading    { font-size: 30px; }
   .ts-quote         { font-size: 24px; }
-  .ts-eyebrow-serif { font-size: 19px; }
+  .ts-eyebrow { font-size: 19px; }
   .ts-body-large    { font-size: 20px; }
   .ts-body          { font-size: 18px; }
   .ts-label         { font-size: 18px; }
@@ -119,7 +124,7 @@
   .ts-heading       { font-size: 38px; }
   .ts-subheading    { font-size: 32px; }
   .ts-quote         { font-size: 26px; }
-  .ts-eyebrow-serif { font-size: 24px; }
+  .ts-eyebrow { font-size: 24px; }
   .ts-body-large    { font-size: 20px; }
 }
 

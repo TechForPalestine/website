@@ -84,7 +84,7 @@ const projects = [
 
 <section id="portfolio" class="bg-page px-6 pt-24 pb-24 md:px-10 md:pt-32 md:pb-32">
   <div class="mx-auto max-w-[1400px]">
-    <p class="ts-eyebrow mb-10 text-ink-secondary">— Our portfolio</p>
+    <p class="ts-overline mb-10 text-ink-secondary">— Our portfolio</p>
 
     <div class="grid grid-cols-1 gap-8 pb-10 md:grid-cols-2 md:gap-16 md:pb-14">
       <h2 class="ts-editorial text-ink">
@@ -109,7 +109,7 @@ const projects = [
         >
           <article class="portfolio-card grid w-full grid-cols-1 gap-8 rounded-[20px] border border-butter bg-sand p-6 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10 md:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
             <div class="flex min-w-0 flex-col">
-              <h3 class="ts-editorial text-ink break-words">{p.name}</h3>
+              <h3 class="ts-heading text-ink break-words">{p.name}</h3>
               <p class="ts-body mt-5 text-ink-secondary break-words">
                 {p.description}
               </p>
@@ -185,13 +185,13 @@ const projects = [
 
   .portfolio-card-wrap {
     opacity: 0;
-    transform: translateY(32px);
+    translate: 0 32px;
     width: 100%;
   }
   .portfolio-card-wrap.in-view {
     opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    translate: none;
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   @media (min-width: 768px) {
@@ -199,10 +199,10 @@ const projects = [
       position: sticky;
       transform-origin: top center;
       opacity: 0;
-      transition: transform 0.35s ease, opacity 0.7s ease-out;
-      will-change: transform;
+      transition: scale 0.35s ease, opacity 0.7s ease-out;
+      will-change: scale, translate;
     }
-    .portfolio-card-wrap.in-view { opacity: 1; transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
+    .portfolio-card-wrap.in-view { opacity: 1; transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), translate 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
     .portfolio-card-wrap[data-i="0"] { top: 40px; }
     .portfolio-card-wrap[data-i="1"] { top: 64px; }
     .portfolio-card-wrap[data-i="2"] { top: 88px; }
@@ -215,7 +215,8 @@ const projects = [
     .portfolio-card-wrap {
       position: static;
       opacity: 1;
-      transform: none;
+      translate: none;
+      scale: 1;
     }
     .portfolio-card { transition: none; }
   }
@@ -265,7 +266,7 @@ const projects = [
           const depth = activeIdx - i;
           const scale =
             depth > 0 ? Math.max(MIN_SCALE, 1 - depth * SCALE_STEP) : 1;
-          card.style.transform = `scale(${scale})`;
+          card.style.scale = scale.toString();
         });
       };
 

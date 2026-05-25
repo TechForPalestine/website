@@ -7,7 +7,7 @@ colors:
   butter: "#F7EAD4"
   sand: "#F7F2E8"
   ink: "#2A2428"
-  ink-secondary: "#73656E"
+  ink-secondary: "#908486"
   ink-muted: "#B5B5B5"
   ink-divider: "#D6D6D6"
   brand: "#AB4956"
@@ -57,7 +57,7 @@ spacing:
 components:
   button-primary:
     backgroundColor: "{colors.brand}"
-    textColor: "{colors.page}"
+    textColor: "#FFFFFF"
     rounded: "{rounded.pill}"
     padding: "14px 20px"
     typography: "{typography.label}"
@@ -101,7 +101,7 @@ This system explicitly rejects: SaaS gradient aesthetics, corporate nonprofit po
 - Warm parchment neutrals with a single pomegranate accent, used sparingly
 - Flat-by-default surfaces with tonal depth through background steps (page → cream → sand → butter)
 - Motion is restrained: entrances only, no looping decorative animation, always `prefers-reduced-motion` safe
-- Every screen ends with a clear, direct call to action
+- CTAs appear where they are contextually earned, not mandated at the end of every section
 
 ## 2. Colors: The Parchment and Pomegranate Palette
 
@@ -109,7 +109,7 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 
 ### Primary
 - **Pomegranate** (`#AB4956`): The sole accent. Used on CTAs, active states, brand emphasis, and the `text-brand` utility class. Forbidden as a background for large surface areas. Its rarity is its power.
-- **Pomegranate Light** (`#D35464`): Hover state only. Never appears at rest.
+- **Pomegranate Light** (`#D35464`): Hover state only. Never appears at rest. Lighter than base for a lift feel.
 
 ### Neutral
 - **Warm Parchment** (`#FFFBF5`): The page background. The surface everything rests on. Never pure white.
@@ -117,7 +117,7 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 - **Butter** (`#F7EAD4`): Card borders, warm dividers, the rotated accent behind logo frames.
 - **Sand** (`#F7F2E8`): Recessed surfaces — stats grids, input backgrounds.
 - **Ink** (`#2A2428`): All primary text. Warm near-black, never pure black.
-- **Ink Secondary** (`#73656E`): Body copy, descriptions, supporting text.
+- **Ink Secondary** (`#908486`): Body copy, descriptions, supporting text.
 - **Ink Muted** (`#B5B5B5`): Placeholders, disabled states, metadata.
 - **Ink Divider** (`#D6D6D6`): Horizontal rules, section separators.
 
@@ -139,7 +139,7 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 
 - **Display** (400, clamp 42–60px, line-height 1.22): Hero headlines. Used once per page. The largest typographic statement.
 - **Headline / Editorial** (400, clamp 36–48px, line-height 1.18, tracking –0.01em): Section-opening statements. The manifesto headline, portfolio section header. Slightly tighter tracking for editorial character.
-- **Title** (400, clamp 32–38px, line-height 1.22): Project names in portfolio cards. Sub-section headings.
+- **Heading** (400, clamp 32–38px, line-height 1.22): Project names in portfolio cards. Sub-section headings. Maps to `.ts-heading`.
 - **Body Large** (Outfit, 400, clamp 18–20px, line-height 1.48): Primary body copy. Section descriptions, project descriptions. Line length capped at 65–75ch.
 - **Body** (Outfit, 400, clamp 16–18px, line-height 1.22): Secondary body copy, card support text. Use sparingly — prefer Body Large where possible.
 - **Label / Eyebrow** (Outfit, 500, 12px, tracking 0.12em, uppercase): Section labels, button text, `— Our portfolio` style annotations. All uppercase, generous tracking. Never Fraunces.
@@ -169,7 +169,7 @@ Shadows appear in two specific contexts only: (1) interactive elements that need
 Clean pill form. The shape is soft but the intent is direct. Two meaningful variants; a third for inline text links.
 
 - **Shape:** Fully rounded pill (999px radius). Softness signals approachability, not weakness.
-- **Primary:** Pomegranate background (`#AB4956`), Warm Parchment text, Outfit 500 label weight, 14px 20px padding. Hover shifts to Pomegranate Light (`#D35464`). Active state compresses to 98% scale.
+- **Primary:** Pomegranate background (`#AB4956`), White text (`#FFFFFF` — max contrast on brand surface), Outfit 500 label weight, 14px 20px padding. Hover lightens to Pomegranate Light (`#D35464`). Active state compresses to 98% scale.
 - **Ghost:** Transparent background, Ink border and text, same pill shape and padding as Primary. Hover fills with `ink/5` (5% ink tint). Used for secondary actions alongside a Primary CTA.
 - **Text:** No border, no background. Pomegranate text, no radius. Underlines on hover. Used inline in body copy or as a tertiary option.
 - **Focus:** `outline-2 outline-offset-2 outline-brand` for all variants. Keyboard navigation must be visually unambiguous.
@@ -204,7 +204,7 @@ The `HomeLayout.astro` renders the page without a navigation bar. Future navigat
 - **Do** use Fraunces exclusively for display, headline, and title roles. Outfit owns all body, label, and interface text.
 - **Do** cap body text at 65–75ch line length on all viewport widths.
 - **Do** guard every animation with `prefers-reduced-motion`. The CSS blanket `* { animation: none !important }` must be replaced with per-element guards.
-- **Do** end every page section with a progression toward the primary CTA ("Become a Member").
+- **Do** place CTAs where they are contextually earned — after evidence, after a clear invitation, not mechanically at the end of every section.
 - **Do** use real faces, real event photos, and real project logos. Stock photography is prohibited.
 - **Do** state T4P's mission explicitly and early. The cause is not implied; it is named.
 - **Do** use the portfolio stack component (sticky scroll with depth) for featured projects. It is the homepage's signature interaction.

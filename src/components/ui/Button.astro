@@ -1,30 +1,38 @@
 ---
 interface Props {
   variant?: "primary" | "ghost" | "text";
+  size?: "md" | "lg";
   href?: string;
   arrow?: boolean;
   class?: string;
 }
 
-const { variant = "primary", href, arrow = false, class: className = "" } = Astro.props;
+const { variant = "primary", size = "md", href, arrow = false, class: className = "" } = Astro.props;
 
 const base =
   "ts-label inline-flex items-center gap-2 transition-all duration-150 cursor-pointer border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-h-[44px]";
 
+const sizes = {
+  md: "px-5 py-3.5",
+  lg: "px-10 py-5 min-[810px]:px-11",
+};
+
 const variants = {
   primary:
-    "bg-brand text-white border-transparent rounded-pill px-5 py-3.5 hover:bg-[#D35464] active:scale-[0.98]",
+    "bg-brand text-white border-transparent rounded-pill hover:bg-brand-hover active:scale-[0.98]",
   ghost:
-    "bg-transparent text-ink border-ink rounded-pill px-5 py-3.5 hover:bg-ink/5 active:scale-[0.98]",
+    "bg-transparent text-ink border-ink rounded-pill hover:bg-ink/5 active:scale-[0.98]",
   text: "bg-transparent text-brand border-transparent p-0 rounded-none hover:underline",
 };
+
+const paddingClass = variant === "text" ? "" : sizes[size];
 
 const Tag = href ? "a" : "button";
 ---
 
 <Tag
   href={href}
-  class={`${base} ${variants[variant]} ${className}`}
+  class={`${base} ${paddingClass} ${variants[variant]} ${className}`}
 >
   <slot />
   {arrow && (
