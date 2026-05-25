@@ -8,7 +8,8 @@ import Button from "../ui/Button.astro";
     <img
       src="/images/new-homepage/hero.webp"
       alt="Palestinian children playing near the separation wall"
-      class="h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center animate-ken-burns motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
+      fetchpriority="high"
+    class="h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center animate-ken-burns motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
     />
 
     <!-- Mobile overlay (below 810px): logo + scroll down -->
@@ -16,7 +17,7 @@ import Button from "../ui/Button.astro";
       <div class="hero-logo">
         <img src="/images/new-homepage/t4p-logo.webp" alt="Tech for Palestine" class="h-[8.2rem]" />
       </div>
-      <a href="#mobile-content" class="hero-cta-a ts-label text-brand flex flex-col items-center gap-2">
+      <a href="#mobile-content" class="hero-cta-a ts-label text-brand flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm">
         Scroll down
         <svg class="scroll-indicator" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M12 5v14M5 13l7 7 7-7" />
@@ -59,9 +60,9 @@ import Button from "../ui/Button.astro";
 
   <!-- Mobile content below hero (below 810px) -->
   <div id="mobile-content" class="pt-40 min-[810px]:hidden">
-    <p class="ts-display hero-h1-a mb-8 text-left text-ink" aria-hidden="true">
+    <h1 class="ts-display hero-h1-a mb-8 text-left text-ink">
       Join the movement behind 90+ projects for Palestinian liberation
-    </p>
+    </h1>
     <div class="flex flex-col items-start gap-4">
       <div class="hero-cta-a">
         <Button href="/get-involved" variant="primary" arrow class="!px-10 !py-5 !text-[16px]">Become a member</Button>

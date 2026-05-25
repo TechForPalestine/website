@@ -8,6 +8,7 @@ const LOGO_DEFAULTS = {
 const projects = [
   {
     name: "UpScrolled",
+    url: "https://upscrolled.com/en/",
     description:
       "The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach. Launched and scaled via the T4P incubator and ecosystem partners.",
     logo: { src: "/images/new-homepage/proj-logo-5.webp", alt: "UpScrolled logo" },
@@ -18,6 +19,7 @@ const projects = [
   },
   {
     name: "Boycat",
+    url: "https://www.boycat.io/",
     description:
       "Scan any product to check its ethical compliance and find alternatives in real time. Official BDS partner app, connected through T4P.",
     logo: { src: "/images/new-homepage/proj-logo-3.webp", alt: "Boycat logo" },
@@ -28,6 +30,7 @@ const projects = [
   },
   {
     name: "Thaura.ai",
+    url: "https://thaura.ai/home",
     description:
       "AI built ethically, designed around environmental, social, and privacy concerns. Launched via the T4P network to profitability.",
     logo: { src: "/images/new-homepage/proj-logo-4.webp", alt: "Thaura.ai logo" },
@@ -38,6 +41,7 @@ const projects = [
   },
   {
     name: "Apricot",
+    url: "https://apricotinternational.org/",
     description:
       "Connecting top tech talent from the Middle East, including Palestinian refugees, with US tech companies. Customer introductions and strategic refocus via T4P.",
     logo: { src: "/images/new-homepage/proj-logo-2.webp", alt: "Apricot logo" },
@@ -48,6 +52,7 @@ const projects = [
   },
   {
     name: "Newscord",
+    url: "https://newscord.org/",
     description:
       "AI-powered news summaries across hundreds of sources, exposing media bias in every language. Refocused and connected with T4P ecosystem partners.",
     logo: {
@@ -61,6 +66,7 @@ const projects = [
   },
   {
     name: "Find a Protest",
+    url: "https://www.findaprotest.info/",
     description:
       "Find and subscribe to protests in your area, powered by organizers, communities, and volunteer data collectors. Refocused and volunteer-powered through T4P.",
     logo: {
@@ -95,16 +101,16 @@ const projects = [
   </div>
 
   <div class="mx-auto max-w-[1400px]">
-  <ul class="portfolio-stack list-none p-0">
+  <ul class="portfolio-stack list-none p-0" role="list">
       {projects.map((p, i) => (
         <li
           class="portfolio-card-wrap"
           data-i={i}
         >
           <article class="portfolio-card grid w-full grid-cols-1 gap-8 rounded-[20px] border border-butter bg-sand p-6 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10 md:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
-            <div class="flex flex-col">
-              <h3 class="ts-editorial text-ink">{p.name}</h3>
-              <p class="ts-body mt-5 text-ink-secondary">
+            <div class="flex min-w-0 flex-col">
+              <h3 class="ts-editorial text-ink break-words">{p.name}</h3>
+              <p class="ts-body mt-5 text-ink-secondary break-words">
                 {p.description}
               </p>
               <dl class="mt-10 flex flex-col gap-y-6 lg:mt-auto lg:flex-row lg:gap-x-10 lg:pt-12">
@@ -117,15 +123,29 @@ const projects = [
                   </div>
                 ))}
               </dl>
+              {p.url && (
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ts-label mt-8 inline-flex items-center gap-2 text-brand hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  Visit {p.name}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                  </svg>
+                </a>
+              )}
             </div>
 
-            <div class="logo-frame relative w-full md:h-[190px]">
+            <div class="logo-frame relative w-full min-h-[150px] md:min-h-0 md:h-[190px]">
               <div class="logo-frame-back" aria-hidden="true"></div>
               <div class:list={["logo-frame-front relative flex items-center justify-center rounded-[16px] w-full h-full", p.logo.padding ?? LOGO_DEFAULTS.padding, p.logo.bg ?? LOGO_DEFAULTS.bg]}>
               <img
                 src={p.logo.src}
                 alt={p.logo.alt}
                 loading="lazy"
+                decoding="async"
                 width="340"
                 height="170"
                 sizes="(max-width: 768px) 280px, 340px"
@@ -148,7 +168,7 @@ const projects = [
   }
 
   .portfolio-card {
-    transition: transform 0.35s ease;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .logo-frame-back {
@@ -171,7 +191,7 @@ const projects = [
   .portfolio-card-wrap.in-view {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   @media (min-width: 768px) {
@@ -182,7 +202,7 @@ const projects = [
       transition: transform 0.35s ease, opacity 0.7s ease-out;
       will-change: transform;
     }
-    .portfolio-card-wrap.in-view { opacity: 1; }
+    .portfolio-card-wrap.in-view { opacity: 1; transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
     .portfolio-card-wrap[data-i="0"] { top: 40px; }
     .portfolio-card-wrap[data-i="1"] { top: 64px; }
     .portfolio-card-wrap[data-i="2"] { top: 88px; }

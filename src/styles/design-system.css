@@ -140,12 +140,12 @@ html.no-js {
   to   { opacity: 1; transform: scale(1); }
 }
 
-.hero-card   { animation: cardIn 0.8s ease-out both; }
-.hero-h1-a   { animation: blurIn 1.2s ease-out 0.2s both; }
-.hero-h1-b   { animation: blurIn 1.2s ease-out 0.6s both; }
-.hero-cta-a  { animation: fadeUp 0.6s ease-out 1s both; }
-.hero-cta-b  { animation: fadeUp 0.6s ease-out 1.15s both; }
-.hero-logo   { animation: fadeUp 0.6s ease-out 1.3s both; }
+.hero-card   { animation: cardIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) both; }
+.hero-h1-a   { animation: blurIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+.hero-h1-b   { animation: blurIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both; }
+.hero-cta-a  { animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) 1s both; }
+.hero-cta-b  { animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) 1.15s both; }
+.hero-logo   { animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) 1.3s both; }
 
 @keyframes kenBurns {
   0%, 100% { transform: scale(1); }
@@ -164,7 +164,7 @@ html.no-js {
   opacity: 0;
 }
 .motif-icon.animate.visible {
-  animation: fadeLeft 0.6s ease-out both;
+  animation: fadeLeft 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 
 .manifesto-headline.animate {
@@ -174,10 +174,10 @@ html.no-js {
   opacity: 1;
 }
 .manifesto-headline.animate.visible .manifesto-text-a {
-  animation: blurIn 1.2s ease-out 0.2s both;
+  animation: blurIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 .manifesto-headline.animate.visible .manifesto-text-b {
-  animation: blurIn 1.2s ease-out 0.6s both;
+  animation: blurIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
 }
 
 /* Collage cards */
@@ -198,6 +198,12 @@ html.no-js {
   .collage-card-3 { transform: rotate(5deg); }
 }
 
+/* Ken-burns stagger — one card animating at a time */
+.collage-card-1 img { animation-delay: 0s; }
+.collage-card-2 img { animation-delay: 3.5s; }
+.collage-card-3 img { animation-delay: 7s; }
+.collage-card-4 img { animation-delay: 10.5s; }
+
 /* Scroll indicator bounce */
 @keyframes scrollBounce {
   0%, 100% { transform: translateY(0); opacity: 1; }
@@ -208,5 +214,51 @@ html.no-js {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  /* Hero — show at final resting state immediately */
+  .hero-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .hero-h1-a,
+  .hero-h1-b,
+  .hero-cta-a,
+  .hero-cta-b,
+  .hero-logo {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  /* Scroll indicator — stop bouncing */
+  .scroll-indicator {
+    animation: none;
+  }
+
+  /* Ken-burns — disable on all images */
+  .animate-ken-burns {
+    animation: none;
+  }
+
+  /* Motif row — show all at full opacity immediately */
+  .motif-icon.animate {
+    opacity: 1;
+  }
+  .motif-icon.animate.visible {
+    animation: none;
+    transform: none;
+  }
+
+  /* Manifesto headline — show at full opacity immediately */
+  .manifesto-headline.animate {
+    opacity: 1;
+  }
+  .manifesto-headline.animate.visible .manifesto-text-a,
+  .manifesto-headline.animate.visible .manifesto-text-b {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }

@@ -175,6 +175,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.7.1
         version: 0.7.1(prettier-plugin-astro@0.14.1)(prettier@3.6.2)
+      wrangler:
+        specifier: ^4.85.0
+        version: 4.85.0(@cloudflare/workers-types@4.20251011.0)
 
 packages:
 
