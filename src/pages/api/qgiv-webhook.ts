@@ -33,13 +33,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const payload = await request.json();
 
-    // Check if this is a membership dues payment (recurring donation on the membership form)
+    // Normalise field names — Zapier sends Title Case with spaces ("Is Recurring",
+    // "Type", "Contact Email") while direct QGiv webhooks use camelCase.
     const formId = payload["formId"] ?? payload["Form Id"] ?? null;
+    const isRecurringRaw = payload["Is Recurring"] ?? payload["isRecurring"] ?? "n";
+    const typeRaw: string = payload["Type"] ?? payload["type"] ?? "";
+
     const isMembershipForm = String(formId) === MEMBERSHIP_FORM_ID;
-    const isRecurring = payload["isRecurring"] === "y";
+    const isRecurring = isRecurringRaw === "y";
 
     if (isMembershipForm && isRecurring) {
-      const email: string = payload["contactEmail"] ?? "";
+      const email: string = payload["Contact Email"] ?? payload["contactEmail"] ?? "";
       if (email) {
         const hubApiUrl = getEnv("HUB_API_URL", locals);
         const hubApiKey = getEnv("HUB_API_KEY", locals);
@@ -71,8 +75,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
                   api_key: eoApiKey,
                   email_address: email,
                   fields: {
-                    FirstName: payload["firstName"] ?? payload["contactFirstName"] ?? "",
-                    LastName: payload["lastName"] ?? payload["contactLastName"] ?? "",
+                    FirstName: payload["First Name"] ?? payload["firstName"] ?? payload["contactFirstName"] ?? "",
+                    LastName: payload["Last Name"] ?? payload["lastName"] ?? payload["contactLastName"] ?? "",
                   },
                   tags: ["member"],
                   status: "SUBSCRIBED",
@@ -102,10 +106,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Determine donation type based on QGiv payload
     let donationType: "monthly" | "onetime" | null = null;
 
-    // isRecurring: "y" or "n" (string); type: "one time" or "recurring" (string with space)
-    if (payload.isRecurring === "y" || payload.type === "recurring") {
+    if (isRecurring || typeRaw === "recurring") {
       donationType = "monthly";
-    } else if (payload.isRecurring === "n" || payload.type === "one time") {
+    } else if (isRecurringRaw === "n" || typeRaw === "one time") {
       donationType = "onetime";
     }
 
@@ -126,9 +129,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
           url: "https://techforpalestine.org/donate",
           props: {
             source: "webhook",
-            form: String(payload.form?.name || "Unknown"),
-            amount: String(payload.value ?? payload.donationAmount ?? "0"),
-            transactionId: String(payload.id ?? payload.transactionId ?? ""),
+            form: String(payload["Form Name"] ?? payload.form?.name ?? "Unknown"),
+            amount: String(payload["Value"] ?? payload.value ?? payload.donationAmount ?? "0"),
+            transactionId: String(payload["ID"] ?? payload.id ?? payload.transactionId ?? ""),
           },
         }),
       })
