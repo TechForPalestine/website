@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { reportError } from "../../lib/report-error";
 import { constantTimeEqual } from "../../utils/crypto";
 import { getEnv } from "../../utils/getEnv";
 
@@ -50,10 +51,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
                   if (res.ok) {
                     console.log(`✅ Hub invite sent to [redacted]@${email.split("@")[1]}`);
                   } else {
-                    console.error(`Hub invite failed for [redacted]@${email.split("@")[1]}:`, res.status, await res.json().catch(() => ({})));
+                    const body = await res.json().catch(() => ({}));
+                    reportError(new Error(`Hub invite failed: ${res.status}`), { context: "Hub API invite", email: `[redacted]@${email.split("@")[1]}`, status: res.status, body });
                   }
                 })
-                .catch((err) => console.error("Error calling Hub API:", err))
+                .catch((err) => reportError(err, { context: "Hub API invite", email: `[redacted]@${email.split("@")[1]}` }))
             : Promise.resolve(console.warn(`Hub API not configured — skipping invite for [redacted]@${email.split("@")[1]}`)),
 
           eoApiKey
@@ -75,10 +77,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
                   if (res.ok) {
                     console.log(`✅ EmailOctopus contact added for [redacted]@${email.split("@")[1]}`);
                   } else {
-                    console.error(`EmailOctopus failed for [redacted]@${email.split("@")[1]}:`, res.status, await res.json().catch(() => ({})));
+                    const body = await res.json().catch(() => ({}));
+                    reportError(new Error(`EmailOctopus failed: ${res.status}`), { context: "EmailOctopus API", email: `[redacted]@${email.split("@")[1]}`, status: res.status, body });
                   }
                 })
-                .catch((err) => console.error("Error calling EmailOctopus API:", err))
+                .catch((err) => reportError(err, { context: "EmailOctopus API", email: `[redacted]@${email.split("@")[1]}` }))
             : Promise.resolve(console.warn(`EO_API_KEY not configured — skipping EmailOctopus for [redacted]@${email.split("@")[1]}`)),
         ]);
       } else {
@@ -147,7 +150,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
             }
           );
         } else {
-          console.error("Plausible API error:", await plausibleResponse.text());
+          const body = await plausibleResponse.text();
+          reportError(new Error(`Plausible API error: ${plausibleResponse.status}`), { context: "Plausible API", eventName, body });
 
           return new Response(
             JSON.stringify({
@@ -164,7 +168,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           );
         }
       } catch (plausibleError) {
-        console.error("Error calling Plausible API:", plausibleError);
+        reportError(plausibleError, { context: "Plausible API", eventName });
 
         return new Response(
           JSON.stringify({
@@ -189,7 +193,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     );
   } catch (error) {
-    console.error("Error processing QGiv webhook:", error);
+    reportError(error, { context: "QGiv webhook processing" });
 
     return new Response(
       JSON.stringify({
