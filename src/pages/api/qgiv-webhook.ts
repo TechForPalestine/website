@@ -112,13 +112,19 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (donationType) {
       const eventName = donationType === "monthly" ? "Monthly-donate" : "One-time-donate";
 
+      // Forward the original donor IP so Plausible doesn't drop the event as a
+      // bot — server-side requests from Cloudflare IPs are silently dropped
+      // unless X-Forwarded-For contains a real end-user IP.
+      const donorIp = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "";
+
       // Fire-and-forget Plausible tracking — a Plausible failure must never
       // cause a non-2xx response to Zapier, which would auto-disable the Zap.
       fetch("https://plausible.io/api/event", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "User-Agent": "QGiv-Webhook/1.0",
+          "User-Agent": "Mozilla/5.0 (compatible; T4P-Webhook/1.0)",
+          ...(donorIp && { "X-Forwarded-For": donorIp }),
         },
         body: JSON.stringify({
           domain: "techforpalestine.org",
