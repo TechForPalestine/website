@@ -9,9 +9,6 @@ const MEMBERSHIP_FORM_ID = "1116610";
 const EO_MEMBERS_LIST_URL =
   "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
 
-// QGiv webhook endpoint to receive donation notifications
-// Form: T4P Website Donation Form (embed ID: 83460)
-// Form: T4P Membership Form (Form Id: 1116610)
 export const POST: APIRoute = async ({ request, locals }) => {
   const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
   const webhookSecret = runtime?.QGIV_WEBHOOK_SECRET ?? import.meta.env.QGIV_WEBHOOK_SECRET;
@@ -33,7 +30,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const payload = await request.json();
 
-    // Check if this is a membership dues payment (recurring donation on the membership form)
     const formId = payload["formId"] ?? payload["Form Id"] ?? null;
     const isMembershipForm = String(formId) === MEMBERSHIP_FORM_ID;
     const isRecurring = payload["isRecurring"] === "y";
@@ -99,10 +95,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Determine donation type based on QGiv payload
     let donationType: "monthly" | "onetime" | null = null;
 
-    // isRecurring: "y" or "n" (string); type: "one time" or "recurring" (string with space)
     if (payload.isRecurring === "y" || payload.type === "recurring") {
       donationType = "monthly";
     } else if (payload.isRecurring === "n" || payload.type === "one time") {
@@ -112,13 +106,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (donationType) {
       const eventName = donationType === "monthly" ? "Monthly-donate" : "One-time-donate";
 
-      // Forward the original donor IP so Plausible doesn't drop the event as a
-      // bot — server-side requests from Cloudflare IPs are silently dropped
-      // unless X-Forwarded-For contains a real end-user IP.
       const donorIp = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "";
 
-      // Fire-and-forget Plausible tracking — a Plausible failure must never
-      // cause a non-2xx response to Zapier, which would auto-disable the Zap.
       fetch("https://plausible.io/api/event", {
         method: "POST",
         headers: {
