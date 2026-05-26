@@ -19,6 +19,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const token = request.headers.get("X-Webhook-Secret");
 
   if (!webhookSecret || !token || !constantTimeEqual(token, webhookSecret)) {
+    reportError(new Error("QGiv webhook auth failed"), {
+      context: "auth",
+      hasSecret: Boolean(webhookSecret),
+      hasToken: Boolean(token),
+    });
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -97,114 +102,62 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Determine donation type based on QGiv payload
     let donationType: "monthly" | "onetime" | null = null;
 
-    // Check QGiv's actual field formats
-    // isRecurring: "y" or "n" (string)
-    // type: "one time" or "recurring" (string with space)
+    // isRecurring: "y" or "n" (string); type: "one time" or "recurring" (string with space)
     if (payload.isRecurring === "y" || payload.type === "recurring") {
       donationType = "monthly";
     } else if (payload.isRecurring === "n" || payload.type === "one time") {
       donationType = "onetime";
     }
 
-    // If we detected a donation type, send event to Plausible directly
     if (donationType) {
       const eventName = donationType === "monthly" ? "Monthly-donate" : "One-time-donate";
 
-      // Call Plausible Events API
-      try {
-        const plausibleResponse = await fetch("https://plausible.io/api/event", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "User-Agent": "QGiv-Webhook/1.0",
+      // Fire-and-forget Plausible tracking — a Plausible failure must never
+      // cause a non-2xx response to Zapier, which would auto-disable the Zap.
+      fetch("https://plausible.io/api/event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "QGiv-Webhook/1.0",
+        },
+        body: JSON.stringify({
+          domain: "techforpalestine.org",
+          name: eventName,
+          url: "https://techforpalestine.org/donate",
+          props: {
+            source: "webhook",
+            form: String(payload.form?.name || "Unknown"),
+            amount: String(payload.value ?? payload.donationAmount ?? "0"),
+            transactionId: String(payload.id ?? payload.transactionId ?? ""),
           },
-          body: JSON.stringify({
-            domain: "techforpalestine.org",
-            name: eventName,
-            url: "https://techforpalestine.org/donate",
-            props: {
-              source: "webhook",
-              form: payload.form?.name || "Unknown",
-              amount: payload.value || payload.donationAmount || "0",
-              transactionId: payload.id || payload.transactionId || "",
-            },
-          }),
-        });
-
-        if (plausibleResponse.ok) {
-          console.log(`✅ Plausible event sent: ${eventName}`);
-
-          return new Response(
-            JSON.stringify({
-              success: true,
-              donationType,
-              eventName,
-              formId,
-              message: "Donation tracked successfully in Plausible",
-            }),
-            {
-              status: 200,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        } else {
-          const body = await plausibleResponse.text();
-          reportError(new Error(`Plausible API error: ${plausibleResponse.status}`), { context: "Plausible API", eventName, body });
-
-          return new Response(
-            JSON.stringify({
-              success: false,
-              error: "Failed to send event to Plausible",
-              donationType,
-            }),
-            {
-              status: 500,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        }
-      } catch (plausibleError) {
-        reportError(plausibleError, { context: "Plausible API", eventName });
-
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "Failed to call Plausible API",
-          }),
-          {
-            status: 500,
-            headers: {
-              "Content-Type": "application/json",
-            },
+        }),
+      })
+        .then(async (res) => {
+          if (res.ok) {
+            console.log(`✅ Plausible event sent: ${eventName}`);
+          } else {
+            const body = await res.text();
+            reportError(new Error(`Plausible API error: ${res.status}`), { context: "Plausible API", eventName, body });
           }
-        );
-      }
+        })
+        .catch((err) => reportError(err, { context: "Plausible API", eventName }));
+
+      return new Response(
+        JSON.stringify({ success: true, donationType, eventName, formId, message: "Donation tracked" }),
+        { status: 200, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     return new Response(
       JSON.stringify({ success: true, message: "Webhook received but donation type unclear" }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
+      { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
     reportError(error, { context: "QGiv webhook processing" });
 
     return new Response(
-      JSON.stringify({
-        error: "Failed to process webhook",
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      JSON.stringify({ error: "Failed to process webhook" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 };
