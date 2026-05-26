@@ -128,11 +128,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
         }),
       })
         .then(async (res) => {
-          if (res.ok) {
-            console.log(`✅ Plausible event sent: ${eventName}`);
-          } else {
+          const dropped = res.headers.get("x-plausible-dropped");
+          if (!res.ok) {
             const body = await res.text();
             reportError(new Error(`Plausible API error: ${res.status}`), { context: "Plausible API", eventName, body });
+          } else if (dropped === "1") {
+            reportError(new Error("Plausible dropped the event"), { context: "Plausible API", eventName, donorIp });
+          } else {
+            console.log(`✅ Plausible event sent: ${eventName}`);
           }
         })
         .catch((err) => reportError(err, { context: "Plausible API", eventName }));
