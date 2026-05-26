@@ -10,7 +10,9 @@ const EO_MEMBERS_LIST_URL =
   "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
+  const cf = (locals as { runtime?: { env?: Record<string, string>; ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime;
+  const runtime = cf?.env;
+  const ctx = cf?.ctx;
   const webhookSecret = runtime?.QGIV_WEBHOOK_SECRET ?? import.meta.env.QGIV_WEBHOOK_SECRET;
 
   const token = request.headers.get("X-Webhook-Secret");
@@ -108,7 +110,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
       const donorIp = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "";
 
-      fetch("https://plausible.io/api/event", {
+      const plausibleRequest = fetch("https://plausible.io/api/event", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,6 +141,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
           }
         })
         .catch((err) => reportError(err, { context: "Plausible API", eventName }));
+
+      ctx?.waitUntil(plausibleRequest);
 
       return new Response(
         JSON.stringify({ success: true, donationType, eventName, formId, message: "Donation tracked" }),
