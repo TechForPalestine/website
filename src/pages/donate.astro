@@ -279,6 +279,28 @@ const isUK = country === "GB";
         });
       }
 
+      // Track completed donations from the Qgiv embed via its donationComplete DOM event.
+      // This fires in the donor's real browser, so Plausible accepts it (unlike server-side webhooks).
+      document.addEventListener("QGIV.donationComplete", function (event) {
+        var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+
+        if (data.transStatus && data.transStatus !== "Accepted") return;
+
+        var isRecurring =
+          data.isRecurring === "y" ||
+          data.recurring === true ||
+          data.type === "recurring" ||
+          data.type === "monthly";
+        var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
+        var amount = String(data.value || data.amount || data.donationAmount || "");
+
+        if (typeof window.plausible !== "undefined") {
+          window.plausible(donationEvent, {
+            props: { source: "qgiv-embed", amount: amount },
+          });
+        }
+      });
+
       // Track form variant (safely)
       if (typeof window.plausible !== "undefined") {
         window.plausible("Donate Form", { props: { donate_form_variant: trackingVariant } });
