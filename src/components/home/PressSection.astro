@@ -27,6 +27,24 @@ const articles = [
     headline: "What's UpScrolled, the app gaining popularity after TikTok's US takeover?",
     url: "https://www.aljazeera.com/news/2026/1/29/whats-upscrolled-the-app-gaining-popularity-after-tiktoks-us-takeover",
   },
+  {
+    publication: "The Guardian",
+    date: "Nov 2025",
+    headline: "Fundraisers warn of 'catastrophic' drop in donations to Gaza since ceasefire",
+    url: "https://www.theguardian.com/global-development/2025/nov/21/fundraisers-warn-catastrophic-drop-donations-aid-palestinians-gaza-israel-ceasefire",
+  },
+  {
+    publication: "TRT World",
+    date: "2024",
+    headline: "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
+    url: "https://www.trtworld.com/video/18268907",
+  },
+  {
+    publication: "Counter Points",
+    date: "2024",
+    headline: "Paul on Counter Points — Tech for Palestine",
+    url: "https://www.youtube.com/watch?v=UldcFPEZBM4&t=4388s",
+  },
 ];
 ---
 
@@ -59,7 +77,7 @@ const articles = [
 
     <!-- Article cards -->
     <ul
-      class="mt-12 min-[810px]:mt-16 mb-16 min-[810px]:mb-24 grid grid-cols-1 gap-4 lg:grid-cols-3 list-none p-0"
+      class="mt-12 min-[810px]:mt-16 mb-16 min-[810px]:mb-24 grid grid-cols-1 gap-4 min-[810px]:grid-cols-2 lg:grid-cols-3 list-none p-0"
       role="list"
     >
       {articles.map((article, i) => (
