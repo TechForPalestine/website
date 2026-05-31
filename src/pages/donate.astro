@@ -281,12 +281,12 @@ const isUK = country === "GB";
 
       // QGIV.ga4Purchase carries transaction data; QGIV.donationComplete only has contact info.
       // Debug ga4Purchase to find the recurring flag, then use donationComplete to fire Plausible.
-      // Temporary: log all QGIV events to find which fires and what data it carries.
-      ["QGIV.donationStart","QGIV.donationStepChange","QGIV.donationComplete",
-       "QGIV.ga4Purchase","QGIV.metaPixelPurchase","QGIV.pageView"].forEach(function(name) {
-        document.addEventListener(name, function(event) {
-          console.log("[QGIV]", name, JSON.stringify(event.detail, null, 2));
-        });
+      // Temporary: intercept raw postMessages from Qgiv iframe to inspect full payload.
+      window.addEventListener("message", function (event) {
+        if (event.origin !== "https://secure.qgiv.com") return;
+        var message;
+        try { message = JSON.parse(event.data); } catch (e) { return; }
+        console.log("[QGIV postMessage]", JSON.stringify(message, null, 2));
       });
 
       document.addEventListener("QGIV.donationComplete", function (event) {
