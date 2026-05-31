@@ -284,28 +284,30 @@ const isUK = country === "GB";
       document.addEventListener("QGIV.donationComplete", function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
 
-        if (data.transStatus && data.transStatus !== "Accepted") return;
+        var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
+
+        if (inner.transStatus && inner.transStatus !== "Accepted") return;
 
         // Temporary: capture raw field values so we can confirm the recurring field name.
         // Remove once confirmed.
         if (typeof window.plausible !== "undefined") {
           window.plausible("Donation-debug", {
             props: {
-              isRecurring: String(data.isRecurring ?? "undefined"),
-              type: String(data.type ?? "undefined"),
-              recurring: String(data.recurring ?? "undefined"),
-              keys: Object.keys(data).slice(0, 5).join(","),
+              isRecurring: String(inner.isRecurring ?? "undefined"),
+              type: String(inner.type ?? "undefined"),
+              recurring: String(inner.recurring ?? "undefined"),
+              keys: Object.keys(inner).slice(0, 5).join(","),
             },
           });
         }
 
         var isRecurring =
-          data.isRecurring === "y" ||
-          data.recurring === true ||
-          data.type === "recurring" ||
-          data.type === "monthly";
+          inner.isRecurring === "y" ||
+          inner.recurring === true ||
+          inner.type === "recurring" ||
+          inner.type === "monthly";
         var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
-        var amount = String(data.value || data.amount || data.donationAmount || "");
+        var amount = String(inner.value || inner.amount || inner.donationAmount || "");
 
         if (typeof window.plausible !== "undefined") {
           window.plausible(donationEvent, {
