@@ -2,3 +2,6 @@
 /resources /faq 301
 /resources/ /faq 301
 /project/* /projects 301
+/project-apply /projects 301
+/project-details/* /projects 301
+/mentor-application /mentorship 301
