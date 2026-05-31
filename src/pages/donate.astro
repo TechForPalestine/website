@@ -281,6 +281,7 @@ const isUK = country === "GB";
 
       document.addEventListener("QGIV.donationComplete", function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+        console.log("[QGIV donationComplete fired]", JSON.stringify(data.QGIV && data.QGIV.transaction));
         var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
 
         if (transaction.status !== "Accepted") return;
