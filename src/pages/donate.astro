@@ -279,9 +279,23 @@ const isUK = country === "GB";
         });
       }
 
-      // Temporary: log full donationComplete payload to find recurring field.
       document.addEventListener("QGIV.donationComplete", function (event) {
-        console.log("[QGIV donationComplete]", JSON.stringify(event.detail));
+        var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+        var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
+
+        if (transaction.status !== "Accepted") return;
+
+        var isRecurring = transaction.recurring === true ||
+          (typeof transaction.frequency === "string" &&
+           transaction.frequency.toLowerCase() !== "one time");
+
+        var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
+
+        if (typeof window.plausible !== "undefined") {
+          window.plausible(donationEvent, {
+            props: { source: "qgiv-embed", amount: String(transaction.total || "") },
+          });
+        }
       });
 
       // Track form variant (safely)

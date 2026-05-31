@@ -97,61 +97,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    let donationType: "monthly" | "onetime" | null = null;
-
-    if (payload.isRecurring === "y" || payload.type === "recurring") {
-      donationType = "monthly";
-    } else if (payload.isRecurring === "n" || payload.type === "one time") {
-      donationType = "onetime";
-    }
-
-    if (donationType) {
-      const eventName = donationType === "monthly" ? "Monthly-donate" : "One-time-donate";
-
-      const donorIp = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "";
-
-      const plausibleRequest = fetch("https://plausible.io/api/event", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0 (compatible; T4P-Webhook/1.0)",
-          ...(donorIp && { "X-Forwarded-For": donorIp }),
-        },
-        body: JSON.stringify({
-          domain: "techforpalestine.org",
-          name: eventName,
-          url: "https://techforpalestine.org/donate",
-          props: {
-            source: "webhook",
-            form: String(payload.form?.name || "Unknown"),
-            amount: String(payload.value ?? payload.donationAmount ?? "0"),
-            transactionId: String(payload.id ?? payload.transactionId ?? ""),
-          },
-        }),
-      })
-        .then(async (res) => {
-          const dropped = res.headers.get("x-plausible-dropped");
-          if (!res.ok) {
-            const body = await res.text();
-            reportError(new Error(`Plausible API error: ${res.status}`), { context: "Plausible API", eventName, body });
-          } else if (dropped === "1") {
-            reportError(new Error("Plausible dropped the event"), { context: "Plausible API", eventName, donorIp });
-          } else {
-            console.log(`✅ Plausible event sent: ${eventName}`);
-          }
-        })
-        .catch((err) => reportError(err, { context: "Plausible API", eventName }));
-
-      ctx?.waitUntil(plausibleRequest);
-
-      return new Response(
-        JSON.stringify({ success: true, donationType, eventName, formId, message: "Donation tracked" }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
     return new Response(
-      JSON.stringify({ success: true, message: "Webhook received but donation type unclear" }),
+      JSON.stringify({ success: true, message: "Webhook received" }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
