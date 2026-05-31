@@ -282,11 +282,8 @@ const isUK = country === "GB";
       // QGIV.ga4Purchase carries transaction data; QGIV.donationComplete only has contact info.
       // Debug ga4Purchase to find the recurring flag, then use donationComplete to fire Plausible.
       document.addEventListener("QGIV.ga4Purchase", function (event) {
-        var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-        var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
-
-        // Temporary: log full ga4Purchase payload. Remove once recurring field is confirmed.
-        console.log("[QGIV ga4Purchase]", JSON.stringify(inner, null, 2));
+        // Temporary: log full raw payload. Remove once recurring field is confirmed.
+        console.log("[QGIV ga4Purchase]", JSON.stringify(event.detail, null, 2));
       });
 
       document.addEventListener("QGIV.donationComplete", function (event) {
