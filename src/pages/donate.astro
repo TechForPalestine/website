@@ -279,7 +279,7 @@ const isUK = country === "GB";
         });
       }
 
-      document.addEventListener("QGIV.donationComplete", function (event) {
+      document.addEventListener("QGIV.donationComplete", async function (event) {
         console.log("[T4P DEBUG] QGIV.donationComplete fired");
         console.log("[T4P DEBUG] event type:", typeof event, "| is CustomEvent:", event instanceof CustomEvent);
         console.log("[T4P DEBUG] event.detail:", JSON.stringify(event.detail, null, 2));
@@ -306,9 +306,11 @@ const isUK = country === "GB";
         console.log("[T4P DEBUG] typeof window.plausible:", typeof window.plausible);
         if (typeof window.plausible !== "undefined") {
           var props = { source: "qgiv-embed", amount: String(transaction.total || "") };
-          console.log("[T4P DEBUG] calling plausible('" + donationEvent + "', { props:", JSON.stringify(props), "})");
-          window.plausible(donationEvent, { props: props });
-          console.log("[T4P DEBUG] plausible call completed");
+          console.log("[T4P DEBUG] calling plausible (awaited) for:", donationEvent);
+          await new Promise(function (resolve) {
+            window.plausible(donationEvent, { props: props, callback: resolve });
+          });
+          console.log("[T4P DEBUG] plausible await resolved — event confirmed sent");
         } else {
           console.log("[T4P DEBUG] plausible NOT available — event NOT sent");
         }
