@@ -283,6 +283,7 @@ const isUK = country === "GB";
       // ecommerce.items item_name/category identifies recurring vs one-time.
       document.addEventListener("QGIV.ga4Purchase", function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+        console.log("[QGIV ga4Purchase]", JSON.stringify(data, null, 2));
         var ecommerce = data.ecommerce || {};
         var items = Array.isArray(ecommerce.items) ? ecommerce.items : [];
 
