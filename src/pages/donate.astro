@@ -286,6 +286,19 @@ const isUK = country === "GB";
 
         if (data.transStatus && data.transStatus !== "Accepted") return;
 
+        // Temporary: capture raw field values so we can confirm the recurring field name.
+        // Remove once confirmed.
+        if (typeof window.plausible !== "undefined") {
+          window.plausible("Donation-debug", {
+            props: {
+              isRecurring: String(data.isRecurring ?? "undefined"),
+              type: String(data.type ?? "undefined"),
+              recurring: String(data.recurring ?? "undefined"),
+              keys: Object.keys(data).slice(0, 5).join(","),
+            },
+          });
+        }
+
         var isRecurring =
           data.isRecurring === "y" ||
           data.recurring === true ||
