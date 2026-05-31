@@ -279,32 +279,22 @@ const isUK = country === "GB";
         });
       }
 
-      // QGIV.ga4Purchase carries transaction data; QGIV.donationComplete only has contact info.
-      // Debug ga4Purchase to find the recurring flag, then use donationComplete to fire Plausible.
+      // Track donations via QGIV.ga4Purchase which carries full transaction data.
+      // ecommerce.items item_name/category identifies recurring vs one-time.
       document.addEventListener("QGIV.ga4Purchase", function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-        var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
+        console.log("[QGIV ga4Purchase]", JSON.stringify(data, null, 2));
+        var ecommerce = data.ecommerce || {};
+        var items = Array.isArray(ecommerce.items) ? ecommerce.items : [];
 
-        // Temporary: log ga4Purchase payload to find recurring field. Remove once confirmed.
-        if (typeof window.plausible !== "undefined") {
-          window.plausible("Donation-debug", {
-            props: { payload: JSON.stringify(inner).slice(0, 1000) },
-          });
-        }
-      });
+        var isRecurring = items.some(function (item) {
+          var text = [item.item_name, item.item_category, item.name, item.category]
+            .filter(Boolean).join(" ").toLowerCase();
+          return text.indexOf("recurring") !== -1 || text.indexOf("monthly") !== -1;
+        });
 
-      document.addEventListener("QGIV.donationComplete", function (event) {
-        var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-
-        var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
-
-        var isRecurring =
-          inner.isRecurring === "y" ||
-          inner.recurring === true ||
-          inner.type === "recurring" ||
-          inner.type === "monthly";
         var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
-        var amount = String(inner.value || inner.amount || inner.donationAmount || "");
+        var amount = String(ecommerce.value || "");
 
         if (typeof window.plausible !== "undefined") {
           window.plausible(donationEvent, {
