@@ -48,7 +48,7 @@ const photos = [
       {stats.map((s) => (
         <div class="last:col-span-2 sm:last:col-span-1">
           <dt class="ts-stat text-ink" aria-label={`${s.value}+`}>
-            <span class="stat-value" data-target={s.value} aria-hidden="true">0</span><span class="text-brand" aria-hidden="true">+</span>
+            <span class="stat-value" data-target={s.value} aria-hidden="true">{s.value}</span><span class="text-brand" aria-hidden="true">+</span>
           </dt>
           <dd class="ts-body-large mt-1.5 text-ink-secondary">{s.label}</dd>
         </div>
@@ -139,11 +139,13 @@ const photos = [
 
   const statsGrid = document.querySelector(".stats-grid");
   if (statsGrid) {
+    const values = statsGrid.querySelectorAll<HTMLElement>(".stat-value");
+    values.forEach((el) => { el.textContent = "0"; });
+
     const statsObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const values = statsGrid.querySelectorAll<HTMLElement>(".stat-value");
             values.forEach((el, i) => {
               setTimeout(() => animateCount(el), i * 120);
             });

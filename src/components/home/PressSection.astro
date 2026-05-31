@@ -192,6 +192,14 @@ const articles = [
     opacity: 1;
   }
 
+  :global(html.no-js) .press-heading,
+  :global(html.no-js) .press-logos,
+  :global(html.no-js) .press-card-wrap,
+  :global(html.no-js) .press-photo {
+    opacity: 1;
+    translate: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .press-heading,
     .press-logos,

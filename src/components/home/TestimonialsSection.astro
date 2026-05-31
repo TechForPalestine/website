@@ -107,6 +107,17 @@ const testimonials = [
     background-color: var(--color-butter);
   }
 
+  :global(html.no-js) .testimonials-header {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .testimonials-marquee {
+    overflow-x: auto;
+  }
+  :global(html.no-js) .marquee-track {
+    gap: 1rem;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .testimonials-header {
       opacity: 1;

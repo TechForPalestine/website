@@ -211,6 +211,12 @@ const projects = [
     .portfolio-card-wrap[data-i="5"] { top: 160px; }
   }
 
+  :global(html.no-js) .portfolio-card-wrap {
+    opacity: 1;
+    translate: none;
+    position: static;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .portfolio-card-wrap {
       position: static;
