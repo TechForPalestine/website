@@ -288,16 +288,10 @@ const isUK = country === "GB";
 
         if (inner.transStatus && inner.transStatus !== "Accepted") return;
 
-        // Temporary: capture raw field values so we can confirm the recurring field name.
-        // Remove once confirmed.
+        // Temporary: log full payload to confirm field names. Remove once confirmed.
         if (typeof window.plausible !== "undefined") {
           window.plausible("Donation-debug", {
-            props: {
-              isRecurring: String(inner.isRecurring ?? "undefined"),
-              type: String(inner.type ?? "undefined"),
-              recurring: String(inner.recurring ?? "undefined"),
-              keys: Object.keys(inner).slice(0, 5).join(","),
-            },
+            props: { payload: JSON.stringify(inner).slice(0, 1000) },
           });
         }
 
