@@ -286,8 +286,6 @@ const isUK = country === "GB";
 
         var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
 
-        if (inner.transStatus && inner.transStatus !== "Accepted") return;
-
         // Temporary: log full payload to confirm field names. Remove once confirmed.
         if (typeof window.plausible !== "undefined") {
           window.plausible("Donation-debug", {
