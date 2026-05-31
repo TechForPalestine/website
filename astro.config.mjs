@@ -50,6 +50,22 @@ export default defineConfig({
         },
       },
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) => {
+        const exclude = [
+          "/coming-soon/",
+          "/index-new/",
+          "/incubator-new/",
+          "/project-details-temp/",
+          "/project/",
+          "/success/",
+          "/vercel/",
+          "/donate-2/",
+          "/event-details/",
+          "/404/",
+        ];
+        return !exclude.some((path) => page.endsWith(path));
+      },
+    }),
   ],
 });
