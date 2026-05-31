@@ -279,19 +279,23 @@ const isUK = country === "GB";
         });
       }
 
-      // Track completed donations from the Qgiv embed via its donationComplete DOM event.
-      // This fires in the donor's real browser, so Plausible accepts it (unlike server-side webhooks).
-      document.addEventListener("QGIV.donationComplete", function (event) {
+      // QGIV.ga4Purchase carries transaction data; QGIV.donationComplete only has contact info.
+      // Use ga4Purchase to debug the payload and find the recurring flag.
+      document.addEventListener("QGIV.ga4Purchase", function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-
         var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
 
-        // Temporary: log full payload to confirm field names. Remove once confirmed.
+        // Temporary: log ga4Purchase payload to find recurring field. Remove once confirmed.
         if (typeof window.plausible !== "undefined") {
           window.plausible("Donation-debug", {
             props: { payload: JSON.stringify(inner).slice(0, 1000) },
           });
         }
+      });
+
+      document.addEventListener("QGIV.donationComplete", function (event) {
+        var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+        var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
 
         var isRecurring =
           inner.isRecurring === "y" ||
