@@ -285,12 +285,8 @@ const isUK = country === "GB";
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
         var inner = (data.QGIV && typeof data.QGIV === "object") ? data.QGIV : data;
 
-        // Temporary: log ga4Purchase payload to find recurring field. Remove once confirmed.
-        if (typeof window.plausible !== "undefined") {
-          window.plausible("Donation-debug", {
-            props: { payload: JSON.stringify(inner).slice(0, 1000) },
-          });
-        }
+        // Temporary: log full ga4Purchase payload. Remove once recurring field is confirmed.
+        console.log("[QGIV ga4Purchase]", JSON.stringify(inner, null, 2));
       });
 
       document.addEventListener("QGIV.donationComplete", function (event) {
