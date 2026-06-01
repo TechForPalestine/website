@@ -19,6 +19,7 @@ export default {
         sand: "#F7F2E8",
         ink: {
           DEFAULT: "#2A2428",
+          dark: "#201D1E",
           secondary: "#73656E",
           muted: "#B5B5B5",
           divider: "#D6D6D6",
@@ -26,6 +27,7 @@ export default {
         brand: {
           DEFAULT: "#AB4956",
           hover: "#D35464",
+          light: "#E8727F",
         },
       },
       fontFamily: {
