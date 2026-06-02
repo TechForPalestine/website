@@ -1,0 +1,125 @@
+---
+import { Icon } from "astro-icon/components";
+
+const navigation: Record<string, [string, string][]> = {
+  About: [
+    ["Our organization", "/about"],
+    ["Team", "/team"],
+    ["Media", "/media"],
+    ["Contact us", "/contact"],
+  ],
+  Incubator: [
+    ["Overview", "/incubator"],
+    ["Projects", "/projects"],
+    ["Ideas", "/ideas"],
+    ["Tools", "/tools"],
+  ],
+  "Get Involved": [
+    ["Join our Discord", "https://techforpalestine.org/discord-invite"],
+    ["Entrepreneurs for Palestine", "/e4p"],
+    ["Become a member", "/membership"],
+    ["Volunteer", "/volunteer"],
+    ["Hire Palestinians", "/help/hire"],
+  ],
+  "Events & Updates": [
+    ["Brussels 2026", "https://brussels2026.techforpalestine.org/"],
+    ["Barcelona 2026", "https://barcelona2026.techforpalestine.org/"],
+    ["Bay Area 2026", "https://summit.techforpalestine.org"],
+    ["London 2025", "/london-gathering"],
+    ["Past Events", "/events"],
+    ["Past Updates", "https://updates.techforpalestine.org"],
+    ["FAQ", "/faq"],
+  ],
+};
+
+const socials = [
+  { name: "LinkedIn", url: "https://www.linkedin.com/company/techforpalestine/", icon: "mdi:linkedin" },
+  { name: "Instagram", url: "https://www.instagram.com/techforpalestine", icon: "mdi:instagram" },
+  { name: "Twitter", url: "https://twitter.com/tech4palestine", icon: "mdi:twitter" },
+  { name: "GitHub", url: "https://github.com/TechForPalestine/", icon: "mdi:github" },
+];
+---
+
+<footer class="bg-ink-dark pt-20 pb-12">
+  <div class="mx-auto max-w-7xl px-6 md:px-8">
+    <!-- Main footer grid -->
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
+      <!-- Brand column -->
+      <div class="lg:col-span-4">
+        <a href="/" class="inline-block">
+          <img
+            src="/logos/Logo-dark.png"
+            alt="Tech for Palestine"
+            class="h-[4.5rem] w-auto"
+          />
+        </a>
+
+        <p class="ts-body mt-6 max-w-xs leading-relaxed text-white/60">
+          A coalition of professionals harnessing technology and human innovation
+          for a free and sovereign Palestine.
+        </p>
+
+        <ul class="mt-8 flex gap-4">
+          {socials.map((s) => (
+            <li>
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-white/40 transition-colors duration-200 hover:text-white"
+                title={s.name}
+              >
+                <span class="sr-only">{s.name}</span>
+                <Icon name={s.icon} class="h-5 w-5" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Navigation columns -->
+      <nav class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8" aria-label="Footer">
+        {Object.entries(navigation).map(([category, links]) => (
+          <div>
+            <h3 class="ts-overline text-white/40">{category}</h3>
+            <ul class="mt-4 space-y-3">
+              {links.map(([label, href]) => (
+                <li>
+                  <a
+                    href={href}
+                    class="ts-body-small text-white/60 transition-colors duration-200 hover:text-white"
+                    target={href.startsWith("http") ? "_blank" : "_self"}
+                    rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+
+    <!-- Divider -->
+    <hr class="mt-16 border-white/10" />
+
+    <!-- Bottom bar -->
+    <div class="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+      <p class="ts-body-small text-white/40">
+        &copy; {new Date().getFullYear()} Tech for Palestine. All rights reserved. 501(c)(3) nonprofit &middot; EIN 99-3441367
+      </p>
+      <div class="flex gap-6">
+        <a href="/privacy-policy" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+          Privacy
+        </a>
+        <a href="/terms" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+          Terms
+        </a>
+        <a href="/legal" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+          Legal
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
