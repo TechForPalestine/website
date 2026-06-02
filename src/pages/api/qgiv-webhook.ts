@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { reportError } from "../../lib/report-error";
 import { constantTimeEqual } from "../../utils/crypto";
 import { getEnv } from "../../utils/getEnv";
 
@@ -8,16 +9,20 @@ const MEMBERSHIP_FORM_ID = "1116610";
 const EO_MEMBERS_LIST_URL =
   "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
 
-// QGiv webhook endpoint to receive donation notifications
-// Form: T4P Website Donation Form (embed ID: 83460)
-// Form: T4P Membership Form (Form Id: 1116610)
 export const POST: APIRoute = async ({ request, locals }) => {
-  const runtime = (locals as { runtime?: { env?: Record<string, string> } }).runtime?.env;
+  const cf = (locals as { runtime?: { env?: Record<string, string>; ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime;
+  const runtime = cf?.env;
+  const ctx = cf?.ctx;
   const webhookSecret = runtime?.QGIV_WEBHOOK_SECRET ?? import.meta.env.QGIV_WEBHOOK_SECRET;
 
   const token = request.headers.get("X-Webhook-Secret");
 
   if (!webhookSecret || !token || !constantTimeEqual(token, webhookSecret)) {
+    reportError(new Error("QGiv webhook auth failed"), {
+      context: "auth",
+      hasSecret: Boolean(webhookSecret),
+      hasToken: Boolean(token),
+    });
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -27,7 +32,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const payload = await request.json();
 
-    // Check if this is a membership dues payment (recurring donation on the membership form)
     const formId = payload["formId"] ?? payload["Form Id"] ?? null;
     const isMembershipForm = String(formId) === MEMBERSHIP_FORM_ID;
     const isRecurring = payload["isRecurring"] === "y";
@@ -50,10 +54,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
                   if (res.ok) {
                     console.log(`✅ Hub invite sent to [redacted]@${email.split("@")[1]}`);
                   } else {
-                    console.error(`Hub invite failed for [redacted]@${email.split("@")[1]}:`, res.status, await res.json().catch(() => ({})));
+                    const body = await res.json().catch(() => ({}));
+                    reportError(new Error(`Hub invite failed: ${res.status}`), { context: "Hub API invite", email: `[redacted]@${email.split("@")[1]}`, status: res.status, body });
                   }
                 })
-                .catch((err) => console.error("Error calling Hub API:", err))
+                .catch((err) => reportError(err, { context: "Hub API invite", email: `[redacted]@${email.split("@")[1]}` }))
             : Promise.resolve(console.warn(`Hub API not configured — skipping invite for [redacted]@${email.split("@")[1]}`)),
 
           eoApiKey
@@ -75,10 +80,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
                   if (res.ok) {
                     console.log(`✅ EmailOctopus contact added for [redacted]@${email.split("@")[1]}`);
                   } else {
-                    console.error(`EmailOctopus failed for [redacted]@${email.split("@")[1]}:`, res.status, await res.json().catch(() => ({})));
+                    const body = await res.json().catch(() => ({}));
+                    reportError(new Error(`EmailOctopus failed: ${res.status}`), { context: "EmailOctopus API", email: `[redacted]@${email.split("@")[1]}`, status: res.status, body });
                   }
                 })
-                .catch((err) => console.error("Error calling EmailOctopus API:", err))
+                .catch((err) => reportError(err, { context: "EmailOctopus API", email: `[redacted]@${email.split("@")[1]}` }))
             : Promise.resolve(console.warn(`EO_API_KEY not configured — skipping EmailOctopus for [redacted]@${email.split("@")[1]}`)),
         ]);
       } else {
@@ -91,116 +97,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Determine donation type based on QGiv payload
-    let donationType: "monthly" | "onetime" | null = null;
-
-    // Check QGiv's actual field formats
-    // isRecurring: "y" or "n" (string)
-    // type: "one time" or "recurring" (string with space)
-    if (payload.isRecurring === "y" || payload.type === "recurring") {
-      donationType = "monthly";
-    } else if (payload.isRecurring === "n" || payload.type === "one time") {
-      donationType = "onetime";
-    }
-
-    // If we detected a donation type, send event to Plausible directly
-    if (donationType) {
-      const eventName = donationType === "monthly" ? "Monthly-donate" : "One-time-donate";
-
-      // Call Plausible Events API
-      try {
-        const plausibleResponse = await fetch("https://plausible.io/api/event", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "User-Agent": "QGiv-Webhook/1.0",
-          },
-          body: JSON.stringify({
-            domain: "techforpalestine.org",
-            name: eventName,
-            url: "https://techforpalestine.org/donate",
-            props: {
-              source: "webhook",
-              form: payload.form?.name || "Unknown",
-              amount: payload.value || payload.donationAmount || "0",
-              transactionId: payload.id || payload.transactionId || "",
-            },
-          }),
-        });
-
-        if (plausibleResponse.ok) {
-          console.log(`✅ Plausible event sent: ${eventName}`);
-
-          return new Response(
-            JSON.stringify({
-              success: true,
-              donationType,
-              eventName,
-              formId,
-              message: "Donation tracked successfully in Plausible",
-            }),
-            {
-              status: 200,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        } else {
-          console.error("Plausible API error:", await plausibleResponse.text());
-
-          return new Response(
-            JSON.stringify({
-              success: false,
-              error: "Failed to send event to Plausible",
-              donationType,
-            }),
-            {
-              status: 500,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        }
-      } catch (plausibleError) {
-        console.error("Error calling Plausible API:", plausibleError);
-
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "Failed to call Plausible API",
-          }),
-          {
-            status: 500,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
-    }
-
     return new Response(
-      JSON.stringify({ success: true, message: "Webhook received but donation type unclear" }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
+      JSON.stringify({ success: true, message: "Webhook received" }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error processing QGiv webhook:", error);
+    reportError(error, { context: "QGiv webhook processing" });
 
     return new Response(
-      JSON.stringify({
-        error: "Failed to process webhook",
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      JSON.stringify({ error: "Failed to process webhook" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 };

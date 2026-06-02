@@ -252,6 +252,12 @@ export default function Component({ initialData, loading: initialLoading = false
 - Build command: `yarn build`
 - Output directory: `dist/`
 
+## Routing & Redirects
+
+- **When removing or renaming a page, always add a 301 redirect** in `public/_redirects` pointing to the closest equivalent page. Only omit the redirect if there genuinely is no equivalent destination. Old URLs get indexed by Google — without a redirect, they become persistent 404s that hurt SEO and send users to dead ends.
+- **Custom 404 page** lives at `src/pages/404.astro`. It uses the standard `Layout.astro` so visitors always see site navigation. Keep it that way.
+- **Exclude test/orphan pages from the sitemap.** Any page built for testing, staging, or experimentation — or any page not reachable via site navigation — must be added to the `filter` exclude list in the `sitemap()` config in `astro.config.mjs`. Google should only index pages that real users can navigate to.
+
 ## Security & Best Practices
 
 This project has undergone six rounds of security auditing. The rules below are derived directly from findings that were discovered and fixed. Do not regress them.

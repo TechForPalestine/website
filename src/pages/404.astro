@@ -1,0 +1,35 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/base.css";
+---
+
+<Layout title="Page Not Found">
+  <main class="flex-1 flex items-center justify-center px-6 py-24">
+    <div class="text-center max-w-lg">
+      <p class="text-base font-semibold text-[#168039]">404</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+        Page not found
+      </h1>
+      <p class="mt-6 text-lg text-gray-600">
+        Sorry, the page you're looking for doesn't exist or has been moved.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href="/"
+          class="rounded-md bg-[#168039] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#126b2e] transition-colors"
+        >
+          Go home
+        </a>
+        <a href="/projects" class="text-sm font-semibold text-gray-900 hover:text-[#168039] transition-colors">
+          Projects <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/events" class="text-sm font-semibold text-gray-900 hover:text-[#168039] transition-colors">
+          Events <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/get-involved" class="text-sm font-semibold text-gray-900 hover:text-[#168039] transition-colors">
+          Get involved <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>
