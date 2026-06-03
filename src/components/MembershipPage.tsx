@@ -91,6 +91,27 @@ export default function MembershipPage() {
     }
   }, [showCalculator]);
 
+  useEffect(() => {
+    const variant = showCalculator ? "Calculator" : "No Calculator";
+
+    function handleDonationComplete(event: Event) {
+      const detail = (event as CustomEvent).detail ?? {};
+      const transaction = detail?.QGIV?.transaction ?? {};
+
+      if (typeof window.plausible !== "undefined") {
+        window.plausible("Membership", {
+          props: {
+            amount: String(transaction.total || ""),
+            membership_variant: variant,
+          },
+        });
+      }
+    }
+
+    document.addEventListener("QGIV.donationComplete", handleDonationComplete);
+    return () => document.removeEventListener("QGIV.donationComplete", handleDonationComplete);
+  }, [showCalculator]);
+
   return (
     <Box sx={{ maxWidth: 800, mx: "auto" }}>
       {/* Intro */}
