@@ -1,7 +1,45 @@
 import { useState, useRef } from "react";
 import type { CSSProperties } from "react";
 
-const DATASETS = [
+type CategoryKey = "casualties" | "satellite" | "events" | "humanitarian" | "human-rights" | "population";
+type AccessKey = "open" | "restricted";
+type LicenseKey = "open" | "cc" | "restrictive";
+
+interface Dataset {
+  id: number;
+  name: string;
+  org: string;
+  category: CategoryKey;
+  categoryLabel: string;
+  formats: string[];
+  updateFreq: string;
+  access: AccessKey;
+  accessLabel: string;
+  license: string;
+  licenseType: LicenseKey;
+  score: number;
+  records: string;
+  timespan: string;
+  url: string;
+  description: string;
+  maintainer: string;
+  size: string;
+  accessDetail: string;
+  licenseDetail: string;
+  crossRefs: number[];
+  crossRefNotes: string;
+  integrationEffort: string;
+  caveats: string;
+  tags: string[];
+}
+
+interface CategoryStyle {
+  color: string;
+  bg: string;
+  label: string;
+}
+
+const DATASETS: Dataset[] = [
   {
     id: 1,
     name: "T4P Daily Casualties",
@@ -220,7 +258,7 @@ const DATASETS = [
   }
 ];
 
-const CATEGORIES = {
+const CATEGORIES: Record<CategoryKey, CategoryStyle> = {
   casualties: { color: "#C4503D", bg: "#FDF0ED", label: "Casualties" },
   satellite: { color: "#2D6A9F", bg: "#EBF2F9", label: "Satellite / Infrastructure" },
   events: { color: "#6B52AE", bg: "#F0EDF8", label: "Conflict Events" },
@@ -229,18 +267,18 @@ const CATEGORIES = {
   population: { color: "#A07628", bg: "#F8F3E8", label: "Population" },
 };
 
-const ACCESS_STYLES = {
+const ACCESS_STYLES: Record<AccessKey, { dot: string; label: string }> = {
   open: { dot: "#2E7D5B", label: "Open" },
   restricted: { dot: "#C4503D", label: "Restricted" },
 };
 
-const LICENSE_STYLES = {
+const LICENSE_STYLES: Record<LicenseKey, { color: string }> = {
   open: { color: "#2E7D5B" },
   cc: { color: "#2D6A9F" },
   restrictive: { color: "#C4503D" },
 };
 
-function StarRating({ n }) {
+function StarRating({ n }: { n: number }) {
   return (
     <span style={{ letterSpacing: "-1px", fontSize: 14 }}>
       {[1, 2, 3, 4, 5].map((i) => (
@@ -252,7 +290,7 @@ function StarRating({ n }) {
   );
 }
 
-function FormatPill({ fmt }) {
+function FormatPill({ fmt }: { fmt: string }) {
   return (
     <span
       style={{
@@ -272,7 +310,7 @@ function FormatPill({ fmt }) {
   );
 }
 
-function CategoryBadge({ cat, small }) {
+function CategoryBadge({ cat, small }: { cat: CategoryKey; small?: boolean }) {
   const c = CATEGORIES[cat];
   return (
     <span
@@ -303,7 +341,7 @@ function CategoryBadge({ cat, small }) {
   );
 }
 
-function AccessDot({ type }) {
+function AccessDot({ type }: { type: AccessKey }) {
   const s = ACCESS_STYLES[type];
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11 }}>
@@ -321,7 +359,7 @@ function AccessDot({ type }) {
   );
 }
 
-function ConnectionLine({ from, to, datasets }) {
+function ConnectionLine({ from, to, datasets }: { from: number; to: number; datasets: Dataset[] }) {
   const a = datasets.find((d) => d.id === from);
   const b = datasets.find((d) => d.id === to);
   if (!a || !b) return null;
@@ -367,7 +405,7 @@ function ConnectionLine({ from, to, datasets }) {
   );
 }
 
-function DatasetCard({ dataset, isSelected, onClick, index }) {
+function DatasetCard({ dataset, isSelected, onClick, index }: { dataset: Dataset; isSelected: boolean; onClick: () => void; index: number }) {
   const cat = CATEGORIES[dataset.category];
   return (
     <div
@@ -478,10 +516,10 @@ function DatasetCard({ dataset, isSelected, onClick, index }) {
   );
 }
 
-function DetailPanel({ dataset, onClose }) {
+function DetailPanel({ dataset, onClose }: { dataset: Dataset; onClose: () => void }) {
   const cat = CATEGORIES[dataset.category];
   const lic = LICENSE_STYLES[dataset.licenseType];
-  const sections = [
+  const sections: { label: string; value: string; color?: string }[] = [
     { label: "Maintainer", value: dataset.maintainer },
     { label: "Coverage & size", value: dataset.size },
     { label: "Time span", value: dataset.timespan },
@@ -734,9 +772,9 @@ function DetailPanel({ dataset, onClose }) {
   );
 }
 
-function NetworkGraph({ datasets, selectedId, onSelect }) {
-  const svgRef = useRef(null);
-  const positions = [
+function NetworkGraph({ datasets, selectedId, onSelect }: { datasets: Dataset[]; selectedId: number | null; onSelect: (id: number) => void }) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const positions: { x: number; y: number }[] = [
     { x: 160, y: 50 },
     { x: 310, y: 30 },
     { x: 440, y: 65 },
@@ -746,7 +784,7 @@ function NetworkGraph({ datasets, selectedId, onSelect }) {
     { x: 520, y: 120 },
     { x: 180, y: 230 },
   ];
-  const edges = [];
+  const edges: { from: number; to: number }[] = [];
   datasets.forEach((d) => {
     d.crossRefs.forEach((refId) => {
       if (
@@ -776,7 +814,7 @@ function NetworkGraph({ datasets, selectedId, onSelect }) {
             y1={fromPos.y}
             x2={toPos.x}
             y2={toPos.y}
-            stroke={isHighlighted ? CATEGORIES[datasets.find((d) => d.id === selectedId).category].color : "#C4C0B8"}
+            stroke={isHighlighted ? CATEGORIES[datasets.find((d) => d.id === selectedId)!.category].color : "#C4C0B8"}
             strokeWidth={isHighlighted ? 1.5 : 0.5}
             strokeDasharray={isHighlighted ? "none" : "3 3"}
             opacity={selectedId ? (isHighlighted ? 0.8 : 0.15) : 0.4}
@@ -842,10 +880,10 @@ function NetworkGraph({ datasets, selectedId, onSelect }) {
 }
 
 export default function PalestineDatacommons() {
-  const [selectedId, setSelectedId] = useState(null);
-  const [filterCat, setFilterCat] = useState("all");
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [filterCat, setFilterCat] = useState<CategoryKey | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [view, setView] = useState("grid");
+  const [view, setView] = useState<"grid" | "network">("grid");
 
   const filtered = DATASETS.filter((d) => {
     const matchCat = filterCat === "all" || d.category === filterCat;
@@ -858,7 +896,7 @@ export default function PalestineDatacommons() {
   });
 
   const selectedDataset = DATASETS.find((d) => d.id === selectedId);
-  const categories = ["all", ...Object.keys(CATEGORIES)];
+  const categories: (CategoryKey | "all")[] = ["all", ...(Object.keys(CATEGORIES) as CategoryKey[])];
 
   const cssVars: Record<string, string> = {
     "--ds-bg-primary": "#FAFAF7",
@@ -994,7 +1032,7 @@ export default function PalestineDatacommons() {
                     transition: "all 0.15s",
                   }}
                 >
-                  {c === "all" ? `All (${DATASETS.length})` : catData.label}
+                  {c === "all" ? `All (${DATASETS.length})` : catData?.label}
                 </button>
               );
             })}
@@ -1009,7 +1047,7 @@ export default function PalestineDatacommons() {
               marginLeft: "auto",
             }}
           >
-            {["grid", "network"].map((v) => (
+            {(["grid", "network"] as const).map((v) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
