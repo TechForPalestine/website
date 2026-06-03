@@ -64,6 +64,7 @@ export default defineConfig({
           "/event-details/",
           "/404/",
           "/js/web.js/",
+          "/palestine-data/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
