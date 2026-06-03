@@ -279,15 +279,6 @@ const isUK = country === "GB";
         });
       }
 
-      // Log ALL postMessage events from Qgiv iframe to discover available messages
-      window.addEventListener("message", function (event) {
-        if (typeof event.origin === "string" && event.origin.indexOf("qgiv.com") !== -1) {
-          console.log("[T4P QGIV postMessage] origin:", event.origin);
-          console.log("[T4P QGIV postMessage] data type:", typeof event.data);
-          console.log("[T4P QGIV postMessage] data:", typeof event.data === "string" ? event.data : JSON.stringify(event.data, null, 2));
-        }
-      });
-
       document.addEventListener("QGIV.donationComplete", async function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
         var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
