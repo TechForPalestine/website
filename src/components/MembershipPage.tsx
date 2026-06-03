@@ -101,7 +101,7 @@ export default function MembershipPage() {
       if (typeof window.plausible !== "undefined") {
         window.plausible("Membership", {
           props: {
-            amount: String(transaction.total || ""),
+            amount: transaction.total != null ? String(transaction.total) : "",
             membership_variant: variant,
           },
         });
@@ -226,7 +226,7 @@ export default function MembershipPage() {
               Tech for Palestine aims for inclusivity. Please contact{" "}
               <a
                 href="mailto:membership@techforpalestine.org"
-                style={{ color: "#168039", textDecoration: "underline" }}
+                className="text-[#168039] underline"
               >
                 membership@techforpalestine.org
               </a>{" "}
@@ -253,7 +253,7 @@ export default function MembershipPage() {
               If you are in the US, your dues are tax deductible. If you are in the UK, contact us at{" "}
               <a
                 href="mailto:membership@techforpalestine.org"
-                style={{ color: "#168039", textDecoration: "underline" }}
+                className="text-[#168039] underline"
               >
                 membership@techforpalestine.org
               </a>{" "}
@@ -282,7 +282,7 @@ export default function MembershipPage() {
               If you have questions, set up an{" "}
               <a
                 href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
-                style={{ color: "#168039", textDecoration: "underline", fontWeight: 600 }}
+                className="text-[#168039] underline font-semibold"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -291,7 +291,7 @@ export default function MembershipPage() {
               or reach out to us at{" "}
               <a
                 href="mailto:membership@techforpalestine.org"
-                style={{ color: "#168039", textDecoration: "underline", fontWeight: 600 }}
+                className="text-[#168039] underline font-semibold"
               >
                 membership@techforpalestine.org
               </a>

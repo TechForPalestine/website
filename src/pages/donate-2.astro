@@ -185,13 +185,9 @@ import "../styles/base.css";
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Track which donate form variant the user sees
-      (window as any).plausible =
-        (window as any).plausible ||
-        function () {
-          ((window as any).plausible.q = (window as any).plausible.q || []).push(arguments);
-        };
-      (window as any).plausible("Donate Form", { props: { donate_form_variant: "charitystack" } });
+      if (typeof (window as any).plausible !== "undefined") {
+        (window as any).plausible("Donate Form", { props: { donate_form_variant: "charitystack" } });
+      }
 
       const script = document.createElement("script");
       script.defer = true;

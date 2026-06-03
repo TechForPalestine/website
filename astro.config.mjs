@@ -63,6 +63,7 @@ export default defineConfig({
           "/donate-2/",
           "/event-details/",
           "/404/",
+          "/js/web.js/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
