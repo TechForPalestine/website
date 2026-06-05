@@ -78,7 +78,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     if (dropped || !response.ok) {
-      ctx?.waitUntil(Sentry.flush(2000));
+      ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
     }
 
     return new Response(response.body, {
@@ -93,7 +93,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       hasUserAgent: Boolean(userAgent),
     });
 
-    ctx?.waitUntil(Sentry.flush(2000));
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response("", { status: 502 });
   }
