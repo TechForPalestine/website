@@ -1,6 +1,17 @@
 import type { APIRoute } from "astro";
+import { reportError } from "../../lib/report-error";
 
 const ALLOWED_ORIGIN = "https://techforpalestine.org";
+const PLAUSIBLE_API = "https://plausible.io/api/event";
+
+function parseEventName(body: string): string {
+  try {
+    const parsed = JSON.parse(body);
+    return parsed.n || parsed.name || "unknown";
+  } catch {
+    return "unparseable";
+  }
+}
 
 export const POST: APIRoute = async ({ request }) => {
   const origin = request.headers.get("origin");
@@ -24,19 +35,58 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const body = await request.text();
+  const eventName = parseEventName(body);
 
   try {
-    const response = await fetch("https://plausible.io/api/event", {
+    const response = await fetch(PLAUSIBLE_API, {
       method: "POST",
       headers,
       body,
     });
 
+    const dropped = response.headers.get("x-plausible-dropped") === "1";
+
+    if (dropped) {
+      reportError(new Error("Plausible dropped event"), {
+        context: "pipe",
+        eventName,
+        status: response.status,
+        hasIp: Boolean(forwardedFor),
+        hasUserAgent: Boolean(userAgent),
+      });
+    }
+
+    if (!response.ok) {
+      const responseBody = await response.text();
+      reportError(new Error(`Plausible rejected event: ${response.status}`), {
+        context: "pipe",
+        eventName,
+        status: response.status,
+        responseBody: responseBody.slice(0, 500),
+        hasIp: Boolean(forwardedFor),
+        hasUserAgent: Boolean(userAgent),
+      });
+    }
+
+    const responseHeaders = new Headers({
+      "Content-Type": response.headers.get("content-type") || "text/plain",
+    });
+    if (dropped) {
+      responseHeaders.set("x-plausible-dropped", "1");
+    }
+
     return new Response(response.body, {
       status: response.status,
-      headers: { "Content-Type": response.headers.get("content-type") || "text/plain" },
+      headers: responseHeaders,
     });
-  } catch {
-    return new Response("", { status: 202 });
+  } catch (error) {
+    reportError(error, {
+      context: "pipe",
+      eventName,
+      hasIp: Boolean(forwardedFor),
+      hasUserAgent: Boolean(userAgent),
+    });
+
+    return new Response("", { status: 502 });
   }
 };
