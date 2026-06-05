@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import PalestineDatacommons from "../components/PalestineDatacommons.tsx";
+import "../styles/base.css";
+---
+
+<Layout
+  title="Palestine Datacommons — Tech for Palestine"
+  description="Discover, explore, and cross-reference independent datasets documenting the situation in Palestine. A unified entry point for data across casualties, satellite imagery, humanitarian conditions, and more."
+>
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  />
+
+  <PageHeader
+    overline="Tech for Palestine"
+    title="Palestine Datacommons"
+    subtitle="Discover, explore, and cross-reference independent datasets documenting the situation in Palestine."
+  />
+
+  <PalestineDatacommons client:only="react" />
+</Layout>
