@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { reportError } from "../../lib/report-error";
 
 const ALLOWED_ORIGIN = "https://techforpalestine.org";
@@ -13,7 +14,8 @@ function parseEventName(body: string): string {
   }
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
+  const ctx = (locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime?.ctx;
   const origin = request.headers.get("origin");
   if (origin && origin !== ALLOWED_ORIGIN) {
     return new Response("Forbidden", { status: 403 });
@@ -75,6 +77,10 @@ export const POST: APIRoute = async ({ request }) => {
       responseHeaders.set("x-plausible-dropped", "1");
     }
 
+    if (dropped || !response.ok) {
+      ctx?.waitUntil(Sentry.flush(2000));
+    }
+
     return new Response(response.body, {
       status: response.status,
       headers: responseHeaders,
@@ -86,6 +92,8 @@ export const POST: APIRoute = async ({ request }) => {
       hasIp: Boolean(forwardedFor),
       hasUserAgent: Boolean(userAgent),
     });
+
+    ctx?.waitUntil(Sentry.flush(2000));
 
     return new Response("", { status: 502 });
   }
