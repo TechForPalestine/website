@@ -78,7 +78,7 @@ function getProp(props: Record<string, string>, ...keys: string[]): string {
     <h1 class="text-2xl font-bold text-gray-900">Dropped Conversion Events</h1>
     <p class="mt-2 text-sm text-gray-600">
       Events that Plausible silently dropped (e.g. visitors on VPNs or with bot-like browsers).
-      Auto-expires after 90 days.
+      Entries persist until manually deleted from KV.
     </p>
 
     <form method="get" class="mt-6 flex items-end gap-4">
