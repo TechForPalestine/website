@@ -4,12 +4,7 @@ import { reportError } from "../../lib/report-error";
 
 const ALLOWED_ORIGIN = "https://techforpalestine.org";
 const PLAUSIBLE_API = "https://plausible.io/api/event";
-const CONVERSION_EVENTS = new Set([
-  "Monthly-donate",
-  "One-time-donate",
-  "Membership",
-  "Donate Form",
-]);
+const CONVERSION_EVENTS = new Set(["Monthly-donate", "One-time-donate"]);
 
 function parseEventName(body: string): string {
   try {
