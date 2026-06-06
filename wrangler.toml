@@ -7,3 +7,8 @@ pages_build_output_dir = "dist"
 
 # Notion DB IDs are set via Cloudflare Pages dashboard environment variables.
 # For local dev, add them to .env (see .env.example).
+
+[[kv_namespaces]]
+binding = "DROPPED_CONVERSIONS"
+id = "2d428a3626f846ffaa58a589565f1829"
+preview_id = "7dc503aa602743a398447364d31ffeb0"
