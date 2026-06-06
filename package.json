@@ -41,6 +41,7 @@
     "astro-heroicons": "^2.1.5",
     "astro-icon": "^1.1.5",
     "axios": "^1.15.0",
+    "chart.js": "^4.5.1",
     "install": "^0.13.0",
     "leaflet": "^1.9.4",
     "marked": "^15.0.12",
