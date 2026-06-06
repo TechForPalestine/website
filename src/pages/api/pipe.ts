@@ -4,6 +4,7 @@ import { reportError } from "../../lib/report-error";
 
 const ALLOWED_ORIGIN = "https://techforpalestine.org";
 const PLAUSIBLE_API = "https://plausible.io/api/event";
+const CONVERSION_EVENTS = new Set(["Monthly-donate", "One-time-donate"]);
 
 function parseEventName(body: string): string {
   try {
@@ -15,7 +16,7 @@ function parseEventName(body: string): string {
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const ctx = (locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime?.ctx;
+  const ctx = locals.runtime?.ctx;
   const origin = request.headers.get("origin");
   if (origin && origin !== ALLOWED_ORIGIN) {
     return new Response("Forbidden", { status: 403 });
@@ -56,6 +57,30 @@ export const POST: APIRoute = async ({ request, locals }) => {
         hasIp: Boolean(forwardedFor),
         hasUserAgent: Boolean(userAgent),
       });
+
+      if (CONVERSION_EVENTS.has(eventName)) {
+        const kv = locals.runtime?.env?.DROPPED_CONVERSIONS;
+        if (kv && ctx) {
+          const now = new Date();
+          const date = now.toISOString().slice(0, 10);
+          const time = now.toISOString().slice(11, 19).replace(/:/g, "-");
+          const id = crypto.randomUUID().slice(0, 8);
+          const key = `dropped:${date}:${time}:${id}`;
+
+          let parsed: Record<string, unknown> = {};
+          try { parsed = JSON.parse(body); } catch {}
+
+          const value = JSON.stringify({
+            eventName,
+            timestamp: now.toISOString(),
+            props: parsed.p ?? parsed.props ?? {},
+            hasIp: Boolean(forwardedFor),
+            hasUserAgent: Boolean(userAgent),
+          });
+
+          ctx.waitUntil(kv.put(key, value, { expirationTtl: 90 * 86400 }));
+        }
+      }
     }
 
     if (!response.ok) {

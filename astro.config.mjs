@@ -64,6 +64,7 @@ export default defineConfig({
           "/event-details/",
           "/404/",
           "/js/web.js/",
+          "/admin/dropped-conversions/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
