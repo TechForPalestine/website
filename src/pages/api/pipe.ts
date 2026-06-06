@@ -78,7 +78,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             hasUserAgent: Boolean(userAgent),
           });
 
-          ctx.waitUntil(kv.put(key, value, { expirationTtl: 90 * 86400 }));
+          ctx.waitUntil(kv.put(key, value));
         }
       }
     }
