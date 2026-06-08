@@ -12,6 +12,34 @@ export default {
       animation: {
         fadeIn: "fadeIn 0.5s ease-out forwards",
       },
+      colors: {
+        page: "#FFFBF5",
+        cream: "#FBF2ED",
+        butter: "#F7EAD4",
+        sand: "#F7F2E8",
+        ink: {
+          DEFAULT: "#2A2428",
+          dark: "#201D1E",
+          secondary: "#73656E",
+          muted: "#B5B5B5",
+          divider: "#D6D6D6",
+        },
+        brand: {
+          DEFAULT: "#AB4956",
+          hover: "#D35464",
+          light: "#E8727F",
+        },
+      },
+      fontFamily: {
+        serif: ["Fraunces", "Fraunces Placeholder", "serif"],
+        sans: ["Outfit", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        sm: "8px",
+        md: "16px",
+        lg: "24px",
+        pill: "999px",
+      },
       red: {
         50: "#fff1f3",
         100: "#ffe0e3",

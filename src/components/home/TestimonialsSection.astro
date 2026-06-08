@@ -1,0 +1,274 @@
+---
+const testimonials = [
+  {
+    quote:
+      "The valuable advice and launch support from T4P was exactly what we needed to finally hit cash-flow positive and build our impact.",
+    name: "Hani Chihabi",
+    role: "Founder, Thaura",
+    logo: "/thaura.svg",
+    headshot: "/images/new-homepage/testimonials/Hani.png",
+  },
+  {
+    quote:
+      "Tech for Palestine has been a true partner to UpScrolled from the early days, opening doors to their ecosystem and standing by us at every step of the journey.",
+    name: "Issam Hijazi",
+    role: "Founder, UpScrolled",
+    logo: "/upscrolled-icon.svg",
+    headshot: "/images/new-homepage/testimonials/Issam Hijazi Headshot.jpg",
+  },
+  {
+    quote:
+      "With the volunteers and partnerships provided, we went from a minimally viable concept to a full-fledged global platform reaching millions of accounts each month.",
+    name: "Nima Akram",
+    role: "Founder, Newscord",
+    logo: "/newscord.svg",
+    headshot: "/images/new-homepage/testimonials/newscord-headshot.jpeg",
+  },
+];
+---
+
+<section class="bg-page pt-24 min-[810px]:pt-32 pb-24 min-[810px]:pb-32">
+  <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
+
+    <div class="testimonials-header grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end mb-12 min-[810px]:mb-16">
+      <div>
+        <p class="ts-overline mb-8 text-ink-secondary">— From the people building with us</p>
+        <h2 class="ts-editorial text-ink leading-[1.2]">
+          What it's like to <span class="text-brand">work with T4P</span>
+        </h2>
+      </div>
+      <p class="ts-body text-ink-secondary min-[810px]:text-right min-[810px]:max-w-[400px] min-[810px]:ml-auto">
+        Project leaders, mentors, and members on their time inside the coalition.
+      </p>
+    </div>
+
+    <div class="border-t border-ink-divider mb-12 min-[810px]:mb-16"></div>
+
+    <div class="testimonials-marquee -mx-6 min-[810px]:-mx-10 overflow-hidden" aria-label="Testimonials carousel">
+      <div class="marquee-track flex gap-4 min-[810px]:gap-6 w-max will-change-transform">
+        {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+          <div class:list={["testimonial-card flex flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 min-w-[300px] max-w-[300px] min-[810px]:min-w-[420px] min-[810px]:max-w-[420px] shrink-0", i >= testimonials.length && "marquee-dupe"]}>
+            <svg
+              class="text-brand mb-6 shrink-0"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
+            </svg>
+            <p class="ts-quote text-ink flex-1">{t.quote}</p>
+            <footer class="mt-8 flex items-center gap-3">
+              <img
+                src={t.headshot}
+                alt={t.name}
+                width="48"
+                height="48"
+                loading="lazy"
+                decoding="async"
+                class="testimonial-avatar h-12 w-12 rounded-full object-cover"
+              />
+              <div>
+                <p class="ts-label text-ink">{t.name}</p>
+                <p class="ts-body-small mt-0.5 text-ink-secondary">{t.role}</p>
+              </div>
+            </footer>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .testimonial-avatar {
+    box-shadow: 0 0 0 1px var(--color-ink-ring);
+  }
+
+  /* Header entrance */
+  .testimonials-header {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .testimonials-header.in-view {
+    opacity: 1;
+    translate: none;
+  }
+
+  /* Card hover */
+  .testimonial-card {
+    transition: background-color 0.2s ease;
+  }
+  .testimonial-card:hover {
+    background-color: var(--color-butter);
+  }
+
+  :global(html.no-js) .testimonials-header {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .marquee-dupe {
+    display: none;
+  }
+  :global(html.no-js) .testimonials-marquee {
+    overflow: visible;
+    margin: 0;
+  }
+  :global(html.no-js) .marquee-track {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  :global(html.no-js) .testimonial-card {
+    flex: 1 1 300px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials-header {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+    .marquee-dupe {
+      display: none;
+    }
+    .testimonials-marquee {
+      overflow: visible;
+      margin: 0;
+    }
+    .marquee-track {
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .testimonial-card {
+      flex: 1 1 300px;
+    }
+  }
+</style>
+
+<script>
+  const testimonialsHeaderObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          testimonialsHeaderObs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  document
+    .querySelectorAll<HTMLElement>(".testimonials-header")
+    .forEach((el) => testimonialsHeaderObs.observe(el));
+
+  // Transform-based infinite scroll — no native scroll limits
+  const marquee = document.querySelector<HTMLElement>(".testimonials-marquee");
+  const track = document.querySelector<HTMLElement>(".marquee-track");
+  if (marquee && track) {
+    const oneSetWidth = track.scrollWidth / 3;
+    let offset = -oneSetWidth; // start at middle set
+    let paused = false;
+    let resumeTimer: ReturnType<typeof setTimeout>;
+    const speed = 0.5;
+
+    function wrap() {
+      if (offset <= -oneSetWidth * 2) offset += oneSetWidth;
+      else if (offset >= 0) offset -= oneSetWidth;
+    }
+
+    function render() {
+      track!.style.transform = `translateX(${offset}px)`;
+    }
+
+    function step() {
+      if (!paused) offset -= speed;
+      wrap();
+      render();
+      requestAnimationFrame(step);
+    }
+
+    // Touch
+    let touchStartX = 0;
+    let touchOffset = 0;
+    marquee.addEventListener("touchstart", (e) => {
+      paused = true;
+      clearTimeout(resumeTimer);
+      touchStartX = e.touches[0].clientX;
+      touchOffset = offset;
+    }, { passive: true });
+
+    marquee.addEventListener("touchmove", (e) => {
+      offset = touchOffset + (e.touches[0].clientX - touchStartX);
+      wrap();
+      render();
+    }, { passive: true });
+
+    marquee.addEventListener("touchend", () => {
+      resumeTimer = setTimeout(() => { paused = false; }, 2000);
+    });
+
+    // Mouse drag with momentum
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragOffset = 0;
+    let velocity = 0;
+    let lastX = 0;
+    let lastTime = 0;
+
+    marquee.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      paused = true;
+      clearTimeout(resumeTimer);
+      dragStartX = e.clientX;
+      dragOffset = offset;
+      lastX = e.clientX;
+      lastTime = performance.now();
+      velocity = 0;
+      e.preventDefault();
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const now = performance.now();
+      const dt = now - lastTime;
+      const dx = e.clientX - lastX;
+      if (dt > 0) velocity = dx / dt;
+      lastX = e.clientX;
+      lastTime = now;
+      offset = dragOffset + (e.clientX - dragStartX);
+      wrap();
+      render();
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (!isDragging) return;
+      isDragging = false;
+
+      const fling = () => {
+        if (Math.abs(velocity) > 0.01) {
+          offset += velocity * 16;
+          velocity *= 0.95;
+          wrap();
+          render();
+          requestAnimationFrame(fling);
+        } else {
+          resumeTimer = setTimeout(() => { paused = false; }, 2000);
+        }
+      };
+      requestAnimationFrame(fling);
+    });
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      requestAnimationFrame(step);
+    }
+  }
+</script>

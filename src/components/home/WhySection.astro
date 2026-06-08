@@ -1,0 +1,150 @@
+---
+---
+
+<section class="bg-page px-6 pt-24 pb-24 min-[810px]:px-10 min-[810px]:pt-32 min-[810px]:pb-32">
+  <div class="mx-auto max-w-[1400px]">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16 xl:gap-24 lg:items-center">
+
+      <!-- Video placeholder -->
+      <div class="why-video">
+        <div class="relative overflow-hidden rounded-2xl aspect-video">
+          <div class="why-video-bg absolute inset-0"></div>
+          <div class="why-horizon"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <button
+              class="why-play flex items-center justify-center w-16 h-16 rounded-full border border-white/20 bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              aria-label="Watch Paul Biggar explain why T4P exists"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-white/80 ml-1" aria-hidden="true">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="why-quote flex flex-col">
+        <p class="ts-overline mb-8 text-ink-secondary">— Why T4P exists</p>
+        <blockquote>
+          <p class="ts-editorial text-ink leading-[1.3]">
+            <span class="why-text-a">"Tens of thousands of well-funded hasbara projects exist. We're building </span><span class="why-text-b text-brand">tens of thousands of liberation initiatives</span><span class="why-text-a"> to match them."</span>
+          </p>
+        </blockquote>
+        <footer class="mt-10 flex items-center gap-4">
+          <img
+            src="/images/new-homepage/why/paul.webp"
+            alt="Paul Biggar, Founder of Tech for Palestine"
+            width="56"
+            height="56"
+            loading="lazy"
+            decoding="async"
+            class="why-avatar h-14 w-14 rounded-full object-cover"
+          />
+          <div>
+            <p class="ts-label text-ink">Paul Biggar</p>
+            <p class="ts-body-small mt-1 text-ink-secondary">Founder, Tech for Palestine</p>
+          </div>
+        </footer>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-video-bg {
+    background: linear-gradient(
+      180deg,
+      #1c3549 0%,
+      #0e2231 40%,
+      #060e18 75%,
+      #020608 100%
+    );
+  }
+
+  .why-horizon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 42%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.04) 30%,
+      rgba(255, 255, 255, 0.07) 50%,
+      rgba(255, 255, 255, 0.04) 70%,
+      transparent 100%
+    );
+  }
+
+  .why-play {
+    transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+  .why-play:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.08);
+  }
+
+  .why-avatar {
+    box-shadow: 0 0 0 1px var(--color-ink-ring);
+  }
+
+/* Entrance animations */
+  .why-video {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .why-video.in-view {
+    opacity: 1;
+    translate: none;
+  }
+
+  .why-quote {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.15s,
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.15s;
+  }
+  .why-quote.in-view {
+    opacity: 1;
+    translate: none;
+  }
+
+  :global(html.no-js) .why-video,
+  :global(html.no-js) .why-quote {
+    opacity: 1;
+    translate: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .why-video,
+    .why-quote {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const whyObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          whyObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  document
+    .querySelectorAll<HTMLElement>(".why-video, .why-quote")
+    .forEach((el) => whyObserver.observe(el));
+</script>

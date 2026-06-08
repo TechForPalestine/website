@@ -1,0 +1,253 @@
+---
+const logos = [
+  { src: "https://upload.wikimedia.org/wikipedia/commons/7/75/The_Guardian_2018.svg",            alt: "The Guardian"                     },
+  { src: "https://e7.pngegg.com/pngimages/669/74/png-clipart-tc-techcrunch-logo-illustration-techcrunch-logo-icons-logos-emojis-iconic-brands.png", alt: "TechCrunch" },
+  { src: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Al_Jazeera_Media_Network_Logo.svg/1280px-Al_Jazeera_Media_Network_Logo.svg.png", alt: "Al Jazeera" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Inc._%28business_magazine%29_logo.svg", alt: "Inc."                        },
+  { src: "https://ssir.org/images/resources/SSIR_Logo.RGB_Black_984x234.png",                    alt: "Stanford Social Innovation Review"},
+  { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/The_Verge_wordmark_2022.svg/1920px-The_Verge_wordmark_2022.svg.png?_=20220915012757", alt: "The Verge" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/TechRadar_logo_%282023%29.svg/1280px-TechRadar_logo_%282023%29.svg.png", alt: "TechRadar" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/4/4f/TRT_World_logosu.png", alt: "TRT World" },
+];
+
+const articles = [
+  {
+    publication: "Stanford Social Innovation Review",
+    date: "2024",
+    headline: "Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights",
+    url: "https://ssir.org/articles/entry/tech-against-genocide",
+  },
+  {
+    publication: "TechCrunch",
+    date: "Jan 2024",
+    headline: "Tech for Palestine launches to provide tools to help support Palestinians",
+    url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
+  },
+  {
+    publication: "Al Jazeera",
+    date: "Jan 2026",
+    headline: "What's UpScrolled, the app gaining popularity after TikTok's US takeover?",
+    url: "https://www.aljazeera.com/news/2026/1/29/whats-upscrolled-the-app-gaining-popularity-after-tiktoks-us-takeover",
+  },
+  {
+    publication: "The Guardian",
+    date: "Nov 2025",
+    headline: "Fundraisers warn of 'catastrophic' drop in donations to Gaza since ceasefire",
+    url: "https://www.theguardian.com/global-development/2025/nov/21/fundraisers-warn-catastrophic-drop-donations-aid-palestinians-gaza-israel-ceasefire",
+  },
+  {
+    publication: "TRT World",
+    date: "2024",
+    headline: "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
+    url: "https://www.trtworld.com/video/18268907",
+  },
+  {
+    publication: "Counter Points",
+    date: "2024",
+    headline: "Paul on Counter Points — Tech for Palestine",
+    url: "https://www.youtube.com/watch?v=UldcFPEZBM4&t=4388s",
+  },
+];
+---
+
+<section class="bg-page pt-24 min-[810px]:pt-32 pb-24 min-[810px]:pb-32">
+  <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
+
+    <p class="ts-overline mb-8 text-ink-secondary">— In the press</p>
+    <h2 class="press-heading ts-editorial text-ink mb-12 min-[810px]:mb-16">Making headlines</h2>
+
+    <!-- Publication logos -->
+    <div class="press-logos border-t border-b border-ink-divider py-6 min-[810px]:py-8">
+      <ul
+        class="flex flex-wrap items-center justify-center gap-x-10 gap-y-10 min-[810px]:gap-y-6 list-none p-0 max-w-[1000px] mx-auto w-full"
+        role="list"
+        aria-label="Publications that have covered T4P"
+      >
+        {logos.map((logo) => (
+          <li class="flex items-center">
+            <img
+              src={logo.src}
+              alt={logo.alt}
+              loading="lazy"
+              decoding="async"
+              class="w-[150px] min-[810px]:w-[210px] object-contain"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Article cards -->
+    <ul
+      class="mt-12 min-[810px]:mt-16 mb-16 min-[810px]:mb-24 grid grid-cols-1 gap-4 min-[810px]:grid-cols-2 lg:grid-cols-3 list-none p-0"
+      role="list"
+    >
+      {articles.map((article, i) => (
+        <li class="press-card-wrap flex" data-i={i}>
+          <a
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="press-card flex flex-1 flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            <p class="ts-caption text-ink-secondary mb-5">
+              {article.publication}
+              <span class="mx-1.5" aria-hidden="true">·</span>
+              {article.date}
+            </p>
+            <h3 class="ts-subheading text-ink flex-1 leading-snug">{article.headline}</h3>
+            <span class="ts-label mt-6 flex items-center gap-2 text-brand">
+              Read article<span class="sr-only"> (opens in new tab)</span>
+              <svg
+                class="press-arrow"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Community photo -->
+    <div class="press-photo overflow-hidden rounded-2xl">
+      <img
+        src="/images/new-homepage/press/team-2.webp"
+        alt="Tech for Palestine community gathered at a workshop and strategy session"
+        width="2400"
+        height="1600"
+        loading="lazy"
+        decoding="async"
+        class="w-full h-[480px] min-[810px]:h-[560px] object-cover object-center animate-ken-burns motion-reduce:animate-none"
+      />
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Heading entrance */
+  .press-heading {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .press-heading.in-view {
+    opacity: 1;
+    translate: none;
+  }
+
+  /* Logo row entrance */
+  .press-logos {
+    opacity: 0;
+    translate: 0 16px;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
+  }
+  .press-logos.in-view {
+    opacity: 1;
+    translate: none;
+  }
+
+  /* Article card staggered entrance */
+  .press-card-wrap {
+    opacity: 0;
+    translate: 0 24px;
+  }
+  .press-card-wrap.in-view {
+    opacity: 1;
+    translate: none;
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* Card hover */
+  .press-card {
+    transition: background-color 0.2s ease;
+  }
+  .press-card:hover {
+    background-color: var(--color-butter);
+  }
+
+  /* Arrow slide on card hover */
+  .press-arrow {
+    transition: translate 0.2s ease;
+  }
+  .press-card:hover .press-arrow {
+    translate: 4px 0;
+  }
+
+  /* Full-bleed photo entrance */
+  .press-photo {
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
+  }
+  .press-photo.in-view {
+    opacity: 1;
+  }
+
+  :global(html.no-js) .press-heading,
+  :global(html.no-js) .press-logos,
+  :global(html.no-js) .press-card-wrap,
+  :global(html.no-js) .press-photo {
+    opacity: 1;
+    translate: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .press-heading,
+    .press-logos,
+    .press-card-wrap,
+    .press-photo {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+    .press-card:hover .press-arrow {
+      translate: none;
+    }
+  }
+</style>
+
+<script>
+  const sectionObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          sectionObs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  document
+    .querySelectorAll<HTMLElement>(".press-heading, .press-logos, .press-photo")
+    .forEach((el) => sectionObs.observe(el));
+
+  const cardObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          cardObs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll<HTMLElement>(".press-card-wrap").forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.1}s`;
+    cardObs.observe(card);
+  });
+</script>

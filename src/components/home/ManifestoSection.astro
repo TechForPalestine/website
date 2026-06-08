@@ -1,0 +1,160 @@
+---
+const stats = [
+  { value: "90", label: "Projects Incubated" },
+  { value: "400", label: "Global Volunteers" },
+  { value: "30", label: "Expert Mentors" },
+  { value: "50", label: "Investors for Palestine" },
+  { value: "350", label: "Entrepreneurs for Palestine" },
+];
+
+const photos = [
+  {
+    alt: "Tech for Palestine speaker at a Building Ethical Technology event",
+    src: "/images/new-homepage/manifesto/who-are-we-4.webp",
+  },
+  {
+    alt: "Pro-Palestine protest outside a neoclassical government building",
+    src: "/images/new-homepage/manifesto/who-are-we-2.webp",
+  },
+  {
+    alt: "Immigration lawyer holding flowers at a Tech for Palestine event",
+    src: "/images/new-homepage/manifesto/who-are-we-1.webp",
+  },
+  {
+    alt: "Demonstrator in traditional Palestinian embroidery raising flowers at a street protest",
+    src: "/images/new-homepage/manifesto/who-are-we-3.webp",
+  },
+];
+---
+
+<section class="overflow-x-clip bg-page px-6 pt-24 pb-24 min-[810px]:px-10 min-[810px]:pt-32 min-[810px]:pb-32">
+  <div class="mx-auto max-w-[1400px]">
+    <!-- Motif row -->
+    <div class="mb-10 flex items-center -space-x-[18px] sm:-space-x-[22px] min-[810px]:-space-x-[30px] motif-row" role="presentation" aria-hidden="true">
+      {[1, 2, 3, 4].map((_, i) => (
+        <img src="/images/logo.avif" alt="" class={`w-20 sm:w-28 min-[810px]:w-32 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
+      ))}
+    </div>
+
+    <!-- Editorial headline -->
+    <h2 class="ts-editorial mb-14 max-w-[52ch] text-ink min-[810px]:mb-20 manifesto-headline">
+      <span class="manifesto-text-a">Thousands of founders, tech workers, business professionals and advocates building tools and products that </span><span class="manifesto-text-b text-brand">protect, inform, resist, and rebuild.</span>
+    </h2>
+  </div>
+
+  <!-- Stats + collage wrapper -->
+  <div class="mx-auto max-w-[1400px]">
+    <dl class="stats-grid grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 min-[810px]:px-12 min-[810px]:pt-12 lg:grid-cols-5 lg:pb-64">
+      {stats.map((s) => (
+        <div class="last:col-span-2 sm:last:col-span-1">
+          <dt class="ts-stat text-ink" aria-label={`${s.value}+`}>
+            <span class="stat-value" data-target={s.value} aria-hidden="true">{s.value}</span><span class="text-brand" aria-hidden="true">+</span>
+          </dt>
+          <dd class="ts-body-large mt-1.5 text-ink-secondary">{s.label}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <!-- Photo collage — pulled up over the stats padding -->
+    <div class="relative -mt-48 lg:-mt-56">
+      <div class="flex items-end justify-center">
+        {photos.map((p, i) => (
+          <div class={`collage-card collage-card-${i + 1} flex-1 overflow-hidden rounded-lg${i === 1 ? " hidden lg:block" : ""}${i === 3 ? " hidden sm:block" : ""}`}>
+            <img
+              src={p.src}
+              alt={p.alt}
+              width="400"
+              height="400"
+              loading="lazy"
+              class="h-[370px] w-full object-cover animate-ken-burns motion-reduce:animate-none"
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const row = document.querySelector(".motif-row");
+  if (row) {
+    const icons = row.querySelectorAll(".motif-icon");
+    icons.forEach((icon) => icon.classList.add("animate"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            icons.forEach((icon, i) => {
+              (icon as HTMLElement).style.animationDelay = `${i * 0.15}s`;
+              icon.classList.add("visible");
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(row);
+  }
+
+  const headline = document.querySelector(".manifesto-headline");
+  if (headline) {
+    headline.classList.add("animate");
+    const headlineObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            headline.classList.add("visible");
+            headlineObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    headlineObserver.observe(headline);
+  }
+
+  function animateCount(el: HTMLElement) {
+    const target = parseInt(el.dataset.target || "0", 10);
+    if (isNaN(target)) {
+      el.textContent = el.dataset.target || "0";
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = target.toString();
+      return;
+    }
+    const duration = 1600;
+    const start = performance.now();
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target).toString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const statsGrid = document.querySelector(".stats-grid");
+  if (statsGrid) {
+    const values = statsGrid.querySelectorAll<HTMLElement>(".stat-value");
+    values.forEach((el) => { el.textContent = "0"; });
+
+    const statsObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            values.forEach((el, i) => {
+              setTimeout(() => animateCount(el), i * 120);
+            });
+            statsObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    statsObserver.observe(statsGrid);
+  }
+</script>

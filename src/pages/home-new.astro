@@ -1,0 +1,28 @@
+---
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HeroSection from "../components/home/HeroSection.astro";
+import ManifestoSection from "../components/home/ManifestoSection.astro";
+import WhySection from "../components/home/WhySection.astro";
+import PortfolioSection from "../components/home/PortfolioSection.astro";
+import SupportSection from "../components/home/SupportSection.astro";
+import TestimonialsSection from "../components/home/TestimonialsSection.astro";
+import PressSection from "../components/home/PressSection.astro";
+import CtaSection from "../components/home/CtaSection.astro";
+---
+
+<HomeLayout
+  title="Tech For Palestine"
+  description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation."
+>
+  <link rel="preload" as="image" href="/images/new-homepage/hero/hero.webp" fetchpriority="high" slot="head" />
+  <main>
+    <HeroSection />
+    <ManifestoSection />
+    <PortfolioSection />
+    <SupportSection />
+    <WhySection />
+    <TestimonialsSection />
+    <PressSection />
+    <CtaSection />
+  </main>
+</HomeLayout>
