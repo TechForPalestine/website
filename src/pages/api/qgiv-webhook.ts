@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { reportError } from "../../lib/report-error";
 import { constantTimeEqual } from "../../utils/crypto";
 import { getEnv } from "../../utils/getEnv";
@@ -11,8 +12,8 @@ const EO_MEMBERS_LIST_URL =
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const cf = (locals as { runtime?: { env?: Record<string, string>; ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime;
-  const runtime = cf?.env;
   const ctx = cf?.ctx;
+  const runtime = cf?.env;
   const webhookSecret = runtime?.QGIV_WEBHOOK_SECRET ?? import.meta.env.QGIV_WEBHOOK_SECRET;
 
   const token = request.headers.get("X-Webhook-Secret");
@@ -23,6 +24,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       hasSecret: Boolean(webhookSecret),
       hasToken: Boolean(token),
     });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -103,6 +105,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     );
   } catch (error) {
     reportError(error, { context: "QGiv webhook processing" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(
       JSON.stringify({ error: "Failed to process webhook" }),

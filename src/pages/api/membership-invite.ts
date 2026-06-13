@@ -1,5 +1,7 @@
+import * as Sentry from "@sentry/astro";
 import { constantTimeEqual } from "../../utils/crypto";
 import { getEnv } from "../../utils/getEnv";
+import { reportError } from "../../lib/report-error";
 
 export const prerender = false;
 
@@ -61,18 +63,29 @@ export async function POST({ request, locals }: { request: Request; locals: App.
   const payload: Record<string, string> = { email, type };
   if (paymentReference !== undefined) payload.paymentReference = paymentReference;
 
-  const upstream = await fetch(`${hubApiUrl}/api/auth/invite`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${hubApiKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  const ctx = locals.runtime?.ctx;
+  try {
+    const upstream = await fetch(`${hubApiUrl}/api/auth/invite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${hubApiKey}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-  const data = await upstream.json();
-  return new Response(JSON.stringify(data), {
-    status: upstream.status,
-    headers: { "Content-Type": "application/json" },
-  });
+    const data = await upstream.json();
+    return new Response(JSON.stringify(data), {
+      status: upstream.status,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    reportError(error, { context: "membership-invite" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+
+    return new Response(JSON.stringify({ message: "Failed to process request" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }

@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { constantTimeEqual } from "../../../utils/crypto";
 import { getEnv } from "../../../utils/getEnv";
+import { reportError } from "../../../lib/report-error";
 
 const PLAUSIBLE_API = "https://plausible.io/api/v2/query";
 const SITE_ID = "techforpalestine.org";
@@ -135,6 +137,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
   const dateFrom = url.searchParams.get("date_from") || defaultFrom;
   const dateTo = url.searchParams.get("date_to") || defaultTo;
 
+  const ctx = locals.runtime?.ctx;
   try {
     const [plausible, dropped] = await Promise.all([
       apiKey
@@ -161,9 +164,10 @@ export const GET: APIRoute = async ({ request, locals }) => {
       }
     );
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to fetch stats";
-    return new Response(JSON.stringify({ error: message }), {
+    reportError(error, { context: "conversion-stats" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+
+    return new Response(JSON.stringify({ error: "Failed to fetch stats" }), {
       status: 502,
       headers: { "Content-Type": "application/json" },
     });
