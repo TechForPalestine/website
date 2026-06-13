@@ -106,6 +106,21 @@ export default function MembershipPage() {
           },
         });
       }
+
+      const contact = detail?.QGIV?.contact ?? {};
+      const email = contact.email ?? "";
+
+      if (email) {
+        fetch("/api/membership-complete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            firstName: contact.firstName ?? "",
+            lastName: contact.lastName ?? "",
+          }),
+        }).catch(() => {});
+      }
     }
 
     document.addEventListener("QGIV.donationComplete", handleDonationComplete);
