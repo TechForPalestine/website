@@ -92,16 +92,6 @@ export default function MembershipPage() {
   }, [showCalculator]);
 
   useEffect(() => {
-    console.log("[membership] component mounted");
-
-    function handleMessage(event: MessageEvent) {
-      console.log("[membership] postMessage from:", event.origin, "data:", event.data);
-    }
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
-
-  useEffect(() => {
     const variant = showCalculator ? "Calculator" : "No Calculator";
 
     function handleDonationComplete(event: Event) {
