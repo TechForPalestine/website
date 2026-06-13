@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { getEnv } from "../../utils/getEnv.js";
+import { reportError } from "../../lib/report-error";
 
 export const prerender = false;
 
@@ -49,23 +51,33 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
   }
   headers.set("Authorization", secretKey);
 
-  const upstreamResponse = await fetch(upstream, {
-    method: request.method,
-    headers,
-    body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
-    // @ts-ignore — Cloudflare Workers require this for streaming POST bodies
-    duplex: "half",
-  });
+  try {
+    const upstreamResponse = await fetch(upstream, {
+      method: request.method,
+      headers,
+      body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
+      // @ts-ignore — Cloudflare Workers require this for streaming POST bodies
+      duplex: "half",
+    });
 
-  const responseHeaders = new Headers(upstreamResponse.headers);
-  // Remove hop-by-hop headers
-  responseHeaders.delete("transfer-encoding");
-  responseHeaders.delete("connection");
+    const responseHeaders = new Headers(upstreamResponse.headers);
+    responseHeaders.delete("transfer-encoding");
+    responseHeaders.delete("connection");
 
-  return new Response(upstreamResponse.body, {
-    status: upstreamResponse.status,
-    headers: responseHeaders,
-  });
+    return new Response(upstreamResponse.body, {
+      status: upstreamResponse.status,
+      headers: responseHeaders,
+    });
+  } catch (error) {
+    reportError(error, { context: "project-proxy", path: normalizedPath });
+    const ctx = (locals as any).runtime?.ctx;
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+
+    return new Response(JSON.stringify({ error: "Failed to process request" }), {
+      status: 502,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }
 
 export const GET: APIRoute = ({ request, locals }) => proxy(request, locals);

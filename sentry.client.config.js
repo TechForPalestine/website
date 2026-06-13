@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/astro";
 
 Sentry.init({
   dsn: import.meta.env.PUBLIC_SENTRY_DSN,
-  environment: import.meta.env.PUBLIC_SENTRY_ENVIRONMENT ?? "development",
+  environment: import.meta.env.PUBLIC_SENTRY_ENVIRONMENT ?? "production",
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.captureConsoleIntegration({ levels: ["error"] }),

@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { getEnv } from "../../utils/getEnv.js";
+import { reportError } from "../../lib/report-error";
 
 export const prerender = false;
 
@@ -78,6 +80,7 @@ async function fetchWithRetry(url: string, options: RequestInit & { cf?: any }, 
 }
 
 export const GET: APIRoute = async ({ locals }) => {
+  const ctx = locals.runtime?.ctx;
   const startTime = Date.now();
   try {
     const PROJECTHUB_API_KEY = getEnv("PROJECTHUB_API_KEY", locals);
@@ -154,8 +157,8 @@ export const GET: APIRoute = async ({ locals }) => {
       },
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`[API /api/projects] Fatal error:`, errorMessage, error);
+    reportError(error, { context: "projects" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(
       JSON.stringify({
