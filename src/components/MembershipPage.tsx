@@ -107,25 +107,18 @@ export default function MembershipPage() {
         });
       }
 
-      const email =
-        transaction.email ??
-        transaction.contactEmail ??
-        (document.querySelector<HTMLInputElement>('.qgiv-embed-container input[type="email"], .qgiv-embed-container input[name*="email"]')?.value ?? "");
+      const contact = detail?.QGIV?.contact ?? {};
+      const email = contact.email ?? "";
 
       if (email) {
-        const firstName =
-          transaction.firstName ??
-          transaction.contactFirstName ??
-          (document.querySelector<HTMLInputElement>('.qgiv-embed-container input[name*="first"]')?.value ?? "");
-        const lastName =
-          transaction.lastName ??
-          transaction.contactLastName ??
-          (document.querySelector<HTMLInputElement>('.qgiv-embed-container input[name*="last"]')?.value ?? "");
-
         fetch("/api/membership-complete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, firstName, lastName }),
+          body: JSON.stringify({
+            email,
+            firstName: contact.firstName ?? "",
+            lastName: contact.lastName ?? "",
+          }),
         }).catch(() => {});
       }
     }
