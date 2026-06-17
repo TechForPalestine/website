@@ -12,6 +12,21 @@ import PressSection from "../components/home/PressSection.astro";
 import CtaSection from "../components/home/CtaSection.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+let openRoles: Array<{
+  id: string;
+  title: string;
+  skillCategories: string[];
+  timeCommitment: string | null;
+  team: { name: string } | null;
+}> = [];
+
+try {
+  const res = await fetch("https://hub.techforpalestine.org/api/public/open-roles");
+  if (res.ok) {
+    openRoles = await res.json();
+  }
+} catch {}
 ---
 
 <HomeLayout
@@ -26,7 +41,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <SupportSection />
     <WhySection />
     <TestimonialsSection />
-    <OpeningsSection membershipLive={membershipLive} />
+    {openRoles.length > 0 && <OpeningsSection membershipLive={membershipLive} roles={openRoles} />}
     <PressSection />
     <CtaSection membershipLive={membershipLive} />
   </main>

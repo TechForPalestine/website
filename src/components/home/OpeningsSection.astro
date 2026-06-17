@@ -1,21 +1,25 @@
 ---
 import Button from "../ui/Button.astro";
 
-interface Props {
-  membershipLive?: boolean;
+interface Role {
+  id: string;
+  title: string;
+  skillCategories: string[];
+  timeCommitment: string | null;
+  team: { name: string } | null;
 }
 
-const { membershipLive = false } = Astro.props;
-const applyHref = membershipLive ? "/membership" : "/get-involved";
+interface Props {
+  membershipLive?: boolean;
+  roles: Role[];
+}
 
-const openings = [
-  { org: "Boycat", role: "Senior Full-Stack Engineer", stack: "React · Node · Postgres", hours: "~8 hrs / week", location: "Remote" },
-  { org: "Newscord", role: "Product Designer", stack: "Figma · CSS · Design Systems", hours: "~5 hrs / week", location: "Remote" },
-  { org: "UpScrolled", role: "Mobile Engineer", stack: "React Native · TypeScript", hours: "~10 hrs / week", location: "Remote" },
-  { org: "Thaura", role: "Backend Engineer", stack: "Python · Django · Redis", hours: "~6 hrs / week", location: "Remote" },
-];
+const { membershipLive = false, roles } = Astro.props;
+const visible = roles.slice(0, 4);
 
-const visible = openings.slice(0, 4);
+function applyHref(roleId: string): string {
+  return membershipLive ? `/membership?targetRoleId=${roleId}` : "/get-involved";
+}
 ---
 
 <section class="bg-page pt-24 min-[810px]:pt-32 pb-24 min-[810px]:pb-32">
@@ -37,19 +41,22 @@ const visible = openings.slice(0, 4);
 
     <div class="border-t border-ink-divider mb-12 min-[810px]:mb-16"></div>
 
-    <ul class="flex flex-col gap-4 mb-16 min-[810px]:mb-24 list-none p-0 m-0">
-      {visible.map((o) => (
+    <ul class="flex flex-col gap-4 mb-16 min-[810px]:mb-24 list-none p-0 m-0" role="list">
+      {visible.map((role) => (
         <li class="opening-card-wrap">
-          <div class="opening-card rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 grid grid-cols-1 gap-4 min-[810px]:grid-cols-[200px_1fr_auto_auto_auto] min-[810px]:items-center min-[810px]:gap-8">
-            <p class="ts-subheading text-ink">{o.org}</p>
+          <div class="opening-card rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 grid grid-cols-1 gap-4 min-[810px]:grid-cols-[200px_1fr_auto_auto] min-[810px]:items-center min-[810px]:gap-8">
+            <p class="ts-subheading text-ink">{role.team?.name ?? "T4P"}</p>
             <div>
-              <p class="ts-label text-ink">{o.role}</p>
-              <p class="ts-body-small text-ink-secondary mt-0.5">{o.stack}</p>
+              <p class="ts-label text-ink">{role.title}</p>
+              {role.skillCategories.length > 0 && (
+                <p class="ts-body-small text-ink-secondary mt-0.5">{role.skillCategories.join(" · ")}</p>
+              )}
             </div>
-            <p class="ts-body-small text-ink-secondary">{o.hours}</p>
-            <p class="ts-body-small text-ink-secondary">{o.location}</p>
+            {role.timeCommitment && (
+              <p class="ts-body-small text-ink-secondary">{role.timeCommitment}</p>
+            )}
             <a
-              href={applyHref}
+              href={applyHref(role.id)}
               class="ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
               Apply
@@ -72,7 +79,7 @@ const visible = openings.slice(0, 4);
     </ul>
 
     <div class="openings-cta flex justify-center">
-      <Button href={applyHref} variant="primary" size="lg" arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button>
+      <Button href={membershipLive ? "/membership" : "/get-involved"} variant="primary" size="lg" arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button>
     </div>
 
   </div>
