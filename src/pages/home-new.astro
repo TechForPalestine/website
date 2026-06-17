@@ -1,4 +1,5 @@
 ---
+import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HeroSection from "../components/home/HeroSection.astro";
 import ManifestoSection from "../components/home/ManifestoSection.astro";
@@ -9,6 +10,8 @@ import TestimonialsSection from "../components/home/TestimonialsSection.astro";
 import OpeningsSection from "../components/home/OpeningsSection.astro";
 import PressSection from "../components/home/PressSection.astro";
 import CtaSection from "../components/home/CtaSection.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
 <HomeLayout
@@ -23,8 +26,8 @@ import CtaSection from "../components/home/CtaSection.astro";
     <SupportSection />
     <WhySection />
     <TestimonialsSection />
-    <OpeningsSection />
+    <OpeningsSection membershipLive={membershipLive} />
     <PressSection />
-    <CtaSection />
+    <CtaSection membershipLive={membershipLive} />
   </main>
 </HomeLayout>

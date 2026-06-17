@@ -1,6 +1,12 @@
 ---
 import Button from "../ui/Button.astro";
 
+interface Props {
+  membershipLive?: boolean;
+}
+
+const { membershipLive = false } = Astro.props;
+
 const amounts = [
   { label: "$25", href: "/donate?amount=25" },
   { label: "$50", href: "/donate?amount=50" },
@@ -19,10 +25,14 @@ const amounts = [
           <span class="text-brand-light">Now build with us.</span>
         </h2>
         <p class="ts-body mt-6 text-page/60 max-w-[480px] mx-auto leading-relaxed">
-          By joining you'll get access to our private member Hub, where you can volunteer your skills, connect with the community and receive advanced updates.
+          {membershipLive
+            ? "By joining you'll get access to our private member Hub, where you can volunteer your skills, connect with the community and receive advanced updates."
+            : "Join our coalition of tech professionals working in support of Palestinian liberation. Volunteer your skills, connect with the community and make an impact."}
         </p>
         <div class="mt-10">
-          <Button href="/get-involved" variant="primary" size="lg" arrow>Become a member</Button>
+          {membershipLive
+            ? <Button href="/membership" variant="primary" size="lg" arrow>Become a member</Button>
+            : <Button href="/get-involved" variant="primary" size="lg" arrow>Get involved</Button>}
         </div>
       </div>
 

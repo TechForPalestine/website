@@ -1,6 +1,13 @@
 ---
 import Button from "../ui/Button.astro";
 
+interface Props {
+  membershipLive?: boolean;
+}
+
+const { membershipLive = false } = Astro.props;
+const applyHref = membershipLive ? "/membership" : "/get-involved";
+
 const openings = [
   { org: "Boycat", role: "Senior Full-Stack Engineer", stack: "React · Node · Postgres", hours: "~8 hrs / week", location: "Remote" },
   { org: "Newscord", role: "Product Designer", stack: "Figma · CSS · Design Systems", hours: "~5 hrs / week", location: "Remote" },
@@ -22,7 +29,9 @@ const visible = openings.slice(0, 4);
         </h2>
       </div>
       <p class="ts-body text-ink-secondary min-[810px]:text-right min-[810px]:max-w-[400px] min-[810px]:ml-auto">
-        This could be you. Become a member to fill one of these impactful openings.
+        {membershipLive
+          ? "This could be you. Become a member to fill one of these impactful openings."
+          : "This could be you. Get involved to fill one of these impactful openings."}
       </p>
     </div>
 
@@ -40,7 +49,7 @@ const visible = openings.slice(0, 4);
             <p class="ts-body-small text-ink-secondary">{o.hours}</p>
             <p class="ts-body-small text-ink-secondary">{o.location}</p>
             <a
-              href="/membership"
+              href={applyHref}
               class="ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
               Apply
@@ -63,7 +72,7 @@ const visible = openings.slice(0, 4);
     </ul>
 
     <div class="openings-cta flex justify-center">
-      <Button href="/membership" variant="primary" size="lg" arrow>Fill an opening now</Button>
+      <Button href={applyHref} variant="primary" size="lg" arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button>
     </div>
 
   </div>
