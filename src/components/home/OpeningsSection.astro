@@ -3,9 +3,9 @@ import Button from "../ui/Button.astro";
 
 const openings = [
   { org: "Boycat", role: "Senior Full-Stack Engineer", stack: "React · Node · Postgres", hours: "~8 hrs / week", location: "Remote" },
-  { org: "Boycat", role: "Senior Full-Stack Engineer", stack: "React · Node · Postgres", hours: "~8 hrs / week", location: "Remote" },
-  { org: "Boycat", role: "Senior Full-Stack Engineer", stack: "React · Node · Postgres", hours: "~8 hrs / week", location: "Remote" },
-  { org: "Boycat", role: "Senior Full-Stack Engineer", stack: "React · Node · Postgres", hours: "~8 hrs / week", location: "Remote" },
+  { org: "Newscord", role: "Product Designer", stack: "Figma · CSS · Design Systems", hours: "~5 hrs / week", location: "Remote" },
+  { org: "UpScrolled", role: "Mobile Engineer", stack: "React Native · TypeScript", hours: "~10 hrs / week", location: "Remote" },
+  { org: "Thaura", role: "Backend Engineer", stack: "Python · Django · Redis", hours: "~6 hrs / week", location: "Remote" },
 ];
 
 const visible = openings.slice(0, 4);
@@ -28,9 +28,9 @@ const visible = openings.slice(0, 4);
 
     <div class="border-t border-ink-divider mb-12 min-[810px]:mb-16"></div>
 
-    <div class="flex flex-col gap-4 mb-16 min-[810px]:mb-24">
-      {visible.map((o, i) => (
-        <div class="opening-card-wrap" data-i={i}>
+    <ul class="flex flex-col gap-4 mb-16 min-[810px]:mb-24 list-none p-0 m-0">
+      {visible.map((o) => (
+        <li class="opening-card-wrap">
           <div class="opening-card rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 grid grid-cols-1 gap-4 min-[810px]:grid-cols-[200px_1fr_auto_auto_auto] min-[810px]:items-center min-[810px]:gap-8">
             <p class="ts-subheading text-ink">{o.org}</p>
             <div>
@@ -41,7 +41,7 @@ const visible = openings.slice(0, 4);
             <p class="ts-body-small text-ink-secondary">{o.location}</p>
             <a
               href="/membership"
-              class="opening-apply ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              class="ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
               Apply
               <svg
@@ -58,9 +58,9 @@ const visible = openings.slice(0, 4);
               </svg>
             </a>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
 
     <div class="openings-cta flex justify-center">
       <Button href="/membership" variant="primary" size="lg" arrow>Fill an opening now</Button>
@@ -146,36 +146,50 @@ const visible = openings.slice(0, 4);
 </style>
 
 <script>
-  const openingsHeaderObs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          openingsHeaderObs.unobserve(entry.target);
-        }
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (prefersReducedMotion) {
+    document
+      .querySelectorAll<HTMLElement>(
+        ".openings-header, .opening-card-wrap, .openings-cta"
+      )
+      .forEach((el) => el.classList.add("in-view"));
+  } else {
+    const openingsHeaderObs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            openingsHeaderObs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    document
+      .querySelectorAll<HTMLElement>(".openings-header, .openings-cta")
+      .forEach((el) => openingsHeaderObs.observe(el));
+
+    const openingsCardObs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            openingsCardObs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document
+      .querySelectorAll<HTMLElement>(".opening-card-wrap")
+      .forEach((card, i) => {
+        card.style.transitionDelay = `${i * 0.1}s`;
+        openingsCardObs.observe(card);
       });
-    },
-    { threshold: 0.15 }
-  );
-
-  document
-    .querySelectorAll<HTMLElement>(".openings-header, .openings-cta")
-    .forEach((el) => openingsHeaderObs.observe(el));
-
-  const openingsCardObs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          openingsCardObs.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1 }
-  );
-
-  document.querySelectorAll<HTMLElement>(".opening-card-wrap").forEach((card, i) => {
-    card.style.transitionDelay = `${i * 0.1}s`;
-    openingsCardObs.observe(card);
-  });
+  }
 </script>
