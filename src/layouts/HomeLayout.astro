@@ -38,6 +38,7 @@ const canonicalUrl = new URL(
     <meta name="csp-nonce" content={Astro.locals.cspNonce} />
     <script is:inline>
       (function () {
+        document.documentElement.classList.remove("no-js");
         function applyStyleString(el, value) {
           while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
           if (!value) return;
@@ -121,8 +122,6 @@ const canonicalUrl = new URL(
 
     <script>
       import Lenis from "lenis";
-
-      document.documentElement.classList.remove("no-js");
 
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         const lenis = new Lenis({
