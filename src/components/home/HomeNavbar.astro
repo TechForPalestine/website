@@ -343,23 +343,12 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
 
 <script>
   const navbar = document.querySelector<HTMLElement>(".home-navbar");
-  const heroSection = document.querySelector<HTMLElement>("[data-hero]") ??
-    document.querySelector<HTMLElement>("section");
 
-  if (navbar && heroSection) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            navbar.classList.remove("visible");
-          } else {
-            navbar.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.05 }
-    );
-    observer.observe(heroSection);
+  if (navbar) {
+    const threshold = window.innerHeight / 2;
+    window.addEventListener("scroll", () => {
+      navbar.classList.toggle("visible", window.scrollY >= threshold);
+    }, { passive: true });
   }
 
   const burger = document.querySelector<HTMLButtonElement>(".home-navbar-burger");
