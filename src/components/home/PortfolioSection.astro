@@ -10,51 +10,55 @@ const projects = [
     name: "UpScrolled",
     url: "https://upscrolled.com/en/",
     description:
-      "The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach. Launched and scaled via the T4P incubator and ecosystem partners.",
+      "Meta and other social media apps are controlled by billionaires and suppress pro-Palestine content. This social platform has no shadowbans and no algorithmic games. Launched and scaled via the T4P incubator and ecosystem partners.",
     logo: { src: "/images/new-homepage/portfolio/proj-logo-5.webp", alt: "UpScrolled logo" },
     stats: [
-      { label: "Global App Store", value: "#1" },
-      { label: "Users in 7 months", value: "5M+" },
+      { label: "in App Store", value: "#1" },
+      { label: "users", value: "5M+" },
     ],
   },
   {
     name: "Boycat",
     url: "https://www.boycat.io/",
     description:
-      "Scan any product to check its ethical compliance and find alternatives in real time. Official BDS partner app, connected through T4P.",
+      "Makes boycotting easy. Scan any product to check its ethical compliance and find alternatives to products complicit in the genocide in real time. Official BDS partner app, connected through T4P.",
     logo: { src: "/images/new-homepage/portfolio/proj-logo-3.webp", alt: "Boycat logo" },
     stats: [
-      { label: "Users worldwide", value: "3M+" },
-      { label: "Redirected to ethical brands", value: "$500M+" },
+      { label: "users", value: "3M+" },
+      { label: "redirected to ethical brands", value: "$500M+" },
+    ],
+  },
+  {
+    name: "Find a Protest",
+    url: "https://www.findaprotest.info/",
+    description:
+      "Find and subscribe to protests for Palestine in your area, powered by organizers, communities, and volunteer data collectors. Powered by volunteers & strategic guidance through T4P.",
+    logo: {
+      src: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp",
+      alt: "Find a Protest logo",
+      imgClass: "max-h-[120px] w-full max-w-[220px] object-contain",
+    },
+    stats: [
+      { label: "monthly users", value: "200k+" },
+      { label: "protests & solidarity events listed", value: "10k+" },
     ],
   },
   {
     name: "Thaura.ai",
     url: "https://thaura.ai/home",
     description:
-      "AI built ethically, designed around environmental, social, and privacy concerns. Launched via the T4P network to profitability.",
+      "Mainstream LLM models are designed with imperialist and Zionist bias. Thaura is AI built ethically, pro-Palestine, designed around environmental, social, and privacy concerns. Launched via the T4P network to profitability.",
     logo: { src: "/images/new-homepage/portfolio/proj-logo-4.webp", alt: "Thaura.ai logo" },
     stats: [
-      { label: "Less energy than ChatGPT", value: "94%" },
-      { label: "Data sold to third parties", value: "0" },
-    ],
-  },
-  {
-    name: "Apricot",
-    url: "https://apricotinternational.org/",
-    description:
-      "Connecting top tech talent from the Middle East, including Palestinian refugees, with US tech companies. Customer introductions and strategic refocus via T4P.",
-    logo: { src: "/images/new-homepage/portfolio/proj-logo-2.webp", alt: "Apricot logo" },
-    stats: [
-      { label: "Paid to placed talent", value: "$1M" },
-      { label: "Candidates", value: "10k+" },
+      { label: "less energy than ChatGPT per query", value: "94%" },
+      { label: "data sold to third parties", value: "0" },
     ],
   },
   {
     name: "Newscord",
     url: "https://newscord.org/",
     description:
-      "AI-powered news summaries across hundreds of sources, exposing media bias in every language. Refocused and connected with T4P ecosystem partners.",
+      "Exposes media bias against Palestine with AI-powered news summaries across hundreds of sources, and tracking of biased headlines & responsible news outlets. T4P marketing support & connections to ecosystem partners.",
     logo: {
       src: "/images/new-homepage/portfolio/proj-logo-1.webp",
       alt: "Newscord logo",
@@ -62,29 +66,25 @@ const projects = [
       padding: "px-14 py-0",
       imgClass: "max-h-[170px] w-[180px] max-w-full object-contain",
     },
-    stats: [{ label: "Accounts reached monthly", value: "10M+" }],
+    stats: [{ label: "accounts reached monthly", value: "10M+" }],
   },
   {
-    name: "Find a Protest",
-    url: "https://www.findaprotest.info/",
+    name: "Apricot",
+    url: "https://apricotinternational.org/",
     description:
-      "Find and subscribe to protests in your area, powered by organizers, communities, and volunteer data collectors. Refocused and volunteer-powered through T4P.",
-    logo: {
-      src: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp",
-      alt: "Find a Protest logo",
-      imgClass: "max-h-[120px] w-full max-w-[220px] object-contain",
-    },
+      "Connecting top tech talent from the Middle East, including Palestinian refugees, with US tech companies. Customer introductions and strategic advice via T4P.",
+    logo: { src: "/images/new-homepage/portfolio/proj-logo-2.webp", alt: "Apricot logo" },
     stats: [
-      { label: "Monthly users", value: "200k+" },
-      { label: "Protests & solidarity events listed", value: "10k+" },
+      { label: "paid to placed talent", value: "$1M+" },
+      { label: "candidates", value: "10k+" },
     ],
   },
 ];
 ---
 
-<section id="portfolio" class="bg-page px-6 pt-24 pb-24 min-[810px]:px-10 min-[810px]:pt-32 min-[810px]:pb-32">
+<section id="portfolio" class="bg-page px-6 pt-14 pb-14 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-20">
   <div class="mx-auto max-w-[1400px]">
-    <p class="ts-overline mb-10 text-ink-secondary">— Our portfolio</p>
+    <p class="ts-overline mb-10 text-ink-secondary">Our portfolio</p>
 
     <div class="grid grid-cols-1 gap-8 pb-10 min-[810px]:grid-cols-2 min-[810px]:gap-16 min-[810px]:pb-14">
       <h2 class="ts-editorial text-ink">
@@ -92,7 +92,10 @@ const projects = [
       </h2>
       <div>
         <p class="ts-body-large text-ink-secondary">
-          Funded, mentored, and scaled by T4P volunteers and people like you.
+          Each of these projects was scaled through T4P. Powered by volunteers, mentors, and people like you.
+        </p>
+        <p class="ts-body mt-4 text-ink-secondary">
+          If you have a business or nonprofit that supports Palestine, <a href="/incubator" class="text-brand hover:underline">Apply to the Incubator</a>.
         </p>
       </div>
     </div>

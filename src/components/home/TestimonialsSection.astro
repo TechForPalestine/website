@@ -3,10 +3,13 @@ const testimonials = [
   {
     quote:
       "The valuable advice and launch support from T4P was exactly what we needed to finally hit cash-flow positive and build our impact.",
-    name: "Hani Chihabi",
-    role: "Founder, Thaura",
+    name: "Hani & Said Chihabi",
+    role: "Founders, Thaura",
     logo: "/thaura.svg",
-    headshot: "/images/new-homepage/testimonials/Hani.png",
+    headshots: [
+      "/images/new-homepage/testimonials/Hani.png",
+      "/images/new-homepage/testimonials/Said.png",
+    ],
   },
   {
     quote:
@@ -27,12 +30,12 @@ const testimonials = [
 ];
 ---
 
-<section class="bg-page pt-24 min-[810px]:pt-32 pb-24 min-[810px]:pb-32">
+<section class="bg-page pt-14 min-[810px]:pt-20 pb-14 min-[810px]:pb-20">
   <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
 
     <div class="testimonials-header grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end mb-12 min-[810px]:mb-16">
       <div>
-        <p class="ts-overline mb-8 text-ink-secondary">— From the people building with us</p>
+        <p class="ts-overline mb-8 text-ink-secondary">From the people building with us</p>
         <h2 class="ts-editorial text-ink leading-[1.2]">
           What it's like to <span class="text-brand">work with T4P</span>
         </h2>
@@ -60,15 +63,38 @@ const testimonials = [
             </svg>
             <p class="ts-quote text-ink flex-1">{t.quote}</p>
             <footer class="mt-8 flex items-center gap-3">
-              <img
-                src={t.headshot}
-                alt={t.name}
-                width="48"
-                height="48"
-                loading="lazy"
-                decoding="async"
-                class="testimonial-avatar h-12 w-12 rounded-full object-cover"
-              />
+              {t.headshots ? (
+                <div class="relative w-12 h-12 shrink-0">
+                  <img
+                    src={t.headshots[0]}
+                    alt=""
+                    width="36"
+                    height="36"
+                    loading="lazy"
+                    decoding="async"
+                    class="testimonial-avatar absolute top-0 -left-2 h-8 w-8 rounded-full object-cover z-10"
+                  />
+                  <img
+                    src={t.headshots[1]}
+                    alt=""
+                    width="36"
+                    height="36"
+                    loading="lazy"
+                    decoding="async"
+                    class="testimonial-avatar absolute bottom-0 right-0 h-8 w-8 rounded-full object-cover"
+                  />
+                </div>
+              ) : (
+                <img
+                  src={t.headshot}
+                  alt=""
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                  class="testimonial-avatar h-12 w-12 rounded-full object-cover"
+                />
+              )}
               <div>
                 <p class="ts-label text-ink">{t.name}</p>
                 <p class="ts-body-small mt-0.5 text-ink-secondary">{t.role}</p>

@@ -3,10 +3,10 @@ import { Icon } from "astro-icon/components";
 
 const navigation: Record<string, [string, string][]> = {
   About: [
-    ["Our organization", "/about"],
+    ["Our Organization", "/about"],
     ["Team", "/team"],
-    ["Media", "/media"],
-    ["Contact us", "/contact"],
+    ["FAQ", "/faq"],
+    ["Contact Us", "/contact"],
   ],
   Incubator: [
     ["Overview", "/incubator"],
@@ -15,20 +15,20 @@ const navigation: Record<string, [string, string][]> = {
     ["Tools", "/tools"],
   ],
   "Get Involved": [
-    ["Join our Discord", "https://techforpalestine.org/discord-invite"],
-    ["Entrepreneurs for Palestine", "/e4p"],
-    ["Become a member", "/membership"],
+    ["Become a Member", "/membership"],
+    ["Donate", "/donate"],
+    ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
     ["Volunteer", "/volunteer"],
+    ["Entrepreneurs for Palestine", "/e4p"],
     ["Hire Palestinians", "/help/hire"],
   ],
-  "Events & Updates": [
+  Events: [
+    ["Past Events", "/events"],
     ["Brussels 2026", "https://brussels2026.techforpalestine.org/"],
     ["Barcelona 2026", "https://barcelona2026.techforpalestine.org/"],
     ["Bay Area 2026", "https://summit.techforpalestine.org"],
     ["London 2025", "/london-gathering"],
-    ["Past Events", "/events"],
-    ["Past Updates", "https://updates.techforpalestine.org"],
-    ["FAQ", "/faq"],
+    ["Updates", "https://updates.techforpalestine.org"],
   ],
 };
 
@@ -117,7 +117,10 @@ const socials = [
           Terms
         </a>
         <a href="/legal" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
-          Legal
+          Legal &amp; Financial
+        </a>
+        <a href="/media" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+          Media Kit
         </a>
       </div>
     </div>

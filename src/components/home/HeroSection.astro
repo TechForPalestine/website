@@ -2,7 +2,7 @@
 import Button from "../ui/Button.astro";
 ---
 
-<section class="px-4 pt-4 pb-24 sm:px-6 sm:pt-6 min-[810px]:pb-32">
+<section data-hero class="px-4 pt-4 pb-6 sm:px-6 sm:pt-6 min-[810px]:pb-10">
   <div class="relative overflow-hidden rounded-3xl">
     <!-- Background image -->
     <img
@@ -36,20 +36,20 @@ import Button from "../ui/Button.astro";
         </div>
 
         <p class="ts-display mb-7 text-left text-ink" aria-hidden="true">
-          <span class="hero-h1-a inline">Join the movement behind 90+ projects for </span><span class="hero-h1-b inline text-brand">Palestinian liberation</span>
+          <span class="hero-h1-a inline">Join the movement behind 90+ projects for </span><span class="hero-h1-b inline text-brand">Palestine</span>
         </p>
         <div class="flex flex-wrap items-center justify-start gap-5 min-[1200px]:justify-between">
           <div class="flex flex-wrap items-center">
             <div class="hero-cta-a">
-              <Button href="/get-involved" variant="primary" size="lg">Become a member</Button>
-            </div>
-            <div class="hero-cta-b">
               <Button href="#portfolio" variant="ghost" class="!border-transparent hover:!bg-transparent">
                 See what we've built
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                   <path d="M12 5v14M5 13l7 7 7-7" />
                 </svg>
               </Button>
+            </div>
+            <div class="hero-cta-b">
+              <Button href="/get-involved" variant="primary" size="lg" arrow>Become a member</Button>
             </div>
           </div>
           <div class="hero-logo hidden items-center gap-2 min-[1200px]:flex">
@@ -61,21 +61,21 @@ import Button from "../ui/Button.astro";
   </div>
 
   <!-- Mobile content below hero (below 810px) -->
-  <div id="mobile-content" class="pt-40 min-[810px]:hidden">
+  <div id="mobile-content" class="pt-20 min-[810px]:hidden">
     <h1 class="ts-display hero-h1-a mb-8 text-left text-ink">
-      Join the movement behind 90+ projects for Palestinian liberation
+      Join the movement behind 90+ projects for Palestine
     </h1>
     <div class="flex flex-col items-start gap-4">
       <div class="hero-cta-a">
-        <Button href="/get-involved" variant="primary" size="lg" arrow>Become a member</Button>
-      </div>
-      <div class="hero-cta-b">
         <Button href="#portfolio" variant="ghost" class="!border-transparent hover:!bg-transparent">
           See what we've built
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
             <path d="M12 5v14M5 13l7 7 7-7" />
           </svg>
         </Button>
+      </div>
+      <div class="hero-cta-b">
+        <Button href="/get-involved" variant="primary" size="lg" arrow>Become a member</Button>
       </div>
     </div>
   </div>
