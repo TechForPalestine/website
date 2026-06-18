@@ -11,6 +11,9 @@ import sentry from "@sentry/astro";
 export default defineConfig({
   site: "https://techforpalestine.org",
   output: "server",
+  prefetch: {
+    defaultStrategy: "hover",
+  },
   adapter: cloudflare({
     imageService: "cloudflare",
   }),
