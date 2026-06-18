@@ -348,9 +348,11 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
 
   if (navbar) {
     const threshold = window.innerHeight / 2;
-    window.addEventListener("scroll", () => {
+    const updateVisibility = () => {
       navbar.classList.toggle("visible", window.scrollY >= threshold);
-    }, { passive: true });
+    };
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
   }
 
   const burger = document.querySelector<HTMLButtonElement>(".home-navbar-burger");
