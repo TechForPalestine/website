@@ -32,7 +32,7 @@ const photos = [
     <!-- Motif row -->
     <div class="mb-10 flex items-center -space-x-[18px] sm:-space-x-[24px] min-[810px]:-space-x-[30px] motif-row" role="presentation" aria-hidden="true">
       {[1, 2, 3, 4].map((_, i) => (
-        <img src="/images/logo.avif" alt="" class={`w-20 sm:w-24 min-[810px]:w-32 shrink-0 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
+        <img src="/images/logo.avif" alt="" width="128" height="163" loading="lazy" decoding="async" class={`w-20 sm:w-24 min-[810px]:w-32 shrink-0 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
       ))}
     </div>
 
