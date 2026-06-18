@@ -57,6 +57,12 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@types/react@19.2.2)(react@19.2.0)
+      '@fontsource/fraunces':
+        specifier: ^5.2.9
+        version: 5.2.9
+      '@fontsource/outfit':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@iconify-json/simple-icons':
         specifier: ^1.2.54
         version: 1.2.54
@@ -962,6 +968,12 @@ packages:
     resolution: {integrity: sha512-3TASCATfw+ctICSb4ymrv7iCm0qJ0N9CarB+CZ7zIJ7KqNbwI5JjyDL1/sxoC0ccTO1Zyd1iQ+oqncPg5FJXaA==}
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
+
+  '@fontsource/fraunces@5.2.9':
+    resolution: {integrity: sha512-XDzuddBtoC7BZgZdBn6b7hsFZY2+V1hgN7yca5fBTKuHjb/lOd45a0Ji8dTUgFhPoL7RdGupo+bC2BFSt6UH8Q==}
+
+  '@fontsource/outfit@5.2.8':
+    resolution: {integrity: sha512-rXC6g0MqD7cOBjht0bMqc43qM6lRqDLML9KXsmg9uykz0wLQhy8Z/ajrMG6iyoT3NJR+MYgU+OEHp7uHoTb+Yw==}
 
   '@iconify-json/bi@1.2.6':
     resolution: {integrity: sha512-fWfLr1/+DJDe8+rIUXxMwvmWBZFlxRtM59sYnrezJ2xX87QKyXVw3QuforJ4kF2Orrz85J+JTRG6305vaJ7flA==}
@@ -4946,6 +4958,10 @@ snapshots:
       minimatch: 9.0.9
     transitivePeerDependencies:
       - supports-color
+
+  '@fontsource/fraunces@5.2.9': {}
+
+  '@fontsource/outfit@5.2.8': {}
 
   '@iconify-json/bi@1.2.6':
     dependencies:

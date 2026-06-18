@@ -1,5 +1,8 @@
 ---
 import FooterSection from "../components/home/FooterSection.astro";
+import "@fontsource/fraunces/latin-400.css";
+import "@fontsource/outfit/latin-400.css";
+import "@fontsource/outfit/latin-500.css";
 import "../styles/base.css";
 import "../styles/design-system.css";
 
@@ -29,12 +32,6 @@ const canonicalUrl = new URL(
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <link rel="me" href="https://infosec.exchange/@tech4palestine" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Outfit:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
     <meta name="generator" content={Astro.generator} />
     <meta name="csp-nonce" content={Astro.locals.cspNonce} />
     <script is:inline>
