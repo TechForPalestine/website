@@ -32,11 +32,17 @@ const navigation: Record<string, [string, string][]> = {
   ],
 };
 
-const socials = [
-  { name: "LinkedIn", url: "https://www.linkedin.com/company/techforpalestine/", icon: "mdi:linkedin" },
+const socials: { name: string; url: string; icon: string }[] = [
   { name: "Instagram", url: "https://www.instagram.com/techforpalestine", icon: "mdi:instagram" },
   { name: "Twitter", url: "https://twitter.com/tech4palestine", icon: "mdi:twitter" },
+  { name: "YouTube", url: "https://www.youtube.com/@tech4palestine", icon: "mdi:youtube" },
   { name: "GitHub", url: "https://github.com/TechForPalestine/", icon: "mdi:github" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/company/techforpalestine/", icon: "mdi:linkedin" },
+  { name: "Discord", url: "https://techforpalestine.org/discord-invite", icon: "ic:baseline-discord" },
+  { name: "Mastodon", url: "https://infosec.exchange/@tech4palestine", icon: "mdi:mastodon" },
+  { name: "TikTok", url: "https://www.tiktok.com/@techforpalestine", icon: "ic:baseline-tiktok" },
+  { name: "Bluesky", url: "https://bsky.app/profile/techforpalestine.org", icon: "simple-icons:bluesky" },
+  { name: "UpScrolled", url: "https://share.upscrolled.com/en/user/39494e76-22a4-47ee-a67d-cd7049835a53/", icon: "/upscrolled-icon.svg" },
 ];
 ---
 
@@ -48,8 +54,10 @@ const socials = [
       <div class="lg:col-span-4">
         <a href="/" class="inline-block">
           <img
-            src="/logos/Logo-dark-no-padding.png"
+            src="/logos/logo-dark-no-padding.webp"
             alt="Tech for Palestine"
+            width="352"
+            height="112"
             class="h-14 w-auto"
           />
         </a>
@@ -59,7 +67,7 @@ const socials = [
           for a free and sovereign Palestine.
         </p>
 
-        <ul class="mt-8 flex gap-4">
+        <ul class="mt-8 flex flex-wrap gap-4">
           {socials.map((s) => (
             <li>
               <a
@@ -70,7 +78,11 @@ const socials = [
                 title={s.name}
               >
                 <span class="sr-only">{s.name}</span>
-                <Icon name={s.icon} class="h-5 w-5" />
+                {s.icon.startsWith("/") ? (
+                  <img src={s.icon} alt={s.name} class="h-5 w-5 opacity-40 transition-opacity duration-200 hover:opacity-100" />
+                ) : (
+                  <Icon name={s.icon} class="h-5 w-5" />
+                )}
               </a>
             </li>
           ))}
