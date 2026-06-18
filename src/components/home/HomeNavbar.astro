@@ -92,8 +92,8 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
           <a
             href={item.href}
             class:list={[
-              "ts-body transition-colors duration-150 inline-flex items-center gap-1.5 py-2 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-              isGroupActive(item, currentPath) ? "text-ink" : "text-ink-secondary hover:text-brand",
+              "ts-label transition-colors duration-150 inline-flex items-center gap-1.5 py-2 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+              isGroupActive(item, currentPath) ? "text-brand" : "text-ink-secondary hover:text-ink",
             ]}
             target={item.href.startsWith("http") ? "_blank" : "_self"}
             rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
@@ -109,14 +109,14 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
           </a>
           {item.children && (
             <div class="nav-dropdown-menu absolute top-full left-0 pt-2">
-              <ul class="nav-dropdown-panel min-w-[220px] rounded-[20px] border border-butter bg-page p-2.5 list-none m-0" role="list">
+              <ul class="nav-dropdown-panel min-w-[220px] rounded-lg border border-butter bg-page p-2.5 list-none m-0" role="list">
                 {item.children.map((child) => (
                   <li>
                     <a
                       href={child.href}
                       class:list={[
-                        "ts-body-small block rounded-xl px-4 py-3 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                        isActive(child.href, currentPath) ? "bg-butter text-ink" : "text-ink-secondary hover:bg-butter hover:text-ink",
+                        "ts-body-small block rounded-md px-4 py-3 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                        isActive(child.href, currentPath) ? "bg-butter text-ink hover:bg-butter/70" : "text-ink-secondary hover:bg-cream hover:text-ink",
                       ]}
                       target={child.href.startsWith("http") ? "_blank" : "_self"}
                       rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
@@ -219,21 +219,16 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   .home-navbar {
     transform: translateY(-100%);
     opacity: 0;
-    filter: blur(8px);
     background: #FFFBF5;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 1px 0 #F7EAD4, 0 4px 16px rgba(42, 36, 40, 0.06);
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
 
   .home-navbar.visible {
     transform: translateY(0);
     opacity: 1;
-    filter: blur(0);
     pointer-events: auto;
   }
 
@@ -245,19 +240,26 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   .nav-dropdown-menu {
     opacity: 0;
     transform: translateY(-4px);
-    filter: blur(4px);
     pointer-events: none;
     transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-                transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-                filter 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+                transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .nav-dropdown:hover .nav-dropdown-menu,
   .nav-dropdown:focus-within .nav-dropdown-menu {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
     pointer-events: auto;
+  }
+
+  /* Bridge: keep hover alive while cursor crosses the gap between trigger and panel */
+  .nav-dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
   }
 
   .nav-chevron {
@@ -279,8 +281,6 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     opacity: 0;
     visibility: hidden;
     background: #FFFBF5;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
                 opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
                 visibility 0s 0.35s;
@@ -332,21 +332,8 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .home-navbar {
-      transition: none;
-      filter: none;
-    }
-    .home-navbar.visible {
-      filter: none;
-    }
-    .nav-dropdown-menu {
-      transition: none;
-      filter: none;
-    }
-    .nav-dropdown:hover .nav-dropdown-menu,
-    .nav-dropdown:focus-within .nav-dropdown-menu {
-      filter: none;
-    }
+    .home-navbar,
+    .nav-dropdown-menu,
     .mobile-accordion-panel,
     .home-navbar-drawer {
       transition: none;
