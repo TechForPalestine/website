@@ -135,7 +135,7 @@ async function fetchDroppedEvents(
   kv: KVNamespace,
   dateFrom: string,
   dateTo: string
-): Promise<{ daily: DailyCount[] }> {
+): Promise<{ daily: DailyCount[]; propBreakdowns: PropBreakdown[] }> {
   const allKeys: string[] = [];
   let cursor: string | undefined;
   do {
@@ -182,7 +182,21 @@ async function fetchDroppedEvents(
     daily.push({ date, goal: goalParts.join(":"), count });
   }
 
-  return { daily };
+  const propCounts = new Map<string, number>();
+  for (const e of filtered) {
+    for (const [prop, value] of Object.entries(e.props)) {
+      const key = `${e.eventName}:${prop}:${value}`;
+      propCounts.set(key, (propCounts.get(key) || 0) + 1);
+    }
+  }
+
+  const propBreakdowns: PropBreakdown[] = [];
+  for (const [key, count] of propCounts) {
+    const [goal, prop, ...valueParts] = key.split(":");
+    propBreakdowns.push({ goal, prop, value: valueParts.join(":"), count });
+  }
+
+  return { daily, propBreakdowns };
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -209,7 +223,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
         : Promise.resolve([]),
       kv
         ? fetchDroppedEvents(kv, dateFrom, dateTo)
-        : Promise.resolve({ daily: [] }),
+        : Promise.resolve({ daily: [], propBreakdowns: [] }),
       apiKey
         ? fetchPropertyBreakdowns(apiKey, dateFrom, dateTo)
         : Promise.resolve([]),
@@ -219,7 +233,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       JSON.stringify({
         plausible,
         dropped: dropped.daily,
-        propBreakdowns,
+        propBreakdowns: [...propBreakdowns, ...dropped.propBreakdowns],
         dateFrom,
         dateTo,
       }),
