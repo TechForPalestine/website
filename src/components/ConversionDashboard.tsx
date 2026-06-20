@@ -24,17 +24,17 @@ interface DailyCount {
   count: number;
 }
 
-interface PropBreakdown {
+interface ConversionDetail {
   goal: string;
-  prop: string;
-  value: string;
+  amount: string;
+  variant: string;
   count: number;
 }
 
 interface StatsResponse {
   plausible: DailyCount[];
   dropped: DailyCount[];
-  propBreakdowns: PropBreakdown[];
+  details: ConversionDetail[];
   dateFrom: string;
   dateTo: string;
   error?: string;
@@ -335,28 +335,27 @@ export default function ConversionDashboard({
             </div>
           </div>
 
-          {/* Amount breakdowns per goal */}
-          {data.propBreakdowns.length > 0 && (
+          {/* Conversion details per goal */}
+          {data.details.length > 0 && (
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {goalKeys.map((goal) => {
-                const allAmounts = data.propBreakdowns.filter(
-                  (p) => p.goal === goal && p.prop === "amount"
-                );
-                if (allAmounts.length === 0) return null;
-                const tracked = allAmounts
-                  .filter((p) => p.value && !isNaN(parseFloat(p.value)))
-                  .sort((a, b) => parseFloat(b.value) - parseFloat(a.value));
-                const untrackedCount = allAmounts
-                  .filter((p) => !p.value || isNaN(parseFloat(p.value)))
-                  .reduce((s, p) => s + p.count, 0);
+                const rows = data.details.filter((d) => d.goal === goal);
+                if (rows.length === 0) return null;
+                const hasVariant = goal === "Membership-complete";
+                const tracked = rows
+                  .filter((r) => r.amount && !isNaN(parseFloat(r.amount)))
+                  .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
+                const untrackedCount = rows
+                  .filter((r) => !r.amount || isNaN(parseFloat(r.amount)))
+                  .reduce((s, r) => s + r.count, 0);
                 const total = tracked.reduce(
-                  (sum, p) => sum + parseFloat(p.value) * p.count,
+                  (sum, r) => sum + parseFloat(r.amount) * r.count,
                   0
                 );
                 const colors = GOAL_COLORS[goal];
                 return (
                   <div
-                    key={`amount-${goal}`}
+                    key={`detail-${goal}`}
                     className="rounded-lg border border-gray-200 bg-white p-5"
                   >
                     <h3 className="text-sm font-medium text-gray-500">
@@ -368,24 +367,35 @@ export default function ConversionDashboard({
                     >
                       ${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
-                    <div className="mt-3 max-h-48 overflow-y-auto">
+                    <div className="mt-3 max-h-64 overflow-y-auto">
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="border-b border-gray-100">
                             <th className="pb-1 text-left font-medium text-gray-400">Amount</th>
+                            {hasVariant && (
+                              <th className="pb-1 text-left font-medium text-gray-400">Variant</th>
+                            )}
                             <th className="pb-1 text-right font-medium text-gray-400">Count</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {tracked.map((a) => (
-                            <tr key={a.value} className="border-b border-gray-50">
-                              <td className="py-1 text-gray-700">${parseFloat(a.value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                              <td className="py-1 text-right text-gray-900 font-medium">{a.count}</td>
+                          {tracked.map((r, i) => (
+                            <tr key={i} className="border-b border-gray-50">
+                              <td className="py-1 text-gray-700">
+                                ${parseFloat(r.amount).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              </td>
+                              {hasVariant && (
+                                <td className="py-1 text-gray-600">
+                                  {r.variant || "—"}
+                                </td>
+                              )}
+                              <td className="py-1 text-right text-gray-900 font-medium">{r.count}</td>
                             </tr>
                           ))}
                           {untrackedCount > 0 && (
                             <tr className="border-b border-gray-50">
                               <td className="py-1 text-gray-400 italic">Untracked</td>
+                              {hasVariant && <td />}
                               <td className="py-1 text-right text-gray-400 font-medium">{untrackedCount}</td>
                             </tr>
                           )}
@@ -397,38 +407,6 @@ export default function ConversionDashboard({
               })}
             </div>
           )}
-
-          {/* Membership variant breakdown */}
-          {(() => {
-            const variants = data.propBreakdowns.filter(
-              (p) =>
-                p.goal === "Membership-complete" &&
-                p.prop === "membership_variant"
-            );
-            if (variants.length === 0) return null;
-            return (
-              <div className="mt-4 max-w-xs rounded-lg border border-gray-200 bg-white p-5">
-                <h3 className="text-sm font-medium text-gray-500">
-                  Membership — Calculator Variant
-                </h3>
-                <div className="mt-3 space-y-2">
-                  {variants.map((v) => (
-                    <div
-                      key={v.value}
-                      className="flex items-center justify-between"
-                    >
-                      <span className="text-sm text-gray-700">
-                        {v.value || "(not set)"}
-                      </span>
-                      <span className="text-sm font-semibold text-gray-900">
-                        {v.count}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })()}
         </>
       )}
     </div>

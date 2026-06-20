@@ -77,20 +77,20 @@ async function fetchPlausibleStats(
   return results.flat();
 }
 
-interface PropBreakdown {
+interface ConversionDetail {
   goal: string;
-  prop: string;
-  value: string;
+  amount: string;
+  variant: string;
   count: number;
 }
 
-async function fetchPlausiblePropBreakdown(
+async function fetchPlausibleConversionDetails(
   apiKey: string,
   goal: string,
-  prop: string,
+  props: string[],
   dateFrom: string,
   dateTo: string
-): Promise<PropBreakdown[]> {
+): Promise<ConversionDetail[]> {
   const response = await fetch(PLAUSIBLE_API, {
     method: "POST",
     headers: {
@@ -102,7 +102,7 @@ async function fetchPlausiblePropBreakdown(
       metrics: ["events"],
       date_range: [dateFrom, dateTo],
       filters: [["is", "event:goal", [goal]]],
-      dimensions: [`event:props:${prop}`],
+      dimensions: props.map((p) => `event:props:${p}`),
     }),
   });
 
@@ -112,20 +112,21 @@ async function fetchPlausiblePropBreakdown(
 
   return data.results.map((r) => ({
     goal,
-    prop,
-    value: r.dimensions[0],
+    amount: r.dimensions[props.indexOf("amount")] ?? "",
+    variant: r.dimensions[props.indexOf("membership_variant")] ?? "",
     count: r.metrics[0],
   }));
 }
 
-async function fetchPropertyBreakdowns(
+async function fetchConversionDetails(
   apiKey: string,
   dateFrom: string,
   dateTo: string
-): Promise<PropBreakdown[]> {
+): Promise<ConversionDetail[]> {
   const queries = [
-    ...GOALS.map((goal) => fetchPlausiblePropBreakdown(apiKey, goal, "amount", dateFrom, dateTo)),
-    fetchPlausiblePropBreakdown(apiKey, "Membership-complete", "membership_variant", dateFrom, dateTo),
+    fetchPlausibleConversionDetails(apiKey, "One-time-donate", ["amount"], dateFrom, dateTo),
+    fetchPlausibleConversionDetails(apiKey, "Monthly-donate", ["amount"], dateFrom, dateTo),
+    fetchPlausibleConversionDetails(apiKey, "Membership-complete", ["amount", "membership_variant"], dateFrom, dateTo),
   ];
   const results = await Promise.all(queries);
   return results.flat();
@@ -135,7 +136,7 @@ async function fetchDroppedEvents(
   kv: KVNamespace,
   dateFrom: string,
   dateTo: string
-): Promise<{ daily: DailyCount[]; propBreakdowns: PropBreakdown[] }> {
+): Promise<{ daily: DailyCount[]; details: ConversionDetail[] }> {
   const allKeys: string[] = [];
   let cursor: string | undefined;
   do {
@@ -182,21 +183,21 @@ async function fetchDroppedEvents(
     daily.push({ date, goal: goalParts.join(":"), count });
   }
 
-  const propCounts = new Map<string, number>();
+  const detailCounts = new Map<string, number>();
   for (const e of filtered) {
-    for (const [prop, value] of Object.entries(e.props)) {
-      const key = `${e.eventName}:${prop}:${value}`;
-      propCounts.set(key, (propCounts.get(key) || 0) + 1);
-    }
+    const amount = String(e.props.amount ?? "");
+    const variant = String(e.props.membership_variant ?? "");
+    const key = `${e.eventName}:${amount}:${variant}`;
+    detailCounts.set(key, (detailCounts.get(key) || 0) + 1);
   }
 
-  const propBreakdowns: PropBreakdown[] = [];
-  for (const [key, count] of propCounts) {
-    const [goal, prop, ...valueParts] = key.split(":");
-    propBreakdowns.push({ goal, prop, value: valueParts.join(":"), count });
+  const details: ConversionDetail[] = [];
+  for (const [key, count] of detailCounts) {
+    const [goal, amount, variant] = key.split(":");
+    details.push({ goal, amount, variant, count });
   }
 
-  return { daily, propBreakdowns };
+  return { daily, details };
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -217,15 +218,15 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   const ctx = locals.runtime?.ctx;
   try {
-    const [plausible, dropped, propBreakdowns] = await Promise.all([
+    const [plausible, dropped, details] = await Promise.all([
       apiKey
         ? fetchPlausibleStats(apiKey, dateFrom, dateTo)
         : Promise.resolve([]),
       kv
         ? fetchDroppedEvents(kv, dateFrom, dateTo)
-        : Promise.resolve({ daily: [], propBreakdowns: [] }),
+        : Promise.resolve({ daily: [], details: [] }),
       apiKey
-        ? fetchPropertyBreakdowns(apiKey, dateFrom, dateTo)
+        ? fetchConversionDetails(apiKey, dateFrom, dateTo)
         : Promise.resolve([]),
     ]);
 
@@ -233,7 +234,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       JSON.stringify({
         plausible,
         dropped: dropped.daily,
-        propBreakdowns: [...propBreakdowns, ...dropped.propBreakdowns],
+        details: [...details, ...dropped.details],
         dateFrom,
         dateTo,
       }),
