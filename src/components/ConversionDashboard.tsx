@@ -339,12 +339,18 @@ export default function ConversionDashboard({
           {data.propBreakdowns.length > 0 && (
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {goalKeys.map((goal) => {
-                const amounts = data.propBreakdowns
-                  .filter((p) => p.goal === goal && p.prop === "amount" && p.value)
+                const allAmounts = data.propBreakdowns.filter(
+                  (p) => p.goal === goal && p.prop === "amount"
+                );
+                if (allAmounts.length === 0) return null;
+                const tracked = allAmounts
+                  .filter((p) => p.value && !isNaN(parseFloat(p.value)))
                   .sort((a, b) => parseFloat(b.value) - parseFloat(a.value));
-                if (amounts.length === 0) return null;
-                const total = amounts.reduce(
-                  (sum, p) => sum + parseFloat(p.value || "0") * p.count,
+                const untrackedCount = allAmounts
+                  .filter((p) => !p.value || isNaN(parseFloat(p.value)))
+                  .reduce((s, p) => s + p.count, 0);
+                const total = tracked.reduce(
+                  (sum, p) => sum + parseFloat(p.value) * p.count,
                   0
                 );
                 const colors = GOAL_COLORS[goal];
@@ -371,12 +377,18 @@ export default function ConversionDashboard({
                           </tr>
                         </thead>
                         <tbody>
-                          {amounts.map((a) => (
+                          {tracked.map((a) => (
                             <tr key={a.value} className="border-b border-gray-50">
                               <td className="py-1 text-gray-700">${parseFloat(a.value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                               <td className="py-1 text-right text-gray-900 font-medium">{a.count}</td>
                             </tr>
                           ))}
+                          {untrackedCount > 0 && (
+                            <tr className="border-b border-gray-50">
+                              <td className="py-1 text-gray-400 italic">Untracked</td>
+                              <td className="py-1 text-right text-gray-400 font-medium">{untrackedCount}</td>
+                            </tr>
+                          )}
                         </tbody>
                       </table>
                     </div>
