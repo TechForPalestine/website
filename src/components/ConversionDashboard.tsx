@@ -24,9 +24,17 @@ interface DailyCount {
   count: number;
 }
 
+interface PropBreakdown {
+  goal: string;
+  prop: string;
+  value: string;
+  count: number;
+}
+
 interface StatsResponse {
   plausible: DailyCount[];
   dropped: DailyCount[];
+  propBreakdowns: PropBreakdown[];
   dateFrom: string;
   dateTo: string;
   error?: string;
@@ -326,6 +334,74 @@ export default function ConversionDashboard({
               <canvas ref={chartRef} />
             </div>
           </div>
+
+          {/* Property breakdowns */}
+          {data.propBreakdowns.length > 0 && (
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {/* Amount totals per goal */}
+              {goalKeys.map((goal) => {
+                const amounts = data.propBreakdowns.filter(
+                  (p) => p.goal === goal && p.prop === "amount" && p.value
+                );
+                if (amounts.length === 0) return null;
+                const total = amounts.reduce(
+                  (sum, p) => sum + parseFloat(p.value || "0") * p.count,
+                  0
+                );
+                return (
+                  <div
+                    key={`amount-${goal}`}
+                    className="rounded-lg border border-gray-200 bg-white p-5"
+                  >
+                    <h3 className="text-sm font-medium text-gray-500">
+                      {GOAL_LABELS[goal]} — Total Amount
+                    </h3>
+                    <p
+                      className="mt-1 text-2xl font-bold"
+                      style={{ color: GOAL_COLORS[goal]?.border }}
+                    >
+                      ${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      {amounts.reduce((s, p) => s + p.count, 0)} conversions
+                    </p>
+                  </div>
+                );
+              })}
+
+              {/* Membership variant breakdown */}
+              {(() => {
+                const variants = data.propBreakdowns.filter(
+                  (p) =>
+                    p.goal === "Membership-complete" &&
+                    p.prop === "membership_variant"
+                );
+                if (variants.length === 0) return null;
+                return (
+                  <div className="rounded-lg border border-gray-200 bg-white p-5">
+                    <h3 className="text-sm font-medium text-gray-500">
+                      Membership — Calculator Variant
+                    </h3>
+                    <div className="mt-3 space-y-2">
+                      {variants.map((v) => (
+                        <div
+                          key={v.value}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-sm text-gray-700">
+                            {v.value || "(not set)"}
+                          </span>
+                          <span className="text-sm font-semibold text-gray-900">
+                            {v.count}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
         </>
       )}
     </div>

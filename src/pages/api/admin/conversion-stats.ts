@@ -77,6 +77,60 @@ async function fetchPlausibleStats(
   return results.flat();
 }
 
+interface PropBreakdown {
+  goal: string;
+  prop: string;
+  value: string;
+  count: number;
+}
+
+async function fetchPlausiblePropBreakdown(
+  apiKey: string,
+  goal: string,
+  prop: string,
+  dateFrom: string,
+  dateTo: string
+): Promise<PropBreakdown[]> {
+  const response = await fetch(PLAUSIBLE_API, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      site_id: SITE_ID,
+      metrics: ["events"],
+      date_range: [dateFrom, dateTo],
+      filters: [["is", "event:goal", [goal]]],
+      dimensions: [`event:props:${prop}`],
+    }),
+  });
+
+  if (!response.ok) return [];
+
+  const data = (await response.json()) as { results: PlausibleResult[] };
+
+  return data.results.map((r) => ({
+    goal,
+    prop,
+    value: r.dimensions[0],
+    count: r.metrics[0],
+  }));
+}
+
+async function fetchPropertyBreakdowns(
+  apiKey: string,
+  dateFrom: string,
+  dateTo: string
+): Promise<PropBreakdown[]> {
+  const queries = [
+    ...GOALS.map((goal) => fetchPlausiblePropBreakdown(apiKey, goal, "amount", dateFrom, dateTo)),
+    fetchPlausiblePropBreakdown(apiKey, "Membership-complete", "membership_variant", dateFrom, dateTo),
+  ];
+  const results = await Promise.all(queries);
+  return results.flat();
+}
+
 async function fetchDroppedEvents(
   kv: KVNamespace,
   dateFrom: string,
@@ -149,19 +203,23 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   const ctx = locals.runtime?.ctx;
   try {
-    const [plausible, dropped] = await Promise.all([
+    const [plausible, dropped, propBreakdowns] = await Promise.all([
       apiKey
         ? fetchPlausibleStats(apiKey, dateFrom, dateTo)
         : Promise.resolve([]),
       kv
         ? fetchDroppedEvents(kv, dateFrom, dateTo)
         : Promise.resolve({ daily: [] }),
+      apiKey
+        ? fetchPropertyBreakdowns(apiKey, dateFrom, dateTo)
+        : Promise.resolve([]),
     ]);
 
     return new Response(
       JSON.stringify({
         plausible,
         dropped: dropped.daily,
+        propBreakdowns,
         dateFrom,
         dateTo,
       }),
