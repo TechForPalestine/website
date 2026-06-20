@@ -3,8 +3,13 @@ import * as Sentry from "@sentry/astro";
 import { reportError } from "../../lib/report-error";
 
 const ALLOWED_ORIGIN = "https://techforpalestine.org";
+const PREVIEW_ORIGIN_SUFFIX = ".pages.dev";
 const PLAUSIBLE_API = "https://plausible.io/api/event";
 const CONVERSION_EVENTS = new Set(["Monthly-donate", "One-time-donate", "Membership"]);
+
+function isAllowedOrigin(origin: string): boolean {
+  return origin === ALLOWED_ORIGIN || origin.endsWith(PREVIEW_ORIGIN_SUFFIX);
+}
 
 function parseEventName(body: string): string {
   try {
@@ -18,7 +23,7 @@ function parseEventName(body: string): string {
 export const POST: APIRoute = async ({ request, locals }) => {
   const ctx = locals.runtime?.ctx;
   const origin = request.headers.get("origin");
-  if (origin && origin !== ALLOWED_ORIGIN) {
+  if (origin && !isAllowedOrigin(origin)) {
     return new Response("Forbidden", { status: 403 });
   }
 
