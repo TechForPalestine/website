@@ -6,7 +6,7 @@ import { reportError } from "../../../lib/report-error";
 
 const PLAUSIBLE_API = "https://plausible.io/api/v2/query";
 const SITE_ID = "techforpalestine.org";
-const GOALS = ["Monthly-donate", "One-time-donate"];
+const GOALS = ["Monthly-donate", "One-time-donate", "Membership-complete"];
 
 interface PlausibleResult {
   dimensions: string[];
@@ -34,8 +34,9 @@ function defaultDateRange(): [string, string] {
   return [from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)];
 }
 
-async function fetchPlausibleStats(
+async function fetchPlausibleStatsForGoal(
   apiKey: string,
+  goal: string,
   dateFrom: string,
   dateTo: string
 ): Promise<DailyCount[]> {
@@ -49,14 +50,12 @@ async function fetchPlausibleStats(
       site_id: SITE_ID,
       metrics: ["events"],
       date_range: [dateFrom, dateTo],
-      filters: [["is", "event:goal", GOALS]],
+      filters: [["is", "event:goal", [goal]]],
       dimensions: ["time:day", "event:goal"],
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(`Plausible API error: ${response.status}`);
-  }
+  if (!response.ok) return [];
 
   const data = (await response.json()) as { results: PlausibleResult[] };
 
@@ -67,11 +66,76 @@ async function fetchPlausibleStats(
   }));
 }
 
+async function fetchPlausibleStats(
+  apiKey: string,
+  dateFrom: string,
+  dateTo: string
+): Promise<DailyCount[]> {
+  const results = await Promise.all(
+    GOALS.map((goal) => fetchPlausibleStatsForGoal(apiKey, goal, dateFrom, dateTo))
+  );
+  return results.flat();
+}
+
+interface PropBreakdown {
+  goal: string;
+  prop: string;
+  value: string;
+  count: number;
+}
+
+async function fetchPlausiblePropBreakdown(
+  apiKey: string,
+  goal: string,
+  prop: string,
+  dateFrom: string,
+  dateTo: string
+): Promise<PropBreakdown[]> {
+  const response = await fetch(PLAUSIBLE_API, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      site_id: SITE_ID,
+      metrics: ["events"],
+      date_range: [dateFrom, dateTo],
+      filters: [["is", "event:goal", [goal]]],
+      dimensions: [`event:props:${prop}`],
+    }),
+  });
+
+  if (!response.ok) return [];
+
+  const data = (await response.json()) as { results: PlausibleResult[] };
+
+  return data.results.map((r) => ({
+    goal,
+    prop,
+    value: r.dimensions[0],
+    count: r.metrics[0],
+  }));
+}
+
+async function fetchPropertyBreakdowns(
+  apiKey: string,
+  dateFrom: string,
+  dateTo: string
+): Promise<PropBreakdown[]> {
+  const queries = [
+    ...GOALS.map((goal) => fetchPlausiblePropBreakdown(apiKey, goal, "amount", dateFrom, dateTo)),
+    fetchPlausiblePropBreakdown(apiKey, "Membership-complete", "membership_variant", dateFrom, dateTo),
+  ];
+  const results = await Promise.all(queries);
+  return results.flat();
+}
+
 async function fetchDroppedEvents(
   kv: KVNamespace,
   dateFrom: string,
   dateTo: string
-): Promise<{ daily: DailyCount[]; events: DroppedEvent[] }> {
+): Promise<{ daily: DailyCount[]; propBreakdowns: PropBreakdown[] }> {
   const allKeys: string[] = [];
   let cursor: string | undefined;
   do {
@@ -118,7 +182,21 @@ async function fetchDroppedEvents(
     daily.push({ date, goal: goalParts.join(":"), count });
   }
 
-  return { daily, events: filtered.reverse() };
+  const propCounts = new Map<string, number>();
+  for (const e of filtered) {
+    for (const [prop, value] of Object.entries(e.props)) {
+      const key = `${e.eventName}:${prop}:${value}`;
+      propCounts.set(key, (propCounts.get(key) || 0) + 1);
+    }
+  }
+
+  const propBreakdowns: PropBreakdown[] = [];
+  for (const [key, count] of propCounts) {
+    const [goal, prop, ...valueParts] = key.split(":");
+    propBreakdowns.push({ goal, prop, value: valueParts.join(":"), count });
+  }
+
+  return { daily, propBreakdowns };
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -139,20 +217,23 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   const ctx = locals.runtime?.ctx;
   try {
-    const [plausible, dropped] = await Promise.all([
+    const [plausible, dropped, propBreakdowns] = await Promise.all([
       apiKey
         ? fetchPlausibleStats(apiKey, dateFrom, dateTo)
         : Promise.resolve([]),
       kv
         ? fetchDroppedEvents(kv, dateFrom, dateTo)
-        : Promise.resolve({ daily: [], events: [] }),
+        : Promise.resolve({ daily: [], propBreakdowns: [] }),
+      apiKey
+        ? fetchPropertyBreakdowns(apiKey, dateFrom, dateTo)
+        : Promise.resolve([]),
     ]);
 
     return new Response(
       JSON.stringify({
         plausible,
         dropped: dropped.daily,
-        droppedEvents: dropped.events,
+        propBreakdowns: [...propBreakdowns, ...dropped.propBreakdowns],
         dateFrom,
         dateTo,
       }),

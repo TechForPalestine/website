@@ -99,7 +99,7 @@ export default function MembershipPage() {
       const transaction = detail?.QGIV?.transaction ?? {};
 
       if (typeof window.plausible !== "undefined") {
-        window.plausible("Membership", {
+        window.plausible("Membership-complete", {
           props: {
             amount: transaction.total != null ? String(transaction.total) : "",
             membership_variant: variant,

@@ -16,5 +16,5 @@ if (!expectedToken || !token || !constantTimeEqual(token, expectedToken)) {
 ---
 
 <Layout title="Conversion Dashboard">
-  <ConversionDashboard token={token} client:load />
+  <ConversionDashboard token={token} client:only="react" />
 </Layout>

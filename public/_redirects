@@ -5,3 +5,4 @@
 /project-apply /projects 301
 /project-details/* /projects 301
 /mentor-application /mentorship 301
+/admin/dropped-conversions /admin/conversions 301
