@@ -6,7 +6,7 @@ import { reportError } from "../../../lib/report-error";
 
 const PLAUSIBLE_API = "https://plausible.io/api/v2/query";
 const SITE_ID = "techforpalestine.org";
-const GOALS = ["Monthly-donate", "One-time-donate"];
+const GOALS = ["Monthly-donate", "One-time-donate", "Membership"];
 
 interface PlausibleResult {
   dimensions: string[];
@@ -71,7 +71,7 @@ async function fetchDroppedEvents(
   kv: KVNamespace,
   dateFrom: string,
   dateTo: string
-): Promise<{ daily: DailyCount[]; events: DroppedEvent[] }> {
+): Promise<{ daily: DailyCount[] }> {
   const allKeys: string[] = [];
   let cursor: string | undefined;
   do {
@@ -118,7 +118,7 @@ async function fetchDroppedEvents(
     daily.push({ date, goal: goalParts.join(":"), count });
   }
 
-  return { daily, events: filtered.reverse() };
+  return { daily };
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -145,14 +145,13 @@ export const GET: APIRoute = async ({ request, locals }) => {
         : Promise.resolve([]),
       kv
         ? fetchDroppedEvents(kv, dateFrom, dateTo)
-        : Promise.resolve({ daily: [], events: [] }),
+        : Promise.resolve({ daily: [] }),
     ]);
 
     return new Response(
       JSON.stringify({
         plausible,
         dropped: dropped.daily,
-        droppedEvents: dropped.events,
         dateFrom,
         dateTo,
       }),
