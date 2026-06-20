@@ -335,73 +335,88 @@ export default function ConversionDashboard({
             </div>
           </div>
 
-          {/* Property breakdowns */}
+          {/* Amount breakdowns per goal */}
           {data.propBreakdowns.length > 0 && (
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {/* Amount totals per goal */}
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {goalKeys.map((goal) => {
-                const amounts = data.propBreakdowns.filter(
-                  (p) => p.goal === goal && p.prop === "amount" && p.value
-                );
+                const amounts = data.propBreakdowns
+                  .filter((p) => p.goal === goal && p.prop === "amount" && p.value)
+                  .sort((a, b) => parseFloat(b.value) - parseFloat(a.value));
                 if (amounts.length === 0) return null;
                 const total = amounts.reduce(
                   (sum, p) => sum + parseFloat(p.value || "0") * p.count,
                   0
                 );
+                const colors = GOAL_COLORS[goal];
                 return (
                   <div
                     key={`amount-${goal}`}
                     className="rounded-lg border border-gray-200 bg-white p-5"
                   >
                     <h3 className="text-sm font-medium text-gray-500">
-                      {GOAL_LABELS[goal]} — Total Amount
+                      {GOAL_LABELS[goal]}
                     </h3>
                     <p
                       className="mt-1 text-2xl font-bold"
-                      style={{ color: GOAL_COLORS[goal]?.border }}
+                      style={{ color: colors?.border }}
                     >
                       ${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
-                    <p className="mt-1 text-xs text-gray-400">
-                      {amounts.reduce((s, p) => s + p.count, 0)} conversions
-                    </p>
-                  </div>
-                );
-              })}
-
-              {/* Membership variant breakdown */}
-              {(() => {
-                const variants = data.propBreakdowns.filter(
-                  (p) =>
-                    p.goal === "Membership-complete" &&
-                    p.prop === "membership_variant"
-                );
-                if (variants.length === 0) return null;
-                return (
-                  <div className="rounded-lg border border-gray-200 bg-white p-5">
-                    <h3 className="text-sm font-medium text-gray-500">
-                      Membership — Calculator Variant
-                    </h3>
-                    <div className="mt-3 space-y-2">
-                      {variants.map((v) => (
-                        <div
-                          key={v.value}
-                          className="flex items-center justify-between"
-                        >
-                          <span className="text-sm text-gray-700">
-                            {v.value || "(not set)"}
-                          </span>
-                          <span className="text-sm font-semibold text-gray-900">
-                            {v.count}
-                          </span>
-                        </div>
-                      ))}
+                    <div className="mt-3 max-h-48 overflow-y-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-gray-100">
+                            <th className="pb-1 text-left font-medium text-gray-400">Amount</th>
+                            <th className="pb-1 text-right font-medium text-gray-400">Count</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {amounts.map((a) => (
+                            <tr key={a.value} className="border-b border-gray-50">
+                              <td className="py-1 text-gray-700">${parseFloat(a.value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                              <td className="py-1 text-right text-gray-900 font-medium">{a.count}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 );
-              })()}
+              })}
             </div>
           )}
+
+          {/* Membership variant breakdown */}
+          {(() => {
+            const variants = data.propBreakdowns.filter(
+              (p) =>
+                p.goal === "Membership-complete" &&
+                p.prop === "membership_variant"
+            );
+            if (variants.length === 0) return null;
+            return (
+              <div className="mt-4 max-w-xs rounded-lg border border-gray-200 bg-white p-5">
+                <h3 className="text-sm font-medium text-gray-500">
+                  Membership — Calculator Variant
+                </h3>
+                <div className="mt-3 space-y-2">
+                  {variants.map((v) => (
+                    <div
+                      key={v.value}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-sm text-gray-700">
+                        {v.value || "(not set)"}
+                      </span>
+                      <span className="text-sm font-semibold text-gray-900">
+                        {v.count}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
         </>
       )}
     </div>
