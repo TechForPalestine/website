@@ -39,13 +39,13 @@ interface ConversionDashboardProps {
 const GOAL_LABELS: Record<string, string> = {
   "One-time-donate": "One-time Donation",
   "Monthly-donate": "Monthly Donation",
-  Membership: "Membership",
+  "Membership-complete": "Membership",
 };
 
 const GOAL_COLORS: Record<string, { bg: string; border: string }> = {
   "One-time-donate": { bg: "#16803980", border: "#168039" },
   "Monthly-donate": { bg: "#2563eb80", border: "#2563eb" },
-  Membership: { bg: "#7c3aed80", border: "#7c3aed" },
+  "Membership-complete": { bg: "#7c3aed80", border: "#7c3aed" },
 };
 
 function buildDateRange(days: number): [string, string] {
@@ -189,7 +189,7 @@ export default function ConversionDashboard({
 
   const totalConversions = allCounts.reduce((sum, d) => sum + d.count, 0);
 
-  const goalKeys = ["One-time-donate", "Monthly-donate", "Membership"] as const;
+  const goalKeys = ["One-time-donate", "Monthly-donate", "Membership-complete"] as const;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">

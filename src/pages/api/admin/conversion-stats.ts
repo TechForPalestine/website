@@ -6,7 +6,7 @@ import { reportError } from "../../../lib/report-error";
 
 const PLAUSIBLE_API = "https://plausible.io/api/v2/query";
 const SITE_ID = "techforpalestine.org";
-const GOALS = ["Monthly-donate", "One-time-donate", "Membership"];
+const GOALS = ["Monthly-donate", "One-time-donate", "Membership-complete"];
 
 interface PlausibleResult {
   dimensions: string[];

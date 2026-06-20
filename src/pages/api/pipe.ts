@@ -5,7 +5,7 @@ import { reportError } from "../../lib/report-error";
 const ALLOWED_ORIGIN = "https://techforpalestine.org";
 const PREVIEW_ORIGIN_SUFFIX = ".pages.dev";
 const PLAUSIBLE_API = "https://plausible.io/api/event";
-const CONVERSION_EVENTS = new Set(["Monthly-donate", "One-time-donate", "Membership"]);
+const CONVERSION_EVENTS = new Set(["Monthly-donate", "One-time-donate", "Membership-complete"]);
 
 function isAllowedOrigin(origin: string): boolean {
   return origin === ALLOWED_ORIGIN || origin.endsWith(PREVIEW_ORIGIN_SUFFIX);
