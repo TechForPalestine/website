@@ -34,8 +34,9 @@ function defaultDateRange(): [string, string] {
   return [from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)];
 }
 
-async function fetchPlausibleStats(
+async function fetchPlausibleStatsForGoal(
   apiKey: string,
+  goal: string,
   dateFrom: string,
   dateTo: string
 ): Promise<DailyCount[]> {
@@ -49,14 +50,12 @@ async function fetchPlausibleStats(
       site_id: SITE_ID,
       metrics: ["events"],
       date_range: [dateFrom, dateTo],
-      filters: [["is", "event:goal", GOALS]],
+      filters: [["is", "event:goal", [goal]]],
       dimensions: ["time:day", "event:goal"],
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(`Plausible API error: ${response.status}`);
-  }
+  if (!response.ok) return [];
 
   const data = (await response.json()) as { results: PlausibleResult[] };
 
@@ -65,6 +64,17 @@ async function fetchPlausibleStats(
     goal: r.dimensions[1],
     count: r.metrics[0],
   }));
+}
+
+async function fetchPlausibleStats(
+  apiKey: string,
+  dateFrom: string,
+  dateTo: string
+): Promise<DailyCount[]> {
+  const results = await Promise.all(
+    GOALS.map((goal) => fetchPlausibleStatsForGoal(apiKey, goal, dateFrom, dateTo))
+  );
+  return results.flat();
 }
 
 async function fetchDroppedEvents(
