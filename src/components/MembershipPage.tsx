@@ -11,32 +11,32 @@ const teams = [
   {
     name: "Coaching for Palestinian Entrepreneurs",
     description:
-      "Support Palestinian entrepreneurs with job skills for professional growth.",
+      "Helping Palestinian entrepreneurs build job skills for professional growth.",
   },
   {
     name: "Tech Accountability",
     description:
-      "Develop content like blogs, social media posts, and more to hold tech companies accountable for supporting Israel's war crimes.",
+      "Running campaigns that hold tech companies accountable for supporting war crimes.",
   },
   {
     name: "Legal Aid",
     description:
-      "Help connect pro-bono resources from law firms to cases of discrimination against the Palestinian identity or pro-Palestinian speech.",
+      "Providing pro-bono legal aid to advocacy projects & cases of discrimination against Palestinians or pro-Palestine speech.",
   },
   {
-    name: "US Events",
+    name: "Research Team",
     description:
-      "Organize in-person T4P events in the US to help grow the movement.",
+      "Supporting research across T4P projects and initiatives, including topics such as Big Tech & tech complicity, social media suppression & content moderation, AI, digital tools employed for surveillance, and more.",
   },
   {
     name: "T4P Hackathons",
     description:
-      "Arrange hackathons to kickstart software solutions to movement problems.",
+      "Kickstarting software solutions to movement problems.",
   },
   {
-    name: "Boycott Search",
+    name: "Palestine Datasets",
     description:
-      "Develop a search engine that aggregates boycott targets and alternatives to Zionist resources, providing a central entry point to easily navigate boycotting information across organizations.",
+      "Maintaining open datasets documenting the human toll of the genocide, so that journalists, researchers, artists, and advocates can tell the story.",
   },
 ];
 
@@ -131,19 +131,18 @@ export default function MembershipPage() {
     <Box sx={{ maxWidth: 800, mx: "auto" }}>
       {/* Intro */}
       <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
-        Becoming a member is the best way to support Tech for Palestine
+        Becoming a member is the best way to support Tech for Palestine.
       </Typography>
       <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Members support T4P's work directly through dues and by joining teams to scale the movement,
-        advocate for non-complicit tech and collaborate for Palestinian liberation.
+        Members support T4P's work through dues and by joining teams to scale the movement.
       </Typography>
       <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Membership dues support all T4P initiatives, including the Incubator, the 90+ external projects
-        we support, and teams & campaigns working on tech complicity. Our best known successes include
+        Membership dues support all T4P initiatives, including the 90+ external projects
+        we support through the Incubator, and teams working on tech complicity. Our best known successes include
         UpScrolled, Boycat, Find a Protest, Apricot, and Thaura AI.
       </Typography>
       <Typography variant="body1" sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        After joining, you'll be invited to join <strong>Hub</strong>, our member portal, where you can:
+        You'll be invited to join <strong>Hub</strong>, our member portal, where you can:
       </Typography>
       <Box
         component="ul"
@@ -157,8 +156,9 @@ export default function MembershipPage() {
           "& li": { mb: 0.75, lineHeight: 1.75 },
         }}
       >
-        <li>Join our advocacy and support teams, working directly on Palestinian liberation</li>
+        <li>Join advocacy and support teams, working directly on Palestinian liberation</li>
         <li>Start a team of your own, with T4P support and resources to help you grow</li>
+        <li>Join community events, like the T4P Book Club and other member meetups</li>
       </Box>
       <Typography variant="body1" sx={{ mb: 5, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
         Whether you're a thinker, builder, leader, software developer, marketer, or activist, there's a place for you to contribute in your own way.
