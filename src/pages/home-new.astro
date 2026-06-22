@@ -19,7 +19,9 @@ let openRoles: Array<{
   title: string;
   skillCategories: string[];
   timeCommitment: string | null;
+  type: "team" | "project";
   team: { name: string } | null;
+  project: { id: string; name: string } | null;
 }> = [];
 
 try {

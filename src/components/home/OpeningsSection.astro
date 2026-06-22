@@ -6,7 +6,9 @@ interface Role {
   title: string;
   skillCategories: string[];
   timeCommitment: string | null;
+  type: "team" | "project";
   team: { name: string } | null;
+  project: { id: string; name: string } | null;
 }
 
 interface Props {
@@ -27,9 +29,9 @@ function applyHref(roleId: string): string {
 
     <div class="openings-header grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end mb-12 min-[810px]:mb-16">
       <div>
-        <p class="ts-overline mb-8 text-ink-secondary">Current team openings</p>
+        <p class="ts-overline mb-8 text-ink-secondary">Current openings</p>
         <h2 class="ts-editorial text-ink leading-[1.2]">
-          Teams waiting for their <span class="text-brand">next volunteer</span>
+          Teams & projects waiting for their <span class="text-brand">next volunteer</span>
         </h2>
       </div>
       <p class="ts-body text-ink-secondary min-[810px]:text-right min-[810px]:max-w-[400px] min-[810px]:ml-auto">
@@ -45,7 +47,7 @@ function applyHref(roleId: string): string {
       {visible.map((role) => (
         <li class="opening-card-wrap">
           <div class="opening-card rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 grid grid-cols-1 gap-4 min-[810px]:grid-cols-[200px_1fr_auto_auto] min-[810px]:items-center min-[810px]:gap-8">
-            <p class="ts-subheading text-ink">{role.team?.name ?? "T4P"}</p>
+            <p class="ts-subheading text-ink">{role.type === "project" ? role.project?.name : role.team?.name ?? "T4P"}</p>
             <div>
               <p class="ts-label text-ink">{role.title}</p>
               {role.skillCategories.length > 0 && (
