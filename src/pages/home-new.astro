@@ -17,6 +17,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 let openRoles: Array<{
   id: string;
   title: string;
+  description: string | null;
   skillCategories: string[];
   timeCommitment: string | null;
   type: "team" | "project";

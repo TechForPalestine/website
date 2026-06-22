@@ -4,11 +4,21 @@ import Button from "../ui/Button.astro";
 interface Role {
   id: string;
   title: string;
+  description: string | null;
   skillCategories: string[];
   timeCommitment: string | null;
   type: "team" | "project";
   team: { name: string } | null;
   project: { id: string; name: string } | null;
+}
+
+function roleName(role: Role): string {
+  if (role.type === "team") return role.team?.name ?? "T4P";
+  return role.project?.name ?? role.title;
+}
+
+function roleTime(role: Role): string | null {
+  return role.timeCommitment ?? role.description ?? null;
 }
 
 interface Props {
@@ -48,15 +58,15 @@ function applyHref(role: Role): string {
       {visible.map((role) => (
         <li class="opening-card-wrap">
           <div class="opening-card rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 grid grid-cols-1 gap-4 min-[810px]:grid-cols-[200px_1fr_auto_auto] min-[810px]:items-center min-[810px]:gap-8">
-            <p class="ts-subheading text-ink">{role.type === "project" ? role.project?.name : role.team?.name ?? "T4P"}</p>
+            <p class="ts-subheading text-ink">{roleName(role)}</p>
             <div>
               <p class="ts-label text-ink">{role.title}</p>
               {role.skillCategories.length > 0 && (
                 <p class="ts-body-small text-ink-secondary mt-0.5">{role.skillCategories.join(" · ")}</p>
               )}
             </div>
-            {role.timeCommitment && (
-              <p class="ts-body-small text-ink-secondary">{role.timeCommitment}</p>
+            {roleTime(role) && (
+              <p class="ts-body-small text-ink-secondary whitespace-nowrap">{roleTime(role)}</p>
             )}
             <a
               href={applyHref(role)}
