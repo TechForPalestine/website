@@ -19,8 +19,9 @@ interface Props {
 const { membershipLive = false, roles } = Astro.props;
 const visible = roles.slice(0, 4);
 
-function applyHref(roleId: string): string {
-  return membershipLive ? `/membership?targetRoleId=${roleId}` : "/get-involved";
+function applyHref(role: Role): string {
+  if (role.type === "project") return "/volunteering";
+  return membershipLive ? `/membership?targetRoleId=${role.id}` : "/get-involved";
 }
 ---
 
@@ -58,7 +59,7 @@ function applyHref(roleId: string): string {
               <p class="ts-body-small text-ink-secondary">{role.timeCommitment}</p>
             )}
             <a
-              href={applyHref(role.id)}
+              href={applyHref(role)}
               class="ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
               Apply
