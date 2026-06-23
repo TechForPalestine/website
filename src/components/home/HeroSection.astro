@@ -1,5 +1,11 @@
 ---
 import Button from "../ui/Button.astro";
+
+interface Props {
+  membershipLive?: boolean;
+}
+
+const { membershipLive = false } = Astro.props;
 ---
 
 <section data-hero class="px-4 pt-4 pb-6 sm:px-6 sm:pt-6 min-[810px]:pb-10">
@@ -49,7 +55,7 @@ import Button from "../ui/Button.astro";
               </Button>
             </div>
             <div class="hero-cta-b">
-              <Button href="/get-involved" variant="primary" size="lg" arrow>Get involved</Button>
+              <Button href={membershipLive ? "/membership" : "/get-involved"} variant="primary" size="lg" arrow>{membershipLive ? "Become a member" : "Get involved"}</Button>
             </div>
           </div>
           <div class="hero-logo hidden items-center gap-2 min-[1200px]:flex">
@@ -75,7 +81,7 @@ import Button from "../ui/Button.astro";
         </Button>
       </div>
       <div class="hero-cta-b">
-        <Button href="/get-involved" variant="primary" size="lg" arrow>Get involved</Button>
+        <Button href={membershipLive ? "/membership" : "/get-involved"} variant="primary" size="lg" arrow>{membershipLive ? "Become a member" : "Get involved"}</Button>
       </div>
     </div>
   </div>
