@@ -137,26 +137,36 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
 
     <div class="hidden min-[1050px]:block">
       <Button
-        href={membershipLive ? "/membership" : "/get-involved"}
+        href={membershipLive ? "/membership" : "/donate"}
         variant="primary"
         size="md"
         arrow
         class="!px-7 !py-[1.125rem]"
       >
-        Become a member
+        {membershipLive ? "Become a member" : "Donate"}
       </Button>
     </div>
 
-    <!-- Mobile burger -->
-    <button
-      class="home-navbar-burger min-[1050px]:hidden flex items-center justify-center w-11 h-11 rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-      aria-label="Open menu"
-      aria-expanded="false"
-    >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path d="M4 7h16M4 12h16M4 17h16" />
-      </svg>
-    </button>
+    <!-- Mobile CTA + burger -->
+    <div class="flex min-[1050px]:hidden items-center gap-3">
+      <Button
+        href={membershipLive ? "/membership" : "/donate"}
+        variant="primary"
+        size="sm"
+        arrow
+      >
+        {membershipLive ? "Become a member" : "Donate"}
+      </Button>
+      <button
+        class="home-navbar-burger flex items-center justify-center w-11 h-11 rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Mobile drawer -->
@@ -206,12 +216,12 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
       ))}
       <li class="pt-2">
         <Button
-          href={membershipLive ? "/membership" : "/get-involved"}
+          href={membershipLive ? "/membership" : "/donate"}
           variant="primary"
           size="lg"
           arrow
         >
-          Become a member
+          {membershipLive ? "Become a member" : "Donate"}
         </Button>
       </li>
     </ul>
