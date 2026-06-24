@@ -4,9 +4,10 @@ import Button from "../ui/Button.astro";
 interface Props {
   membershipLive?: boolean;
   currentPath?: string;
+  alwaysVisible?: boolean;
 }
 
-const { membershipLive = false } = Astro.props;
+const { membershipLive = false, alwaysVisible = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const navItems = [
@@ -75,6 +76,7 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
 <nav
   class="home-navbar fixed top-0 left-0 right-0 z-50"
   aria-label="Main navigation"
+  data-always-visible={alwaysVisible ? "true" : undefined}
 >
   <div class="home-navbar-inner mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3 min-[1050px]:px-10">
     <a href="/" class="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
@@ -349,12 +351,16 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   const navbar = document.querySelector<HTMLElement>(".home-navbar");
 
   if (navbar) {
-    const threshold = window.innerHeight / 2;
-    const updateVisibility = () => {
-      navbar.classList.toggle("visible", window.scrollY >= threshold);
-    };
-    updateVisibility();
-    window.addEventListener("scroll", updateVisibility, { passive: true });
+    if (navbar.dataset.alwaysVisible === "true") {
+      navbar.classList.add("visible");
+    } else {
+      const threshold = window.innerHeight / 2;
+      const updateVisibility = () => {
+        navbar.classList.toggle("visible", window.scrollY >= threshold);
+      };
+      updateVisibility();
+      window.addEventListener("scroll", updateVisibility, { passive: true });
+    }
   }
 
   const burger = document.querySelector<HTMLButtonElement>(".home-navbar-burger");

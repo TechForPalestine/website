@@ -12,7 +12,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   title="About — Tech For Palestine"
   description="Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation."
 >
-  <HomeNavbar membershipLive={membershipLive} />
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
     <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
