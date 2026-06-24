@@ -40,9 +40,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </div>
           </div>
 
-          <!-- Photo gallery column — hidden on mobile, shown from 810px up -->
-          <div class="hidden min-[810px]:flex justify-end gap-4 sm:gap-6">
-            <div class="w-36 flex-none space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
+          <!-- Photo gallery column -->
+          <div class="flex justify-end gap-4 sm:gap-6">
+            <div class="hidden min-[810px]:flex w-36 flex-none flex-col space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/protest-dc.jpg"
