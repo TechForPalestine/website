@@ -1,0 +1,100 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="About — Tech For Palestine"
+  description="Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation."
+>
+  <HomeNavbar membershipLive={membershipLive} />
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="grid grid-cols-1 items-center gap-12 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+          <!-- Text column -->
+          <div class="about-animate">
+            <p class="ts-overline mb-6 text-ink-secondary">About Tech for Palestine</p>
+            <h1 class="ts-editorial mb-6 text-ink">
+              Let's make tech a driving force for Palestinian <span class="text-brand">freedom and liberation</span>
+            </h1>
+            <p class="ts-body-large mb-10 max-w-[60ch] text-ink-secondary">
+              Technology should disrupt the status quo, not serve it.
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <Button href="/project" variant="primary" size="md" arrow>
+                Explore Projects
+              </Button>
+              <Button href="/get-involved" variant="ghost" size="md" arrow>
+                Get Involved
+              </Button>
+              <Button href="/discord-invite" variant="ghost" size="md" arrow>
+                Join Discord
+              </Button>
+            </div>
+          </div>
+
+          <!-- Photo gallery column -->
+          <div class="flex justify-end gap-4 sm:gap-6">
+            <div class="w-36 flex-none space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
+              <div class="overflow-hidden rounded-lg">
+                <img
+                  src="/protest-dc.jpg"
+                  alt="Palestine solidarity march in Washington DC with demonstrators carrying Palestinian flags near Capitol building"
+                  class="aspect-[2/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
+            <div class="w-36 flex-none space-y-4 sm:w-44 sm:space-y-6 sm:pt-20">
+              <div class="overflow-hidden rounded-lg">
+                <img
+                  src="/gaza-sky-geeks.webp"
+                  alt="A woman working on a laptop at Gaza Sky Geeks technology center"
+                  class="aspect-[2/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="overflow-hidden rounded-lg">
+                <img
+                  src="/jerusalem.jpg"
+                  alt="Dome of the Rock in Jerusalem, Palestine, silhouetted against dramatic sunset sky with orange and purple clouds"
+                  class="aspect-[2/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
+            <div class="w-36 flex-none space-y-4 pt-12 sm:w-44 sm:space-y-6 sm:pt-0">
+              <div class="overflow-hidden rounded-lg">
+                <img
+                  src="/olive-branch-thobe.jpg"
+                  alt="Woman in traditional Palestinian embroidered thobe holding an olive branch, wearing ornate gold coin headpiece against olive tree background"
+                  class="aspect-[2/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="overflow-hidden rounded-lg">
+                <img
+                  src="/gaza-father-child.avif"
+                  alt="Silhouette of a Palestinian father playfully tossing child in the air against Gaza cityscape at sunset with vibrant orange and purple sky"
+                  class="aspect-[2/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</HomeLayout>
