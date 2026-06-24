@@ -42,7 +42,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
           <!-- Photo gallery column -->
           <div class="flex justify-end gap-4 sm:gap-6">
-            <div class="w-36 flex-none space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
+            <div class="hidden min-[810px]:block w-36 flex-none space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/protest-dc.jpg"
@@ -55,7 +55,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 />
               </div>
             </div>
-            <div class="w-36 flex-none space-y-4 sm:w-44 sm:space-y-6 sm:pt-20">
+            <div class="w-36 flex-none space-y-4 sm:w-44 sm:space-y-6 min-[810px]:pt-20">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/gaza-sky-geeks.webp"
@@ -79,7 +79,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 />
               </div>
             </div>
-            <div class="w-36 flex-none space-y-4 pt-12 sm:w-44 sm:space-y-6 sm:pt-0">
+            <div class="w-36 flex-none space-y-4 sm:w-44 sm:space-y-6 min-[810px]:pt-12">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/olive-branch-thobe.jpg"
