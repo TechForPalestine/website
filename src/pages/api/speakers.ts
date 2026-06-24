@@ -1,7 +1,10 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { fetchNotionAgenda } from "../../store/notionClient";
+import { reportError } from "../../lib/report-error";
 
 export const GET: APIRoute = async ({ locals }) => {
+  const ctx = locals.runtime?.ctx;
   try {
     const data = await fetchNotionAgenda(locals);
 
@@ -18,7 +21,8 @@ export const GET: APIRoute = async ({ locals }) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching agenda and speakers:", error);
+    reportError(error, { context: "speakers" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(JSON.stringify({ error: "Failed to fetch agenda and speakers" }), {
       status: 500,

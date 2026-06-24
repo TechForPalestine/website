@@ -73,6 +73,8 @@ export default defineConfig({
           "/projects-new/",
           "/ideas-new/",
           "/tools-new/",
+          "/js/web.js/",
+          "/admin/conversions/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

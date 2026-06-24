@@ -137,12 +137,14 @@ const newsletters = [
           <h4 class="mb-2 text-lg font-semibold text-gray-800">Official Logos</h4>
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {[
-              { src: "/logos/Logo.png", label: "Logo (PNG)", bg: "bg-gray-50" },
-              { src: "/logos/Logo---Transparent.png", label: "Logo Transparent (PNG)", bg: "bg-gray-200" },
-              { src: "/logos/Mark.png", label: "Mark (PNG)", bg: "bg-gray-50" },
-              { src: "/logos/Mark---Transparent.png", label: "Mark Transparent (PNG)", bg: "bg-gray-200" },
+              { src: "/logos/Logo.png", label: "Logo (PNG)", bg: "bg-white" },
+              { src: "/logos/Logo.svg", label: "Logo (SVG)", bg: "bg-white" },
+              { src: "/logos/Logo---Transparent.png", label: "Logo Transparent (PNG)", bg: "bg-white" },
+              { src: "/logos/Logo-dark.png", label: "Logo Dark (PNG)", bg: "bg-black" },
+              { src: "/logos/Mark.png", label: "Mark (PNG)", bg: "bg-white" },
+              { src: "/logos/Mark---Transparent.png", label: "Mark Transparent (PNG)", bg: "bg-white" },
+              { src: "/logos/Mark-dark.png", label: "Mark Dark (PNG)", bg: "bg-black" },
               { src: "/logos/Colors.png", label: "Color Palette", bg: "bg-white" },
-              { src: "/logos/Logo.svg", label: "Logo (SVG)", bg: "bg-gray-50" },
             ].map(({ src, label, bg }) => (
               <div class="group relative overflow-hidden rounded-lg border shadow-sm">
                 <img src={src} alt={label} class={`h-28 w-full object-contain p-2 ${bg}`} />

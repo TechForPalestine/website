@@ -1,10 +1,13 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { Client } from "@notionhq/client";
 import { getEnv } from "../../utils/getEnv.js";
+import { reportError } from "../../lib/report-error";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ locals }) => {
+  const ctx = locals.runtime?.ctx;
   try {
     const notionSecret = getEnv("NOTION_SECRET", locals);
     const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);
@@ -55,7 +58,8 @@ export const GET: APIRoute = async ({ locals }) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching signatories:", error);
+    reportError(error, { context: "e4p-signatories" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(JSON.stringify({ error: "Failed to fetch signatories" }), {
       status: 500,

@@ -1,9 +1,12 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { fetchNotionEvents } from "../../store/notionClient";
+import { reportError } from "../../lib/report-error";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request, locals }) => {
+  const ctx = locals.runtime?.ctx;
   try {
     const url = new URL(request.url);
     const showAll = url.searchParams.get("showAll") === "yes";
@@ -23,7 +26,8 @@ export const GET: APIRoute = async ({ request, locals }) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching events:", error);
+    reportError(error, { context: "events" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(JSON.stringify({ error: "Failed to fetch events" }), {
       status: 500,

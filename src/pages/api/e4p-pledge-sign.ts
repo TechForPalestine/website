@@ -1,10 +1,13 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { Client } from "@notionhq/client";
 import { getEnv } from "../../utils/getEnv.js";
+import { reportError } from "../../lib/report-error";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  const ctx = locals.runtime?.ctx;
   const origin = request.headers.get("Origin");
   if (origin !== "https://techforpalestine.org") {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -162,7 +165,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     );
   } catch (error) {
-    console.error("Error processing pledge:", error);
+    reportError(error, { context: "e4p-pledge-sign" });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(JSON.stringify({ error: "Failed to process pledge" }), {
       status: 500,

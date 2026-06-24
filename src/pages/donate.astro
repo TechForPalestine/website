@@ -263,39 +263,21 @@ const isUK = country === "GB";
       }
 
       document.addEventListener("QGIV.donationComplete", async function (event) {
-        console.log("[T4P DEBUG] QGIV.donationComplete fired");
-        console.log("[T4P DEBUG] event type:", typeof event, "| is CustomEvent:", event instanceof CustomEvent);
-        console.log("[T4P DEBUG] event.detail:", JSON.stringify(event.detail, null, 2));
-
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-        console.log("[T4P DEBUG] data.QGIV:", JSON.stringify(data.QGIV, null, 2));
-
         var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
-        console.log("[T4P DEBUG] transaction:", JSON.stringify(transaction));
-        console.log("[T4P DEBUG] transaction.recurring:", transaction.recurring, "| type:", typeof transaction.recurring);
-        console.log("[T4P DEBUG] transaction.frequency:", transaction.frequency, "| type:", typeof transaction.frequency);
-        console.log("[T4P DEBUG] transaction.status:", transaction.status);
-        console.log("[T4P DEBUG] transaction.total:", transaction.total);
 
         var recurringByFlag = transaction.recurring === true;
         var recurringByFrequency = typeof transaction.frequency === "string" &&
           transaction.frequency.toLowerCase() !== "one time";
         var isRecurring = recurringByFlag || recurringByFrequency;
-        console.log("[T4P DEBUG] recurringByFlag:", recurringByFlag, "| recurringByFrequency:", recurringByFrequency, "| isRecurring:", isRecurring);
 
         var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
-        console.log("[T4P DEBUG] donationEvent:", donationEvent);
 
-        console.log("[T4P DEBUG] typeof window.plausible:", typeof window.plausible);
         if (typeof window.plausible !== "undefined") {
-          var props = { source: "qgiv-embed", amount: String(transaction.total || "") };
-          console.log("[T4P DEBUG] calling plausible (awaited) for:", donationEvent);
+          var props = { source: "qgiv-embed", amount: transaction.total != null ? String(transaction.total) : "" };
           await new Promise(function (resolve) {
             window.plausible(donationEvent, { props: props, callback: resolve });
           });
-          console.log("[T4P DEBUG] plausible await resolved — event confirmed sent");
-        } else {
-          console.log("[T4P DEBUG] plausible NOT available — event NOT sent");
         }
       });
 
