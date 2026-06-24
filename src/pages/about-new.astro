@@ -9,7 +9,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
 <HomeLayout
-  title="About — Tech For Palestine"
+  title="About"
   description="Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation."
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
@@ -41,8 +41,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           </div>
 
           <!-- Photo gallery column -->
-          <div class="flex justify-end gap-4 sm:gap-6">
-            <div class="hidden min-[810px]:block w-36 flex-none space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
+          <div class="about-animate flex justify-center gap-4 min-[810px]:justify-end min-[810px]:gap-6">
+            <div class="hidden min-[1050px]:block w-36 flex-none space-y-4 pt-24 sm:w-44 sm:space-y-6 sm:pt-32">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/protest-dc.jpg"
@@ -55,7 +55,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 />
               </div>
             </div>
-            <div class="w-36 flex-none space-y-4 sm:w-44 sm:space-y-6 min-[810px]:pt-20">
+            <div class="w-[42vw] max-w-[144px] flex-none space-y-4 min-[810px]:w-44 min-[810px]:space-y-6 min-[810px]:pt-20">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/gaza-sky-geeks.webp"
@@ -79,7 +79,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 />
               </div>
             </div>
-            <div class="w-36 flex-none space-y-4 sm:w-44 sm:space-y-6 min-[810px]:pt-12">
+            <div class="w-[42vw] max-w-[144px] flex-none space-y-4 pt-8 min-[810px]:w-44 min-[810px]:space-y-6 min-[810px]:pt-12">
               <div class="overflow-hidden rounded-lg">
                 <img
                   src="/olive-branch-thobe.jpg"

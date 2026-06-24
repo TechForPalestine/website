@@ -1,0 +1,143 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const contacts = [
+  {
+    heading: "General Questions",
+    description: "For general inquiries about Tech for Palestine, our projects, or how to get involved.",
+    linkType: "email" as const,
+  },
+  {
+    heading: "Media & Press",
+    description: "Journalists and media professionals can find press resources and contact information on our media page.",
+    linkText: "Visit our Media page",
+    href: "/media",
+    linkType: "page" as const,
+  },
+  {
+    heading: "Endorsements",
+    description: "Seeking a T4P endorsement for your campaign or organization? Learn what we look for and submit a request.",
+    linkText: "Request an endorsement",
+    href: "/endorsements",
+    linkType: "page" as const,
+  },
+];
+---
+
+<HomeLayout
+  title="Contact Us"
+  description="Get in touch with Tech for Palestine — general questions, media inquiries, or request an endorsement for your campaign."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="about-animate max-w-[65ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Contact Us
+          </h1>
+          <p class="ts-body-large text-ink-secondary">
+            Have a question, media inquiry, or want to request an endorsement? We'd love to hear from you.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact methods -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="about-animate mx-auto max-w-[800px]">
+        {contacts.map((item) => (
+          <div class="border-t border-ink-divider py-8 last:border-b">
+            <h2 class="ts-body-large mb-2 font-medium text-ink">{item.heading}</h2>
+            <p class="ts-body mb-3 max-w-[65ch] text-ink-secondary">{item.description}</p>
+            {item.linkType === "email" ? (
+              <a
+                id="contact-email"
+                href="#"
+                class="ts-body font-medium text-brand transition-colors hover:underline"
+              ></a>
+            ) : (
+              <a
+                href={item.href}
+                class="ts-body font-medium text-brand transition-colors hover:underline"
+              >
+                {item.linkText} &rarr;
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Sign-up form -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<script>
+  (function () {
+    var el = document.getElementById("contact-email") as HTMLAnchorElement | null;
+    if (!el) return;
+    var e = "contact" + "@" + "techforpalestine.org";
+    el.href = "mailto:" + e;
+    el.textContent = e;
+  })();
+</script>
+
+<style>
+  .about-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .about-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .about-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .about-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".about-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

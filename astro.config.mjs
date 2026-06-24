@@ -67,6 +67,12 @@ export default defineConfig({
           "/event-details/",
           "/404/",
           "/about-new/",
+          "/team-new/",
+          "/faq-new/",
+          "/contact-new/",
+          "/projects-new/",
+          "/ideas-new/",
+          "/tools-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

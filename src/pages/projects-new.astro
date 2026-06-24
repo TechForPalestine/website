@@ -1,0 +1,123 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import ProjectsDirectory from "../components/projects/ProjectsDirectory";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Incubator Projects - Tech for Palestine"
+  description="Explore 80+ projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-12">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="projects-animate grid grid-cols-1 gap-8 min-[810px]:grid-cols-[1fr_auto] min-[810px]:items-end">
+          <div>
+            <p class="ts-overline mb-5 text-ink-secondary">Incubator portfolio</p>
+            <h1 class="ts-editorial mb-5 max-w-[18ch] text-ink">
+              <span class="text-brand">80+</span> projects building toward a free Palestine
+            </h1>
+            <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+              Built by tech workers, advocates, and builders who refuse to stay silent.
+              Browse them, support them, or apply to bring yours.
+            </p>
+          </div>
+          <div class="flex shrink-0 pb-1">
+            <Button href="/incubator-new" variant="ghost" size="md" arrow>
+              Apply to the Incubator
+            </Button>
+          </div>
+        </div>
+
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-12" />
+      </div>
+    </section>
+
+    <!-- Directory toolbar + grid -->
+    <section class="bg-page">
+      <ProjectsDirectory client:only="react" />
+    </section>
+
+    <!-- CTA band -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="projects-animate flex flex-col items-start gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
+          <div class="max-w-[55ch]">
+            <p class="ts-overline mb-3 text-ink-secondary">Ready to build?</p>
+            <h2 class="ts-heading text-ink">
+              Have a project that supports Palestine?
+            </h2>
+            <p class="ts-body mt-3 text-ink-secondary">
+              T4P connects you with mentors, partners, and a community of 10,000+ advocates.
+            </p>
+          </div>
+          <div class="flex shrink-0 gap-3">
+            <Button
+              href="https://techforpalestine.org/project-application-form"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply now
+            </Button>
+            <Button href="/incubator-new" variant="ghost" size="md">
+              Learn more
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .projects-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .projects-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .projects-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .projects-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .projects-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>(".projects-animate");
+  if (els.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => observer.observe(el));
+  }
+</script>

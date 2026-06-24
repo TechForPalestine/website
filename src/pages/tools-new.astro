@@ -1,0 +1,277 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const featured = [
+  {
+    name: "Thaura",
+    desc: "A privacy-first AI assistant built by Syrian engineers — ethical AI that never trains on your data and stands with Palestine.",
+    link: "https://thaura.ai/",
+    logo: "/thaura.svg",
+  },
+  {
+    name: "Newscord",
+    desc: "Get comprehensive news coverage with AI-powered insights from multiple sources in one place.",
+    link: "https://newscord.org/",
+    logo: "/newscord.svg",
+  },
+  {
+    name: "Boycat",
+    desc: "Search brands, scan products, and make ethical shopping choices with confidence.",
+    link: "https://www.boycat.io/",
+    logo: "/Boycat.png",
+  },
+  {
+    name: "Find A Protest",
+    desc: "Discover protests and actions across the world.",
+    link: "https://www.findaprotest.info/",
+    logo: "/findprotest.svg",
+  },
+];
+
+const tools = [
+  {
+    name: "UpScrolled",
+    desc: "Simply, social without limits.",
+    link: "https://upscrolled.com/en/",
+    logo: "/upscrolled-icon.svg",
+  },
+  {
+    name: "T4P Datasets",
+    desc: "Tracking the human toll. Use the data from our APIs to tell their story.",
+    link: "https://data.techforpalestine.org/",
+    logo: "/mark-transparent.png",
+  },
+  {
+    name: "The Wall",
+    desc: "A browser plugin to detect and block more than Israel related websites and their social accounts.",
+    link: "https://thewallproject.github.io/",
+    logo: "/thewall.svg",
+  },
+  {
+    name: "Profile Pic Maker",
+    desc: "Wrap your profile pic in the colors of Palestine.",
+    link: "https://ppm.techforpalestine.org/",
+    logo: "/profile-maker.png",
+  },
+  {
+    name: "Anti-Palestinian VC funds",
+    desc: "A database of anti-Palestinian VC funds.",
+    link: "https://github.com/TechForPalestine/antipalestinian-vc-funds/",
+    logo: "/mark-transparent.png",
+  },
+  {
+    name: "Israeli Tech Alternatives",
+    desc: "Find alternatives to Israeli tech.",
+    link: "https://www.israelitechalternatives.com/",
+    logo: "/mark-transparent.png",
+  },
+  {
+    name: "Jaywalk",
+    desc: "Stay safe and informed during protests with an interactive map.",
+    link: "https://jaywalkapp.org",
+    logo: "/jaywalk.png",
+  },
+  {
+    name: "BuycatVPN",
+    desc: "Be safe on public Wi-Fi, block trackers, and browse freely.",
+    link: "https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch",
+    logo: "/Boycat.png",
+  },
+  {
+    name: "UK University Repression League Table 2025",
+    desc: "See how UK universities rank in repressing activism and ties to arms industries.",
+    link: "https://si4j.org/universityrepression",
+    logo: "/mark-transparent.png",
+  },
+  {
+    name: "Built with Apartheid",
+    desc: "Discover which products and technologies are built with Israeli apartheid.",
+    link: "https://builtwithapartheid.com/",
+    logo: "/mark-transparent.png",
+  },
+  {
+    name: "Accountable Media",
+    desc: "Track media accountability and bias in coverage of Palestine.",
+    link: "https://accountable-media.com/",
+    logo: "/accountable-media.png",
+  },
+];
+---
+
+<HomeLayout
+  title="Tools - Tech for Palestine"
+  description="A growing list of tools built by the movement to support advocacy for Palestinian liberation — from ethical AI and news coverage to boycott tools, protest maps, and accountability databases."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-12">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="tools-animate">
+          <p class="ts-overline mb-5 text-ink-secondary">Tools for the movement</p>
+          <h1 class="ts-editorial mb-5 max-w-[20ch] text-ink">
+            Tools that <span class="text-brand">power the work</span>
+          </h1>
+          <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+            A growing list of tools built to support advocacy for Palestinian liberation.
+            Use them, share them, and help the movement reach further.
+          </p>
+        </div>
+
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-12" />
+      </div>
+    </section>
+
+    <!-- Featured -->
+    <section class="bg-page px-6 pb-12 min-[810px]:px-10">
+      <div class="mx-auto max-w-[1400px]">
+        <p class="tools-animate ts-overline mb-4 text-ink-secondary">Featured</p>
+        <div class="tools-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((tool) => (
+            <a
+              href={tool.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5 shadow-[0_4px_14px_rgba(42,36,40,0.06)]">
+                <img
+                  src={tool.logo}
+                  alt={`${tool.name} logo`}
+                  class="max-h-full max-w-full object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <h3 class="ts-label mb-2 text-ink transition-colors duration-150 group-hover:text-brand">
+                {tool.name}
+              </h3>
+              <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
+              <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
+                Visit
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- More tools -->
+    <section class="bg-page px-6 pb-14 min-[810px]:px-10 min-[810px]:pb-20">
+      <div class="mx-auto max-w-[1400px]">
+        <p class="tools-animate ts-overline mb-4 text-ink-secondary">More tools</p>
+        <div class="tools-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {tools.map((tool) => (
+            <a
+              href={tool.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5 shadow-[0_4px_14px_rgba(42,36,40,0.06)]">
+                <img
+                  src={tool.logo}
+                  alt={`${tool.name} logo`}
+                  class="max-h-full max-w-full object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <h3 class="ts-label mb-2 text-ink transition-colors duration-150 group-hover:text-brand">
+                {tool.name}
+              </h3>
+              <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
+              <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
+                Visit
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="tools-animate flex flex-col items-start gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
+          <div class="max-w-[55ch]">
+            <p class="ts-overline mb-3 text-ink-secondary">Building something?</p>
+            <h2 class="ts-heading text-ink">
+              Building a tool for the movement?
+            </h2>
+            <p class="ts-body mt-3 text-ink-secondary">
+              Bring it to the Tech for Palestine Incubator and reach a community of 10,000+ advocates.
+            </p>
+          </div>
+          <div class="flex shrink-0 gap-3">
+            <Button
+              href="https://techforpalestine.org/project-application-form"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply to the Incubator
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .tools-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .tools-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .tools-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tools-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .tools-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>(".tools-animate");
+  if (els.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => observer.observe(el));
+  }
+</script>

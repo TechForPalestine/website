@@ -1,117 +1,271 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import "../styles/base.css";
+import { getEnv } from "../utils/getEnv";
+import { Icon } from "astro-icon/components";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
-<Layout title="Tech for Palestine Incubator">
-  <main class="bg-white">
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-green-100 to-blue-100">
-      <div class="container mx-auto px-6 py-20 text-center">
-        <h1 class="text-5xl font-bold text-gray-800">The Tech for Palestine Incubator</h1>
-        <p class="mx-auto mt-6 max-w-2xl text-xl text-gray-700">
-          Tech for Palestine's mission is to create a vast ecosystem of projects for Palestinian
-          liberation that push back against racism and occupation and address every part of the
-          hasbara ecosystem, as well as promoting, advocating, and sharing the unique aspects of
-          Palestine's struggle for liberation.
-        </p>
+<HomeLayout
+  title="T4P Incubator"
+  description="The Tech for Palestine Incubator supports early-stage advocacy projects with mentorship, volunteers, funding, and a network that's launched 60+ initiatives for Palestinian liberation."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate max-w-[65ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">T4P Incubator</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Turn your idea for Palestine into something that <span class="text-brand">scales</span>
+          </h1>
+          <p class="ts-body-large mb-10 max-w-[60ch] text-ink-secondary">
+            The Tech for Palestine Incubator supports early-stage advocacy projects with mentorship, volunteers, funding, and a network that's launched 60+ initiatives.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button href="/project-application-form" variant="primary" size="md" arrow>
+              Apply to the incubator
+            </Button>
+            <Button href="/ideas" variant="ghost" size="md" arrow>
+              Browse project ideas
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Theory of Change Section -->
-    <section class="container mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-        <div>
-          <h2 class="mb-4 text-3xl font-semibold text-gray-800">Our Theory of Change</h2>
-          <p class="text-lg text-gray-700">
-            Our theory of change is that thousands of high-impact, pro-Palestinian advocacy projects
-            are needed to counter the massive flood of anti-Palestinian propaganda, especially in
-            the west. We started a project incubator because we saw many highly motivated, dedicated
-            people with great ideas struggling to bring their ideas to life and produce the outcomes
-            they were after. Our main purpose is to provide support.
+    <!-- Theory of change -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <h2 class="ts-heading mb-6 text-ink">Our theory of change</h2>
+          <p class="ts-body-large max-w-[75ch] text-ink-secondary">
+            Thousands of high-impact, pro-Palestinian advocacy projects are needed to counter the massive flood of anti-Palestinian propaganda, especially in the west. We started a project incubator because we saw highly motivated people with great ideas struggling to bring them to life. Our purpose is to provide the support, expertise, and connections that turn good ideas into projects with real reach.
           </p>
         </div>
-        <div class="flex justify-center">
-          <!-- Replace the image source with an appropriate visual if available -->
-          <img src="/incubator-vision.jpg" alt="Incubator Vision" class="rounded-lg shadow-lg" />
-        </div>
       </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="bg-gray-50">
-      <div class="container mx-auto px-6 py-16">
-        <h2 class="mb-6 text-center text-3xl font-semibold text-gray-800">How It Works</h2>
-        <p class="mb-8 text-center text-lg text-gray-700">
-          We accept a limited number of projects to support with our expertise, network, and
-          funding, but are happy to promote other community and affiliated projects that could use
-          some airtime.
-        </p>
-        <div class="mx-auto max-w-3xl space-y-6">
-          {
-            [
-              "Fill out and submit the incubator application",
-              "If we understand and appreciate your project, we will request an interview",
-              "If we don't understand or think it isn't a fit, we may ask for more info or send a rejection email (no harm/foul)",
-              "If accepted: onboarding email, book a strategy call, attend an onboarding meeting, and gain access to Discord channels and Notion",
-            ].map((step) => (
-              <div class="flex items-start">
-                <div class="flex-shrink-0">
-                  <span class="inline-block rounded-full bg-green-500 p-2 text-white">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </span>
-                </div>
-                <div class="ml-4">
-                  <p class="text-lg text-gray-700">{step}</p>
-                </div>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
-    <!-- What You Get & What We Expect Section -->
-    <section class="container mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
-        <div>
-          <h2 class="mb-4 text-3xl font-semibold text-gray-800">What You Get</h2>
-          <ul class="list-disc space-y-2 pl-8 text-lg text-gray-700">
-            <li>Join the Discord community</li>
-            <li>Office Hours or 1v1 Mentorship</li>
-            <li>Volunteering/Marketing help</li>
-            <li>Connection to our network</li>
-          </ul>
-        </div>
-        <div>
-          <h2 class="mb-4 text-3xl font-semibold text-gray-800">What We Expect</h2>
-          <ul class="list-disc space-y-2 pl-8 text-lg text-gray-700">
-            <li>Dedication to impact</li>
-            <li>Office hours attendance</li>
-            <li>Community engagement</li>
-            <li>Transparency</li>
+    <!-- What you get -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <h2 class="ts-heading mb-6 text-ink">What the incubator provides</h2>
+          <ul class="grid grid-cols-1 gap-x-12 gap-y-4 min-[810px]:grid-cols-2">
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:lightbulb-outline" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Strategic advice</span> from experience across 200+ projects, starting with a strategy session to hone your approach</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:account-voice" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Mentorship</span> through office hours 6x/week with Paul Biggar, plus optional dedicated weekly mentor sessions</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:hand-heart-outline" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Volunteering</span> with access to 3,000+ registered volunteers and a dedicated recruitment team</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:bullhorn-outline" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Marketing</span> to get early users through press, influencers, ecosystem partners, and our community</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:link-variant" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Connections</span> to the Palestine advocacy ecosystem and the right partners for your initiative</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:currency-usd" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Funding</span> through small grants to most projects, with minimal fuss</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:account-group-outline" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Community</span> of 60+ project leaders facing similar challenges and providing mutual support</span>
+            </li>
+            <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
+              <Icon name="mdi:school-outline" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+              <span><span class="font-medium text-ink">Education</span> through seminars on marketing, go-to-market strategy, technical projects, and branding</span>
+            </li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- We Don't Require Section -->
-    <section class="bg-gray-50">
-      <div class="container mx-auto px-6 py-16">
-        <h2 class="mb-4 text-center text-3xl font-semibold text-gray-800">We Don't Require</h2>
-        <ul class="mx-auto max-w-md list-disc space-y-2 pl-8 text-lg text-gray-700">
-          <li>t4p branding</li>
-          <li>a cut of your profit</li>
-          <li>use of our resources for organization</li>
-        </ul>
+    <!-- Who it's for -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <h2 class="ts-heading mb-6 text-ink">Who the incubator is for</h2>
+          <p class="ts-body-large max-w-[75ch] text-ink-secondary">
+            Any early-stage project that directly or indirectly advocates for Palestine, where we believe you can have impact and scale. Our projects often work on <span class="font-medium text-ink">scaling boycotts</span>, <span class="font-medium text-ink">protest tech</span>, <span class="font-medium text-ink">tech industry divestment</span>, <span class="font-medium text-ink">media bias</span>, <span class="font-medium text-ink">reaching new audiences</span>, <span class="font-medium text-ink">Silicon Valley partnerships</span>, <span class="font-medium text-ink">AI bias</span>, and <span class="font-medium text-ink">exposing hasbara</span>.
+          </p>
+          <p class="ts-body-large mt-4 max-w-[75ch] text-ink-secondary">
+            Whether you're just getting started or have an experienced team looking for connections and strategic advice, the incubator is built to meet you where you are.
+          </p>
+        </div>
       </div>
     </section>
+
+    <!-- Image break -->
+    <div class="px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <img
+          src="/happy-kids.jpg"
+          alt="Palestinian children smiling together"
+          class="aspect-[5/2] w-full rounded-lg object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <!-- What we expect -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <h2 class="ts-heading mb-6 text-ink">What we expect</h2>
+          <ul class="space-y-4 max-w-[75ch]">
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span><span class="font-medium text-ink">Focus on impact</span>, such as reaching 10 million users</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span><span class="font-medium text-ink">Commitment</span> to keep working on your project and driving it forward</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span><span class="font-medium text-ink">Communication</span> through office hours (weekly for the first 6 weeks, monthly after) and regular updates</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span><span class="font-medium text-ink">Flexible participation</span>: if the incubator no longer fits your needs, membership may be removed without hard feelings</span>
+            </li>
+          </ul>
+          <p class="ts-body mt-8 max-w-[75ch] text-ink-secondary">
+            We don't require T4P branding, ownership of your work, daily meetings, or use of specific tools. Use whatever works best for your project.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to apply -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <h2 class="ts-heading mb-6 text-ink">How to apply</h2>
+          <ol class="space-y-4 max-w-[75ch] list-none">
+            <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
+              <span class="ts-label shrink-0 text-brand">1</span>
+              <span><span class="font-medium text-ink">Application form</span>: fill out the application (takes 10 to 30 minutes)</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
+              <span class="ts-label shrink-0 text-brand">2</span>
+              <span><span class="font-medium text-ink">Review</span>: we review your application and invite selected projects for an interview. We may reach out for more information.</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
+              <span class="ts-label shrink-0 text-brand">3</span>
+              <span><span class="font-medium text-ink">Interview</span>: a 30-minute call focusing on the impact you intend to have and how you plan to get there. No slides needed.</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
+              <span class="ts-label shrink-0 text-brand">4</span>
+              <span><span class="font-medium text-ink">Decision</span>: we aim to notify all applicants within 10 days of application. Interviews and decisions happen twice weekly.</span>
+            </li>
+            <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
+              <span class="ts-label shrink-0 text-brand">5</span>
+              <span><span class="font-medium text-ink">Onboarding</span>: if admitted, you receive next steps and access to all Tech for Palestine resources.</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Three paths CTA -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <h2 class="ts-heading mb-10 text-ink">Ready to get started?</h2>
+          <div class="max-w-[75ch] divide-y divide-ink-divider">
+            <div class="pb-8">
+              <p class="ts-body-large mb-4 text-ink-secondary">Have an idea and ready to build?</p>
+              <Button href="/project-application-form" variant="primary" size="md" arrow>
+                Apply to the incubator
+              </Button>
+            </div>
+            <div class="py-8">
+              <p class="ts-body-large mb-4 text-ink-secondary">Want to lead a project but need inspiration?</p>
+              <Button href="/ideas" variant="ghost" size="md" arrow>
+                Browse project ideas
+              </Button>
+            </div>
+            <div class="pt-8">
+              <p class="ts-body-large mb-4 text-ink-secondary">Want to contribute your skills to existing projects?</p>
+              <Button href="/volunteer" variant="ghost" size="md" arrow>
+                Register as a volunteer
+              </Button>
+            </div>
+          </div>
+          <p class="ts-body mt-10 text-ink-secondary">
+            If you have already applied, we'll reach out to you soon.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up form -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+
   </main>
-</Layout>
+</HomeLayout>
+
+<style>
+  .incubator-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .incubator-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .incubator-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .incubator-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .incubator-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".incubator-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

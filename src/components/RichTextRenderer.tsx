@@ -1,5 +1,4 @@
 import React from "react";
-import { Link, Typography } from "@mui/material";
 import type { RichTextSegment, RichTextRendererProps, NotionRichText } from "../types/richText";
 
 const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className = "" }) => {
@@ -41,28 +40,16 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
 
     const flushCurrentList = () => {
       if (currentList) {
-        // Different bullet styles for different nesting levels
-        const listStyles = ["disc", "circle", "square"];
-        const listStyleType = listStyles[currentList.indentLevel % listStyles.length];
-
+        const indentClass = currentList.indentLevel === 0 ? "" : currentList.indentLevel === 1 ? "ml-5" : "ml-10";
         processedElements.push(
           <ul
             key={`list-${listKey++}`}
-            style={{
-              marginLeft: `${currentList.indentLevel * 20}px`,
-              marginTop: "4px",
-              marginBottom: "4px",
-              paddingLeft: "20px",
-              listStyleType,
-            }}
+            className={`${indentClass} my-1 list-disc pl-5`}
           >
             {currentList.items.map((item, itemIndex) => (
               <li
                 key={itemIndex}
-                style={{
-                  position: "relative",
-                  marginBottom: "2px",
-                }}
+                className="relative mb-0.5"
               >
                 {item}
               </li>
@@ -141,9 +128,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
         processedElements.push(
           <div
             key={`line-${lineIndex}`}
-            style={{
-              marginTop: lineIndex > 0 ? "8px" : "0",
-            }}
+            className={lineIndex > 0 ? "mt-2" : ""}
           >
             {lineContent}
           </div>
@@ -184,12 +169,11 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
       style.textDecoration = (style.textDecoration || "") + " underline";
     }
     if (annotations.code) {
-      classes.push("font-mono bg-gray-100 px-1 py-0.5 rounded text-sm");
+      classes.push("font-mono bg-sand px-1 py-0.5 rounded text-sm");
     }
     if (annotations.color && annotations.color !== "default") {
-      // Map Notion colors to Tailwind/CSS classes
       const colorMap: Record<string, string> = {
-        gray: "text-gray-600",
+        gray: "text-ink-secondary",
         brown: "text-amber-800",
         orange: "text-orange-600",
         yellow: "text-yellow-600",
@@ -197,7 +181,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
         blue: "text-blue-600",
         purple: "text-purple-600",
         pink: "text-pink-600",
-        red: "text-red-600",
+        red: "text-brand",
       };
       if (colorMap[annotations.color]) {
         classes.push(colorMap[annotations.color]);
@@ -209,16 +193,16 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
 
     if (linkUrl) {
       return (
-        <Link
+        <a
           key={index}
           href={linkUrl}
           target={linkUrl.startsWith("http") ? "_blank" : undefined}
           rel={linkUrl.startsWith("http") ? "noopener noreferrer" : undefined}
           style={style}
-          className={classes.join(" ")}
+          className={`text-brand hover:underline ${classes.join(" ")}`}
         >
           {content}
-        </Link>
+        </a>
       );
     }
 
@@ -231,9 +215,9 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
   };
 
   return (
-    <Typography component="div" className={className}>
+    <div className={className}>
       {processContent()}
-    </Typography>
+    </div>
   );
 };
 
