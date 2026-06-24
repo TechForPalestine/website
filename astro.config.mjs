@@ -66,6 +66,7 @@ export default defineConfig({
           "/donate-2/",
           "/event-details/",
           "/404/",
+          "/about-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

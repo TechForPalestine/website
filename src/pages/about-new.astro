@@ -3,6 +3,7 @@ import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
@@ -201,5 +202,65 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
         </div>
       </div>
     </section>
+    <!-- Full-width image -->
+    <div class="px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <img
+          src="/gaza-children-playing-ocean.jpg"
+          alt="Palestinian children playing joyfully in ocean waves at sunset on Gaza's Mediterranean coastline"
+          class="aspect-[5/2] w-full rounded-lg object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <!-- Sign-up form -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
   </main>
 </HomeLayout>
+
+<style>
+  .about-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .about-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .about-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".about-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>
