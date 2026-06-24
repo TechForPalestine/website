@@ -48,6 +48,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   src="/protest-dc.jpg"
                   alt="Palestine solidarity march in Washington DC with demonstrators carrying Palestinian flags near Capitol building"
                   class="aspect-[2/3] w-full object-cover"
+                  width="176"
+                  height="264"
                   loading="lazy"
                   decoding="async"
                 />
@@ -59,6 +61,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   src="/gaza-sky-geeks.webp"
                   alt="A woman working on a laptop at Gaza Sky Geeks technology center"
                   class="aspect-[2/3] w-full object-cover"
+                  width="176"
+                  height="264"
                   loading="lazy"
                   decoding="async"
                 />
@@ -68,6 +72,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   src="/jerusalem.jpg"
                   alt="Dome of the Rock in Jerusalem, Palestine, silhouetted against dramatic sunset sky with orange and purple clouds"
                   class="aspect-[2/3] w-full object-cover"
+                  width="176"
+                  height="264"
                   loading="lazy"
                   decoding="async"
                 />
@@ -79,6 +85,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   src="/olive-branch-thobe.jpg"
                   alt="Woman in traditional Palestinian embroidered thobe holding an olive branch, wearing ornate gold coin headpiece against olive tree background"
                   class="aspect-[2/3] w-full object-cover"
+                  width="176"
+                  height="264"
                   loading="lazy"
                   decoding="async"
                 />
@@ -88,6 +96,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   src="/gaza-father-child.avif"
                   alt="Silhouette of a Palestinian father playfully tossing child in the air against Gaza cityscape at sunset with vibrant orange and purple sky"
                   class="aspect-[2/3] w-full object-cover"
+                  width="176"
+                  height="264"
                   loading="lazy"
                   decoding="async"
                 />
@@ -106,11 +116,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <h2 class="ts-heading mb-6 text-ink">Our Founder</h2>
             <p class="ts-body-large max-w-[75ch] text-ink-secondary">
               Paul Biggar is a tech founder and software engineer. He founded Tech For Palestine,
-              <a href="https://circleci.com" class="text-brand hover:underline">CircleCI</a> and
-              <a href="https://darklang.com" class="text-brand hover:underline">Darklang</a>.
+              <a href="https://circleci.com" class="text-brand hover:underline" target="_blank" rel="noopener noreferrer">CircleCI</a> and
+              <a href="https://darklang.com" class="text-brand hover:underline" target="_blank" rel="noopener noreferrer">Darklang</a>.
             </p>
             <p class="ts-body-large mt-4 max-w-[75ch] text-ink-secondary">
-              Read why <a href="https://blog.paulbiggar.com/i-cant-sleep/" class="text-brand hover:underline">Paul couldn't sleep</a> —
+              Read why <a href="https://blog.paulbiggar.com/i-cant-sleep/" class="text-brand hover:underline" target="_blank" rel="noopener noreferrer">Paul couldn't sleep</a> —
               the post that started Tech for Palestine.
             </p>
           </div>
@@ -231,6 +241,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   }
   .about-animate.visible {
     animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .about-animate {
+    opacity: 1;
+    transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
     .about-animate {
