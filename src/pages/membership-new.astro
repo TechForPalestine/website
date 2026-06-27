@@ -1,0 +1,271 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+import MembershipDues from "../components/membership/MembershipDues";
+import MembershipFAQSection from "../components/membership/MembershipFAQSection";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const teams = [
+  {
+    name: "Coaching for Palestinian Entrepreneurs",
+    description:
+      "Support Palestinian entrepreneurs with job skills for professional growth.",
+  },
+  {
+    name: "Tech Accountability",
+    description:
+      "Develop content like blogs, social media posts, and more to hold tech companies accountable for supporting Israel's war crimes.",
+  },
+  {
+    name: "Legal Aid",
+    description:
+      "Help connect pro-bono resources from law firms to cases of discrimination against the Palestinian identity or pro-Palestinian speech.",
+  },
+  {
+    name: "US Events",
+    description:
+      "Organize in-person T4P events in the US to help grow the movement.",
+  },
+  {
+    name: "T4P Hackathons",
+    description:
+      "Arrange hackathons to kickstart software solutions to movement problems.",
+  },
+  {
+    name: "Boycott Search",
+    description:
+      "Develop a search engine that aggregates boycott targets and alternatives to Zionist resources, providing a central entry point to easily navigate boycotting information across organizations.",
+  },
+];
+
+---
+
+<HomeLayout
+  title="Membership - Tech for Palestine"
+  description="Join the coalition working on impactful initiatives for Palestinian liberation. Browse activism initiatives looking for your skills, or start an initiative of your own with T4P support."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Membership</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            The most direct way to support{" "}
+            <span class="text-brand">Tech for Palestine</span>
+          </h1>
+          <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+            Members fund and shape T4P's work directly: through dues that sustain our
+            initiatives, and through teams that scale the movement for Palestinian
+            liberation.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button href="#join" variant="primary" size="md" arrow>
+              Become a member
+            </Button>
+            <Button
+              href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
+              variant="ghost"
+              size="md"
+            >
+              Book an intro call
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero image -->
+    <div class="px-6 min-[810px]:px-10">
+      <div class="mx-auto max-w-[1400px]">
+        <img
+          src="/images/membership-hero.jpg"
+          alt="Tech for Palestine community members applauding at an event"
+          class="aspect-[16/6] w-full rounded-[20px] object-cover [object-position:center_30%]"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <!-- Why become a member -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate max-w-[75ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Why join</p>
+          <h2 class="ts-heading mb-8 text-ink">
+            Becoming a member is the best way to support Tech for Palestine
+          </h2>
+          <p class="ts-body-large mb-5 text-ink-secondary">
+            Members support T4P's work directly through dues and by joining teams to scale
+            the movement, advocate for non-complicit tech and collaborate for Palestinian
+            liberation.
+          </p>
+          <p class="ts-body-large mb-5 text-ink-secondary">
+            Membership dues support all T4P initiatives, including the Incubator, the 90+
+            external projects we support, and teams and campaigns working on tech
+            complicity. Our best known successes include UpScrolled, Boycat, Find a
+            Protest, Apricot, and Thaura AI.
+          </p>
+          <p class="ts-body-large mb-5 text-ink-secondary">
+            After joining, you'll be invited to join <strong class="font-medium text-ink">Hub</strong>,
+            our member portal, where you can:
+          </p>
+          <ul class="mb-6 space-y-3">
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span
+                class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                aria-hidden="true"
+              ></span>
+              Join our advocacy and support teams, working directly on Palestinian
+              liberation
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span
+                class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                aria-hidden="true"
+              ></span>
+              Start a team of your own, with T4P support and resources to help you grow
+            </li>
+          </ul>
+          <p class="ts-body-large text-ink-secondary">
+            Whether you're a thinker, builder, leader, software developer, marketer, or
+            activist, there's a place for you to contribute in your own way.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our teams -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Working committees</p>
+          <h2 class="ts-heading mb-10 text-ink">A few examples of our teams</h2>
+          <div class="grid grid-cols-1 gap-4 min-[810px]:grid-cols-2">
+            {
+              teams.map((team) => (
+                <div class="rounded-[20px] border border-butter bg-sand p-6">
+                  <h3 class="ts-label mb-3 text-ink">{team.name}</h3>
+                  <p class="ts-body-small text-ink-secondary leading-relaxed">
+                    {team.description}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Membership dues + Qgiv form -->
+    <section
+      id="join"
+      class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20"
+    >
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <p class="ts-overline mb-3 text-ink-secondary">Membership dues</p>
+          <h2 class="ts-heading mb-3 text-ink">Join today</h2>
+          <MembershipDues client:only="react" />
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Questions</p>
+          <h2 class="ts-heading mb-10 text-ink">Membership FAQ</h2>
+
+          <div class="max-w-[800px]">
+            <MembershipFAQSection client:only="react" />
+          </div>
+
+          <!-- FAQ contact line -->
+          <p class="ts-body-large mt-10 text-ink-secondary">
+            For additional questions, email{" "}
+            <a
+              href="mailto:membership@techforpalestine.org"
+              class="font-medium text-brand underline hover:text-brand-hover"
+            >
+              membership@techforpalestine.org
+            </a>
+            .
+          </p>
+
+          <!-- Community image -->
+          <div class="mt-12 max-w-[680px]">
+            <img
+              src="/images/membership-event.webp"
+              alt="Tech for Palestine community event"
+              class="w-full rounded-[20px] object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .membership-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .membership-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .membership-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .membership-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .membership-animate.visible {
+      animation: none;
+    }
+  }
+
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".membership-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

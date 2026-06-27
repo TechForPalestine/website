@@ -1,5 +1,6 @@
 ---
 import FooterSection from "../components/home/FooterSection.astro";
+import { getEnv } from "../utils/getEnv";
 import "@fontsource/fraunces/latin-400.css";
 import "@fontsource/outfit/latin-400.css";
 import "@fontsource/outfit/latin-500.css";
@@ -17,6 +18,8 @@ const {
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
 } = Astro.props;
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
 const canonicalUrl = new URL(
   Astro.url.pathname,
@@ -174,6 +177,6 @@ const canonicalUrl = new URL(
     <div class="flex-grow">
       <slot />
     </div>
-    <FooterSection />
+    <FooterSection membershipLive={membershipLive} />
   </body>
 </html>

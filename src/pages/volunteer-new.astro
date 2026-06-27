@@ -1,0 +1,327 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Get Involved - Tech for Palestine"
+  description="Join the Tech for Palestine volunteer community. Apply your skills to projects that amplify Palestinian voices and support the movement for liberation."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Get Involved</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Join our <span class="text-brand">Volunteer</span> Community
+          </h1>
+          <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+            Join us in volunteering to make a meaningful impact for Palestine.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button
+              href="https://techforpalestine.org/volunteer-form"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply to Volunteer Now
+            </Button>
+            <Button
+              href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
+              variant="ghost"
+              size="md"
+            >
+              Current Volunteer Needs
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Volunteer -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate max-w-[75ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Why join</p>
+          <h2 class="ts-heading mb-8 text-ink">Why Volunteer with Us?</h2>
+          <ul class="space-y-5">
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              Make a direct impact by applying your skills to projects that amplify Palestinian
+              voices and uplift the cause.
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              Join a global network of technologists, creatives, entrepreneurs, professionals, and
+              activists united by a commitment to justice and human dignity for Palestinians.
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              Develop professionally while working on meaningful initiatives that create lasting
+              positive change.
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              Connect with like-minded individuals through community spaces, events, and
+              collaborative projects.
+            </li>
+            <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              Transform concern into concrete action with measurable outcomes for Palestinian
+              communities.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Volunteer Roles -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">How you can help</p>
+          <h2 class="ts-heading mb-10 text-ink">Volunteer Roles</h2>
+          <div class="grid grid-cols-1 gap-4 min-[810px]:grid-cols-2">
+            <div class="rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
+              <h3 class="ts-label mb-4 text-ink">Ongoing Volunteers</h3>
+              <ul class="space-y-3">
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Regularly contribute your skills and collaborate with our project and/or T4P teams.
+                </li>
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Assignments are typically a minimum of 3 months.
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
+              <h3 class="ts-label mb-4 text-ink">Subject Matter Expert &amp; One-Off Engagements</h3>
+              <ul class="space-y-3">
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Offer short-term expertise and consultation to support specific projects and/or
+                  internal T4P teams.
+                </li>
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  One-off short projects (eg. user-testing, website redesign/updates, data-entry).
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Join -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate max-w-[75ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Getting started</p>
+          <h2 class="ts-heading mb-8 text-ink">How to Join?</h2>
+          <p class="ts-body-large text-ink-secondary">
+            Complete our{" "}
+            <a
+              href="https://techforpalestine.org/volunteer-form"
+              class="font-medium text-brand underline hover:text-brand-hover"
+            >volunteer application form</a>{" "}
+            to get matched with the right project or team—even if you're not sure how you want to
+            contribute!{" "}
+            <a
+              href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
+              class="font-medium text-brand underline hover:text-brand-hover"
+            >Check out specific roles we're looking for right now!</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Volunteer Expectations -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">What to expect</p>
+          <h2 class="ts-heading mb-10 text-ink">Volunteer Expectations</h2>
+          <div class="grid grid-cols-1 gap-4 min-[810px]:grid-cols-2">
+            <div class="rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
+              <h3 class="ts-label mb-4 text-ink">What We Expect</h3>
+              <ul class="space-y-3">
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  A commitment of your time and expertise.
+                </li>
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Active collaboration and clear communication.
+                </li>
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Timely notification of any changes to your availability.
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-[20px] border border-butter bg-cream p-6 min-[810px]:p-8">
+              <h3 class="ts-label mb-4 text-ink">What We Don't Expect</h3>
+              <ul class="space-y-3">
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Daily or rigid meeting attendance, unless essential for your role.
+                </li>
+                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
+                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  Exclusive commitment—you are welcome to engage in other initiatives.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Steps — numbered editorial treatment, genuinely sequential -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Ready?</p>
+          <h2 class="ts-heading mb-12 text-ink">Next Steps</h2>
+          <ol class="max-w-[75ch] space-y-10">
+            <li class="flex items-start gap-6 min-[810px]:gap-8">
+              <span class="ts-display shrink-0 leading-none text-brand opacity-[0.2]" aria-hidden="true">01</span>
+              <div class="pt-1">
+                <p class="ts-label mb-2 text-ink">Submit your application</p>
+                <p class="ts-body-large text-ink-secondary">
+                  Complete our{" "}
+                  <a
+                    href="https://techforpalestine.org/volunteer-form"
+                    class="font-medium text-brand underline hover:text-brand-hover"
+                  >application form</a>{" "}
+                  to be matched with the right project or team.
+                </p>
+              </div>
+            </li>
+            <li class="flex items-start gap-6 min-[810px]:gap-8">
+              <span class="ts-display shrink-0 leading-none text-brand opacity-[0.2]" aria-hidden="true">02</span>
+              <div class="pt-1">
+                <p class="ts-label mb-2 text-ink">Join our Discord</p>
+                <p class="ts-body-large text-ink-secondary">
+                  <a
+                    href="https://techforpalestine.org/discord-invite"
+                    class="font-medium text-brand underline hover:text-brand-hover"
+                  >Join our Discord server</a>{" "}
+                  and community calls to connect with the movement.
+                </p>
+              </div>
+            </li>
+            <li class="flex items-start gap-6 min-[810px]:gap-8">
+              <span class="ts-display shrink-0 leading-none text-brand opacity-[0.2]" aria-hidden="true">03</span>
+              <div class="pt-1">
+                <p class="ts-label mb-2 text-ink">Stay connected</p>
+                <p class="ts-body-large text-ink-secondary">
+                  Follow us on{" "}
+                  <a href="https://www.instagram.com/techforpalestine" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">Instagram</a>,{" "}
+                  <a href="https://twitter.com/tech4palestine" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">Twitter</a>,{" "}
+                  <a href="https://www.linkedin.com/company/techforpalestine/" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">LinkedIn</a>,{" "}
+                  <a href="https://www.youtube.com/@tech4palestine" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">YouTube</a>,{" "}
+                  <a href="https://github.com/TechForPalestine/" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">GitHub</a>,{" "}
+                  <a href="https://bsky.app/profile/techforpalestine.org" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">Bluesky</a>,
+                  and more.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="volunteer-animate max-w-[680px]">
+          <p class="ts-body-large mb-10 text-ink-secondary">
+            Your time and skills can truly make a difference. Thank you for considering to volunteer
+            with us!
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button
+              href="https://techforpalestine.org/volunteer-form"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply to Volunteer Now
+            </Button>
+            <Button
+              href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
+              variant="ghost"
+              size="md"
+            >
+              Current Volunteer Needs
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .volunteer-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .volunteer-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .volunteer-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .volunteer-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .volunteer-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".volunteer-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

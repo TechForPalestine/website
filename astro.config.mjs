@@ -75,6 +75,12 @@ export default defineConfig({
           "/tools-new/",
           "/js/web.js/",
           "/admin/conversions/",
+          "/membership-new/",
+          "/volunteer-new/",
+          "/e4p-new/",
+          "/help/hire-new/",
+          "/mentorship-new/",
+          "/london-gathering-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

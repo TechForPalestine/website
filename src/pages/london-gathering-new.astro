@@ -1,0 +1,396 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+import { Icon } from "astro-icon/components";
+import { fetchNotionAgenda } from "../store/notionClient";
+import SpeakersSection from "../components/london-gathering/SpeakersSection";
+import AgendaSection from "../components/london-gathering/AgendaSection";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+let agendaData: any = { agendaItems: [], speakers: [] };
+try {
+  agendaData = await fetchNotionAgenda(Astro.locals);
+} catch (error) {
+  console.error("Error fetching agenda data:", error);
+}
+
+const themes = [
+  { name: "Scaling Up Boycotts", icon: "mdi:cart-off" },
+  { name: "Media Bias and Hasbara", icon: "mdi:bullhorn" },
+  { name: "Protests and Activism", icon: "mdi:account-group" },
+  { name: "Palestinian Tech Sector", icon: "mdi:domain" },
+  { name: "MedTech for Palestine", icon: "mdi:medical-bag" },
+  { name: "Hiring Palestinians", icon: "mdi:briefcase-search" },
+  { name: "Social Media Censorship", icon: "mdi:cancel" },
+  { name: "Investors for Palestine", icon: "mdi:trending-up" },
+];
+
+const stats = [
+  { number: "70+", label: "Incubator", description: "Impactful advocacy projects", href: "/projects-new" },
+  { number: "9K+", label: "Community", description: "Tech workers worldwide", href: "/about-new" },
+  { number: "1K+", label: "Volunteers", description: "Donate skills to projects you care about", href: "/volunteer-new" },
+  { number: "250+", label: "Entrepreneurs", description: "Pro-Palestine entrepreneurs", href: "/e4p-new" },
+];
+---
+
+<HomeLayout
+  title="Tech for Palestine Gathering - London"
+  description="A full day event for T4P community members with workshops and networking opportunities. November 8, 2025 at Palestine House, London."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">London, November 8 2025</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Tech for Palestine <span class="text-brand">Gathering</span>
+          </h1>
+          <div class="mb-6 flex flex-wrap gap-3">
+            <span class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2">
+              <Icon name="mdi:map-marker" class="h-4 w-4 text-brand" />
+              Palestine House
+            </span>
+            <span class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2">
+              <Icon name="mdi:clock-outline" class="h-4 w-4 text-brand" />
+              9:00am - 4:00pm
+            </span>
+          </div>
+          <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
+            A full day event for T4P community members with workshops and networking
+            opportunities.
+          </p>
+          <img
+            src="/images/london-gathering/sold-out-png-12.png"
+            alt="Sold Out"
+            class="h-20 w-auto"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Themes -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">What we covered</p>
+          <h2 class="ts-heading mb-10 text-ink">Themes</h2>
+          <div class="flex flex-wrap gap-3">
+            {
+              themes.map((theme) => (
+                <span class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter bg-page px-5 py-2.5 text-ink">
+                  <Icon name={theme.icon} class="h-4 w-4 text-brand" />
+                  {theme.name}
+                </span>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About the Event -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">About</p>
+          <h2 class="ts-heading mb-10 text-ink">About the event</h2>
+          <div class="grid grid-cols-1 items-center gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+            <div class="max-w-[65ch]">
+              <p class="ts-body-large mb-5 text-ink-secondary">
+                The Tech for Palestine Community Gathering brought together 100 professionals who
+                work at the intersection of tech and pro-Palestine activism.
+              </p>
+              <p class="ts-body-large mb-5 text-ink-secondary">
+                Whether you work in the field of combatting media bias, scaling boycotts, making
+                protests safer, or building alternatives to big tech platforms, this event was for
+                you.
+              </p>
+              <p class="ts-body-large mb-8 text-ink-secondary">
+                The gathering was also open to entrepreneurs, investors and organizers who wanted
+                to network with innovators and support their work.
+              </p>
+              <img
+                src="/images/london-gathering/sold-out-png-12.png"
+                alt="Sold Out"
+                class="h-16 w-auto"
+              />
+            </div>
+            <div class="overflow-hidden rounded-[20px]">
+              <img
+                src="/images/london-gathering/about-image.webp"
+                alt="Tech for Palestine community gathering"
+                class="aspect-[4/3] w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Location -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Venue</p>
+          <h2 class="ts-heading mb-10 text-ink">Location</h2>
+          <div class="grid grid-cols-1 items-center gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+            <div class="overflow-hidden rounded-[20px]">
+              <img
+                src="/images/london-gathering/location-left-image.webp"
+                alt="Palestine House location in London"
+                class="aspect-square w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
+              <h3 class="ts-heading mb-8 text-ink">London</h3>
+              <div class="space-y-4">
+                <div class="flex items-center gap-4 rounded-[16px] bg-sand p-4">
+                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand">
+                    <Icon name="mdi:clock-outline" class="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <p class="ts-label text-ink">9:00am - 4:00pm</p>
+                    <p class="ts-body-small mt-1 text-ink-secondary">Full day event</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4 rounded-[16px] bg-sand p-4">
+                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand">
+                    <Icon name="mdi:map-marker" class="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <p class="ts-label text-ink">Palestine House</p>
+                    <p class="ts-body-small mt-1 text-ink-secondary">
+                      113 High Holborn<br />London WC1V 6JQ
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6">
+                <Button
+                  href="https://maps.app.goo.gl/nhy7XaRrfPh4Usex6"
+                  variant="ghost"
+                  size="md"
+                >
+                  Get directions
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Speakers (React) -->
+    <SpeakersSection client:only="react" initialSpeakers={agendaData.speakers || []} />
+
+    <!-- Agenda (React) -->
+    <AgendaSection client:only="react" initialAgendaItems={agendaData.agendaItems || []} />
+
+    <!-- About T4P -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">The movement</p>
+          <h2 class="ts-heading mb-8 text-ink">About Tech for Palestine</h2>
+          <div class="grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+            <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+              We bring together a global community of tech professionals who support the
+              Palestinian liberation movement and want to contribute their expertise to
+              meaningful, impactful tech projects.
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              {
+                stats.map((stat) => (
+                  <a
+                    href={stat.href}
+                    class="stat-card rounded-[20px] border border-butter bg-sand p-6 text-center"
+                  >
+                    <p class="ts-heading mb-1 text-brand">{stat.number}</p>
+                    <p class="ts-label mb-2 text-ink">{stat.label}</p>
+                    <p class="ts-body-small text-ink-secondary">{stat.description}</p>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsors -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Thank you</p>
+          <h2 class="ts-heading mb-12 text-ink">Sponsors</h2>
+
+          <div class="mb-10 grid grid-cols-1 gap-4 min-[810px]:grid-cols-3">
+            <!-- Premium -->
+            <a
+              href="https://www.dna.online/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="sponsor-card flex flex-col items-center justify-center rounded-[20px] border border-butter bg-page p-10 min-[810px]:col-span-1"
+            >
+              <p class="ts-overline mb-4 text-ink-secondary">Premium</p>
+              <img
+                src="/images/london-gathering/DNA.webp"
+                alt="DNA Premium Sponsor"
+                class="h-24 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <!-- Gold -->
+            <a
+              href="https://allyforaction.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="sponsor-card flex flex-col items-center justify-center rounded-[20px] border border-butter bg-page p-8"
+            >
+              <p class="ts-overline mb-4 text-ink-secondary">Gold</p>
+              <img
+                src="/images/london-gathering/Host_Logo_Artworks_RGB_Colour_Blue.webp"
+                alt="Host Gold Sponsor"
+                class="h-16 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <a
+              href="https://www.ya-soko.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="sponsor-card flex flex-col items-center justify-center rounded-[20px] border border-butter bg-page p-8"
+            >
+              <p class="ts-overline mb-4 text-ink-secondary">Gold</p>
+              <img
+                src="/images/london-gathering/YASOKO.webp"
+                alt="YASOKO Gold Sponsor"
+                class="h-16 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          </div>
+
+          <!-- Sponsorship inquiry -->
+          <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
+            <h3 class="ts-label mb-3 text-ink">Interested in becoming a sponsor?</h3>
+            <p class="ts-body-large mb-6 text-ink-secondary">
+              Contact us to receive our sponsorship package and learn more about T4P initiatives.
+            </p>
+            <Button href="/contact-new" variant="primary" size="md" arrow>
+              Contact us
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-ink-dark px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="lg-animate max-w-[680px]">
+          <h2 class="ts-heading mb-6 text-butter">Ready to join us?</h2>
+          <p class="ts-body-large mb-8 text-butter/70">
+            Don't miss this opportunity to connect with fellow tech professionals supporting
+            Palestine and learn about impactful projects.
+          </p>
+          <img
+            src="/images/london-gathering/sold-out-png-12.png"
+            alt="Sold Out"
+            class="h-24 w-auto"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .speaker-avatar {
+    box-shadow: 0 0 0 1px rgba(42, 36, 40, 0.12);
+  }
+
+  .stat-card {
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    background-color: #FBF2ED;
+    border-color: transparent;
+  }
+
+  .sponsor-card {
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+      border-color 0.2s ease;
+  }
+  .sponsor-card:hover {
+    transform: translateY(-2px);
+    border-color: transparent;
+  }
+
+  .lg-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .lg-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .lg-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lg-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .lg-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".lg-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

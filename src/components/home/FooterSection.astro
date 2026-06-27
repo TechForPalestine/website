@@ -1,6 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
 
+interface Props {
+  membershipLive?: boolean;
+}
+
+const { membershipLive = false } = Astro.props;
+
 const navigation: Record<string, [string, string][]> = {
   About: [
     ["Our Organization", "/about-new"],
@@ -11,16 +17,17 @@ const navigation: Record<string, [string, string][]> = {
   Incubator: [
     ["Overview", "/incubator-new"],
     ["Projects", "/projects-new"],
-    ["Ideas", "/ideas"],
+    ["Ideas", "/ideas-new"],
     ["Tools", "/tools-new"],
   ],
   "Get Involved": [
-    ["Become a Member", "/membership"],
+    ...(membershipLive ? [["Become a Member", "/membership"] as [string, string]] : []),
     ["Donate", "/donate"],
     ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
-    ["Volunteer", "/volunteer"],
-    ["Entrepreneurs for Palestine", "/e4p"],
-    ["Hire Palestinians", "/help/hire"],
+    ["Volunteer", "/volunteer-new"],
+    ["Entrepreneurs for Palestine", "/e4p-new"],
+    ["Be a Mentor", "/mentorship-new"],
+    ["Hire Palestinians", "/help/hire-new"],
   ],
   Events: [
     ["Past Events", "/events"],
