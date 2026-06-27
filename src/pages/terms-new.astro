@@ -1,0 +1,432 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Terms & Conditions — Tech for Palestine"
+  description="Terms of Service governing your use of Tech for Palestine's website and services."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <!-- Hero + Content -->
+    <section class="bg-page px-6 pt-10 pb-20 min-[810px]:px-10 min-[810px]:pt-14">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="doc-animate max-w-[65ch] mb-12">
+          <p class="ts-overline mb-4 text-ink-secondary">Legal · Tech for Palestine</p>
+          <h1 class="ts-editorial mb-4 text-ink">
+            Terms &amp; <span class="text-brand">Conditions</span>
+          </h1>
+          <p class="ts-body-large text-ink-secondary">
+            Last updated August 5, 2025. By using our services, you agree to these terms.
+          </p>
+        </div>
+        <div class="max-w-[800px]">
+        <article>
+
+          <div class="border-t border-ink-divider pt-10 mt-0">
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Welcome to the <strong class="text-ink">Tech for Palestine</strong> website and services. Tech for Palestine ("we", "us", or "our") is a 501(c)(3) nonprofit organization whose mission is <em>to harness technology and human innovation for a free and truly sovereign Palestine</em>. These Terms of Service ("Terms") govern your access to and use of our website, our incubator application/portal, and any related services (collectively, the "Services").
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              By accessing or using our Services, <strong class="text-ink">you agree to be bound by these Terms</strong> as well as our <a href="/privacy-policy-new" class="text-brand hover:underline">Privacy Policy</a> (which is incorporated herein by reference). If you do not agree with any part of these Terms or our Privacy Policy, you must not use our Services.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              Please read these Terms carefully. They constitute a legally binding agreement between you (the user of our Services) and Tech for Palestine. If you are using the Services on behalf of an organization or entity, you represent that you have the authority to bind that organization to these Terms.
+            </p>
+          </div>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="acceptance-of-terms">
+            <h2 class="ts-heading text-ink mb-4">1. Acceptance of Terms</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              By using our website or any Services, you indicate that you <strong class="text-ink">accept these Terms</strong> and agree to comply with them. This acceptance is effective as of the date you first access the Services. If you do not agree, you must not use or access the Services.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We may also ask you to signify agreement to these Terms by clicking "Accept" or "Agree" (for example, when registering an account). Even if we do not do so, your continued use of the Services constitutes acceptance.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              <strong class="text-ink">Supplemental terms:</strong> In certain cases, additional terms or guidelines may apply to specific features or activities. Any supplemental terms will be disclosed to you in connection with the relevant Service and are incorporated into these Terms by reference. In the event of a conflict, the supplemental terms will prevail for the specific service they apply to.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="eligibility">
+            <h2 class="ts-heading text-ink mb-4">2. Eligibility</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              The Services are offered and available only to users who are at least <strong class="text-ink">13 years of age</strong>. By using the Services, you represent and warrant that you are 13 or older. <strong class="text-ink">If you are under 13 years old, you are not permitted to use our Services.</strong>
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              If you are between 13 and 17 years of age, you may use the Services <strong class="text-ink">only with the involvement and consent of a parent or legal guardian</strong>. We reserve the right to request verifiable parental consent for any users under 18 if necessary.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Users must also have the <strong class="text-ink">power to enter a binding contract</strong> with us and are not barred from doing so under any applicable laws.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              The Services are provided from the United States. If you access the Services from outside the U.S., you are responsible for ensuring your use is lawful in your jurisdiction and complying with local laws.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="user-accounts-and-registration">
+            <h2 class="ts-heading text-ink mb-4">3. User Accounts and Registration</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">3.1 Account Creation:</strong> Some parts of our Services may require you to create an account. If you register, you agree to provide accurate, current, and complete information and to update it if it changes.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">3.2 Account Security:</strong> You are responsible for maintaining the confidentiality of your account credentials. You must not share your password with others. Notify us immediately at <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a> if you suspect unauthorized use of your account.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">3.3 User Responsibilities:</strong> When you create an account, you agree to:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Use the account solely for your personal or organizational use related to our Services, and not impersonate any other person or entity.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Not select or use a username that is offensive, obscene, or infringes someone's rights.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Ensure all information you provide is truthful and lawful.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                If you provide personal data of others, ensure you have obtained their consent to share that information with us.
+              </li>
+            </ul>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="acceptable-use-policy">
+            <h2 class="ts-heading text-ink mb-4">4. Acceptable Use Policy</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              You agree to use our Services only for lawful purposes and in compliance with these Terms. <strong class="text-ink">You are solely responsible for your conduct</strong> and any content you submit. You agree not to engage in any of the following prohibited activities:
+            </p>
+            <ul class="space-y-3 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Illegal Activities:</span> Using the Services for any purpose that violates any applicable law or regulation, including fraud, hacking, or trafficking of unlawful material.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Abusive or Harmful Conduct:</span> Uploading or transmitting content that advocates violence or is discriminatory, abusive, threatening, harassing, defamatory, obscene, or otherwise offensive.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Endangering Any Person:</span> Stalking, intimidating, harming, or endangering another person, or sharing another person's private information without consent (doxxing).</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Security Violations:</span> Attempting to probe or test the vulnerability of our systems, or introducing viruses, malware, or other harmful code.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Unauthorized Access:</span> Accessing non-public areas of the Services or attempting to gain unauthorized access to other users' accounts.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Spam and Misuse:</span> Sending unsolicited bulk communications or using automated means (bots, scrapers) to collect data without our express permission.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Commercial or Political Use:</span> Using the Services for commercial solicitation or advertising not approved by us, or promoting political campaigns in a way that implies our endorsement.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Impersonation:</span> Impersonating any person or entity, or falsely implying affiliation with us.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Disruption:</span> Engaging in any conduct that restricts or inhibits anyone's use or enjoyment of the Services.</span>
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              Violation of the above may result in <strong class="text-ink">immediate termination or suspension</strong> of your account or access to the Services, and may also expose you to civil or criminal penalties.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="user-content-and-submissions">
+            <h2 class="ts-heading text-ink mb-4">5. User Content and Submissions</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Our Services may allow you to submit or upload content — for example, project information in our incubator portal, application materials, or forum communications. Any content a user submits is referred to as "User Content."
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">5.1 Your Responsibility:</strong> You retain any intellectual property rights you hold in the User Content you provide. We do not claim ownership of your original content. However, by providing User Content, you <strong class="text-ink">grant us certain rights</strong> to use it as described below. You affirm that:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                You own or have necessary rights to submit the content and to grant the licenses to us under these Terms.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Your User Content will not infringe or violate any third party's intellectual property, privacy, or other rights, nor violate any law.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Your content is not defamatory, obscene, hateful, or otherwise violative of our Acceptable Use Policy (Section 4).
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">5.2 License Grant:</strong> By submitting User Content, you grant Tech for Palestine a non-exclusive, worldwide, royalty-free license to use, reproduce, distribute, and display your content <strong class="text-ink">solely for the purpose of operating and providing the Services</strong> and fulfilling our mission. We will not use your content for commercial purposes unrelated to our nonprofit mission, and we will not sell your content to third parties.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">5.3 No Compensation:</strong> Tech for Palestine is not obligated to provide any compensation for User Content. Any contribution of content is purely voluntary.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">5.4 Monitoring:</strong> We reserve the right to review, screen, or delete any User Content at any time, including if we believe it violates these Terms.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">5.5 Backups:</strong> You are encouraged to keep backups of your own content. We are not responsible for lost or unrecoverable User Content.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              <strong class="text-ink">5.6 Feedback:</strong> If you provide suggestions or feedback about the Services, you agree that we can use and share such feedback for any purpose without compensation to you.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="intellectual-property-rights">
+            <h2 class="ts-heading text-ink mb-4">6. Intellectual Property Rights</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">6.1 Our Content:</strong> Unless otherwise indicated, the Services and all content therein — including text, graphics, logos, images, software code, audio/video clips, and documentation — are the property of Tech for Palestine or our licensors, protected by U.S. and international copyright and trademark laws.
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Our name, logo, and all related marks are trademarks of Tech for Palestine. You are not granted any license to use these marks without our prior written permission.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                The look and feel of the website and app are part of our branding and are also protected.
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">6.2 License to You:</strong> We grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Services for your <strong class="text-ink">personal, non-commercial use</strong> in accordance with these Terms. Under this license, you must not copy, modify, distribute, publish, or create derivative works of our content without prior consent, nor use our trademarks without authorization.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">6.3 User Content:</strong> These Terms do not grant us ownership of your User Content (see Section 5). However, all User Content is subject to the license you granted us and may be removed if it infringes rights or violates these Terms.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">6.4 DMCA Copyright Policy:</strong> If you believe content on our Services infringes your copyright, please notify us at: Tech for Palestine, 548 Market St #266950, San Francisco, CA 94104-5401, <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a> (label "DMCA Notice"). Your notice must include a description of the copyrighted work, location of the material, your contact information, a good faith belief statement, an accuracy statement under penalty of perjury, and your signature.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="third-party-links-and-services">
+            <h2 class="ts-heading text-ink mb-4">7. Third-Party Links and Services</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Our Services may contain links to third-party websites or services not owned or controlled by Tech for Palestine.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">7.1 No Endorsement or Control:</strong> These links are provided for convenience only. Tech for Palestine does not endorse or control third-party websites or services. When you leave our site, <strong class="text-ink">these Terms and our Privacy Policy no longer apply</strong>; the third party's terms govern.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">7.2 Separate Terms:</strong> Third-party software or services you use in connection with our Services may be subject to the third party's own terms. You are responsible for complying with those terms.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              <strong class="text-ink">7.3 No Liability:</strong> You agree that Tech for Palestine will not be liable for any loss or damage relating to your dealings with third parties found on or through our Services. Use third-party links and services at your own risk.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="termination-and-suspension">
+            <h2 class="ts-heading text-ink mb-4">8. Termination and Suspension</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">8.1 By You:</strong> You may stop using our Services at any time. If you have an account, you can request deletion by contacting us.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">8.2 By Us:</strong> We reserve the right to suspend or terminate your access at our sole discretion if we believe you have violated these Terms, created legal exposure for us, or for other operational reasons. We will provide reasonable notice when feasible, except where immediate action is necessary.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              <strong class="text-ink">8.3 Effect of Termination:</strong> Upon termination, your right to use the Services will immediately cease. We may delete your account data in accordance with our Privacy Policy. Provisions of these Terms that by their nature should survive termination — including Intellectual Property, Disclaimers, Limitation of Liability, and Indemnification — will remain in effect.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="disclaimers-of-warranties">
+            <h2 class="ts-heading text-ink mb-4">9. Disclaimers of Warranties</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">Tech for Palestine provides the Services on an "AS IS" and "AS AVAILABLE" basis.</strong> To the fullest extent permitted by law, we <strong class="text-ink">disclaim all warranties</strong> of any kind, whether express, implied, or statutory. We make no guarantees that:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                The Services will always be available, timely, secure, uninterrupted, or error-free.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                The results of using the Services will meet your expectations or requirements.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Any information or content obtained through the Services will be accurate, complete, or reliable.
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We expressly disclaim all implied warranties, including merchantability, fitness for a particular purpose, title, and non-infringement. Some jurisdictions do not allow the exclusion of certain warranties; if those laws apply to you, some exclusions may not apply.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="limitation-of-liability">
+            <h2 class="ts-heading text-ink mb-4">10. Limitation of Liability</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">To the fullest extent permitted by law, Tech for Palestine and its officers, directors, employees, volunteers, agents, partners, and affiliates will not be liable</strong> for any indirect, incidental, special, consequential, exemplary, or punitive damages — including loss of profits, loss of data, service interruption, or the cost of substitute services — arising from your use of, or inability to use, the Services.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              This limitation covers damages resulting from, among other things:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Your use of or reliance on any content or information obtained through the Services.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Unauthorized access to or alteration of your transmissions or data.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Statements or conduct of any third party on the Services.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Any transactions or relationships between you and any third party in connection with the Services.
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              <strong class="text-ink">Cap on Liability:</strong> In no event shall total liability exceed the greater of (a) <strong class="text-ink">$100 USD</strong>, or (b) the total amount of fees you paid to us for use of the Services in the 6 months prior to the claim. Some jurisdictions do not allow certain limitations, so some of the above may not apply to you.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="indemnification">
+            <h2 class="ts-heading text-ink mb-4">11. Indemnification</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              To the extent permitted by law, you agree to <strong class="text-ink">indemnify, defend, and hold harmless</strong> Tech for Palestine and its affiliates, officers, directors, employees, agents, and volunteers from and against any claims, liabilities, damages, losses, costs, or fees (including reasonable attorneys' fees) arising out of or relating to:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Your willful misuse of the Services, or unlawful activities in connection with the Services.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Any User Content you submit that infringes third-party rights or causes harm.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Your willful violation of these Terms or applicable laws.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Unauthorized use of the Services with your credentials resulting from your failure to maintain their confidentiality.
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              This indemnification obligation survives any termination of your account or of the Services.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="general-provisions">
+            <h2 class="ts-heading text-ink mb-4">12. General Provisions</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.1 Governing Law:</strong> These Terms will be governed by the laws of the <strong class="text-ink">State of Georgia, USA</strong>, without giving effect to conflict of laws principles.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.2 Jurisdiction and Venue:</strong> Any judicial proceedings will be brought in federal or state courts located in <strong class="text-ink">Georgia</strong>, unless prohibited by law. We reserve the right to seek injunctive relief in any jurisdiction to protect our intellectual property.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.3 Alternative Dispute Resolution:</strong> Both parties are free to seek an amicable resolution. You agree to contact us first to try to resolve any dispute informally.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.4 No Class Actions:</strong> To the extent permitted by law, you and Tech for Palestine agree that <strong class="text-ink">each may bring claims only in an individual capacity</strong> and not as a plaintiff or class member in any class or representative action.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.5 No Waiver:</strong> Our failure to exercise or enforce any right shall not operate as a waiver of such right.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.6 Severability:</strong> If any provision of these Terms is held invalid or unenforceable, the remaining provisions will continue in full force and effect.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.7 Entire Agreement:</strong> These Terms, together with our Privacy Policy and any supplemental terms, constitute the <strong class="text-ink">entire agreement</strong> between you and Tech for Palestine regarding the Services.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.8 Assignment:</strong> You may not assign your rights under these Terms without our prior written consent. We may assign our rights in connection with a merger, acquisition, or sale of assets.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.9 Relationship of Parties:</strong> These Terms do not create any agency, partnership, joint venture, or employment relationship between you and Tech for Palestine.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.10 Force Majeure:</strong> Tech for Palestine will not be liable for failure or delay in performance caused by circumstances beyond our reasonable control, including acts of God, war, terrorism, pandemics, or power outages.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.11 Notices:</strong> We may provide notices via email, postal mail, or by posting on our website. Official notices to us should be sent to the contact address in Section 13.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">12.12 Export Controls:</strong> If you access our Services from outside the United States, you are responsible for compliance with local laws and applicable U.S. export control laws and regulations.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              <strong class="text-ink">12.13 Updates to Terms:</strong> We may occasionally update these Terms. If we make material changes, we will notify users by posting the updated Terms with a new effective date and/or by email notification. Your continued use of the Services after an update constitutes acceptance of the revised Terms.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="contact-information">
+            <h2 class="ts-heading text-ink mb-4">13. Contact Information</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              If you have any questions about these Terms of Service, you can reach us at:
+            </p>
+            <div class="rounded-[16px] border border-butter bg-sand p-6 mb-4">
+              <p class="ts-body text-ink font-medium">Tech for Palestine</p>
+              <p class="ts-body text-ink-secondary">548 Market St #266950</p>
+              <p class="ts-body text-ink-secondary">San Francisco, California 94104-5401</p>
+              <p class="ts-body text-ink-secondary">United States</p>
+              <p class="ts-body text-ink-secondary mt-3">
+                <span class="font-medium text-ink">Email:</span>{" "}
+                <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a>
+              </p>
+            </div>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We value our community and welcome feedback. Thank you for being a part of our mission and for abiding by these Terms.
+            </p>
+          </section>
+
+        </article>
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .doc-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .doc-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .doc-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .doc-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .doc-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>(".doc-animate");
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+  } else {
+    els.forEach((el) => el.classList.add("visible"));
+  }
+</script>

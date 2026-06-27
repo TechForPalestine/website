@@ -81,6 +81,11 @@ export default defineConfig({
           "/help/hire-new/",
           "/mentorship-new/",
           "/london-gathering-new/",
+          "/get-involved-new/",
+          "/media-new/",
+          "/legal-new/",
+          "/terms-new/",
+          "/privacy-policy-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

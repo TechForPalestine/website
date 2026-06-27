@@ -1,0 +1,405 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Privacy Policy — Tech for Palestine"
+  description="How Tech for Palestine collects, uses, and protects your personal information."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <!-- Hero + Content -->
+    <section class="bg-page px-6 pt-10 pb-20 min-[810px]:px-10 min-[810px]:pt-14">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="doc-animate max-w-[65ch] mb-12">
+          <p class="ts-overline mb-4 text-ink-secondary">Legal · Tech for Palestine</p>
+          <h1 class="ts-editorial mb-4 text-ink">
+            Privacy <span class="text-brand">Policy</span>
+          </h1>
+          <p class="ts-body-large text-ink-secondary">
+            Last updated August 5, 2025. How we collect, use, and protect your information.
+          </p>
+        </div>
+        <div class="max-w-[800px]">
+        <article>
+
+          <div class="border-t border-ink-divider pt-10 mt-0">
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              This Privacy Policy describes how <strong class="text-ink">Tech for Palestine</strong> (a 501(c)(3) nonprofit, referred to as "we," "us," or "our") collects, uses, and shares personal information when you use our services (the "Services"). The Services include:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Visiting our website:</span> including all pages on our site (e.g. techforpalestine.org) that link to this Privacy Policy.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Engaging with our organization:</span> for example, joining our mailing list, signing up to volunteer, or submitting a project application to our incubator program via online forms.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Using our application:</span> if your project is accepted into our incubator, using our online portal or app to update project information and collaborate with us.</span>
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              Please read this Privacy Policy carefully. By using our Services, you agree to the collection and use of information as described in this policy. If you have any questions, see the <a href="#contact-us" class="text-brand hover:underline">Contact Us</a> section below.
+            </p>
+          </div>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="information-we-collect">
+            <h2 class="ts-heading text-ink mb-4">1. Information We Collect</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-6">
+              We collect several types of information from and about users of our Services, including personal information. The exact data we collect depends on how you interact with us.
+            </p>
+
+            <h3 class="ts-subheading text-ink mb-3">Information You Provide to Us</h3>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We collect personal information that you choose to provide directly, such as through forms or communications. This includes:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Contact Information:</span> Your name, email address, telephone number, and similar contact data that you provide when, for example, joining our mailing list or signing up to volunteer.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Volunteer or Application Information:</span> Details you provide when you volunteer or apply to our incubator, such as your address, professional or educational background, project proposal, and any other information you include on application or registration forms.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Communications:</span> The content of messages or inquiries you send us, such as emails, survey responses, or feedback. This may include personal data if you include it in those communications.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Other Information You Choose to Provide:</span> Any other data you voluntarily provide, such as when responding to surveys, participating in events, or other interactions.</span>
+              </li>
+            </ul>
+            <div class="rounded-[16px] border border-butter bg-sand p-5 mb-6">
+              <p class="ts-body text-ink-secondary">
+                <strong class="text-ink">Note:</strong> If you provide information about others (for example, refer a friend or include team members on a project application), you are responsible for ensuring you have the right or consent to share that information with us.
+              </p>
+            </div>
+
+            <h3 class="ts-subheading text-ink mb-3">Information We Collect Automatically</h3>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              When you use our website or app, we automatically collect certain information about your device and usage via cookies and other tracking technologies. This includes:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Device and Technical Data:</span> IP address, browser type, device type, operating system, network information, and device identifiers.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Usage Data:</span> Details about how you use our Services, such as pages or screens viewed, links clicked, time spent, and navigation paths. We may log dates and times of visits, and performance data for our website or app.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Cookies and Similar Technologies:</span> We (and authorized third parties) use cookies, web beacons, and similar tracking technologies to collect information about your interactions. See <a href="#cookies-and-tracking-technologies" class="text-brand hover:underline">Cookies and Tracking Technologies</a> below.</span>
+              </li>
+            </ul>
+
+            <h3 class="ts-subheading text-ink mb-3">Information from Third Parties</h3>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Service Providers:</span> For example, if we use an email newsletter platform or a volunteer management tool, it might provide us with information such as confirmation that you opened our email or completed a form.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Social Media or Linked Services:</span> If you engage with our organization on social media platforms, those platforms may share limited information with us according to their policies.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Partner Organizations:</span> We may obtain information from partner nonprofits or collaborators. We handle such data according to this Policy.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Public Sources:</span> We might collect information from publicly available sources for outreach or research purposes.</span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="how-we-use-your-information">
+            <h2 class="ts-heading text-ink mb-4">2. How We Use Your Information</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We use personal information for purposes consistent with our nonprofit mission and as necessary to provide our Services:
+            </p>
+            <ul class="space-y-3 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Providing and Improving Services:</span> To operate and maintain our website, applications, and programs. For example, we use personal data to process volunteer registrations, evaluate incubator project applications, and facilitate project incubator activities.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Communication:</span> To communicate with you about your involvement or interest in our organization, including responding to inquiries, sending confirmations, and notifying you of important changes.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Email Newsletters and Updates:</span> If you join our mailing list or opt in, to send you newsletters, announcements, event invitations, or fundraising appeals. You can always opt out as described in <a href="#your-privacy-rights" class="text-brand hover:underline">Your Privacy Rights</a>.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Volunteer and Donor Management:</span> To manage volunteer assignments or donor relationships, such as tracking volunteer hours or sending donation receipts.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Incubator Program Support:</span> For accepted projects, to provide services such as mentorship, access to resources, and tracking of project progress.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Analytics and Improvements:</span> To analyze usage of our website and app to understand engagement, troubleshoot issues, and make informed decisions about improvements.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Legal and Security:</span> To protect the rights and safety of our organization, our users, or others, and to comply with applicable laws and regulations.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Record-Keeping:</span> To maintain proper organizational records for administrative purposes, including fulfilling any legal record retention requirements.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Other Purposes with Consent:</span> If we intend to use your information for a purpose not described above, we will explain it at the time of collection and, if required by law, obtain your consent.</span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="how-we-share-your-information">
+            <h2 class="ts-heading text-ink mb-4">3. How We Share Your Information</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We <strong class="text-ink">do not sell</strong> your personal information to third parties for profit or monetary gain. We only share or disclose personal data in the following circumstances:
+            </p>
+            <ul class="space-y-3 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Service Providers:</span> We may share information with third-party vendors who perform services on our behalf (hosting, email platforms, volunteer databases, payment processors). They are contractually obligated to protect it and use it only for our authorized purposes.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Partner Organizations and Incubator Advisors:</span> If you are accepted into our incubator program, we might share relevant information with mentors or advisors strictly to further the support of your project, with your consent or under strict confidentiality agreements.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Legal Compliance and Protection:</span> We may disclose information if required by law, to comply with court orders or government requests, or to protect the safety of our users or the public.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Organizational Transfers:</span> In the unlikely event of a major organizational change such as a merger with another nonprofit, personal information may be transferred to the successor entity and would remain subject to the promises made in this Privacy Policy.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">With Your Consent:</span> We may share your personal information for other purposes if you ask us to or explicitly consent to such sharing.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Aggregated or De-Identified Data:</span> We may share information that has been aggregated or de-identified so it can no longer be linked back to you.</span>
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We do not share personal information with third parties for their own marketing or advertising purposes without your consent. We also do not "sell" or "share" personal information as defined under the California Consumer Privacy Act (CCPA).
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="cookies-and-tracking-technologies">
+            <h2 class="ts-heading text-ink mb-4">4. Cookies and Tracking Technologies</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Like most websites and apps, we use cookies and similar tracking technologies to provide and improve our Services. We use cookies for several reasons:
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Essential Cookies:</span> Some cookies are necessary for our site to function properly, for example to keep you logged in to the incubator portal or to remember your preferences.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Analytics Cookies:</span> We use third-party analytics tools (such as Google Analytics) that set cookies to collect information about how users navigate our site. This helps us understand usage patterns and make our website more user-friendly.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Functional Cookies:</span> These cookies remember choices you make (such as your language or region, if applicable) and enhance your experience.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Third-Party and Social Media Cookies:</span> If our site integrates content from third parties (for example, an embedded video or social media button), those providers may set cookies governed by their own privacy policies.</span>
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">Your choices:</strong> On your first visit, you may see a cookies notice or banner. You can manage cookies through your browser settings — most browsers allow you to refuse new cookies, remove existing cookies, or be notified when new cookies are set. Note that blocking cookies may affect some features of our Services, especially the incubator app login.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We currently do not use online advertising networks or behavioral advertising, so you should not see third-party ads on our site that track you.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="data-security">
+            <h2 class="ts-heading text-ink mb-4">5. Data Security</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We take data security seriously and have implemented <strong class="text-ink">reasonable security measures</strong> to protect your personal information from unauthorized access, disclosure, alteration, and destruction. These include technical, administrative, and physical safeguards appropriate to the sensitivity of the information. For example, our website uses HTTPS encryption to secure data in transit, and we restrict access to personal data to staff or volunteers who need it.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Please understand that <strong class="text-ink">no method of transmission over the Internet or electronic storage is 100% secure</strong>. While we strive to protect your personal information, we cannot guarantee absolute security. In the event of a data breach that affects your personal information, we will notify you and the appropriate authorities as required by law.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We encourage you to take steps to protect your own information — such as choosing a strong password for any account in our incubator app and keeping your login credentials confidential.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="data-retention">
+            <h2 class="ts-heading text-ink mb-4">6. Data Retention</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We will retain your personal information only for as long as necessary to fulfill the purposes we collected it for, including to satisfy any legal, accounting, or reporting requirements.
+            </p>
+            <ul class="space-y-2 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Active Use:</span> Information you provide as a volunteer or program participant will be kept for as long as you are active with our organization.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Mailing List:</span> If you subscribe to our newsletter, we will retain your email address and related preferences until you unsubscribe or ask us to delete that information.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Applications and Records:</span> If you submit a project application that is not accepted, we may keep the information only as long as necessary for legitimate nonprofit purposes or legal compliance.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Legal Obligations:</span> We may need to retain certain data for longer periods if required by law — for example, donation transaction records for 7 years for tax and audit purposes.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Backup and Archival:</span> Even after deletion, copies of your data may remain in our backups for a brief period until those backups are cycled out. We aim to incorporate secure deletion practices where possible.</span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="childrens-privacy">
+            <h2 class="ts-heading text-ink mb-4">7. Children's Privacy</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Our Services are <strong class="text-ink">not intended for children under the age of 13</strong>, and we do not knowingly collect personal information from children under 13 years old without parental consent. If you are under 13, please do not use our website or send us any personal information without your parent or guardian's permission.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              If we learn that we have inadvertently collected personal data from a child under 13 without parental consent, we will take steps to delete that information as soon as possible. Please contact us immediately if you believe we might have any information from or about a child under 13.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              For minors age 13 to 17: we generally require that individuals be at least 18 to volunteer or participate in our programs without a guardian. We strongly encourage parents and guardians to educate their children about online safety and to supervise their children's use of websites.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="your-privacy-rights">
+            <h2 class="ts-heading text-ink mb-4">8. Your Privacy Rights</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Depending on your jurisdiction, you may have certain legal rights regarding your personal information. We strive to honor these rights and provide transparency and control to all our users.
+            </p>
+
+            <h3 class="ts-subheading text-ink mb-3">General Rights for All Users</h3>
+            <ul class="space-y-3 mb-4">
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Access and Update:</span> You have the right to request access to the personal information we hold about you and to request correction or updates if it is inaccurate or incomplete.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Deletion:</span> You can ask us to delete your personal information. We will honor deletion requests to the extent required by law and technically feasible. We may retain certain information for legal compliance as described above.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Objection to Processing:</span> If we process your information based on our legitimate interests, you can object to that processing if you feel it impacts your fundamental rights and freedoms.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Opt-Out of Marketing:</span> If at any time you prefer not to receive our newsletter or other marketing emails, you can click the "unsubscribe" link in any promotional email or contact us directly. We will stop sending you non-transactional communications once we process your request.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Consent Withdrawal:</span> If we are processing your personal information based on your consent, you have the right to withdraw that consent at any time. Withdrawal will not affect processing already carried out.</span>
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <span><span class="font-medium text-ink">Non-Discrimination:</span> We will not discriminate against you for exercising any of these rights.</span>
+              </li>
+            </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              To exercise any of the above rights, see the Contact Us section below. We may need to verify your identity before fulfilling certain requests, and will respond within a reasonable timeframe in accordance with applicable law.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="changes-to-this-privacy-policy">
+            <h2 class="ts-heading text-ink mb-4">9. Changes to this Privacy Policy</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We may update or revise this Privacy Policy from time to time to reflect changes in our practices, technologies, legal requirements, or for other reasons. When we do, we will change the "Last updated" date at the top of this Policy. The updated Privacy Policy will be effective as of the time of posting, or a later date if explicitly stated.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              If we make any <strong class="text-ink">material changes</strong> to this Privacy Policy, we will provide a more prominent notice — such as posting a notice on our website or contacting you via email. Your continued use of the Services after any changes indicates your acknowledgment of the updated Privacy Policy.
+            </p>
+          </section>
+
+          <section class="border-t border-ink-divider pt-10 mt-10" id="contact-us">
+            <h2 class="ts-heading text-ink mb-4">10. Contact Us</h2>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              If you have any questions, concerns, or requests regarding this Privacy Policy or how we handle your personal information, please contact us:
+            </p>
+            <div class="rounded-[16px] border border-butter bg-sand p-6 mb-4">
+              <p class="ts-body text-ink font-medium">Tech for Palestine (Attn: Privacy)</p>
+              <p class="ts-body text-ink-secondary">548 Market St #266950</p>
+              <p class="ts-body text-ink-secondary">San Francisco, California 94104-5401</p>
+              <p class="ts-body text-ink-secondary">United States</p>
+              <p class="ts-body text-ink-secondary mt-3">
+                <span class="font-medium text-ink">Email:</span>{" "}
+                <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a>
+                <span class="text-ink-secondary"> (include "Privacy Inquiry" in the subject)</span>
+              </p>
+            </div>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We will be happy to respond to your inquiries or assist you in exercising your rights. For our terms of service, see our <a href="/terms-new" class="text-brand hover:underline">Terms &amp; Conditions</a>. For our legal and financial information, see our <a href="/legal-new" class="text-brand hover:underline">Financial &amp; Legal Notice</a>. Thank you for reading this policy.
+            </p>
+          </section>
+
+        </article>
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .doc-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .doc-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .doc-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .doc-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .doc-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>(".doc-animate");
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+  } else {
+    els.forEach((el) => el.classList.add("visible"));
+  }
+</script>

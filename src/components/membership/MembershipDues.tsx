@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import MembershipCalculator from "./MembershipCalculator";
 
-declare global {
-  interface Window {
-    plausible?: (event: string, opts?: { props: Record<string, string> }) => void;
-  }
-}
 
 function QgivEmbed() {
   const scriptLoadedRef = useRef(false);

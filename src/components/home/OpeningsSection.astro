@@ -33,7 +33,7 @@ const visible = roles.slice(0, 4);
 
 function applyHref(role: Role): string {
   if (role.type === "project") return "/volunteer";
-  return membershipLive ? `/membership?targetRoleId=${role.id}` : "/get-involved";
+  return membershipLive ? `/membership?targetRoleId=${role.id}` : "/get-involved-new";
 }
 ---
 
@@ -94,7 +94,7 @@ function applyHref(role: Role): string {
     </ul>
 
     <div class="openings-cta flex justify-center">
-      <Button href={membershipLive ? "/membership" : "/get-involved"} variant="primary" size="lg" arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button>
+      <Button href={membershipLive ? "/membership" : "/get-involved-new"} variant="primary" size="lg" arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button>
     </div>
 
   </div>
