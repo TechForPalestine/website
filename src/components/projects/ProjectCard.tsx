@@ -70,7 +70,7 @@ export default function ProjectCard({ project, onClick, featured = false }: Proj
           "group w-full cursor-pointer rounded-[20px] border text-left transition-colors duration-150",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
           featured
-            ? "border-brand/30 bg-cream p-8 hover:border-brand/50 hover:bg-[#F5EBE8]"
+            ? "border-butter border-t-2 border-t-brand bg-page p-8 hover:bg-cream"
             : "border-butter bg-sand p-6 hover:border-brand/30 hover:bg-cream",
         ].join(" ")}
         aria-label={`View details for ${project.name}`}

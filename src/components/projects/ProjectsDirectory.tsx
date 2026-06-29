@@ -61,6 +61,9 @@ export default function ProjectsDirectory({
           const tags: Tag[] = data.tags ?? [];
           setProjects(fetched);
           setAvailableTags(tags);
+          window.dispatchEvent(
+            new CustomEvent("projects:loaded", { detail: { count: fetched.length } })
+          );
         }
       } finally {
         setLoading(false);
@@ -139,15 +142,17 @@ export default function ProjectsDirectory({
               {!isFiltering && featuredProjects.length > 0 && (
                 <section aria-label="Featured projects" className="mb-10">
                   <p className="ts-overline mb-4 text-ink-secondary">Featured</p>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {featuredProjects.map((project) => (
-                      <ProjectCard
-                        key={project.id}
-                        project={project}
-                        featured
-                        onClick={handleCardClick}
-                      />
-                    ))}
+                  <div className="rounded-[24px] bg-sand p-5 min-[810px]:p-7">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      {featuredProjects.map((project) => (
+                        <ProjectCard
+                          key={project.id}
+                          project={project}
+                          featured
+                          onClick={handleCardClick}
+                        />
+                      ))}
+                    </div>
                   </div>
                   {mainProjects.length > 0 && (
                     <div className="mb-6 mt-10 h-px w-full bg-ink-divider" />
