@@ -154,6 +154,19 @@ const testimonials = [
     flex: 1 1 300px;
   }
 
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-33.333%); }
+  }
+
+  .marquee-track {
+    animation: marquee-scroll 40s linear infinite;
+  }
+
+  .testimonials-marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .testimonials-header {
       opacity: 1;
@@ -172,6 +185,7 @@ const testimonials = [
       flex-wrap: wrap;
       gap: 1.5rem;
       justify-content: center;
+      animation: none;
     }
     .testimonial-card {
       flex: 1 1 300px;
@@ -195,106 +209,4 @@ const testimonials = [
   document
     .querySelectorAll<HTMLElement>(".testimonials-header")
     .forEach((el) => testimonialsHeaderObs.observe(el));
-
-  // Transform-based infinite scroll — no native scroll limits
-  const marquee = document.querySelector<HTMLElement>(".testimonials-marquee");
-  const track = document.querySelector<HTMLElement>(".marquee-track");
-  if (marquee && track) {
-    const oneSetWidth = track.scrollWidth / 3;
-    let offset = -oneSetWidth; // start at middle set
-    let paused = false;
-    let resumeTimer: ReturnType<typeof setTimeout>;
-    const speed = 0.5;
-
-    function wrap() {
-      if (offset <= -oneSetWidth * 2) offset += oneSetWidth;
-      else if (offset >= 0) offset -= oneSetWidth;
-    }
-
-    function render() {
-      track!.style.transform = `translateX(${offset}px)`;
-    }
-
-    function step() {
-      if (!paused) offset -= speed;
-      wrap();
-      render();
-      requestAnimationFrame(step);
-    }
-
-    // Touch
-    let touchStartX = 0;
-    let touchOffset = 0;
-    marquee.addEventListener("touchstart", (e) => {
-      paused = true;
-      clearTimeout(resumeTimer);
-      touchStartX = e.touches[0].clientX;
-      touchOffset = offset;
-    }, { passive: true });
-
-    marquee.addEventListener("touchmove", (e) => {
-      offset = touchOffset + (e.touches[0].clientX - touchStartX);
-      wrap();
-      render();
-    }, { passive: true });
-
-    marquee.addEventListener("touchend", () => {
-      resumeTimer = setTimeout(() => { paused = false; }, 2000);
-    });
-
-    // Mouse drag with momentum
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragOffset = 0;
-    let velocity = 0;
-    let lastX = 0;
-    let lastTime = 0;
-
-    marquee.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      paused = true;
-      clearTimeout(resumeTimer);
-      dragStartX = e.clientX;
-      dragOffset = offset;
-      lastX = e.clientX;
-      lastTime = performance.now();
-      velocity = 0;
-      e.preventDefault();
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-      const now = performance.now();
-      const dt = now - lastTime;
-      const dx = e.clientX - lastX;
-      if (dt > 0) velocity = dx / dt;
-      lastX = e.clientX;
-      lastTime = now;
-      offset = dragOffset + (e.clientX - dragStartX);
-      wrap();
-      render();
-    });
-
-    window.addEventListener("mouseup", () => {
-      if (!isDragging) return;
-      isDragging = false;
-
-      const fling = () => {
-        if (Math.abs(velocity) > 0.01) {
-          offset += velocity * 16;
-          velocity *= 0.95;
-          wrap();
-          render();
-          requestAnimationFrame(fling);
-        } else {
-          resumeTimer = setTimeout(() => { paused = false; }, 2000);
-        }
-      };
-      requestAnimationFrame(fling);
-    });
-
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      requestAnimationFrame(step);
-    }
-  }
 </script>

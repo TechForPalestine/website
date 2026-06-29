@@ -381,7 +381,7 @@ const darkAssets = [
         <div class="grid grid-cols-1 gap-8 min-[810px]:grid-cols-2">
           {interviews.map((interview) => (
             <div class="interview-card-wrap">
-              <div class="rounded-[20px] overflow-hidden">
+              <div data-lenis-prevent class="rounded-[20px] overflow-hidden">
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${interview.id}`}
                   title={interview.title}

@@ -147,6 +147,14 @@ const canonicalUrl = new URL(
 
         (window as any).__lenis = lenis;
 
+        // Stop Lenis while the native scrollbar is being dragged
+        document.addEventListener("pointerdown", (e) => {
+          if (e.clientX >= document.documentElement.clientWidth) {
+            lenis.stop();
+            window.addEventListener("pointerup", () => lenis.start(), { once: true });
+          }
+        });
+
         function raf(time: number) {
           lenis.raf(time);
           requestAnimationFrame(raf);
