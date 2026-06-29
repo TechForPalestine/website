@@ -23,8 +23,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h1 class="ts-editorial mb-6 text-ink">
             There's a place for you in <span class="text-brand">this work</span>.
           </h1>
-          <p class="ts-body-large mb-10 max-w-[55ch] text-ink-secondary">
-            Join a community of technologists, builders, and advocates working for Palestinian liberation. However you want to contribute, there's a way in.
+          <p class="ts-body-large mb-4 max-w-[55ch] text-ink-secondary">
+            Join our mission-driven community to volunteer, collaborate, and innovate for Palestinian liberation. There are many ways to contribute your skills and passion.
+          </p>
+          <p class="ts-body mb-10 max-w-[55ch] text-ink-secondary">
+            Please read our <a href="https://github.com/techForPalestine/code-of-conduct" class="text-brand underline hover:text-brand-hover">Code of Conduct</a> here.
           </p>
           <div class="flex flex-wrap gap-4">
             <Button
@@ -64,7 +67,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-overline text-ink-secondary">01 / Start here</p>
           </div>
           <ul class="max-w-[860px]">
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="https://techforpalestine.org/discord-invite"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -74,7 +77,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span class="min-w-0">
                   <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Join the Discord community</span>
                   <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Connect with thousands of advocates, volunteers, and project leaders in the movement.
+                    Connect with thousands of pro-Palestine advocates, volunteers, and project leaders in our vibrant Discord server.
                   </span>
                 </span>
                 <svg
@@ -84,14 +87,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
             </li>
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="/ideas-new"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -109,7 +112,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -126,7 +129,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-overline text-ink-secondary">02 / Lend your skills</p>
           </div>
           <ul class="max-w-[860px]">
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="/volunteer-new"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -144,7 +147,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -157,11 +160,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  See open roles
+                  Check out specific roles we're looking for right now!
                 </a>
               </div>
             </li>
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="/mentorship-new"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -169,7 +172,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span class="min-w-0">
                   <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Be a mentor</span>
                   <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Share your expertise with emerging project leaders. Help shape the next generation of Palestinian advocates.
+                    Share your expertise and experience with emerging project leaders. Help shape the next generation of Palestinian advocates.
                   </span>
                 </span>
                 <svg
@@ -179,7 +182,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -196,7 +199,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-overline text-ink-secondary">03 / Build &amp; lead</p>
           </div>
           <ul class="max-w-[860px]">
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="https://techforpalestine.org/project-application-form"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -216,7 +219,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -231,7 +234,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 </a>
               </div>
             </li>
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="/e4p-new"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -239,7 +242,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span class="min-w-0">
                   <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Entrepreneurs for Palestine</span>
                   <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Connect with founders and CEOs who support the Palestinian cause. Share resources and build partnerships.
+                    Connect with other founders and CEOs who support the Palestinian cause. Share resources and build partnerships.
                   </span>
                 </span>
                 <svg
@@ -249,14 +252,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
             </li>
-            <li class="gi-row border-t border-ink-divider">
+            <li class="gi-animate border-t border-ink-divider">
               <a
                 href="/help/hire-new"
                 class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
@@ -274,7 +277,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand transition-transform duration-150 group-hover:translate-x-1 min-[810px]:mt-0"
+                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
                   aria-hidden="true"
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -309,7 +312,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       <div class="mx-auto max-w-[1400px]">
         <div class="gi-animate max-w-[680px]">
           <p class="ts-body-large mb-8 text-ink-secondary">
-            Not sure which path is right for you? We'd love to hear from you.
+            Not sure which option is right for you? Want to learn more about our mission? We'd love to hear from you!
           </p>
           <Button href="/contact-new" variant="ghost" size="md">
             Contact us
@@ -321,89 +324,33 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 </HomeLayout>
 
 <style>
-  /* Section-level entrance */
   .gi-animate {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .gi-animate.visible {
-    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-  }
-
-  /* Row-level stagger entrance */
-  .gi-row {
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-      transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .gi-row.visible {
+  .gi-animate.in-view {
     opacity: 1;
-    transform: translateY(0);
+    translate: none;
   }
-
-  /* No-JS fallback */
-  :global(html.no-js) .gi-animate,
-  :global(html.no-js) .gi-row {
+  :global(html.no-js) .gi-animate {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .gi-animate,
-    .gi-row {
+    .gi-animate {
       opacity: 1;
-      transform: none;
+      translate: none;
       transition: none;
-    }
-    .gi-animate.visible {
-      animation: none;
     }
   }
 </style>
 
 <script>
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Section-level fade-up
-  const sections = document.querySelectorAll<HTMLElement>(".gi-animate");
-  if (!prefersReduced) {
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            sectionObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0 }
-    );
-    sections.forEach((el) => sectionObserver.observe(el));
-  } else {
-    sections.forEach((el) => el.classList.add("visible"));
-  }
-
-  // Row-level stagger — each row reveals independently with a tiny delay
-  const rows = document.querySelectorAll<HTMLElement>(".gi-row");
-  if (!prefersReduced) {
-    const rowObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            // Small stagger relative to siblings
-            const siblings = Array.from(el.parentElement?.querySelectorAll(".gi-row") ?? []);
-            const idx = siblings.indexOf(el);
-            setTimeout(() => el.classList.add("visible"), idx * 60);
-            rowObserver.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0 }
-    );
-    rows.forEach((el) => rowObserver.observe(el));
-  } else {
-    rows.forEach((el) => el.classList.add("visible"));
-  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".gi-animate").forEach((el) => obs.observe(el));
 </script>

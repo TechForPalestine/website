@@ -3,6 +3,7 @@ import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
+import Button from "../components/ui/Button.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
@@ -24,14 +25,14 @@ const board = [
 
 const staff = [
   { name: "Afzal Mangal", role: "Director of Marketing", image: "/images/staff/afzal.jpg" },
-  { name: "Alaa' Odeh", role: "Director of Operations (Interim)", image: "/images/staff/alaa.jpg", objectPosition: "center 20%" },
+  { name: "Alaa' Odeh", role: "Director of Operations (Interim)", image: "/images/staff/alaa.jpg", posClass: "[object-position:center_15%]" },
   { name: "Azza Harara", role: "Director of Volunteering and Recruitment", image: "/images/staff/azza.jpg" },
-  { name: "Cecile Potier", role: "Volunteers and Members Coordinator", image: "/images/staff/cecile.jpeg" },
-  { name: "Iva Gumnishka", role: "Director of Strategic Partnerships & Events", image: "/images/staff/iva.jpg", objectPosition: "center top" },
-  { name: "Kate Kerpez", role: "Director of Development", image: "/images/staff/kate.png", objectPosition: "center top" },
+  { name: "Cecile Potier", role: "Volunteers and Members Coordinator", image: "/images/staff/cecile.jpeg", posClass: "object-top" },
+  { name: "Iva Gumnishka", role: "Director of Strategic Partnerships & Events", image: "/images/staff/iva.jpg", posClass: "object-top" },
+  { name: "Kate Kerpez", role: "Director of Development", image: "/images/staff/kate.png", posClass: "object-top" },
   { name: "Omar Hamayel", role: "Director of Finance", image: "/images/staff/omar.JPG" },
   { name: "Samira Hayat", role: "Project & Teams Operations Manager", image: "/images/staff/samira.jpg" },
-  { name: "Tom Hall", role: "Director of Incubation", image: "/images/staff/tom.jpg", objectPosition: "center 43%" },
+  { name: "Tom Hall", role: "Director of Incubation", image: "/images/staff/tom.jpg", posClass: "[object-position:center_35%]" },
   { name: "Zahid Hanif", role: "Director of Engineering", image: "/images/staff/zahid.jpeg" },
 ];
 ---
@@ -52,15 +53,16 @@ const staff = [
             The people building tech for Palestinian <span class="text-brand">freedom and liberation</span>
           </h1>
           <p class="ts-body-large text-ink-secondary">
-            Meet the dedicated leaders guiding Tech for Palestine's mission.
+            Meet the dedicated leaders guiding Tech for Palestine's mission to support Palestinian liberation through technology and advocacy.
           </p>
         </div>
       </div>
     </section>
 
     <!-- Board of Directors -->
-    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
+        <p class="ts-overline mb-4 text-ink-secondary">Leadership</p>
         <h2 class="ts-heading mb-12 text-ink">Board of Directors</h2>
         <div class="space-y-16">
           {board.map((member) => (
@@ -70,7 +72,7 @@ const staff = [
                   <img
                     src={member.image}
                     alt={member.name}
-                    class="w-full rounded-lg object-cover"
+                    class="w-full rounded-[20px] object-cover"
                     loading="lazy"
                     decoding="async"
                   />
@@ -86,7 +88,7 @@ const staff = [
                   <img
                     src={member.image}
                     alt={member.name}
-                    class="w-full rounded-lg object-cover"
+                    class="w-full rounded-[20px] object-cover"
                     loading="lazy"
                     decoding="async"
                   />
@@ -99,31 +101,54 @@ const staff = [
     </section>
 
     <!-- Our Staff -->
-    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
+        <p class="ts-overline mb-4 text-ink-secondary">The team</p>
         <h2 class="ts-heading mb-12 text-ink">Our Staff</h2>
-        <div class="about-animate grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 min-[810px]:gap-10">
+        <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 min-[810px]:gap-6">
           {staff.map((member) => (
-            <div>
-              <div class="overflow-hidden rounded-lg">
+            <div class="about-animate overflow-hidden rounded-[20px] border border-butter bg-page transition-colors hover:bg-cream">
+              <div class="aspect-[4/4] overflow-hidden">
                 <img
                   src={member.image}
                   alt={member.name}
-                  class={`aspect-[3/4] w-full object-cover${member.objectPosition ? ` [object-position:${member.objectPosition}]` : ""}`}
+                  class={`h-full w-full object-cover${member.posClass ? ` ${member.posClass}` : ""}`}
                   loading="lazy"
                   decoding="async"
                 />
               </div>
-              <p class="ts-body-large mt-4 font-medium text-ink">{member.name}</p>
-              <p class="ts-body mt-1 text-ink-secondary">{member.role}</p>
+              <div class="border-t-2 border-brand px-5 pt-4 pb-5">
+                <p class="ts-overline mb-2 text-ink-secondary">{member.role}</p>
+                <p class="ts-eyebrow text-ink">{member.name}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- Sign-up form -->
+    <!-- Join Our Mission -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="about-animate">
+          <h2 class="ts-heading mb-6 text-ink">Join Our Mission</h2>
+          <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
+            We're always looking for passionate individuals to join our team and contribute to Palestinian liberation through technology.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button href="/volunteer-new" variant="primary" size="md" arrow>
+              Get Involved
+            </Button>
+            <Button href="/contact-new" variant="ghost" size="md" arrow>
+              Contact Us
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up form -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-screen-md">
         <SignUpForm />
       </div>

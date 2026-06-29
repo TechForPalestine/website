@@ -52,15 +52,15 @@ const stats = [
           <h1 class="ts-editorial mb-6 text-ink">
             Tech for Palestine <span class="text-brand">Gathering</span>
           </h1>
-          <div class="mb-6 flex flex-wrap gap-3">
-            <span class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2">
-              <Icon name="mdi:map-marker" class="h-4 w-4 text-brand" />
-              Palestine House
-            </span>
-            <span class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2">
-              <Icon name="mdi:clock-outline" class="h-4 w-4 text-brand" />
-              9:00am - 4:00pm
-            </span>
+          <div class="mb-6 flex flex-wrap gap-6">
+            <div>
+              <p class="ts-overline text-ink-secondary">Venue</p>
+              <p class="ts-label text-ink">Palestine House</p>
+            </div>
+            <div>
+              <p class="ts-overline text-ink-secondary">Time</p>
+              <p class="ts-label text-ink">9:00am - 4:00pm</p>
+            </div>
           </div>
           <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
             A full day event for T4P community members with workshops and networking
@@ -155,25 +155,17 @@ const stats = [
             <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
               <h3 class="ts-heading mb-8 text-ink">London</h3>
               <div class="space-y-4">
-                <div class="flex items-center gap-4 rounded-[16px] bg-sand p-4">
-                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand">
-                    <Icon name="mdi:clock-outline" class="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <p class="ts-label text-ink">9:00am - 4:00pm</p>
-                    <p class="ts-body-small mt-1 text-ink-secondary">Full day event</p>
-                  </div>
+                <div class="rounded-[16px] bg-sand p-4">
+                  <p class="ts-overline text-ink-secondary">Time</p>
+                  <p class="ts-label text-ink">9:00am - 4:00pm</p>
+                  <p class="ts-body-small mt-1 text-ink-secondary">Full day event</p>
                 </div>
-                <div class="flex items-start gap-4 rounded-[16px] bg-sand p-4">
-                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand">
-                    <Icon name="mdi:map-marker" class="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <p class="ts-label text-ink">Palestine House</p>
-                    <p class="ts-body-small mt-1 text-ink-secondary">
-                      113 High Holborn<br />London WC1V 6JQ
-                    </p>
-                  </div>
+                <div class="rounded-[16px] bg-sand p-4">
+                  <p class="ts-overline text-ink-secondary">Address</p>
+                  <p class="ts-label text-ink">Palestine House</p>
+                  <p class="ts-body-small mt-1 text-ink-secondary">
+                    113 High Holborn<br />London WC1V 6JQ
+                  </p>
                 </div>
               </div>
               <div class="mt-6">
@@ -300,11 +292,11 @@ const stats = [
     </section>
 
     <!-- CTA -->
-    <section class="bg-ink-dark px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="lg-animate max-w-[680px]">
-          <h2 class="ts-heading mb-6 text-butter">Ready to join us?</h2>
-          <p class="ts-body-large mb-8 text-butter/70">
+          <h2 class="ts-heading mb-6 text-ink">Ready to join us?</h2>
+          <p class="ts-body-large mb-8 text-ink-secondary">
             Don't miss this opportunity to connect with fellow tech professionals supporting
             Palestine and learn about impactful projects.
           </p>
@@ -332,43 +324,37 @@ const stats = [
   }
 
   .stat-card {
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-      background-color 0.2s ease,
-      border-color 0.2s ease;
+    transition: background-color 0.2s ease;
   }
   .stat-card:hover {
-    transform: translateY(-2px);
     background-color: #FBF2ED;
-    border-color: transparent;
   }
 
   .sponsor-card {
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-      border-color 0.2s ease;
+    transition: background-color 0.2s ease;
   }
   .sponsor-card:hover {
-    transform: translateY(-2px);
-    border-color: transparent;
+    background-color: #FBF2ED;
   }
 
   .lg-animate {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .lg-animate.visible {
-    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  .lg-animate.in-view {
+    opacity: 1;
+    translate: none;
   }
   :global(html.no-js) .lg-animate {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
   @media (prefers-reduced-motion: reduce) {
     .lg-animate {
       opacity: 1;
-      transform: none;
-    }
-    .lg-animate.visible {
-      animation: none;
+      translate: none;
+      transition: none;
     }
   }
 </style>
@@ -380,17 +366,17 @@ const stats = [
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("in-view");
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     );
     sections.forEach((el) => observer.observe(el));
   } else {
     sections.forEach((el) => {
-      el.classList.add("visible");
+      el.classList.add("in-view");
     });
   }
 </script>

@@ -16,7 +16,7 @@ const contacts = [
     heading: "Media & Press",
     description: "Journalists and media professionals can find press resources and contact information on our media page.",
     linkText: "Visit our Media page",
-    href: "/media-new",
+    href: "/media",
     linkType: "page" as const,
   },
   {
@@ -39,13 +39,13 @@ const contacts = [
     <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="about-animate max-w-[65ch]">
+        <div class="contact-animate max-w-[65ch]">
           <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
           <h1 class="ts-editorial mb-6 text-ink">
             Contact Us
           </h1>
           <p class="ts-body-large text-ink-secondary">
-            Have a question, media inquiry, or want to request an endorsement? We'd love to hear from you.
+            Have a question, media inquiry, or want to request an endorsement? We'd love to hear from you. We try to respond within 2 business days.
           </p>
         </div>
       </div>
@@ -53,7 +53,7 @@ const contacts = [
 
     <!-- Contact methods -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
-      <div class="about-animate mx-auto max-w-[800px]">
+      <div class="contact-animate mx-auto max-w-[800px]">
         {contacts.map((item) => (
           <div class="border-t border-ink-divider py-8 last:border-b">
             <h2 class="ts-body-large mb-2 font-medium text-ink">{item.heading}</h2>
@@ -98,30 +98,30 @@ const contacts = [
 </script>
 
 <style>
-  .about-animate {
+  .contact-animate {
     opacity: 0;
     transform: translateY(12px);
   }
-  .about-animate.visible {
+  .contact-animate.visible {
     animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
   }
-  :global(html.no-js) .about-animate {
+  :global(html.no-js) .contact-animate {
     opacity: 1;
     transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .about-animate {
+    .contact-animate {
       opacity: 1;
       transform: none;
     }
-    .about-animate.visible {
+    .contact-animate.visible {
       animation: none;
     }
   }
 </style>
 
 <script>
-  const sections = document.querySelectorAll<HTMLElement>(".about-animate");
+  const sections = document.querySelectorAll<HTMLElement>(".contact-animate");
   if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver(
       (entries) => {

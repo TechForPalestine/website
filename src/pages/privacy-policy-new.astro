@@ -14,7 +14,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   <main class="pt-20">
 
     <!-- Hero + Content -->
-    <section class="bg-page px-6 pt-10 pb-20 min-[810px]:px-10 min-[810px]:pt-14">
+    <section class="bg-page px-6 pt-14 pb-14 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="doc-animate max-w-[65ch] mb-12">
           <p class="ts-overline mb-4 text-ink-secondary">Legal · Tech for Palestine</p>
@@ -25,6 +25,27 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             Last updated August 5, 2025. How we collect, use, and protect your information.
           </p>
         </div>
+    <!-- Table of Contents -->
+    <section class="bg-sand px-6 py-8 min-[810px]:px-10 min-[810px]:py-10">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="doc-animate max-w-[800px]">
+          <p class="ts-overline mb-4 text-ink-secondary">On this page</p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2">
+          <a href="#information-we-collect" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Information We Collect</a>
+          <a href="#how-we-use-your-information" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">How We Use Your Information</a>
+          <a href="#how-we-share-your-information" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">How We Share Your Information</a>
+          <a href="#cookies-and-tracking-technologies" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Cookies</a>
+          <a href="#data-security" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Data Security</a>
+          <a href="#data-retention" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Data Retention</a>
+          <a href="#childrens-privacy" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Children's Privacy</a>
+          <a href="#your-privacy-rights" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Your Rights</a>
+          <a href="#changes-to-this-privacy-policy" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Policy Changes</a>
+          <a href="#contact-us" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
         <div class="max-w-[800px]">
         <article>
 
@@ -47,7 +68,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
             </ul>
             <p class="ts-body text-ink-secondary leading-relaxed">
-              Please read this Privacy Policy carefully. By using our Services, you agree to the collection and use of information as described in this policy. If you have any questions, see the <a href="#contact-us" class="text-brand hover:underline">Contact Us</a> section below.
+              Please read this Privacy Policy carefully to understand our practices. By using our Services, you agree to the collection and use of information as described in this policy. If you do not agree, please do not use the Services. If you have any questions or concerns, see the <a href="#contact-us" class="text-brand hover:underline">Contact Us</a> section below.
             </p>
           </div>
 
@@ -104,6 +125,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
             </ul>
 
+            <p class="ts-body text-ink-secondary leading-relaxed mb-6">
+              You can set your web browser to refuse some or all browser cookies or to alert you when cookies are being used. <strong class="text-ink">However, if you disable or refuse cookies, some parts of our Services may become inaccessible or not function properly.</strong> For more details, see <a href="#cookies-and-tracking-technologies" class="text-brand hover:underline">Cookies and Tracking Technologies</a> below.
+            </p>
+
             <h3 class="ts-subheading text-ink mb-3">Information from Third Parties</h3>
             <ul class="space-y-2 mb-4">
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
@@ -123,6 +148,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span><span class="font-medium text-ink">Public Sources:</span> We might collect information from publicly available sources for outreach or research purposes.</span>
               </li>
             </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mt-4">
+              We treat any personal information obtained from third parties in line with the practices described here, plus any additional restrictions imposed by the source of the data. This Privacy Policy does not cover the practices of third parties who provide information to us; we encourage you to review their policies as well.
+            </p>
           </section>
 
           <section class="border-t border-ink-divider pt-10 mt-10" id="how-we-use-your-information">
@@ -168,6 +196,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span><span class="font-medium text-ink">Other Purposes with Consent:</span> If we intend to use your information for a purpose not described above, we will explain it at the time of collection and, if required by law, obtain your consent.</span>
               </li>
             </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mt-4">
+              We will not use personal information for purposes that are incompatible with the above, unless we obtain your consent or as permitted or required by law. If we ever need to use your data for a new purpose, we will notify you and, if required, seek your permission.
+            </p>
           </section>
 
           <section class="border-t border-ink-divider pt-10 mt-10" id="how-we-share-your-information">
@@ -201,8 +232,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span><span class="font-medium text-ink">Aggregated or De-Identified Data:</span> We may share information that has been aggregated or de-identified so it can no longer be linked back to you.</span>
               </li>
             </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              Importantly, <strong class="text-ink">we do not share personal information with third parties for their own marketing or advertising purposes without your consent.</strong> We will not give or sell your name or contact information to other organizations so they can market to you, unless you agree or request it. California residents have the right to be informed about our practices in this regard — we confirm that we do <em>not</em> disclose personal information to unaffiliated third parties for those parties' direct marketing purposes without consent.
+            </p>
             <p class="ts-body text-ink-secondary leading-relaxed">
-              We do not share personal information with third parties for their own marketing or advertising purposes without your consent. We also do not "sell" or "share" personal information as defined under the California Consumer Privacy Act (CCPA).
+              Additionally, we do <strong class="text-ink">not</strong> "sell" or "share" personal information as those terms are defined under the California Consumer Privacy Act (CCPA) — i.e., we do not exchange personal data for money or other valuable consideration, nor do we share it for cross-context behavioral advertising. Since we do not sell or share personal data in that manner, there is no need for you to "opt-out" of sales. If this ever changes, we will update this policy and provide appropriate opt-out mechanisms.
             </p>
           </section>
 
@@ -233,7 +267,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               <strong class="text-ink">Your choices:</strong> On your first visit, you may see a cookies notice or banner. You can manage cookies through your browser settings — most browsers allow you to refuse new cookies, remove existing cookies, or be notified when new cookies are set. Note that blocking cookies may affect some features of our Services, especially the incubator app login.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed">
-              We currently do not use online advertising networks or behavioral advertising, so you should not see third-party ads on our site that track you.
+              We currently do not use technologies like web beacons or pixels in our emails, except as part of standard analytics (for instance, our email service might tell us if you opened an email newsletter). We do not use online advertising networks or behavioral advertising, so you should not see third-party ads on our site that track you.
             </p>
           </section>
 
@@ -277,6 +311,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span><span class="font-medium text-ink">Backup and Archival:</span> Even after deletion, copies of your data may remain in our backups for a brief period until those backups are cycled out. We aim to incorporate secure deletion practices where possible.</span>
               </li>
             </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mt-4">
+              When we have no ongoing legitimate need to process your personal information, we will either delete it or anonymize it (so it can no longer be associated with you), or if deletion/anonymization is not feasible (for example, because the data is stored in secure backups), we will securely store the data and isolate it from further use until deletion is possible.
+            </p>
           </section>
 
           <section class="border-t border-ink-divider pt-10 mt-10" id="childrens-privacy">
@@ -287,8 +324,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               If we learn that we have inadvertently collected personal data from a child under 13 without parental consent, we will take steps to delete that information as soon as possible. Please contact us immediately if you believe we might have any information from or about a child under 13.
             </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              For minors age 13 to 17: we generally require that individuals be at least 18 to volunteer or participate in our programs without a guardian. If you are between 13 and 17 years old, you should only use our Services and provide personal information with the permission and supervision of a parent or legal guardian. We strongly encourage parents and guardians to educate their children about online safety and to supervise their children's use of websites.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <em>(Note: Because we are a nonprofit, certain laws like the U.S. Children's Online Privacy Protection Act (COPPA) may not directly apply to us. Regardless, we respect children's privacy and follow the practices described above.)</em>
+            </p>
             <p class="ts-body text-ink-secondary leading-relaxed">
-              For minors age 13 to 17: we generally require that individuals be at least 18 to volunteer or participate in our programs without a guardian. We strongly encourage parents and guardians to educate their children about online safety and to supervise their children's use of websites.
+              If you are a parent or guardian and have questions about personal data of your children that may have been collected by us, please contact us. We will be happy to delete such data or take other appropriate actions.
             </p>
           </section>
 
@@ -306,7 +349,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
                 <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                <span><span class="font-medium text-ink">Deletion:</span> You can ask us to delete your personal information. We will honor deletion requests to the extent required by law and technically feasible. We may retain certain information for legal compliance as described above.</span>
+                <span><span class="font-medium text-ink">Deletion:</span> You can ask us to delete your personal information. We will honor deletion requests to the extent required by law and technically feasible. For example, if you no longer want us to hold your data, you may request that we remove it from our systems. Do note there may be exceptions — we might retain certain information for legal compliance, backup systems, or internal purposes (see Data Retention above). We will inform you if any such exception applies.</span>
               </li>
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
                 <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
@@ -314,7 +357,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
                 <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                <span><span class="font-medium text-ink">Opt-Out of Marketing:</span> If at any time you prefer not to receive our newsletter or other marketing emails, you can click the "unsubscribe" link in any promotional email or contact us directly. We will stop sending you non-transactional communications once we process your request.</span>
+                <span><span class="font-medium text-ink">Opt-Out of Marketing:</span> If at any time you prefer not to receive our newsletter or other marketing emails, you have the right to opt out. You can click the "unsubscribe" link in any promotional email or contact us directly requesting removal. Once we process your opt-out request, we will stop sending you non-transactional communications. (Please note that even if you opt out of marketing, we may still send you transactional or relationship messages, such as confirmations of volunteering activities, updates on a project you're involved in, or important notices about our Services.)</span>
               </li>
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
                 <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
@@ -333,7 +376,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <section class="border-t border-ink-divider pt-10 mt-10" id="changes-to-this-privacy-policy">
             <h2 class="ts-heading text-ink mb-4">9. Changes to this Privacy Policy</h2>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              We may update or revise this Privacy Policy from time to time to reflect changes in our practices, technologies, legal requirements, or for other reasons. When we do, we will change the "Last updated" date at the top of this Policy. The updated Privacy Policy will be effective as of the time of posting, or a later date if explicitly stated.
+              We may update or revise this Privacy Policy from time to time to reflect changes in our practices, technologies, legal requirements, or for other reasons. When we do, we will change the "Last updated" date at the top of this Policy. The updated Privacy Policy will be effective as of the time of posting, or a later date if explicitly stated. We encourage you to review this page periodically for the latest information on our privacy practices.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed">
               If we make any <strong class="text-ink">material changes</strong> to this Privacy Policy, we will provide a more prominent notice — such as posting a notice on our website or contacting you via email. Your continued use of the Services after any changes indicates your acknowledgment of the updated Privacy Policy.

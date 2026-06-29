@@ -2,7 +2,7 @@
 import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
-import EventsNew from "../components/events/EventsNew";
+import EventsNewComponent from "../components/events/EventsNew";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
@@ -31,7 +31,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
     <!-- Events list -->
     <section class="bg-page">
-      <EventsNew client:only="react" />
+      <EventsNewComponent client:only="react" />
     </section>
 
   </main>

@@ -36,7 +36,7 @@ const navItems = [
     href: "/get-involved-new",
     children: [
       ...(membershipLive ? [{ label: "Become a Member", href: "/membership" }] : []),
-      { label: "Donate", href: "/donate" },
+      { label: "Donate", href: "/donate-new" },
       { label: "Join the Incubator", href: "https://techforpalestine.org/project-application-form" },
       { label: "Volunteer", href: "/volunteer-new" },
       { label: "Entrepreneurs for Palestine", href: "/e4p-new" },
@@ -47,9 +47,9 @@ const navItems = [
   },
   {
     label: "Events",
-    href: "/events",
+    href: "/events-new",
     children: [
-      { label: "Past Events", href: "/events" },
+      { label: "Past Events", href: "/events-new" },
       { label: "Brussels 2026", href: "https://brussels2026.techforpalestine.org/" },
       { label: "Barcelona 2026", href: "https://barcelona2026.techforpalestine.org/" },
       { label: "Bay Area 2026", href: "https://summit.techforpalestine.org" },
@@ -79,7 +79,7 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   data-always-visible={alwaysVisible ? "true" : undefined}
 >
   <div class="home-navbar-inner mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3 min-[1050px]:px-10">
-    <a href="/" class="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+    <a href="/home-new" class="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
       <img
         src="/logos/logo-dark.webp"
         alt="Tech for Palestine"
@@ -139,7 +139,7 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
 
     <div class="hidden min-[1050px]:block">
       <Button
-        href={membershipLive ? "/membership" : "/donate"}
+        href={membershipLive ? "/membership" : "/donate-new"}
         variant="primary"
         size="md"
         arrow
@@ -152,7 +152,7 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     <!-- Mobile CTA + burger -->
     <div class="flex min-[1050px]:hidden items-center gap-3">
       <Button
-        href={membershipLive ? "/membership" : "/donate"}
+        href={membershipLive ? "/membership" : "/donate-new"}
         variant="primary"
         size="md"
         arrow

@@ -18,7 +18,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="about-animate max-w-[65ch]">
+        <div class="faq-animate max-w-[65ch]">
           <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
           <h1 class="ts-editorial mb-6 text-ink">
             Frequently asked <span class="text-brand">questions</span>
@@ -32,8 +32,21 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
     <!-- FAQ list -->
     <section class="bg-page px-6 pb-20 min-[810px]:px-10">
-      <div class="about-animate mx-auto max-w-[800px]">
+      <div class="faq-animate mx-auto max-w-[800px]">
         <FAQSection client:only="react" />
+      </div>
+    </section>
+
+    <!-- Still have a question? -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="faq-animate mx-auto max-w-[800px]">
+        <p class="ts-body-large text-ink-secondary mb-4">Didn't find the answer you were looking for?</p>
+        <a href="/contact-new" class="ts-label font-medium text-brand inline-flex items-center gap-2 transition-colors hover:text-brand-hover">
+          Contact us
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
       </div>
     </section>
 
@@ -48,30 +61,30 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 </HomeLayout>
 
 <style>
-  .about-animate {
+  .faq-animate {
     opacity: 0;
     transform: translateY(12px);
   }
-  .about-animate.visible {
+  .faq-animate.visible {
     animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
   }
-  :global(html.no-js) .about-animate {
+  :global(html.no-js) .faq-animate {
     opacity: 1;
     transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .about-animate {
+    .faq-animate {
       opacity: 1;
       transform: none;
     }
-    .about-animate.visible {
+    .faq-animate.visible {
       animation: none;
     }
   }
 </style>
 
 <script>
-  const sections = document.querySelectorAll<HTMLElement>(".about-animate");
+  const sections = document.querySelectorAll<HTMLElement>(".faq-animate");
   if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver(
       (entries) => {

@@ -24,14 +24,17 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h1 class="ts-editorial mb-6 text-ink">
             Turn your idea for Palestine into something that <span class="text-brand">scales</span>
           </h1>
+          <p class="ts-body-large mb-4 max-w-[60ch] text-ink-secondary">
+            The Tech for Palestine incubator supports initiatives for Palestine, by getting them off the ground and helping them scale up. Our goal is to create a broad and diverse set of initiatives for Palestine that are able to educate the entire world about Palestine, and to address Hasbara and Zionism wherever it takes hold.
+          </p>
           <p class="ts-body-large mb-10 max-w-[60ch] text-ink-secondary">
-            The Tech for Palestine Incubator supports early-stage advocacy projects with mentorship, volunteers, funding, and a network that's launched 60+ initiatives.
+            We take on a limited number of projects to support with our expertise and resources.
           </p>
           <div class="flex flex-wrap gap-4">
             <Button href="/project-application-form" variant="primary" size="md" arrow>
               Apply to the incubator
             </Button>
-            <Button href="/ideas" variant="ghost" size="md" arrow>
+            <Button href="/ideas-new" variant="ghost" size="md" arrow>
               Browse project ideas
             </Button>
           </div>
@@ -43,6 +46,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="incubator-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">Why we exist</p>
           <h2 class="ts-heading mb-6 text-ink">Our theory of change</h2>
           <p class="ts-body-large max-w-[75ch] text-ink-secondary">
             Thousands of high-impact, pro-Palestinian advocacy projects are needed to counter the massive flood of anti-Palestinian propaganda, especially in the west. We started a project incubator because we saw highly motivated people with great ideas struggling to bring them to life. Our purpose is to provide the support, expertise, and connections that turn good ideas into projects with real reach.
@@ -55,6 +59,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="incubator-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">What you get</p>
           <h2 class="ts-heading mb-6 text-ink">What the incubator provides</h2>
           <ul class="grid grid-cols-1 gap-x-12 gap-y-4 min-[810px]:grid-cols-2">
             <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
@@ -87,7 +92,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </li>
             <li class="ts-body-large flex items-start gap-3 text-ink-secondary">
               <Icon name="mdi:school-outline" class="mt-1 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
-              <span><span class="font-medium text-ink">Education</span> through seminars on marketing, go-to-market strategy, technical projects, and branding</span>
+              <span><span class="font-medium text-ink">Education</span> through seminars on marketing, sales, go-to-market strategy, technical projects, and T4P branding</span>
             </li>
           </ul>
         </div>
@@ -98,6 +103,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="incubator-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">Who it's for</p>
           <h2 class="ts-heading mb-6 text-ink">Who the incubator is for</h2>
           <p class="ts-body-large max-w-[75ch] text-ink-secondary">
             Any early-stage project that directly or indirectly advocates for Palestine, where we believe you can have impact and scale. Our projects often work on <span class="font-medium text-ink">scaling boycotts</span>, <span class="font-medium text-ink">protest tech</span>, <span class="font-medium text-ink">tech industry divestment</span>, <span class="font-medium text-ink">media bias</span>, <span class="font-medium text-ink">reaching new audiences</span>, <span class="font-medium text-ink">Silicon Valley partnerships</span>, <span class="font-medium text-ink">AI bias</span>, and <span class="font-medium text-ink">exposing hasbara</span>.
@@ -105,6 +111,24 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <p class="ts-body-large mt-4 max-w-[75ch] text-ink-secondary">
             Whether you're just getting started or have an experienced team looking for connections and strategic advice, the incubator is built to meet you where you are.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How the Incubator can help you -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="incubator-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">How we help</p>
+          <h2 class="ts-heading mb-6 text-ink">How the Incubator can help you</h2>
+          <div class="space-y-5 max-w-[75ch]">
+            <p class="ts-body-large text-ink-secondary">
+              Many projects for Palestine are started by advocates who have a good idea, but don't yet know how to execute on it. We help support you on your journey, using our knowledge of building scalable projects, working with volunteers, the pro-Palestine ecosystem, and using our platform and network to support your work.
+            </p>
+            <p class="ts-body-large text-ink-secondary">
+              More experienced teams may find our connections and platform valuable, as well as our strategic advice on how to tailor what you're building for the right niche to start, and our knowledge of what exists already in the ecosystem, and how to partner with them.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -126,6 +150,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="incubator-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">Our expectations</p>
           <h2 class="ts-heading mb-6 text-ink">What we expect</h2>
           <ul class="space-y-4 max-w-[75ch]">
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
@@ -145,9 +170,23 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               <span><span class="font-medium text-ink">Flexible participation</span>: if the incubator no longer fits your needs, membership may be removed without hard feelings</span>
             </li>
           </ul>
-          <p class="ts-body mt-8 max-w-[75ch] text-ink-secondary">
-            We don't require T4P branding, ownership of your work, daily meetings, or use of specific tools. Use whatever works best for your project.
-          </p>
+          <div class="mt-8">
+            <p class="ts-overline mb-4 text-ink-secondary">What we don't require or expect</p>
+            <ul class="grid grid-cols-1 gap-4 min-[810px]:grid-cols-3">
+              <li class="rounded-lg border border-ink-divider bg-sand px-5 py-4">
+                <p class="ts-label mb-1 font-medium text-ink">No Daily Meetings</p>
+                <p class="ts-body text-ink-secondary">We don't require daily or recurring meetings. Engage through office hours on your own schedule.</p>
+              </li>
+              <li class="rounded-lg border border-ink-divider bg-sand px-5 py-4">
+                <p class="ts-label mb-1 font-medium text-ink">No T4P Ownership</p>
+                <p class="ts-body text-ink-secondary">Your project remains yours. We don't take ownership of your work or require T4P branding.</p>
+              </li>
+              <li class="rounded-lg border border-ink-divider bg-sand px-5 py-4">
+                <p class="ts-label mb-1 font-medium text-ink">Flexible Tools</p>
+                <p class="ts-body text-ink-secondary">Use whatever tools work best for your project. We don't require specific platforms or workflows.</p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -156,6 +195,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="incubator-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">The process</p>
           <h2 class="ts-heading mb-6 text-ink">How to apply</h2>
           <ol class="space-y-4 max-w-[75ch] list-none">
             <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
@@ -168,11 +208,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </li>
             <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
               <span class="ts-label shrink-0 text-brand">3</span>
-              <span><span class="font-medium text-ink">Interview</span>: a 30-minute call focusing on the impact you intend to have and how you plan to get there. No slides needed.</span>
+              <span><span class="font-medium text-ink">Interview</span>: a 30-minute call focusing on the impact you intend to have and how you plan to get there. No slides needed. Interviews are very direct and aim to push you on your understanding of the problem and the impact you might have.</span>
             </li>
             <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
               <span class="ts-label shrink-0 text-brand">4</span>
-              <span><span class="font-medium text-ink">Decision</span>: we aim to notify all applicants within 10 days of application. Interviews and decisions happen twice weekly.</span>
+              <span><span class="font-medium text-ink">Decision</span>: we aim to notify all applicants within 10 days of application. Interviews and decisions happen twice weekly. In some cases we may ask more questions after the interview.</span>
             </li>
             <li class="ts-body-large flex items-baseline gap-4 text-ink-secondary">
               <span class="ts-label shrink-0 text-brand">5</span>
@@ -197,13 +237,13 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </div>
             <div class="py-8">
               <p class="ts-body-large mb-4 text-ink-secondary">Want to lead a project but need inspiration?</p>
-              <Button href="/ideas" variant="ghost" size="md" arrow>
+              <Button href="/ideas-new" variant="ghost" size="md" arrow>
                 Browse project ideas
               </Button>
             </div>
             <div class="pt-8">
               <p class="ts-body-large mb-4 text-ink-secondary">Want to contribute your skills to existing projects?</p>
-              <Button href="/volunteer" variant="ghost" size="md" arrow>
+              <Button href="/volunteer-new" variant="ghost" size="md" arrow>
                 Register as a volunteer
               </Button>
             </div>

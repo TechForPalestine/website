@@ -24,8 +24,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <h1 class="ts-editorial mb-6 text-ink">
               Let's make tech a driving force for Palestinian <span class="text-brand">freedom and liberation</span>
             </h1>
-            <p class="ts-body-large mb-10 max-w-[75ch] text-ink-secondary">
-              Technology should disrupt the status quo, not serve it.
+            <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
+              Technology should disrupt the status quo — not serve it.
+            </p>
+            <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
+              For decades, the narrative about Palestine has been shaped by selective historical accounts and an occupying force that restricts access to the reality on the ground.
+            </p>
+            <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+              The community at Tech for Palestine is shifting the conversation towards equality and justice, by cultivating a garden of projects and services that shut down genocidal speech, enable people to speak up for Palestinian freedom, scale Palestinian activism with technology, and cultivate fierce advocates for Palestine within the Tech community.
             </p>
             <div class="flex flex-wrap gap-4">
               <Button href="/project" variant="primary" size="md" arrow>
@@ -113,6 +119,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       <div class="mx-auto max-w-[1400px]">
         <div class="about-animate grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-[1fr_280px] min-[810px]:gap-16">
           <div>
+            <p class="ts-overline mb-4 text-ink-secondary">Founder</p>
             <h2 class="ts-heading mb-6 text-ink">Our Founder</h2>
             <p class="ts-body-large max-w-[75ch] text-ink-secondary">
               Paul Biggar is a tech founder and software engineer. He founded Tech For Palestine,
@@ -128,7 +135,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <img
               src="/images/new-homepage/why/paul.webp"
               alt="Paul Biggar, founder of Tech for Palestine"
-              class="w-full rounded-lg object-cover"
+              class="w-full rounded-[20px] border border-butter object-cover"
               loading="lazy"
               decoding="async"
             />
@@ -141,6 +148,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="about-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">Our mission</p>
           <h2 class="ts-heading mb-6 text-ink">What we do</h2>
           <p class="ts-body-large mb-6 max-w-[75ch] text-ink-secondary">
             We empower a global community of skilled tech professionals to unite in their
@@ -168,6 +176,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="about-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">Our vision</p>
           <h2 class="ts-heading mb-6 text-ink">What we want</h2>
           <ul class="space-y-6 max-w-[75ch]">
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
@@ -191,6 +200,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="about-animate">
+          <p class="ts-overline mb-4 text-ink-secondary">Our approach</p>
           <h2 class="ts-heading mb-6 text-ink">How we work</h2>
           <ul class="mb-10 space-y-3 max-w-[75ch]">
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
@@ -206,7 +216,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               We create a community of pro-Palestinian techies to get involved in causes they believe in and help Palestinians get hired
             </li>
           </ul>
-          <Button href="/projects" variant="primary" size="md" arrow>
+          <Button href="/projects-new" variant="primary" size="md" arrow>
             Learn more about our Projects
           </Button>
         </div>

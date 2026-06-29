@@ -14,7 +14,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   <main class="pt-20">
 
     <!-- Hero + Content -->
-    <section class="bg-page px-6 pt-10 pb-20 min-[810px]:px-10 min-[810px]:pt-14">
+    <section class="bg-page px-6 pt-14 pb-14 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="doc-animate max-w-[65ch] mb-12">
           <p class="ts-overline mb-4 text-ink-secondary">Legal · Tech for Palestine</p>
@@ -25,6 +25,30 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             Last updated August 5, 2025. By using our services, you agree to these terms.
           </p>
         </div>
+    <!-- Table of Contents -->
+    <section class="bg-sand px-6 py-8 min-[810px]:px-10 min-[810px]:py-10">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="doc-animate max-w-[800px]">
+          <p class="ts-overline mb-4 text-ink-secondary">On this page</p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2">
+          <a href="#acceptance-of-terms" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Acceptance</a>
+          <a href="#eligibility" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Eligibility</a>
+          <a href="#user-accounts-and-registration" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Accounts</a>
+          <a href="#acceptable-use-policy" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Acceptable Use</a>
+          <a href="#user-content-and-submissions" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">User Content</a>
+          <a href="#intellectual-property-rights" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Intellectual Property</a>
+          <a href="#third-party-links-and-services" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Third Parties</a>
+          <a href="#termination-and-suspension" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Termination</a>
+          <a href="#disclaimers-of-warranties" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Disclaimers</a>
+          <a href="#limitation-of-liability" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Liability</a>
+          <a href="#indemnification" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Indemnification</a>
+          <a href="#general-provisions" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">General</a>
+          <a href="#contact-information" class="ts-body-small text-brand hover:text-brand-hover hover:underline transition-colors">Contact</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
         <div class="max-w-[800px]">
         <article>
 
@@ -36,7 +60,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               By accessing or using our Services, <strong class="text-ink">you agree to be bound by these Terms</strong> as well as our <a href="/privacy-policy-new" class="text-brand hover:underline">Privacy Policy</a> (which is incorporated herein by reference). If you do not agree with any part of these Terms or our Privacy Policy, you must not use our Services.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed">
-              Please read these Terms carefully. They constitute a legally binding agreement between you (the user of our Services) and Tech for Palestine. If you are using the Services on behalf of an organization or entity, you represent that you have the authority to bind that organization to these Terms.
+              Please read these Terms carefully. They constitute a legally binding agreement between you (the user of our Services) and Tech for Palestine. Throughout these Terms, "you" may be referred to as the "User". If you are using the Services on behalf of an organization or entity, you represent that you have the authority to bind that organization to these Terms.
             </p>
           </div>
 
@@ -48,8 +72,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               We may also ask you to signify agreement to these Terms by clicking "Accept" or "Agree" (for example, when registering an account). Even if we do not do so, your continued use of the Services constitutes acceptance.
             </p>
-            <p class="ts-body text-ink-secondary leading-relaxed">
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               <strong class="text-ink">Supplemental terms:</strong> In certain cases, additional terms or guidelines may apply to specific features or activities. Any supplemental terms will be disclosed to you in connection with the relevant Service and are incorporated into these Terms by reference. In the event of a conflict, the supplemental terms will prevail for the specific service they apply to.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              These Terms apply whether you are a visitor browsing the public website or a registered user (such as an incubator participant or volunteer with an account).
             </p>
           </section>
 
@@ -75,7 +102,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               <strong class="text-ink">3.1 Account Creation:</strong> Some parts of our Services may require you to create an account. If you register, you agree to provide accurate, current, and complete information and to update it if it changes.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              <strong class="text-ink">3.2 Account Security:</strong> You are responsible for maintaining the confidentiality of your account credentials. You must not share your password with others. Notify us immediately at <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a> if you suspect unauthorized use of your account.
+              <strong class="text-ink">3.2 Account Security:</strong> You are responsible for maintaining the confidentiality of your account credentials. You must not share your password with others. You agree to notify us immediately at <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a> if you suspect any unauthorized use of your account or any other breach of security. We are not liable for any loss or damage arising from your failure to safeguard your credentials or comply with this section.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               <strong class="text-ink">3.3 User Responsibilities:</strong> When you create an account, you agree to:
@@ -98,6 +125,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 If you provide personal data of others, ensure you have obtained their consent to share that information with us.
               </li>
             </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We reserve the right to suspend or terminate your account (and refuse any current or future use of the Services) if we determine, in our sole discretion, that you have violated any provision of these Terms or that your account information is false, misleading, or out-of-date.
+            </p>
           </section>
 
           <section class="border-t border-ink-divider pt-10 mt-10" id="acceptable-use-policy">
@@ -143,8 +173,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span><span class="font-medium text-ink">Disruption:</span> Engaging in any conduct that restricts or inhibits anyone's use or enjoyment of the Services.</span>
               </li>
             </ul>
-            <p class="ts-body text-ink-secondary leading-relaxed">
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               Violation of the above may result in <strong class="text-ink">immediate termination or suspension</strong> of your account or access to the Services, and may also expose you to civil or criminal penalties.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              These examples are not exhaustive. We reserve the right to determine, in our sole discretion, what conduct is inappropriate or prohibited on the Services.
             </p>
           </section>
 
@@ -171,13 +204,13 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
             </ul>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              <strong class="text-ink">5.2 License Grant:</strong> By submitting User Content, you grant Tech for Palestine a non-exclusive, worldwide, royalty-free license to use, reproduce, distribute, and display your content <strong class="text-ink">solely for the purpose of operating and providing the Services</strong> and fulfilling our mission. We will not use your content for commercial purposes unrelated to our nonprofit mission, and we will not sell your content to third parties.
+              <strong class="text-ink">5.2 License Grant:</strong> By submitting User Content, you grant Tech for Palestine a non-exclusive, worldwide, royalty-free, sublicensable (as needed to provide the Services, e.g. to our cloud hosting providers), and transferable license to use, reproduce, distribute, and display your content <strong class="text-ink">solely for the purpose of operating and providing the Services</strong> and fulfilling our mission. For example, if you post a project description on a forum visible to other program participants, we have the right to display it to those users; if you upload a document for an application, we may copy it to review it and share it internally with our selection committee. We will not use your content for commercial purposes unrelated to our nonprofit mission, and we will not sell your content to third parties. Any use of your content for publicity or promotional purposes will require your separate opt-in consent. This license to your content ends when you delete the content from our Services, except to the extent it has been shared with others as part of the Service or archived in our backups (in which case we will delete in accordance with our retention policies).
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               <strong class="text-ink">5.3 No Compensation:</strong> Tech for Palestine is not obligated to provide any compensation for User Content. Any contribution of content is purely voluntary.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              <strong class="text-ink">5.4 Monitoring:</strong> We reserve the right to review, screen, or delete any User Content at any time, including if we believe it violates these Terms.
+              <strong class="text-ink">5.4 Monitoring and Enforcement:</strong> We reserve the right to review, screen, or delete any User Content at any time, including if we believe it violates these Terms. We have the right to remove or disable access to any User Content for any or no reason, including if we, in our discretion, consider it objectionable or in violation of these Terms. We may also take action against you or your account for violation of our rules (see Section 8 on Termination).
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               <strong class="text-ink">5.5 Backups:</strong> You are encouraged to keep backups of your own content. We are not responsible for lost or unrecoverable User Content.
@@ -203,7 +236,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
             </ul>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              <strong class="text-ink">6.2 License to You:</strong> We grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Services for your <strong class="text-ink">personal, non-commercial use</strong> in accordance with these Terms. Under this license, you must not copy, modify, distribute, publish, or create derivative works of our content without prior consent, nor use our trademarks without authorization.
+              <strong class="text-ink">6.2 License to You:</strong> We grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Services for your <strong class="text-ink">personal, non-commercial use</strong> in accordance with these Terms. Under this license, you must not: copy, reproduce, or distribute our content; modify or create derivative works; remove or obscure any copyright, trademark, or other proprietary notices from the content; use any of our content for commercial purposes without permission; or use our trademarks without authorization. If you wish to request permission for uses beyond what this license allows (for example, to use an article or image from our site in a publication), please contact us. We often grant permission for educational or non-profit use, but you must obtain it explicitly.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               <strong class="text-ink">6.3 User Content:</strong> These Terms do not grant us ownership of your User Content (see Section 5). However, all User Content is subject to the license you granted us and may be removed if it infringes rights or violates these Terms.
@@ -216,7 +249,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <section class="border-t border-ink-divider pt-10 mt-10" id="third-party-links-and-services">
             <h2 class="ts-heading text-ink mb-4">7. Third-Party Links and Services</h2>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              Our Services may contain links to third-party websites or services not owned or controlled by Tech for Palestine.
+              Our Services may contain links to third-party websites or services not owned or controlled by Tech for Palestine. For example, our site might link to our social media pages, to news articles, to partner organization sites, or to donation/payment processing services.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               <strong class="text-ink">7.1 No Endorsement or Control:</strong> These links are provided for convenience only. Tech for Palestine does not endorse or control third-party websites or services. When you leave our site, <strong class="text-ink">these Terms and our Privacy Policy no longer apply</strong>; the third party's terms govern.
@@ -227,6 +260,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-body text-ink-secondary leading-relaxed">
               <strong class="text-ink">7.3 No Liability:</strong> You agree that Tech for Palestine will not be liable for any loss or damage relating to your dealings with third parties found on or through our Services. Use third-party links and services at your own risk.
             </p>
+            <p class="ts-body text-ink-secondary leading-relaxed">
+              We encourage you to read the terms of use and privacy policies of any third-party sites or services that you visit or use.
+            </p>
           </section>
 
           <section class="border-t border-ink-divider pt-10 mt-10" id="termination-and-suspension">
@@ -235,10 +271,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               <strong class="text-ink">8.1 By You:</strong> You may stop using our Services at any time. If you have an account, you can request deletion by contacting us.
             </p>
             <p class="ts-body text-ink-secondary leading-relaxed mb-4">
-              <strong class="text-ink">8.2 By Us:</strong> We reserve the right to suspend or terminate your access at our sole discretion if we believe you have violated these Terms, created legal exposure for us, or for other operational reasons. We will provide reasonable notice when feasible, except where immediate action is necessary.
+              <strong class="text-ink">8.2 By Us:</strong> We reserve the right to suspend or terminate your access at our sole discretion if we have reason to believe: (a) you have violated these Terms or any applicable law; (b) you create risk or possible legal exposure for us; (c) our provision of the Services to you is no longer commercially viable or feasible; or (d) for any other reason including prolonged inactivity. We will provide reasonable notice when feasible, except where immediate termination is necessary to prevent abuse, fraud, or risk to others. We also reserve the right to remove or modify the Services (or any part thereof) at any time, temporarily or permanently. For example, if you seriously or repeatedly violate our Acceptable Use Policy (Section 4), we may suspend or delete your account and prevent you from using the Services. If we terminate for a breach of these Terms, you are not entitled to any compensation or remedy.
             </p>
-            <p class="ts-body text-ink-secondary leading-relaxed">
-              <strong class="text-ink">8.3 Effect of Termination:</strong> Upon termination, your right to use the Services will immediately cease. We may delete your account data in accordance with our Privacy Policy. Provisions of these Terms that by their nature should survive termination — including Intellectual Property, Disclaimers, Limitation of Liability, and Indemnification — will remain in effect.
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">8.3 Effect of Termination:</strong> Upon termination, your right to use the Services will immediately cease. You should ensure that you have saved or backed up any information you wish to keep prior to closing your account. We may delete your account data in accordance with our Privacy Policy. Provisions of these Terms that by their nature should survive termination — including Intellectual Property, Disclaimers, Limitation of Liability, and Indemnification — will remain in effect.
             </p>
           </section>
 
@@ -291,7 +327,17 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
                 Any transactions or relationships between you and any third party in connection with the Services.
               </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Any other matter relating to the Services.
+              </li>
             </ul>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">Nature of claims:</strong> The limitations above apply to all types of claims, whether arising from breach of contract, breach of warranty, tort (including negligence), product liability, or otherwise, and even if a Released Party has been advised of the possibility of such damages.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              <strong class="text-ink">No Liability for User Conduct or Third Parties:</strong> You specifically acknowledge that we are not liable for the defamatory, offensive, or illegal conduct of any third party or other user, and that the risk of harm or damage from the foregoing rests entirely with you.
+            </p>
             <p class="ts-body text-ink-secondary leading-relaxed">
               <strong class="text-ink">Cap on Liability:</strong> In no event shall total liability exceed the greater of (a) <strong class="text-ink">$100 USD</strong>, or (b) the total amount of fees you paid to us for use of the Services in the 6 months prior to the claim. Some jurisdictions do not allow certain limitations, so some of the above may not apply to you.
             </p>
@@ -309,6 +355,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               </li>
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
                 <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                Your willful misconduct.
+              </li>
+              <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
                 Any User Content you submit that infringes third-party rights or causes harm.
               </li>
               <li class="ts-body text-ink-secondary flex items-baseline gap-3">
@@ -320,8 +370,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 Unauthorized use of the Services with your credentials resulting from your failure to maintain their confidentiality.
               </li>
             </ul>
-            <p class="ts-body text-ink-secondary leading-relaxed">
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
               This indemnification obligation survives any termination of your account or of the Services.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We reserve the right, at our own expense, to assume the exclusive defense and control of any matter otherwise subject to indemnification by you, in which event you will cooperate with us in asserting any available defenses.
+            </p>
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              You agree not to settle any such matter without our prior written consent. We will use reasonable efforts to notify you of any such claim, action, or proceeding upon becoming aware of it.
             </p>
           </section>
 
@@ -383,8 +439,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a>
               </p>
             </div>
-            <p class="ts-body text-ink-secondary leading-relaxed">
-              We value our community and welcome feedback. Thank you for being a part of our mission and for abiding by these Terms.
+            <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+              We value our community and welcome feedback. If you're unsure about any aspect of these Terms or how they apply to you, please contact us. Your understanding and cooperation help us create a safe and productive environment for everyone. Thank you for being a part of our mission and for abiding by these Terms!
             </p>
           </section>
 

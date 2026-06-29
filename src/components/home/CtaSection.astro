@@ -8,10 +8,10 @@ interface Props {
 const { membershipLive = false } = Astro.props;
 
 const amounts = [
-  { label: "$25", href: "/donate?amount=25" },
-  { label: "$50", href: "/donate?amount=50" },
-  { label: "$100", href: "/donate?amount=100" },
-  { label: "Custom", href: "/donate?amount=custom" },
+  { label: "$25", href: "/donate-new?amount=25" },
+  { label: "$50", href: "/donate-new?amount=50" },
+  { label: "$100", href: "/donate-new?amount=100" },
+  { label: "Custom", href: "/donate-new?amount=custom" },
 ];
 ---
 
@@ -61,7 +61,7 @@ const amounts = [
           T4P is a 501(c)(3). Donations are tax deductible in the US.
         </p>
         <p class="ts-body-small mt-2 text-page/50">
-          <a href="/donate?variant=validaid" class="text-brand-light hover:underline inline-flex items-center min-h-[44px]" aria-label="Donate in the UK with Gift Aid">Click here</a> to donate in the UK with Gift Aid.
+          <a href="/donate-new?variant=validaid" class="text-brand-light hover:underline inline-flex items-center min-h-[44px]" aria-label="Donate in the UK with Gift Aid">Click here</a> to donate in the UK with Gift Aid.
         </p>
       </div>
 

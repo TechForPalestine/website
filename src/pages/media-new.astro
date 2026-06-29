@@ -28,6 +28,7 @@ const articles = [
     publication: "TechCrunch",
     date: "Jan 2024",
     headline: "Tech for Palestine launches to provide tools to help support Palestinians",
+    description: "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
     url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
   },
   {
@@ -52,18 +53,21 @@ const articles = [
     publication: "Palestine Chronicle",
     date: "Jan 2024",
     headline: "'Tech for Palestine' Aims to Boost Global Palestinian Advocacy",
+    description: "Focus on how the initiative empowers tech workers to speak up for Palestine.",
     url: "https://www.palestinechronicle.com/tech-for-palestine-aims-to-boost-global-palestinian-advocacy/",
   },
   {
     publication: "The Daily Star",
     date: "Jan 2024",
     headline: "'Tech for Palestine' Initiative Launched to Support Palestinians",
+    description: "Reporting on the launch and global reach of the Tech for Palestine movement.",
     url: "https://www.thedailystar.net/tech-startup/news/tech-palestine-initiative-launched-support-palestinians-3510791",
   },
   {
     publication: "Muslim Tech Wire",
     date: "Jan 2024",
     headline: "Tech for Palestine — A Global Call",
+    description: "Coverage of the initiative's mission to support Palestine through open-source tools.",
     url: "https://muslimtechwire.com/tech-for-palestine-launches",
   },
   {
@@ -142,15 +146,18 @@ const darkAssets = [
           >
             media@techforpalestine.org
           </a>
-          <p class="ts-body mt-3 text-ink-secondary">For press inquiries, interviews, or media requests.</p>
+          <p class="ts-body mt-3 text-ink-secondary">For press inquiries, interviews, or media requests, please contact:</p>
         </div>
 
         <!-- Press kit intro -->
         <div class="media-animate mt-12 min-[810px]:mt-16 border-t border-ink-divider pt-12 min-[810px]:pt-16">
           <p class="ts-overline mb-4 text-ink-secondary">For media</p>
           <h2 class="ts-heading text-ink mb-6">Press kit</h2>
-          <p class="ts-body-large text-ink-secondary max-w-[65ch] mb-8">
+          <p class="ts-body-large text-ink-secondary max-w-[65ch] mb-4">
             Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation. Our community spans thousands of volunteers, engineers, designers, and advocates worldwide. Use the assets below in coverage, attribution, and partner materials.
+          </p>
+          <p class="ts-body text-ink-secondary max-w-[65ch] mb-8">
+            Tech for Palestine ("T4P") is a coalition of thousands of founders, engineers, product marketers, investors and other professionals who are working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine. We support projects — whether collections of individuals, registered non-profits, or even companies — whose mission helps Palestine, especially advocacy groups building technical products or in the tech space.
           </p>
           <div class="flex flex-wrap gap-4">
             <Button href="/tech_for_palestine_press_kit.pdf" variant="primary" size="md" arrow>
@@ -202,14 +209,14 @@ const darkAssets = [
 
           <!-- Dark logo panel -->
           <div class="rounded-[20px] bg-ink-dark px-6 py-8 min-[810px]:px-8 mb-6">
-            <p class="ts-overline mb-6 text-white/40">Dark variants · for use on dark backgrounds</p>
+            <p class="ts-overline mb-6 text-page/40">Dark variants · for use on dark backgrounds</p>
             <ul class="grid grid-cols-2 gap-3 list-none p-0">
               {darkAssets.map((asset) => (
                 <li>
                   <a
                     href={asset.file}
                     download
-                    class="dark-asset-tile group relative block rounded-[12px] border border-white/10 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    class="dark-asset-tile group relative block rounded-[12px] border border-page/10 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                   >
                     <div class="flex items-center justify-center p-3 h-36">
                       <img
@@ -220,11 +227,11 @@ const darkAssets = [
                         decoding="async"
                       />
                     </div>
-                    <div class="px-3 py-2 border-t border-white/10">
-                      <span class="ts-body-small text-white/60">{asset.label}</span>
+                    <div class="px-3 py-2 border-t border-page/10">
+                      <span class="ts-body-small text-page/60">{asset.label}</span>
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center bg-white/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" aria-hidden="true">
-                      <span class="ts-label text-white flex items-center gap-2">
+                    <div class="absolute inset-0 flex items-center justify-center bg-page/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" aria-hidden="true">
+                      <span class="ts-label text-page flex items-center gap-2">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
                         </svg>
@@ -264,7 +271,7 @@ const darkAssets = [
       <div class="mx-auto max-w-[1400px]">
 
         <!-- Publication logos -->
-        <div class="press-logos border-t border-b border-ink-divider py-8 mb-12 min-[810px]:mb-16">
+        <div class="media-animate border-t border-b border-ink-divider py-8 mb-12 min-[810px]:mb-16">
           <ul
             class="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 list-none p-0 w-full"
             role="list"
@@ -290,7 +297,7 @@ const darkAssets = [
         </div>
 
         <!-- Lead story -->
-        <div class="lead-card-wrap mb-8 min-[810px]:mb-10">
+        <div class="media-animate mb-8 min-[810px]:mb-10">
           <a
             href={leadArticle.url}
             target="_blank"
@@ -311,7 +318,6 @@ const darkAssets = [
               <span class="ts-label flex items-center gap-2 text-brand whitespace-nowrap min-[810px]:self-end">
                 Read article<span class="sr-only"> (opens in new tab)</span>
                 <svg
-                  class="lead-arrow"
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
@@ -333,7 +339,7 @@ const darkAssets = [
           role="list"
         >
           {articles.map((article, i) => (
-            <li class="press-card-wrap flex" data-i={i}>
+            <li class="media-animate flex">
               <a
                 href={article.url}
                 target="_blank"
@@ -345,11 +351,13 @@ const darkAssets = [
                   <span class="mx-1.5" aria-hidden="true">·</span>
                   {article.date}
                 </p>
-                <h3 class="ts-subheading text-ink flex-1 leading-snug">{article.headline}</h3>
+                <h3 class="ts-subheading text-ink leading-snug">{article.headline}</h3>
+                {article.description && (
+                  <p class="ts-body-small text-ink-secondary mt-2 flex-1">{article.description}</p>
+                )}
                 <span class="ts-label mt-6 flex items-center gap-2 text-brand">
                   Read article<span class="sr-only"> (opens in new tab)</span>
                   <svg
-                    class="press-arrow"
                     width="14"
                     height="14"
                     viewBox="0 0 24 24"
@@ -380,7 +388,7 @@ const darkAssets = [
 
         <div class="grid grid-cols-1 gap-8 min-[810px]:grid-cols-2">
           {interviews.map((interview) => (
-            <div class="interview-card-wrap">
+            <div class="media-animate">
               <div data-lenis-prevent class="rounded-[20px] overflow-hidden">
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${interview.id}`}
@@ -422,61 +430,32 @@ const darkAssets = [
 </HomeLayout>
 
 <style>
-  /* Section-level fade-up */
   .media-animate {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .media-animate.visible {
-    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-  }
-
-  /* Logo row */
-  .press-logos {
-    opacity: 0;
-    translate: 0 16px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
-      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
-  }
-  .press-logos.in-view {
+  .media-animate.in-view {
     opacity: 1;
     translate: none;
   }
-
-  /* Lead story card */
-  .lead-card-wrap {
-    opacity: 0;
-    translate: 0 20px;
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.05s,
-      translate 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.05s;
-  }
-  .lead-card-wrap.in-view {
+  :global(html.no-js) .media-animate {
     opacity: 1;
     translate: none;
   }
+  @media (prefers-reduced-motion: reduce) {
+    .media-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+
   .lead-card {
     transition: background-color 0.2s ease;
   }
   .lead-card:hover {
     background-color: var(--color-butter);
-  }
-  .lead-arrow {
-    transition: translate 0.2s ease;
-  }
-  .lead-card:hover .lead-arrow {
-    translate: 4px 0;
-  }
-
-  /* Coverage grid cards */
-  .press-card-wrap {
-    opacity: 0;
-    translate: 0 24px;
-  }
-  .press-card-wrap.in-view {
-    opacity: 1;
-    translate: none;
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
-      translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .press-card {
     transition: background-color 0.2s ease;
@@ -484,162 +463,13 @@ const darkAssets = [
   .press-card:hover {
     background-color: var(--color-butter);
   }
-  .press-arrow {
-    transition: translate 0.2s ease;
-  }
-  .press-card:hover .press-arrow {
-    translate: 4px 0;
-  }
-
-  /* Interview cards */
-  .interview-card-wrap {
-    opacity: 0;
-    translate: 0 24px;
-  }
-  .interview-card-wrap.in-view {
-    opacity: 1;
-    translate: none;
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
-      translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  /* No-JS fallbacks */
-  :global(html.no-js) .media-animate,
-  :global(html.no-js) .press-logos,
-  :global(html.no-js) .lead-card-wrap,
-  :global(html.no-js) .press-card-wrap,
-  :global(html.no-js) .interview-card-wrap {
-    opacity: 1;
-    translate: none;
-    transform: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .media-animate,
-    .press-logos,
-    .lead-card-wrap,
-    .press-card-wrap,
-    .interview-card-wrap {
-      opacity: 1;
-      translate: none;
-      transform: none;
-      transition: none;
-    }
-    .media-animate.visible {
-      animation: none;
-    }
-    .lead-card:hover .lead-arrow,
-    .press-card:hover .press-arrow {
-      translate: none;
-    }
-  }
 </style>
 
 <script>
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Section-level fade-up
-  const sections = document.querySelectorAll<HTMLElement>(".media-animate");
-  if (!prefersReduced) {
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            sectionObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0 }
-    );
-    sections.forEach((el) => sectionObserver.observe(el));
-  } else {
-    sections.forEach((el) => el.classList.add("visible"));
-  }
-
-  // Logo row
-  const pressLogos = document.querySelector<HTMLElement>(".press-logos");
-  if (pressLogos) {
-    if (!prefersReduced) {
-      const logoObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("in-view");
-              logoObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0 }
-      );
-      logoObserver.observe(pressLogos);
-    } else {
-      pressLogos.classList.add("in-view");
-    }
-  }
-
-  // Lead card
-  const leadCard = document.querySelector<HTMLElement>(".lead-card-wrap");
-  if (leadCard) {
-    if (!prefersReduced) {
-      const leadObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("in-view");
-              leadObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0 }
-      );
-      leadObserver.observe(leadCard);
-    } else {
-      leadCard.classList.add("in-view");
-    }
-  }
-
-  // Coverage grid card stagger
-  const cards = document.querySelectorAll<HTMLElement>(".press-card-wrap");
-  if (!prefersReduced) {
-    const cardObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            cardObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0 }
-    );
-    cards.forEach((card, i) => {
-      card.style.transitionDelay = `${i * 0.08}s`;
-      cardObserver.observe(card);
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
     });
-  } else {
-    cards.forEach((el) => el.classList.add("in-view"));
-  }
-
-  // Interview card stagger
-  const interviewCards = document.querySelectorAll<HTMLElement>(".interview-card-wrap");
-  if (!prefersReduced) {
-    const interviewObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            interviewObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0 }
-    );
-    interviewCards.forEach((card, i) => {
-      card.style.transitionDelay = `${i * 0.1}s`;
-      interviewObserver.observe(card);
-    });
-  } else {
-    interviewCards.forEach((el) => el.classList.add("in-view"));
-  }
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".media-animate").forEach((el) => obs.observe(el));
 </script>

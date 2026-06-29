@@ -172,8 +172,11 @@ const founders = [
             an impact by being intentional in how we hire, which clients and suppliers we work with,
             and where we fundraise.
           </p>
-          <p class="ts-label mb-10 text-ink-secondary">
+          <p class="ts-label mb-4 text-ink-secondary">
             44 countries &nbsp;&middot;&nbsp; 6 continents &nbsp;&middot;&nbsp; 270+ founders
+          </p>
+          <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+            More than 270 CEOs and founders have already joined the movement.
           </p>
           <div class="flex flex-wrap gap-4">
             <Button href="/e4p/sign-up" variant="primary" size="md" arrow>
@@ -247,17 +250,17 @@ const founders = [
     </section>
 
     <!-- Pledge strip — the bold moment -->
-    <section class="bg-ink-dark px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+    <section class="bg-cream px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="e4p-animate max-w-[860px]">
-          <p class="ts-overline mb-8 text-brand-light opacity-70">The E4P Pledge</p>
-          <blockquote class="ts-display mb-10 font-serif italic leading-tight text-butter">
-            &ldquo;Be intentional in how you <span class="text-brand-light">hire</span>, which clients and suppliers you <span class="text-brand-light">work with</span>, and
-            where you <span class="text-brand-light">fundraise</span>.&rdquo;
+          <p class="ts-overline mb-8 text-ink-secondary">The E4P Pledge</p>
+          <blockquote class="ts-display mb-10 font-serif italic leading-tight text-ink">
+            &ldquo;Be intentional in how you <span class="text-brand">hire</span>, which clients and suppliers you <span class="text-brand">work with</span>, and
+            where you <span class="text-brand">fundraise</span>.&rdquo;
           </blockquote>
           <a
             href="/e4p/pledge"
-            class="ts-label inline-flex items-center gap-2 rounded-pill border border-brand-light px-5 py-3.5 text-brand-light transition-all duration-150 hover:bg-brand-light/10 min-h-[44px]"
+            class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter px-5 py-3.5 text-brand transition-colors duration-150 hover:bg-butter min-h-[44px]"
           >
             Sign the E4P Pledge
             <svg
@@ -365,13 +368,16 @@ const founders = [
     </section>
 
     <!-- Ready to Join -->
-    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+    <section class="bg-cream px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="e4p-animate">
           <p class="ts-overline mb-6 text-ink-secondary">Get involved</p>
           <h2 class="ts-heading mb-6 text-ink">Ready to join?</h2>
-          <p class="ts-body-large mb-12 max-w-[65ch] text-ink-secondary">
+          <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
             If you're an entrepreneur, schedule a short introductory call based on your region.
+          </p>
+          <p class="ts-body-large mb-12 max-w-[65ch] text-ink-secondary">
+            Please include your company, position, and LinkedIn URL for verification.
           </p>
           <div class="grid grid-cols-1 gap-8 min-[810px]:grid-cols-2">
             <div>
@@ -412,24 +418,20 @@ const founders = [
 
 <style>
   .benefit-card {
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-      background-color 0.2s ease,
+    transition: background-color 0.2s ease,
       border-color 0.2s ease;
   }
   .benefit-card:hover {
-    transform: translateY(-2px);
-    background-color: #FBF2ED;
+    background-color: var(--color-cream);
     border-color: transparent;
   }
 
   .founder-card {
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-      background-color 0.2s ease,
+    transition: background-color 0.2s ease,
       border-color 0.2s ease;
   }
   .founder-card:hover {
-    transform: translateY(-2px);
-    background-color: #FBF2ED;
+    background-color: var(--color-cream);
     border-color: transparent;
   }
   .founder-avatar {
@@ -448,44 +450,31 @@ const founders = [
 
   .e4p-animate {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .e4p-animate.visible {
-    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  .e4p-animate.in-view {
+    opacity: 1;
+    translate: none;
   }
   :global(html.no-js) .e4p-animate {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
   @media (prefers-reduced-motion: reduce) {
     .e4p-animate {
       opacity: 1;
-      transform: none;
-    }
-    .e4p-animate.visible {
-      animation: none;
+      translate: none;
+      transition: none;
     }
   }
 </style>
 
 <script>
-  const sections = document.querySelectorAll<HTMLElement>(".e4p-animate");
-  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    sections.forEach((el) => observer.observe(el));
-  } else {
-    sections.forEach((el) => {
-      el.classList.add("visible");
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
     });
-  }
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".e4p-animate").forEach((el) => obs.observe(el));
 </script>

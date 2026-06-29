@@ -22,7 +22,7 @@ const navigation: Record<string, [string, string][]> = {
   ],
   "Get Involved": [
     ...(membershipLive ? [["Become a Member", "/membership"] as [string, string]] : []),
-    ["Donate", "/donate"],
+    ["Donate", "/donate-new"],
     ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
     ["Volunteer", "/volunteer-new"],
     ["Entrepreneurs for Palestine", "/e4p-new"],
@@ -30,7 +30,7 @@ const navigation: Record<string, [string, string][]> = {
     ["Hire Palestinians", "/help/hire-new"],
   ],
   Events: [
-    ["Past Events", "/events"],
+    ["Past Events", "/events-new"],
     ["Brussels 2026", "https://brussels2026.techforpalestine.org/"],
     ["Barcelona 2026", "https://barcelona2026.techforpalestine.org/"],
     ["Bay Area 2026", "https://summit.techforpalestine.org"],
@@ -59,7 +59,7 @@ const socials: { name: string; url: string; icon: string }[] = [
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
       <!-- Brand column -->
       <div class="lg:col-span-4">
-        <a href="/" class="inline-block">
+        <a href="/home-new" class="inline-block">
           <img
             src="/logos/logo-dark-no-padding.webp"
             alt="Tech for Palestine"

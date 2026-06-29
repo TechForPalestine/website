@@ -64,6 +64,8 @@ export default defineConfig({
           "/success/",
           "/vercel/",
           "/donate-2/",
+          "/donate-new/",
+          "/donate-2-new/",
           "/event-details/",
           "/404/",
           "/about-new/",
@@ -86,6 +88,7 @@ export default defineConfig({
           "/legal-new/",
           "/terms-new/",
           "/privacy-policy-new/",
+          "/events-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
