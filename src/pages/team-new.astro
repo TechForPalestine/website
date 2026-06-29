@@ -67,33 +67,20 @@ const staff = [
         <div class="space-y-16">
           {board.map((member) => (
             <div class={`about-animate grid grid-cols-1 items-start gap-10 min-[810px]:gap-16 ${member.imageLeft ? "min-[810px]:grid-cols-[280px_1fr]" : "min-[810px]:grid-cols-[1fr_280px]"}`}>
-              {member.imageLeft && (
-                <div class="hidden min-[810px]:block">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    class="w-full rounded-[20px] object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              )}
-              <div>
+              <div class={`w-40 min-[810px]:w-full mx-auto min-[810px]:mx-0 ${!member.imageLeft ? "min-[810px]:order-2" : ""}`}>
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  class="w-full rounded-[20px] object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class={!member.imageLeft ? "min-[810px]:order-1" : ""}>
                 <h3 class="ts-heading mb-2 text-ink">{member.name}</h3>
                 <p class="ts-body-large mb-4 text-brand">{member.role}</p>
                 <p class="ts-body-large max-w-[75ch] text-ink-secondary">{member.bio}</p>
               </div>
-              {!member.imageLeft && (
-                <div class="hidden min-[810px]:block">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    class="w-full rounded-[20px] object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -118,8 +105,8 @@ const staff = [
                 />
               </div>
               <div class="border-t-2 border-brand px-5 pt-4 pb-5">
-                <p class="ts-overline mb-2 text-ink-secondary">{member.role}</p>
-                <p class="ts-eyebrow text-ink">{member.name}</p>
+                <p class="ts-eyebrow mb-1 text-ink">{member.name}</p>
+                <p class="ts-overline text-ink-secondary">{member.role}</p>
               </div>
             </div>
           ))}
