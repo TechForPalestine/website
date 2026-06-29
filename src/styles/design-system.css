@@ -3,6 +3,26 @@
    Fraunces for editorial, Outfit for UI.
    Fonts are loaded via <link> in the layout head. */
 
+/* Scrollbar styling — transparent track, brand thumb */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #AB4956 transparent;
+}
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #AB4956;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #D35464;
+}
+
 /* CSS custom property bridge — exposes design tokens to scoped <style> blocks */
 :root {
   --color-ink: #2A2428;

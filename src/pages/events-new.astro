@@ -1,0 +1,70 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import EventsNew from "../components/events/EventsNew";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Events - Tech for Palestine"
+  description="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+
+    <!-- Hero -->
+    <section class="bg-ink px-6 pt-14 pb-12 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-16">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="events-animate">
+          <p class="ts-overline mb-8 text-brand-light">Community</p>
+          <h1 class="ts-display mb-6 text-page">Events</h1>
+          <p class="ts-body-large text-[#9A8F93]">
+            Join builders, organizers, and allies gathering for Palestinian liberation.
+          </p>
+        </div>
+        <div class="mt-12 h-px w-full bg-[#3D3338] min-[810px]:mt-16" />
+      </div>
+    </section>
+
+    <!-- Events list -->
+    <section class="bg-page">
+      <EventsNew client:only="react" />
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .events-animate {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+  }
+  .events-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .events-animate {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .events-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll<HTMLElement>(".events-animate").forEach((el) => obs.observe(el));
+</script>
