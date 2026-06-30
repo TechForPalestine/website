@@ -54,8 +54,8 @@ try {
       (function () {
         try {
           var v = localStorage.getItem("ab-homepage-variant");
-          if (v === "variant") {
-            window.plausible("ab-homepage", { props: { variant: "new" } });
+          if (v === "new-homepage") {
+            window.plausible("ab-homepage", { props: { variant: "new-homepage" } });
           }
         } catch (e) {}
       })();
