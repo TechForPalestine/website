@@ -10,10 +10,10 @@ import "../styles/base.css";
       var key = "ab-homepage-variant";
       var v = localStorage.getItem(key);
       if (!v) {
-        v = Math.random() < 0.5 ? "control" : "variant";
+        v = Math.random() < 0.5 ? "original-homepage" : "new-homepage";
         localStorage.setItem(key, v);
       }
-      if (v === "variant") {
+      if (v === "new-homepage") {
         location.replace("/home-new");
       }
     } catch (e) {}
@@ -567,8 +567,8 @@ import "../styles/base.css";
       (function () {
         try {
           var v = localStorage.getItem("ab-homepage-variant");
-          if (v === "control") {
-            window.plausible("ab-homepage", { props: { variant: "control" } });
+          if (v === "original-homepage") {
+            window.plausible("ab-homepage", { props: { variant: "original-homepage" } });
           }
         } catch (e) {}
       })();
