@@ -50,5 +50,13 @@ try {
     {openRoles.length > 0 && <OpeningsSection membershipLive={membershipLive} roles={openRoles} />}
     <PressSection />
     <CtaSection membershipLive={membershipLive} />
+    <script is:inline>
+      (function () {
+        var v = localStorage.getItem("ab-homepage-variant");
+        if (v === "variant") {
+          window.plausible("ab-homepage", { props: { variant: "new" } });
+        }
+      })();
+    </script>
   </main>
 </HomeLayout>
