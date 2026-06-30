@@ -53,7 +53,8 @@ try {
     <script>
       try {
         const v = localStorage.getItem("ab-homepage-variant");
-        if (v === "new-homepage") {
+        if (v === "new-homepage" && !sessionStorage.getItem("ab-homepage-tracked")) {
+          sessionStorage.setItem("ab-homepage-tracked", "1");
           window.plausible("ab-homepage", { props: { variant: "new-homepage" } });
         }
       } catch (e) {}

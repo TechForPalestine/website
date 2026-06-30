@@ -565,7 +565,8 @@ import "../styles/base.css";
     <script>
       try {
         const v = localStorage.getItem("ab-homepage-variant");
-        if (v === "original-homepage") {
+        if (v === "original-homepage" && !sessionStorage.getItem("ab-homepage-tracked")) {
+          sessionStorage.setItem("ab-homepage-tracked", "1");
           window.plausible("ab-homepage", { props: { variant: "original-homepage" } });
         }
       } catch (e) {}
