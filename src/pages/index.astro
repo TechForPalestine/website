@@ -4,6 +4,20 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 ---
 
+<script is:inline slot="head">
+  (function () {
+    var key = "ab-homepage-variant";
+    var v = localStorage.getItem(key);
+    if (!v) {
+      v = Math.random() < 0.5 ? "control" : "variant";
+      localStorage.setItem(key, v);
+    }
+    if (v === "variant") {
+      location.replace("/home-new");
+    }
+  })();
+</script>
+
 <Layout
   title="Tech For Palestine"
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
@@ -546,5 +560,14 @@ import "../styles/base.css";
         <SignUpForm />
       </div>
     </section>
+
+    <script is:inline>
+      (function () {
+        var v = localStorage.getItem("ab-homepage-variant");
+        if (v === "control") {
+          window.plausible("ab-homepage", { props: { variant: "control" } });
+        }
+      })();
+    </script>
   </main>
 </Layout>
