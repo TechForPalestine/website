@@ -89,6 +89,7 @@ export default defineConfig({
           "/terms-new/",
           "/privacy-policy-new/",
           "/events-new/",
+          "/home-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

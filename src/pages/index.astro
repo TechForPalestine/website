@@ -6,15 +6,17 @@ import "../styles/base.css";
 
 <script is:inline slot="head">
   (function () {
-    var key = "ab-homepage-variant";
-    var v = localStorage.getItem(key);
-    if (!v) {
-      v = Math.random() < 0.5 ? "control" : "variant";
-      localStorage.setItem(key, v);
-    }
-    if (v === "variant") {
-      location.replace("/home-new");
-    }
+    try {
+      var key = "ab-homepage-variant";
+      var v = localStorage.getItem(key);
+      if (!v) {
+        v = Math.random() < 0.5 ? "control" : "variant";
+        localStorage.setItem(key, v);
+      }
+      if (v === "variant") {
+        location.replace("/home-new");
+      }
+    } catch (e) {}
   })();
 </script>
 
@@ -563,10 +565,12 @@ import "../styles/base.css";
 
     <script is:inline>
       (function () {
-        var v = localStorage.getItem("ab-homepage-variant");
-        if (v === "control") {
-          window.plausible("ab-homepage", { props: { variant: "control" } });
-        }
+        try {
+          var v = localStorage.getItem("ab-homepage-variant");
+          if (v === "control") {
+            window.plausible("ab-homepage", { props: { variant: "control" } });
+          }
+        } catch (e) {}
       })();
     </script>
   </main>

@@ -52,10 +52,12 @@ try {
     <CtaSection membershipLive={membershipLive} />
     <script is:inline>
       (function () {
-        var v = localStorage.getItem("ab-homepage-variant");
-        if (v === "variant") {
-          window.plausible("ab-homepage", { props: { variant: "new" } });
-        }
+        try {
+          var v = localStorage.getItem("ab-homepage-variant");
+          if (v === "variant") {
+            window.plausible("ab-homepage", { props: { variant: "new" } });
+          }
+        } catch (e) {}
       })();
     </script>
   </main>
