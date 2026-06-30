@@ -50,15 +50,13 @@ try {
     {openRoles.length > 0 && <OpeningsSection membershipLive={membershipLive} roles={openRoles} />}
     <PressSection />
     <CtaSection membershipLive={membershipLive} />
-    <script is:inline>
-      (function () {
-        try {
-          var v = localStorage.getItem("ab-homepage-variant");
-          if (v === "new-homepage") {
-            window.plausible("ab-homepage", { props: { variant: "new-homepage" } });
-          }
-        } catch (e) {}
-      })();
+    <script>
+      try {
+        const v = localStorage.getItem("ab-homepage-variant");
+        if (v === "new-homepage") {
+          window.plausible("ab-homepage", { props: { variant: "new-homepage" } });
+        }
+      } catch (e) {}
     </script>
   </main>
 </HomeLayout>
