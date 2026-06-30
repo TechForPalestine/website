@@ -110,10 +110,9 @@ const tools = [
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <!-- Hero -->
     <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-12">
       <div class="mx-auto max-w-[1400px]">
-        <div class="tools-animate">
+        <div class="page-animate">
           <p class="ts-overline mb-5 text-ink-secondary">Tools for the movement</p>
           <h1 class="ts-editorial mb-5 max-w-[20ch] text-ink">
             Tools that <span class="text-brand">power the work</span>
@@ -123,16 +122,14 @@ const tools = [
             Use them, share them, and help the movement reach further.
           </p>
         </div>
-
         <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-12" />
       </div>
     </section>
 
-    <!-- Featured -->
     <section class="bg-page px-6 pb-12 min-[810px]:px-10">
       <div class="mx-auto max-w-[1400px]">
-        <p class="tools-animate ts-overline mb-4 text-ink-secondary">Featured</p>
-        <div class="tools-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <p class="page-animate ts-overline mb-4 text-ink-secondary">Featured</p>
+        <div class="page-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((tool) => (
             <a
               href={tool.link}
@@ -140,7 +137,7 @@ const tools = [
               rel="noopener noreferrer"
               class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5 ">
+              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5">
                 <img
                   src={tool.logo}
                   alt={`${tool.name} logo`}
@@ -155,7 +152,7 @@ const tools = [
               <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
               <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
                 Visit
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
                 </svg>
               </span>
@@ -165,11 +162,10 @@ const tools = [
       </div>
     </section>
 
-    <!-- More tools -->
     <section class="bg-page px-6 pb-14 min-[810px]:px-10 min-[810px]:pb-20">
       <div class="mx-auto max-w-[1400px]">
-        <p class="tools-animate ts-overline mb-4 text-ink-secondary">More tools</p>
-        <div class="tools-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <p class="page-animate ts-overline mb-4 text-ink-secondary">More tools</p>
+        <div class="page-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool) => (
             <a
               href={tool.link}
@@ -177,7 +173,7 @@ const tools = [
               rel="noopener noreferrer"
               class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5 ">
+              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5">
                 <img
                   src={tool.logo}
                   alt={`${tool.name} logo`}
@@ -192,7 +188,7 @@ const tools = [
               <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
               <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
                 Visit
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
                 </svg>
               </span>
@@ -202,10 +198,9 @@ const tools = [
       </div>
     </section>
 
-    <!-- CTA band -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="tools-animate flex flex-col items-start gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
+        <div class="page-animate flex flex-col items-start gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
           <div class="max-w-[55ch]">
             <p class="ts-overline mb-3 text-ink-secondary">Building something?</p>
             <h2 class="ts-heading text-ink">
@@ -232,46 +227,33 @@ const tools = [
 </HomeLayout>
 
 <style>
-  .tools-animate {
+  .page-animate {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .tools-animate.visible {
-    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-  }
-  :global(html.no-js) .tools-animate {
+  .page-animate.in-view {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+  :global(html.no-js) .page-animate {
+    opacity: 1;
+    translate: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .tools-animate {
+    .page-animate {
       opacity: 1;
-      transform: none;
-    }
-    .tools-animate.visible {
-      animation: none;
+      translate: none;
+      transition: none;
     }
   }
 </style>
 
 <script>
-  const els = document.querySelectorAll<HTMLElement>(".tools-animate");
-  if (els.length) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    els.forEach((el) => observer.observe(el));
-  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

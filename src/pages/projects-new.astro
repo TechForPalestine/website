@@ -3,101 +3,77 @@ import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
-import ProjectsDirectory from "../components/projects/ProjectsDirectory";
+import ProjectsNewComponent from "../components/ProjectsNew.tsx";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+let projects: any[] = [];
+let loading: boolean = true;
 ---
 
 <HomeLayout
   title="Incubator Projects - Tech for Palestine"
-  description="Explore 90+ projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."
+  description="Explore the projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-
-    <!-- Hero -->
     <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-14">
       <div class="mx-auto max-w-[1400px]">
-
-        <div class="projects-animate">
-          <p class="ts-overline mb-8 text-ink-secondary">Incubator portfolio</p>
-
-          <div class="flex flex-col gap-8 min-[810px]:flex-row min-[810px]:items-end min-[810px]:justify-between">
-            <div>
-              <div class="flex items-baseline gap-4 mb-5">
-                <span class="ts-display text-brand" id="project-count">80+</span>
-                <h1 class="ts-heading text-ink">projects building toward a free Palestine</h1>
-              </div>
-              <p class="ts-body-large max-w-[55ch] text-ink-secondary">
-                Built by tech workers, advocates, and builders who refuse to stay silent.
-              </p>
-            </div>
-            <div class="shrink-0">
-              <Button href="/incubator-new" variant="ghost" size="md" arrow>
-                Apply to the Incubator
-              </Button>
-            </div>
-          </div>
+        <div class="page-animate">
+          <p class="ts-overline mb-5 text-ink-secondary">Tech for Palestine</p>
+          <h1 class="ts-editorial mb-5 text-ink">Incubator Projects</h1>
+          <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+            What is the incubator? <a href="/incubator" class="text-brand underline underline-offset-2 hover:text-brand-hover">Learn more</a>
+          </p>
         </div>
-
         <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
       </div>
     </section>
 
-    <!-- Directory toolbar + grid -->
     <section class="bg-page">
-      <ProjectsDirectory client:only="react" />
+      <ProjectsNewComponent projects={projects} loading={loading} client:only="react" />
     </section>
 
-    <!-- CTA band -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="projects-animate border-t-2 border-ink pt-10">
-          <div class="flex flex-col gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
-            <div>
-              <p class="ts-overline mb-3 text-ink-secondary">Ready to build?</p>
-              <h2 class="ts-heading text-ink max-w-[38ch]">
-                Have a project that supports Palestine?
-              </h2>
-            </div>
-            <div class="flex shrink-0 gap-3">
-              <Button
-                href="https://techforpalestine.org/project-application-form"
-                variant="primary"
-                size="md"
-                arrow
-              >
-                Apply now
-              </Button>
-              <Button href="/incubator-new" variant="ghost" size="md">
-                Learn more
-              </Button>
-            </div>
+        <div class="page-animate flex flex-col gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
+          <div>
+            <p class="ts-overline mb-3 text-ink-secondary">Ready to build?</p>
+            <h2 class="ts-heading text-ink max-w-[38ch]">Apply to the T4P Incubator Today!</h2>
+          </div>
+          <div class="shrink-0">
+            <Button
+              href="https://techforpalestine.org/project-application-form"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply now
+            </Button>
           </div>
         </div>
       </div>
     </section>
-
   </main>
 </HomeLayout>
 
 <style>
-  .projects-animate {
+  .page-animate {
     opacity: 0;
     translate: 0 24px;
     transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .projects-animate.in-view {
+  .page-animate.in-view {
     opacity: 1;
     translate: none;
   }
-  :global(html.no-js) .projects-animate {
+  :global(html.no-js) .page-animate {
     opacity: 1;
     translate: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .projects-animate {
+    .page-animate {
       opacity: 1;
       translate: none;
       transition: none;
@@ -106,16 +82,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 </style>
 
 <script>
-  window.addEventListener("projects:loaded", (e: Event) => {
-    const el = document.getElementById("project-count");
-    const count = (e as CustomEvent<{ count: number }>).detail?.count;
-    if (el && count) el.textContent = `${Math.floor(count / 10) * 10}+`;
-  }, { once: true });
-
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
     });
   }, { threshold: 0.15 });
-  document.querySelectorAll<HTMLElement>(".projects-animate").forEach((el) => obs.observe(el));
+  document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

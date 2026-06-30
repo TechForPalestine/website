@@ -32,15 +32,14 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
 
 <HomeLayout
   title="Project Ideas - Tech for Palestine"
-  description="Browse and lead project ideas that support Palestinian freedom. Explore new ideas, existing projects needing leaders, and initiatives already underway."
+  description="Browse and lead project ideas that support Palestinian freedom. Tech for Palestine builds bold projects to support Palestinian advocacy and counter pro-Israel propaganda. Explore new ideas, existing projects, and initiatives that have already started."
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="ideas-animate max-w-[65ch]">
+        <div class="page-animate max-w-[65ch]">
           <p class="ts-overline mb-5 text-ink-secondary">Incubator ideas</p>
           <h1 class="ts-editorial mb-5 text-ink">
             Turn bold ideas into <span class="text-brand">real impact</span>
@@ -73,7 +72,6 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
       </div>
     </section>
 
-    <!-- Ideas grid -->
     <section class="bg-page pt-10 min-[810px]:pt-12">
       <IdeasWithTabsNew
         newIdeas={newIdeas}
@@ -83,10 +81,9 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
       />
     </section>
 
-    <!-- How it works -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="ideas-animate grid gap-12 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+        <div class="page-animate grid gap-12 min-[810px]:grid-cols-2 min-[810px]:gap-16">
           <div>
             <h2 class="ts-heading mb-4 text-ink">Generating new ideas</h2>
             <p class="ts-body mb-5 text-ink-secondary">
@@ -138,46 +135,33 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
 </HomeLayout>
 
 <style>
-  .ideas-animate {
+  .page-animate {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
   }
-  .ideas-animate.visible {
-    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-  }
-  :global(html.no-js) .ideas-animate {
+  .page-animate.in-view {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+  :global(html.no-js) .page-animate {
+    opacity: 1;
+    translate: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .ideas-animate {
+    .page-animate {
       opacity: 1;
-      transform: none;
-    }
-    .ideas-animate.visible {
-      animation: none;
+      translate: none;
+      transition: none;
     }
   }
 </style>
 
 <script>
-  const els = document.querySelectorAll<HTMLElement>(".ideas-animate");
-  if (els.length) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    els.forEach((el) => observer.observe(el));
-  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

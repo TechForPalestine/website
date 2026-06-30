@@ -15,307 +15,260 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="gi-animate max-w-[680px]">
-          <p class="ts-overline mb-6 text-ink-secondary">Get Involved</p>
-          <h1 class="ts-editorial mb-6 text-ink">
-            There's a place for you in <span class="text-brand">this work</span>.
-          </h1>
-          <p class="ts-body-large mb-4 max-w-[55ch] text-ink-secondary">
-            Join our mission-driven community to volunteer, collaborate, and innovate for Palestinian liberation. There are many ways to contribute your skills and passion.
-          </p>
-          <p class="ts-body mb-10 max-w-[55ch] text-ink-secondary">
-            Please read our <a href="https://github.com/techForPalestine/code-of-conduct" class="text-brand underline hover:text-brand-hover">Code of Conduct</a> here.
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <Button
-              href="https://techforpalestine.org/discord-invite"
-              variant="primary"
-              size="md"
-              arrow
-            >
-              Join our Discord
-            </Button>
-            <Button href="/volunteer-new" variant="ghost" size="md">
-              Volunteer your skills
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div class="mx-auto mt-14 max-w-[1400px] px-0 min-[810px]:mt-20">
-        <div class="h-px w-full bg-ink-divider"></div>
+        <h1 class="ts-editorial mb-6 text-ink">
+          <span class="text-brand">Get Involved</span> with Tech for Palestine
+        </h1>
+        <p class="ts-body mb-4 max-w-[55ch] text-ink-secondary">
+          Join our mission-driven community to volunteer, collaborate, and innovate for Palestinian
+          liberation. There are many ways to contribute your skills and passion.
+        </p>
+        <p class="ts-body max-w-[55ch] text-ink-secondary">
+          Please read our <a
+            href="https://github.com/techForPalestine/code-of-conduct"
+            class="text-brand underline hover:text-brand-hover">Code of Conduct</a
+          > here.
+        </p>
       </div>
     </section>
 
-    <!-- The Ledger -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
+        <h2 class="ts-heading gi-animate mb-12 text-ink">Ways to Get Involved</h2>
 
-        <!-- Ledger intro -->
-        <div class="gi-animate mb-14 max-w-[55ch] min-[810px]:mb-16">
-          <p class="ts-overline mb-4 text-ink-secondary">Ways to get involved</p>
-          <p class="ts-body-large text-ink-secondary">
-            Every path in the movement starts somewhere. Find yours below.
-          </p>
-        </div>
-
-        <!-- Tier 01: Start Here -->
-        <div class="mb-14 min-[810px]:mb-16">
-          <div class="gi-animate mb-1 flex items-center gap-4 border-t-2 border-ink pt-5">
-            <p class="ts-overline text-ink-secondary">01 / Start here</p>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Join our Discord Community</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Connect with thousands of pro-Palestine advocates, volunteers, and project leaders in
+              our vibrant Discord server.
+            </p>
+            <Button href="https://techforpalestine.org/discord-invite" variant="primary" size="md" arrow>
+              Join Discord
+            </Button>
           </div>
-          <ul class="max-w-[860px]">
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="https://techforpalestine.org/discord-invite"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Join the Discord community</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Connect with thousands of pro-Palestine advocates, volunteers, and project leaders in our vibrant Discord server.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            </li>
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="/ideas-new"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
-              >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Browse project ideas</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Explore our curated list of project ideas that could use your skills and passion.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            </li>
-            <li class="border-b border-ink-divider"></li>
-          </ul>
-        </div>
 
-        <!-- Tier 02: Lend Your Skills -->
-        <div class="mb-14 min-[810px]:mb-16">
-          <div class="gi-animate mb-1 flex items-center gap-4 border-t-2 border-ink pt-5">
-            <p class="ts-overline text-ink-secondary">02 / Lend your skills</p>
-          </div>
-          <ul class="max-w-[860px]">
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="/volunteer-new"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
               >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Volunteer your skills</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Contribute your expertise to impactful projects. We're always looking for volunteers in various roles.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-              <div class="pb-5 -mt-1">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Volunteer Your Skills</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Contribute your expertise to impactful projects. We're always looking for volunteers
+              in various roles.
+            </p>
+            <div class="mb-6 space-y-3">
+              <Button href="/volunteer-new" variant="primary" size="md" arrow>
+                Apply to Volunteer
+              </Button>
+              <div class="ts-body-small">
                 <a
                   href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
-                  class="ts-body-small font-medium text-brand underline underline-offset-2 hover:text-brand-hover"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  class="text-brand hover:underline"
                 >
                   Check out specific roles we're looking for right now!
                 </a>
               </div>
-            </li>
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="/mentorship-new"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
-              >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Be a mentor</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Share your expertise and experience with emerging project leaders. Help shape the next generation of Palestinian advocates.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            </li>
-            <li class="border-b border-ink-divider"></li>
-          </ul>
-        </div>
-
-        <!-- Tier 03: Build & Lead -->
-        <div>
-          <div class="gi-animate mb-1 flex items-center gap-4 border-t-2 border-ink pt-5">
-            <p class="ts-overline text-ink-secondary">03 / Build &amp; lead</p>
+            </div>
           </div>
-          <ul class="max-w-[860px]">
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="https://techforpalestine.org/project-application-form"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
-                target="_blank"
-                rel="noopener noreferrer"
+
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
               >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Apply to the incubator</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Have a pro-Palestine project idea? Get mentorship, volunteers, funding, and support to bring it to life.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-              <div class="pb-5 -mt-1">
-                <a
-                  href="/incubator-new"
-                  class="ts-body-small font-medium text-brand underline underline-offset-2 hover:text-brand-hover"
-                >
-                  Learn about the incubator
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6.042A8.967 8.967 0 006 3.75c-1.079 0-2.157.17-3.206.519m15.792 3.355A8.967 8.967 0 0118 3.75c1.079 0 2.157.17 3.206.519M12 6.042V3m0 3.042a3 3 0 110 5.916m0-5.916V21m0-10.958h.008v.008H12v-.008zm0 0H12.017a7.25 7.25 0 01-1.565 4.352m-1.424 4.244L9 18.75c-1.079 0-2.157.17-3.206.519m15.792 3.355L15 18.75m-4.244-1.424L12 12m-2.828 2.828L7.5 21.75c-1.079 0-2.157.17-3.206.519M12 12L12.017 12m-2.828 2.828L12 12m-2.828 2.828L7.5 21.75c-1.079 0-2.157.17-3.206.519M12 12L12.017 12m-2.828 2.828L12 12m-2.828 2.828L7.5 21.75c-1.079 0-2.157.17-3.206.519"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Join the Incubator</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Have a pro-Palestine project idea? Get mentorship, volunteers, funding, and support to
+              bring it to life.
+            </p>
+            <div class="mb-6 space-y-3">
+              <Button href="https://techforpalestine.org/project-application-form" variant="primary" size="md" arrow>
+                Apply to Incubator
+              </Button>
+              <div class="ts-body-small">
+                <a href="/incubator-new" class="text-brand hover:underline">
+                  Learn more about the Incubator
                 </a>
               </div>
-            </li>
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="/e4p-new"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
-              >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Entrepreneurs for Palestine</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Connect with other founders and CEOs who support the Palestinian cause. Share resources and build partnerships.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            </li>
-            <li class="gi-animate border-t border-ink-divider">
-              <a
-                href="/help/hire-new"
-                class="group flex items-start justify-between gap-8 py-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand min-[810px]:items-center"
-              >
-                <span class="min-w-0">
-                  <span class="ts-heading block text-ink transition-colors duration-150 group-hover:text-brand">Hire Palestinians</span>
-                  <span class="ts-body mt-2 block max-w-[55ch] text-ink-secondary">
-                    Looking for talented Palestinian professionals? Connect with our network of skilled individuals across various fields.
-                  </span>
-                </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="mt-1 shrink-0 text-brand min-[810px]:mt-0"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            </li>
-            <li class="border-b border-ink-divider"></li>
-          </ul>
-        </div>
+            </div>
+          </div>
 
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m1.5-13.5a3 3 0 00-3 3v.75m6 3.75v6m-3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Entrepreneurs for Palestine</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Connect with other founders and CEOs who support the Palestinian cause. Share
+              resources and build partnerships.
+            </p>
+            <Button href="/e4p-new" variant="primary" size="md" arrow>
+              Join E4P
+            </Button>
+          </div>
+
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a14.995 14.995 0 00-3.493 2.017 48.57 48.57 0 00-1.804 2.27A60.436 60.436 0 004.26 10.147zM14.5 4.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Be a Mentor</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Share your expertise and experience with emerging project leaders. Help shape the next
+              generation of Palestinian advocates.
+            </p>
+            <Button href="/mentorship-new" variant="primary" size="md" arrow>
+              Apply to Mentor
+            </Button>
+          </div>
+
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18C15.36 20.75 12.375 21 9 21c-3.375 0-6.36-.25-9.378-.67C1.787 18.186 1 17.244 1 16.15v-4.25A16.5 16.5 0 019 3c3.375 0 6.36.25 9.378.67C20.213 3.814 21 4.756 21 5.85z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Hire Palestinians</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Looking for talented Palestinian professionals? Connect with our network of skilled
+              individuals across various fields.
+            </p>
+            <Button href="/help/hire-new" variant="primary" size="md" arrow>
+              Find Talent
+            </Button>
+          </div>
+
+          <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-8 w-8 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="ts-heading mb-4 text-ink">Browse Project Ideas</h3>
+            <p class="ts-body mb-6 text-ink-secondary">
+              Explore our curated list of project ideas that could use your skills and passion.
+            </p>
+            <Button href="/ideas-new" variant="primary" size="md" arrow>
+              View Ideas
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Newsletter -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-screen-md">
-        <div class="gi-animate mb-8 text-center">
+        <div class="gi-animate mb-8">
           <p class="ts-overline mb-4 text-ink-secondary">Stay connected</p>
-          <h2 class="ts-heading mb-3 text-ink">Get project updates</h2>
+          <h2 class="ts-heading mb-3 text-ink">Get Project Updates</h2>
           <p class="ts-body text-ink-secondary">
             Stay informed about new project opportunities and T4P initiatives.
           </p>
         </div>
-        <div class="flex justify-center">
-          <SignUpForm />
-        </div>
+        <SignUpForm />
       </div>
     </section>
 
-    <!-- Have Questions -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="gi-animate max-w-[680px]">
-          <p class="ts-body-large mb-8 text-ink-secondary">
-            Not sure which option is right for you? Want to learn more about our mission? We'd love to hear from you!
+        <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
+          <h2 class="ts-heading mb-4 text-ink">Have Questions?</h2>
+          <p class="ts-body mb-8 text-ink-secondary">
+            Not sure which option is right for you? Want to learn more about our mission? We'd love
+            to hear from you!
           </p>
-          <Button href="/contact-new" variant="ghost" size="md">
-            Contact us
+          <Button href="/contact-new" variant="primary" size="md" arrow>
+            Contact Us
           </Button>
         </div>
       </div>

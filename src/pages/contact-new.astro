@@ -2,85 +2,120 @@
 import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
-import SignUpForm from "../structures/SignUpForm.astro";
-
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-
-const contacts = [
-  {
-    heading: "General Questions",
-    description: "For general inquiries about Tech for Palestine, our projects, or how to get involved.",
-    linkType: "email" as const,
-  },
-  {
-    heading: "Media & Press",
-    description: "Journalists and media professionals can find press resources and contact information on our media page.",
-    linkText: "Visit our Media page",
-    href: "/media",
-    linkType: "page" as const,
-  },
-  {
-    heading: "Endorsements",
-    description: "Seeking a T4P endorsement for your campaign or organization? Learn what we look for and submit a request.",
-    linkText: "Request an endorsement",
-    href: "/endorsements",
-    linkType: "page" as const,
-  },
-];
 ---
 
 <HomeLayout
-  title="Contact Us"
+  title="Contact Us | Tech for Palestine"
   description="Get in touch with Tech for Palestine — general questions, media inquiries, or request an endorsement for your campaign."
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
 
-    <!-- Hero -->
-    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="contact-animate max-w-[65ch]">
+
+        <div class="page-animate mb-14">
           <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
-          <h1 class="ts-editorial mb-6 text-ink">
-            Contact Us
-          </h1>
-          <p class="ts-body-large text-ink-secondary">
-            Have a question, media inquiry, or want to request an endorsement? We'd love to hear from you. We try to respond within 2 business days.
+          <h1 class="ts-editorial mb-6 text-ink">Contact Us</h1>
+          <p class="ts-body max-w-[65ch] text-ink-secondary">
+            Have a question, media inquiry, or want to request an endorsement? We'd love to hear
+            from you.
           </p>
         </div>
-      </div>
-    </section>
 
-    <!-- Contact methods -->
-    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
-      <div class="contact-animate mx-auto max-w-[800px]">
-        {contacts.map((item) => (
-          <div class="border-t border-ink-divider py-8 last:border-b">
-            <h2 class="ts-body-large mb-2 font-medium text-ink">{item.heading}</h2>
-            <p class="ts-body mb-3 max-w-[65ch] text-ink-secondary">{item.description}</p>
-            {item.linkType === "email" ? (
-              <a
-                id="contact-email"
-                href="#"
-                class="ts-body font-medium text-brand transition-colors hover:underline"
-              ></a>
-            ) : (
-              <a
-                href={item.href}
-                class="ts-body font-medium text-brand transition-colors hover:underline"
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
+
+          <div class="page-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sand">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="h-6 w-6 text-brand"
               >
-                {item.linkText} &rarr;
-              </a>
-            )}
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="ts-heading mb-2 text-ink">General Questions</h2>
+            <p class="ts-body-small mb-4 text-ink-secondary">
+              For general inquiries about Tech for Palestine, our projects, or how to get
+              involved.
+            </p>
+            <a
+              id="contact-email"
+              href="#"
+              class="ts-body font-medium text-brand transition-colors hover:underline"
+            ></a>
           </div>
-        ))}
-      </div>
-    </section>
 
-    <!-- Sign-up form -->
-    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
-      <div class="mx-auto max-w-screen-md">
-        <SignUpForm />
+          <div class="page-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sand">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="h-6 w-6 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="ts-heading mb-2 text-ink">Media &amp; Press</h2>
+            <p class="ts-body-small mb-4 text-ink-secondary">
+              Journalists and media professionals can find press resources and contact information
+              on our media page.
+            </p>
+            <a
+              href="/media-new"
+              class="ts-body font-medium text-brand transition-colors hover:underline"
+            >
+              Visit our Media page &rarr;
+            </a>
+          </div>
+
+          <div class="page-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sand">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="h-6 w-6 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.745 3.745 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="ts-heading mb-2 text-ink">Endorsements</h2>
+            <p class="ts-body-small mb-4 text-ink-secondary">
+              Seeking a T4P endorsement for your campaign or organization? Learn what we look for
+              and submit a request.
+            </p>
+            <a
+              href="/endorsements-new"
+              class="ts-body font-medium text-brand transition-colors hover:underline"
+            >
+              Request an endorsement &rarr;
+            </a>
+          </div>
+
+        </div>
       </div>
     </section>
 
@@ -98,30 +133,30 @@ const contacts = [
 </script>
 
 <style>
-  .contact-animate {
+  .page-animate {
     opacity: 0;
     transform: translateY(12px);
   }
-  .contact-animate.visible {
+  .page-animate.visible {
     animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
   }
-  :global(html.no-js) .contact-animate {
+  :global(html.no-js) .page-animate {
     opacity: 1;
     transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .contact-animate {
+    .page-animate {
       opacity: 1;
       transform: none;
     }
-    .contact-animate.visible {
+    .page-animate.visible {
       animation: none;
     }
   }
 </style>
 
 <script>
-  const sections = document.querySelectorAll<HTMLElement>(".contact-animate");
+  const sections = document.querySelectorAll<HTMLElement>(".page-animate");
   if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -132,7 +167,7 @@ const contacts = [
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
     sections.forEach((el) => observer.observe(el));
   } else {
