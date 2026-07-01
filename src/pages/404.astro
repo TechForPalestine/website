@@ -55,9 +55,12 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   <script>
     try {
       if (localStorage.getItem("ab-homepage-variant") === "new-homepage") {
-        document.getElementById("link-projects").href = "/projects-new";
-        document.getElementById("link-events").href = "/events-new";
-        document.getElementById("link-get-involved").href = "/get-involved-new";
+        const projects = document.getElementById("link-projects") as HTMLAnchorElement | null;
+        const events = document.getElementById("link-events") as HTMLAnchorElement | null;
+        const getInvolved = document.getElementById("link-get-involved") as HTMLAnchorElement | null;
+        if (projects) projects.href = "/projects-new";
+        if (events) events.href = "/events-new";
+        if (getInvolved) getInvolved.href = "/get-involved-new";
       }
     } catch (e) {}
   </script>
