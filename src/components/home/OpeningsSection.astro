@@ -14,9 +14,7 @@ interface Role {
 
 function roleName(role: Role): string {
   if (role.type === "team") return role.team?.name ?? "T4P";
-  const parts = role.title.split(" for ");
-  if (parts.length > 1) return parts[parts.length - 1];
-  return role.title;
+  return role.project?.name ?? role.title;
 }
 
 function roleTime(role: Role): string | null {
