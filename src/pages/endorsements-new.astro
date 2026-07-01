@@ -1,0 +1,237 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import EndorsementForm from "../components/EndorsementForm.tsx";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Endorsements | Tech for Palestine"
+  description="Request an endorsement from Tech for Palestine for your campaign or organization. Learn what we look for and how the review process works."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="endorsement-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
+          <h1 class="ts-editorial mb-6 text-ink">Endorsement Requests</h1>
+          <p class="ts-body-large max-w-[55ch] text-ink-secondary">
+            T4P endorsements signal to the broader tech and Palestine advocacy community that your
+            campaign aligns with our values and goals. Here's what you need to know before
+            applying.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What we look for -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="endorsement-animate mb-10">
+          <h2 class="ts-heading text-ink">What we look for</h2>
+        </div>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div class="endorsement-animate rounded-xl border border-butter bg-cream p-6">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-butter">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-brand">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+              </svg>
+            </div>
+            <h3 class="ts-label mb-2 font-semibold text-ink">Will it be impactful?</h3>
+            <p class="ts-body-small text-ink-secondary">
+              We look for campaigns and initiatives with meaningful potential to advance
+              Palestinian rights or hold tech companies accountable.
+            </p>
+          </div>
+
+          <div class="endorsement-animate rounded-xl border border-butter bg-cream p-6">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-butter">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-brand">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3" />
+              </svg>
+            </div>
+            <h3 class="ts-label mb-2 font-semibold text-ink">Does it relate to tech?</h3>
+            <p class="ts-body-small text-ink-secondary">
+              Our endorsements carry the most weight in the tech industry, and we prioritize
+              campaigns where that community connection matters.
+            </p>
+          </div>
+
+          <div class="endorsement-animate rounded-xl border border-butter bg-cream p-6">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-butter">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-brand">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+              </svg>
+            </div>
+            <h3 class="ts-label mb-2 font-semibold text-ink">Who are the other supporters?</h3>
+            <p class="ts-body-small text-ink-secondary">
+              We also consider other endorsing orgs and groups to assess the potential reach and
+              impact of the campaign. Showing strong support from others in the movement
+              strengthens your request.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="endorsement-animate mb-10">
+          <h2 class="ts-heading text-ink">Frequently asked questions</h2>
+        </div>
+        <div class="max-w-[860px]" id="faq-list">
+          <div class="faq-item endorsement-animate border-t border-ink-divider">
+            <button class="flex w-full items-start justify-between gap-6 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand" aria-expanded="false">
+              <span class="ts-body-large font-medium text-ink">What does a T4P endorsement mean?</span>
+              <span class="faq-icon mt-1 shrink-0 text-brand transition-transform duration-300" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-body grid grid-rows-[0fr] transition-all duration-300 ease-out">
+              <div class="overflow-hidden">
+                <p class="ts-body max-w-[65ch] pb-6 text-ink-secondary">
+                  A T4P endorsement is a public statement of support for a specific campaign or
+                  initiative. It signals to our community of thousands of tech workers that the
+                  campaign aligns with our values. It does not imply financial support or ongoing
+                  partnership. Note that we don't fully vet every endorsement — our review is based
+                  on available information and community knowledge, not exhaustive due diligence.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item endorsement-animate border-t border-ink-divider">
+            <button class="flex w-full items-start justify-between gap-6 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand" aria-expanded="false">
+              <span class="ts-body-large font-medium text-ink">How long does the review process take?</span>
+              <span class="faq-icon mt-1 shrink-0 text-brand transition-transform duration-300" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-body grid grid-rows-[0fr] transition-all duration-300 ease-out">
+              <div class="overflow-hidden">
+                <p class="ts-body max-w-[65ch] pb-6 text-ink-secondary">
+                  We aim to review all requests within 5-7 days. We'll reach out if we need
+                  additional information.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item endorsement-animate border-t border-ink-divider">
+            <button class="flex w-full items-start justify-between gap-6 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand" aria-expanded="false">
+              <span class="ts-body-large font-medium text-ink">Can T4P projects apply for endorsements?</span>
+              <span class="faq-icon mt-1 shrink-0 text-brand transition-transform duration-300" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-body grid grid-rows-[0fr] transition-all duration-300 ease-out">
+              <div class="overflow-hidden">
+                <p class="ts-body max-w-[65ch] pb-6 text-ink-secondary">
+                  Yes. If you're already a T4P incubator project and are launching a specific
+                  campaign, you can request an endorsement. Check the "T4P project" box in the form
+                  and our review will reflect that context.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item endorsement-animate border-t border-b border-ink-divider">
+            <button class="flex w-full items-start justify-between gap-6 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand" aria-expanded="false">
+              <span class="ts-body-large font-medium text-ink">What happens if our request is declined?</span>
+              <span class="faq-icon mt-1 shrink-0 text-brand transition-transform duration-300" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-body grid grid-rows-[0fr] transition-all duration-300 ease-out">
+              <div class="overflow-hidden">
+                <p class="ts-body max-w-[65ch] pb-6 text-ink-secondary">
+                  We'll let you know and, where possible, share the reason. Declinations are not
+                  permanent. If your campaign evolves or new information is available, you're
+                  welcome to reapply.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="endorsement-animate max-w-[860px] rounded-xl border border-butter bg-cream p-8">
+          <h2 class="ts-heading mb-2 text-ink">Submit a request</h2>
+          <p class="ts-body mb-8 text-ink-secondary">
+            Fill out the form below and our team will be in touch.
+          </p>
+          <EndorsementForm client:only="react" />
+        </div>
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .endorsement-animate {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+  }
+  .endorsement-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .endorsement-animate {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .endorsement-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll(".endorsement-animate").forEach((el) => obs.observe(el));
+
+  document.querySelectorAll(".faq-item button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = btn.closest(".faq-item");
+      const body = item?.querySelector(".faq-body");
+      const icon = item?.querySelector(".faq-icon");
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!isOpen));
+      body?.classList.toggle("grid-rows-[0fr]", isOpen);
+      body?.classList.toggle("grid-rows-[1fr]", !isOpen);
+      icon?.classList.toggle("rotate-45", !isOpen);
+    });
+  });
+</script>

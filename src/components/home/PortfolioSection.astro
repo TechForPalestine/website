@@ -1,0 +1,297 @@
+---
+const LOGO_DEFAULTS = {
+  bg: "bg-white",
+  padding: "p-8 md:p-4 lg:p-8",
+  imgClass: "max-h-[170px] w-full max-w-[340px] object-contain",
+};
+
+const projects = [
+  {
+    name: "UpScrolled",
+    url: "https://upscrolled.com/en/",
+    description:
+      "Meta and other social media apps are controlled by billionaires and suppress pro-Palestine content. This social platform has no shadowbans and no algorithmic games. Launched and scaled via the T4P incubator and ecosystem partners.",
+    logo: { src: "/images/new-homepage/portfolio/proj-logo-5.webp", alt: "UpScrolled logo" },
+    stats: [
+      { label: "in App Store", value: "#1" },
+      { label: "users", value: "5M+" },
+    ],
+  },
+  {
+    name: "Boycat",
+    url: "https://www.boycat.io/",
+    description:
+      "Makes boycotting easy. Scan any product to check its ethical compliance and find alternatives to products complicit in the genocide in real time. Official BDS partner app, connected through T4P.",
+    logo: { src: "/images/new-homepage/portfolio/proj-logo-3.webp", alt: "Boycat logo" },
+    stats: [
+      { label: "users", value: "3M+" },
+      { label: "redirected to ethical brands", value: "$500M+" },
+    ],
+  },
+  {
+    name: "Find a Protest",
+    url: "https://www.findaprotest.info/",
+    description:
+      "Find and subscribe to protests for Palestine in your area, powered by organizers, communities, and volunteer data collectors. Powered by volunteers & strategic guidance through T4P.",
+    logo: {
+      src: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp",
+      alt: "Find a Protest logo",
+      imgClass: "max-h-[120px] w-full max-w-[220px] object-contain",
+    },
+    stats: [
+      { label: "monthly users", value: "200k+" },
+      { label: "protests & solidarity events listed", value: "10k+" },
+    ],
+  },
+  {
+    name: "Thaura.ai",
+    url: "https://thaura.ai/home",
+    description:
+      "Mainstream LLM models are designed with imperialist and Zionist bias. Thaura is AI built ethically, pro-Palestine, designed around environmental, social, and privacy concerns. Launched via the T4P network to profitability.",
+    logo: { src: "/images/new-homepage/portfolio/proj-logo-4.webp", alt: "Thaura.ai logo" },
+    stats: [
+      { label: "less energy than ChatGPT per query", value: "94%" },
+      { label: "data sold to third parties", value: "0" },
+    ],
+  },
+  {
+    name: "Newscord",
+    url: "https://newscord.org/",
+    description:
+      "Exposes media bias against Palestine with AI-powered news summaries across hundreds of sources, and tracking of biased headlines & responsible news outlets. T4P marketing support & connections to ecosystem partners.",
+    logo: {
+      src: "/images/new-homepage/portfolio/proj-logo-1.webp",
+      alt: "Newscord logo",
+      bg: "bg-black",
+      padding: "px-14 py-0",
+      imgClass: "max-h-[170px] w-[180px] max-w-full object-contain",
+    },
+    stats: [{ label: "accounts reached monthly", value: "10M+" }],
+  },
+  {
+    name: "Apricot",
+    url: "https://apricotinternational.org/",
+    description:
+      "Connecting top tech talent from the Middle East, including Palestinian refugees, with US tech companies. Customer introductions and strategic advice via T4P.",
+    logo: { src: "/images/new-homepage/portfolio/proj-logo-2.webp", alt: "Apricot logo" },
+    stats: [
+      { label: "paid to placed talent", value: "$1M+" },
+      { label: "candidates", value: "10k+" },
+    ],
+  },
+];
+---
+
+<section id="portfolio" class="bg-page px-6 pt-14 pb-14 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-20">
+  <div class="mx-auto max-w-[1400px]">
+    <p class="ts-overline mb-10 text-ink-secondary">Our portfolio</p>
+
+    <div class="grid grid-cols-1 gap-8 pb-10 min-[810px]:grid-cols-2 min-[810px]:gap-16 min-[810px]:pb-14">
+      <h2 class="ts-editorial text-ink">
+        Projects that came through <span class="text-brand">T4P</span>
+      </h2>
+      <div>
+        <p class="ts-body-large text-ink-secondary">
+          Each of these projects was scaled through T4P. Powered by volunteers, mentors, and people like you.
+        </p>
+        <p class="ts-body mt-4 text-ink-secondary">
+          If you have a business or nonprofit that supports Palestine, <a href="/incubator-new" class="text-brand hover:underline">Apply to the Incubator</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="mb-6 h-px w-full bg-ink-divider min-[810px]:mb-8"></div>
+  </div>
+
+  <div class="mx-auto max-w-[1400px]">
+  <ul class="portfolio-stack list-none p-0" role="list">
+      {projects.map((p, i) => (
+        <li
+          class="portfolio-card-wrap"
+          data-i={i}
+        >
+          <article class="portfolio-card grid w-full grid-cols-1 gap-8 rounded-[20px] border border-butter bg-sand p-6 min-[810px]:grid-cols-[1.2fr_1fr] min-[810px]:items-center min-[810px]:gap-10 min-[810px]:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
+            <div class="flex min-w-0 flex-col">
+              <h3 class="ts-heading text-ink break-words">{p.name}</h3>
+              <p class="ts-body mt-5 max-w-[65ch] text-ink-secondary break-words">
+                {p.description}
+              </p>
+              <dl class="mt-10 flex flex-col gap-y-6 lg:mt-auto lg:flex-row lg:gap-x-10 lg:pt-12">
+                {p.stats.map((s) => (
+                  <div>
+                    <dt class="ts-body-large text-ink-secondary">{s.label}</dt>
+                    <dd class="ts-stat-large mt-2 text-brand">
+                      {s.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              {p.url && (
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ts-label mt-8 inline-flex items-center gap-2 min-h-[44px] py-2 text-brand hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  Visit {p.name}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                  </svg>
+                </a>
+              )}
+            </div>
+
+            <div class="logo-frame relative w-full min-h-[150px] min-[810px]:min-h-0 min-[810px]:h-[190px]">
+              <div class="logo-frame-back" aria-hidden="true"></div>
+              <div class:list={["logo-frame-front relative flex items-center justify-center rounded-[16px] w-full h-full", p.logo.padding ?? LOGO_DEFAULTS.padding, p.logo.bg ?? LOGO_DEFAULTS.bg]}>
+              <img
+                src={p.logo.src}
+                alt={p.logo.alt}
+                loading="lazy"
+                decoding="async"
+                width="340"
+                height="170"
+                sizes="(max-width: 810px) 280px, 340px"
+                class={p.logo.imgClass ?? LOGO_DEFAULTS.imgClass}
+              />
+              </div>
+            </div>
+          </article>
+        </li>
+      ))}
+  </ul>
+  </div>
+</section>
+
+<style>
+  .portfolio-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .portfolio-card {
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .logo-frame-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: var(--color-logo-frame);
+    transform: rotate(-3deg);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  }
+  .logo-frame-front {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .portfolio-card-wrap {
+    opacity: 0;
+    translate: 0 32px;
+    width: 100%;
+  }
+  .portfolio-card-wrap.in-view {
+    opacity: 1;
+    translate: none;
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  @media (min-width: 810px) {
+    .portfolio-card-wrap {
+      position: sticky;
+      transform-origin: top center;
+      opacity: 0;
+      transition: scale 0.35s ease, opacity 0.7s ease-out;
+      will-change: scale, translate;
+    }
+    .portfolio-card-wrap.in-view { opacity: 1; transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), translate 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
+    .portfolio-card-wrap[data-i="0"] { top: 40px; }
+    .portfolio-card-wrap[data-i="1"] { top: 64px; }
+    .portfolio-card-wrap[data-i="2"] { top: 88px; }
+    .portfolio-card-wrap[data-i="3"] { top: 112px; }
+    .portfolio-card-wrap[data-i="4"] { top: 136px; }
+    .portfolio-card-wrap[data-i="5"] { top: 160px; }
+  }
+
+  :global(html.no-js) .portfolio-card-wrap {
+    opacity: 1;
+    translate: none;
+    position: static;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portfolio-card-wrap {
+      position: static;
+      opacity: 1;
+      translate: none;
+      scale: 1;
+    }
+    .portfolio-card { transition: none; }
+  }
+</style>
+
+<script>
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>(".portfolio-card-wrap")
+  );
+
+  if (cards.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add("in-view");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    cards.forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+      observer.observe(card);
+    });
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const isDesktop = window.matchMedia("(min-width: 810px)").matches;
+
+    if (!prefersReducedMotion && isDesktop) {
+      const SCALE_STEP = 0.025;
+      const MIN_SCALE = 0.88;
+
+      const updateStackScales = () => {
+        // Find the index of the bottom-most card that has reached its sticky top.
+        let activeIdx = -1;
+        cards.forEach((card, i) => {
+          const rect = card.getBoundingClientRect();
+          const stickyTop = parseFloat(getComputedStyle(card).top);
+          if (rect.top <= stickyTop + 0.5) activeIdx = i;
+        });
+
+        cards.forEach((card, i) => {
+          const depth = activeIdx - i;
+          const scale =
+            depth > 0 ? Math.max(MIN_SCALE, 1 - depth * SCALE_STEP) : 1;
+          card.style.scale = scale.toString();
+        });
+      };
+
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateStackScales();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      updateStackScales();
+    }
+  }
+</script>

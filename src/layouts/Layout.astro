@@ -25,7 +25,8 @@ const canonicalUrl = new URL(
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="me" href="https://infosec.exchange/@tech4palestine" />
     <script type="speculationrules">
       {
@@ -117,12 +118,13 @@ const canonicalUrl = new URL(
     <meta property="og:image" content={image} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content="website" />
-    <meta property="twitter:card" name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:site" name="twitter:site" content="@tech4palestine" />
-    <meta property="twitter:title" name="twitter:title" content={title} />
-    <meta property="twitter:description" name="twitter:description" content={description} />
-    <meta property="twitter:image" name="twitter:image" content={image} />
-    <meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
+    <meta property="og:site_name" content="Tech for Palestine" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@tech4palestine" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:creator" content="@tech4palestine" />
 
     <slot name="head" />
 

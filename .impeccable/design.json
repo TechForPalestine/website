@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-25T00:00:00Z",
+  "title": "Design System: Tech for Palestine",
+  "extensions": {
+    "colorMeta": {
+      "page":         { "role": "neutral",   "displayName": "Warm Parchment",    "canonical": "oklch(99% 0.005 80)",  "tonalRamp": ["oklch(15% 0.005 80)","oklch(30% 0.005 80)","oklch(45% 0.005 80)","oklch(60% 0.005 80)","oklch(75% 0.005 80)","oklch(88% 0.005 80)","oklch(95% 0.005 80)","oklch(99% 0.005 80)"] },
+      "cream":        { "role": "neutral",   "displayName": "Cream",             "canonical": "oklch(97% 0.008 65)",  "tonalRamp": ["oklch(15% 0.008 65)","oklch(30% 0.008 65)","oklch(45% 0.008 65)","oklch(60% 0.008 65)","oklch(75% 0.008 65)","oklch(88% 0.008 65)","oklch(94% 0.008 65)","oklch(97% 0.008 65)"] },
+      "butter":       { "role": "neutral",   "displayName": "Butter",            "canonical": "oklch(95% 0.015 75)",  "tonalRamp": ["oklch(15% 0.015 75)","oklch(30% 0.015 75)","oklch(45% 0.015 75)","oklch(60% 0.015 75)","oklch(75% 0.015 75)","oklch(87% 0.015 75)","oklch(92% 0.015 75)","oklch(95% 0.015 75)"] },
+      "sand":         { "role": "neutral",   "displayName": "Sand",              "canonical": "oklch(96% 0.010 80)",  "tonalRamp": ["oklch(15% 0.010 80)","oklch(30% 0.010 80)","oklch(45% 0.010 80)","oklch(60% 0.010 80)","oklch(75% 0.010 80)","oklch(88% 0.010 80)","oklch(93% 0.010 80)","oklch(96% 0.010 80)"] },
+      "ink":          { "role": "neutral",   "displayName": "Ink",               "canonical": "oklch(20% 0.008 350)", "tonalRamp": ["oklch(20% 0.008 350)","oklch(32% 0.008 350)","oklch(44% 0.008 350)","oklch(56% 0.008 350)","oklch(68% 0.008 350)","oklch(80% 0.008 350)","oklch(90% 0.008 350)","oklch(97% 0.008 350)"] },
+      "ink-secondary":{ "role": "neutral",   "displayName": "Ink Secondary",     "canonical": "oklch(48% 0.012 350)", "tonalRamp": ["oklch(15% 0.012 350)","oklch(28% 0.012 350)","oklch(40% 0.012 350)","oklch(48% 0.012 350)","oklch(62% 0.012 350)","oklch(74% 0.012 350)","oklch(85% 0.012 350)","oklch(95% 0.012 350)"] },
+      "ink-muted":    { "role": "neutral",   "displayName": "Ink Muted",         "canonical": "oklch(74% 0.002 0)",   "tonalRamp": ["oklch(20% 0.002 0)","oklch(35% 0.002 0)","oklch(50% 0.002 0)","oklch(62% 0.002 0)","oklch(74% 0.002 0)","oklch(84% 0.002 0)","oklch(91% 0.002 0)","oklch(97% 0.002 0)"] },
+      "ink-divider":  { "role": "neutral",   "displayName": "Ink Divider",       "canonical": "oklch(85% 0.002 0)",   "tonalRamp": ["oklch(20% 0.002 0)","oklch(35% 0.002 0)","oklch(50% 0.002 0)","oklch(65% 0.002 0)","oklch(75% 0.002 0)","oklch(85% 0.002 0)","oklch(92% 0.002 0)","oklch(97% 0.002 0)"] },
+      "brand":        { "role": "primary",   "displayName": "Pomegranate",       "canonical": "oklch(50% 0.12 352)",  "tonalRamp": ["oklch(18% 0.12 352)","oklch(27% 0.12 352)","oklch(36% 0.12 352)","oklch(44% 0.12 352)","oklch(50% 0.12 352)","oklch(62% 0.12 352)","oklch(75% 0.10 352)","oklch(90% 0.06 352)"] },
+      "brand-hover":  { "role": "primary",   "displayName": "Pomegranate Light", "canonical": "oklch(57% 0.13 352)",  "tonalRamp": ["oklch(20% 0.13 352)","oklch(30% 0.13 352)","oklch(40% 0.13 352)","oklch(50% 0.13 352)","oklch(57% 0.13 352)","oklch(68% 0.11 352)","oklch(80% 0.08 352)","oklch(93% 0.04 352)"] }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",          "purpose": "Hero headlines. Used once per page." },
+      "headline": { "displayName": "Headline/Editorial","purpose": "Section-opening statements. Manifesto, portfolio header." },
+      "title":    { "displayName": "Title",             "purpose": "Project names, sub-section headings." },
+      "body":     { "displayName": "Body",              "purpose": "Primary body copy. Max 65-75ch line length." },
+      "label":    { "displayName": "Label/Eyebrow",     "purpose": "Section annotations, button text. Always uppercase." }
+    },
+    "shadows": [
+      { "name": "logo-frame-ambient", "value": "0 6px 20px rgba(0,0,0,0.06)",                           "purpose": "Rotated butter accent behind logo frames." },
+      { "name": "logo-frame-lift",    "value": "0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05)", "purpose": "Logo card foreground — structural lift over accent." }
+    ],
+    "motion": [
+      { "name": "blur-in",      "value": "opacity 0 filter blur(12px) translateY(20px) → opacity 1 filter blur(0) translateY(0)", "duration": "1.2s", "easing": "ease-out", "purpose": "Hero headline entrance. Used for primary copy only." },
+      { "name": "fade-up",      "value": "opacity 0 translateY(12px) → opacity 1 translateY(0)",         "duration": "0.6s", "easing": "ease-out", "purpose": "CTA and logo entrance after headline." },
+      { "name": "card-in",      "value": "opacity 0 scale(0.96) → opacity 1 scale(1)",                   "duration": "0.8s", "easing": "ease-out", "purpose": "Hero glass card entrance." },
+      { "name": "ken-burns",    "value": "scale(1) → scale(1.08) → scale(1)",                            "duration": "14s",  "easing": "ease-in-out", "purpose": "Subtle image life. Full-bleed hero and collage photos only. Always motion-reduce:animate-none." },
+      { "name": "portfolio-in", "value": "opacity 0 translateY(32px) → opacity 1 translateY(0)",         "duration": "0.7s", "easing": "ease-out", "purpose": "Portfolio card scroll-triggered entrance." },
+      { "name": "fade-left",    "value": "opacity 0 translateX(-16px) → opacity 1 translateX(0)",        "duration": "0.6s", "easing": "ease-out", "purpose": "Motif row icon stagger." }
+    ],
+    "breakpoints": [
+      { "name": "sm",  "value": "640px",  "note": "Mobile collage and motif adjustments" },
+      { "name": "md",  "value": "810px",  "note": "Hero layout switch: mobile scroll → desktop glass card" },
+      { "name": "lg",  "value": "1024px", "note": "Portfolio card 2-col, collage all 4 visible" },
+      { "name": "xl",  "value": "1200px", "note": "Logo repositions to bottom-right in hero card; type scale top step" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA. Used for Become a Member and Apply to Incubator.",
+      "html": "<button class=\"ds-btn-primary\">Become a Member</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #FFFBF5; background-color: #AB4956; border: 1px solid transparent; border-radius: 999px; padding: 14px 20px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-primary:hover { background-color: #D35464; } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary CTA. Used alongside Primary to offer a softer alternate action.",
+      "html": "<button class=\"ds-btn-ghost\">See what we've built <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\"><path d=\"M12 5v14M5 13l7 7 7-7\"/></svg></button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #2A2428; background-color: transparent; border: 1px solid #2A2428; border-radius: 999px; padding: 14px 20px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-ghost:hover { background-color: rgba(42,36,40,0.05); } .ds-btn-ghost:active { transform: scale(0.98); } .ds-btn-ghost:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Link Button",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Inline text action. Used for tertiary options and body-copy links.",
+      "html": "<button class=\"ds-btn-text\">Read article →</button>",
+      "css": ".ds-btn-text { display: inline-flex; align-items: center; gap: 4px; font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #AB4956; background: none; border: none; border-radius: 0; padding: 0; cursor: pointer; transition: text-decoration 0.15s ease; } .ds-btn-text:hover { text-decoration: underline; } .ds-btn-text:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
+    },
+    {
+      "name": "Eyebrow Label",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Section annotation. Uppercase, tracked, Ink Secondary. Prefixed with an em-dash by convention.",
+      "html": "<p class=\"ds-eyebrow\">— Our portfolio</p>",
+      "css": ".ds-eyebrow { font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #73656E; margin: 0; }"
+    },
+    {
+      "name": "Portfolio Card",
+      "kind": "card",
+      "refersTo": "portfolio-card",
+      "description": "Signature content container. Full-width editorial strip, not a grid card. Part of the sticky-scroll stack on desktop.",
+      "html": "<article class=\"ds-portfolio-card\"><div class=\"ds-portfolio-card__content\"><h3 class=\"ds-portfolio-card__title\">UpScrolled</h3><p class=\"ds-portfolio-card__body\">The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach.</p><dl class=\"ds-portfolio-card__stats\"><div><dt class=\"ds-portfolio-card__stat-label\">Global App Store</dt><dd class=\"ds-portfolio-card__stat-value\">#1</dd></div></dl></div><div class=\"ds-portfolio-card__logo\"><div class=\"ds-portfolio-logo-back\"></div><div class=\"ds-portfolio-logo-front\"><img src=\"\" alt=\"UpScrolled logo\" width=\"200\" height=\"100\" style=\"max-height:100px;object-fit:contain;\"/></div></div></article>",
+      "css": ".ds-portfolio-card { display: grid; grid-template-columns: 1fr; gap: 32px; background: #F7F2E8; border: 1px solid #F7EAD4; border-radius: 20px; padding: 24px; } @media (min-width: 768px) { .ds-portfolio-card { grid-template-columns: 1.2fr 1fr; align-items: center; gap: 40px; padding: 40px; } } .ds-portfolio-card__content { display: flex; flex-direction: column; } .ds-portfolio-card__title { font-family: 'Fraunces', serif; font-size: clamp(32px, 3vw, 38px); font-weight: 400; line-height: 1.22; color: #2A2428; margin: 0; } .ds-portfolio-card__body { font-family: 'Outfit', system-ui, sans-serif; font-size: clamp(16px, 1.5vw, 18px); font-weight: 400; line-height: 1.48; color: #73656E; margin: 20px 0 0; } .ds-portfolio-card__stats { display: flex; flex-direction: column; gap: 24px; margin-top: 40px; } .ds-portfolio-card__stat-label { font-family: 'Outfit', system-ui, sans-serif; font-size: 18px; color: #73656E; margin: 0; } .ds-portfolio-card__stat-value { font-family: 'Fraunces', serif; font-size: clamp(42px, 4vw, 60px); font-weight: 400; line-height: 1; color: #AB4956; margin: 8px 0 0; } .ds-portfolio-card__logo { position: relative; width: 100%; min-height: 160px; } .ds-portfolio-logo-back { position: absolute; inset: 0; border-radius: 16px; background: #EFE3D4; transform: rotate(-3deg); box-shadow: 0 6px 20px rgba(0,0,0,0.06); } .ds-portfolio-logo-front { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 160px; border-radius: 16px; background: #fff; padding: 32px; box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05); }"
+    },
+    {
+      "name": "Stats Cell",
+      "kind": "custom",
+      "refersTo": "stats-cell",
+      "description": "Impact number with supporting label. Lives inside the sand stats grid. Counter animates on scroll entry (JS); always degrades gracefully without animation.",
+      "html": "<div class=\"ds-stat-cell\"><p class=\"ds-stat-cell__value\">80<span class=\"ds-stat-cell__plus\">+</span></p><p class=\"ds-stat-cell__label\">Projects Incubated</p></div>",
+      "css": ".ds-stat-cell { } .ds-stat-cell__value { font-family: 'Fraunces', serif; font-size: clamp(36px, 4vw, 48px); font-weight: 400; line-height: 1.22; color: #2A2428; margin: 0; } .ds-stat-cell__plus { color: #AB4956; } .ds-stat-cell__label { font-family: 'Outfit', system-ui, sans-serif; font-size: clamp(16px, 1.5vw, 20px); font-weight: 400; line-height: 1.48; color: #73656E; margin: 6px 0 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Steadfast Press",
+    "overview": "This system is built like a publication produced by people who care deeply: warm paper stock, purposeful type, nothing decorative that doesn't earn its place. The Fraunces serif carries editorial authority; Outfit brings it back down to earth. The palette reads like late-afternoon light on linen, not a tech product, not a protest poster.\n\nThe design is warm without being sentimental, serious without being cold, and direct without being aggressive. It reflects a community of skilled professionals who know what they're doing and aren't apologetic about why. Complexity is prohibited not because the cause is simple, but because clarity is respect for the visitor's time and attention.\n\nThis system explicitly rejects: SaaS gradient aesthetics, corporate nonprofit polish, excessive motion or interactivity, vague social-good language, and anything that hedges on what T4P stands for.",
+    "keyCharacteristics": [
+      "Editorial serif (Fraunces) paired with a clean humanist sans (Outfit)",
+      "Warm parchment neutrals with a single pomegranate accent, used sparingly",
+      "Flat-by-default surfaces with tonal depth through background steps",
+      "Motion is restrained: entrances only, no looping decorative animation",
+      "Every screen ends with a clear, direct call to action"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule",         "body": "Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.", "section": "colors" },
+      { "name": "The Tonal Depth Rule",        "body": "Depth is created by stepping through the neutral stack (Parchment → Cream → Sand → Butter), not by drop shadows. Shadows are reserved for interactive elements that need structural lift.", "section": "colors" },
+      { "name": "The No Pure Values Rule",     "body": "Never use #000000 or #ffffff. Every neutral carries a warm tint. Pure values feel clinical; tinted neutrals feel inhabited.", "section": "colors" },
+      { "name": "The Fraunces Hierarchy Rule", "body": "Fraunces is exclusively for display, headline, and title roles. It is never used for body, label, or interface copy.", "section": "typography" },
+      { "name": "The Line Length Rule",        "body": "Body copy never exceeds 75 characters per line. On wide viewports, constrain with max-w-[75ch] or equivalent.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule",    "body": "A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step solves the same problem.", "section": "elevation" },
+      { "name": "The No Nested Card Rule",     "body": "Never place a card inside a card. The logo frame within a portfolio card is a logo display element, not a card.", "section": "components" }
+    ],
+    "dos": [
+      "Use Pomegranate (#AB4956) only on CTAs, brand emphasis, and active states",
+      "Step through the neutral stack to create depth rather than adding shadows",
+      "Use Fraunces exclusively for display, headline, and title roles",
+      "Cap body text at 65–75ch line length on all viewport widths",
+      "Guard every animation with prefers-reduced-motion",
+      "End every page section with a progression toward the primary CTA",
+      "Use real faces, real event photos, and real project logos",
+      "State T4P's mission explicitly and early — the cause is named, not implied"
+    ],
+    "donts": [
+      "Don't use excessive interactivity or motion — clarity takes priority over spectacle",
+      "Don't hedge or use vague social-good language — T4P is explicitly pro-Palestine",
+      "Don't use cold or corporate visual language: blues, grays, geometric icons, corporate-sans",
+      "Don't use gradient text (background-clip: text) — use solid Pomegranate",
+      "Don't use side-stripe borders (border-left > 1px as colored accent)",
+      "Don't repeat the hero metric pattern (big number + small label + gradient) as SaaS feature grid",
+      "Don't use glassmorphism decoratively — the hero glass card is purposeful, everywhere else is solid",
+      "Don't use #000000 or #ffffff",
+      "Don't add shadows to surfaces that don't move or need structural lift",
+      "Don't use generic nonprofit design: blue-and-white palettes, stock photo heroes, 'we believe in a better world' copy"
+    ]
+  }
+}

@@ -1,0 +1,190 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+import Button from "../components/ui/Button.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const board = [
+  {
+    name: "Paul Biggar",
+    role: "Founder & CEO",
+    image: "/paul-biggar.png",
+    bio: "Paul Biggar leads Tech for Palestine, a collaboration of tech projects advocating for Palestine. At its core, Tech for Palestine is an incubator to start and support projects for Palestine with mentorship, tech volunteers, marketing support, and connections to the broad Palestine advocacy community. He previously founded tech startups Darklang and CircleCI, as well as a Y Combinator-backed startup. He graduated with a PhD in Computer Science from Trinity College Dublin in 2010.",
+  },
+  {
+    name: "Amir Nathoo",
+    role: "Co-founder & CEO of Outschool",
+    image: "/amir-nathoo.jpg",
+    imageLeft: true,
+    bio: "Amir seeks technology and social levers to disrupt the status quo and drive positive change at scale. He is Co-founder and CEO of Outschool, an education marketplace for kids, having previously founded Trigger.io, a development platform for creating native mobile apps, and worked at Square, leading the development of Square Payroll. He holds an MEng in Electrical and Information Sciences from the University of Cambridge. Since late 2023, Amir has led, funded and supported a variety of humanitarian, political and economic projects in resistance to Israel's genocide and in support of Palestinian liberation. He provides free classes for Palestinian refugee kids through Outschool.org's non profit initiative and is an investor in Boycat.io amongst others.",
+  },
+];
+
+const staff = [
+  { name: "Afzal Mangal", role: "Director of Marketing", image: "/images/staff/afzal.jpg" },
+  { name: "Alaa' Odeh", role: "Director of Operations (Interim)", image: "/images/staff/alaa.jpg", posClass: "[object-position:center_15%]" },
+  { name: "Azza Harara", role: "Director of Volunteering and Recruitment", image: "/images/staff/azza.jpg" },
+  { name: "Cecile Potier", role: "Volunteers and Members Coordinator", image: "/images/staff/cecile.jpeg", posClass: "object-top" },
+  { name: "Iva Gumnishka", role: "Director of Strategic Partnerships & Events", image: "/images/staff/iva.jpg", posClass: "object-top" },
+  { name: "Kate Kerpez", role: "Director of Development", image: "/images/staff/kate.png", posClass: "object-top" },
+  { name: "Omar Hamayel", role: "Director of Finance", image: "/images/staff/omar.JPG" },
+  { name: "Samira Hayat", role: "Project & Teams Operations Manager", image: "/images/staff/samira.jpg" },
+  { name: "Tom Hall", role: "Director of Incubation", image: "/images/staff/tom.jpg", posClass: "[object-position:center_35%]" },
+  { name: "Zahid Hanif", role: "Director of Engineering", image: "/images/staff/zahid.jpeg" },
+];
+---
+
+<HomeLayout
+  title="Team & Board"
+  description="Meet the dedicated leaders guiding Tech for Palestine's mission to support Palestinian liberation through technology and advocacy."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="about-animate max-w-[65ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Our Team</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            The people building tech for Palestinian <span class="text-brand">freedom and liberation</span>
+          </h1>
+          <p class="ts-body-large text-ink-secondary">
+            Meet the dedicated leaders guiding Tech for Palestine's mission to support Palestinian liberation through technology and advocacy.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Board of Directors -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <p class="ts-overline mb-4 text-ink-secondary">Leadership</p>
+        <h2 class="ts-heading mb-12 text-ink">Board of Directors</h2>
+        <div class="space-y-16">
+          {board.map((member) => (
+            <div class={`about-animate grid grid-cols-1 items-start gap-10 min-[810px]:gap-16 ${member.imageLeft ? "min-[810px]:grid-cols-[280px_1fr]" : "min-[810px]:grid-cols-[1fr_280px]"}`}>
+              <div class={`w-40 min-[810px]:w-full mx-auto min-[810px]:mx-0 ${!member.imageLeft ? "min-[810px]:order-2" : ""}`}>
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  class="w-full rounded-[20px] object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class={!member.imageLeft ? "min-[810px]:order-1" : ""}>
+                <h3 class="ts-heading mb-2 text-ink">{member.name}</h3>
+                <p class="ts-body-large mb-4 text-brand">{member.role}</p>
+                <p class="ts-body-large max-w-[75ch] text-ink-secondary">{member.bio}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Staff -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <p class="ts-overline mb-4 text-ink-secondary">The team</p>
+        <h2 class="ts-heading mb-12 text-ink">Our Staff</h2>
+        <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 min-[810px]:gap-6">
+          {staff.map((member) => (
+            <div class="about-animate overflow-hidden rounded-[20px] border border-butter bg-page transition-colors hover:bg-cream">
+              <div class="aspect-[4/4] overflow-hidden">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  class={`h-full w-full object-cover${member.posClass ? ` ${member.posClass}` : ""}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="border-t-2 border-brand px-5 pt-4 pb-5">
+                <p class="ts-eyebrow mb-1 text-ink">{member.name}</p>
+                <p class="ts-overline text-ink-secondary">{member.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Join Our Mission -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="about-animate">
+          <h2 class="ts-heading mb-6 text-ink">Join Our Mission</h2>
+          <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
+            We're always looking for passionate individuals to join our team and contribute to Palestinian liberation through technology.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button href="/volunteer-new" variant="primary" size="md" arrow>
+              Get Involved
+            </Button>
+            <Button href="/contact-new" variant="ghost" size="md" arrow>
+              Contact Us
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up form -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .about-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .about-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .about-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .about-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".about-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

@@ -1,0 +1,63 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HeroSection from "../components/home/HeroSection.astro";
+import ManifestoSection from "../components/home/ManifestoSection.astro";
+import WhySection from "../components/home/WhySection.astro";
+import PortfolioSection from "../components/home/PortfolioSection.astro";
+import SupportSection from "../components/home/SupportSection.astro";
+import TestimonialsSection from "../components/home/TestimonialsSection.astro";
+import OpeningsSection from "../components/home/OpeningsSection.astro";
+import PressSection from "../components/home/PressSection.astro";
+import CtaSection from "../components/home/CtaSection.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+let openRoles: Array<{
+  id: string;
+  title: string;
+  description: string | null;
+  skillCategories: string[];
+  timeCommitment: string | null;
+  type: "team" | "project";
+  team: { name: string } | null;
+  project: { id: string; name: string } | null;
+}> = [];
+
+try {
+  const res = await fetch("https://hub.techforpalestine.org/api/public/open-roles");
+  if (res.ok) {
+    openRoles = await res.json();
+  }
+} catch {}
+---
+
+<HomeLayout
+  title="Tech For Palestine"
+  description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation."
+>
+  <link rel="preload" as="image" href="/images/new-homepage/hero/hero.webp" fetchpriority="high" slot="head" />
+  <link rel="preload" as="image" href="/images/new-homepage/manifesto/who-are-we-4.webp" slot="head" />
+  <HomeNavbar membershipLive={membershipLive} />
+  <main>
+    <HeroSection membershipLive={membershipLive} />
+    <ManifestoSection />
+    <PortfolioSection />
+    <SupportSection />
+    <WhySection />
+    <TestimonialsSection />
+    {openRoles.length > 0 && <OpeningsSection membershipLive={membershipLive} roles={openRoles} />}
+    <PressSection />
+    <CtaSection membershipLive={membershipLive} />
+    <script>
+      try {
+        const v = localStorage.getItem("ab-homepage-variant");
+        if (v === "new-homepage" && !sessionStorage.getItem("ab-homepage-tracked")) {
+          sessionStorage.setItem("ab-homepage-tracked", "1");
+          window.plausible("ab-homepage", { props: { variant: "new-homepage" } });
+        }
+      } catch (e) {}
+    </script>
+  </main>
+</HomeLayout>

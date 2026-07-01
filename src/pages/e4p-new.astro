@@ -1,0 +1,480 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+import Map from "../components/Map";
+import { Icon } from "astro-icon/components";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const benefits = [
+  {
+    name: "Community",
+    description: "A supportive community of peers who share the same values",
+    icon: "mdi:account-group",
+  },
+  {
+    name: "New Business & Networking",
+    description: "Opportunities to generate new business and build your professional network",
+    icon: "mdi:handshake",
+  },
+  {
+    name: "In-Person Meetups",
+    description: "Invitations to in-person meetups around the world with local E4P members",
+    icon: "mdi:calendar-star",
+  },
+  {
+    name: "Funding Introductions",
+    description:
+      "Introductions to values-aligned VCs, angel investors and other sources of funding",
+    icon: "mdi:cash-multiple",
+  },
+  {
+    name: "Hiring Support",
+    description:
+      "Support for enriching your hiring pipeline with Palestinian and pro-Palestine talent",
+    icon: "mdi:account-search",
+  },
+  {
+    name: "Boycott Alternatives",
+    description: "Lists of companies and tech products to boycott and alternatives",
+    icon: "mdi:swap-horizontal-circle",
+  },
+  {
+    name: "PR Assistance",
+    description: "PR assistance by amplifying your posts and showcasing your business",
+    icon: "mdi:bullhorn",
+  },
+  {
+    name: "Mentorship & Coaching",
+    description: "Mentorship and personal coaching by other E4P members",
+    icon: "mdi:school",
+  },
+  {
+    name: "Legal Assistance",
+    description: "Pro bono or discounted legal assistance in case of any legal issues",
+    icon: "mdi:gavel",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Chris Musei-Sequeira",
+    title: "Founder, CJSC — USA",
+    image: "/images/chris-linkedin.jpg",
+    linkedin: "https://www.linkedin.com/in/cjsequeira/",
+    quote:
+      "I'm so glad to be a member of Entrepreneurs for Palestine, where I know everyone stands for basic human decency. We are so many different people from so many parts of the world, but we all agree on this most fundamental value.",
+  },
+  {
+    name: "Sami Abu Heiba",
+    title: "Founder, GIL — Palestine",
+    image: "/images/sami-linkedin.jpg",
+    linkedin: "https://www.linkedin.com/in/samiabuheiba/",
+    quote:
+      "Joining E4P has been an incredibly rich and inspiring experience. It connected me with a diverse community of purpose-driven entrepreneurs and gave me access to valuable tools, insights, and opportunities for growth. Being part of this network reminds me daily of the power of collaboration and shared impact.",
+  },
+  {
+    name: "Ariana Alexander-Sefre",
+    title: "Founder, SPOKE — UK",
+    image: "/images/ariana-linkedin.jpg",
+    linkedin: "https://www.linkedin.com/in/arianasefre/",
+    quote:
+      "I joined E4P because I started to ask myself who I can truly trust. I don't want to work with, or take investment from, people who aren't on the right side of history. From now on, I believe it's essential to align with people and brands who will stand up to injustice when they see it. That's why E4P is a great community; because everyone here shares those values.",
+  },
+];
+
+const founders = [
+  {
+    name: "Aline Sara",
+    title: "Co-Founder, Entrepreneurs for Palestine",
+    image: "/images/founders/aline-sara.png",
+    linkedin: "https://www.linkedin.com/in/alinesara/",
+  },
+  {
+    name: "Iva Gumnishka",
+    title: "Co-Founder",
+    image: "/images/founders/iva-gumnishka.png",
+    linkedin: "https://www.linkedin.com/in/ivagumnishka/",
+  },
+  {
+    name: "Paul Biggar",
+    title: "Founder, Tech for Palestine",
+    image: "/images/founders/paul-biggar.png",
+    linkedin: "https://www.linkedin.com/in/paulbiggar/",
+  },
+  {
+    name: "Miguel de Icaza",
+    title: "CEO, Xibbon",
+    image: "/images/founders/miguel-de-icaza.png",
+    linkedin: "https://www.linkedin.com/in/migueld1/",
+  },
+  {
+    name: "Fadi Ghandour",
+    title: "Executive Chairman, Wamda Group",
+    image: "/images/founders/fadi-ghandour.png",
+    linkedin: "https://www.linkedin.com/in/fadi-ghandour-52353b/",
+  },
+  {
+    name: "Amir Nathoo",
+    title: "Co-Founder and CEO, Outschool",
+    image: "/images/founders/amir-nathoo.png",
+    linkedin: "https://www.linkedin.com/in/amirnathoo/",
+  },
+  {
+    name: "Stephanie Nadi Olson",
+    title: "Founder and Executive Chair of the Board, We Are Rosie",
+    image: "/images/founders/stephanie-nadi-olson.png",
+    linkedin: "https://www.linkedin.com/in/snadi/",
+  },
+  {
+    name: "Reem Qawasmi",
+    title: "Venture Partner, Ibtikar Fund",
+    image: "/images/founders/reem-qawasmi.png",
+    linkedin: "https://www.linkedin.com/in/reemqawasmi/",
+  },
+  {
+    name: "Essma Bengabsia",
+    title: "Founder, Bengabsia Consulting",
+    image: "/images/founders/essma-bengabsia.png",
+    linkedin: "https://www.linkedin.com/in/essmabengabsia/",
+  },
+  {
+    name: "Arshan Ahmad",
+    title: "Co-Founder, Friday Ventures",
+    image: "/images/founders/arshan-ahmad.png",
+    linkedin: "https://www.linkedin.com/in/arshanahmad/",
+  },
+];
+---
+
+<HomeLayout
+  title="Entrepreneurs for Palestine - Tech for Palestine"
+  description="Entrepreneurs for Palestine is a global community of founders and CEOs joining forces to stand up for what's right and make a difference for the Palestinian cause."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Entrepreneurs for Palestine</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            <span class="text-brand">Entrepreneurs</span> for Palestine
+          </h1>
+          <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
+            Entrepreneurs for Palestine is a global community of founders and CEOs who are joining
+            forces to stand up for what's right. As entrepreneurs, we hold a lot of collective power
+            which we can use in order to make a difference for the Palestinian cause. We seek to make
+            an impact by being intentional in how we hire, which clients and suppliers we work with,
+            and where we fundraise.
+          </p>
+          <p class="ts-label mb-4 text-ink-secondary">
+            44 countries &nbsp;&middot;&nbsp; 6 continents &nbsp;&middot;&nbsp; 270+ founders
+          </p>
+          <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+            More than 270 CEOs and founders have already joined the movement.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button href="/e4p/sign-up" variant="primary" size="md" arrow>
+              Join the Community
+            </Button>
+            <Button href="/e4p/pledge" variant="ghost" size="md">
+              Sign the E4P Pledge
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits — definition-list layout, no icon cards -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Member benefits</p>
+          <h2 class="ts-heading mb-12 text-ink">What you get as a member</h2>
+          <!-- Featured pair -->
+          <div class="grid grid-cols-1 gap-4 min-[640px]:grid-cols-2 mb-4">
+            {
+              benefits.slice(0, 2).map((benefit, i) => (
+                <div class:list={[
+                  "benefit-card flex items-start gap-5 rounded-[20px] border border-butter p-6 min-[810px]:p-8",
+                  i % 2 === 0 ? "bg-page" : "bg-cream"
+                ]}>
+                  <Icon name={benefit.icon} class="mt-0.5 h-7 w-7 shrink-0 text-brand" />
+                  <div>
+                    <p class="ts-label mb-2 text-ink">{benefit.name}</p>
+                    <p class="ts-body-small leading-relaxed text-ink-secondary">
+                      {benefit.description}
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <!-- Remaining benefits -->
+          <div class="grid grid-cols-1 gap-4 min-[640px]:grid-cols-2 min-[1050px]:grid-cols-3">
+            {
+              benefits.slice(2).map((benefit, i) => (
+                <div class:list={[
+                  "benefit-card rounded-[20px] border border-butter p-6 min-[810px]:p-8",
+                  i % 2 === 0 ? "bg-cream" : "bg-page"
+                ]}>
+                  <Icon name={benefit.icon} class="mb-4 h-6 w-6 text-brand" />
+                  <p class="ts-label mb-2 text-ink">{benefit.name}</p>
+                  <p class="ts-body-small leading-relaxed text-ink-secondary">
+                    {benefit.description}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Community -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Our reach</p>
+          <h2 class="ts-heading mb-10 text-ink">A global community</h2>
+          <div class="overflow-hidden rounded-[20px] border border-butter">
+            <Map client:only="react" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pledge strip — the bold moment -->
+    <section class="bg-cream px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate max-w-[860px]">
+          <p class="ts-overline mb-8 text-ink-secondary">The E4P Pledge</p>
+          <blockquote class="ts-display mb-10 font-serif italic leading-tight text-ink">
+            &ldquo;Be intentional in how you <span class="text-brand">hire</span>, which clients and suppliers you <span class="text-brand">work with</span>, and
+            where you <span class="text-brand">fundraise</span>.&rdquo;
+          </blockquote>
+          <a
+            href="/e4p/pledge"
+            class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter px-5 py-3.5 text-brand transition-colors duration-150 hover:bg-butter min-h-[44px]"
+          >
+            Sign the E4P Pledge
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">From our members</p>
+          <h2 class="ts-heading mb-12 text-ink">What members are saying</h2>
+          <div class="grid grid-cols-1 gap-4 min-[810px]:grid-cols-3 min-[810px]:gap-6">
+            {
+              testimonials.map((t) => (
+                <div class="testimonial-card flex flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
+                  <svg
+                    class="mb-6 shrink-0 text-brand"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
+                  </svg>
+                  <p class="ts-quote flex-1 text-ink">{t.quote}</p>
+                  <footer class="mt-8 flex items-center gap-3">
+                    <img
+                      src={t.image}
+                      alt=""
+                      width="48"
+                      height="48"
+                      loading="lazy"
+                      decoding="async"
+                      class="testimonial-avatar h-12 w-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <a
+                        href={t.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="ts-label text-ink hover:text-brand"
+                      >
+                        {t.name}
+                      </a>
+                      <p class="ts-body-small mt-0.5 text-ink-secondary">{t.title}</p>
+                    </div>
+                  </footer>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Meet the Founders -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Who's behind E4P</p>
+          <h2 class="ts-heading mb-12 text-ink">Meet the founders</h2>
+          <div class="grid grid-cols-2 gap-4 min-[640px]:grid-cols-3 min-[1050px]:grid-cols-5">
+            {
+              founders.map((f) => (
+                <a
+                  href={f.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="founder-card group flex flex-col items-center rounded-[20px] border border-butter bg-page p-5 text-center"
+                  aria-label={`${f.name} on LinkedIn`}
+                >
+                  <img
+                    src={f.image}
+                    alt={f.name}
+                    class="founder-avatar mb-4 h-20 w-20 rounded-full object-cover min-[810px]:h-24 min-[810px]:w-24"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <p class="ts-label mb-1 text-ink group-hover:text-brand">{f.name}</p>
+                  <p class="ts-body-small text-ink-secondary">{f.title}</p>
+                  <Icon
+                    name="mdi:linkedin"
+                    class="mt-3 h-5 w-5 text-ink-muted transition-colors duration-150 group-hover:text-brand"
+                  />
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ready to Join -->
+    <section class="bg-cream px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="e4p-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Get involved</p>
+          <h2 class="ts-heading mb-6 text-ink">Ready to join?</h2>
+          <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
+            If you're an entrepreneur, schedule a short introductory call based on your region.
+          </p>
+          <p class="ts-body-large mb-12 max-w-[65ch] text-ink-secondary">
+            Please include your company, position, and LinkedIn URL for verification.
+          </p>
+          <div class="grid grid-cols-1 gap-8 min-[810px]:grid-cols-2">
+            <div>
+              <p class="ts-label mb-4 text-ink">Americas</p>
+              <div class="overflow-hidden rounded-[20px] border border-butter">
+                <iframe
+                  src="https://calendly.com/hsyed-hsyedlegal/entrepreneurs-for-palestine?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
+                  width="100%"
+                  height="600"
+                  frameborder="0"
+                  title="Schedule a call — Americas"></iframe>
+              </div>
+            </div>
+            <div>
+              <p class="ts-label mb-4 text-ink">Europe &amp; Asia</p>
+              <div class="overflow-hidden rounded-[20px] border border-butter">
+                <iframe
+                  src="https://calendly.com/megan-techforpalestine/30min?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
+                  width="100%"
+                  height="600"
+                  frameborder="0"
+                  title="Schedule a call — Europe & Asia"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-up -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .benefit-card {
+    transition: background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .benefit-card:hover {
+    background-color: var(--color-cream);
+    border-color: transparent;
+  }
+
+  .founder-card {
+    transition: background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .founder-card:hover {
+    background-color: var(--color-cream);
+    border-color: transparent;
+  }
+  .founder-avatar {
+    box-shadow: 0 0 0 1px rgba(42, 36, 40, 0.12);
+  }
+
+  .testimonial-avatar {
+    box-shadow: 0 0 0 1px var(--color-ink-ring);
+  }
+  .testimonial-card {
+    transition: background-color 0.2s ease;
+  }
+  .testimonial-card:hover {
+    background-color: var(--color-butter);
+  }
+
+  .e4p-animate {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+  }
+  .e4p-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .e4p-animate {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .e4p-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".e4p-animate").forEach((el) => obs.observe(el));
+</script>

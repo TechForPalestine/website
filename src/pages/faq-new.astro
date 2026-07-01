@@ -1,0 +1,102 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import FAQSection from "../components/FAQSection.tsx";
+import SignUpForm from "../structures/SignUpForm.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="FAQ"
+  description="Frequently asked questions about Tech for Palestine. Learn about our mission, how to get involved, the T4P Incubator, volunteer opportunities, and how we support Palestinian liberation through technology."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="faq-animate max-w-[65ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Frequently asked <span class="text-brand">questions</span>
+          </h1>
+          <p class="ts-body-large text-ink-secondary">
+            Everything you need to know about our mission, projects, and how to get involved.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-page px-6 pb-20 min-[810px]:px-10">
+      <div class="faq-animate mx-auto max-w-[800px]">
+        <FAQSection client:only="react" />
+      </div>
+    </section>
+
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="faq-animate mx-auto max-w-[800px]">
+        <p class="ts-body-large mb-4 text-ink-secondary">Didn't find the answer you were looking for?</p>
+        <a href="/contact-new" class="ts-label inline-flex items-center gap-2 font-medium text-brand transition-colors hover:text-brand-hover">
+          Contact us
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .faq-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .faq-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .faq-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .faq-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".faq-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>
