@@ -1,35 +1,79 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import "../styles/base.css";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import { getEnv } from "../utils/getEnv";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
-<Layout title="Page Not Found">
-  <main class="flex-1 flex items-center justify-center px-6 py-24">
-    <div class="text-center max-w-lg">
-      <p class="text-base font-semibold text-[#168039]">404</p>
-      <h1 class="mt-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-        Page not found
-      </h1>
-      <p class="mt-6 text-lg text-gray-600">
-        Sorry, the page you're looking for doesn't exist or has been moved.
+<HomeLayout title="Page not found | Tech for Palestine" description="The page you are looking for could not be found.">
+  <HomeNavbar alwaysVisible membershipLive={membershipLive} />
+
+  <main class="flex min-h-[60vh] items-center justify-center px-6 py-16 pt-32">
+    <div class="w-full max-w-[600px] error-content">
+
+      <p class="ts-overline text-ink-secondary">404</p>
+      <hr class="border-t border-ink-divider mt-3 mb-6" />
+
+      <h1 class="ts-editorial text-ink">This page could not be found</h1>
+      <p class="ts-body text-ink-secondary mt-4">
+        It may have moved, been archived, or the address was mistyped.
       </p>
-      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a
-          href="/"
-          class="rounded-md bg-[#168039] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#126b2e] transition-colors"
-        >
-          Go home
-        </a>
-        <a href="/projects" class="text-sm font-semibold text-gray-900 hover:text-[#168039] transition-colors">
-          Projects <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="/events" class="text-sm font-semibold text-gray-900 hover:text-[#168039] transition-colors">
-          Events <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="/get-involved" class="text-sm font-semibold text-gray-900 hover:text-[#168039] transition-colors">
-          Get involved <span aria-hidden="true">&rarr;</span>
-        </a>
-      </div>
+
+      <nav aria-label="Site navigation" class="mt-10">
+        <ul class="list-none m-0 p-0" role="list">
+          <li class="border-t border-ink-divider">
+            <a href="/" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+              <span>Home</span>
+              <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+          <li class="border-t border-ink-divider">
+            <a id="link-projects" href="/projects" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+              <span>Projects</span>
+              <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+          <li class="border-t border-ink-divider">
+            <a id="link-events" href="/events" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+              <span>Events</span>
+              <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+          <li class="border-t border-ink-divider border-b border-ink-divider">
+            <a id="link-get-involved" href="/get-involved" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+              <span>Get involved</span>
+              <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
     </div>
   </main>
-</Layout>
+
+  <script>
+    try {
+      if (localStorage.getItem("ab-homepage-variant") === "new-homepage") {
+        document.getElementById("link-projects").href = "/projects-new";
+        document.getElementById("link-events").href = "/events-new";
+        document.getElementById("link-get-involved").href = "/get-involved-new";
+      }
+    } catch (e) {}
+  </script>
+</HomeLayout>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .error-content {
+      animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.1s both;
+    }
+    .nav-link .arrow {
+      display: inline-block;
+      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .nav-link:hover .arrow {
+      transform: translateX(4px);
+    }
+  }
+</style>
