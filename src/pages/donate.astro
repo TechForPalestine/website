@@ -281,18 +281,6 @@ const isUK = country === "GB";
 
       document.addEventListener("QGIV.donationComplete", async function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-        // TEMP DEBUG: remove after inspecting the payload shape for the opt-in checkbox field
-        try {
-          var debugBox = document.createElement("pre");
-          debugBox.id = "qgiv-debug-payload";
-          debugBox.style.cssText =
-            "position:fixed;top:0;left:0;right:0;z-index:99999;max-height:60vh;overflow:auto;" +
-            "background:#111;color:#0f0;font-size:12px;padding:12px;margin:0;white-space:pre-wrap;word-break:break-all;";
-          debugBox.textContent = "QGIV.donationComplete event.detail:\n" + JSON.stringify(data, null, 2);
-          document.body.appendChild(debugBox);
-        } catch (e) {
-          console.log("QGIV debug render failed", e);
-        }
         var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
 
         var recurringByFlag = transaction.recurring === true;
