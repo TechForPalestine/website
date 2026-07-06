@@ -265,6 +265,7 @@ const isUK = country === "GB";
       document.addEventListener("QGIV.donationComplete", async function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
         var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
+        var contact = (data.QGIV && data.QGIV.contact) ? data.QGIV.contact : {};
 
         var recurringByFlag = transaction.recurring === true;
         var recurringByFrequency = typeof transaction.frequency === "string" &&
@@ -278,6 +279,18 @@ const isUK = country === "GB";
           await new Promise(function (resolve) {
             window.plausible(donationEvent, { props: props, callback: resolve });
           });
+        }
+
+        if (contact.optedIn === true && contact.email) {
+          fetch("/api/donation-complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: contact.email,
+              firstName: contact.firstName || "",
+              lastName: contact.lastName || "",
+            }),
+          }).catch(function () {});
         }
       });
 
