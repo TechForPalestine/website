@@ -281,6 +281,8 @@ const isUK = country === "GB";
 
       document.addEventListener("QGIV.donationComplete", async function (event) {
         var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+        // TEMP DEBUG: remove after inspecting the payload shape for the opt-in checkbox field
+        console.log("QGIV.donationComplete event.detail:", JSON.parse(JSON.stringify(data)));
         var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
 
         var recurringByFlag = transaction.recurring === true;
