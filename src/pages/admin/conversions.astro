@@ -1,6 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import "../../styles/base.css";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 import ConversionDashboard from "../../components/ConversionDashboard";
 import { constantTimeEqual } from "../../utils/crypto";
 import { getEnv } from "../../utils/getEnv";
@@ -15,6 +14,6 @@ if (!expectedToken || !token || !constantTimeEqual(token, expectedToken)) {
 }
 ---
 
-<Layout title="Conversion Dashboard">
+<AdminLayout title="Conversion Dashboard">
   <ConversionDashboard token={token} client:only="react" />
-</Layout>
+</AdminLayout>

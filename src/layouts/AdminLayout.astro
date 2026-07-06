@@ -1,0 +1,116 @@
+---
+import "@fontsource/fraunces/latin-400.css";
+import "@fontsource/outfit/latin-400.css";
+import "@fontsource/outfit/latin-500.css";
+import "../styles/base.css";
+import "../styles/design-system.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description = "Internal admin tool.",
+  image = "https://techforpalestine.org/t4p-social-logo.png",
+} = Astro.props;
+
+const canonicalUrl = new URL(
+  Astro.url.pathname,
+  Astro.site || "https://techforpalestine.org"
+).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="csp-nonce" content={Astro.locals.cspNonce} />
+    <script is:inline>
+      (function () {
+        function applyStyleString(el, value) {
+          while (el.style.length > 0) el.style.removeProperty(el.style.item(0));
+          if (!value) return;
+          value.split(";").forEach(function (part) {
+            var idx = part.indexOf(":");
+            if (idx > 0) {
+              var prop = part.slice(0, idx).trim();
+              var val = part.slice(idx + 1).trim();
+              if (!prop) return;
+              var priority = "";
+              if (/!important\s*$/.test(val)) {
+                priority = "important";
+                val = val.replace(/\s*!important\s*$/, "").trim();
+              }
+              el.style.setProperty(prop, val, priority);
+            }
+          });
+        }
+
+        var m = document.querySelector('meta[name="csp-nonce"]');
+        var n = m && m.getAttribute("content");
+        if (n) {
+          var origCreate = document.createElement.bind(document);
+          document.createElement = function (tag) {
+            var el = origCreate.apply(this, arguments);
+            if (typeof tag === "string" && tag.toLowerCase() === "style") el.nonce = n;
+            return el;
+          };
+        }
+
+        var origSetAttr = Element.prototype.setAttribute;
+        Element.prototype.setAttribute = function (name, value) {
+          if (name === "style") {
+            applyStyleString(this, value);
+            return;
+          }
+          origSetAttr.apply(this, arguments);
+        };
+
+        var origInnerHTMLDesc = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+        if (origInnerHTMLDesc && origInnerHTMLDesc.set) {
+          Object.defineProperty(Element.prototype, "innerHTML", {
+            get: origInnerHTMLDesc.get,
+            set: function (value) {
+              if (typeof value !== "string" || value.indexOf("style=") === -1) {
+                origInnerHTMLDesc.set.call(this, value);
+                return;
+              }
+              var cleaned = value
+                .replace(/\bstyle\s*=\s*"([^"]*)"/gi, 'data-csp-style="$1"')
+                .replace(/\bstyle\s*=\s*'([^']*)'/gi, "data-csp-style='$1'");
+              origInnerHTMLDesc.set.call(this, cleaned);
+              var els = this.querySelectorAll("[data-csp-style]");
+              for (var i = 0; i < els.length; i++) {
+                var sv = els[i].getAttribute("data-csp-style");
+                els[i].removeAttribute("data-csp-style");
+                applyStyleString(els[i], sv);
+              }
+            },
+            configurable: true,
+            enumerable: origInnerHTMLDesc.enumerable,
+          });
+        }
+      })();
+    </script>
+    <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+
+    <slot name="head" />
+  </head>
+  <body class="bg-page font-sans text-ink">
+    <slot />
+  </body>
+</html>
