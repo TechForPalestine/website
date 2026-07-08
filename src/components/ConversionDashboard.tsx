@@ -82,6 +82,10 @@ function buildDateRange(days: number): [string, string] {
 
 const INCLUSIVE_SOURCES = new Set(["qgiv-embed"]);
 
+function effectiveSource(source: string): string {
+  return source && source !== "(none)" ? source : "qgiv-embed";
+}
+
 function applyFilters<T extends { source: string; goal: string }>(
   records: T[],
   goalFilter: string,
@@ -92,8 +96,7 @@ function applyFilters<T extends { source: string; goal: string }>(
     if (!goalMatch) return false;
     if (sourceFilter === "all") return true;
     if (!SOURCED_GOAL_SET.has(r.goal)) return INCLUSIVE_SOURCES.has(sourceFilter);
-    const effectiveSource = r.source || "qgiv-embed";
-    return effectiveSource === sourceFilter;
+    return effectiveSource(r.source) === sourceFilter;
   });
 }
 
@@ -282,8 +285,8 @@ export default function ConversionDashboard() {
     );
     for (const d of filtered) {
       if (!SOURCED_GOAL_SET.has(d.goal)) continue;
-      const source = d.source || "qgiv-embed";
-      totals[source] = (totals[source] || 0) + d.count;
+      const src = effectiveSource(d.source);
+      totals[src] = (totals[src] || 0) + d.count;
     }
     return totals;
   }, [data, goalFilter]);
@@ -693,7 +696,7 @@ export default function ConversionDashboard() {
                               )}
                               {hasSource && (
                                 <td className="py-1 text-ink-secondary">
-                                  {SOURCE_LABELS[r.source || "qgiv-embed"] || r.source || "Qgiv"}
+                                  {SOURCE_LABELS[effectiveSource(r.source)]}
                                 </td>
                               )}
                               <td className="py-1 text-right font-medium text-ink">
