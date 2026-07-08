@@ -83,7 +83,8 @@ function buildDateRange(days: number): [string, string] {
 const INCLUSIVE_SOURCES = new Set(["qgiv-embed"]);
 
 function effectiveSource(source: string): string {
-  return source && source !== "(none)" ? source : "qgiv-embed";
+  if (!source || source === "(none)" || source === "webhook") return "qgiv-embed";
+  return source;
 }
 
 function applyFilters<T extends { source: string; goal: string }>(
