@@ -1,4 +1,11 @@
 ---
+interface Props {
+  membershipLive?: boolean;
+}
+
+const { membershipLive = false } = Astro.props;
+const volunteerTitle = membershipLive ? "Member" : "Volunteer";
+
 const testimonials = [
   {
     quote:
@@ -31,14 +38,21 @@ const testimonials = [
     quote:
       "T4P isn't just a projects incubator, it incubated me too. As someone from Gaza, being part of a team that actively supports and advocates for Palestine makes this work feel deeply personal.",
     name: "Mohanad",
-    role: "Engineering Staff, Tech for Palestine",
+    role: `${volunteerTitle}, Tech for Palestine`,
     headshot: "/images/new-homepage/testimonials/anonymous.svg",
   },
   {
     quote:
-      "Being part of Tech For Palestine is not a duty. It is a privilege. It is a rare opportunity to help the people of Palestine survive and hopefully thrive. I hope more people join as volunteers, and that more people join the Incubator. This is work we do to help forge a future for everyone who is being oppressed. And you will find tremendous joy as you do it.",
+      "Being part of Tech for Palestine is not a duty, it is a privilege. This is work we do to help forge a future for everyone who is being oppressed.",
     name: "Veda",
-    role: "Volunteer, Tech for Palestine",
+    role: `${volunteerTitle}, Tech for Palestine`,
+    headshot: "/images/new-homepage/testimonials/anonymous.svg",
+  },
+  {
+    quote:
+      "T4P gave me a meaningful way to support the Palestinian cause and liberation. It is inspiring to connect with T4P's deeply committed people and volunteers, all united in driving positive change, through the high-impact projects we support.",
+    name: "Cecile",
+    role: `${volunteerTitle}, Tech for Palestine`,
     headshot: "/images/new-homepage/testimonials/anonymous.svg",
   },
 ];
