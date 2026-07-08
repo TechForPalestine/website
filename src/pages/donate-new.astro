@@ -231,6 +231,23 @@ const isUK = country === "GB";
 </script>
 
 <script is:inline define:vars={{ isUK }}>
+  function trackConversion(eventName, props) {
+    if (typeof window.plausible !== "undefined") {
+      window.plausible(eventName, { props: props });
+      return;
+    }
+    fetch("/api/pipe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        n: eventName,
+        u: window.location.href,
+        d: window.location.hostname,
+        p: props,
+      }),
+    }).catch(function () {});
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const forceVariant = urlParams.get("variant");
@@ -275,6 +292,7 @@ const isUK = country === "GB";
     } else if (formToShow === "form-validaid-link") {
       window.addEventListener("message", (event) => {
         if (event.origin !== "https://validaid.org") return;
+
         if (
           event.data.type === "validaid-resize" &&
           event.data.iframeId === "validaid-iframe-event-236"
@@ -283,6 +301,17 @@ const isUK = country === "GB";
           if (iframe) {
             iframe.style.height = event.data.height + "px";
           }
+        } else if (event.data.type === "validaid-donation-complete") {
+          var frequency = event.data.frequency || "one-time";
+          var isRecurring = frequency !== "one-time";
+          var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
+
+          trackConversion(donationEvent, {
+            source: "validaid-embed",
+            amount: event.data.amount != null ? String(event.data.amount) : "",
+            currency: event.data.currency || "",
+            frequency: frequency,
+          });
         }
       });
     }
@@ -299,12 +328,10 @@ const isUK = country === "GB";
 
       var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
 
-      if (typeof window.plausible !== "undefined") {
-        var props = { source: "qgiv-embed", amount: transaction.total != null ? String(transaction.total) : "" };
-        await new Promise(function (resolve) {
-          window.plausible(donationEvent, { props: props, callback: resolve });
-        });
-      }
+      trackConversion(donationEvent, {
+        source: "qgiv-embed",
+        amount: transaction.total != null ? String(transaction.total) : "",
+      });
 
       if (contact.optedIn === true && contact.email) {
         fetch("/api/donation-complete", {

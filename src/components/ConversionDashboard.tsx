@@ -23,6 +23,7 @@ Chart.register(
 interface DailyCount {
   date: string;
   goal: string;
+  source: string;
   count: number;
 }
 
@@ -30,6 +31,7 @@ interface ConversionDetail {
   goal: string;
   amount: string;
   variant: string;
+  source: string;
   count: number;
 }
 
@@ -62,11 +64,36 @@ const GOAL_KEYS = [
   "Membership-complete",
 ] as const;
 
+const SOURCE_KEYS = ["qgiv-embed", "validaid-embed"] as const;
+
+const SOURCE_LABELS: Record<string, string> = {
+  "qgiv-embed": "Qgiv",
+  "validaid-embed": "ValidAid",
+};
+
+const SOURCED_GOAL_SET = new Set(["One-time-donate", "Monthly-donate"]);
+
 function buildDateRange(days: number): [string, string] {
   const to = new Date();
   const from = new Date();
   from.setDate(from.getDate() - days);
   return [from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)];
+}
+
+const INCLUSIVE_SOURCES = new Set(["qgiv-embed"]);
+
+function applyFilters<T extends { source: string; goal: string }>(
+  records: T[],
+  goalFilter: string,
+  sourceFilter: string
+): T[] {
+  return records.filter((r) => {
+    const goalMatch = goalFilter === "all" || r.goal === goalFilter;
+    if (!goalMatch) return false;
+    if (sourceFilter === "all") return true;
+    if (!SOURCED_GOAL_SET.has(r.goal)) return INCLUSIVE_SOURCES.has(sourceFilter);
+    return r.source === sourceFilter;
+  });
 }
 
 function mergeCountsByGoal(
@@ -80,7 +107,7 @@ function mergeCountsByGoal(
   }
   return Array.from(merged, ([key, count]) => {
     const [date, ...goalParts] = key.split(":");
-    return { date, goal: goalParts.join(":"), count };
+    return { date, goal: goalParts.join(":"), source: "", count };
   });
 }
 
@@ -100,7 +127,7 @@ function bucketByWeek(counts: DailyCount[]): DailyCount[] {
   }
   return Array.from(merged, ([key, count]) => {
     const [date, ...goalParts] = key.split(":");
-    return { date, goal: goalParts.join(":"), count };
+    return { date, goal: goalParts.join(":"), source: "", count };
   });
 }
 
@@ -137,11 +164,13 @@ function StatCard({
   value,
   valueColor,
   emphasized = false,
+  note,
 }: {
   label: string;
   value: string;
   valueColor?: string;
   emphasized?: boolean;
+  note?: string;
 }) {
   return (
     <div
@@ -156,6 +185,9 @@ function StatCard({
       >
         {value}
       </p>
+      {note && (
+        <p className="ts-caption mt-1 text-ink-muted">{note}</p>
+      )}
     </div>
   );
 }
@@ -166,6 +198,7 @@ export default function ConversionDashboard() {
   const [dateTo, setDateTo] = useState(defaultTo);
   const [activePreset, setActivePreset] = useState<number | null>(30);
   const [goalFilter, setGoalFilter] = useState("all");
+  const [sourceFilter, setSourceFilter] = useState("all");
   const [data, setData] = useState<StatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -208,18 +241,50 @@ export default function ConversionDashboard() {
 
   const isAggregated = rangeDays > 30;
 
+  const sourceDisabled = goalFilter === "Membership-complete";
+
+  const visibleGoals = goalFilter === "all"
+    ? GOAL_KEYS
+    : GOAL_KEYS.filter((g) => g === goalFilter);
+
+  const showSourceCards =
+    goalFilter === "all" || SOURCED_GOAL_SET.has(goalFilter);
+
+  const visibleSources =
+    !showSourceCards
+      ? []
+      : sourceFilter === "all"
+        ? [...SOURCE_KEYS]
+        : SOURCE_KEYS.filter((s) => s === sourceFilter);
+
   const chartData = useMemo(() => {
     if (!data) return null;
-    const allCounts = mergeCountsByGoal(data.plausible, data.dropped);
-    const filtered =
-      goalFilter === "all"
-        ? allCounts
-        : allCounts.filter((d) => d.goal === goalFilter);
-    const bucketed = isAggregated ? bucketByWeek(filtered) : filtered;
+    const filtered = applyFilters(
+      [...data.plausible, ...data.dropped],
+      goalFilter,
+      sourceFilter
+    );
+    const allCounts = mergeCountsByGoal(filtered, []);
+    const bucketed = isAggregated ? bucketByWeek(allCounts) : allCounts;
     const dates = Array.from(new Set(bucketed.map((d) => d.date))).sort();
     const goals = Array.from(new Set(bucketed.map((d) => d.goal)));
     return { bucketed, dates, goals };
-  }, [data, goalFilter, isAggregated]);
+  }, [data, goalFilter, sourceFilter, isAggregated]);
+
+  const sourceTotals = useMemo(() => {
+    if (!data) return {} as Record<string, number>;
+    const totals: Record<string, number> = {};
+    const filtered = applyFilters(
+      [...data.plausible, ...data.dropped],
+      goalFilter,
+      "all"
+    );
+    for (const d of filtered) {
+      if (!SOURCED_GOAL_SET.has(d.goal) || !d.source) continue;
+      totals[d.source] = (totals[d.source] || 0) + d.count;
+    }
+    return totals;
+  }, [data, goalFilter]);
 
   useEffect(() => {
     if (!chartData || !chartRef.current) return;
@@ -288,7 +353,18 @@ export default function ConversionDashboard() {
   }, [chartData]);
 
   const allCounts = data
-    ? mergeCountsByGoal(data.plausible, data.dropped)
+    ? mergeCountsByGoal(
+        applyFilters(
+          [...data.plausible, ...data.dropped],
+          goalFilter,
+          sourceFilter
+        ),
+        []
+      )
+    : [];
+
+  const filteredDetails = data
+    ? applyFilters(data.details, goalFilter, sourceFilter)
     : [];
 
   const totalConversions = allCounts.reduce((sum, d) => sum + d.count, 0);
@@ -305,8 +381,9 @@ export default function ConversionDashboard() {
         Conversion events tracked across /donate and /membership pages.
       </p>
 
-      {/* Date range + goal filter */}
+      {/* Filters */}
       <div className="mt-8 flex flex-wrap items-end gap-6">
+        {/* Date range */}
         <div>
           <label htmlFor="date-from" className="ts-caption text-ink-secondary">
             From
@@ -353,22 +430,52 @@ export default function ConversionDashboard() {
             </SegmentedButton>
           ))}
         </div>
-        <div className="flex flex-wrap gap-2">
-          <SegmentedButton
-            active={goalFilter === "all"}
-            onClick={() => setGoalFilter("all")}
-          >
-            All Goals
-          </SegmentedButton>
-          {GOAL_KEYS.map((goal) => (
+
+        {/* Goal filter */}
+        <div>
+          <p className="ts-caption mb-1 text-ink-secondary">Goal</p>
+          <div className="flex flex-wrap gap-2">
             <SegmentedButton
-              key={goal}
-              active={goalFilter === goal}
-              onClick={() => setGoalFilter(goal)}
+              active={goalFilter === "all"}
+              onClick={() => setGoalFilter("all")}
             >
-              {GOAL_LABELS[goal]}
+              All
             </SegmentedButton>
-          ))}
+            {GOAL_KEYS.map((goal) => (
+              <SegmentedButton
+                key={goal}
+                active={goalFilter === goal}
+                onClick={() => setGoalFilter(goal)}
+              >
+                {GOAL_LABELS[goal]}
+              </SegmentedButton>
+            ))}
+          </div>
+        </div>
+
+        {/* Source filter */}
+        <div
+          className={`transition-opacity ${sourceDisabled ? "pointer-events-none opacity-40" : ""}`}
+          aria-disabled={sourceDisabled}
+        >
+          <p className="ts-caption mb-1 text-ink-secondary">Source</p>
+          <div className="flex flex-wrap gap-2">
+            <SegmentedButton
+              active={sourceFilter === "all"}
+              onClick={() => setSourceFilter("all")}
+            >
+              All Sources
+            </SegmentedButton>
+            {SOURCE_KEYS.map((source) => (
+              <SegmentedButton
+                key={source}
+                active={sourceFilter === source}
+                onClick={() => setSourceFilter(source)}
+              >
+                {SOURCE_LABELS[source]}
+              </SegmentedButton>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -392,7 +499,7 @@ export default function ConversionDashboard() {
       {data && !loading && totalConversions === 0 && (
         <div className="ts-body-small mt-8 rounded-md bg-sand p-6 text-ink-secondary">
           No conversions recorded in this range. Try widening the date range
-          or clearing the goal filter.
+          or clearing filters.
         </div>
       )}
 
@@ -405,7 +512,7 @@ export default function ConversionDashboard() {
               value={String(totalConversions)}
               emphasized
             />
-            {GOAL_KEYS.map((goal) => {
+            {visibleGoals.map((goal) => {
               const count = allCounts
                 .filter((d) => d.goal === goal)
                 .reduce((s, d) => s + d.count, 0);
@@ -420,6 +527,20 @@ export default function ConversionDashboard() {
               );
             })}
           </div>
+
+          {/* By-source summary */}
+          {visibleSources.length > 0 && (
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {visibleSources.map((source) => (
+                <StatCard
+                  key={source}
+                  label={`${SOURCE_LABELS[source]} Donations`}
+                  value={String(sourceTotals[source] || 0)}
+                  note={source === "qgiv-embed" ? "Excludes membership" : undefined}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Chart */}
           <div className="mt-8 rounded-md bg-sand p-6">
@@ -438,7 +559,7 @@ export default function ConversionDashboard() {
             </div>
           </div>
 
-          {/* Raw counts table — accessible fallback for the chart above */}
+          {/* Daily/weekly counts table */}
           {chartData && chartData.dates.length > 0 && (
             <div className="mt-4 rounded-md bg-sand p-5">
               <h3 className="ts-caption text-ink-secondary uppercase tracking-wide">
@@ -497,12 +618,14 @@ export default function ConversionDashboard() {
           )}
 
           {/* Conversion details per goal */}
-          {data.details.length > 0 && (
+          {filteredDetails.length > 0 && (
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {GOAL_KEYS.map((goal) => {
-                const rows = data.details.filter((d) => d.goal === goal);
+              {visibleGoals.map((goal) => {
+                const rows = filteredDetails.filter((d) => d.goal === goal);
                 if (rows.length === 0) return null;
                 const hasVariant = goal === "Membership-complete";
+                const hasSource =
+                  sourceFilter === "all" && SOURCED_GOAL_SET.has(goal);
                 const tracked = rows
                   .filter((r) => r.amount && !isNaN(parseFloat(r.amount)))
                   .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
@@ -541,6 +664,11 @@ export default function ConversionDashboard() {
                                 Variant
                               </th>
                             )}
+                            {hasSource && (
+                              <th className="ts-label pb-1 text-left text-ink-secondary">
+                                Source
+                              </th>
+                            )}
                             <th className="ts-label pb-1 text-right text-ink-secondary">
                               Count
                             </th>
@@ -561,6 +689,11 @@ export default function ConversionDashboard() {
                                   {r.variant || "—"}
                                 </td>
                               )}
+                              {hasSource && (
+                                <td className="py-1 text-ink-secondary">
+                                  {SOURCE_LABELS[r.source] || r.source || "—"}
+                                </td>
+                              )}
                               <td className="py-1 text-right font-medium text-ink">
                                 {r.count}
                               </td>
@@ -572,6 +705,7 @@ export default function ConversionDashboard() {
                                 Untracked
                               </td>
                               {hasVariant && <td />}
+                              {hasSource && <td />}
                               <td className="py-1 text-right font-medium text-ink-muted">
                                 {untrackedCount}
                               </td>

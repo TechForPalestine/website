@@ -16,8 +16,11 @@ interface PlausibleResult {
 interface DailyCount {
   date: string;
   goal: string;
+  source: string;
   count: number;
 }
+
+const SOURCED_GOALS = ["One-time-donate", "Monthly-donate"];
 
 interface DroppedEvent {
   eventName: string;
@@ -40,6 +43,11 @@ async function fetchPlausibleStatsForGoal(
   dateFrom: string,
   dateTo: string
 ): Promise<DailyCount[]> {
+  const isSourced = SOURCED_GOALS.includes(goal);
+  const dimensions = isSourced
+    ? ["time:day", "event:goal", "event:props:source"]
+    : ["time:day", "event:goal"];
+
   const response = await fetch(PLAUSIBLE_API, {
     method: "POST",
     headers: {
@@ -51,7 +59,7 @@ async function fetchPlausibleStatsForGoal(
       metrics: ["events"],
       date_range: [dateFrom, dateTo],
       filters: [["is", "event:goal", [goal]]],
-      dimensions: ["time:day", "event:goal"],
+      dimensions,
     }),
   });
 
@@ -62,6 +70,7 @@ async function fetchPlausibleStatsForGoal(
   return data.results.map((r) => ({
     date: r.dimensions[0],
     goal: r.dimensions[1],
+    source: isSourced ? r.dimensions[2] || "" : "",
     count: r.metrics[0],
   }));
 }
@@ -81,6 +90,7 @@ interface ConversionDetail {
   goal: string;
   amount: string;
   variant: string;
+  source: string;
   count: number;
 }
 
@@ -114,6 +124,7 @@ async function fetchPlausibleConversionDetails(
     goal,
     amount: r.dimensions[props.indexOf("amount")] ?? "",
     variant: r.dimensions[props.indexOf("membership_variant")] ?? "",
+    source: r.dimensions[props.indexOf("source")] ?? "",
     count: r.metrics[0],
   }));
 }
@@ -124,8 +135,8 @@ async function fetchConversionDetails(
   dateTo: string
 ): Promise<ConversionDetail[]> {
   const queries = [
-    fetchPlausibleConversionDetails(apiKey, "One-time-donate", ["amount"], dateFrom, dateTo),
-    fetchPlausibleConversionDetails(apiKey, "Monthly-donate", ["amount"], dateFrom, dateTo),
+    fetchPlausibleConversionDetails(apiKey, "One-time-donate", ["amount", "source"], dateFrom, dateTo),
+    fetchPlausibleConversionDetails(apiKey, "Monthly-donate", ["amount", "source"], dateFrom, dateTo),
     fetchPlausibleConversionDetails(apiKey, "Membership-complete", ["amount", "membership_variant"], dateFrom, dateTo),
   ];
   const results = await Promise.all(queries);
@@ -173,28 +184,30 @@ async function fetchDroppedEvents(
   const counts = new Map<string, number>();
   for (const e of filtered) {
     const date = e.timestamp.slice(0, 10);
-    const key = `${date}:${e.eventName}`;
+    const source = SOURCED_GOALS.includes(e.eventName) ? String(e.props.source ?? "") : "";
+    const key = `${date}:${e.eventName}:${source}`;
     counts.set(key, (counts.get(key) || 0) + 1);
   }
 
   const daily: DailyCount[] = [];
   for (const [key, count] of counts) {
-    const [date, ...goalParts] = key.split(":");
-    daily.push({ date, goal: goalParts.join(":"), count });
+    const [date, goal, source] = key.split(":");
+    daily.push({ date, goal, source, count });
   }
 
   const detailCounts = new Map<string, number>();
   for (const e of filtered) {
     const amount = String(e.props.amount ?? "");
     const variant = String(e.props.membership_variant ?? "");
-    const key = `${e.eventName}:${amount}:${variant}`;
+    const source = String(e.props.source ?? "");
+    const key = `${e.eventName}:${amount}:${variant}:${source}`;
     detailCounts.set(key, (detailCounts.get(key) || 0) + 1);
   }
 
   const details: ConversionDetail[] = [];
   for (const [key, count] of detailCounts) {
-    const [goal, amount, variant] = key.split(":");
-    details.push({ goal, amount, variant, count });
+    const [goal, amount, variant, source] = key.split(":");
+    details.push({ goal, amount, variant, source, count });
   }
 
   return { daily, details };
