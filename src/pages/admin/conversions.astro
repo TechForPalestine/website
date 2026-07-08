@@ -1,19 +1,15 @@
 ---
 import AdminLayout from "../../layouts/AdminLayout.astro";
 import ConversionDashboard from "../../components/ConversionDashboard";
-import { constantTimeEqual } from "../../utils/crypto";
-import { getEnv } from "../../utils/getEnv";
+import { isAuthorized, unauthorizedResponse } from "../../utils/basicAuth";
 
 export const prerender = false;
 
-const token = Astro.url.searchParams.get("token");
-const expectedToken = getEnv("DROPPED_CONVERSIONS_TOKEN", Astro.locals);
-
-if (!expectedToken || !token || !constantTimeEqual(token, expectedToken)) {
-  return new Response("Unauthorized", { status: 401 });
+if (!isAuthorized(Astro.request, Astro.locals)) {
+  return unauthorizedResponse();
 }
 ---
 
 <AdminLayout title="Conversion Dashboard">
-  <ConversionDashboard token={token} client:only="react" />
+  <ConversionDashboard client:only="react" />
 </AdminLayout>

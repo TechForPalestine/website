@@ -42,10 +42,6 @@ interface StatsResponse {
   error?: string;
 }
 
-interface ConversionDashboardProps {
-  token: string;
-}
-
 const GOAL_LABELS: Record<string, string> = {
   "One-time-donate": "One-time Donation",
   "Monthly-donate": "Monthly Donation",
@@ -164,9 +160,7 @@ function StatCard({
   );
 }
 
-export default function ConversionDashboard({
-  token,
-}: ConversionDashboardProps) {
+export default function ConversionDashboard() {
   const [defaultFrom, defaultTo] = buildDateRange(30);
   const [dateFrom, setDateFrom] = useState(defaultFrom);
   const [dateTo, setDateTo] = useState(defaultTo);
@@ -183,7 +177,6 @@ export default function ConversionDashboard({
     setError(null);
     try {
       const params = new URLSearchParams({
-        token,
         date_from: dateFrom,
         date_to: dateTo,
       });
@@ -201,7 +194,7 @@ export default function ConversionDashboard({
     } finally {
       setLoading(false);
     }
-  }, [token, dateFrom, dateTo]);
+  }, [dateFrom, dateTo]);
 
   useEffect(() => {
     fetchData();

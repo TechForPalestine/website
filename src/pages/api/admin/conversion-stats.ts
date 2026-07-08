@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
-import { constantTimeEqual } from "../../../utils/crypto";
+import { isAuthorized, unauthorizedResponse } from "../../../utils/basicAuth";
 import { getEnv } from "../../../utils/getEnv";
 import { reportError } from "../../../lib/report-error";
 
@@ -201,13 +201,11 @@ async function fetchDroppedEvents(
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
-  const url = new URL(request.url);
-  const token = url.searchParams.get("token");
-  const expectedToken = getEnv("DROPPED_CONVERSIONS_TOKEN", locals);
-
-  if (!expectedToken || !token || !constantTimeEqual(token, expectedToken)) {
-    return new Response("Unauthorized", { status: 401 });
+  if (!isAuthorized(request, locals)) {
+    return unauthorizedResponse();
   }
+
+  const url = new URL(request.url);
 
   const apiKey = getEnv("PLAUSIBLE_API_KEY", locals);
   const kv = locals.runtime?.env?.DROPPED_CONVERSIONS;
