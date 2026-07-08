@@ -92,7 +92,8 @@ function applyFilters<T extends { source: string; goal: string }>(
     if (!goalMatch) return false;
     if (sourceFilter === "all") return true;
     if (!SOURCED_GOAL_SET.has(r.goal)) return INCLUSIVE_SOURCES.has(sourceFilter);
-    return r.source === sourceFilter;
+    const effectiveSource = r.source || "qgiv-embed";
+    return effectiveSource === sourceFilter;
   });
 }
 
@@ -280,8 +281,9 @@ export default function ConversionDashboard() {
       "all"
     );
     for (const d of filtered) {
-      if (!SOURCED_GOAL_SET.has(d.goal) || !d.source) continue;
-      totals[d.source] = (totals[d.source] || 0) + d.count;
+      if (!SOURCED_GOAL_SET.has(d.goal)) continue;
+      const source = d.source || "qgiv-embed";
+      totals[source] = (totals[source] || 0) + d.count;
     }
     return totals;
   }, [data, goalFilter]);
@@ -691,7 +693,7 @@ export default function ConversionDashboard() {
                               )}
                               {hasSource && (
                                 <td className="py-1 text-ink-secondary">
-                                  {SOURCE_LABELS[r.source] || r.source || "—"}
+                                  {SOURCE_LABELS[r.source || "qgiv-embed"] || r.source || "Qgiv"}
                                 </td>
                               )}
                               <td className="py-1 text-right font-medium text-ink">
