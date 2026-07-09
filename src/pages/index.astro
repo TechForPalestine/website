@@ -9,6 +9,21 @@ import "../styles/base.css";
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
   image="https://techforpalestine.org/happy-kids.jpg"
 >
+  <script is:inline slot="head">
+    (function () {
+      try {
+        var key = "ab-homepage-variant";
+        var v = localStorage.getItem(key);
+        if (!v) {
+          v = Math.random() < 0.5 ? "original-homepage" : "new-homepage";
+          localStorage.setItem(key, v);
+        }
+        if (v === "new-homepage") {
+          location.replace("/home-new");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <main>
     <!-- Hero Section -->
     <section
@@ -546,5 +561,15 @@ import "../styles/base.css";
         <SignUpForm />
       </div>
     </section>
+
+    <script>
+      try {
+        const v = localStorage.getItem("ab-homepage-variant");
+        if (v === "original-homepage" && !sessionStorage.getItem("ab-homepage-tracked")) {
+          sessionStorage.setItem("ab-homepage-tracked", "1");
+          window.plausible("ab-homepage", { props: { variant: "original-homepage" } });
+        }
+      } catch (e) {}
+    </script>
   </main>
 </Layout>

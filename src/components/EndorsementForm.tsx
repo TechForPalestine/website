@@ -229,8 +229,8 @@ export default function EndorsementForm() {
             disabled={submitting}
             startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
             sx={{
-              backgroundColor: "#168039",
-              "&:hover": { backgroundColor: "#0f5c2a" },
+              backgroundColor: "#AB4956",
+              "&:hover": { backgroundColor: "#D35464" },
               px: 4,
               py: 1.5,
               fontWeight: 600,

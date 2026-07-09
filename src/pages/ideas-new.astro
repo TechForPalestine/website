@@ -1,0 +1,167 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import IdeasWithTabsNew from "../components/IdeasWithTabsNew";
+import { fetchNotionIdeas } from "../store/notionClient.js";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+let rawIdeas: any[] = [];
+try {
+  rawIdeas = await fetchNotionIdeas(Astro.locals);
+} catch (error) {
+  console.error("Failed to fetch ideas from Notion:", error);
+}
+
+const mapIdea = (idea: any) => {
+  const plainText = idea.description.map((s: any) => s.plain_text).join("");
+  return {
+    id: idea.id,
+    data: { title: idea.name, tags: [] },
+    richTextDescription: idea.description,
+    excerpt: plainText.substring(0, 150) + (plainText.length > 150 ? "..." : ""),
+  };
+};
+
+const newIdeas = rawIdeas.filter((i) => i.category === "new").map(mapIdea);
+const existingIdeas = rawIdeas.filter((i) => i.category === "existing").map(mapIdea);
+const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIdea);
+---
+
+<HomeLayout
+  title="Project Ideas - Tech for Palestine"
+  description="Browse and lead project ideas that support Palestinian freedom. Tech for Palestine builds bold projects to support Palestinian advocacy and counter pro-Israel propaganda. Explore new ideas, existing projects, and initiatives that have already started."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="page-animate max-w-[65ch]">
+          <p class="ts-overline mb-5 text-ink-secondary">Incubator ideas</p>
+          <h1 class="ts-editorial mb-5 text-ink">
+            Turn bold ideas into <span class="text-brand">real impact</span>
+          </h1>
+          <p class="ts-body-large text-ink-secondary">
+            Tech for Palestine builds bold projects to support Palestinian freedom and counter pro-Israel propaganda.
+          </p>
+          <p class="ts-body-large text-ink-secondary">
+            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to help make them real.
+          </p>
+          <p class="ts-body-large text-ink-secondary">
+            Explore the ideas below and get involved.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Button
+              href="https://projecthub.techforpalestine.org/apply"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply now
+            </Button>
+            <Button href="/incubator-new" variant="ghost" size="md">
+              About the Incubator
+            </Button>
+          </div>
+        </div>
+
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
+      </div>
+    </section>
+
+    <section class="bg-page pt-10 min-[810px]:pt-12">
+      <IdeasWithTabsNew
+        newIdeas={newIdeas}
+        existingIdeas={existingIdeas}
+        startedIdeas={startedIdeas}
+        client:only="react"
+      />
+    </section>
+
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="page-animate grid gap-12 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+          <div>
+            <h2 class="ts-heading mb-4 text-ink">Generating new ideas</h2>
+            <p class="ts-body mb-5 text-ink-secondary">
+              There are endless pro-Israel initiatives that need countering. Consider targeting:
+            </p>
+            <ul class="ts-body space-y-3 text-ink-secondary">
+              <li class="flex gap-3">
+                <span class="mt-0.5 shrink-0 text-brand">—</span>
+                <span>A politician's complicity or ties to Israel</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-0.5 shrink-0 text-brand">—</span>
+                <span>Someone who committed violence against protestors</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-0.5 shrink-0 text-brand">—</span>
+                <span>A pro-Israel hasbara organization</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-0.5 shrink-0 text-brand">—</span>
+                <span>An entity's investments in Israel</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-0.5 shrink-0 text-brand">—</span>
+                <span>A US non-profit funding the genocide (e.g. Friends of the IDF)</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="ts-heading mb-4 text-ink">How to apply</h2>
+            <p class="ts-body mb-8 text-ink-secondary">
+              Want to lead an existing project or bring a new idea to life? Submit through the
+              Project Hub and our team will follow up.
+            </p>
+            <Button
+              href="https://projecthub.techforpalestine.org/apply"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Submit your idea
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .page-animate {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+  }
+  .page-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .page-animate {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
+</script>

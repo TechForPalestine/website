@@ -1,0 +1,365 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+const country = Astro.request.headers.get("cf-ipcountry") || "UNKNOWN";
+const isUK = country === "GB";
+---
+
+<HomeLayout
+  title="Donate - Tech for Palestine"
+  description="Support Tech for Palestine. Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="donate-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Support Our Work</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Support <span class="text-brand">Tech for Palestine</span>
+          </h1>
+          <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
+            Since launching Tech for Palestine, we've helped bring impactful projects to life: UpScrolled, Media Bias Meter, Boycat, Find a Protest, Newscord, and many more.
+          </p>
+          <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+            Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Donation Form + Sidebar -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="grid grid-cols-1 gap-8 min-[1050px]:grid-cols-3 min-[1050px]:items-start">
+
+          <!-- Donation Card -->
+          <div class="min-[1050px]:col-span-2">
+            <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
+              <h2 class="ts-heading mb-6 text-ink">Make a donation</h2>
+                <!-- Variant A: Qgiv only (no UK link) -->
+                <div id="form-qgiv-only" hidden>
+                  <div
+                    class="qgiv-embed-container"
+                    data-qgiv-embed="true"
+                    data-embed-id="83460"
+                    data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                    data-width="630"
+                  ></div>
+                </div>
+
+                <!-- Variant B Non-UK: Qgiv + link to ValidAid -->
+                <div id="form-qgiv-link" hidden>
+                  <p class="ts-body-small mb-4 text-ink-secondary">
+                    If you are in the UK, <a
+                      href="?variant=validaid"
+                      class="text-brand underline hover:text-brand-hover"
+                      >click here to donate with Gift Aid</a
+                    >.
+                  </p>
+                  <div
+                    class="qgiv-embed-container"
+                    data-qgiv-embed="true"
+                    data-embed-id="83460"
+                    data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                    data-width="630"
+                  ></div>
+                </div>
+
+                <!-- Variant B UK: ValidAid + link to Qgiv -->
+                <div id="form-validaid-link" hidden>
+                  <p class="ts-body-small mb-4 text-ink-secondary">
+                    Not in the UK? <a
+                      href="?variant=qgiv"
+                      class="text-brand underline hover:text-brand-hover"
+                      >Click here to donate</a
+                    >.
+                  </p>
+                  <iframe
+                    id="validaid-iframe-event-236"
+                    src="https://validaid.org/embed/event/236"
+                    title="Tech for Palestine"
+                    class="w-full border-0"
+                    allow="payment"
+                  ></iframe>
+                </div>
+
+              <p class="ts-body-small mt-4 text-ink-secondary">
+                If this page isn't loading, please use <a
+                  href="/donate-2"
+                  class="text-brand underline hover:text-brand-hover">this form</a
+                >.
+              </p>
+
+              <!-- Trust badges -->
+              <div class="mt-6 flex flex-wrap items-center gap-4 border-t border-ink-divider pt-5">
+                <div class="flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 text-brand"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <span class="ts-body-small text-ink-secondary">501(c)(3) nonprofit</span>
+                </div>
+                <span class="ts-body-small text-ink-muted" aria-hidden="true">·</span>
+                <span class="ts-body-small text-ink-secondary">Tax-deductible in the U.S.</span>
+                <span class="ts-body-small text-ink-muted" aria-hidden="true">·</span>
+                <span class="ts-body-small text-ink-secondary">EIN: 99-3441367</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="space-y-6">
+
+            <!-- Why it matters -->
+            <div class="rounded-[20px] border border-butter bg-cream p-6">
+              <h3 class="ts-subheading mb-5 text-ink">Why your donation matters</h3>
+              <ul class="space-y-4">
+                <li class="flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary">Accelerates projects already making impact</span>
+                </li>
+                <li class="flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary">Funds critical skills: engineering, design, marketing</span>
+                </li>
+                <li class="flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary">Helps launch new initiatives quickly and effectively</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Other ways to give -->
+            <div class="rounded-[20px] border border-butter bg-cream p-6">
+              <h3 class="ts-subheading mb-5 text-ink">Other ways to give</h3>
+              <ul class="space-y-5">
+                <li>
+                  <p class="ts-label mb-1 text-ink">Stock &amp; Cryptocurrency</p>
+                  <p class="ts-body text-ink-secondary">
+                    To make a gift via stock or cryptocurrency, visit our <a
+                      href="https://thegivingblock.com/donate/tech-for-palestine/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-brand underline hover:text-brand-hover">form here</a
+                    >.
+                  </p>
+                </li>
+                <li>
+                  <p class="ts-label mb-1 text-ink">Corporate Match</p>
+                  <p class="ts-body text-ink-secondary">
+                    If your employer uses Benevity to match your contribution, find us <a
+                      href="https://causes.benevity.org/user"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-brand underline hover:text-brand-hover">on the Benevity Causes Portal</a
+                    >.
+                  </p>
+                </li>
+                <li>
+                  <p class="ts-label mb-1 text-ink">Major Gifts</p>
+                  <p class="ts-body text-ink-secondary">
+                    For more information about making a major gift or for other questions about donations, please contact <a
+                      href="mailto:donations@techforpalestine.org"
+                      class="text-brand underline hover:text-brand-hover"
+                      >donations&#64;techforpalestine.org</a
+                    >.
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</HomeLayout>
+
+<style>
+  :global(iframe.qgiv-embed) {
+    height: 800px !important;
+  }
+
+  .donate-animate {
+    opacity: 0;
+    translate: 0 20px;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .donate-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .donate-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll<HTMLElement>(".donate-animate").forEach((el) => obs.observe(el));
+</script>
+
+<script is:inline define:vars={{ isUK }}>
+  function trackConversion(eventName, props) {
+    if (typeof window.plausible !== "undefined") {
+      window.plausible(eventName, { props: props });
+      return;
+    }
+    fetch("/api/pipe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        n: eventName,
+        u: window.location.href,
+        d: window.location.hostname,
+        p: props,
+      }),
+    }).catch(function () {});
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceVariant = urlParams.get("variant");
+
+    let trackingVariant;
+    let formToShow;
+
+    if (forceVariant === "qgiv") {
+      formToShow = "form-qgiv-link";
+      trackingVariant = "qgiv + link";
+    } else if (forceVariant === "validaid") {
+      formToShow = "form-validaid-link";
+      trackingVariant = "Validaid + link";
+    } else {
+      const testGroup = Math.random() < 0.5 ? "A" : "B";
+
+      if (testGroup === "A") {
+        formToShow = "form-qgiv-only";
+        trackingVariant = "qgiv";
+      } else if (isUK) {
+        formToShow = "form-validaid-link";
+        trackingVariant = "Validaid + link";
+      } else {
+        formToShow = "form-qgiv-link";
+        trackingVariant = "qgiv + link";
+      }
+    }
+
+    const targetForm = document.getElementById(formToShow);
+    if (targetForm) {
+      targetForm.style.display = "block";
+    }
+
+    if (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link") {
+      if (!document.getElementById("qgiv-embedjs")) {
+        const js = document.createElement("script");
+        js.id = "qgiv-embedjs";
+        js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
+        const fjs = document.getElementsByTagName("script")[0];
+        fjs.parentNode?.insertBefore(js, fjs);
+      }
+    } else if (formToShow === "form-validaid-link") {
+      window.addEventListener("message", (event) => {
+        if (event.origin !== "https://validaid.org") return;
+
+        if (
+          event.data.type === "validaid-resize" &&
+          event.data.iframeId === "validaid-iframe-event-236"
+        ) {
+          const iframe = document.getElementById("validaid-iframe-event-236");
+          if (iframe) {
+            iframe.style.height = event.data.height + "px";
+          }
+        } else if (event.data.type === "validaid-donation-complete") {
+          var frequency = event.data.frequency || "one-time";
+          var isRecurring = frequency !== "one-time";
+          var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
+
+          trackConversion(donationEvent, {
+            source: "validaid-embed",
+            amount: event.data.amount != null ? String(event.data.amount) : "",
+            currency: event.data.currency || "",
+            frequency: frequency,
+          });
+        }
+      });
+    }
+
+    document.addEventListener("QGIV.donationComplete", async function (event) {
+      var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
+      var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
+      var contact = (data.QGIV && data.QGIV.contact) ? data.QGIV.contact : {};
+
+      var recurringByFlag = transaction.recurring === true;
+      var recurringByFrequency = typeof transaction.frequency === "string" &&
+        transaction.frequency.toLowerCase() !== "one time";
+      var isRecurring = recurringByFlag || recurringByFrequency;
+
+      var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
+
+      trackConversion(donationEvent, {
+        source: "qgiv-embed",
+        amount: transaction.total != null ? String(transaction.total) : "",
+      });
+
+      if (contact.optedIn === true && contact.email) {
+        fetch("/api/donation-complete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: contact.email,
+            firstName: contact.firstName || "",
+            lastName: contact.lastName || "",
+          }),
+        }).catch(function () {});
+      }
+    });
+
+    if (typeof window.plausible !== "undefined") {
+      window.plausible("Donate Form", { props: { donate_form_variant: trackingVariant } });
+    }
+
+    const presetAmount = urlParams.get("amount");
+    if (presetAmount && (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link")) {
+      const amountToId = { "25": "1620628", "50": "1620629", "100": "1620630", "500": "1620631", "custom": "1620632" };
+      const targetId = amountToId[presetAmount];
+      if (targetId) {
+        document.querySelectorAll(".qgiv-embed-container[data-embed]").forEach((el) => {
+          const base = el.getAttribute("data-embed");
+          el.setAttribute("data-embed", base.replace(/\/amount\/\d+\//, "/amount/" + targetId + "/"));
+        });
+      }
+    }
+  });
+</script>

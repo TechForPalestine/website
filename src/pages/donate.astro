@@ -206,75 +206,87 @@ const isUK = country === "GB";
   </div>
 
   <script is:inline define:vars={{ isUK }}>
-    // A/B Test Logic
-    document.addEventListener("DOMContentLoaded", function () {
-      // Check for URL parameter override (for testing)
-      var urlParams = new URLSearchParams(window.location.search);
-      var forceVariant = urlParams.get("variant");
+    function trackConversion(eventName, props) {
+      if (typeof window.plausible !== "undefined") {
+        window.plausible(eventName, { props: props });
+        return;
+      }
+      fetch("/api/pipe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          n: eventName,
+          u: window.location.href,
+          d: window.location.hostname,
+          p: props,
+        }),
+      }).catch(function () {});
+    }
 
-      var trackingVariant;
-      var formToShow;
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceVariant = urlParams.get("variant");
+
+      let trackingVariant;
+      let formToShow;
 
       if (forceVariant === "qgiv") {
-        // Force show qgiv form with link
         formToShow = "form-qgiv-link";
         trackingVariant = "qgiv + link";
       } else if (forceVariant === "validaid") {
-        // Force show ValidAid form with link
         formToShow = "form-validaid-link";
         trackingVariant = "Validaid + link";
       } else {
-        // Randomly assign A/B test variant (50/50 split)
-        var testGroup = Math.random() < 0.5 ? "A" : "B";
+        const testGroup = Math.random() < 0.5 ? "A" : "B";
 
         if (testGroup === "A") {
-          // Control: qgiv only, no link
           formToShow = "form-qgiv-only";
           trackingVariant = "qgiv";
+        } else if (isUK) {
+          formToShow = "form-validaid-link";
+          trackingVariant = "Validaid + link";
         } else {
-          // Variant B: Geo-targeted
-          if (isUK) {
-            // UK visitors: ValidAid form + link to qgiv
-            formToShow = "form-validaid-link";
-            trackingVariant = "Validaid + link";
-          } else {
-            // Non-UK visitors: qgiv form + link to ValidAid
-            formToShow = "form-qgiv-link";
-            trackingVariant = "qgiv + link";
-          }
+          formToShow = "form-qgiv-link";
+          trackingVariant = "qgiv + link";
         }
       }
 
-      // Show the appropriate form
-      var targetForm = document.getElementById(formToShow);
+      const targetForm = document.getElementById(formToShow);
       if (targetForm) {
         targetForm.style.display = "block";
       }
 
-      // Load appropriate scripts based on which form is shown
       if (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link") {
-        // Load qgiv script
-        (function (w, d, s, id) {
-          var js,
-            fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s);
-          js.id = id;
+        if (!document.getElementById("qgiv-embedjs")) {
+          const js = document.createElement("script");
+          js.id = "qgiv-embedjs";
           js.src = "https://secure.qgiv.com/resources/core/js/embed.js";
+          const fjs = document.getElementsByTagName("script")[0];
           fjs.parentNode?.insertBefore(js, fjs);
-        })(window, document, "script", "qgiv-embedjs");
+        }
       } else if (formToShow === "form-validaid-link") {
-        // Handle ValidAid iframe resize
-        window.addEventListener("message", function (event) {
+        window.addEventListener("message", (event) => {
           if (event.origin !== "https://validaid.org") return;
+
           if (
             event.data.type === "validaid-resize" &&
             event.data.iframeId === "validaid-iframe-event-236"
           ) {
-            var iframe = document.getElementById("validaid-iframe-event-236");
+            const iframe = document.getElementById("validaid-iframe-event-236");
             if (iframe) {
               iframe.style.height = event.data.height + "px";
             }
+          } else if (event.data.type === "validaid-donation-complete") {
+            var frequency = event.data.frequency || "one-time";
+            var isRecurring = frequency !== "one-time";
+            var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
+
+            trackConversion(donationEvent, {
+              source: "validaid-embed",
+              amount: event.data.amount != null ? String(event.data.amount) : "",
+              currency: event.data.currency || "",
+              frequency: frequency,
+            });
           }
         });
       }
@@ -291,12 +303,10 @@ const isUK = country === "GB";
 
         var donationEvent = isRecurring ? "Monthly-donate" : "One-time-donate";
 
-        if (typeof window.plausible !== "undefined") {
-          var props = { source: "qgiv-embed", amount: transaction.total != null ? String(transaction.total) : "" };
-          await new Promise(function (resolve) {
-            window.plausible(donationEvent, { props: props, callback: resolve });
-          });
-        }
+        trackConversion(donationEvent, {
+          source: "qgiv-embed",
+          amount: transaction.total != null ? String(transaction.total) : "",
+        });
 
         if (contact.optedIn === true && contact.email) {
           fetch("/api/donation-complete", {
@@ -314,6 +324,18 @@ const isUK = country === "GB";
       // Track form variant (safely)
       if (typeof window.plausible !== "undefined") {
         window.plausible("Donate Form", { props: { donate_form_variant: trackingVariant } });
+      }
+
+      const presetAmount = urlParams.get("amount");
+      if (presetAmount && (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link")) {
+        const amountToId = { "25": "1620628", "50": "1620629", "100": "1620630", "500": "1620631", "custom": "1620632" };
+        const targetId = amountToId[presetAmount];
+        if (targetId) {
+          document.querySelectorAll(".qgiv-embed-container[data-embed]").forEach((el) => {
+            const base = el.getAttribute("data-embed");
+            el.setAttribute("data-embed", base.replace(/\/amount\/\d+\//, "/amount/" + targetId + "/"));
+          });
+        }
       }
     });
   </script>

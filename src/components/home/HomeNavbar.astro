@@ -1,0 +1,443 @@
+---
+import Button from "../ui/Button.astro";
+
+interface Props {
+  membershipLive?: boolean;
+  currentPath?: string;
+  alwaysVisible?: boolean;
+}
+
+const { membershipLive = false, alwaysVisible = false } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  {
+    label: "About",
+    href: "/about-new",
+    children: [
+      { label: "Our Organization", href: "/about-new" },
+      { label: "Team", href: "/team-new" },
+      { label: "FAQ", href: "/faq-new" },
+      { label: "Contact Us", href: "/contact-new" },
+    ],
+  },
+  {
+    label: "Incubator",
+    href: "/incubator-new",
+    children: [
+      { label: "Overview", href: "/incubator-new" },
+      { label: "Projects", href: "/projects-new" },
+      { label: "Ideas", href: "/ideas-new" },
+      { label: "Tools", href: "/tools-new" },
+    ],
+  },
+  {
+    label: "Get Involved",
+    href: "/get-involved-new",
+    children: [
+      ...(membershipLive ? [{ label: "Become a Member", href: "/membership" }] : []),
+      { label: "Donate", href: "/donate-new" },
+      { label: "Join the Incubator", href: "https://techforpalestine.org/project-application-form" },
+      { label: "Volunteer", href: "/volunteer-new" },
+      { label: "Entrepreneurs for Palestine", href: "/e4p-new" },
+      { label: "Be a Mentor", href: "/mentorship-new" },
+      { label: "Hire Palestinians", href: "/help/hire-new" },
+      { label: "Join our Discord", href: "https://techforpalestine.org/discord-invite" },
+    ],
+  },
+  {
+    label: "Events",
+    href: "/events-new",
+    children: [
+      { label: "Past Events", href: "/events-new" },
+      { label: "Brussels 2026", href: "https://brussels2026.techforpalestine.org/" },
+      { label: "Barcelona 2026", href: "https://barcelona2026.techforpalestine.org/" },
+      { label: "Bay Area 2026", href: "https://summit.techforpalestine.org" },
+      { label: "London 2025", href: "/london-gathering" },
+    ],
+  },
+  {
+    label: "Updates",
+    href: "https://updates.techforpalestine.org",
+  },
+];
+
+function isActive(itemHref: string, path: string): boolean {
+  if (itemHref.startsWith("http")) return false;
+  return path === itemHref || path.startsWith(itemHref + "/");
+}
+
+function isGroupActive(item: typeof navItems[number], path: string): boolean {
+  if (isActive(item.href, path)) return true;
+  return item.children?.some(c => isActive(c.href, path)) ?? false;
+}
+---
+
+<nav
+  class="home-navbar fixed top-0 left-0 right-0 z-50"
+  aria-label="Main navigation"
+  data-always-visible={alwaysVisible ? "true" : undefined}
+>
+  <div class="home-navbar-inner mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3 min-[1050px]:px-10">
+    <a href="/home-new" class="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+      <img
+        src="/logos/logo-dark.webp"
+        alt="Tech for Palestine"
+        width="136"
+        height="40"
+        class="h-10 w-auto"
+      />
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden min-[1050px]:flex items-center gap-8 list-none p-0 m-0" role="list">
+      {navItems.map((item) => (
+        <li class={item.children ? "nav-dropdown relative" : ""}>
+          <a
+            href={item.href}
+            class:list={[
+              "ts-label transition-colors duration-150 inline-flex items-center gap-1.5 py-2 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+              isGroupActive(item, currentPath) ? "text-brand" : "text-ink-secondary hover:text-ink",
+            ]}
+            target={item.href.startsWith("http") ? "_blank" : "_self"}
+            rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+            aria-current={isGroupActive(item, currentPath) ? "true" : undefined}
+            {...(item.children ? { "aria-haspopup": "true", "aria-expanded": "false" } : {})}
+          >
+            {item.label}
+            {item.children && (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-chevron" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            )}
+          </a>
+          {item.children && (
+            <div class="nav-dropdown-menu absolute top-full left-0 pt-2">
+              <ul class="nav-dropdown-panel min-w-[220px] rounded-lg border border-butter bg-page p-2.5 list-none m-0" role="list">
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class:list={[
+                        "ts-body-small block rounded-md px-4 py-3 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                        isActive(child.href, currentPath) ? "bg-butter text-ink hover:bg-butter/70" : "text-ink-secondary hover:bg-cream hover:text-ink",
+                      ]}
+                      target={child.href.startsWith("http") ? "_blank" : "_self"}
+                      rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-current={isActive(child.href, currentPath) ? "page" : undefined}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+
+    <div class="hidden min-[1050px]:block">
+      <Button
+        href={membershipLive ? "/membership" : "/donate-new"}
+        variant="primary"
+        size="md"
+        arrow
+        class="!px-7 !py-[1.125rem]"
+      >
+        {membershipLive ? "Become a member" : "Donate"}
+      </Button>
+    </div>
+
+    <!-- Mobile CTA + burger -->
+    <div class="flex min-[1050px]:hidden items-center gap-3">
+      <Button
+        href={membershipLive ? "/membership" : "/donate-new"}
+        variant="primary"
+        size="md"
+        arrow
+        class="!px-4 !py-2.5"
+      >
+        {membershipLive ? "Become a member" : "Donate"}
+      </Button>
+      <button
+        class="home-navbar-burger flex items-center justify-center w-11 h-11 rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div class="home-navbar-drawer min-[1050px]:hidden" role="dialog" aria-label="Navigation menu">
+    <ul class="flex flex-col gap-1 px-6 py-4 pb-6 list-none p-0 m-0" role="list">
+      {navItems.map((item) => (
+        <li>
+          {item.children ? (
+            <button
+              class="mobile-accordion ts-label flex w-full items-center justify-between py-3 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
+              aria-expanded="false"
+            >
+              {item.label}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mobile-accordion-chevron" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+          ) : (
+            <a
+              href={item.href}
+              class="ts-label block py-3 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
+              target={item.href.startsWith("http") ? "_blank" : "_self"}
+              rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+            >
+              {item.label}
+            </a>
+          )}
+          {item.children && (
+            <div class="mobile-accordion-panel">
+              <ul class="pl-4 pb-2 list-none m-0" role="list">
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class="ts-body-small block py-3 text-ink-secondary/70 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
+                      target={child.href.startsWith("http") ? "_blank" : "_self"}
+                      rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .home-navbar {
+    transform: translateY(-100%);
+    opacity: 0;
+    background: #FFFBF5;
+    box-shadow: 0 1px 0 #F7EAD4, 0 4px 16px rgba(42, 36, 40, 0.06);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  .home-navbar.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-dropdown-panel {
+    box-shadow: 0 8px 24px rgba(42, 36, 40, 0.08), 0 2px 6px rgba(42, 36, 40, 0.04);
+  }
+
+  /* Dropdown menus - open on hover OR focus-within for keyboard access */
+  .nav-dropdown-menu {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+                transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown:focus-within .nav-dropdown-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Bridge: keep hover alive while cursor crosses the gap between trigger and panel */
+  .nav-dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+  }
+
+  .nav-chevron {
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .nav-dropdown:hover .nav-chevron,
+  .nav-dropdown:focus-within .nav-chevron {
+    transform: rotate(180deg);
+  }
+
+  .home-navbar-drawer {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    background: #FFFBF5;
+    transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                visibility 0s 0.35s;
+  }
+
+  .home-navbar-drawer.open {
+    border-top: 1px solid #F7EAD4;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                visibility 0s;
+  }
+
+  .home-navbar-drawer > * {
+    overflow: hidden;
+  }
+
+  .mobile-accordion-chevron {
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .mobile-accordion[aria-expanded="true"] .mobile-accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  .mobile-accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .mobile-accordion-panel.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .mobile-accordion-panel > * {
+    overflow: hidden;
+  }
+
+  :global(html.no-js) .home-navbar {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-navbar,
+    .nav-dropdown-menu,
+    .mobile-accordion-panel,
+    .home-navbar-drawer {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const navbar = document.querySelector<HTMLElement>(".home-navbar");
+
+  if (navbar) {
+    if (navbar.dataset.alwaysVisible === "true") {
+      navbar.classList.add("visible");
+    } else {
+      const threshold = window.innerHeight / 2;
+      const updateVisibility = () => {
+        navbar.classList.toggle("visible", window.scrollY >= threshold);
+      };
+      updateVisibility();
+      window.addEventListener("scroll", updateVisibility, { passive: true });
+    }
+  }
+
+  const burger = document.querySelector<HTMLButtonElement>(".home-navbar-burger");
+  const drawer = document.querySelector<HTMLElement>(".home-navbar-drawer");
+
+  function openDrawer() {
+    if (!burger || !drawer) return;
+    drawer.classList.add("open");
+    burger.setAttribute("aria-expanded", "true");
+    document.documentElement.classList.add("overflow-hidden");
+  }
+
+  function closeDrawer() {
+    if (!burger || !drawer) return;
+    drawer.classList.remove("open");
+    burger.setAttribute("aria-expanded", "false");
+    document.documentElement.classList.remove("overflow-hidden");
+  }
+
+  if (burger && drawer) {
+    burger.addEventListener("click", () => {
+      const isOpen = drawer.classList.contains("open");
+      if (isOpen) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) {
+        closeDrawer();
+        burger.focus();
+      }
+    });
+  }
+
+  // Close mobile drawer when resizing past desktop breakpoint
+  const desktopQuery = window.matchMedia("(min-width: 1050px)");
+  desktopQuery.addEventListener("change", (e) => {
+    if (e.matches) closeDrawer();
+  });
+
+  // Desktop dropdown keyboard support: update aria-expanded on focus
+  document.querySelectorAll<HTMLElement>(".nav-dropdown").forEach((dropdown) => {
+    const trigger = dropdown.querySelector<HTMLAnchorElement>("a[aria-haspopup]");
+    if (!trigger) return;
+
+    dropdown.addEventListener("focusin", () => {
+      trigger.setAttribute("aria-expanded", "true");
+    });
+
+    dropdown.addEventListener("focusout", (e) => {
+      if (!dropdown.contains((e as FocusEvent).relatedTarget as Node)) {
+        trigger.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    dropdown.addEventListener("mouseenter", () => {
+      trigger.setAttribute("aria-expanded", "true");
+    });
+
+    dropdown.addEventListener("mouseleave", () => {
+      if (!dropdown.contains(document.activeElement)) {
+        trigger.setAttribute("aria-expanded", "false");
+      }
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>(".mobile-accordion").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", (!expanded).toString());
+      const panel = btn.nextElementSibling as HTMLElement | null;
+      if (panel?.classList.contains("mobile-accordion-panel")) {
+        panel.classList.toggle("open");
+      }
+    });
+  });
+</script>

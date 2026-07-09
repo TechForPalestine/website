@@ -1,0 +1,289 @@
+---
+import { getEnv } from "../../utils/getEnv";
+import HomeLayout from "../../layouts/HomeLayout.astro";
+import HomeNavbar from "../../components/home/HomeNavbar.astro";
+import SignUpForm from "../../structures/SignUpForm.astro";
+import { Icon } from "astro-icon/components";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const contacts = [
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/techforpalestine",
+    icon: "mdi:instagram",
+  },
+  {
+    name: "Twitter",
+    url: "https://twitter.com/tech4palestine",
+    icon: "mdi:twitter",
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/TechForPalestine/",
+    icon: "mdi:github",
+  },
+  {
+    name: "Discord",
+    url: "https://techforpalestine.org/discord-invite",
+    icon: "ic:baseline-discord",
+  },
+];
+
+function generateLabel(name: string): string {
+  const map: Record<string, string> = {
+    Upwork: "Hire on Upwork",
+    Dribble: "View on Dribble",
+    TAP: "View TAP Program",
+    "Manara.tech": "Hire via Manara",
+    "Rising from Ashes": "Hire via Rising Bees",
+    Youmna: "Meet Your Assistant",
+  };
+  const key = Object.keys(map).find((k) => name.includes(k));
+  return key ? map[key] : `Explore ${name}`;
+}
+
+const resourceSections = [
+  {
+    name: "Recruitment Platforms",
+    overline: "Hire from Palestine",
+    bg: "bg-sand" as const,
+    cardBg: "bg-page" as const,
+    resources: [
+      {
+        name: "Apricot",
+        url: "https://apricotinternational.org/",
+        logo: "/apricot.jpg",
+        description: `Apricot connects engineering talent in Palestine with international teams.`,
+      },
+      {
+        name: "MENA Alliances",
+        url: "https://menaalliances.com/jobsforpalestine/",
+        logo: "/mena-alliances-logo.webp",
+        description: `MENA Alliance sources tech talent from Palestine for global companies.`,
+      },
+      {
+        name: "Gaza Sky Geeks",
+        url: "https://gazaskygeeks.com/",
+        logo: "/gaza-sky-geeks-logo.png",
+        description: `A leading tech hub in Gaza and the West Bank, fostering future tech leaders since 2011.`,
+      },
+      {
+        name: "Manara.tech",
+        url: "https://manara.tech/tech-jobs-for-palestine",
+        logo: "/manara.png",
+        description: `Connecting top tech talent in the MENA region to global jobs.`,
+      },
+      {
+        name: "Rising from Ashes",
+        url: "https://bees.to/hire-ps/",
+        logo: "/bees-logo-horizontal.webp",
+        description: `Rising Bees connects Palestinians with remote IT jobs.`,
+      },
+      {
+        name: "TAP",
+        url: "https://www.tapcareers.io/",
+        logo: "/tap-logo.svg",
+        description: `TAP offers career acceleration in Palestine and Jordan with remote-ready talent.`,
+      },
+      {
+        name: "Techtative",
+        url: "https://techtative.io/",
+        logo: "/techtative-logo.png",
+        description: `Premier EOR in Palestine, helping global orgs tap into local expertise.`,
+      },
+      {
+        name: "Olives and Heather",
+        url: "https://www.olivesandheather.com/",
+        logo: "/olives-and-heather.png",
+        description: `Empowering Palestinian marketers through global marketing excellence.`,
+      },
+      {
+        name: "Gaza Talents",
+        url: "https://gazatalents.com/en",
+        logo: "/gazatalents.png",
+        description: `Quick access to skilled professionals from Gaza.`,
+      },
+      {
+        name: "Youmna",
+        url: "https://www.withyoumna.com/",
+        logo: "/youmna.png",
+        description: `Remote Executive Assistants from Palestine — your "right hand".`,
+      },
+      {
+        name: "BrightGaza",
+        url: "https://brightgaza.com/",
+        logo: "/brightgaza-logo.svg",
+        description: `BrightGaza connects talented freelancers in Gaza with real remote work opportunities around the world, helping them grow professionally, earn income, and build sustainable careers.`,
+      },
+    ],
+  },
+  {
+    name: "Freelance Networks",
+    overline: "Freelancers",
+    bg: "bg-page" as const,
+    cardBg: "bg-sand" as const,
+    resources: [
+      {
+        name: "Dribble",
+        url: "https://dribbble.com/freelance-ux-designers-for-hire-gaza-ps",
+        logo: "/dribbble-logo.png",
+        description: `UX designers from Gaza offering freelance services.`,
+      },
+      {
+        name: "Upwork",
+        url: "https://www.upwork.com/hire/ps/",
+        logo: "/upwork.png",
+        description: `Find Palestinian freelancers for your projects on Upwork.`,
+      },
+    ],
+  },
+];
+---
+
+<HomeLayout
+  title="Jobs for Palestinians - Tech for Palestine"
+  description="Find organizations that connect Palestinian job seekers with employers."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="hire-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Jobs for Palestine</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            Hire <span class="text-brand">top talent</span> from Palestine and the Middle East
+          </h1>
+          <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+            Get help hiring engineers, designers, and technologists from across the region.
+          </p>
+          <p class="ts-body-small text-ink-secondary">
+            Know another good resource? Let us know:
+            {
+              contacts.map((contact) => (
+                <a
+                  href={contact.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="relative top-1 ml-1.5 inline-block text-ink-secondary transition-colors duration-150 hover:text-brand"
+                >
+                  <span class="sr-only">{contact.name}</span>
+                  <Icon name={contact.icon} class="h-5 w-5" />
+                </a>
+              ))
+            }
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resource sections -->
+    {
+      resourceSections.map((section) => (
+        <section class={`${section.bg} px-6 py-14 min-[810px]:px-10 min-[810px]:py-20`}>
+          <div class="mx-auto max-w-[1400px]">
+            <div class="hire-animate">
+              <p class="ts-overline mb-6 text-ink-secondary">{section.overline}</p>
+              <h2 class="ts-heading mb-12 text-ink">{section.name}</h2>
+              <div class="grid grid-cols-1 gap-4 min-[640px]:grid-cols-2 min-[1050px]:grid-cols-3">
+                {section.resources.map((res) => (
+                  <a
+                    href={res.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={`hire-card group flex flex-col rounded-[20px] border border-butter ${section.cardBg} p-6 min-[810px]:p-8`}
+                  >
+                    <div class="mb-5 flex h-16 items-center">
+                      <img
+                        src={res.logo}
+                        alt={`${res.name} logo`}
+                        class="max-h-full max-w-[160px] object-contain"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <p class="ts-label mb-2 text-ink group-hover:text-brand">
+                      {res.name}
+                    </p>
+                    <p class="ts-body-small mb-4 flex-1 leading-relaxed text-ink-secondary">
+                      {res.description}
+                    </p>
+                    <span class="ts-body-small inline-flex items-center gap-1.5 text-brand group-hover:text-brand-hover">
+                      {generateLabel(res.name)}
+                      <Icon name="mdi:open-in-new" class="h-3.5 w-3.5" />
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+
+    <!-- Sign-up -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpForm />
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .hire-card {
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .hire-card:hover {
+    transform: translateY(-2px);
+    background-color: #FBF2ED;
+    border-color: transparent;
+  }
+
+  .hire-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .hire-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .hire-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hire-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .hire-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".hire-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

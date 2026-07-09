@@ -1,0 +1,70 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import EventsComponent from "../components/Events.tsx";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+let events: any[] = [];
+let loading: boolean = true;
+---
+
+<HomeLayout
+  title="Events - Tech for Palestine"
+  description="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation. Join our community webinars, workshops, and networking sessions."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <section class="bg-sand px-6 pt-14 pb-12 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-16">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="page-animate">
+          <p class="ts-overline mb-5 text-ink-secondary">Tech for Palestine</p>
+          <h1 class="ts-editorial mb-5 text-ink">Events</h1>
+          <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+            Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action.
+          </p>
+        </div>
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
+      </div>
+    </section>
+
+    <section class="bg-page">
+      <EventsComponent events={events} loading={loading} client:only="react" />
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .page-animate {
+    opacity: 0;
+    translate: 0 24px;
+    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+  }
+  .page-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .page-animate {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
+</script>

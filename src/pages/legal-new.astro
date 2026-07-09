@@ -1,0 +1,184 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Financial & Legal Notice — Tech for Palestine"
+  description="Tech for Palestine's legal structure, financial transparency, and compliance information."
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+  <main class="pt-20">
+
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+
+        <div class="doc-animate max-w-[65ch] mb-12">
+          <p class="ts-overline mb-4 text-ink-secondary">Legal · Tech for Palestine</p>
+          <h1 class="ts-editorial mb-4 text-ink">
+            Financial &amp; <span class="text-brand">Legal</span> Notice
+          </h1>
+          <p class="ts-body text-ink-secondary">
+            Our legal structure, financial transparency, and compliance information.
+          </p>
+        </div>
+
+        <div class="doc-animate mb-10 max-w-[800px] rounded-[16px] border border-butter bg-sand px-6 py-6">
+          <p class="ts-overline mb-4 text-ink-secondary">On this page</p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2">
+            <a href="#tax-exempt" class="ts-body-small text-brand hover:underline transition-colors">501(c)(3) Tax-Exempt Organization</a>
+            <a href="#mission" class="ts-body-small text-brand hover:underline transition-colors">Mission Statement</a>
+            <a href="#tax-deductibility" class="ts-body-small text-brand hover:underline transition-colors">Tax Deductibility</a>
+            <a href="#financial-transparency" class="ts-body-small text-brand hover:underline transition-colors">Financial Transparency</a>
+            <a href="#legal-disclaimers" class="ts-body-small text-brand hover:underline transition-colors">Legal Disclaimers</a>
+            <a href="#anti-discrimination" class="ts-body-small text-brand hover:underline transition-colors">Anti-Discrimination Policy</a>
+            <a href="#governance" class="ts-body-small text-brand hover:underline transition-colors">Governance</a>
+            <a href="#reporting-concerns" class="ts-body-small text-brand hover:underline transition-colors">Reporting Concerns</a>
+            <a href="#contact" class="ts-body-small text-brand hover:underline transition-colors">Contact Information</a>
+          </div>
+        </div>
+
+        <div class="max-w-[800px]">
+          <article>
+
+            <section id="tax-exempt" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">501(c)(3) Tax-Exempt Organization</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed mb-4">
+                Tech for Palestine is a registered 501(c)(3) nonprofit with the Internal Revenue Service.
+              </p>
+              <ul class="space-y-2 mb-4">
+                <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span><span class="font-medium text-ink">EIN:</span> 99-3441367</span>
+                </li>
+                <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span><span class="font-medium text-ink">Registered Address:</span> 548 Market St #266950, San Francisco, California 94104-5401 US</span>
+                </li>
+                <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span><span class="font-medium text-ink">IRS Determination Letter:</span> Available upon request</span>
+                </li>
+              </ul>
+            </section>
+
+            <section id="mission" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Mission Statement</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                Our mission is <em>to harness technology and human innovation for a free and truly sovereign Palestine</em>. All charitable contributions are used at the discretion of Tech for Palestine for furthering this mission and our programs according to our governing documents and applicable law.
+              </p>
+            </section>
+
+            <section id="tax-deductibility" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Tax Deductibility</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                Contributions to Tech for Palestine may be deductible as charitable donations for federal tax purposes to the extent allowed by law. Please consult your tax advisor for details specific to your situation, as we do not provide tax advice.
+              </p>
+            </section>
+
+            <section id="financial-transparency" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Financial Transparency</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                We strive for transparency in our operations and finances. Our IRS Form 990s and financial information are available at <a href="https://www.guidestar.org/profile/99-3441367" target="_blank" rel="noopener noreferrer" class="text-brand hover:underline">our Candid/Guidestar profile</a> or by request when legally permissible.
+              </p>
+            </section>
+
+            <section id="legal-disclaimers" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Legal Disclaimers</h2>
+              <ul class="space-y-2">
+                <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span><span class="font-medium text-ink">No Legal or Tax Advice:</span> Information on this website is provided for informational purposes only and does not constitute legal or tax advice.</span>
+                </li>
+                <li class="ts-body text-ink-secondary flex items-baseline gap-3">
+                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span><span class="font-medium text-ink">No Guarantee:</span> While we strive for accuracy, all information is provided without warranty of any kind and subject to change.</span>
+                </li>
+              </ul>
+            </section>
+
+            <section id="anti-discrimination" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Anti-Discrimination Policy</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                We do not discriminate based on race, color, national origin, religion, sex, gender identity, sexual orientation, age, or disability in our programs, activities, or employment practices.
+              </p>
+            </section>
+
+            <section id="governance" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Governance</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                Copies of our current whistleblower and conflict of interest policies are available upon request to ensure transparency and accountability in our operations.
+              </p>
+            </section>
+
+            <section id="reporting-concerns" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Reporting Concerns</h2>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                Suspected fraud, misuse of funds, or other concerns may be reported to <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a> or to your state's Attorney General as appropriate.
+              </p>
+            </section>
+
+            <section id="contact" class="border-t border-ink-divider pt-10 mt-10">
+              <h2 class="ts-heading text-ink mb-4">Contact Information</h2>
+              <div class="rounded-[16px] border border-butter bg-sand p-6 mb-4">
+                <p class="ts-body text-ink font-medium">Tech for Palestine</p>
+                <p class="ts-body text-ink-secondary">548 Market St #266950</p>
+                <p class="ts-body text-ink-secondary">San Francisco, California 94104-5401</p>
+                <p class="ts-body text-ink-secondary">United States</p>
+                <p class="ts-body text-ink-secondary mt-3">
+                  <span class="font-medium text-ink">Email:</span>{" "}
+                  <a href="mailto:contact@techforpalestine.org" class="text-brand hover:underline">contact@techforpalestine.org</a>
+                </p>
+              </div>
+              <p class="ts-body text-ink-secondary leading-relaxed">
+                For questions about our privacy practices, please see our <a href="/privacy-policy-new" class="text-brand hover:underline">Privacy Policy</a>. For terms governing your use of our services, please see our <a href="/terms-new" class="text-brand hover:underline">Terms of Service</a>.
+              </p>
+            </section>
+
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</HomeLayout>
+
+<style>
+  .doc-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .doc-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .doc-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .doc-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .doc-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>(".doc-animate");
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+  } else {
+    els.forEach((el) => el.classList.add("visible"));
+  }
+</script>
