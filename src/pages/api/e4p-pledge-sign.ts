@@ -3,13 +3,14 @@ import * as Sentry from "@sentry/astro";
 import { Client } from "@notionhq/client";
 import { getEnv } from "../../utils/getEnv.js";
 import { reportError } from "../../lib/report-error";
+import { isAllowedOrigin, corsHeaders } from "../../utils/origin";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const ctx = locals.runtime?.ctx;
   const origin = request.headers.get("Origin");
-  if (origin !== "https://techforpalestine.org") {
+  if (!isAllowedOrigin(origin)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },
@@ -43,7 +44,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           status: 400,
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "https://techforpalestine.org",
+            "Access-Control-Allow-Origin": origin,
           },
         }
       );
@@ -54,14 +55,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (!emailRx.test(pledgeData.email)) {
       return new Response(JSON.stringify({ error: "Invalid email address" }), {
         status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
       });
     }
 
-    try { new URL(pledgeData.linkedin); } catch {
+    try {
+      new URL(pledgeData.linkedin);
+    } catch {
       return new Response(JSON.stringify({ error: "Invalid LinkedIn URL" }), {
         status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
       });
     }
 
@@ -73,10 +76,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
     ];
     for (const [field, value] of textFields) {
       if (value.length > MAX) {
-        return new Response(JSON.stringify({ error: `Field '${field}' exceeds maximum length of ${MAX} characters` }), {
-          status: 400,
-          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://techforpalestine.org" },
-        });
+        return new Response(
+          JSON.stringify({ error: `Field '${field}' exceeds maximum length of ${MAX} characters` }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
+          }
+        );
       }
     }
 
@@ -156,12 +162,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }),
       {
         status: 201,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "https://techforpalestine.org",
-          "Access-Control-Allow-Methods": "POST",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
+        headers: { "Content-Type": "application/json", ...corsHeaders(origin, "POST") },
       }
     );
   } catch (error) {
@@ -172,7 +173,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       status: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "https://techforpalestine.org",
+        "Access-Control-Allow-Origin": origin,
       },
     });
   }
