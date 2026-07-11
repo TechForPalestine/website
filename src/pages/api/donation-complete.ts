@@ -2,41 +2,34 @@ import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
 import { reportError } from "../../lib/report-error";
 import { getEnv } from "../../utils/getEnv";
+import {
+  isAllowedOrigin,
+  corsHeaders,
+  ALLOWED_ORIGIN,
+  type OriginPolicy,
+} from "../../utils/origin";
 
 export const prerender = false;
 
-const ALLOWED_ORIGINS = [
-  "https://techforpalestine.org",
-  ...(import.meta.env.PROD ? [] : ["http://localhost:4321"]),
-];
-
-function isAllowedOrigin(origin: string | null): origin is string {
-  if (!origin) return false;
-  if (ALLOWED_ORIGINS.includes(origin)) return true;
-  return /\.website-aun\.pages\.dev$/.test(new URL(origin).hostname);
-}
+const ORIGIN_POLICY: OriginPolicy = {
+  allowedOrigins: [ALLOWED_ORIGIN, ...(import.meta.env.PROD ? [] : ["http://localhost:4321"])],
+  allowedSuffixes: [".website-aun.pages.dev"],
+};
 const EO_MEMBERS_LIST_URL =
   "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
 const MAX_NAME_LENGTH = 200;
 
-function corsHeaders(origin: string) {
-  return {
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  } as const;
-}
-
 export const POST: APIRoute = async ({ request, locals }) => {
   const origin = request.headers.get("Origin");
-  if (!isAllowedOrigin(origin)) {
+  if (!isAllowedOrigin(origin, ORIGIN_POLICY)) {
     return new Response(JSON.stringify({ message: "Forbidden" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },
     });
   }
 
-  const ctx = (locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime?.ctx;
+  const ctx = (locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } })
+    .runtime?.ctx;
 
   let body: Record<string, unknown>;
   try {
@@ -105,7 +98,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
 export const OPTIONS: APIRoute = async ({ request }) => {
   const origin = request.headers.get("Origin");
-  if (!isAllowedOrigin(origin)) {
+  if (!isAllowedOrigin(origin, ORIGIN_POLICY)) {
     return new Response(null, { status: 403 });
   }
   return new Response(null, { status: 200, headers: corsHeaders(origin) });

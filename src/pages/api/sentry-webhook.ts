@@ -1,11 +1,8 @@
 import type { APIRoute } from "astro";
 import { getEnv } from "../../utils/getEnv";
+import { constantTimeEqual } from "../../utils/crypto";
 
-async function verifySignature(
-  secret: string,
-  body: string,
-  signature: string
-): Promise<boolean> {
+async function verifySignature(secret: string, body: string, signature: string): Promise<boolean> {
   const key = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(secret),
@@ -17,13 +14,7 @@ async function verifySignature(
   const expected = Array.from(new Uint8Array(mac))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-  // constant-time comparison
-  if (expected.length !== signature.length) return false;
-  let diff = 0;
-  for (let i = 0; i < expected.length; i++) {
-    diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
-  }
-  return diff === 0;
+  return constantTimeEqual(expected, signature);
 }
 
 function formatMessage(body: Record<string, any>): string {
@@ -88,7 +79,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const mmChannelId = getEnv("MATTERMOST_CHANNEL_ID", locals);
 
   if (!secret || !mmUrl || !mmToken || !mmChannelId) {
-    console.error("Missing SENTRY_WEBHOOK_SECRET, MATTERMOST_URL, MATTERMOST_BOT_TOKEN, or MATTERMOST_CHANNEL_ID");
+    console.error(
+      "Missing SENTRY_WEBHOOK_SECRET, MATTERMOST_URL, MATTERMOST_BOT_TOKEN, or MATTERMOST_CHANNEL_ID"
+    );
     return new Response(JSON.stringify({ error: "Not configured" }), { status: 500 });
   }
 

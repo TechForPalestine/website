@@ -2,29 +2,35 @@ import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
 import { getEnv } from "../../utils/getEnv.js";
 import { reportError } from "../../lib/report-error";
+import { sanitizeUrl } from "../../components/projects/projectData.js";
 
 export const prerender = false;
 
 const URL_FIELDS = [
-  "websiteUrl", "logoUrl", "twitterUrl", "linkedinUrl", "githubUrl",
-  "instagramUrl", "facebookUrl", "youtubeUrl", "telegramUrl",
-  "mastodonUrl", "blueskyUrl", "tiktokUrl", "signalUrl", "upscrolledUrl",
-  "leaderPhoto", "donationUrl", "involvementUrl",
+  "websiteUrl",
+  "logoUrl",
+  "twitterUrl",
+  "linkedinUrl",
+  "githubUrl",
+  "instagramUrl",
+  "facebookUrl",
+  "youtubeUrl",
+  "telegramUrl",
+  "mastodonUrl",
+  "blueskyUrl",
+  "tiktokUrl",
+  "signalUrl",
+  "upscrolledUrl",
+  "leaderPhoto",
+  "donationUrl",
+  "involvementUrl",
 ] as const;
 
-/** Strip any URL field that isn't http(s) to prevent XSS via javascript: or data: URIs. */
 function sanitizeProjectUrls(project: Record<string, unknown>): Record<string, unknown> {
   for (const field of URL_FIELDS) {
     const val = project[field];
     if (typeof val !== "string") continue;
-    try {
-      const parsed = new URL(val, "https://placeholder.invalid");
-      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-        project[field] = undefined;
-      }
-    } catch {
-      project[field] = undefined;
-    }
+    project[field] = sanitizeUrl(val) || undefined;
   }
   return project;
 }

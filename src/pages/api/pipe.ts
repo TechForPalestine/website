@@ -1,15 +1,14 @@
 import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
 import { reportError } from "../../lib/report-error";
+import { isAllowedOrigin, type OriginPolicy } from "../../utils/origin";
 
-const ALLOWED_ORIGIN = "https://techforpalestine.org";
-const PREVIEW_ORIGIN_SUFFIX = ".pages.dev";
 const PLAUSIBLE_API = "https://plausible.io/api/event";
 const CONVERSION_EVENTS = new Set(["Monthly-donate", "One-time-donate", "Membership-complete"]);
-
-function isAllowedOrigin(origin: string): boolean {
-  return origin === ALLOWED_ORIGIN || origin.endsWith(PREVIEW_ORIGIN_SUFFIX);
-}
+const ORIGIN_POLICY: OriginPolicy = {
+  allowedSuffixes: [".pages.dev"],
+  allowMissingOrigin: true,
+};
 
 function parseEventName(body: string): string {
   try {
@@ -23,7 +22,7 @@ function parseEventName(body: string): string {
 export const POST: APIRoute = async ({ request, locals }) => {
   const ctx = locals.runtime?.ctx;
   const origin = request.headers.get("origin");
-  if (origin && !isAllowedOrigin(origin)) {
+  if (!isAllowedOrigin(origin, ORIGIN_POLICY)) {
     return new Response("Forbidden", { status: 403 });
   }
 
@@ -73,7 +72,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
           const key = `dropped:${date}:${time}:${id}`;
 
           let parsed: Record<string, unknown> = {};
-          try { parsed = JSON.parse(body); } catch {}
+          try {
+            parsed = JSON.parse(body);
+          } catch {}
 
           const value = JSON.stringify({
             eventName,

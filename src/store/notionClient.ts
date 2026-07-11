@@ -13,6 +13,35 @@ function createNotionAxios(secret: string) {
   });
 }
 
+interface NotionFilesProperty {
+  files?: Array<
+    { type: "external"; external: { url: string } } | { type: "file"; file: { url: string } }
+  >;
+}
+
+interface NotionTitleProperty {
+  title?: Array<{ plain_text: string }>;
+}
+
+interface NotionRichTextProperty {
+  rich_text?: Array<{ plain_text: string }>;
+}
+
+function fileUrl(prop: NotionFilesProperty | undefined, fallback: string): string {
+  const file = prop?.files?.[0];
+  if (!file) return fallback;
+  if (file.type === "external") return file.external.url;
+  return file.file.url;
+}
+
+function titleText(prop: NotionTitleProperty | undefined, fallback = ""): string {
+  return prop?.title?.[0]?.plain_text || fallback;
+}
+
+function richText(prop: NotionRichTextProperty | undefined, fallback = ""): string {
+  return prop?.rich_text?.[0]?.plain_text || fallback;
+}
+
 export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) => {
   const secret = getEnv("NOTION_SECRET", locals);
   const dbId = getEnv("NOTION_DB_ID", locals);
@@ -38,28 +67,18 @@ export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) 
   const events = response.data.results.map((page: any) => {
     const props = page.properties;
 
-    let headerImage = "";
-    if (props["Header"]?.files?.length > 0) {
-      const file = props["Header"].files[0];
-      if (file.type === "external") {
-        headerImage = file.external.url;
-      } else if (file.type === "file") {
-        headerImage = file.file.url;
-      }
-    }
-
-    const description = props["Description"]?.rich_text?.[0]?.plain_text || "";
-
+    const headerImage = fileUrl(props["Header"], "/images/default.jpg");
+    const description = richText(props["Description"]);
     const registerLink = props["Link to registration"]?.url || "";
     const recordingLink = props["Link to recording"]?.url || "";
 
     return {
       id: page.id,
-      title: props["Title"]?.title?.[0]?.plain_text || "Untitled",
+      title: titleText(props["Title"], "Untitled"),
       date: props["Date of event"]?.date?.start || "",
       status: props["Stage"]?.select?.name || "",
       location: props["Type of event"]?.multi_select?.[0]?.name || "",
-      image: headerImage || "/images/default.jpg",
+      image: headerImage,
       link: page.url,
       description,
       registerLink,
@@ -83,28 +102,18 @@ export const fetchNotionEventById = async (pageId: string, locals?: any) => {
 
   const props = response.data.properties;
 
-  // Image from "Header" files property
-  let headerImage = "";
-  if (props["Header"]?.files?.length > 0) {
-    const file = props["Header"].files[0];
-    if (file.type === "external") {
-      headerImage = file.external.url;
-    } else if (file.type === "file") {
-      headerImage = file.file.url;
-    }
-  }
-
-  const description = props["Description"]?.rich_text?.[0]?.plain_text || "";
+  const headerImage = fileUrl(props["Header"], "/images/default.jpg");
+  const description = richText(props["Description"]);
   const registerLink = props["Link to registration"]?.url || "";
   const recordingLink = props["Link to recording"]?.url || "";
 
   return {
     id: response.data.id,
-    title: props["Title"]?.title?.[0]?.plain_text || "Untitled",
+    title: titleText(props["Title"], "Untitled"),
     date: props["Date of event"]?.date?.start || "",
     status: props["Stage"]?.select?.name || "",
     location: props["Type of event"]?.multi_select?.[0]?.name || "",
-    image: headerImage || "/images/default.jpg",
+    image: headerImage,
     link: response.data.url,
     description,
     registerLink,
@@ -139,7 +148,7 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
   const faqs = response.data.results.map((page: any) => {
     const props = page.properties;
 
-    const question = props["Question"]?.title?.[0]?.plain_text || "";
+    const question = titleText(props["Question"]);
     const answer = props["Answer"]?.rich_text || [];
     const position = props["Position"]?.number ?? 999999; // Default to high number if no position
 
@@ -180,7 +189,7 @@ export const fetchNotionIdeas = async (locals?: any) => {
   const ideas = response.data.results.map((page: any) => {
     const props = page.properties;
 
-    const name = props["Name"]?.title?.[0]?.plain_text || "";
+    const name = titleText(props["Name"]);
     const category = props["Category"]?.select?.name || "";
     const description = props["Description"]?.rich_text || [];
 
@@ -222,23 +231,14 @@ export const fetchNotionAgenda = async (locals?: any) => {
       const speakerResponse = await notionAxios.get(`pages/${modId}`);
       const props = speakerResponse.data.properties;
 
-      const name = props["Name"]?.title?.[0]?.plain_text || "";
-      const title = props["Title"]?.rich_text?.[0]?.plain_text || "";
+      const name = titleText(props["Name"]);
+      const title = richText(props["Title"]);
 
       // Concatenate all rich_text blocks for bio
       const bioArray = props["Speaker bio"]?.rich_text || [];
       const bio = bioArray.map((block: any) => block.plain_text).join("");
 
-      // Get photo from files property
-      let photo = "";
-      if (props["Photo"]?.files?.length > 0) {
-        const file = props["Photo"].files[0];
-        if (file.type === "external") {
-          photo = file.external.url;
-        } else if (file.type === "file") {
-          photo = file.file.url;
-        }
-      }
+      const photo = fileUrl(props["Photo"], "/images/default.jpg");
 
       return {
         id: modId,
@@ -247,7 +247,7 @@ export const fetchNotionAgenda = async (locals?: any) => {
           name,
           title,
           bio,
-          photo: photo || "/images/default.jpg",
+          photo,
         },
       };
     } catch (error) {
@@ -267,9 +267,9 @@ export const fetchNotionAgenda = async (locals?: any) => {
   const agendaItems = response.data.results.map((page: any) => {
     const props = page.properties;
 
-    const title = props["Title"]?.title?.[0]?.plain_text || "";
-    const description = props["Description"]?.rich_text?.[0]?.plain_text || "";
-    const time = props["Time"]?.rich_text?.[0]?.plain_text || "";
+    const title = titleText(props["Title"]);
+    const description = richText(props["Description"]);
+    const time = richText(props["Time"]);
 
     const moderatorRelations = props["Moderator"]?.relation || [];
     const moderator =

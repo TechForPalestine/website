@@ -30,6 +30,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import LanguageIcon from "@mui/icons-material/Language";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import GroupsIcon from "@mui/icons-material/Groups";
+import { sanitizeUrl, sanitizeEmail } from "./projects/projectData";
 
 interface Tag {
   id: number;
@@ -77,25 +78,6 @@ interface ProjectsNewProps {
   loading?: boolean;
   availableTags?: Tag[];
 }
-
-/** Only allow http: and https: URLs to prevent javascript: / data: XSS vectors. Returns empty string for unsafe/invalid URLs. */
-const sanitizeUrl = (url: string | undefined): string => {
-  if (!url) return "";
-  try {
-    const parsed = new URL(url, "https://placeholder.invalid");
-    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
-      return url;
-    }
-  } catch {
-    // malformed URL
-  }
-  return "";
-};
-
-const sanitizeEmail = (email: string | undefined): string => {
-  if (!email) return "";
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : "";
-};
 
 const getInitials = (name: string): string => {
   const words = name.trim().split(/\s+/);
@@ -205,7 +187,11 @@ const SOCIAL_FIELDS: SocialField[] = [
   { key: "blueskyUrl", label: "Bluesky", icon: <BlueskySvg /> },
   { key: "tiktokUrl", label: "TikTok", icon: <TikTokSvg /> },
   { key: "signalUrl", label: "Signal", icon: <SignalSvg /> },
-  { key: "upscrolledUrl", label: "Upscrolled", icon: <Box component="img" src="/upscrolled-icon.svg" alt="" sx={{ width: 20, height: 20 }} /> },
+  {
+    key: "upscrolledUrl",
+    label: "Upscrolled",
+    icon: <Box component="img" src="/upscrolled-icon.svg" alt="" sx={{ width: 20, height: 20 }} />,
+  },
   { key: "discordUsername", label: "Discord", icon: <DiscordSvg />, isDiscord: true },
   { key: "publicEmail", label: "Email", icon: <EmailIcon fontSize="small" />, isEmail: true },
 ];
@@ -269,7 +255,9 @@ export default function ProjectsNew({
         const data = await response.json();
         const projects = data.projects ?? data;
         const tags = data.tags ?? [];
-        console.log(`[ProjectsNew] Successfully fetched ${projects.length} projects, ${tags.length} tags`);
+        console.log(
+          `[ProjectsNew] Successfully fetched ${projects.length} projects, ${tags.length} tags`
+        );
         setProjects(projects);
         setAvailableTags(tags);
       } else {
@@ -326,8 +314,7 @@ export default function ProjectsNew({
       getProjectText(project).toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesTags =
-      activeTagIds.size === 0 ||
-      project.tags?.some((t) => activeTagIds.has(t.id));
+      activeTagIds.size === 0 || project.tags?.some((t) => activeTagIds.has(t.id));
 
     return matchesSearch && matchesTags;
   });
@@ -362,7 +349,9 @@ export default function ProjectsNew({
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => {
-                const { bgcolor, color } = getTagColor(availableTags.findIndex((t) => t.id === option.id));
+                const { bgcolor, color } = getTagColor(
+                  availableTags.findIndex((t) => t.id === option.id)
+                );
                 const { key, ...tagProps } = getTagProps({ index });
                 return (
                   <Chip
@@ -376,8 +365,12 @@ export default function ProjectsNew({
               })
             }
             renderOption={(props, option) => {
-              const { bgcolor, color } = getTagColor(availableTags.findIndex((t) => t.id === option.id));
-              const { key, ...optionProps } = props as { key: React.Key } & React.HTMLAttributes<HTMLLIElement>;
+              const { bgcolor, color } = getTagColor(
+                availableTags.findIndex((t) => t.id === option.id)
+              );
+              const { key, ...optionProps } = props as {
+                key: React.Key;
+              } & React.HTMLAttributes<HTMLLIElement>;
               return (
                 <li key={key} {...optionProps}>
                   <Chip
@@ -455,22 +448,37 @@ export default function ProjectsNew({
                         component="img"
                         src={logoSrc}
                         alt={project.name}
-                        sx={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                        sx={{
+                          width: 52,
+                          height: 52,
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          flexShrink: 0,
+                        }}
                         onError={() => setFailedImages((prev) => new Set(prev).add(project.id))}
                       />
                     )}
                     <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="h6" sx={{ fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.25 }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.25 }}
+                      >
                         {project.name}
                       </Typography>
                       {project.leadName && (
-                        <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.secondary", fontSize: "0.875rem" }}
+                        >
                           Led by {project.leadName}
                         </Typography>
                       )}
                     </Box>
                   </Box>
-                  <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.6, flexGrow: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.primary", lineHeight: 1.6, flexGrow: 1 }}
+                  >
                     {getProjectText(project)}
                   </Typography>
                   {sanitizeUrl(project.websiteUrl) && (
@@ -597,7 +605,12 @@ export default function ProjectsNew({
                   </Typography>
                 </Box>
                 {project.featured && isFiltering && (
-                  <Chip label="Featured" size="small" color="primary" sx={{ flexShrink: 0, fontWeight: 600 }} />
+                  <Chip
+                    label="Featured"
+                    size="small"
+                    color="primary"
+                    sx={{ flexShrink: 0, fontWeight: 600 }}
+                  />
                 )}
               </Box>
 
@@ -608,11 +621,18 @@ export default function ProjectsNew({
                     <Chip
                       label={project.categoryName}
                       size="small"
-                      sx={{ bgcolor: "#f0f0f0", color: "text.secondary", fontSize: "0.7rem", fontWeight: 500 }}
+                      sx={{
+                        bgcolor: "#f0f0f0",
+                        color: "text.secondary",
+                        fontSize: "0.7rem",
+                        fontWeight: 500,
+                      }}
                     />
                   )}
                   {project.tags?.slice(0, 3).map((tag) => {
-                    const { bgcolor, color } = getTagColor(availableTags.findIndex((t) => t.id === tag.id));
+                    const { bgcolor, color } = getTagColor(
+                      availableTags.findIndex((t) => t.id === tag.id)
+                    );
                     return (
                       <Chip
                         key={tag.id}
@@ -651,7 +671,14 @@ export default function ProjectsNew({
               </Typography>
 
               {/* Footer row */}
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: "auto" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mt: "auto",
+                }}
+              >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
                   {visibleSocials.map((field) => (
                     <IconButton
@@ -669,7 +696,10 @@ export default function ProjectsNew({
                     </IconButton>
                   ))}
                   {overflowCount > 0 && (
-                    <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.7rem", ml: 0.25 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.secondary", fontSize: "0.7rem", ml: 0.25 }}
+                    >
                       +{overflowCount}
                     </Typography>
                   )}
@@ -693,313 +723,342 @@ export default function ProjectsNew({
 
       {/* Project Details Dialog */}
       <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        {selectedProject && (() => {
-          const hasLogo =
-            selectedProject.logoUrl &&
-            selectedProject.logoUrl !== "/images/default.jpg" &&
-            !dialogLogoFailed;
-          const logoSrc = hasLogo ? resolveLogoSrc(selectedProject.logoUrl) : "";
-          const hasLeaderPhotoInDialog = !!selectedProject.leaderPhoto && !dialogLeaderPhotoFailed;
-          const leaderPhotoSrcDialog = hasLeaderPhotoInDialog
-            ? resolveLogoSrc(selectedProject.leaderPhoto)
-            : "";
-          const showDialogInitials = !hasLogo && !hasLeaderPhotoInDialog;
-          // Project logo takes priority; leader photo only fills in when there's no project logo
-          const dialogAvatarSrc = hasLogo ? logoSrc : leaderPhotoSrcDialog;
+        {selectedProject &&
+          (() => {
+            const hasLogo =
+              selectedProject.logoUrl &&
+              selectedProject.logoUrl !== "/images/default.jpg" &&
+              !dialogLogoFailed;
+            const logoSrc = hasLogo ? resolveLogoSrc(selectedProject.logoUrl) : "";
+            const hasLeaderPhotoInDialog =
+              !!selectedProject.leaderPhoto && !dialogLeaderPhotoFailed;
+            const leaderPhotoSrcDialog = hasLeaderPhotoInDialog
+              ? resolveLogoSrc(selectedProject.leaderPhoto)
+              : "";
+            const showDialogInitials = !hasLogo && !hasLeaderPhotoInDialog;
+            // Project logo takes priority; leader photo only fills in when there's no project logo
+            const dialogAvatarSrc = hasLogo ? logoSrc : leaderPhotoSrcDialog;
 
-          const ctaCount = [
-            sanitizeUrl(selectedProject.websiteUrl),
-            sanitizeUrl(selectedProject.donationUrl),
-            sanitizeUrl(selectedProject.involvementUrl),
-            sanitizeEmail(selectedProject.publicEmail),
-          ].filter(Boolean).length;
+            const ctaCount = [
+              sanitizeUrl(selectedProject.websiteUrl),
+              sanitizeUrl(selectedProject.donationUrl),
+              sanitizeUrl(selectedProject.involvementUrl),
+              sanitizeEmail(selectedProject.publicEmail),
+            ].filter(Boolean).length;
 
-          const activeSocials = getActiveSocialFields(selectedProject);
-          const joinedDate = formatMonthYear(selectedProject.createdAt);
-          const updatedDate = formatDate(selectedProject.updatedAt);
+            const activeSocials = getActiveSocialFields(selectedProject);
+            const joinedDate = formatMonthYear(selectedProject.createdAt);
+            const updatedDate = formatDate(selectedProject.updatedAt);
 
-          return (
-            <>
-              <DialogTitle
-                sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", pr: 1 }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, minWidth: 0, flex: 1 }}>
-                  {showDialogInitials ? (
-                    <Box
-                      sx={{
-                        width: 64,
-                        height: 64,
-                        borderRadius: "50%",
-                        bgcolor: "#E3F9ED",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                        fontSize: "1.4rem",
-                        fontWeight: 500,
-                        color: "#666",
-                      }}
-                    >
-                      {getInitials(selectedProject.name)}
-                    </Box>
-                  ) : (
-                    <Box
-                      component="img"
-                      src={dialogAvatarSrc}
-                      alt={selectedProject.name}
-                      sx={{
-                        width: 64,
-                        height: 64,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        bgcolor: "#f5f5f5",
-                        flexShrink: 0,
-                      }}
-                      onError={() => {
-                        if (hasLeaderPhotoInDialog) {
-                          setDialogLeaderPhotoFailed(true);
-                        } else {
-                          setDialogLogoFailed(true);
-                        }
-                      }}
-                    />
-                  )}
-                  <Box sx={{ minWidth: 0 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
-                      <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                        {selectedProject.name}
-                      </Typography>
-                      {selectedProject.featured && (
-                        <Chip label="Featured project" size="small" color="primary" sx={{ fontWeight: 600 }} />
-                      )}
-                    </Box>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25 }}>
-                      {[selectedProject.categoryName, joinedDate ? `Joined ${joinedDate}` : ""].filter(Boolean).join(" · ")}
-                    </Typography>
-                  </Box>
-                </Box>
-                <IconButton onClick={handleCloseDialog} size="small" sx={{ flexShrink: 0, mt: 0.5 }}>
-                  <CloseIcon />
-                </IconButton>
-              </DialogTitle>
-
-              <DialogContent dividers sx={{ p: 4 }}>
-                {/* Primary CTA row */}
-                {ctaCount > 0 && (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mb: 4 }}>
-                    {sanitizeUrl(selectedProject.websiteUrl) && (
-                      <Button
-                        variant="contained"
-                        href={sanitizeUrl(selectedProject.websiteUrl)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        startIcon={<LanguageIcon />}
-                        sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
-                      >
-                        Visit website
-                      </Button>
-                    )}
-                    {sanitizeUrl(selectedProject.donationUrl) && (
-                      <Button
-                        variant="contained"
-                        href={sanitizeUrl(selectedProject.donationUrl)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        startIcon={<VolunteerActivismIcon />}
+            return (
+              <>
+                <DialogTitle
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    pr: 1,
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2, minWidth: 0, flex: 1 }}>
+                    {showDialogInitials ? (
+                      <Box
                         sx={{
-                          textTransform: "none",
-                          fontWeight: 600,
-                          borderRadius: 2,
-                          bgcolor: "#E65100",
-                          "&:hover": { bgcolor: "#BF360C" },
+                          width: 64,
+                          height: 64,
+                          borderRadius: "50%",
+                          bgcolor: "#E3F9ED",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                          fontSize: "1.4rem",
+                          fontWeight: 500,
+                          color: "#666",
                         }}
                       >
-                        Donate
-                      </Button>
+                        {getInitials(selectedProject.name)}
+                      </Box>
+                    ) : (
+                      <Box
+                        component="img"
+                        src={dialogAvatarSrc}
+                        alt={selectedProject.name}
+                        sx={{
+                          width: 64,
+                          height: 64,
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          bgcolor: "#f5f5f5",
+                          flexShrink: 0,
+                        }}
+                        onError={() => {
+                          if (hasLeaderPhotoInDialog) {
+                            setDialogLeaderPhotoFailed(true);
+                          } else {
+                            setDialogLogoFailed(true);
+                          }
+                        }}
+                      />
                     )}
-                    {sanitizeUrl(selectedProject.involvementUrl) && (
-                      <Button
-                        variant="outlined"
-                        href={sanitizeUrl(selectedProject.involvementUrl)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        startIcon={<GroupsIcon />}
-                        sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
-                      >
-                        Get involved
-                      </Button>
-                    )}
-                    {sanitizeEmail(selectedProject.publicEmail) && (
-                      <Button
-                        variant="outlined"
-                        href={`mailto:${sanitizeEmail(selectedProject.publicEmail)}`}
-                        startIcon={<EmailIcon />}
-                        sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
-                      >
-                        Contact
-                      </Button>
-                    )}
-                  </Box>
-                )}
-
-                {/* About the project */}
-                <Typography
-                  variant="body1"
-                  sx={{ lineHeight: 1.8, mb: 3, fontSize: "1rem", color: "text.primary" }}
-                >
-                  {selectedProject.description}
-                </Typography>
-
-                {/* Our Impact callout */}
-                {selectedProject.impactStatement && (
-                  <Box
-                    sx={{
-                      bgcolor: "#f0fdf4",
-                      borderLeft: "4px solid #168039",
-                      borderRadius: 1,
-                      p: 2,
-                      mb: 3,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ mb: 0.5, fontWeight: 600, color: "#168039", textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: 1 }}
-                    >
-                      Our Impact
-                    </Typography>
-                    <Typography variant="body1" sx={{ lineHeight: 1.7, color: "text.primary" }}>
-                      {selectedProject.impactStatement}
-                    </Typography>
-                  </Box>
-                )}
-
-                {/* About the leader */}
-                {selectedProject.leaderBio && (
-                  <Box sx={{ mb: 3 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        mb: 1.5,
-                        fontWeight: 600,
-                        color: "text.secondary",
-                        textTransform: "uppercase",
-                        fontSize: "0.75rem",
-                        letterSpacing: 1,
-                      }}
-                    >
-                      About the leader
-                    </Typography>
-                    <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-                      {selectedProject.leaderPhoto && !dialogLeaderPhotoFailed && (
-                        <Box
-                          component="img"
-                          src={resolveLogoSrc(selectedProject.leaderPhoto)}
-                          alt={selectedProject.leadName ?? "Leader"}
-                          sx={{
-                            width: 80,
-                            height: 80,
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            flexShrink: 0,
-                          }}
-                          onError={() => setDialogLeaderPhotoFailed(true)}
-                        />
-                      )}
-                      <Typography variant="body2" sx={{ lineHeight: 1.7, color: "text.primary" }}>
-                        {selectedProject.leaderBio}
+                    <Box sx={{ minWidth: 0 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                          {selectedProject.name}
+                        </Typography>
+                        {selectedProject.featured && (
+                          <Chip
+                            label="Featured project"
+                            size="small"
+                            color="primary"
+                            sx={{ fontWeight: 600 }}
+                          />
+                        )}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25 }}>
+                        {[selectedProject.categoryName, joinedDate ? `Joined ${joinedDate}` : ""]
+                          .filter(Boolean)
+                          .join(" · ")}
                       </Typography>
                     </Box>
                   </Box>
-                )}
+                  <IconButton
+                    onClick={handleCloseDialog}
+                    size="small"
+                    sx={{ flexShrink: 0, mt: 0.5 }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </DialogTitle>
 
-                {/* Connect */}
-                {activeSocials.length > 0 && (
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        mb: 1.5,
-                        fontWeight: 600,
-                        color: "text.secondary",
-                        textTransform: "uppercase",
-                        fontSize: "0.75rem",
-                        letterSpacing: 1,
-                      }}
-                    >
-                      Connect
-                    </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
-                      {activeSocials.map((field) => (
+                <DialogContent dividers sx={{ p: 4 }}>
+                  {/* Primary CTA row */}
+                  {ctaCount > 0 && (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mb: 4 }}>
+                      {sanitizeUrl(selectedProject.websiteUrl) && (
                         <Button
-                          key={field.key}
-                          variant="outlined"
-                          component="a"
-                          href={getSocialHref(field, selectedProject)}
-                          target={field.isEmail ? undefined : "_blank"}
-                          rel={field.isEmail ? undefined : "noopener noreferrer"}
-                          startIcon={field.icon}
-                          aria-label={`${selectedProject.name} on ${field.label}`}
+                          variant="contained"
+                          href={sanitizeUrl(selectedProject.websiteUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          startIcon={<LanguageIcon />}
+                          sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
+                        >
+                          Visit website
+                        </Button>
+                      )}
+                      {sanitizeUrl(selectedProject.donationUrl) && (
+                        <Button
+                          variant="contained"
+                          href={sanitizeUrl(selectedProject.donationUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          startIcon={<VolunteerActivismIcon />}
                           sx={{
-                            borderRadius: 2,
                             textTransform: "none",
-                            fontWeight: 500,
-                            px: 2,
+                            fontWeight: 600,
+                            borderRadius: 2,
+                            bgcolor: "#E65100",
+                            "&:hover": { bgcolor: "#BF360C" },
                           }}
                         >
-                          {field.label}
+                          Donate
                         </Button>
-                      ))}
+                      )}
+                      {sanitizeUrl(selectedProject.involvementUrl) && (
+                        <Button
+                          variant="outlined"
+                          href={sanitizeUrl(selectedProject.involvementUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          startIcon={<GroupsIcon />}
+                          sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
+                        >
+                          Get involved
+                        </Button>
+                      )}
+                      {sanitizeEmail(selectedProject.publicEmail) && (
+                        <Button
+                          variant="outlined"
+                          href={`mailto:${sanitizeEmail(selectedProject.publicEmail)}`}
+                          startIcon={<EmailIcon />}
+                          sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
+                        >
+                          Contact
+                        </Button>
+                      )}
                     </Box>
-                  </Box>
-                )}
+                  )}
 
-                {/* Tags */}
-                {selectedProject.tags && selectedProject.tags.length > 0 && (
-                  <Box sx={{ mt: 3 }}>
-                    <Typography
-                      variant="body2"
+                  {/* About the project */}
+                  <Typography
+                    variant="body1"
+                    sx={{ lineHeight: 1.8, mb: 3, fontSize: "1rem", color: "text.primary" }}
+                  >
+                    {selectedProject.description}
+                  </Typography>
+
+                  {/* Our Impact callout */}
+                  {selectedProject.impactStatement && (
+                    <Box
                       sx={{
-                        mb: 1,
-                        fontWeight: 600,
-                        color: "text.secondary",
-                        textTransform: "uppercase",
-                        fontSize: "0.75rem",
-                        letterSpacing: 1,
+                        bgcolor: "#f0fdf4",
+                        borderLeft: "4px solid #168039",
+                        borderRadius: 1,
+                        p: 2,
+                        mb: 3,
                       }}
                     >
-                      Tags
-                    </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
-                      {selectedProject.tags.map((tag) => {
-                        const { bgcolor, color } = getTagColor(availableTags.findIndex((t) => t.id === tag.id));
-                        return (
-                          <Chip
-                            key={tag.id}
-                            label={tag.name}
-                            size="small"
-                            sx={{ bgcolor, color, fontWeight: 500, border: "none" }}
-                          />
-                        );
-                      })}
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          mb: 0.5,
+                          fontWeight: 600,
+                          color: "#168039",
+                          textTransform: "uppercase",
+                          fontSize: "0.7rem",
+                          letterSpacing: 1,
+                        }}
+                      >
+                        Our Impact
+                      </Typography>
+                      <Typography variant="body1" sx={{ lineHeight: 1.7, color: "text.primary" }}>
+                        {selectedProject.impactStatement}
+                      </Typography>
                     </Box>
-                  </Box>
-                )}
-              </DialogContent>
+                  )}
 
-              <DialogActions sx={{ px: 4, py: 2, bgcolor: "#fafafa", justifyContent: "space-between" }}>
-                <Typography variant="caption" sx={{ color: "text.disabled" }}>
-                  Last updated {updatedDate}
-                </Typography>
-                <Button
-                  onClick={handleCloseDialog}
-                  sx={{ textTransform: "none", fontWeight: 500, color: "text.secondary" }}
+                  {/* About the leader */}
+                  {selectedProject.leaderBio && (
+                    <Box sx={{ mb: 3 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          mb: 1.5,
+                          fontWeight: 600,
+                          color: "text.secondary",
+                          textTransform: "uppercase",
+                          fontSize: "0.75rem",
+                          letterSpacing: 1,
+                        }}
+                      >
+                        About the leader
+                      </Typography>
+                      <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+                        {selectedProject.leaderPhoto && !dialogLeaderPhotoFailed && (
+                          <Box
+                            component="img"
+                            src={resolveLogoSrc(selectedProject.leaderPhoto)}
+                            alt={selectedProject.leadName ?? "Leader"}
+                            sx={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                              flexShrink: 0,
+                            }}
+                            onError={() => setDialogLeaderPhotoFailed(true)}
+                          />
+                        )}
+                        <Typography variant="body2" sx={{ lineHeight: 1.7, color: "text.primary" }}>
+                          {selectedProject.leaderBio}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+
+                  {/* Connect */}
+                  {activeSocials.length > 0 && (
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          mb: 1.5,
+                          fontWeight: 600,
+                          color: "text.secondary",
+                          textTransform: "uppercase",
+                          fontSize: "0.75rem",
+                          letterSpacing: 1,
+                        }}
+                      >
+                        Connect
+                      </Typography>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
+                        {activeSocials.map((field) => (
+                          <Button
+                            key={field.key}
+                            variant="outlined"
+                            component="a"
+                            href={getSocialHref(field, selectedProject)}
+                            target={field.isEmail ? undefined : "_blank"}
+                            rel={field.isEmail ? undefined : "noopener noreferrer"}
+                            startIcon={field.icon}
+                            aria-label={`${selectedProject.name} on ${field.label}`}
+                            sx={{
+                              borderRadius: 2,
+                              textTransform: "none",
+                              fontWeight: 500,
+                              px: 2,
+                            }}
+                          >
+                            {field.label}
+                          </Button>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
+
+                  {/* Tags */}
+                  {selectedProject.tags && selectedProject.tags.length > 0 && (
+                    <Box sx={{ mt: 3 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          mb: 1,
+                          fontWeight: 600,
+                          color: "text.secondary",
+                          textTransform: "uppercase",
+                          fontSize: "0.75rem",
+                          letterSpacing: 1,
+                        }}
+                      >
+                        Tags
+                      </Typography>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+                        {selectedProject.tags.map((tag) => {
+                          const { bgcolor, color } = getTagColor(
+                            availableTags.findIndex((t) => t.id === tag.id)
+                          );
+                          return (
+                            <Chip
+                              key={tag.id}
+                              label={tag.name}
+                              size="small"
+                              sx={{ bgcolor, color, fontWeight: 500, border: "none" }}
+                            />
+                          );
+                        })}
+                      </Box>
+                    </Box>
+                  )}
+                </DialogContent>
+
+                <DialogActions
+                  sx={{ px: 4, py: 2, bgcolor: "#fafafa", justifyContent: "space-between" }}
                 >
-                  Close
-                </Button>
-              </DialogActions>
-            </>
-          );
-        })()}
+                  <Typography variant="caption" sx={{ color: "text.disabled" }}>
+                    Last updated {updatedDate}
+                  </Typography>
+                  <Button
+                    onClick={handleCloseDialog}
+                    sx={{ textTransform: "none", fontWeight: 500, color: "text.secondary" }}
+                  >
+                    Close
+                  </Button>
+                </DialogActions>
+              </>
+            );
+          })()}
       </Dialog>
     </Box>
   );
