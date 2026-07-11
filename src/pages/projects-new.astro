@@ -3,16 +3,13 @@ import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
-import ProjectsNewComponent from "../components/ProjectsNew.tsx";
+import ProjectsDirectory from "../components/projects/ProjectsDirectory";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-
-let projects: any[] = [];
-let loading: boolean = true;
 ---
 
 <HomeLayout
-  title="Incubator Projects - Tech for Palestine"
+  title="Incubator Projects"
   description="Explore the projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
@@ -21,18 +18,31 @@ let loading: boolean = true;
     <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-14">
       <div class="mx-auto max-w-[1400px]">
         <div class="page-animate">
-          <p class="ts-overline mb-5 text-ink-secondary">Tech for Palestine</p>
+          <p class="ts-overline mb-5 text-ink-secondary">The Incubator</p>
           <h1 class="ts-editorial mb-5 text-ink">Incubator Projects</h1>
           <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-            What is the incubator? <a href="/incubator" class="text-brand underline underline-offset-2 hover:text-brand-hover">Learn more</a>
+            Every project below was built and led by volunteers who turned frustration into action. Explore what the movement has built, then help lead the next one.
           </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Button
+              href="https://techforpalestine.org/project-application-form"
+              variant="primary"
+              size="md"
+              arrow
+            >
+              Apply now
+            </Button>
+            <Button href="/incubator-new" variant="ghost" size="md">
+              About the Incubator
+            </Button>
+          </div>
         </div>
         <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
       </div>
     </section>
 
     <section class="bg-page">
-      <ProjectsNewComponent projects={projects} loading={loading} client:only="react" />
+      <ProjectsDirectory client:only="react" />
     </section>
 
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
