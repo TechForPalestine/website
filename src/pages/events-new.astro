@@ -3,16 +3,13 @@ import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
-import EventsComponent from "../components/Events.tsx";
+import EventsNewComponent from "../components/events/EventsNew";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-
-let events: any[] = [];
-let loading: boolean = true;
 ---
 
 <HomeLayout
-  title="Events - Tech for Palestine"
+  title="Events"
   description="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation. Join our community webinars, workshops, and networking sessions."
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
@@ -32,7 +29,7 @@ let loading: boolean = true;
     </section>
 
     <section class="bg-page">
-      <EventsComponent events={events} loading={loading} client:only="react" />
+      <EventsNewComponent client:only="react" />
     </section>
   </main>
 </HomeLayout>
