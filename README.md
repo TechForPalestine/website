@@ -30,19 +30,19 @@ npm ci
 
 ### Events System
 
-The `/events` page displays real-time events from a Notion database with automatic image caching. See [docs/EVENTS.md](docs/EVENTS.md) for detailed documentation.
+The `/events` page displays events from a Notion database. See [docs/EVENTS.md](docs/EVENTS.md) for detailed documentation.
 
 Key features:
 
-- Real-time polling for event updates
-- Cloudflare Worker proxy for persistent image caching
-- Graceful fallbacks for failed images
+- Manual refresh (no background polling)
+- Graceful fallbacks for failed/expired images
 - Responsive event cards with registration/recording links
 
 ## Documentation
 
-- [Events System](docs/EVENTS.md) - Complete guide to the events page functionality
-- [Image Proxy Deployment](DEPLOYMENT.md) - Cloudflare Worker setup instructions
+Full documentation index: [docs/README.md](docs/README.md) — architecture, API reference, security model, Notion/ProjectHub integrations, donation pipeline, and more.
+
+- [Deployment](DEPLOYMENT.md) - Cloudflare Pages deployment and environment variables
 
 ## Code of Conduct
 

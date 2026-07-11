@@ -7,11 +7,14 @@ colors:
   butter: "#F7EAD4"
   sand: "#F7F2E8"
   ink: "#2A2428"
+  ink-dark: "#201D1E"
   ink-secondary: "#73656E"
   ink-muted: "#B5B5B5"
   ink-divider: "#D6D6D6"
+  logo-frame: "#EFE3D4"
   brand: "#AB4956"
   brand-hover: "#D35464"
+  brand-light: "#E8727F"
 typography:
   display:
     fontFamily: "Fraunces, serif"
@@ -117,12 +120,19 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 - **Butter** (`#F7EAD4`): Card borders, warm dividers, the rotated accent behind logo frames.
 - **Sand** (`#F7F2E8`): Recessed surfaces — stats grids, input backgrounds.
 - **Ink** (`#2A2428`): All primary text. Warm near-black, never pure black.
+- **Ink Dark** (`#201D1E`): The one dark surface. Backs the closing CTA block (`CtaSection`) so the final call to action inverts against the parchment page. Not a text color; a full-bleed dark panel. Text on it is parchment (`page`) and `brand-light`.
 - **Ink Secondary** (`#73656E`): Body copy, descriptions, supporting text.
 - **Ink Muted** (`#B5B5B5`): Placeholders, disabled states, metadata.
 - **Ink Divider** (`#D6D6D6`): Horizontal rules, section separators.
+- **Logo Frame** (`#EFE3D4`): The warm rotated accent panel behind portfolio logo frames. A shade deeper than Butter so the frame reads against Sand card surfaces.
+
+### Brand on Dark
+- **Pomegranate Light** (`#E8727F`): The accent on the dark CTA surface only. Pomegranate at rest is too dark to carry emphasis against `ink-dark`; this lifted tint is the on-dark counterpart (distinct from `brand-hover` `#D35464`, which is a light-surface hover state).
 
 ### Named Rules
 **The One Accent Rule.** Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.
+
+**The Single Dark Surface Rule.** Exactly one dark panel exists: the closing CTA (`ink-dark` `#201D1E`). It earns its inversion by being the terminal call to action. Do not introduce dark sections elsewhere; the system is parchment-light by default and the dark block's rarity is what makes it land.
 
 **The Tonal Depth Rule.** Depth is created by stepping through the neutral stack (Parchment → Cream → Sand → Butter), not by drop shadows on every surface. Shadows are reserved for interactive elements that need structural lift.
 
@@ -135,17 +145,26 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 
 **Character:** Fraunces carries optical weight and editorial warmth — it reads like a serious publication, not a startup homepage. Outfit is clean and humanist, grounding the editorial tone in clarity. Neither font performs. Together they communicate: "people who know what they're doing built this."
 
-### Hierarchy
+The scale is **fixed-step, not fluid.** Sizes snap at three breakpoints (390 base / 810 / 1200) rather than using `clamp()`; the clamp values in the frontmatter are min→max endpoint approximations of that stepped scale. Every role is a `.ts-*` utility class defined in `src/styles/design-system.css`.
 
-- **Display** (400, clamp 42–60px, line-height 1.22): Hero headlines. Used once per page. The largest typographic statement.
-- **Headline / Editorial** (400, clamp 36–48px, line-height 1.18, tracking –0.01em): Section-opening statements. The manifesto headline, portfolio section header. Slightly tighter tracking for editorial character.
-- **Heading** (400, clamp 32–38px, line-height 1.22): Project names in portfolio cards. Sub-section headings. Maps to `.ts-heading`.
-- **Body Large** (Outfit, 400, clamp 18–20px, line-height 1.48): Primary body copy. Section descriptions, project descriptions. Line length capped at 65–75ch.
-- **Body** (Outfit, 400, clamp 16–18px, line-height 1.22): Secondary body copy, card support text. Use sparingly — prefer Body Large where possible.
-- **Label / Eyebrow** (Outfit, 500, 12px, tracking 0.12em, uppercase): Section labels, button text, `— Our portfolio` style annotations. All uppercase, generous tracking. Never Fraunces.
+#### Fraunces (editorial roles)
+- **Display** (`.ts-display`, 400, 42→52→60px, line-height 1.22): Hero headline. Used once per page. The largest typographic statement.
+- **Editorial** (`.ts-editorial`, 400, 36→42→48px, line-height 1.18, tracking –0.01em): Section-opening statements. Manifesto headline, portfolio section header. Slightly tighter tracking for editorial character. (Frontmatter `headline`.)
+- **Stat / Stat Large** (`.ts-stat` 36→42→48px, `.ts-stat-large` 42→52→60px, line-height 1.22/1): The proof-point numbers (80+, 10,000+). Fraunces, so stats read as editorial evidence, not a SaaS metric grid.
+- **Heading** (`.ts-heading`, 400, 32→36→38px, line-height 1.22): Project names in portfolio cards, sub-section headings. (Frontmatter `title`.)
+- **Subheading** (`.ts-subheading`, 400, 28→30→32px): Tertiary headings within sections.
+- **Quote** (`.ts-quote`, 400, 22→24→26px, line-height 1.32): Pull quotes, testimonials.
+- **Eyebrow** (`.ts-eyebrow`, 400, 18→19→24px, line-height 1.32): A Fraunces editorial annotation above a headline. This is a serif eyebrow, NOT the uppercase-tracked label — for that, see Overline below.
+
+#### Outfit (interface roles)
+- **Body Large** (`.ts-body-large`, 400, 18→20px, line-height 1.48): Primary body copy. Section and project descriptions. Line length capped at 65–75ch. (Frontmatter `body`.)
+- **Body** (`.ts-body`, 400, 16→18px, line-height 1.22): Secondary body copy, card support text. Prefer Body Large where possible.
+- **Body Small / Caption** (`.ts-body-small` 14→16px, `.ts-caption` 14px): Metadata, fine print.
+- **Label** (`.ts-label`, 500, 16→18px, line-height 1): Button text and interactive labels. Used by `Button.astro`.
+- **Overline** (`.ts-overline`, 500, 12px, tracking 0.12em, uppercase): Section eyebrows, `— OUR PORTFOLIO` style annotations. All uppercase, generous tracking. (Frontmatter `label`.)
 
 ### Named Rules
-**The Fraunces Hierarchy Rule.** Fraunces is exclusively for display, headline, and title roles. It is never used for body, label, or interface copy. Mixing the serif into UI text breaks the editorial/UI distinction the system depends on.
+**The Fraunces Hierarchy Rule.** Fraunces owns display, editorial, stat, heading, subheading, quote, and the serif eyebrow. Outfit owns all interface text: body, label, overline, caption. The serif never appears in a button, an overline, or interface chrome; the sans never appears in a headline or a stat. This editorial/UI split is the system's spine.
 
 **The Line Length Rule.** Body copy never exceeds 75 characters per line. On wide viewports, constrain with `max-w-[75ch]` or equivalent, not just container padding.
 
@@ -158,6 +177,7 @@ Shadows appear in two specific contexts only: (1) interactive elements that need
 ### Shadow Vocabulary
 - **Logo Frame Ambient** (`0 6px 20px rgba(0,0,0,0.06)`): The rotated Butter accent behind logo frames. Provides depth without weight. Never used on text containers.
 - **Logo Frame Lift** (`0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05)`): The logo card itself. Layered shadow creates subtle three-dimensional presence.
+- **Ink Ring** (`--color-ink-ring`, `rgba(42,36,40,0.12)`): A hairline warm ring for resting surface edges (inputs, framed elements) where a full `ink-divider` border would read too hard. Not a drop shadow; a low-contrast boundary. Interactive focus uses the Pomegranate outline (`outline-brand`), not this.
 
 ### Named Rules
 **The Flat-By-Default Rule.** A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step (parchment → sand) solves the same problem without visual noise.
@@ -186,7 +206,13 @@ The portfolio card is the signature container of this system. It is not a standa
 
 ### Navigation
 
-The `HomeLayout.astro` renders the page without a navigation bar. Future navigation should follow: Outfit label weight, Ink text, horizontal link list, no active-state underline, Pomegranate for a single CTA button (same primary button spec).
+`HomeNavbar.astro` is a fixed-top bar (`fixed top-0 z-50`) over the parchment page. Structure: a horizontal list of top-level items (About, Incubator, Get Involved, Events, Updates), each opening a dropdown mega-menu of children, with a single Pomegranate primary CTA button (`Button.astro`, `variant="primary"`) anchored at the right.
+
+- **Typography:** Outfit label weight (`.ts-label` / `.ts-overline` for menu items). Never Fraunces.
+- **Text:** Ink at rest, Pomegranate for active/hover.
+- **Active state:** an item is active when the current path matches its href or any child href (`isGroupActive`). No underline; color shift only.
+- **CTA:** exactly one Pomegranate button in the bar. All other nav items are text links.
+- **Visibility:** supports an `alwaysVisible` mode; otherwise reveals on scroll (`data-always-visible`).
 
 ### Signature Components
 

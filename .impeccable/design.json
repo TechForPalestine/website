@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-25T00:00:00Z",
+  "generatedAt": "2026-07-11T00:00:00Z",
   "title": "Design System: Tech for Palestine",
   "extensions": {
     "colorMeta": {
@@ -9,18 +9,21 @@
       "butter":       { "role": "neutral",   "displayName": "Butter",            "canonical": "oklch(95% 0.015 75)",  "tonalRamp": ["oklch(15% 0.015 75)","oklch(30% 0.015 75)","oklch(45% 0.015 75)","oklch(60% 0.015 75)","oklch(75% 0.015 75)","oklch(87% 0.015 75)","oklch(92% 0.015 75)","oklch(95% 0.015 75)"] },
       "sand":         { "role": "neutral",   "displayName": "Sand",              "canonical": "oklch(96% 0.010 80)",  "tonalRamp": ["oklch(15% 0.010 80)","oklch(30% 0.010 80)","oklch(45% 0.010 80)","oklch(60% 0.010 80)","oklch(75% 0.010 80)","oklch(88% 0.010 80)","oklch(93% 0.010 80)","oklch(96% 0.010 80)"] },
       "ink":          { "role": "neutral",   "displayName": "Ink",               "canonical": "oklch(20% 0.008 350)", "tonalRamp": ["oklch(20% 0.008 350)","oklch(32% 0.008 350)","oklch(44% 0.008 350)","oklch(56% 0.008 350)","oklch(68% 0.008 350)","oklch(80% 0.008 350)","oklch(90% 0.008 350)","oklch(97% 0.008 350)"] },
+      "ink-dark":     { "role": "neutral",   "displayName": "Ink Dark",          "canonical": "oklch(17% 0.006 350)", "tonalRamp": ["oklch(17% 0.006 350)","oklch(29% 0.006 350)","oklch(41% 0.006 350)","oklch(53% 0.006 350)","oklch(65% 0.006 350)","oklch(78% 0.006 350)","oklch(89% 0.006 350)","oklch(96% 0.006 350)"] },
       "ink-secondary":{ "role": "neutral",   "displayName": "Ink Secondary",     "canonical": "oklch(48% 0.012 350)", "tonalRamp": ["oklch(15% 0.012 350)","oklch(28% 0.012 350)","oklch(40% 0.012 350)","oklch(48% 0.012 350)","oklch(62% 0.012 350)","oklch(74% 0.012 350)","oklch(85% 0.012 350)","oklch(95% 0.012 350)"] },
       "ink-muted":    { "role": "neutral",   "displayName": "Ink Muted",         "canonical": "oklch(74% 0.002 0)",   "tonalRamp": ["oklch(20% 0.002 0)","oklch(35% 0.002 0)","oklch(50% 0.002 0)","oklch(62% 0.002 0)","oklch(74% 0.002 0)","oklch(84% 0.002 0)","oklch(91% 0.002 0)","oklch(97% 0.002 0)"] },
       "ink-divider":  { "role": "neutral",   "displayName": "Ink Divider",       "canonical": "oklch(85% 0.002 0)",   "tonalRamp": ["oklch(20% 0.002 0)","oklch(35% 0.002 0)","oklch(50% 0.002 0)","oklch(65% 0.002 0)","oklch(75% 0.002 0)","oklch(85% 0.002 0)","oklch(92% 0.002 0)","oklch(97% 0.002 0)"] },
+      "logo-frame":   { "role": "neutral",   "displayName": "Logo Frame",        "canonical": "oklch(92% 0.018 75)",  "tonalRamp": ["oklch(15% 0.018 75)","oklch(30% 0.018 75)","oklch(45% 0.018 75)","oklch(60% 0.018 75)","oklch(75% 0.018 75)","oklch(85% 0.018 75)","oklch(92% 0.018 75)","oklch(97% 0.010 75)"] },
       "brand":        { "role": "primary",   "displayName": "Pomegranate",       "canonical": "oklch(50% 0.12 352)",  "tonalRamp": ["oklch(18% 0.12 352)","oklch(27% 0.12 352)","oklch(36% 0.12 352)","oklch(44% 0.12 352)","oklch(50% 0.12 352)","oklch(62% 0.12 352)","oklch(75% 0.10 352)","oklch(90% 0.06 352)"] },
-      "brand-hover":  { "role": "primary",   "displayName": "Pomegranate Light", "canonical": "oklch(57% 0.13 352)",  "tonalRamp": ["oklch(20% 0.13 352)","oklch(30% 0.13 352)","oklch(40% 0.13 352)","oklch(50% 0.13 352)","oklch(57% 0.13 352)","oklch(68% 0.11 352)","oklch(80% 0.08 352)","oklch(93% 0.04 352)"] }
+      "brand-hover":  { "role": "primary",   "displayName": "Pomegranate Light", "canonical": "oklch(57% 0.13 352)",  "tonalRamp": ["oklch(20% 0.13 352)","oklch(30% 0.13 352)","oklch(40% 0.13 352)","oklch(50% 0.13 352)","oklch(57% 0.13 352)","oklch(68% 0.11 352)","oklch(80% 0.08 352)","oklch(93% 0.04 352)"] },
+      "brand-light":  { "role": "primary",   "displayName": "Pomegranate on Dark","canonical": "oklch(65% 0.14 12)",   "tonalRamp": ["oklch(22% 0.14 12)","oklch(33% 0.14 12)","oklch(44% 0.14 12)","oklch(55% 0.14 12)","oklch(65% 0.14 12)","oklch(76% 0.11 12)","oklch(86% 0.07 12)","oklch(94% 0.03 12)"] }
     },
     "typographyMeta": {
-      "display":  { "displayName": "Display",          "purpose": "Hero headlines. Used once per page." },
-      "headline": { "displayName": "Headline/Editorial","purpose": "Section-opening statements. Manifesto, portfolio header." },
-      "title":    { "displayName": "Title",             "purpose": "Project names, sub-section headings." },
-      "body":     { "displayName": "Body",              "purpose": "Primary body copy. Max 65-75ch line length." },
-      "label":    { "displayName": "Label/Eyebrow",     "purpose": "Section annotations, button text. Always uppercase." }
+      "display":  { "displayName": "Display (.ts-display)",     "purpose": "Hero headline. Used once per page. Fraunces 42→52→60px." },
+      "headline": { "displayName": "Editorial (.ts-editorial)", "purpose": "Section-opening statements. Manifesto, portfolio header. Fraunces 36→42→48px." },
+      "title":    { "displayName": "Heading (.ts-heading)",     "purpose": "Project names, sub-section headings. Fraunces 32→36→38px." },
+      "body":     { "displayName": "Body Large (.ts-body-large)","purpose": "Primary body copy. Outfit 18→20px, line-height 1.48. Max 65-75ch." },
+      "label":    { "displayName": "Overline (.ts-overline)",   "purpose": "Section eyebrows, uppercase tracked annotations. Outfit 12px, 0.12em, uppercase. Distinct from button label (.ts-label, 16-18px, not uppercase) and the Fraunces eyebrow (.ts-eyebrow, 18-24px serif)." }
     },
     "shadows": [
       { "name": "logo-frame-ambient", "value": "0 6px 20px rgba(0,0,0,0.06)",                           "purpose": "Rotated butter accent behind logo frames." },
@@ -48,7 +51,7 @@
       "refersTo": "button-primary",
       "description": "Primary CTA. Used for Become a Member and Apply to Incubator.",
       "html": "<button class=\"ds-btn-primary\">Become a Member</button>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #FFFBF5; background-color: #AB4956; border: 1px solid transparent; border-radius: 999px; padding: 14px 20px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-primary:hover { background-color: #D35464; } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', system-ui, sans-serif; font-size: 16px; font-weight: 500; line-height: 1; min-height: 44px; color: #FFFBF5; background-color: #AB4956; border: 1px solid transparent; border-radius: 999px; padding: 14px 20px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-primary:hover { background-color: #D35464; } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
     },
     {
       "name": "Ghost Button",
@@ -56,7 +59,7 @@
       "refersTo": "button-ghost",
       "description": "Secondary CTA. Used alongside Primary to offer a softer alternate action.",
       "html": "<button class=\"ds-btn-ghost\">See what we've built <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\"><path d=\"M12 5v14M5 13l7 7 7-7\"/></svg></button>",
-      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #2A2428; background-color: transparent; border: 1px solid #2A2428; border-radius: 999px; padding: 14px 20px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-ghost:hover { background-color: rgba(42,36,40,0.05); } .ds-btn-ghost:active { transform: scale(0.98); } .ds-btn-ghost:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', system-ui, sans-serif; font-size: 16px; font-weight: 500; line-height: 1; min-height: 44px; color: #2A2428; background-color: transparent; border: 1px solid #2A2428; border-radius: 999px; padding: 14px 20px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-ghost:hover { background-color: rgba(42,36,40,0.05); } .ds-btn-ghost:active { transform: scale(0.98); } .ds-btn-ghost:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
     },
     {
       "name": "Text Link Button",
@@ -64,15 +67,15 @@
       "refersTo": "button-text",
       "description": "Inline text action. Used for tertiary options and body-copy links.",
       "html": "<button class=\"ds-btn-text\">Read article →</button>",
-      "css": ".ds-btn-text { display: inline-flex; align-items: center; gap: 4px; font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #AB4956; background: none; border: none; border-radius: 0; padding: 0; cursor: pointer; transition: text-decoration 0.15s ease; } .ds-btn-text:hover { text-decoration: underline; } .ds-btn-text:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
+      "css": ".ds-btn-text { display: inline-flex; align-items: center; gap: 4px; font-family: 'Outfit', system-ui, sans-serif; font-size: 16px; font-weight: 500; line-height: 1; color: #AB4956; background: none; border: none; border-radius: 0; padding: 0; cursor: pointer; transition: text-decoration 0.15s ease; } .ds-btn-text:hover { text-decoration: underline; } .ds-btn-text:focus-visible { outline: 2px solid #AB4956; outline-offset: 2px; }"
     },
     {
-      "name": "Eyebrow Label",
+      "name": "Overline",
       "kind": "custom",
-      "refersTo": null,
-      "description": "Section annotation. Uppercase, tracked, Ink Secondary. Prefixed with an em-dash by convention.",
-      "html": "<p class=\"ds-eyebrow\">— Our portfolio</p>",
-      "css": ".ds-eyebrow { font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #73656E; margin: 0; }"
+      "refersTo": "label",
+      "description": "Section annotation (.ts-overline). Uppercase, tracked, Ink Secondary. Prefixed with an em-dash by convention. Not to be confused with .ts-eyebrow, which is a Fraunces serif annotation.",
+      "html": "<p class=\"ds-overline\">— OUR PORTFOLIO</p>",
+      "css": ".ds-overline { font-family: 'Outfit', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #73656E; margin: 0; }"
     },
     {
       "name": "Portfolio Card",
@@ -103,9 +106,10 @@
     ],
     "rules": [
       { "name": "The One Accent Rule",         "body": "Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.", "section": "colors" },
+      { "name": "The Single Dark Surface Rule","body": "Exactly one dark panel exists: the closing CTA (ink-dark #201D1E), with brand-light #E8727F as its on-dark accent. It earns its inversion by being the terminal call to action. Do not introduce dark sections elsewhere.", "section": "colors" },
       { "name": "The Tonal Depth Rule",        "body": "Depth is created by stepping through the neutral stack (Parchment → Cream → Sand → Butter), not by drop shadows. Shadows are reserved for interactive elements that need structural lift.", "section": "colors" },
       { "name": "The No Pure Values Rule",     "body": "Never use #000000 or #ffffff. Every neutral carries a warm tint. Pure values feel clinical; tinted neutrals feel inhabited.", "section": "colors" },
-      { "name": "The Fraunces Hierarchy Rule", "body": "Fraunces is exclusively for display, headline, and title roles. It is never used for body, label, or interface copy.", "section": "typography" },
+      { "name": "The Fraunces Hierarchy Rule", "body": "Fraunces owns display, editorial, stat, heading, subheading, quote, and the serif eyebrow (.ts-eyebrow). Outfit owns all interface text: body, label, overline, caption. The serif never appears in a button or overline; the sans never appears in a headline or stat.", "section": "typography" },
       { "name": "The Line Length Rule",        "body": "Body copy never exceeds 75 characters per line. On wide viewports, constrain with max-w-[75ch] or equivalent.", "section": "typography" },
       { "name": "The Flat-By-Default Rule",    "body": "A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step solves the same problem.", "section": "elevation" },
       { "name": "The No Nested Card Rule",     "body": "Never place a card inside a card. The logo frame within a portfolio card is a logo display element, not a card.", "section": "components" }
