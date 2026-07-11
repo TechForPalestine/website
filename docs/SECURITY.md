@@ -1,0 +1,30 @@
+# Security Model
+
+This project went through six rounds of external security auditing (`security_audit/`, `security-audit-findings.csv` has the full list). Every rule below was written in direct response to a finding that was actually exploited or exploitable — not speculative hardening. Don't regress them.
+
+## Rules, with the incident that produced them
+
+- **Secrets never in source or config files.** All secrets live only in the Cloudflare Pages dashboard, resolved via `getEnv(name, locals)` (`src/utils/getEnv.ts`). *(C-1: `PROJECTHUB_API_KEY` was once committed in plain text in `wrangler.toml`.)*
+- **Never bundle a secret into client-side code**, including inside an axios instance's default headers. If a client needs an authenticated call, add a server-side proxy under `src/pages/api/` that attaches the credential — see `project-proxy.ts` for the pattern. *(H-1: a secret key was `console.log`'d in browser code; R-1: a secret was bundled into the client JS via an axios `Authorization` header default.)*
+- **Webhook endpoints authenticate via header, never a URL query param.** Use `X-Webhook-Secret` or a signature header (`sentry-webhook.ts` uses `sentry-hook-signature` + HMAC). *(N-1: a webhook secret was passed as `?secret=TOKEN`, which ends up in Cloudflare/proxy access logs.)*
+- **Secret/token comparison must use `constantTimeEqual(a, b)`** from `src/utils/crypto.ts`, never `===`/`!==`. *(N-2: a timing attack was possible against a `!==` token comparison.)*
+- **Every mutating endpoint requires authentication or verification before it acts** — no endpoint should perform a privileged side effect (inviting a member, writing to Notion, etc.) purely because it was called. *(C-2: an unauthenticated endpoint could trigger Hub API membership invitations from any caller; C-3: a webhook processed donations without verifying its secret first.)*
+- **Public write endpoints validate `Origin` before parsing the body**, reject if it doesn't match `https://techforpalestine.org` (or an approved preview-deploy suffix for a small set of routes — see [API.md](API.md) for which). *(M-1: form endpoints had no CSRF/Origin check at all.)*
+- **Public write endpoints validate input**: required-field presence, `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` for email, `try { new URL(x) } catch` for URL fields, and a 2000-character cap on free-text fields. *(M-2: no format or length validation existed on the endorsement/pledge forms.)*
+- **`getEnv` only reads Cloudflare runtime env / `import.meta.env` / `process.env`** — no `globalThis` fallback. *(M-3: a `globalThis[name]` fallback in an earlier version resolved to `window[name]` in the browser, i.e. attacker-influenceable client state.)*
+- **Never log full PII.** Emails are logged as `[redacted]@${email.split("@")[1]}` — domain only, everywhere `reportError()` is called with an email in context. *(M-4: full donor emails were written to server logs.)*
+- **Never return a raw `error.message` or stack trace to the client.** Every route returns a generic string (`"Failed to process request"`) and logs the real error server-side via `reportError()`. *(M-5 and H-2: internal error messages and a full donor PII payload were both echoed back in HTTP response bodies.)*
+- **CORS**: never `Access-Control-Allow-Origin: *` on a write endpoint (POST/PUT/PATCH/DELETE) — use the explicit prod origin. Read-only GET endpoints serving public data (`events`, `faq`, `projects`, etc.) may use `*`. *(H-5: wildcard CORS was present on write endpoints.)*
+- **Proxy routes normalize the upstream path and use an explicit header allowlist.** Normalize dot-segments with `new URL(path, "http://localhost").pathname` before checking a prefix, only forward to an explicit allowed prefix, and build a fresh `Headers()` object rather than forwarding all incoming headers (which would leak `Cookie`, `X-Forwarded-For`, etc. to the upstream). Proxy responses also strip `transfer-encoding`/`connection` before passthrough. See `src/pages/api/project-proxy.ts` for the current reference implementation.
+- **A proxy or forwarding route only ever passes through an explicit field allowlist**, never the full request body verbatim to a privileged upstream call. *(N-3: a membership-invite route forwarded arbitrary body fields to the Hub API instead of whitelisting `email`/`type`/`paymentReference`.)*
+- **API responses are non-cacheable.** `src/middleware/cache-control.ts` forces `Cache-Control: no-store` on every `/api/*` route and every non-GET request; don't override this with a more permissive header on a new route. *(H-3: the middleware once set `public, max-age=600` on every response including API routes; M-6: a duplicate `src/middleware.ts` silently shadowed `src/middleware/index.ts`, meaning the cache-control middleware wasn't even running.)*
+- **There must be exactly one middleware entry point: `src/middleware/index.ts`.** A parallel `src/middleware.ts` will shadow it. *(Same M-6 incident — worth repeating since it's an easy mistake to reintroduce.)*
+- **CSP**: managed only in `src/middleware/csp.ts`, per-request nonce via `crypto.randomUUID()` + Cloudflare `HTMLRewriter`, `script-src` uses `'nonce-...' 'strict-dynamic'`. Never add `'unsafe-inline'`. Never use `style=""` inline attributes — the production CSP has no `'unsafe-inline'` on `style-src`, so inline `style` attributes are silently blocked in prod (they appear to work in devtools, which bypass CSP). Use Tailwind classes instead. *(R-2: CSP `script-src` originally used `'unsafe-inline'`, defeating its own XSS protection.)*
+- **Rate limiting** is enforced at the Cloudflare WAF layer (not in application code) — confirmed live with HTTP 429 responses. *(H-4.)*
+
+## Where to look for more
+
+- `security_audit/security-audit-findings.csv` — full finding list with severity, OWASP category, and which audit round fixed it.
+- `security_audit/security-audit-report-v6.pdf` — latest full report.
+- [API.md](API.md) — per-route auth/origin table.
+- [DONATIONS.md](DONATIONS.md) — the admin dashboard's Basic Auth setup.
