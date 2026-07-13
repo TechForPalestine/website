@@ -5,12 +5,52 @@ import HomeNavbar from "../components/home/HomeNavbar.astro";
 import EndorsementForm from "../components/EndorsementForm.tsx";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const endorsementFaqs = [
+  {
+    question: "What does a T4P endorsement mean?",
+    answer:
+      "A T4P endorsement is a public statement of support for a specific campaign or initiative. It signals to our community of thousands of tech workers that the campaign aligns with our values. It does not imply financial support or ongoing partnership. Note that we don't fully vet every endorsement — our review is based on available information and community knowledge, not exhaustive due diligence.",
+  },
+  {
+    question: "How long does the review process take?",
+    answer:
+      "We aim to review all requests within 5-7 days. We'll reach out if we need additional information.",
+  },
+  {
+    question: "Can T4P projects apply for endorsements?",
+    answer:
+      'Yes. If you\'re already a T4P incubator project and are launching a specific campaign, you can request an endorsement. Check the "T4P project" box in the form and our review will reflect that context.',
+  },
+  {
+    question: "What happens if our request is declined?",
+    answer:
+      "We'll let you know and, where possible, share the reason. Declinations are not permanent. If your campaign evolves or new information is available, you're welcome to reapply.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: endorsementFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
 ---
 
 <HomeLayout
   title="Endorsements"
   description="Request an endorsement from Tech for Palestine for your campaign or organization. Learn what we look for and how the review process works."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">

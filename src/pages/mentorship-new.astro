@@ -6,13 +6,42 @@ import Button from "../components/ui/Button.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to become a Tech for Palestine mentor",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Submit the Mentor Application",
+      text: "Fill out the Mentor Application. Your profile will be screened against our ideal mentor profile.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Interview with the T4P team",
+      text: "If your profile fits, you'll be invited to an interview with the Tech for Palestine team.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Get matched with a project",
+      text: "Join the database of potential mentors. Project leaders can request a mentor and you'll be introduced to begin your mentorship journey.",
+    },
+  ],
+};
 ---
 
 <HomeLayout
-  title="Mentorship"
+  title="Mentorship | Tech for Palestine"
   description="Support T4P Incubator projects with expertise and guidance. Become a mentor and help Palestinian tech projects find product-market fit."
   noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -113,7 +142,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       <div class="mx-auto max-w-[1400px]">
         <div class="mentorship-animate max-w-[75ch]">
           <p class="ts-overline mb-6 text-ink-secondary">Getting started</p>
-          <h2 class="ts-heading mb-8 text-ink">How it works</h2>
+          <h2 class="ts-heading mb-8 text-ink">How does mentorship work?</h2>
           <p class="ts-body-large mb-5 text-ink-secondary">
             Once you fill out the Mentor Application, your profile will be screened and if it
             corresponds to our ideal profile, you will be invited to an interview with the Tech for

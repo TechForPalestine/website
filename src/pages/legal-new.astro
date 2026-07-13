@@ -4,13 +4,23 @@ import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const pageTitle = "Financial & Legal Notice";
+const pageDescription =
+  "Tech for Palestine's legal structure, financial transparency, and compliance information.";
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: pageTitle,
+  description: pageDescription,
+  dateModified: "2025-08-05",
+};
 ---
 
-<HomeLayout
-  title="Financial & Legal Notice"
-  description="Tech for Palestine's legal structure, financial transparency, and compliance information."
-  noindex={true}
->
+<HomeLayout title={pageTitle} description={pageDescription} noindex={true}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
@@ -21,7 +31,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             Financial &amp; <span class="text-brand">Legal</span> Notice
           </h1>
           <p class="ts-body text-ink-secondary">
-            Our legal structure, financial transparency, and compliance information.
+            <strong class="text-ink">Last updated:</strong> August 5, 2025
           </p>
         </div>
 

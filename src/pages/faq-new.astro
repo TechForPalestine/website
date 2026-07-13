@@ -15,7 +15,29 @@ interface FAQItem {
   answer: string | RichTextSegment[];
 }
 
-const faqs: FAQItem[] = await fetchNotionFAQ(false, Astro.locals).catch(() => []);
+const fallbackFaqs: FAQItem[] = [
+  {
+    id: "fallback-mission",
+    question: "What does Tech for Palestine do?",
+    answer:
+      "Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation.",
+  },
+  {
+    id: "fallback-get-involved",
+    question: "How can I get involved with Tech for Palestine?",
+    answer:
+      "You can volunteer your skills, mentor an Incubator project, or join the T4P Incubator to build your own project. Visit our Get Involved page for the full list of ways to contribute.",
+  },
+  {
+    id: "fallback-incubator",
+    question: "What is the T4P Incubator?",
+    answer:
+      "The T4P Incubator helps advocates build, grow, and scale technical projects that support Palestinian freedom, providing mentorship, community, and resources to project leaders.",
+  },
+];
+
+const notionFaqs: FAQItem[] = await fetchNotionFAQ(false, Astro.locals).catch(() => []);
+const faqs: FAQItem[] = notionFaqs.length > 0 ? notionFaqs : fallbackFaqs;
 
 const answerToPlainText = (answer: FAQItem["answer"]): string =>
   typeof answer === "string" ? answer : answer.map((segment) => segment.plain_text).join("");
@@ -35,12 +57,12 @@ const faqSchema = {
 ---
 
 <HomeLayout
-  title="FAQ"
-  description="Frequently asked questions about Tech for Palestine. Learn about our mission, how to get involved, the T4P Incubator, volunteer opportunities, and how we support Palestinian liberation through technology."
+  title="FAQ | Tech for Palestine"
+  description="Frequently asked questions about Tech for Palestine's mission, the Incubator, and how to get involved."
   noindex={true}
 >
   <Fragment slot="head">
-    {faqs.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
