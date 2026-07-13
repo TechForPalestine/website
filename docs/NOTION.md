@@ -2,15 +2,15 @@
 
 Notion is the CMS for most semi-dynamic content on the site. There are **7 separate Notion databases**, each with its own env var and consuming route(s).
 
-| Database | Env var (ID) | Fetcher / route | Consumed by |
-|---|---|---|---|
-| Events | `NOTION_DB_ID` | `fetchNotionEvents()` / `fetchNotionEventById()` in `src/store/notionClient.ts`; `/api/events` | `events.astro`, `Events.tsx` — full detail in [EVENTS.md](EVENTS.md) |
-| FAQ | `NOTION_FAQ_DB_ID` | `fetchNotionFAQ()`; `/api/faq` | `faq.astro` |
-| Ideas | `NOTION_IDEAS_DB_ID` | `fetchNotionIdeas()`; `/api/ideas` | `ideas.astro` |
-| Agenda / Speakers | `NOTION_AGENDA_DB_ID` | `fetchNotionAgenda()`; `/api/speakers` | London Gathering agenda page — resolves `Moderator` relation properties against speaker pages in the same DB |
-| E4P Signatories | `NOTION_SIGNATORIES_DB_ID` | `/api/e4p-signatories` (GET, reads only `Approved` rows), `/api/e4p-pledge-sign` (POST, creates unapproved rows) — both use `@notionhq/client` directly, not `notionClient.ts` | `e4p.astro`, `e4p/pledge.astro`, `e4p/sign-up.astro` — see [E4P.md](E4P.md) |
-| Endorsements | `NOTION_ENDORSEMENTS_DB_ID` | `/api/endorsement-request` (POST, `@notionhq/client` directly) | `endorsements.astro` |
-| *(unused by current code)* | `NOTION_SPEAKERS_DB_ID` | listed in `.env.example`/DEPLOYMENT.md but not referenced by any current fetcher — agenda/speaker data now comes from the Agenda DB's `Moderator` relation | — |
+| Database                   | Env var (ID)                | Fetcher / route                                                                                                                                                                | Consumed by                                                                                                  |
+| -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Events                     | `NOTION_DB_ID`              | `fetchNotionEvents()` / `fetchNotionEventById()` in `src/store/notionClient.ts`; `/api/events`                                                                                 | `events.astro`, `Events.tsx` — full detail in [EVENTS.md](EVENTS.md)                                         |
+| FAQ                        | `NOTION_FAQ_DB_ID`          | `fetchNotionFAQ()`; `/api/faq`                                                                                                                                                 | `faq.astro`                                                                                                  |
+| Ideas                      | `NOTION_IDEAS_DB_ID`        | `fetchNotionIdeas()`; `/api/ideas`                                                                                                                                             | `ideas.astro`                                                                                                |
+| Agenda / Speakers          | `NOTION_AGENDA_DB_ID`       | `fetchNotionAgenda()`; `/api/speakers`                                                                                                                                         | London Gathering agenda page — resolves `Moderator` relation properties against speaker pages in the same DB |
+| E4P Signatories            | `NOTION_SIGNATORIES_DB_ID`  | `/api/e4p-signatories` (GET, reads only `Approved` rows), `/api/e4p-pledge-sign` (POST, creates unapproved rows) — both use `@notionhq/client` directly, not `notionClient.ts` | `e4p.astro`, `e4p/pledge.astro`, `e4p/sign-up.astro` — see [E4P.md](E4P.md)                                  |
+| Endorsements               | `NOTION_ENDORSEMENTS_DB_ID` | `/api/endorsement-request` (POST, `@notionhq/client` directly)                                                                                                                 | `endorsements.astro`                                                                                         |
+| _(unused by current code)_ | `NOTION_SPEAKERS_DB_ID`     | listed in `.env.example`/DEPLOYMENT.md but not referenced by any current fetcher — agenda/speaker data now comes from the Agenda DB's `Moderator` relation                     | —                                                                                                            |
 
 ## Two integration patterns in the codebase
 

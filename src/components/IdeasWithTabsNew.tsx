@@ -66,7 +66,9 @@ export default function IdeasWithTabsNew({
     } else {
       lenis?.start();
     }
-    return () => { lenis?.start(); };
+    return () => {
+      lenis?.start();
+    };
   }, [activeIdea]);
 
   const openIdea = (idea: Idea) => {
@@ -96,7 +98,12 @@ export default function IdeasWithTabsNew({
   };
 
   // Clear any pending close timer on unmount
-  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+  useEffect(
+    () => () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    },
+    []
+  );
 
   return (
     <div className="px-6 pb-14 min-[810px]:px-10 min-[810px]:pb-20">
@@ -163,7 +170,9 @@ export default function IdeasWithTabsNew({
       {/* Modal — always mounted once first idea is opened, controlled by modalVisible */}
       {activeIdea && (
         <div
-          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeModal();
+          }}
           className={[
             "fixed inset-0 z-50 flex items-center justify-center px-4 py-8",
             "bg-ink/60 backdrop-blur-sm",
@@ -185,7 +194,15 @@ export default function IdeasWithTabsNew({
               className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-ink-divider text-ink-secondary transition-colors hover:border-brand/30 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               aria-label="Close"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             </button>
@@ -202,7 +219,10 @@ export default function IdeasWithTabsNew({
             {activeIdea.tags?.length > 0 && (
               <div className="mt-5 flex flex-wrap gap-2">
                 {activeIdea.tags.map((tag, i) => (
-                  <span key={i} className="ts-body-small rounded-pill border border-ink-divider px-2.5 py-1 text-ink-secondary">
+                  <span
+                    key={i}
+                    className="ts-body-small rounded-pill border border-ink-divider px-2.5 py-1 text-ink-secondary"
+                  >
                     {tag}
                   </span>
                 ))}
@@ -217,7 +237,15 @@ export default function IdeasWithTabsNew({
                 className="ts-label inline-flex items-center gap-2 rounded-pill bg-brand px-6 py-3 text-page transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
                 Apply for this idea
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                >
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </a>

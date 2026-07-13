@@ -1,4 +1,6 @@
 ---
+// Fallback donation form for donate-new.astro (linked from there as "this form"
+// when the primary embed doesn't load) — not an accidental duplicate page.
 import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
@@ -7,13 +9,29 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
 <HomeLayout
-  title="Donate"
+  title="Donate (Alternate Form) | Tech for Palestine"
   description="Support Tech for Palestine. Your donation helps us hire professionals, strengthen existing projects, and launch new initiatives for a free Palestine."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "NonprofitOrganization",
+        name: "Tech for Palestine",
+        potentialAction: {
+          "@type": "DonateAction",
+          name: "Donate to Tech for Palestine",
+          description:
+            "Your donation helps us hire professionals, strengthen existing projects, and launch new initiatives for a free Palestine.",
+        },
+      })}
+    />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-
     <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
@@ -34,20 +52,54 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
         <!-- Highlight chips -->
         <div class="donate-animate mt-10 flex flex-wrap gap-3">
-          <div class="flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          <div
+            class="flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2.5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-brand"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <span class="ts-label text-ink">Hire professionals</span>
           </div>
-          <div class="flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          <div
+            class="flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2.5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-brand"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"
+              ></path>
             </svg>
             <span class="ts-label text-ink">Strengthen projects</span>
           </div>
-          <div class="flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <div
+            class="flex items-center gap-2 rounded-pill border border-butter bg-sand px-4 py-2.5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-brand"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
             </svg>
             <span class="ts-label text-ink">Launch new initiatives</span>
@@ -60,7 +112,6 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="grid grid-cols-1 gap-8 min-[1050px]:grid-cols-3">
-
           <!-- Donation Card -->
           <div class="min-[1050px]:col-span-2">
             <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
@@ -70,7 +121,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   data-entity="EMBED_FORM"
                   data-source="CharityStack"
                   id="1546c2c2-a580-4994-bbb3-9e643aed1309"
-                ></div>
+                >
+                </div>
               </div>
 
               <!-- Trust badges -->
@@ -85,34 +137,50 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                     stroke-width="2"
                     aria-hidden="true"
                   >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <span class="ts-body-small text-ink-secondary">501(c)(3) nonprofit</span>
                 </div>
                 <span class="ts-body-small text-ink-muted" aria-hidden="true">·</span>
                 <span class="ts-body-small text-ink-secondary">Tax-deductible in the U.S.</span>
+                <span class="ts-body-small text-ink-muted" aria-hidden="true">·</span>
+                <span class="ts-body-small text-ink-secondary">EIN: 99-3441367</span>
               </div>
             </div>
           </div>
 
           <!-- Sidebar -->
           <div class="space-y-6">
-
             <!-- Why it matters -->
             <div class="rounded-[20px] border border-butter bg-cream p-6">
               <h3 class="ts-subheading mb-5 text-ink">Why your donation matters</h3>
               <ul class="space-y-4">
                 <li class="flex items-baseline gap-3">
-                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  <span class="ts-body text-ink-secondary">Accelerates projects already making impact</span>
+                  <span
+                    class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary"
+                    >Accelerates projects already making impact</span
+                  >
                 </li>
                 <li class="flex items-baseline gap-3">
-                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  <span class="ts-body text-ink-secondary">Funds critical skills: engineering, design, marketing</span>
+                  <span
+                    class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary"
+                    >Funds critical skills: engineering, design, marketing</span
+                  >
                 </li>
                 <li class="flex items-baseline gap-3">
-                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  <span class="ts-body text-ink-secondary">Helps launch new initiatives quickly and effectively</span>
+                  <span
+                    class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary"
+                    >Helps launch new initiatives quickly and effectively</span
+                  >
                 </li>
               </ul>
             </div>
@@ -132,21 +200,19 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                 > and we'll assist you.
               </p>
             </div>
-
           </div>
         </div>
       </div>
     </section>
-
   </main>
-
 </HomeLayout>
 
 <style>
   .donate-animate {
     opacity: 0;
     translate: 0 20px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .donate-animate.in-view {

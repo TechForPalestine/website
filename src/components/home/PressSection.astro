@@ -1,18 +1,37 @@
 ---
 const logos = [
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/75/The_Guardian_2018.svg",            alt: "The Guardian"                     },
-  { src: "https://e7.pngegg.com/pngimages/669/74/png-clipart-tc-techcrunch-logo-illustration-techcrunch-logo-icons-logos-emojis-iconic-brands.png", alt: "TechCrunch" },
-  { src: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Al_Jazeera_Media_Network_Logo.svg/1280px-Al_Jazeera_Media_Network_Logo.svg.png", alt: "Al Jazeera" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Inc._%28business_magazine%29_logo.svg", alt: "Inc."                        },
-  { src: "https://ssir.org/images/resources/SSIR_Logo.RGB_Black_984x234.png",                    alt: "Stanford Social Innovation Review"},
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/4f/TRT_World_logosu.png", alt: "TRT World" },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/7/75/The_Guardian_2018.svg",
+    alt: "The Guardian",
+  },
+  {
+    src: "https://e7.pngegg.com/pngimages/669/74/png-clipart-tc-techcrunch-logo-illustration-techcrunch-logo-icons-logos-emojis-iconic-brands.png",
+    alt: "TechCrunch",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Al_Jazeera_Media_Network_Logo.svg/1280px-Al_Jazeera_Media_Network_Logo.svg.png",
+    alt: "Al Jazeera",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Inc._%28business_magazine%29_logo.svg",
+    alt: "Inc.",
+  },
+  {
+    src: "https://ssir.org/images/resources/SSIR_Logo.RGB_Black_984x234.png",
+    alt: "Stanford Social Innovation Review",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/4/4f/TRT_World_logosu.png",
+    alt: "TRT World",
+  },
 ];
 
 const articles = [
   {
     publication: "Stanford Social Innovation Review",
     date: "2024",
-    headline: "Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights",
+    headline:
+      "Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights",
     url: "https://ssir.org/articles/entry/tech-against-genocide",
   },
   {
@@ -36,7 +55,8 @@ const articles = [
   {
     publication: "TRT World",
     date: "2024",
-    headline: "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
+    headline:
+      "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
     url: "https://www.trtworld.com/video/18268907",
   },
   {
@@ -48,70 +68,75 @@ const articles = [
 ];
 ---
 
-<section class="bg-page pt-14 min-[810px]:pt-20 pb-14 min-[810px]:pb-20">
+<section class="bg-page pb-14 pt-14 min-[810px]:pb-20 min-[810px]:pt-20">
   <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
-
     <p class="ts-overline mb-8 text-ink-secondary">In the press</p>
-    <h2 class="press-heading ts-editorial text-ink mb-12 min-[810px]:mb-16">Making headlines</h2>
+    <h2 class="press-heading ts-editorial mb-12 text-ink min-[810px]:mb-16">Making headlines</h2>
 
     <!-- Publication logos -->
-    <div class="press-logos border-t border-b border-ink-divider py-6 min-[810px]:py-8">
+    <div class="press-logos border-b border-t border-ink-divider py-6 min-[810px]:py-8">
       <ul
-        class="flex flex-wrap items-center justify-center gap-x-10 gap-y-10 min-[810px]:gap-y-6 list-none p-0 max-w-[1000px] mx-auto w-full"
+        class="mx-auto flex w-full max-w-[1000px] list-none flex-wrap items-center justify-center gap-x-10 gap-y-10 p-0 min-[810px]:gap-y-6"
         role="list"
         aria-label="Publications that have covered T4P"
       >
-        {logos.map((logo) => (
-          <li class="flex items-center">
-            <img
-              src={logo.src}
-              alt={logo.alt}
-              loading="lazy"
-              decoding="async"
-              class="w-[150px] min-[810px]:w-[210px] object-contain"
-            />
-          </li>
-        ))}
+        {
+          logos.map((logo) => (
+            <li class="flex items-center">
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                loading="lazy"
+                decoding="async"
+                class="w-[150px] object-contain min-[810px]:w-[210px]"
+              />
+            </li>
+          ))
+        }
       </ul>
     </div>
 
     <!-- Article cards -->
     <ul
-      class="mt-12 min-[810px]:mt-16 mb-16 min-[810px]:mb-24 grid grid-cols-1 gap-4 min-[810px]:grid-cols-2 lg:grid-cols-3 list-none p-0"
+      class="mb-16 mt-12 grid list-none grid-cols-1 gap-4 p-0 min-[810px]:mb-24 min-[810px]:mt-16 min-[810px]:grid-cols-2 lg:grid-cols-3"
       role="list"
     >
-      {articles.map((article, i) => (
-        <li class="press-card-wrap flex" data-i={i}>
-          <a
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="press-card flex flex-1 flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-          >
-            <p class="ts-caption text-ink-secondary mb-5">
-              {article.publication}
-              <span class="mx-1.5" aria-hidden="true">·</span>
-              {article.date}
-            </p>
-            <h3 class="ts-subheading text-ink flex-1 leading-snug">{article.headline}</h3>
-            <span class="ts-label mt-6 flex items-center gap-2 text-brand">
-              Read article<span class="sr-only"> (opens in new tab)</span>
-              <svg
-                class="press-arrow"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </span>
-          </a>
-        </li>
-      ))}
+      {
+        articles.map((article, i) => (
+          <li class="press-card-wrap flex" data-i={i}>
+            <a
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="press-card flex flex-1 flex-col rounded-[20px] border border-butter bg-sand p-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-[810px]:p-8"
+            >
+              <p class="ts-caption mb-5 text-ink-secondary">
+                {article.publication}
+                <span class="mx-1.5" aria-hidden="true">
+                  ·
+                </span>
+                {article.date}
+              </p>
+              <h3 class="ts-subheading flex-1 leading-snug text-ink">{article.headline}</h3>
+              <span class="ts-label mt-6 flex items-center gap-2 text-brand">
+                Read article<span class="sr-only"> (opens in new tab)</span>
+                <svg
+                  class="press-arrow"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </a>
+          </li>
+        ))
+      }
     </ul>
 
     <!-- Community photo -->
@@ -123,10 +148,9 @@ const articles = [
         height="1600"
         loading="lazy"
         decoding="async"
-        class="w-full h-[480px] min-[810px]:h-[560px] object-cover object-center animate-ken-burns motion-reduce:animate-none"
+        class="animate-ken-burns h-[480px] w-full object-cover object-center motion-reduce:animate-none min-[810px]:h-[560px]"
       />
     </div>
-
   </div>
 </section>
 
@@ -135,7 +159,8 @@ const articles = [
   .press-heading {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .press-heading.in-view {
@@ -147,7 +172,8 @@ const articles = [
   .press-logos {
     opacity: 0;
     translate: 0 16px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
   }
   .press-logos.in-view {
@@ -163,7 +189,8 @@ const articles = [
   .press-card-wrap.in-view {
     opacity: 1;
     translate: none;
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   }
 

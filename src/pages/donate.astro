@@ -292,12 +292,13 @@ const isUK = country === "GB";
       }
 
       document.addEventListener("QGIV.donationComplete", async function (event) {
-        var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-        var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
-        var contact = (data.QGIV && data.QGIV.contact) ? data.QGIV.contact : {};
+        var data = event instanceof CustomEvent && event.detail ? event.detail : {};
+        var transaction = data.QGIV && data.QGIV.transaction ? data.QGIV.transaction : {};
+        var contact = data.QGIV && data.QGIV.contact ? data.QGIV.contact : {};
 
         var recurringByFlag = transaction.recurring === true;
-        var recurringByFrequency = typeof transaction.frequency === "string" &&
+        var recurringByFrequency =
+          typeof transaction.frequency === "string" &&
           transaction.frequency.toLowerCase() !== "one time";
         var isRecurring = recurringByFlag || recurringByFrequency;
 
@@ -328,12 +329,21 @@ const isUK = country === "GB";
 
       const presetAmount = urlParams.get("amount");
       if (presetAmount && (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link")) {
-        const amountToId = { "25": "1620628", "50": "1620629", "100": "1620630", "500": "1620631", "custom": "1620632" };
+        const amountToId = {
+          "25": "1620628",
+          "50": "1620629",
+          "100": "1620630",
+          "500": "1620631",
+          custom: "1620632",
+        };
         const targetId = amountToId[presetAmount];
         if (targetId) {
           document.querySelectorAll(".qgiv-embed-container[data-embed]").forEach((el) => {
             const base = el.getAttribute("data-embed");
-            el.setAttribute("data-embed", base.replace(/\/amount\/\d+\//, "/amount/" + targetId + "/"));
+            el.setAttribute(
+              "data-embed",
+              base.replace(/\/amount\/\d+\//, "/amount/" + targetId + "/")
+            );
           });
         }
       }

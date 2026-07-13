@@ -100,6 +100,7 @@ The design is warm without being sentimental, serious without being cold, and di
 This system explicitly rejects: SaaS gradient aesthetics, corporate nonprofit polish, excessive motion or interactivity, vague social-good language, and anything that hedges on what T4P stands for.
 
 **Key Characteristics:**
+
 - Editorial serif (Fraunces) paired with a clean humanist sans (Outfit)
 - Warm parchment neutrals with a single pomegranate accent, used sparingly
 - Flat-by-default surfaces with tonal depth through background steps (page → cream → sand → butter)
@@ -111,10 +112,12 @@ This system explicitly rejects: SaaS gradient aesthetics, corporate nonprofit po
 A warm neutral stack grounded in off-white parchment, with a single saturated accent used only where it signals action or emphasis. The palette reads as editorial, human, and grounded — not tech-blue, not activist-red, not nonprofit-green.
 
 ### Primary
+
 - **Pomegranate** (`#AB4956`): The sole accent. Used on CTAs, active states, brand emphasis, and the `text-brand` utility class. Forbidden as a background for large surface areas. Its rarity is its power.
 - **Pomegranate Light** (`#D35464`): Hover state only. Never appears at rest. Lighter than base for a lift feel.
 
 ### Neutral
+
 - **Warm Parchment** (`#FFFBF5`): The page background. The surface everything rests on. Never pure white.
 - **Cream** (`#FBF2ED`): Slightly elevated surface — light card backgrounds, hover fills.
 - **Butter** (`#F7EAD4`): Card borders, warm dividers, the rotated accent behind logo frames.
@@ -127,9 +130,11 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 - **Logo Frame** (`#EFE3D4`): The warm rotated accent panel behind portfolio logo frames. A shade deeper than Butter so the frame reads against Sand card surfaces.
 
 ### Brand on Dark
+
 - **Pomegranate Light** (`#E8727F`): The accent on the dark CTA surface only. Pomegranate at rest is too dark to carry emphasis against `ink-dark`; this lifted tint is the on-dark counterpart (distinct from `brand-hover` `#D35464`, which is a light-surface hover state).
 
 ### Named Rules
+
 **The One Accent Rule.** Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.
 
 **The Single Dark Surface Rule.** Exactly one dark panel exists: the closing CTA (`ink-dark` `#201D1E`). It earns its inversion by being the terminal call to action. Do not introduce dark sections elsewhere; the system is parchment-light by default and the dark block's rarity is what makes it land.
@@ -148,6 +153,7 @@ A warm neutral stack grounded in off-white parchment, with a single saturated ac
 The scale is **fixed-step, not fluid.** Sizes snap at three breakpoints (390 base / 810 / 1200) rather than using `clamp()`; the clamp values in the frontmatter are min→max endpoint approximations of that stepped scale. Every role is a `.ts-*` utility class defined in `src/styles/design-system.css`.
 
 #### Fraunces (editorial roles)
+
 - **Display** (`.ts-display`, 400, 42→52→60px, line-height 1.22): Hero headline. Used once per page. The largest typographic statement.
 - **Editorial** (`.ts-editorial`, 400, 36→42→48px, line-height 1.18, tracking –0.01em): Section-opening statements. Manifesto headline, portfolio section header. Slightly tighter tracking for editorial character. (Frontmatter `headline`.)
 - **Stat / Stat Large** (`.ts-stat` 36→42→48px, `.ts-stat-large` 42→52→60px, line-height 1.22/1): The proof-point numbers (80+, 10,000+). Fraunces, so stats read as editorial evidence, not a SaaS metric grid.
@@ -157,6 +163,7 @@ The scale is **fixed-step, not fluid.** Sizes snap at three breakpoints (390 bas
 - **Eyebrow** (`.ts-eyebrow`, 400, 18→19→24px, line-height 1.32): A Fraunces editorial annotation above a headline. This is a serif eyebrow, NOT the uppercase-tracked label — for that, see Overline below.
 
 #### Outfit (interface roles)
+
 - **Body Large** (`.ts-body-large`, 400, 18→20px, line-height 1.48): Primary body copy. Section and project descriptions. Line length capped at 65–75ch. (Frontmatter `body`.)
 - **Body** (`.ts-body`, 400, 16→18px, line-height 1.22): Secondary body copy, card support text. Prefer Body Large where possible.
 - **Body Small / Caption** (`.ts-body-small` 14→16px, `.ts-caption` 14px): Metadata, fine print.
@@ -164,6 +171,7 @@ The scale is **fixed-step, not fluid.** Sizes snap at three breakpoints (390 bas
 - **Overline** (`.ts-overline`, 500, 12px, tracking 0.12em, uppercase): Section eyebrows, `— OUR PORTFOLIO` style annotations. All uppercase, generous tracking. (Frontmatter `label`.)
 
 ### Named Rules
+
 **The Fraunces Hierarchy Rule.** Fraunces owns display, editorial, stat, heading, subheading, quote, and the serif eyebrow. Outfit owns all interface text: body, label, overline, caption. The serif never appears in a button, an overline, or interface chrome; the sans never appears in a headline or a stat. This editorial/UI split is the system's spine.
 
 **The Line Length Rule.** Body copy never exceeds 75 characters per line. On wide viewports, constrain with `max-w-[75ch]` or equivalent, not just container padding.
@@ -175,11 +183,13 @@ This system is flat by default. Surfaces rest without shadow; the tonal neutral 
 Shadows appear in two specific contexts only: (1) interactive elements that need structural lift to signal they are "above" the page (logo frames in portfolio cards), and (2) the hero glass card overlay, which uses a semi-transparent white backdrop rather than a traditional shadow.
 
 ### Shadow Vocabulary
+
 - **Logo Frame Ambient** (`0 6px 20px rgba(0,0,0,0.06)`): The rotated Butter accent behind logo frames. Provides depth without weight. Never used on text containers.
 - **Logo Frame Lift** (`0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05)`): The logo card itself. Layered shadow creates subtle three-dimensional presence.
 - **Ink Ring** (`--color-ink-ring`, `rgba(42,36,40,0.12)`): A hairline warm ring for resting surface edges (inputs, framed elements) where a full `ink-divider` border would read too hard. Not a drop shadow; a low-contrast boundary. Interactive focus uses the Pomegranate outline (`outline-brand`), not this.
 
 ### Named Rules
+
 **The Flat-By-Default Rule.** A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step (parchment → sand) solves the same problem without visual noise.
 
 ## 5. Components
@@ -225,6 +235,7 @@ The portfolio card is the signature container of this system. It is not a standa
 ## 6. Do's and Don'ts
 
 ### Do:
+
 - **Do** use Pomegranate (`#AB4956`) only on CTAs, brand emphasis, and active states. Its scarcity is its meaning.
 - **Do** step through the neutral stack (Parchment → Cream → Sand → Butter) to create depth rather than adding shadows.
 - **Do** use Fraunces exclusively for display, headline, and title roles. Outfit owns all body, label, and interface text.
@@ -236,6 +247,7 @@ The portfolio card is the signature container of this system. It is not a standa
 - **Do** use the portfolio stack component (sticky scroll with depth) for featured projects. It is the homepage's signature interaction.
 
 ### Don't:
+
 - **Don't** use excessive interactivity or motion. Clarity of communication takes priority over visual spectacle. If an animation doesn't aid comprehension, remove it.
 - **Don't** hedge or use vague "social good" language. T4P is explicitly pro-Palestine. Every headline must say so.
 - **Don't** use cold or corporate visual language: blues, grays, geometric icons, or corporate-sans typography. This is a community, not a product.

@@ -61,8 +61,20 @@ export default function MembershipCalculator() {
               ))}
             </select>
             <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-muted">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 4L6 8L10 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </span>
           </div>
@@ -91,10 +103,7 @@ export default function MembershipCalculator() {
 
         {/* Amount */}
         <div className="flex-1">
-          <label
-            htmlFor="calc-income"
-            className="ts-body-small mb-1.5 block font-medium text-ink"
-          >
+          <label htmlFor="calc-income" className="ts-body-small mb-1.5 block font-medium text-ink">
             {incomeType === "monthly" ? "Monthly income" : "Annual income"}
           </label>
           <div className="relative">
@@ -121,7 +130,8 @@ export default function MembershipCalculator() {
           <div className="rounded-[12px] bg-sand px-5 py-4">
             <p className="ts-body-small mb-1 text-ink-secondary">Monthly dues</p>
             <p className="font-fraunces text-3xl text-brand">
-              {currencyData.symbol}{suggestedMonthly.toFixed(2)}
+              {currencyData.symbol}
+              {suggestedMonthly.toFixed(2)}
             </p>
             {!isUSD && (
               <p className="ts-body-small mt-0.5 text-ink-muted">
@@ -132,7 +142,8 @@ export default function MembershipCalculator() {
           <div className="rounded-[12px] bg-sand px-5 py-4">
             <p className="ts-body-small mb-1 text-ink-secondary">Annual dues</p>
             <p className="font-fraunces text-3xl text-brand">
-              {currencyData.symbol}{suggestedAnnual.toFixed(2)}
+              {currencyData.symbol}
+              {suggestedAnnual.toFixed(2)}
             </p>
             {!isUSD && (
               <p className="ts-body-small mt-0.5 text-ink-muted">

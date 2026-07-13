@@ -1,4 +1,6 @@
 ---
+// This is the primary donate page (see the in-page fallback link to /donate-2).
+// donate-2-new.astro is the intentional fallback form, not an accidental duplicate.
 import { getEnv } from "../utils/getEnv";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
@@ -9,13 +11,29 @@ const isUK = country === "GB";
 ---
 
 <HomeLayout
-  title="Donate"
+  title="Donate | Tech for Palestine"
   description="Support Tech for Palestine. Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "NonprofitOrganization",
+        name: "Tech for Palestine",
+        potentialAction: {
+          "@type": "DonateAction",
+          name: "Donate to Tech for Palestine",
+          description:
+            "Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine.",
+        },
+      })}
+    />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-
     <!-- Hero -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
@@ -25,10 +43,12 @@ const isUK = country === "GB";
             Support <span class="text-brand">Tech for Palestine</span>
           </h1>
           <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
-            Since launching Tech for Palestine, we've helped bring impactful projects to life: UpScrolled, Media Bias Meter, Boycat, Find a Protest, Newscord, and many more.
+            Since launching Tech for Palestine, we've helped bring impactful projects to life:
+            UpScrolled, Media Bias Meter, Boycat, Find a Protest, Newscord, and many more.
           </p>
           <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-            Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine.
+            Your donation helps us strengthen existing projects and launch new initiatives for a
+            free Palestine.
           </p>
         </div>
       </div>
@@ -38,57 +58,56 @@ const isUK = country === "GB";
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="grid grid-cols-1 gap-8 min-[1050px]:grid-cols-3 min-[1050px]:items-start">
-
           <!-- Donation Card -->
           <div class="min-[1050px]:col-span-2">
             <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
               <h2 class="ts-heading mb-6 text-ink">Make a donation</h2>
-                <!-- Variant A: Qgiv only (no UK link) -->
-                <div id="form-qgiv-only" hidden>
-                  <div
-                    class="qgiv-embed-container"
-                    data-qgiv-embed="true"
-                    data-embed-id="83460"
-                    data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
-                    data-width="630"
-                  ></div>
+              <!-- Variant A: Qgiv only (no UK link) -->
+              <div id="form-qgiv-only" hidden>
+                <div
+                  class="qgiv-embed-container"
+                  data-qgiv-embed="true"
+                  data-embed-id="83460"
+                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                  data-width="630"
+                >
                 </div>
+              </div>
 
-                <!-- Variant B Non-UK: Qgiv + link to ValidAid -->
-                <div id="form-qgiv-link" hidden>
-                  <p class="ts-body-small mb-4 text-ink-secondary">
-                    If you are in the UK, <a
-                      href="?variant=validaid"
-                      class="text-brand underline hover:text-brand-hover"
-                      >click here to donate with Gift Aid</a
-                    >.
-                  </p>
-                  <div
-                    class="qgiv-embed-container"
-                    data-qgiv-embed="true"
-                    data-embed-id="83460"
-                    data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
-                    data-width="630"
-                  ></div>
+              <!-- Variant B Non-UK: Qgiv + link to ValidAid -->
+              <div id="form-qgiv-link" hidden>
+                <p class="ts-body-small mb-4 text-ink-secondary">
+                  If you are in the UK, <a
+                    href="?variant=validaid"
+                    class="text-brand underline hover:text-brand-hover"
+                    >click here to donate with Gift Aid</a
+                  >.
+                </p>
+                <div
+                  class="qgiv-embed-container"
+                  data-qgiv-embed="true"
+                  data-embed-id="83460"
+                  data-embed="https://secure.qgiv.com/for/techforpalestine-websitedonationform/embed/83460/amount/1620629/recurring/"
+                  data-width="630"
+                >
                 </div>
+              </div>
 
-                <!-- Variant B UK: ValidAid + link to Qgiv -->
-                <div id="form-validaid-link" hidden>
-                  <p class="ts-body-small mb-4 text-ink-secondary">
-                    Not in the UK? <a
-                      href="?variant=qgiv"
-                      class="text-brand underline hover:text-brand-hover"
-                      >Click here to donate</a
-                    >.
-                  </p>
-                  <iframe
-                    id="validaid-iframe-event-236"
-                    src="https://validaid.org/embed/event/236"
-                    title="Tech for Palestine"
-                    class="w-full border-0"
-                    allow="payment"
-                  ></iframe>
-                </div>
+              <!-- Variant B UK: ValidAid + link to Qgiv -->
+              <div id="form-validaid-link" hidden>
+                <p class="ts-body-small mb-4 text-ink-secondary">
+                  Not in the UK? <a
+                    href="?variant=qgiv"
+                    class="text-brand underline hover:text-brand-hover">Click here to donate</a
+                  >.
+                </p>
+                <iframe
+                  id="validaid-iframe-event-236"
+                  src="https://validaid.org/embed/event/236"
+                  title="Tech for Palestine"
+                  class="w-full border-0"
+                  allow="payment"></iframe>
+              </div>
 
               <p class="ts-body-small mt-4 text-ink-secondary">
                 If this page isn't loading, please use <a
@@ -109,7 +128,10 @@ const isUK = country === "GB";
                     stroke-width="2"
                     aria-hidden="true"
                   >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <span class="ts-body-small text-ink-secondary">501(c)(3) nonprofit</span>
                 </div>
@@ -123,22 +145,33 @@ const isUK = country === "GB";
 
           <!-- Sidebar -->
           <div class="space-y-6">
-
             <!-- Why it matters -->
             <div class="rounded-[20px] border border-butter bg-cream p-6">
               <h3 class="ts-subheading mb-5 text-ink">Why your donation matters</h3>
               <ul class="space-y-4">
                 <li class="flex items-baseline gap-3">
-                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  <span class="ts-body text-ink-secondary">Accelerates projects already making impact</span>
+                  <span
+                    class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary"
+                    >Accelerates projects already making impact</span
+                  >
                 </li>
                 <li class="flex items-baseline gap-3">
-                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  <span class="ts-body text-ink-secondary">Funds critical skills: engineering, design, marketing</span>
+                  <span
+                    class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary"
+                    >Funds critical skills: engineering, design, marketing</span
+                  >
                 </li>
                 <li class="flex items-baseline gap-3">
-                  <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  <span class="ts-body text-ink-secondary">Helps launch new initiatives quickly and effectively</span>
+                  <span
+                    class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  <span class="ts-body text-ink-secondary"
+                    >Helps launch new initiatives quickly and effectively</span
+                  >
                 </li>
               </ul>
             </div>
@@ -165,14 +198,16 @@ const isUK = country === "GB";
                       href="https://causes.benevity.org/user"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-brand underline hover:text-brand-hover">on the Benevity Causes Portal</a
+                      class="text-brand underline hover:text-brand-hover"
+                      >on the Benevity Causes Portal</a
                     >.
                   </p>
                 </li>
                 <li>
                   <p class="ts-label mb-1 text-ink">Major Gifts</p>
                   <p class="ts-body text-ink-secondary">
-                    For more information about making a major gift or for other questions about donations, please contact <a
+                    For more information about making a major gift or for other questions about
+                    donations, please contact <a
                       href="mailto:donations@techforpalestine.org"
                       class="text-brand underline hover:text-brand-hover"
                       >donations&#64;techforpalestine.org</a
@@ -181,14 +216,11 @@ const isUK = country === "GB";
                 </li>
               </ul>
             </div>
-
           </div>
         </div>
       </div>
     </section>
-
   </main>
-
 </HomeLayout>
 
 <style>
@@ -199,7 +231,8 @@ const isUK = country === "GB";
   .donate-animate {
     opacity: 0;
     translate: 0 20px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .donate-animate.in-view {
@@ -317,12 +350,13 @@ const isUK = country === "GB";
     }
 
     document.addEventListener("QGIV.donationComplete", async function (event) {
-      var data = (event instanceof CustomEvent && event.detail) ? event.detail : {};
-      var transaction = (data.QGIV && data.QGIV.transaction) ? data.QGIV.transaction : {};
-      var contact = (data.QGIV && data.QGIV.contact) ? data.QGIV.contact : {};
+      var data = event instanceof CustomEvent && event.detail ? event.detail : {};
+      var transaction = data.QGIV && data.QGIV.transaction ? data.QGIV.transaction : {};
+      var contact = data.QGIV && data.QGIV.contact ? data.QGIV.contact : {};
 
       var recurringByFlag = transaction.recurring === true;
-      var recurringByFrequency = typeof transaction.frequency === "string" &&
+      var recurringByFrequency =
+        typeof transaction.frequency === "string" &&
         transaction.frequency.toLowerCase() !== "one time";
       var isRecurring = recurringByFlag || recurringByFrequency;
 
@@ -352,12 +386,21 @@ const isUK = country === "GB";
 
     const presetAmount = urlParams.get("amount");
     if (presetAmount && (formToShow === "form-qgiv-only" || formToShow === "form-qgiv-link")) {
-      const amountToId = { "25": "1620628", "50": "1620629", "100": "1620630", "500": "1620631", "custom": "1620632" };
+      const amountToId = {
+        "25": "1620628",
+        "50": "1620629",
+        "100": "1620630",
+        "500": "1620631",
+        custom: "1620632",
+      };
       const targetId = amountToId[presetAmount];
       if (targetId) {
         document.querySelectorAll(".qgiv-embed-container[data-embed]").forEach((el) => {
           const base = el.getAttribute("data-embed");
-          el.setAttribute("data-embed", base.replace(/\/amount\/\d+\//, "/amount/" + targetId + "/"));
+          el.setAttribute(
+            "data-embed",
+            base.replace(/\/amount\/\d+\//, "/amount/" + targetId + "/")
+          );
         });
       }
     }

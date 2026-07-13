@@ -74,7 +74,12 @@ function sortAgendaItems(items: AgendaItem[]): AgendaItem[] {
 
 function AgendaIcon({ title }: { title: string }) {
   const t = title.toLowerCase();
-  if (t.includes("coffee") || t.includes("welcome") || t.includes("goodbye") || t.includes("closing")) {
+  if (
+    t.includes("coffee") ||
+    t.includes("welcome") ||
+    t.includes("goodbye") ||
+    t.includes("closing")
+  ) {
     return (
       <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
         <path d="M2 21v-2h18v2H2zm2-4v-5q0-.825.588-1.413Q5.175 10 6 10h8q.825 0 1.413.587Q16 11.175 16 12v5h2q.825 0 1.413-.587Q20 15.825 20 15v-3q0-.825-.587-1.413Q18.825 10 18 10h-1V8h1q1.65 0 2.825 1.175Q22 10.35 22 12v3q0 1.65-1.175 2.825Q19.65 19 18 19h-2V12H6v5H4z" />
@@ -104,7 +109,12 @@ function AgendaIcon({ title }: { title: string }) {
 
 function getIconBg(title: string): string {
   const t = title.toLowerCase();
-  if (t.includes("coffee") || t.includes("welcome") || t.includes("goodbye") || t.includes("closing"))
+  if (
+    t.includes("coffee") ||
+    t.includes("welcome") ||
+    t.includes("goodbye") ||
+    t.includes("closing")
+  )
     return "bg-brand";
   if (t.includes("lunch")) return "bg-[#d97706]";
   if (t.includes("breakout") || t.includes("workshop")) return "bg-ink-dark";
@@ -154,10 +164,7 @@ export default function AgendaSection({ initialAgendaItems = [] }: AgendaSection
 
             if (isWorkshopHeader) {
               return (
-                <div
-                  key={item.id}
-                  className="rounded-[20px] bg-ink-dark p-6"
-                >
+                <div key={item.id} className="rounded-[20px] bg-ink-dark p-6">
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10">
                       <AgendaIcon title={item.title} />
@@ -181,7 +188,8 @@ export default function AgendaSection({ initialAgendaItems = [] }: AgendaSection
                       {item.title}
                       {item.moderator && (
                         <span className="text-ink-secondary">
-                          {" "}(moderated by {item.moderator.name})
+                          {" "}
+                          (moderated by {item.moderator.name})
                         </span>
                       )}
                     </p>
@@ -191,12 +199,11 @@ export default function AgendaSection({ initialAgendaItems = [] }: AgendaSection
             }
 
             return (
-              <div
-                key={item.id}
-                className="rounded-[20px] border border-butter bg-page p-6"
-              >
+              <div key={item.id} className="rounded-[20px] border border-butter bg-page p-6">
                 <div className="flex items-center gap-4">
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${getIconBg(item.title)}`}>
+                  <div
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${getIconBg(item.title)}`}
+                  >
                     <AgendaIcon title={item.title} />
                   </div>
                   <div>

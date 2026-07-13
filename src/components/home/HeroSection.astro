@@ -8,7 +8,7 @@ interface Props {
 const { membershipLive = false } = Astro.props;
 ---
 
-<section data-hero class="px-4 pt-4 pb-6 sm:px-6 sm:pt-6 min-[810px]:pb-10">
+<section data-hero class="px-4 pb-6 pt-4 sm:px-6 sm:pt-6 min-[810px]:pb-10">
   <div class="relative overflow-hidden rounded-3xl">
     <!-- Background image -->
     <img
@@ -17,49 +17,100 @@ const { membershipLive = false } = Astro.props;
       width="1106"
       height="1113"
       fetchpriority="high"
-      class="h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center animate-ken-burns motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
+      class="animate-ken-burns h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
     />
 
     <!-- Mobile overlay (below 810px): logo + scroll down -->
     <div class="absolute inset-0 flex flex-col items-center gap-6 pt-16 min-[810px]:hidden">
       <div class="hero-logo">
-        <img src="/logos/logo-dark.webp" alt="Tech for Palestine" width="163" height="48" class="h-12 w-auto" />
+        <img
+          src="/logos/logo-dark.webp"
+          alt="Tech for Palestine"
+          width="163"
+          height="48"
+          class="h-12 w-auto"
+        />
       </div>
-      <a href="#mobile-content" class="hero-cta-a ts-label text-brand flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm">
+      <a
+        href="#mobile-content"
+        class="hero-cta-a ts-label flex flex-col items-center gap-2 rounded-sm text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+      >
         Scroll down
-        <svg class="scroll-indicator" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M12 5v14M5 13l7 7 7-7" />
+        <svg
+          class="scroll-indicator"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 13l7 7 7-7"></path>
         </svg>
       </a>
     </div>
 
     <!-- Desktop overlay (810px+): full hero card -->
     <div class="absolute inset-0 hidden items-center justify-center min-[810px]:flex">
-      <div class="hero-card mx-auto w-[90%] max-w-[1008px] rounded-3xl bg-[#ffffffa3] px-3 py-4 min-[900px]:px-5 min-[900px]:py-6">
+      <div
+        class="hero-card mx-auto w-[90%] max-w-[1008px] rounded-3xl bg-[#ffffffa3] px-3 py-4 min-[900px]:px-5 min-[900px]:py-6"
+      >
         <!-- Logo: top-left below 1200px, bottom-right at 1200px+ -->
         <div class="hero-logo mb-4 min-[1200px]:hidden">
-          <img src="/logos/logo-dark.webp" alt="Tech for Palestine" width="163" height="48" class="h-12 w-auto" />
+          <img
+            src="/logos/logo-dark.webp"
+            alt="Tech for Palestine"
+            width="163"
+            height="48"
+            class="h-12 w-auto"
+          />
         </div>
 
         <p class="ts-display mb-7 text-left text-ink" aria-hidden="true">
-          <span class="hero-h1-a inline">Join the movement behind 90+ projects for </span><span class="hero-h1-b inline text-brand">Palestine</span>
+          <span class="hero-h1-a inline">Join the movement behind 90+ projects for </span><span
+            class="hero-h1-b inline text-brand">Palestine</span
+          >
         </p>
         <div class="flex flex-wrap items-center justify-start gap-5 min-[1200px]:justify-between">
           <div class="flex flex-wrap items-center">
             <div class="hero-cta-a">
-              <Button href="#portfolio" variant="ghost" class="!border-transparent hover:!bg-transparent">
+              <Button
+                href="#portfolio"
+                variant="ghost"
+                class="!border-transparent hover:!bg-transparent"
+              >
                 See what we've built
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                  <path d="M12 5v14M5 13l7 7 7-7" />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 13l7 7 7-7"></path>
                 </svg>
               </Button>
             </div>
             <div class="hero-cta-b">
-              <Button href={membershipLive ? "/membership" : "/get-involved-new"} variant="primary" size="lg" arrow>{membershipLive ? "Become a member" : "Get involved"}</Button>
+              <Button
+                href={membershipLive ? "/membership" : "/get-involved-new"}
+                variant="primary"
+                size="lg"
+                arrow>{membershipLive ? "Become a member" : "Get involved"}</Button
+              >
             </div>
           </div>
           <div class="hero-logo hidden items-center gap-2 min-[1200px]:flex">
-            <img src="/logos/logo-dark.webp" alt="Tech for Palestine" width="163" height="48" class="h-12 w-auto" />
+            <img
+              src="/logos/logo-dark.webp"
+              alt="Tech for Palestine"
+              width="163"
+              height="48"
+              class="h-12 w-auto"
+            />
           </div>
         </div>
       </div>
@@ -75,13 +126,26 @@ const { membershipLive = false } = Astro.props;
       <div class="hero-cta-a">
         <Button href="#portfolio" variant="ghost" class="!border-transparent hover:!bg-transparent">
           See what we've built
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-            <path d="M12 5v14M5 13l7 7 7-7" />
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14M5 13l7 7 7-7"></path>
           </svg>
         </Button>
       </div>
       <div class="hero-cta-b">
-        <Button href={membershipLive ? "/membership" : "/get-involved-new"} variant="primary" size="lg" arrow>{membershipLive ? "Become a member" : "Get involved"}</Button>
+        <Button
+          href={membershipLive ? "/membership" : "/get-involved-new"}
+          variant="primary"
+          size="lg"
+          arrow>{membershipLive ? "Become a member" : "Get involved"}</Button
+        >
       </div>
     </div>
   </div>

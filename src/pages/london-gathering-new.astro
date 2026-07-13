@@ -30,17 +30,64 @@ const themes = [
 ];
 
 const stats = [
-  { number: "70+", label: "Incubator", description: "Impactful advocacy projects", href: "/projects-new" },
+  {
+    number: "70+",
+    label: "Incubator",
+    description: "Impactful advocacy projects",
+    href: "/projects-new",
+  },
   { number: "9K+", label: "Community", description: "Tech workers worldwide", href: "/about-new" },
-  { number: "1K+", label: "Volunteers", description: "Donate skills to projects you care about", href: "/volunteer-new" },
-  { number: "250+", label: "Entrepreneurs", description: "Pro-Palestine entrepreneurs", href: "/e4p-new" },
+  {
+    number: "1K+",
+    label: "Volunteers",
+    description: "Donate skills to projects you care about",
+    href: "/volunteer-new",
+  },
+  {
+    number: "250+",
+    label: "Entrepreneurs",
+    description: "Pro-Palestine entrepreneurs",
+    href: "/e4p-new",
+  },
 ];
+
+const eventSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: "Tech for Palestine Gathering — London",
+  startDate: "2025-11-08T09:00:00Z",
+  endDate: "2025-11-08T16:00:00Z",
+  eventStatus: "https://schema.org/EventCompleted",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  location: {
+    "@type": "Place",
+    name: "Palestine House",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "113 High Holborn",
+      addressLocality: "London",
+      postalCode: "WC1V 6JQ",
+      addressCountry: "GB",
+    },
+  },
+  organizer: {
+    "@type": "NonprofitOrganization",
+    name: "Tech for Palestine",
+    url: "https://techforpalestine.org",
+  },
+  description:
+    "A full day event for T4P community members with workshops and networking opportunities.",
+};
 ---
 
 <HomeLayout
-  title="Gathering - London"
-  description="A full day event for T4P community members with workshops and networking opportunities. November 8, 2025 at Palestine House, London."
+  title="London Gathering (Past Event)"
+  description="Tech for Palestine's London community gathering — a full day of workshops and networking held November 8, 2025 at Palestine House, London. This event has concluded."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(eventSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -63,8 +110,7 @@ const stats = [
             </div>
           </div>
           <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
-            A full day event for T4P community members with workshops and networking
-            opportunities.
+            A full day event for T4P community members with workshops and networking opportunities.
           </p>
           <img
             src="/images/london-gathering/sold-out-png-12.png"
@@ -101,7 +147,9 @@ const stats = [
         <div class="lg-animate">
           <p class="ts-overline mb-6 text-ink-secondary">About</p>
           <h2 class="ts-heading mb-10 text-ink">About the event</h2>
-          <div class="grid grid-cols-1 items-center gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+          <div
+            class="grid grid-cols-1 items-center gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16"
+          >
             <div class="max-w-[65ch]">
               <p class="ts-body-large mb-5 text-ink-secondary">
                 The Tech for Palestine Community Gathering brought together 100 professionals who
@@ -113,8 +161,8 @@ const stats = [
                 you.
               </p>
               <p class="ts-body-large mb-8 text-ink-secondary">
-                The gathering was also open to entrepreneurs, investors and organizers who wanted
-                to network with innovators and support their work.
+                The gathering was also open to entrepreneurs, investors and organizers who wanted to
+                network with innovators and support their work.
               </p>
               <img
                 src="/images/london-gathering/sold-out-png-12.png"
@@ -142,7 +190,9 @@ const stats = [
         <div class="lg-animate">
           <p class="ts-overline mb-6 text-ink-secondary">Venue</p>
           <h2 class="ts-heading mb-10 text-ink">Location</h2>
-          <div class="grid grid-cols-1 items-center gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+          <div
+            class="grid grid-cols-1 items-center gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16"
+          >
             <div class="overflow-hidden rounded-[20px]">
               <img
                 src="/images/london-gathering/location-left-image.webp"
@@ -169,11 +219,7 @@ const stats = [
                 </div>
               </div>
               <div class="mt-6">
-                <Button
-                  href="https://maps.app.goo.gl/nhy7XaRrfPh4Usex6"
-                  variant="ghost"
-                  size="md"
-                >
+                <Button href="https://maps.app.goo.gl/nhy7XaRrfPh4Usex6" variant="ghost" size="md">
                   Get directions
                 </Button>
               </div>
@@ -184,10 +230,10 @@ const stats = [
     </section>
 
     <!-- Speakers (React) -->
-    <SpeakersSection client:only="react" initialSpeakers={agendaData.speakers || []} />
+    <SpeakersSection client:load initialSpeakers={agendaData.speakers || []} />
 
     <!-- Agenda (React) -->
-    <AgendaSection client:only="react" initialAgendaItems={agendaData.agendaItems || []} />
+    <AgendaSection client:load initialAgendaItems={agendaData.agendaItems || []} />
 
     <!-- About T4P -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
@@ -195,11 +241,13 @@ const stats = [
         <div class="lg-animate">
           <p class="ts-overline mb-6 text-ink-secondary">The movement</p>
           <h2 class="ts-heading mb-8 text-ink">About Tech for Palestine</h2>
-          <div class="grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16">
+          <div
+            class="grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-16"
+          >
             <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-              We bring together a global community of tech professionals who support the
-              Palestinian liberation movement and want to contribute their expertise to
-              meaningful, impactful tech projects.
+              We bring together a global community of tech professionals who support the Palestinian
+              liberation movement and want to contribute their expertise to meaningful, impactful
+              tech projects.
             </p>
             <div class="grid grid-cols-2 gap-4">
               {
@@ -283,9 +331,7 @@ const stats = [
             <p class="ts-body-large mb-6 text-ink-secondary">
               Contact us to receive our sponsorship package and learn more about T4P initiatives.
             </p>
-            <Button href="/contact-new" variant="primary" size="md" arrow>
-              Contact us
-            </Button>
+            <Button href="/contact-new" variant="primary" size="md" arrow> Contact us </Button>
           </div>
         </div>
       </div>
@@ -327,20 +373,22 @@ const stats = [
     transition: background-color 0.2s ease;
   }
   .stat-card:hover {
-    background-color: #FBF2ED;
+    background-color: #fbf2ed;
   }
 
   .sponsor-card {
     transition: background-color 0.2s ease;
   }
   .sponsor-card:hover {
-    background-color: #FBF2ED;
+    background-color: #fbf2ed;
   }
 
   .lg-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .lg-animate.in-view {
     opacity: 1;

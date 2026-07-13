@@ -37,6 +37,7 @@ Astro runs in `output: "server"` mode on the Cloudflare adapter — nearly every
 ### Request pipeline (middleware)
 
 `src/middleware/index.ts` chains two middlewares via `sequence()`, in this order:
+
 1. `cache-control.ts` — sets `Cache-Control` headers (API routes get `no-store`)
 2. `csp.ts` — injects a per-request CSP nonce into inline `<script>`/`<style>` tags via Cloudflare `HTMLRewriter`, and may rewrite the response
 

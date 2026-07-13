@@ -23,7 +23,10 @@ function DrawerLogoFrame({ logoUrl, name }: { logoUrl?: string; name: string }) 
 
   if (!src || failed) {
     return (
-      <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-butter bg-butter" aria-hidden="true">
+      <div
+        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-butter bg-butter"
+        aria-hidden="true"
+      >
         <span className="ts-subheading font-serif text-ink-secondary">{getInitials(name)}</span>
       </div>
     );
@@ -31,7 +34,10 @@ function DrawerLogoFrame({ logoUrl, name }: { logoUrl?: string; name: string }) 
 
   return (
     <div className="relative h-20 w-20 shrink-0">
-      <div className="absolute inset-0 rotate-[-3deg] rounded-lg bg-[var(--color-logo-frame)] shadow-[0_6px_20px_rgba(0,0,0,0.06)]" aria-hidden="true" />
+      <div
+        className="absolute inset-0 rotate-[-3deg] rounded-lg bg-[var(--color-logo-frame)] shadow-[0_6px_20px_rgba(0,0,0,0.06)]"
+        aria-hidden="true"
+      />
       <div className="relative flex h-full w-full items-center justify-center rounded-lg bg-white p-3 shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
         <img
           src={src}
@@ -92,7 +98,9 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
     } else {
       lenis?.start();
     }
-    return () => { lenis?.start(); };
+    return () => {
+      lenis?.start();
+    };
   }, [open]);
 
   // Focus management + ESC key
@@ -147,7 +155,9 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
 
   return (
     <div
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       className={[
         "fixed inset-0 z-50 flex items-center justify-center px-4 py-8",
         "bg-ink/60 backdrop-blur-sm",
@@ -175,7 +185,15 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
           className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-ink-divider text-ink-secondary transition-colors hover:border-brand/30 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           aria-label="Close"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </button>
@@ -184,9 +202,7 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
         <div className="mb-6 flex items-start gap-4 pr-10">
           <DrawerLogoFrame logoUrl={project.logoUrl} name={project.name} />
           <div className="min-w-0">
-            {project.featured && (
-              <p className="ts-overline mb-1 text-brand">Featured</p>
-            )}
+            {project.featured && <p className="ts-overline mb-1 text-brand">Featured</p>}
             <h2 className="ts-heading break-words text-ink">{project.name}</h2>
             {project.categoryName && (
               <p className="ts-body-small mt-1 text-ink-secondary">{project.categoryName}</p>
@@ -206,10 +222,19 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
               href={websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-transparent bg-brand px-5 py-3 text-white transition-colors hover:bg-brand-hover active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-transparent bg-brand px-5 py-3 text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
             >
               Visit website
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
               </svg>
             </a>
@@ -219,7 +244,7 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
               href={donationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-ink bg-transparent px-5 py-3 text-ink transition-colors hover:bg-ink/5 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-ink bg-transparent px-5 py-3 text-ink transition-colors hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
             >
               Donate
             </a>
@@ -229,7 +254,7 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
               href={involvementUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-ink bg-transparent px-5 py-3 text-ink transition-colors hover:bg-ink/5 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-ink bg-transparent px-5 py-3 text-ink transition-colors hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
             >
               Get involved
             </a>
@@ -327,9 +352,7 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
 
         {/* Last updated */}
         {project.updatedAt && (
-          <p className="ts-caption text-ink-muted">
-            Last updated {formatDate(project.updatedAt)}
-          </p>
+          <p className="ts-caption text-ink-muted">Last updated {formatDate(project.updatedAt)}</p>
         )}
       </div>
     </div>

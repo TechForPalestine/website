@@ -240,7 +240,8 @@ export default function EndorsementForm() {
           </Button>
           {submitted && (
             <Alert severity="success">
-              <strong>Thank you!</strong> Your endorsement request has been received. We'll review it and be in touch soon.
+              <strong>Thank you!</strong> Your endorsement request has been received. We'll review
+              it and be in touch soon.
             </Alert>
           )}
         </Box>

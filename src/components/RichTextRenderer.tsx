@@ -40,17 +40,12 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
 
     const flushCurrentList = () => {
       if (currentList) {
-        const indentClass = currentList.indentLevel === 0 ? "" : currentList.indentLevel === 1 ? "ml-5" : "ml-10";
+        const indentClass =
+          currentList.indentLevel === 0 ? "" : currentList.indentLevel === 1 ? "ml-5" : "ml-10";
         processedElements.push(
-          <ul
-            key={`list-${listKey++}`}
-            className={`${indentClass} my-1 list-disc pl-5`}
-          >
+          <ul key={`list-${listKey++}`} className={`${indentClass} my-1 list-disc pl-5`}>
             {currentList.items.map((item, itemIndex) => (
-              <li
-                key={itemIndex}
-                className="relative mb-0.5"
-              >
+              <li key={itemIndex} className="relative mb-0.5">
                 {item}
               </li>
             ))}
@@ -126,10 +121,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
         flushCurrentList();
         const lineContent = renderLineSegments(line, currentPos);
         processedElements.push(
-          <div
-            key={`line-${lineIndex}`}
-            className={lineIndex > 0 ? "mt-2" : ""}
-          >
+          <div key={`line-${lineIndex}`} className={lineIndex > 0 ? "mt-2" : ""}>
             {lineContent}
           </div>
         );
@@ -214,11 +206,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
     );
   };
 
-  return (
-    <div className={className}>
-      {processContent()}
-    </div>
-  );
+  return <div className={className}>{processContent()}</div>;
 };
 
 export default RichTextRenderer;

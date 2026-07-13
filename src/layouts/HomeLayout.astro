@@ -11,12 +11,14 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  noindex?: boolean;
 }
 
 const {
   title,
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
+  noindex = false,
 } = Astro.props;
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
@@ -25,6 +27,30 @@ const canonicalUrl = new URL(
   Astro.url.pathname,
   Astro.site || "https://techforpalestine.org"
 ).toString();
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "NonprofitOrganization",
+  name: "Tech for Palestine",
+  url: "https://techforpalestine.org",
+  logo: "https://techforpalestine.org/t4p-social-logo.png",
+  taxID: "99-3441367",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "548 Market St #266950",
+    addressLocality: "San Francisco",
+    addressRegion: "CA",
+    postalCode: "94104-5401",
+    addressCountry: "US",
+  },
+  sameAs: [
+    "https://www.instagram.com/techforpalestine",
+    "https://twitter.com/tech4palestine",
+    "https://github.com/TechForPalestine/",
+    "https://www.linkedin.com/company/techforpalestine/",
+    "https://infosec.exchange/@tech4palestine",
+  ],
+};
 ---
 
 <!doctype html>
@@ -39,6 +65,7 @@ const canonicalUrl = new URL(
     <link rel="preconnect" href="https://plausible.io" />
     <meta name="generator" content={Astro.generator} />
     <meta name="csp-nonce" content={Astro.locals.cspNonce} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <script is:inline>
       (function () {
         document.documentElement.classList.remove("no-js");
@@ -120,6 +147,7 @@ const canonicalUrl = new URL(
     <meta property="twitter:description" name="twitter:description" content={description} />
     <meta property="twitter:image" name="twitter:image" content={image} />
     <meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
 
     <slot name="head" />
 

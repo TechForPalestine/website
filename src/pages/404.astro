@@ -6,49 +6,65 @@ import { getEnv } from "../utils/getEnv";
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
-<HomeLayout title="Page not found | Tech for Palestine" description="The page you are looking for could not be found.">
+<HomeLayout
+  title="Page not found | Tech for Palestine"
+  description="The page you are looking for could not be found."
+>
   <HomeNavbar alwaysVisible membershipLive={membershipLive} />
 
   <main class="flex min-h-[60vh] items-center justify-center px-6 py-16 pt-32">
-    <div class="w-full max-w-[600px] error-content">
-
+    <div class="error-content w-full max-w-[600px]">
       <p class="ts-overline text-ink-secondary">404</p>
-      <hr class="border-t border-ink-divider mt-3 mb-6" />
+      <hr class="mb-6 mt-3 border-t border-ink-divider" />
 
       <h1 class="ts-editorial text-ink">This page could not be found</h1>
-      <p class="ts-body text-ink-secondary mt-4">
+      <p class="ts-body mt-4 text-ink-secondary">
         It may have moved, been archived, or the address was mistyped.
       </p>
 
       <nav aria-label="Site navigation" class="mt-10">
-        <ul class="list-none m-0 p-0" role="list">
+        <ul class="m-0 list-none p-0" role="list">
           <li class="border-t border-ink-divider">
-            <a href="/" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+            <a
+              href="/"
+              class="nav-link ts-label flex items-center justify-between py-4 text-ink transition-colors duration-150 hover:text-brand"
+            >
               <span>Home</span>
               <span class="arrow" aria-hidden="true">&rarr;</span>
             </a>
           </li>
           <li class="border-t border-ink-divider">
-            <a id="link-projects" href="/projects" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+            <a
+              id="link-projects"
+              href="/projects"
+              class="nav-link ts-label flex items-center justify-between py-4 text-ink transition-colors duration-150 hover:text-brand"
+            >
               <span>Projects</span>
               <span class="arrow" aria-hidden="true">&rarr;</span>
             </a>
           </li>
           <li class="border-t border-ink-divider">
-            <a id="link-events" href="/events" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+            <a
+              id="link-events"
+              href="/events"
+              class="nav-link ts-label flex items-center justify-between py-4 text-ink transition-colors duration-150 hover:text-brand"
+            >
               <span>Events</span>
               <span class="arrow" aria-hidden="true">&rarr;</span>
             </a>
           </li>
-          <li class="border-t border-ink-divider border-b border-ink-divider">
-            <a id="link-get-involved" href="/get-involved" class="nav-link flex items-center justify-between py-4 ts-label text-ink transition-colors duration-150 hover:text-brand">
+          <li class="border-b border-t border-ink-divider">
+            <a
+              id="link-get-involved"
+              href="/get-involved"
+              class="nav-link ts-label flex items-center justify-between py-4 text-ink transition-colors duration-150 hover:text-brand"
+            >
               <span>Get involved</span>
               <span class="arrow" aria-hidden="true">&rarr;</span>
             </a>
           </li>
         </ul>
       </nav>
-
     </div>
   </main>
 
@@ -57,7 +73,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       if (localStorage.getItem("ab-homepage-variant") === "new-homepage") {
         const projects = document.getElementById("link-projects") as HTMLAnchorElement | null;
         const events = document.getElementById("link-events") as HTMLAnchorElement | null;
-        const getInvolved = document.getElementById("link-get-involved") as HTMLAnchorElement | null;
+        const getInvolved = document.getElementById(
+          "link-get-involved"
+        ) as HTMLAnchorElement | null;
         if (projects) projects.href = "/projects-new";
         if (events) events.href = "/events-new";
         if (getInvolved) getInvolved.href = "/get-involved-new";

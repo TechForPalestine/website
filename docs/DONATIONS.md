@@ -39,15 +39,15 @@ Browser ad-blockers and privacy extensions frequently block requests to `plausib
 
 ## Components
 
-| File | Role |
-|---|---|
-| `src/pages/api/donation-complete.ts` | POST callback after a one-time/monthly donation completes; syncs to EmailOctopus |
-| `src/pages/api/membership-complete.ts` | POST callback after a membership payment completes; syncs to EmailOctopus **and** invites the donor to the Hub via `HUB_API_URL`/`HUB_API_KEY` |
-| `src/pages/api/pipe.ts` | Same-origin proxy for Plausible's `/api/event` endpoint; detects and persists dropped conversion events to KV |
-| `src/pages/api/admin/conversion-stats.ts` | Basic-Auth-protected read endpoint merging Plausible Stats API v2 results with the KV dropped-event log |
-| `src/pages/admin/conversions.astro` | Dashboard page rendering the above |
-| `src/utils/basicAuth.ts` | `isAuthorized(request, locals)` / `unauthorizedResponse()` — HTTP Basic Auth via `ADMIN_USERNAME`/`ADMIN_PASSWORD`, constant-time compared |
-| `wrangler.toml` `[[kv_namespaces]]` | Binds `DROPPED_CONVERSIONS` (KV namespace ID + preview ID) |
+| File                                      | Role                                                                                                                                           |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/pages/api/donation-complete.ts`      | POST callback after a one-time/monthly donation completes; syncs to EmailOctopus                                                               |
+| `src/pages/api/membership-complete.ts`    | POST callback after a membership payment completes; syncs to EmailOctopus **and** invites the donor to the Hub via `HUB_API_URL`/`HUB_API_KEY` |
+| `src/pages/api/pipe.ts`                   | Same-origin proxy for Plausible's `/api/event` endpoint; detects and persists dropped conversion events to KV                                  |
+| `src/pages/api/admin/conversion-stats.ts` | Basic-Auth-protected read endpoint merging Plausible Stats API v2 results with the KV dropped-event log                                        |
+| `src/pages/admin/conversions.astro`       | Dashboard page rendering the above                                                                                                             |
+| `src/utils/basicAuth.ts`                  | `isAuthorized(request, locals)` / `unauthorizedResponse()` — HTTP Basic Auth via `ADMIN_USERNAME`/`ADMIN_PASSWORD`, constant-time compared     |
+| `wrangler.toml` `[[kv_namespaces]]`       | Binds `DROPPED_CONVERSIONS` (KV namespace ID + preview ID)                                                                                     |
 
 ## Conversion goals tracked
 

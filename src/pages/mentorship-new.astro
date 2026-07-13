@@ -6,12 +6,42 @@ import Button from "../components/ui/Button.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to become a Tech for Palestine mentor",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Submit the Mentor Application",
+      text: "Fill out the Mentor Application. Your profile will be screened against our ideal mentor profile.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Interview with the T4P team",
+      text: "If your profile fits, you'll be invited to an interview with the Tech for Palestine team.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Get matched with a project",
+      text: "Join the database of potential mentors. Project leaders can request a mentor and you'll be introduced to begin your mentorship journey.",
+    },
+  ],
+};
 ---
 
 <HomeLayout
-  title="Mentorship"
+  title="Mentorship | Tech for Palestine"
   description="Support T4P Incubator projects with expertise and guidance. Become a mentor and help Palestinian tech projects find product-market fit."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -36,9 +66,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             >
               Apply Now
             </Button>
-            <Button href="/incubator-new" variant="ghost" size="md">
-              View Incubator
-            </Button>
+            <Button href="/incubator-new" variant="ghost" size="md"> View Incubator </Button>
           </div>
         </div>
       </div>
@@ -53,10 +81,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <p class="ts-body-large mb-5 text-ink-secondary">
             Tech for Palestine is currently looking for mentors who will engage with project leaders
             from the{" "}
-            <a
-              href="/incubator-new"
-              class="font-medium text-brand underline hover:text-brand-hover"
-            >Tech for Palestine Incubator</a>{" "}
+            <a href="/incubator-new" class="font-medium text-brand underline hover:text-brand-hover"
+              >Tech for Palestine Incubator</a
+            >{" "}
             through weekly 1:1 mentorship sessions.
           </p>
           <p class="ts-body-large mb-5 text-ink-secondary">
@@ -64,8 +91,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             considerable impact, such as reaching tens of millions of users.
           </p>
           <p class="ts-body-large text-ink-secondary">
-            With over 50 projects in the Incubator and counting, we aim to build a whole ecosystem of
-            pro-Palestine tech which works towards a Free Palestine.
+            With over 50 projects in the Incubator and counting, we aim to build a whole ecosystem
+            of pro-Palestine tech which works towards a Free Palestine.
           </p>
         </div>
       </div>
@@ -79,25 +106,30 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h2 class="ts-heading mb-8 text-ink">Ideal profile</h2>
           <ul class="space-y-5">
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Have you contributed to bringing a product to life and ensured its market fit, in the areas
               of technology, entrepreneurship, venture building, or nonprofit innovation?
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Do you have a strong alignment with T4P values and purpose?
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Do you have previous mentoring, coaching, or teaching experience?
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Do you possess excellent communication skills, and the ability to give actionable feedback
               with empathy?
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Are you available to commit 5 hours+ per month per project for an extended period of time?
             </li>
           </ul>
@@ -110,16 +142,16 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       <div class="mx-auto max-w-[1400px]">
         <div class="mentorship-animate max-w-[75ch]">
           <p class="ts-overline mb-6 text-ink-secondary">Getting started</p>
-          <h2 class="ts-heading mb-8 text-ink">How it works</h2>
+          <h2 class="ts-heading mb-8 text-ink">How does mentorship work?</h2>
           <p class="ts-body-large mb-5 text-ink-secondary">
             Once you fill out the Mentor Application, your profile will be screened and if it
             corresponds to our ideal profile, you will be invited to an interview with the Tech for
             Palestine team.
           </p>
           <p class="ts-body-large text-ink-secondary">
-            After the interview, you will become part of a database of potential mentors which project
-            leaders will have access to. Each project leader will be able to request a mentor, in
-            which case you will be introduced to begin your mentorship journey.
+            After the interview, you will become part of a database of potential mentors which
+            project leaders will have access to. Each project leader will be able to request a
+            mentor, in which case you will be introduced to begin your mentorship journey.
           </p>
         </div>
       </div>
@@ -133,35 +165,42 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h2 class="ts-heading mb-8 text-ink">Key responsibilities</h2>
           <ul class="space-y-5">
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Provide 1:1 or small group mentorship to assigned projects(s) on a weekly basis.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Keep project leaders accountable for attending mentorship sessions and making progress week
-              over week.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Keep project leaders accountable for attending mentorship sessions and making progress
+              week over week.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Share expertise in areas such as: Product strategy, product development, business models,
               product engineering blueprints, Go-to-market, marketing, and impact measurement.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Guide founders in fine-tuning their product strategy and business models, organize their
               priorities, shape their MVPs, and iteratively develop their products.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Focus on asking questions, discussing assumptions, and pointing out inconsistencies, so that
-              projects find the answers themselves, rather than telling them what to do.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Focus on asking questions, discussing assumptions, and pointing out inconsistencies, so
+              that projects find the answers themselves, rather than telling them what to do.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Participate in demo days, mentor roundtables, or feedback sessions when possible.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
               Serve as a trusted advisor and role model who champions advocacy for Palestine, perseverance
               and commitment, creating impactful products, and taking hard decisions.
             </li>
@@ -180,26 +219,46 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
               <h3 class="ts-label mb-4 text-brand">We do</h3>
               <ul class="space-y-3">
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Invest time and resources only in tech projects with a high potential possible impact
                   on Palestine/Palestinians
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Encourage validating assumptions early, getting feedback from users early and frequently
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Encourage thinking about your customers to ensure product market fit
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Encourage building iteratively, fail fast and course correct, "smallest possible thing
                   to validate the most important risks"
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Recommend projects figure out how measure their impact (as a definition of success),
                   and track it
                 </li>
@@ -208,29 +267,54 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <div class="rounded-[20px] border border-butter bg-page p-6 min-[810px]:p-8">
               <h3 class="ts-label mb-4 text-ink">We don't</h3>
               <ul class="space-y-3">
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20"
+                    aria-hidden="true"></span>
                   "Build it and they will come"
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20"
+                    aria-hidden="true"></span>
                   Perfect products before launching them
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20"
+                    aria-hidden="true"></span>
                   Grow projects that have no clear strategy/route to impact
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20" aria-hidden="true"></span>
-                  Invest time and resources in projects beyond our tech/Palestine remit, though we do encourage
-                  tech/Palestine projects to include non-Palestine initiatives where it makes sense
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20"
+                    aria-hidden="true"></span>
+                  Invest time and resources in projects beyond our tech/Palestine remit, though we do
+                  encourage tech/Palestine projects to include non-Palestine initiatives where it makes
+                  sense
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20"
+                    aria-hidden="true"></span>
                   Invest time and resources in projects beyond our capability (Healthcare apps for example)
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-ink/20"
+                    aria-hidden="true"></span>
                   Shy away from communicating facts and realities, even if they are difficult to digest
                 </li>
               </ul>

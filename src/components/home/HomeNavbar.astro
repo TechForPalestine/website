@@ -37,7 +37,10 @@ const navItems = [
     children: [
       ...(membershipLive ? [{ label: "Become a Member", href: "/membership" }] : []),
       { label: "Donate", href: "/donate-new" },
-      { label: "Join the Incubator", href: "https://techforpalestine.org/project-application-form" },
+      {
+        label: "Join the Incubator",
+        href: "https://techforpalestine.org/project-application-form",
+      },
       { label: "Volunteer", href: "/volunteer-new" },
       { label: "Entrepreneurs for Palestine", href: "/e4p-new" },
       { label: "Be a Mentor", href: "/mentorship-new" },
@@ -67,19 +70,24 @@ function isActive(itemHref: string, path: string): boolean {
   return path === itemHref || path.startsWith(itemHref + "/");
 }
 
-function isGroupActive(item: typeof navItems[number], path: string): boolean {
+function isGroupActive(item: (typeof navItems)[number], path: string): boolean {
   if (isActive(item.href, path)) return true;
-  return item.children?.some(c => isActive(c.href, path)) ?? false;
+  return item.children?.some((c) => isActive(c.href, path)) ?? false;
 }
 ---
 
 <nav
-  class="home-navbar fixed top-0 left-0 right-0 z-50"
+  class="home-navbar fixed left-0 right-0 top-0 z-50"
   aria-label="Main navigation"
   data-always-visible={alwaysVisible ? "true" : undefined}
 >
-  <div class="home-navbar-inner mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3 min-[1050px]:px-10">
-    <a href="/home-new" class="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+  <div
+    class="home-navbar-inner mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3 min-[1050px]:px-10"
+  >
+    <a
+      href="/home-new"
+      class="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+    >
       <img
         src="/logos/logo-dark.webp"
         alt="Tech for Palestine"
@@ -90,51 +98,69 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     </a>
 
     <!-- Desktop nav -->
-    <ul class="hidden min-[1050px]:flex items-center gap-8 list-none p-0 m-0" role="list">
-      {navItems.map((item) => (
-        <li class={item.children ? "nav-dropdown relative" : ""}>
-          <a
-            href={item.href}
-            class:list={[
-              "ts-label transition-colors duration-150 inline-flex items-center gap-1.5 py-2 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-              isGroupActive(item, currentPath) ? "text-brand" : "text-ink-secondary hover:text-ink",
-            ]}
-            target={item.href.startsWith("http") ? "_blank" : "_self"}
-            rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            aria-current={isGroupActive(item, currentPath) ? "true" : undefined}
-            {...(item.children ? { "aria-haspopup": "true", "aria-expanded": "false" } : {})}
-          >
-            {item.label}
+    <ul class="m-0 hidden list-none items-center gap-8 p-0 min-[1050px]:flex" role="list">
+      {
+        navItems.map((item) => (
+          <li class={item.children ? "nav-dropdown relative" : ""}>
+            <a
+              href={item.href}
+              class:list={[
+                "ts-label inline-flex items-center gap-1.5 rounded-sm py-2 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                isGroupActive(item, currentPath)
+                  ? "text-brand"
+                  : "text-ink-secondary hover:text-ink",
+              ]}
+              target={item.href.startsWith("http") ? "_blank" : "_self"}
+              rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              aria-current={isGroupActive(item, currentPath) ? "true" : undefined}
+              {...(item.children ? { "aria-haspopup": "true", "aria-expanded": "false" } : {})}
+            >
+              {item.label}
+              {item.children && (
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="nav-chevron"
+                  aria-hidden="true"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              )}
+            </a>
             {item.children && (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-chevron" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
+              <div class="nav-dropdown-menu absolute left-0 top-full pt-2">
+                <ul
+                  class="nav-dropdown-panel m-0 min-w-[220px] list-none rounded-lg border border-butter bg-page p-2.5"
+                  role="list"
+                >
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class:list={[
+                          "ts-body-small block rounded-md px-4 py-3 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                          isActive(child.href, currentPath)
+                            ? "bg-butter text-ink hover:bg-butter/70"
+                            : "text-ink-secondary hover:bg-cream hover:text-ink",
+                        ]}
+                        target={child.href.startsWith("http") ? "_blank" : "_self"}
+                        rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        aria-current={isActive(child.href, currentPath) ? "page" : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
-          </a>
-          {item.children && (
-            <div class="nav-dropdown-menu absolute top-full left-0 pt-2">
-              <ul class="nav-dropdown-panel min-w-[220px] rounded-lg border border-butter bg-page p-2.5 list-none m-0" role="list">
-                {item.children.map((child) => (
-                  <li>
-                    <a
-                      href={child.href}
-                      class:list={[
-                        "ts-body-small block rounded-md px-4 py-3 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                        isActive(child.href, currentPath) ? "bg-butter text-ink hover:bg-butter/70" : "text-ink-secondary hover:bg-cream hover:text-ink",
-                      ]}
-                      target={child.href.startsWith("http") ? "_blank" : "_self"}
-                      rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      aria-current={isActive(child.href, currentPath) ? "page" : undefined}
-                    >
-                      {child.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </li>
-      ))}
+          </li>
+        ))
+      }
     </ul>
 
     <div class="hidden min-[1050px]:block">
@@ -150,7 +176,7 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     </div>
 
     <!-- Mobile CTA + burger -->
-    <div class="flex min-[1050px]:hidden items-center gap-3">
+    <div class="flex items-center gap-3 min-[1050px]:hidden">
       <Button
         href={membershipLive ? "/membership" : "/donate-new"}
         variant="primary"
@@ -161,12 +187,20 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
         {membershipLive ? "Become a member" : "Donate"}
       </Button>
       <button
-        class="home-navbar-burger flex items-center justify-center w-11 h-11 rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        class="home-navbar-burger flex h-11 w-11 items-center justify-center rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         aria-label="Open menu"
         aria-expanded="false"
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M4 7h16M4 12h16M4 17h16" />
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
         </svg>
       </button>
     </div>
@@ -174,49 +208,60 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
 
   <!-- Mobile drawer -->
   <div class="home-navbar-drawer min-[1050px]:hidden" role="dialog" aria-label="Navigation menu">
-    <ul class="flex flex-col gap-1 px-6 py-4 pb-6 list-none p-0 m-0" role="list">
-      {navItems.map((item) => (
-        <li>
-          {item.children ? (
-            <button
-              class="mobile-accordion ts-label flex w-full items-center justify-between py-3 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
-              aria-expanded="false"
-            >
-              {item.label}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mobile-accordion-chevron" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
-          ) : (
-            <a
-              href={item.href}
-              class="ts-label block py-3 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
-              target={item.href.startsWith("http") ? "_blank" : "_self"}
-              rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            >
-              {item.label}
-            </a>
-          )}
-          {item.children && (
-            <div class="mobile-accordion-panel">
-              <ul class="pl-4 pb-2 list-none m-0" role="list">
-                {item.children.map((child) => (
-                  <li>
-                    <a
-                      href={child.href}
-                      class="ts-body-small block py-3 text-ink-secondary/70 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
-                      target={child.href.startsWith("http") ? "_blank" : "_self"}
-                      rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    >
-                      {child.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </li>
-      ))}
+    <ul class="m-0 flex list-none flex-col gap-1 p-0 px-6 py-4 pb-6" role="list">
+      {
+        navItems.map((item) => (
+          <li>
+            {item.children ? (
+              <button
+                class="mobile-accordion ts-label flex w-full items-center justify-between rounded-sm py-3 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                aria-expanded="false"
+              >
+                {item.label}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  class="mobile-accordion-chevron"
+                  aria-hidden="true"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+            ) : (
+              <a
+                href={item.href}
+                class="ts-label block rounded-sm py-3 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                target={item.href.startsWith("http") ? "_blank" : "_self"}
+                rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              >
+                {item.label}
+              </a>
+            )}
+            {item.children && (
+              <div class="mobile-accordion-panel">
+                <ul class="m-0 list-none pb-2 pl-4" role="list">
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class="ts-body-small block rounded-sm py-3 text-ink-secondary/70 transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                        target={child.href.startsWith("http") ? "_blank" : "_self"}
+                        rel={child.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </li>
+        ))
+      }
     </ul>
   </div>
 </nav>
@@ -225,10 +270,13 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   .home-navbar {
     transform: translateY(-100%);
     opacity: 0;
-    background: #FFFBF5;
-    box-shadow: 0 1px 0 #F7EAD4, 0 4px 16px rgba(42, 36, 40, 0.06);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #fffbf5;
+    box-shadow:
+      0 1px 0 #f7ead4,
+      0 4px 16px rgba(42, 36, 40, 0.06);
+    transition:
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
 
@@ -239,7 +287,9 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
   }
 
   .nav-dropdown-panel {
-    box-shadow: 0 8px 24px rgba(42, 36, 40, 0.08), 0 2px 6px rgba(42, 36, 40, 0.04);
+    box-shadow:
+      0 8px 24px rgba(42, 36, 40, 0.08),
+      0 2px 6px rgba(42, 36, 40, 0.04);
   }
 
   /* Dropdown menus - open on hover OR focus-within for keyboard access */
@@ -247,8 +297,9 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     opacity: 0;
     transform: translateY(-4px);
     pointer-events: none;
-    transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1),
-                transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    transition:
+      opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+      transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .nav-dropdown:hover .nav-dropdown-menu,
@@ -286,20 +337,22 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     grid-template-rows: 0fr;
     opacity: 0;
     visibility: hidden;
-    background: #FFFBF5;
-    transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                visibility 0s 0.35s;
+    background: #fffbf5;
+    transition:
+      grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+      visibility 0s 0.35s;
   }
 
   .home-navbar-drawer.open {
-    border-top: 1px solid #F7EAD4;
+    border-top: 1px solid #f7ead4;
     grid-template-rows: 1fr;
     opacity: 1;
     visibility: visible;
-    transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                visibility 0s;
+    transition:
+      grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+      visibility 0s;
   }
 
   .home-navbar-drawer > * {
@@ -318,8 +371,9 @@ function isGroupActive(item: typeof navItems[number], path: string): boolean {
     display: grid;
     grid-template-rows: 0fr;
     opacity: 0;
-    transition: grid-template-rows 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-                opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transition:
+      grid-template-rows 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .mobile-accordion-panel.open {

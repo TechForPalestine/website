@@ -24,10 +24,7 @@ export function isAuthorized(request: Request, locals: unknown): boolean {
   const user = decoded.slice(0, separatorIndex);
   const password = decoded.slice(separatorIndex + 1);
 
-  return (
-    constantTimeEqual(user, expectedUser) &&
-    constantTimeEqual(password, expectedPassword)
-  );
+  return constantTimeEqual(user, expectedUser) && constantTimeEqual(password, expectedPassword);
 }
 
 export function unauthorizedResponse(): Response {

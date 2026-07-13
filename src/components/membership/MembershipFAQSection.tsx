@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-interface FAQItem {
+export interface FAQItem {
   question: string;
   answer: string | { text: string; items?: string[] };
 }
 
-const faqs: FAQItem[] = [
+export const faqs: FAQItem[] = [
   {
     question: "How does membership support Palestinian liberation?",
     answer:
@@ -78,12 +78,30 @@ function FAQItem({ question, answer }: FAQItem) {
           aria-hidden="true"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <line
+              x1="10"
+              y1="2"
+              x2="10"
+              y2="18"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <line
+              x1="2"
+              y1="10"
+              x2="18"
+              y2="10"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
           </svg>
         </span>
       </button>
-      <div className={`grid transition-all duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+      <div
+        className={`grid transition-all duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+      >
         <div className="overflow-hidden">
           <div className="ts-body max-w-[65ch] pb-6 text-ink-secondary">
             {typeof answer === "string" ? (

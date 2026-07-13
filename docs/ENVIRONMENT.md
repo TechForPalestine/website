@@ -4,11 +4,11 @@ This project has **three different places** a variable can live — `.env`, `.de
 
 ## The three tiers
 
-| Tier | File / location | Loaded by | Reachable in code as | Committed? |
-|---|---|---|---|---|
-| 1 | **Cloudflare Pages dashboard** (Settings → Environment variables, per environment: Production / Preview) | Cloudflare, at request time | `locals.runtime.env.X` | N/A — not a file |
-| 2 | **`.dev.vars`** (repo root) | Wrangler's `getPlatformProxy()`, invoked automatically by `@astrojs/cloudflare` in dev mode (`platformProxy.enabled` defaults to `true`) | `locals.runtime.env.X` — **and** also copied into `process.env.X` by the adapter (`setProcessEnv`) | No — gitignored |
-| 3 | **`.env`** (repo root) | Vite's built-in dotenv loader | `import.meta.env.X`, and via Vite's Node process also `process.env.X` | No — gitignored |
+| Tier | File / location                                                                                          | Loaded by                                                                                                                                | Reachable in code as                                                                               | Committed?       |
+| ---- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------- |
+| 1    | **Cloudflare Pages dashboard** (Settings → Environment variables, per environment: Production / Preview) | Cloudflare, at request time                                                                                                              | `locals.runtime.env.X`                                                                             | N/A — not a file |
+| 2    | **`.dev.vars`** (repo root)                                                                              | Wrangler's `getPlatformProxy()`, invoked automatically by `@astrojs/cloudflare` in dev mode (`platformProxy.enabled` defaults to `true`) | `locals.runtime.env.X` — **and** also copied into `process.env.X` by the adapter (`setProcessEnv`) | No — gitignored  |
+| 3    | **`.env`** (repo root)                                                                                   | Vite's built-in dotenv loader                                                                                                            | `import.meta.env.X`, and via Vite's Node process also `process.env.X`                              | No — gitignored  |
 
 `.env.example` (committed) documents which vars exist; it's not loaded by anything at runtime — it's a template to copy from.
 
@@ -26,7 +26,7 @@ This project has **three different places** a variable can live — `.env`, `.de
 3. process.env[name]          ← .env (Node) OR .dev.vars (copied in by the adapter)
 ```
 
-**Practical effect:** if a variable is set in *both* `.dev.vars` and `.env` with different values, `.dev.vars` wins locally (tier 1 beats tier 2/3) — matching what would happen in production, where only the dashboard value exists. If it's in neither, `getEnv()` returns `undefined` and the calling route/component gets whatever fallback it has (usually a 500/503, or a feature flag defaulting to off).
+**Practical effect:** if a variable is set in _both_ `.dev.vars` and `.env` with different values, `.dev.vars` wins locally (tier 1 beats tier 2/3) — matching what would happen in production, where only the dashboard value exists. If it's in neither, `getEnv()` returns `undefined` and the calling route/component gets whatever fallback it has (usually a 500/503, or a feature flag defaulting to off).
 
 ### Build-time-only variables (bypass `getEnv()` entirely)
 
@@ -40,35 +40,35 @@ A few variables are read directly via `process.env` / `import.meta.env` in confi
 
 Ground truth = every `getEnv("X", ...)` call in `src/`, plus the build-time reads above. Cross-checked against `.env.example`, `.env`, `.dev.vars` (presence only — I did not read or record any secret values).
 
-| Variable | Read via | In `.env.example`? | In local `.env`? | In local `.dev.vars`? | Consumers |
-|---|---|:-:|:-:|:-:|---|
-| `NOTION_SECRET` | `getEnv` | ✅ | ✅ | ❌ | All Notion routes |
-| `NOTION_DB_ID` | `getEnv` | ✅ | ✅ | ❌ | Events |
-| `NOTION_SIGNATORIES_DB_ID` | `getEnv` | ✅ | ✅ | ❌ | E4P pledge/signatories |
-| `NOTION_FAQ_DB_ID` | `getEnv` | ✅ | ✅ | ❌ | FAQ |
-| `NOTION_IDEAS_DB_ID` | `getEnv` | ✅ | ✅ | ❌ | Ideas |
-| `NOTION_AGENDA_DB_ID` | `getEnv` | ✅ | ✅ | ❌ | Agenda/speakers |
-| `NOTION_ENDORSEMENTS_DB_ID` | `getEnv` | ✅ | ✅ | ❌ | Endorsement requests |
-| `NOTION_SPEAKERS_DB_ID` | — | ✅ | ✅ | ❌ | **Not read anywhere in code** — see [NOTION.md](NOTION.md) |
-| `PROJECTHUB_API_KEY` | `getEnv` | ✅ | ❌ | ✅ | `/api/projects` |
-| `PUBLIC_API_URL` | `getEnv` | ❌ **missing** | ❌ | ❌ | `/api/project-proxy` — always 503 locally without it |
-| `PUBLIC_SECRET_KEY` | `getEnv` | ❌ **missing** | ❌ | ❌ | `/api/project-proxy` — always 503 locally without it |
-| `HUB_API_URL` | `getEnv` | ✅ | ❌ | ✅ | `/api/membership-complete` |
-| `HUB_API_KEY` | `getEnv` | ✅ | ❌ | ✅ | `/api/membership-complete` |
-| `EO_API_KEY` | `getEnv` | ✅ | ❌ | ❌ | `/api/donation-complete`, `/api/membership-complete` |
-| `PLAUSIBLE_API_KEY` | `getEnv` | ✅ | ❌ | ✅ | `/api/admin/conversion-stats` |
-| `ADMIN_USERNAME` | `getEnv` | ❌ **missing** | ✅ | ✅ | Basic Auth for `/admin/conversions` |
-| `ADMIN_PASSWORD` | `getEnv` | ❌ **missing** | ✅ | ✅ | Basic Auth for `/admin/conversions` |
-| `SENTRY_WEBHOOK_SECRET` | `getEnv` | ✅ | ❌ | ⚠️ **typo** | `/api/sentry-webhook` — see gap below |
-| `MATTERMOST_URL` | `getEnv` | ✅ | ❌ | ❌ | `/api/sentry-webhook` |
-| `MATTERMOST_BOT_TOKEN` | `getEnv` | ✅ | ❌ | ❌ | `/api/sentry-webhook` |
-| `MATTERMOST_CHANNEL_ID` | `getEnv` | ✅ | ❌ | ❌ | `/api/sentry-webhook` |
-| `MEMBERSHIP_LIVE` | `getEnv` | ❌ **missing** | ❌ | ❌ | Feature flag on every `-new` page — always `false` locally |
-| `SENTRY_DSN` | `process.env` (build/server) | ✅ | ✅ | ✅ | `sentry.server.config.js` |
-| `SENTRY_ENVIRONMENT` | `process.env` | ✅ | ✅ | ✅ | `sentry.server.config.js` |
-| `PUBLIC_SENTRY_DSN` | `import.meta.env` | ✅ | ✅ | ✅ | `sentry.client.config.js` (bundled into browser JS) |
-| `PUBLIC_SENTRY_ENVIRONMENT` | `import.meta.env` | ✅ | ✅ | ✅ | `sentry.client.config.js` (bundled into browser JS) |
-| `SENTRY_AUTH_TOKEN` | `process.env` (build only) | ✅ | ✅ | ✅ | `astro.config.mjs`, source-map upload during `pnpm build` |
+| Variable                    | Read via                     | In `.env.example`? | In local `.env`? | In local `.dev.vars`? | Consumers                                                  |
+| --------------------------- | ---------------------------- | :----------------: | :--------------: | :-------------------: | ---------------------------------------------------------- |
+| `NOTION_SECRET`             | `getEnv`                     |         ✅         |        ✅        |          ❌           | All Notion routes                                          |
+| `NOTION_DB_ID`              | `getEnv`                     |         ✅         |        ✅        |          ❌           | Events                                                     |
+| `NOTION_SIGNATORIES_DB_ID`  | `getEnv`                     |         ✅         |        ✅        |          ❌           | E4P pledge/signatories                                     |
+| `NOTION_FAQ_DB_ID`          | `getEnv`                     |         ✅         |        ✅        |          ❌           | FAQ                                                        |
+| `NOTION_IDEAS_DB_ID`        | `getEnv`                     |         ✅         |        ✅        |          ❌           | Ideas                                                      |
+| `NOTION_AGENDA_DB_ID`       | `getEnv`                     |         ✅         |        ✅        |          ❌           | Agenda/speakers                                            |
+| `NOTION_ENDORSEMENTS_DB_ID` | `getEnv`                     |         ✅         |        ✅        |          ❌           | Endorsement requests                                       |
+| `NOTION_SPEAKERS_DB_ID`     | —                            |         ✅         |        ✅        |          ❌           | **Not read anywhere in code** — see [NOTION.md](NOTION.md) |
+| `PROJECTHUB_API_KEY`        | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/projects`                                            |
+| `PUBLIC_API_URL`            | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | `/api/project-proxy` — always 503 locally without it       |
+| `PUBLIC_SECRET_KEY`         | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | `/api/project-proxy` — always 503 locally without it       |
+| `HUB_API_URL`               | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                 |
+| `HUB_API_KEY`               | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                 |
+| `EO_API_KEY`                | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/donation-complete`, `/api/membership-complete`       |
+| `PLAUSIBLE_API_KEY`         | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/admin/conversion-stats`                              |
+| `ADMIN_USERNAME`            | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                        |
+| `ADMIN_PASSWORD`            | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                        |
+| `SENTRY_WEBHOOK_SECRET`     | `getEnv`                     |         ✅         |        ❌        |      ⚠️ **typo**      | `/api/sentry-webhook` — see gap below                      |
+| `MATTERMOST_URL`            | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                      |
+| `MATTERMOST_BOT_TOKEN`      | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                      |
+| `MATTERMOST_CHANNEL_ID`     | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                      |
+| `MEMBERSHIP_LIVE`           | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | Feature flag on every `-new` page — always `false` locally |
+| `SENTRY_DSN`                | `process.env` (build/server) |         ✅         |        ✅        |          ✅           | `sentry.server.config.js`                                  |
+| `SENTRY_ENVIRONMENT`        | `process.env`                |         ✅         |        ✅        |          ✅           | `sentry.server.config.js`                                  |
+| `PUBLIC_SENTRY_DSN`         | `import.meta.env`            |         ✅         |        ✅        |          ✅           | `sentry.client.config.js` (bundled into browser JS)        |
+| `PUBLIC_SENTRY_ENVIRONMENT` | `import.meta.env`            |         ✅         |        ✅        |          ✅           | `sentry.client.config.js` (bundled into browser JS)        |
+| `SENTRY_AUTH_TOKEN`         | `process.env` (build only)   |         ✅         |        ✅        |          ✅           | `astro.config.mjs`, source-map upload during `pnpm build`  |
 
 ## Gaps found in this audit (2026-07-11)
 
@@ -88,7 +88,7 @@ I can't read your Cloudflare dashboard from here. To check what's actually confi
 
 **Via the dashboard UI:** Pages project → Settings → Environment variables.
 
-**Via Wrangler CLI** (lists variable *names* only, not values — safe to run and share output):
+**Via Wrangler CLI** (lists variable _names_ only, not values — safe to run and share output):
 
 ```bash
 npx wrangler pages secret list --project-name=website

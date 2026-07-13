@@ -101,16 +101,32 @@ const tools = [
     logo: "/accountable-media.png",
   },
 ];
+
+const toolsItemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: [...featured, ...tools].map((tool, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: tool.name,
+    description: tool.desc,
+    url: tool.link,
+  })),
+};
 ---
 
 <HomeLayout
-  title="Tools"
-  description="A growing list of tools built by the movement to support advocacy for Palestinian liberation — from ethical AI and news coverage to boycott tools, protest maps, and accountability databases."
+  title="T4P Tools for Palestinian Advocacy | Tech for Palestine"
+  description="Tools built by the movement to support Palestinian advocacy — ethical AI, news coverage, boycott tools, protest maps, and accountability databases."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(toolsItemListSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-12">
+    <section class="bg-page px-6 pb-10 pt-14 min-[810px]:px-10 min-[810px]:pb-12 min-[810px]:pt-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="page-animate">
           <p class="ts-overline mb-5 text-ink-secondary">Tools for the movement</p>
@@ -118,11 +134,11 @@ const tools = [
             Tools that <span class="text-brand">power the work</span>
           </h1>
           <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-            A growing list of tools built to support advocacy for Palestinian liberation.
-            Use them, share them, and help the movement reach further.
+            A growing list of tools built to support advocacy for Palestinian liberation. Use them,
+            share them, and help the movement reach further.
           </p>
         </div>
-        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-12" />
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-12"></div>
       </div>
     </section>
 
@@ -130,34 +146,45 @@ const tools = [
       <div class="mx-auto max-w-[1400px]">
         <p class="page-animate ts-overline mb-4 text-ink-secondary">Featured</p>
         <div class="page-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((tool) => (
-            <a
-              href={tool.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5">
-                <img
-                  src={tool.logo}
-                  alt={`${tool.name} logo`}
-                  class="max-h-full max-w-full object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <h3 class="ts-label mb-2 text-ink transition-colors duration-150 group-hover:text-brand">
-                {tool.name}
-              </h3>
-              <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
-              <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
-                Visit
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
-                </svg>
-              </span>
-            </a>
-          ))}
+          {
+            featured.map((tool) => (
+              <a
+                href={tool.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5">
+                  <img
+                    src={tool.logo}
+                    alt={`${tool.name} logo`}
+                    class="max-h-full max-w-full object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <h3 class="ts-label mb-2 text-ink transition-colors duration-150 group-hover:text-brand">
+                  {tool.name}
+                </h3>
+                <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
+                <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
+                  Visit
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                  </svg>
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -166,48 +193,60 @@ const tools = [
       <div class="mx-auto max-w-[1400px]">
         <p class="page-animate ts-overline mb-4 text-ink-secondary">More tools</p>
         <div class="page-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((tool) => (
-            <a
-              href={tool.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5">
-                <img
-                  src={tool.logo}
-                  alt={`${tool.name} logo`}
-                  class="max-h-full max-w-full object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <h3 class="ts-label mb-2 text-ink transition-colors duration-150 group-hover:text-brand">
-                {tool.name}
-              </h3>
-              <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
-              <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
-                Visit
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
-                </svg>
-              </span>
-            </a>
-          ))}
+          {
+            tools.map((tool) => (
+              <a
+                href={tool.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex min-h-[160px] flex-col items-start rounded-[20px] border border-butter bg-sand p-6 transition-colors duration-150 hover:border-brand/30 hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                <div class="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-butter bg-white p-2.5">
+                  <img
+                    src={tool.logo}
+                    alt={`${tool.name} logo`}
+                    class="max-h-full max-w-full object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <h3 class="ts-label mb-2 text-ink transition-colors duration-150 group-hover:text-brand">
+                  {tool.name}
+                </h3>
+                <p class="ts-body-small mb-4 text-ink-secondary">{tool.desc}</p>
+                <span class="ts-body-small mt-auto inline-flex items-center gap-1.5 text-brand">
+                  Visit
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                  </svg>
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
     </section>
 
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="page-animate flex flex-col items-start gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
+        <div
+          class="page-animate flex flex-col items-start gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between"
+        >
           <div class="max-w-[55ch]">
             <p class="ts-overline mb-3 text-ink-secondary">Building something?</p>
-            <h2 class="ts-heading text-ink">
-              Building a tool for the movement?
-            </h2>
+            <h2 class="ts-heading text-ink">Building a tool for the movement?</h2>
             <p class="ts-body mt-3 text-ink-secondary">
-              Bring it to the Tech for Palestine Incubator and reach a community of 10,000+ advocates.
+              Bring it to the Tech for Palestine Incubator and reach a community of 10,000+
+              advocates.
             </p>
           </div>
           <div class="flex shrink-0 gap-3">
@@ -230,7 +269,9 @@ const tools = [
   .page-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .page-animate.in-view {
     opacity: 1;
@@ -250,10 +291,16 @@ const tools = [
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

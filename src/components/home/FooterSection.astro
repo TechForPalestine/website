@@ -44,16 +44,32 @@ const socials: { name: string; url: string; icon: string }[] = [
   { name: "Twitter", url: "https://twitter.com/tech4palestine", icon: "mdi:twitter" },
   { name: "YouTube", url: "https://www.youtube.com/@tech4palestine", icon: "mdi:youtube" },
   { name: "GitHub", url: "https://github.com/TechForPalestine/", icon: "mdi:github" },
-  { name: "LinkedIn", url: "https://www.linkedin.com/company/techforpalestine/", icon: "mdi:linkedin" },
-  { name: "Discord", url: "https://techforpalestine.org/discord-invite", icon: "ic:baseline-discord" },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/company/techforpalestine/",
+    icon: "mdi:linkedin",
+  },
+  {
+    name: "Discord",
+    url: "https://techforpalestine.org/discord-invite",
+    icon: "ic:baseline-discord",
+  },
   { name: "Mastodon", url: "https://infosec.exchange/@tech4palestine", icon: "mdi:mastodon" },
   { name: "TikTok", url: "https://www.tiktok.com/@techforpalestine", icon: "ic:baseline-tiktok" },
-  { name: "Bluesky", url: "https://bsky.app/profile/techforpalestine.org", icon: "simple-icons:bluesky" },
-  { name: "UpScrolled", url: "https://share.upscrolled.com/en/user/39494e76-22a4-47ee-a67d-cd7049835a53/", icon: "/upscrolled-icon.svg" },
+  {
+    name: "Bluesky",
+    url: "https://bsky.app/profile/techforpalestine.org",
+    icon: "simple-icons:bluesky",
+  },
+  {
+    name: "UpScrolled",
+    url: "https://share.upscrolled.com/en/user/39494e76-22a4-47ee-a67d-cd7049835a53/",
+    icon: "/upscrolled-icon.svg",
+  },
 ];
 ---
 
-<footer class="bg-ink-dark pt-20 pb-12">
+<footer class="bg-ink-dark pb-12 pt-20">
   <div class="mx-auto max-w-7xl px-6 md:px-8">
     <!-- Main footer grid -->
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
@@ -70,53 +86,61 @@ const socials: { name: string; url: string; icon: string }[] = [
         </a>
 
         <p class="ts-body mt-6 max-w-xs leading-relaxed text-white/60">
-          A coalition of professionals harnessing technology and human innovation
-          for a free and sovereign Palestine.
+          A coalition of professionals harnessing technology and human innovation for a free and
+          sovereign Palestine.
         </p>
 
         <ul class="mt-8 flex flex-wrap gap-4">
-          {socials.map((s) => (
-            <li>
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-white/40 transition-colors duration-200 hover:text-white"
-                title={s.name}
-              >
-                <span class="sr-only">{s.name}</span>
-                {s.icon.startsWith("/") ? (
-                  <img src={s.icon} alt={s.name} class="h-5 w-5 opacity-40 transition-opacity duration-200 hover:opacity-100" />
-                ) : (
-                  <Icon name={s.icon} class="h-5 w-5" />
-                )}
-              </a>
-            </li>
-          ))}
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-white/40 transition-colors duration-200 hover:text-white"
+                  title={s.name}
+                >
+                  <span class="sr-only">{s.name}</span>
+                  {s.icon.startsWith("/") ? (
+                    <img
+                      src={s.icon}
+                      alt={s.name}
+                      class="h-5 w-5 opacity-40 transition-opacity duration-200 hover:opacity-100"
+                    />
+                  ) : (
+                    <Icon name={s.icon} class="h-5 w-5" />
+                  )}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
       <!-- Navigation columns -->
       <nav class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8" aria-label="Footer">
-        {Object.entries(navigation).map(([category, links]) => (
-          <div>
-            <h3 class="ts-overline text-white/40">{category}</h3>
-            <ul class="mt-4 space-y-3">
-              {links.map(([label, href]) => (
-                <li>
-                  <a
-                    href={href}
-                    class="ts-body-small text-white/60 transition-colors duration-200 hover:text-white"
-                    target={href.startsWith("http") ? "_blank" : "_self"}
-                    rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {
+          Object.entries(navigation).map(([category, links]) => (
+            <div>
+              <h3 class="ts-overline text-white/40">{category}</h3>
+              <ul class="mt-4 space-y-3">
+                {links.map(([label, href]) => (
+                  <li>
+                    <a
+                      href={href}
+                      class="ts-body-small text-white/60 transition-colors duration-200 hover:text-white"
+                      target={href.startsWith("http") ? "_blank" : "_self"}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
       </nav>
     </div>
 
@@ -126,19 +150,32 @@ const socials: { name: string; url: string; icon: string }[] = [
     <!-- Bottom bar -->
     <div class="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
       <p class="ts-body-small text-white/40">
-        &copy; {new Date().getFullYear()} Tech for Palestine. All rights reserved. 501(c)(3) nonprofit &middot; EIN 99-3441367
+        &copy; {new Date().getFullYear()} Tech for Palestine. All rights reserved. 501(c)(3) nonprofit
+        &middot; EIN 99-3441367
       </p>
       <div class="flex gap-6">
-        <a href="/privacy-policy-new" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+        <a
+          href="/privacy-policy-new"
+          class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white"
+        >
           Privacy
         </a>
-        <a href="/terms-new" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+        <a
+          href="/terms-new"
+          class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white"
+        >
           Terms
         </a>
-        <a href="/legal-new" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+        <a
+          href="/legal-new"
+          class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white"
+        >
           Legal &amp; Financial
         </a>
-        <a href="/media-new" class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white">
+        <a
+          href="/media-new"
+          class="ts-body-small text-white/40 transition-colors duration-200 hover:text-white"
+        >
           Media Kit
         </a>
       </div>

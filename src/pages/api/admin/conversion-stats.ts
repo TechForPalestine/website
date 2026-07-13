@@ -135,9 +135,27 @@ async function fetchConversionDetails(
   dateTo: string
 ): Promise<ConversionDetail[]> {
   const queries = [
-    fetchPlausibleConversionDetails(apiKey, "One-time-donate", ["amount", "source"], dateFrom, dateTo),
-    fetchPlausibleConversionDetails(apiKey, "Monthly-donate", ["amount", "source"], dateFrom, dateTo),
-    fetchPlausibleConversionDetails(apiKey, "Membership-complete", ["amount", "membership_variant"], dateFrom, dateTo),
+    fetchPlausibleConversionDetails(
+      apiKey,
+      "One-time-donate",
+      ["amount", "source"],
+      dateFrom,
+      dateTo
+    ),
+    fetchPlausibleConversionDetails(
+      apiKey,
+      "Monthly-donate",
+      ["amount", "source"],
+      dateFrom,
+      dateTo
+    ),
+    fetchPlausibleConversionDetails(
+      apiKey,
+      "Membership-complete",
+      ["amount", "membership_variant"],
+      dateFrom,
+      dateTo
+    ),
   ];
   const results = await Promise.all(queries);
   return results.flat();
@@ -230,15 +248,9 @@ export const GET: APIRoute = async ({ request, locals }) => {
   const ctx = locals.runtime?.ctx;
   try {
     const [plausible, dropped, details] = await Promise.all([
-      apiKey
-        ? fetchPlausibleStats(apiKey, dateFrom, dateTo)
-        : Promise.resolve([]),
-      kv
-        ? fetchDroppedEvents(kv, dateFrom, dateTo)
-        : Promise.resolve({ daily: [], details: [] }),
-      apiKey
-        ? fetchConversionDetails(apiKey, dateFrom, dateTo)
-        : Promise.resolve([]),
+      apiKey ? fetchPlausibleStats(apiKey, dateFrom, dateTo) : Promise.resolve([]),
+      kv ? fetchDroppedEvents(kv, dateFrom, dateTo) : Promise.resolve({ daily: [], details: [] }),
+      apiKey ? fetchConversionDetails(apiKey, dateFrom, dateTo) : Promise.resolve([]),
     ]);
 
     return new Response(

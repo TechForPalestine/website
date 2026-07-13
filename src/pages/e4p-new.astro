@@ -148,12 +148,27 @@ const founders = [
     linkedin: "https://www.linkedin.com/in/arshanahmad/",
   },
 ];
+const peopleSchema = [...testimonials, ...founders].map((person) => ({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: person.name,
+  jobTitle: person.title,
+  sameAs: [person.linkedin],
+}));
 ---
 
 <HomeLayout
   title="Entrepreneurs for Palestine"
   description="Entrepreneurs for Palestine is a global community of founders and CEOs joining forces to stand up for what's right and make a difference for the Palestinian cause."
+  noindex={true}
 >
+  <Fragment slot="head">
+    {
+      peopleSchema.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -168,9 +183,9 @@ const founders = [
           <p class="ts-body-large mb-8 max-w-[65ch] text-ink-secondary">
             Entrepreneurs for Palestine is a global community of founders and CEOs who are joining
             forces to stand up for what's right. As entrepreneurs, we hold a lot of collective power
-            which we can use in order to make a difference for the Palestinian cause. We seek to make
-            an impact by being intentional in how we hire, which clients and suppliers we work with,
-            and where we fundraise.
+            which we can use in order to make a difference for the Palestinian cause. We seek to
+            make an impact by being intentional in how we hire, which clients and suppliers we work
+            with, and where we fundraise.
           </p>
           <p class="ts-label mb-4 text-ink-secondary">
             44 countries &nbsp;&middot;&nbsp; 6 continents &nbsp;&middot;&nbsp; 270+ founders
@@ -182,9 +197,7 @@ const founders = [
             <Button href="/e4p/sign-up" variant="primary" size="md" arrow>
               Join the Community
             </Button>
-            <Button href="/e4p/pledge" variant="ghost" size="md">
-              Sign the E4P Pledge
-            </Button>
+            <Button href="/e4p/pledge" variant="ghost" size="md"> Sign the E4P Pledge </Button>
           </div>
         </div>
       </div>
@@ -197,13 +210,15 @@ const founders = [
           <p class="ts-overline mb-6 text-ink-secondary">Member benefits</p>
           <h2 class="ts-heading mb-12 text-ink">What you get as a member</h2>
           <!-- Featured pair -->
-          <div class="grid grid-cols-1 gap-4 min-[640px]:grid-cols-2 mb-4">
+          <div class="mb-4 grid grid-cols-1 gap-4 min-[640px]:grid-cols-2">
             {
               benefits.slice(0, 2).map((benefit, i) => (
-                <div class:list={[
-                  "benefit-card flex items-start gap-5 rounded-[20px] border border-butter p-6 min-[810px]:p-8",
-                  i % 2 === 0 ? "bg-page" : "bg-cream"
-                ]}>
+                <div
+                  class:list={[
+                    "benefit-card flex items-start gap-5 rounded-[20px] border border-butter p-6 min-[810px]:p-8",
+                    i % 2 === 0 ? "bg-page" : "bg-cream",
+                  ]}
+                >
                   <Icon name={benefit.icon} class="mt-0.5 h-7 w-7 shrink-0 text-brand" />
                   <div>
                     <p class="ts-label mb-2 text-ink">{benefit.name}</p>
@@ -219,10 +234,12 @@ const founders = [
           <div class="grid grid-cols-1 gap-4 min-[640px]:grid-cols-2 min-[1050px]:grid-cols-3">
             {
               benefits.slice(2).map((benefit, i) => (
-                <div class:list={[
-                  "benefit-card rounded-[20px] border border-butter p-6 min-[810px]:p-8",
-                  i % 2 === 0 ? "bg-cream" : "bg-page"
-                ]}>
+                <div
+                  class:list={[
+                    "benefit-card rounded-[20px] border border-butter p-6 min-[810px]:p-8",
+                    i % 2 === 0 ? "bg-cream" : "bg-page",
+                  ]}
+                >
                   <Icon name={benefit.icon} class="mb-4 h-6 w-6 text-brand" />
                   <p class="ts-label mb-2 text-ink">{benefit.name}</p>
                   <p class="ts-body-small leading-relaxed text-ink-secondary">
@@ -255,12 +272,14 @@ const founders = [
         <div class="e4p-animate max-w-[860px]">
           <p class="ts-overline mb-8 text-ink-secondary">The E4P Pledge</p>
           <blockquote class="ts-display mb-10 font-serif italic leading-tight text-ink">
-            &ldquo;Be intentional in how you <span class="text-brand">hire</span>, which clients and suppliers you <span class="text-brand">work with</span>, and
-            where you <span class="text-brand">fundraise</span>.&rdquo;
+            &ldquo;Be intentional in how you <span class="text-brand">hire</span>, which clients and
+            suppliers you <span class="text-brand">work with</span>, and where you <span
+              class="text-brand">fundraise</span
+            >.&rdquo;
           </blockquote>
           <a
             href="/e4p/pledge"
-            class="ts-label inline-flex items-center gap-2 rounded-pill border border-butter px-5 py-3.5 text-brand transition-colors duration-150 hover:bg-butter min-h-[44px]"
+            class="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-butter px-5 py-3.5 text-brand transition-colors duration-150 hover:bg-butter"
           >
             Sign the E4P Pledge
             <svg
@@ -418,7 +437,8 @@ const founders = [
 
 <style>
   .benefit-card {
-    transition: background-color 0.2s ease,
+    transition:
+      background-color 0.2s ease,
       border-color 0.2s ease;
   }
   .benefit-card:hover {
@@ -427,7 +447,8 @@ const founders = [
   }
 
   .founder-card {
-    transition: background-color 0.2s ease,
+    transition:
+      background-color 0.2s ease,
       border-color 0.2s ease;
   }
   .founder-card:hover {
@@ -451,7 +472,9 @@ const founders = [
   .e4p-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .e4p-animate.in-view {
     opacity: 1;
@@ -471,10 +494,16 @@ const founders = [
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll(".e4p-animate").forEach((el) => obs.observe(el));
 </script>
