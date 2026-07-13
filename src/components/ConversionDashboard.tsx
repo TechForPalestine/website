@@ -58,11 +58,7 @@ const GOAL_COLORS: Record<string, { border: string }> = {
 
 const DATE_RANGE_PRESETS = [7, 30, 90] as const;
 
-const GOAL_KEYS = [
-  "One-time-donate",
-  "Monthly-donate",
-  "Membership-complete",
-] as const;
+const GOAL_KEYS = ["One-time-donate", "Monthly-donate", "Membership-complete"] as const;
 
 const SOURCE_KEYS = ["qgiv-embed", "validaid-embed"] as const;
 
@@ -101,10 +97,7 @@ function applyFilters<T extends { source: string; goal: string }>(
   });
 }
 
-function mergeCountsByGoal(
-  plausible: DailyCount[],
-  dropped: DailyCount[]
-): DailyCount[] {
+function mergeCountsByGoal(plausible: DailyCount[], dropped: DailyCount[]): DailyCount[] {
   const merged = new Map<string, number>();
   for (const d of [...plausible, ...dropped]) {
     const key = `${d.date}:${d.goal}`;
@@ -150,9 +143,7 @@ function SegmentedButton({
       type="button"
       onClick={onClick}
       className={`ts-label rounded-pill px-4 py-2 text-sm transition-colors focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-brand ${
-        active
-          ? "bg-brand text-white"
-          : "bg-transparent text-ink hover:bg-ink/5"
+        active ? "bg-brand text-white" : "bg-transparent text-ink hover:bg-ink/5"
       }`}
     >
       {children}
@@ -178,21 +169,15 @@ function StatCard({
   note?: string;
 }) {
   return (
-    <div
-      className={`rounded-md p-5 ${emphasized ? "bg-brand/5" : "bg-sand"}`}
-    >
-      <p className="ts-caption text-ink-secondary uppercase tracking-wide">
-        {label}
-      </p>
+    <div className={`rounded-md p-5 ${emphasized ? "bg-brand/5" : "bg-sand"}`}>
+      <p className="ts-caption uppercase tracking-wide text-ink-secondary">{label}</p>
       <p
         className={emphasized ? "ts-stat-large mt-1" : "ts-stat mt-1"}
         style={{ color: valueColor }}
       >
         {value}
       </p>
-      {note && (
-        <p className="ts-caption mt-1 text-ink-muted">{note}</p>
-      )}
+      {note && <p className="ts-caption mt-1 text-ink-muted">{note}</p>}
     </div>
   );
 }
@@ -220,9 +205,7 @@ export default function ConversionDashboard() {
       });
       const res = await fetch(`/api/admin/conversion-stats?${params}`);
       if (!res.ok) {
-        throw new Error(
-          res.status === 401 ? "Unauthorized" : "Failed to fetch stats"
-        );
+        throw new Error(res.status === 401 ? "Unauthorized" : "Failed to fetch stats");
       }
       const json = (await res.json()) as StatsResponse;
       if (json.error) throw new Error(json.error);
@@ -248,27 +231,19 @@ export default function ConversionDashboard() {
 
   const sourceDisabled = goalFilter === "Membership-complete";
 
-  const visibleGoals = goalFilter === "all"
-    ? GOAL_KEYS
-    : GOAL_KEYS.filter((g) => g === goalFilter);
+  const visibleGoals = goalFilter === "all" ? GOAL_KEYS : GOAL_KEYS.filter((g) => g === goalFilter);
 
-  const showSourceCards =
-    goalFilter === "all" || SOURCED_GOAL_SET.has(goalFilter);
+  const showSourceCards = goalFilter === "all" || SOURCED_GOAL_SET.has(goalFilter);
 
-  const visibleSources =
-    !showSourceCards
-      ? []
-      : sourceFilter === "all"
-        ? [...SOURCE_KEYS]
-        : SOURCE_KEYS.filter((s) => s === sourceFilter);
+  const visibleSources = !showSourceCards
+    ? []
+    : sourceFilter === "all"
+      ? [...SOURCE_KEYS]
+      : SOURCE_KEYS.filter((s) => s === sourceFilter);
 
   const chartData = useMemo(() => {
     if (!data) return null;
-    const filtered = applyFilters(
-      [...data.plausible, ...data.dropped],
-      goalFilter,
-      sourceFilter
-    );
+    const filtered = applyFilters([...data.plausible, ...data.dropped], goalFilter, sourceFilter);
     const allCounts = mergeCountsByGoal(filtered, []);
     const bucketed = isAggregated ? bucketByWeek(allCounts) : allCounts;
     const dates = Array.from(new Set(bucketed.map((d) => d.date))).sort();
@@ -279,11 +254,7 @@ export default function ConversionDashboard() {
   const sourceTotals = useMemo(() => {
     if (!data) return {} as Record<string, number>;
     const totals: Record<string, number> = {};
-    const filtered = applyFilters(
-      [...data.plausible, ...data.dropped],
-      goalFilter,
-      "all"
-    );
+    const filtered = applyFilters([...data.plausible, ...data.dropped], goalFilter, "all");
     for (const d of filtered) {
       if (!SOURCED_GOAL_SET.has(d.goal)) continue;
       const src = effectiveSource(d.source);
@@ -360,18 +331,12 @@ export default function ConversionDashboard() {
 
   const allCounts = data
     ? mergeCountsByGoal(
-        applyFilters(
-          [...data.plausible, ...data.dropped],
-          goalFilter,
-          sourceFilter
-        ),
+        applyFilters([...data.plausible, ...data.dropped], goalFilter, sourceFilter),
         []
       )
     : [];
 
-  const filteredDetails = data
-    ? applyFilters(data.details, goalFilter, sourceFilter)
-    : [];
+  const filteredDetails = data ? applyFilters(data.details, goalFilter, sourceFilter) : [];
 
   const totalConversions = allCounts.reduce((sum, d) => sum + d.count, 0);
 
@@ -441,10 +406,7 @@ export default function ConversionDashboard() {
         <div>
           <p className="ts-caption mb-1 text-ink-secondary">Goal</p>
           <div className="flex flex-wrap gap-2">
-            <SegmentedButton
-              active={goalFilter === "all"}
-              onClick={() => setGoalFilter("all")}
-            >
+            <SegmentedButton active={goalFilter === "all"} onClick={() => setGoalFilter("all")}>
               All
             </SegmentedButton>
             {GOAL_KEYS.map((goal) => (
@@ -466,10 +428,7 @@ export default function ConversionDashboard() {
         >
           <p className="ts-caption mb-1 text-ink-secondary">Source</p>
           <div className="flex flex-wrap gap-2">
-            <SegmentedButton
-              active={sourceFilter === "all"}
-              onClick={() => setSourceFilter("all")}
-            >
+            <SegmentedButton active={sourceFilter === "all"} onClick={() => setSourceFilter("all")}>
               All Sources
             </SegmentedButton>
             {SOURCE_KEYS.map((source) => (
@@ -504,8 +463,7 @@ export default function ConversionDashboard() {
 
       {data && !loading && totalConversions === 0 && (
         <div className="ts-body-small mt-8 rounded-md bg-sand p-6 text-ink-secondary">
-          No conversions recorded in this range. Try widening the date range
-          or clearing filters.
+          No conversions recorded in this range. Try widening the date range or clearing filters.
         </div>
       )}
 
@@ -513,11 +471,7 @@ export default function ConversionDashboard() {
         <>
           {/* Summary cards */}
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <StatCard
-              label="Total Conversions"
-              value={String(totalConversions)}
-              emphasized
-            />
+            <StatCard label="Total Conversions" value={String(totalConversions)} emphasized />
             {visibleGoals.map((goal) => {
               const count = allCounts
                 .filter((d) => d.goal === goal)
@@ -568,7 +522,7 @@ export default function ConversionDashboard() {
           {/* Daily/weekly counts table */}
           {chartData && chartData.dates.length > 0 && (
             <div className="mt-4 rounded-md bg-sand p-5">
-              <h3 className="ts-caption text-ink-secondary uppercase tracking-wide">
+              <h3 className="ts-caption uppercase tracking-wide text-ink-secondary">
                 {isAggregated ? "Weekly Counts" : "Daily Counts"}
               </h3>
               <div className="mt-3 max-h-64 overflow-y-auto">
@@ -579,16 +533,11 @@ export default function ConversionDashboard() {
                         {isAggregated ? "Week of" : "Date"}
                       </th>
                       {chartData.goals.map((goal) => (
-                        <th
-                          key={goal}
-                          className="ts-label pb-1 text-right text-ink-secondary"
-                        >
+                        <th key={goal} className="ts-label pb-1 text-right text-ink-secondary">
                           {GOAL_LABELS[goal] || goal}
                         </th>
                       ))}
-                      <th className="ts-label pb-1 text-right text-ink-secondary">
-                        Total
-                      </th>
+                      <th className="ts-label pb-1 text-right text-ink-secondary">Total</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -604,16 +553,11 @@ export default function ConversionDashboard() {
                         <tr key={date} className="border-b border-ink-divider/50">
                           <td className="py-1 text-ink">{date}</td>
                           {rowCounts.map((count, i) => (
-                            <td
-                              key={chartData.goals[i]}
-                              className="py-1 text-right text-ink"
-                            >
+                            <td key={chartData.goals[i]} className="py-1 text-right text-ink">
                               {count}
                             </td>
                           ))}
-                          <td className="py-1 text-right font-medium text-ink">
-                            {rowTotal}
-                          </td>
+                          <td className="py-1 text-right font-medium text-ink">{rowTotal}</td>
                         </tr>
                       );
                     })}
@@ -630,28 +574,21 @@ export default function ConversionDashboard() {
                 const rows = filteredDetails.filter((d) => d.goal === goal);
                 if (rows.length === 0) return null;
                 const hasVariant = goal === "Membership-complete";
-                const hasSource =
-                  sourceFilter === "all" && SOURCED_GOAL_SET.has(goal);
+                const hasSource = sourceFilter === "all" && SOURCED_GOAL_SET.has(goal);
                 const tracked = rows
                   .filter((r) => r.amount && !isNaN(parseFloat(r.amount)))
                   .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
                 const untrackedCount = rows
                   .filter((r) => !r.amount || isNaN(parseFloat(r.amount)))
                   .reduce((s, r) => s + r.count, 0);
-                const total = tracked.reduce(
-                  (sum, r) => sum + parseFloat(r.amount) * r.count,
-                  0
-                );
+                const total = tracked.reduce((sum, r) => sum + parseFloat(r.amount) * r.count, 0);
                 const colors = GOAL_COLORS[goal];
                 return (
                   <div key={`detail-${goal}`} className="rounded-md bg-sand p-5">
-                    <h3 className="ts-caption text-ink-secondary uppercase tracking-wide">
+                    <h3 className="ts-caption uppercase tracking-wide text-ink-secondary">
                       {GOAL_LABELS[goal]}
                     </h3>
-                    <p
-                      className="ts-stat mt-1"
-                      style={{ color: colors?.border }}
-                    >
+                    <p className="ts-stat mt-1" style={{ color: colors?.border }}>
                       $
                       {total.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
@@ -662,22 +599,16 @@ export default function ConversionDashboard() {
                       <table className="ts-body-small w-full">
                         <thead>
                           <tr className="sticky top-0 border-b border-ink-divider bg-sand">
-                            <th className="ts-label pb-1 text-left text-ink-secondary">
-                              Amount
-                            </th>
+                            <th className="ts-label pb-1 text-left text-ink-secondary">Amount</th>
                             {hasVariant && (
                               <th className="ts-label pb-1 text-left text-ink-secondary">
                                 Variant
                               </th>
                             )}
                             {hasSource && (
-                              <th className="ts-label pb-1 text-left text-ink-secondary">
-                                Source
-                              </th>
+                              <th className="ts-label pb-1 text-left text-ink-secondary">Source</th>
                             )}
-                            <th className="ts-label pb-1 text-right text-ink-secondary">
-                              Count
-                            </th>
+                            <th className="ts-label pb-1 text-right text-ink-secondary">Count</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -691,25 +622,19 @@ export default function ConversionDashboard() {
                                 })}
                               </td>
                               {hasVariant && (
-                                <td className="py-1 text-ink-secondary">
-                                  {r.variant || "—"}
-                                </td>
+                                <td className="py-1 text-ink-secondary">{r.variant || "—"}</td>
                               )}
                               {hasSource && (
                                 <td className="py-1 text-ink-secondary">
                                   {SOURCE_LABELS[effectiveSource(r.source)]}
                                 </td>
                               )}
-                              <td className="py-1 text-right font-medium text-ink">
-                                {r.count}
-                              </td>
+                              <td className="py-1 text-right font-medium text-ink">{r.count}</td>
                             </tr>
                           ))}
                           {untrackedCount > 0 && (
                             <tr className="border-b border-ink-divider/50">
-                              <td className="py-1 italic text-ink-muted">
-                                Untracked
-                              </td>
+                              <td className="py-1 italic text-ink-muted">Untracked</td>
                               {hasVariant && <td />}
                               {hasSource && <td />}
                               <td className="py-1 text-right font-medium text-ink-muted">

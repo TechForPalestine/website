@@ -58,81 +58,93 @@ const testimonials = [
 ];
 ---
 
-<section class="bg-page pt-14 min-[810px]:pt-20 pb-14 min-[810px]:pb-20">
+<section class="bg-page pb-14 pt-14 min-[810px]:pb-20 min-[810px]:pt-20">
   <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
-
-    <div class="testimonials-header grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end mb-12 min-[810px]:mb-16">
+    <div
+      class="testimonials-header mb-12 grid grid-cols-1 gap-6 min-[810px]:mb-16 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end"
+    >
       <div>
         <p class="ts-overline mb-8 text-ink-secondary">From the people building with us</p>
-        <h2 class="ts-editorial text-ink leading-[1.2]">
+        <h2 class="ts-editorial leading-[1.2] text-ink">
           What it's like to <span class="text-brand">work with T4P</span>
         </h2>
       </div>
-      <p class="ts-body text-ink-secondary min-[810px]:text-right min-[810px]:max-w-[400px] min-[810px]:ml-auto">
+      <p
+        class="ts-body text-ink-secondary min-[810px]:ml-auto min-[810px]:max-w-[400px] min-[810px]:text-right"
+      >
         Project leaders, mentors, and members on their time inside the coalition.
       </p>
     </div>
 
-    <div class="border-t border-ink-divider mb-12 min-[810px]:mb-16"></div>
+    <div class="mb-12 border-t border-ink-divider min-[810px]:mb-16"></div>
 
-    <div class="testimonials-marquee -mx-6 min-[810px]:-mx-10 overflow-hidden" aria-label="Testimonials carousel">
-      <div class="marquee-track flex gap-4 min-[810px]:gap-6 w-max will-change-transform">
-        {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
-          <div class:list={["testimonial-card flex flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 min-w-[300px] max-w-[300px] min-[810px]:min-w-[420px] min-[810px]:max-w-[420px] shrink-0", i >= testimonials.length && "marquee-dupe"]}>
-            <svg
-              class="text-brand mb-6 shrink-0"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
+    <div
+      class="testimonials-marquee -mx-6 overflow-hidden min-[810px]:-mx-10"
+      aria-label="Testimonials carousel"
+    >
+      <div class="marquee-track flex w-max gap-4 will-change-transform min-[810px]:gap-6">
+        {
+          [...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+            <div
+              class:list={[
+                "testimonial-card flex min-w-[300px] max-w-[300px] shrink-0 flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:min-w-[420px] min-[810px]:max-w-[420px] min-[810px]:p-8",
+                i >= testimonials.length && "marquee-dupe",
+              ]}
             >
-              <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
-            </svg>
-            <p class="ts-quote text-ink flex-1">{t.quote}</p>
-            <footer class="mt-8 flex items-center gap-3">
-              {t.headshots ? (
-                <div class="relative w-12 h-12 shrink-0">
+              <svg
+                class="mb-6 shrink-0 text-brand"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
+              </svg>
+              <p class="ts-quote flex-1 text-ink">{t.quote}</p>
+              <footer class="mt-8 flex items-center gap-3">
+                {t.headshots ? (
+                  <div class="relative h-12 w-12 shrink-0">
+                    <img
+                      src={t.headshots[0]}
+                      alt=""
+                      width="36"
+                      height="36"
+                      loading="lazy"
+                      decoding="async"
+                      class="testimonial-avatar absolute -left-2 top-0 z-10 h-8 w-8 rounded-full object-cover"
+                    />
+                    <img
+                      src={t.headshots[1]}
+                      alt=""
+                      width="36"
+                      height="36"
+                      loading="lazy"
+                      decoding="async"
+                      class="testimonial-avatar absolute bottom-0 right-0 h-8 w-8 rounded-full object-cover"
+                    />
+                  </div>
+                ) : (
                   <img
-                    src={t.headshots[0]}
+                    src={t.headshot}
                     alt=""
-                    width="36"
-                    height="36"
+                    width="48"
+                    height="48"
                     loading="lazy"
                     decoding="async"
-                    class="testimonial-avatar absolute top-0 -left-2 h-8 w-8 rounded-full object-cover z-10"
+                    class="testimonial-avatar h-12 w-12 rounded-full object-cover"
                   />
-                  <img
-                    src={t.headshots[1]}
-                    alt=""
-                    width="36"
-                    height="36"
-                    loading="lazy"
-                    decoding="async"
-                    class="testimonial-avatar absolute bottom-0 right-0 h-8 w-8 rounded-full object-cover"
-                  />
+                )}
+                <div>
+                  <p class="ts-label text-ink">{t.name}</p>
+                  <p class="ts-body-small mt-0.5 text-ink-secondary">{t.role}</p>
                 </div>
-              ) : (
-                <img
-                  src={t.headshot}
-                  alt=""
-                  width="48"
-                  height="48"
-                  loading="lazy"
-                  decoding="async"
-                  class="testimonial-avatar h-12 w-12 rounded-full object-cover"
-                />
-              )}
-              <div>
-                <p class="ts-label text-ink">{t.name}</p>
-                <p class="ts-body-small mt-0.5 text-ink-secondary">{t.role}</p>
-              </div>
-            </footer>
-          </div>
-        ))}
+              </footer>
+            </div>
+          ))
+        }
       </div>
     </div>
-
   </div>
 </section>
 
@@ -145,7 +157,8 @@ const testimonials = [
   .testimonials-header {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .testimonials-header.in-view {
@@ -183,8 +196,12 @@ const testimonials = [
   }
 
   @keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-33.333%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-33.333%);
+    }
   }
 
   .marquee-track {

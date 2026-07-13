@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  type ProjectItem,
-  getInitials,
-  resolveLogoSrc,
-  getProjectText,
-} from "./projectData";
+import { type ProjectItem, getInitials, resolveLogoSrc, getProjectText } from "./projectData";
 import { getActiveSocialFields } from "./socialIcons";
 
 interface ProjectCardProps {
@@ -39,7 +34,10 @@ function LogoFrame({
 
   return (
     <div className={`${sizeClass} relative shrink-0`}>
-      <div className="absolute inset-0 rotate-[-3deg] rounded-md bg-[var(--color-logo-frame)] shadow-[0_4px_12px_rgba(0,0,0,0.06)]" aria-hidden="true" />
+      <div
+        className="absolute inset-0 rotate-[-3deg] rounded-md bg-[var(--color-logo-frame)] shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
+        aria-hidden="true"
+      />
       <div className="relative flex h-full w-full items-center justify-center rounded-md bg-white p-2 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
         <img
           src={src}
@@ -70,7 +68,7 @@ export default function ProjectCard({ project, onClick, featured = false }: Proj
           "group w-full cursor-pointer rounded-[20px] border text-left transition-colors duration-150",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
           featured
-            ? "border-butter border-t-2 border-t-brand bg-page p-8 hover:bg-cream"
+            ? "border-t-2 border-butter border-t-brand bg-page p-8 hover:bg-cream"
             : "border-butter bg-sand p-6 hover:border-brand/30 hover:bg-cream",
         ].join(" ")}
         aria-label={`View details for ${project.name}`}
@@ -85,9 +83,7 @@ export default function ProjectCard({ project, onClick, featured = false }: Proj
           </div>
         </div>
 
-        {text && (
-          <p className="ts-body mb-4 line-clamp-3 text-ink-secondary">{text}</p>
-        )}
+        {text && <p className="ts-body mb-4 line-clamp-3 text-ink-secondary">{text}</p>}
 
         {displayTags.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1.5">
@@ -117,7 +113,17 @@ export default function ProjectCard({ project, onClick, featured = false }: Proj
           </div>
           <span className="ts-label flex items-center gap-1 text-brand group-hover:underline">
             View details
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
           </span>

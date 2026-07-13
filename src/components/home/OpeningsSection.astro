@@ -35,66 +35,79 @@ function applyHref(role: Role): string {
 }
 ---
 
-<section class="bg-page pt-14 min-[810px]:pt-20 pb-14 min-[810px]:pb-20">
+<section class="bg-page pb-14 pt-14 min-[810px]:pb-20 min-[810px]:pt-20">
   <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
-
-    <div class="openings-header grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end mb-12 min-[810px]:mb-16">
+    <div
+      class="openings-header mb-12 grid grid-cols-1 gap-6 min-[810px]:mb-16 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end"
+    >
       <div>
         <p class="ts-overline mb-8 text-ink-secondary">Current openings</p>
-        <h2 class="ts-editorial text-ink leading-[1.2]">
+        <h2 class="ts-editorial leading-[1.2] text-ink">
           Teams & projects waiting for their <span class="text-brand">next volunteer</span>
         </h2>
       </div>
-      <p class="ts-body text-ink-secondary min-[810px]:text-right min-[810px]:max-w-[400px] min-[810px]:ml-auto">
-        {membershipLive
-          ? "This could be you. Become a member to fill one of these impactful openings."
-          : "This could be you. Get involved to fill one of these impactful openings."}
+      <p
+        class="ts-body text-ink-secondary min-[810px]:ml-auto min-[810px]:max-w-[400px] min-[810px]:text-right"
+      >
+        {
+          membershipLive
+            ? "This could be you. Become a member to fill one of these impactful openings."
+            : "This could be you. Get involved to fill one of these impactful openings."
+        }
       </p>
     </div>
 
-    <div class="border-t border-ink-divider mb-12 min-[810px]:mb-16"></div>
+    <div class="mb-12 border-t border-ink-divider min-[810px]:mb-16"></div>
 
-    <ul class="flex flex-col gap-4 mb-16 min-[810px]:mb-24 list-none p-0 m-0" role="list">
-      {visible.map((role) => (
-        <li class="opening-card-wrap">
-          <div class="opening-card rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 grid grid-cols-1 gap-4 min-[810px]:grid-cols-[200px_1fr_auto_auto] min-[810px]:items-center min-[810px]:gap-8">
-            <p class="ts-subheading text-ink">{roleName(role)}</p>
-            <div>
-              <p class="ts-label text-ink">{role.title}</p>
-              {role.skillCategories.length > 0 && (
-                <p class="ts-body-small text-ink-secondary mt-0.5">{role.skillCategories.join(" · ")}</p>
+    <ul class="m-0 mb-16 flex list-none flex-col gap-4 p-0 min-[810px]:mb-24" role="list">
+      {
+        visible.map((role) => (
+          <li class="opening-card-wrap">
+            <div class="opening-card grid grid-cols-1 gap-4 rounded-[20px] border border-butter bg-sand p-6 min-[810px]:grid-cols-[200px_1fr_auto_auto] min-[810px]:items-center min-[810px]:gap-8 min-[810px]:p-8">
+              <p class="ts-subheading text-ink">{roleName(role)}</p>
+              <div>
+                <p class="ts-label text-ink">{role.title}</p>
+                {role.skillCategories.length > 0 && (
+                  <p class="ts-body-small mt-0.5 text-ink-secondary">
+                    {role.skillCategories.join(" · ")}
+                  </p>
+                )}
+              </div>
+              {roleTime(role) && (
+                <p class="ts-body-small whitespace-nowrap text-ink-secondary">{roleTime(role)}</p>
               )}
-            </div>
-            {roleTime(role) && (
-              <p class="ts-body-small text-ink-secondary whitespace-nowrap">{roleTime(role)}</p>
-            )}
-            <a
-              href={applyHref(role)}
-              class="ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              Apply
-              <svg
-                class="opening-arrow"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
+              <a
+                href={applyHref(role)}
+                class="ts-label flex items-center gap-2 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </a>
-          </div>
-        </li>
-      ))}
+                Apply
+                <svg
+                  class="opening-arrow"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
+            </div>
+          </li>
+        ))
+      }
     </ul>
 
     <div class="openings-cta flex justify-center">
-      <Button href={membershipLive ? "/membership-new" : "/get-involved-new"} variant="primary" size="lg" arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button>
+      <Button
+        href={membershipLive ? "/membership-new" : "/get-involved-new"}
+        variant="primary"
+        size="lg"
+        arrow>{membershipLive ? "Fill an opening now" : "Get involved"}</Button
+      >
     </div>
-
   </div>
 </section>
 
@@ -103,7 +116,8 @@ function applyHref(role: Role): string {
   .openings-header {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .openings-header.in-view {
@@ -119,7 +133,8 @@ function applyHref(role: Role): string {
   .opening-card-wrap.in-view {
     opacity: 1;
     translate: none;
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
@@ -143,7 +158,8 @@ function applyHref(role: Role): string {
   .openings-cta {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s,
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s,
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
   }
   .openings-cta.in-view {
@@ -175,15 +191,11 @@ function applyHref(role: Role): string {
 </style>
 
 <script>
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (prefersReducedMotion) {
     document
-      .querySelectorAll<HTMLElement>(
-        ".openings-header, .opening-card-wrap, .openings-cta"
-      )
+      .querySelectorAll<HTMLElement>(".openings-header, .opening-card-wrap, .openings-cta")
       .forEach((el) => el.classList.add("in-view"));
   } else {
     const openingsHeaderObs = new IntersectionObserver(
@@ -214,11 +226,9 @@ function applyHref(role: Role): string {
       { threshold: 0.1 }
     );
 
-    document
-      .querySelectorAll<HTMLElement>(".opening-card-wrap")
-      .forEach((card, i) => {
-        card.style.transitionDelay = `${i * 0.1}s`;
-        openingsCardObs.observe(card);
-      });
+    document.querySelectorAll<HTMLElement>(".opening-card-wrap").forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+      openingsCardObs.observe(card);
+    });
   }
 </script>

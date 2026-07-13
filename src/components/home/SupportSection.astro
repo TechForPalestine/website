@@ -27,14 +27,14 @@ const items = [
 ];
 ---
 
-<section class="bg-page px-6 pt-14 pb-14 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-20">
+<section class="bg-page px-6 pb-14 pt-14 min-[810px]:px-10 min-[810px]:pb-20 min-[810px]:pt-20">
   <div class="mx-auto max-w-[1400px]">
     <p class="ts-overline mb-10 text-ink-secondary">Our support</p>
 
     <h2 class="ts-editorial pb-6 text-ink">
       How do we enable projects to <span class="text-brand">succeed?</span>
     </h2>
-    <p class="ts-body-large pb-10 min-[810px]:pb-14 text-ink-secondary max-w-[52ch]">
+    <p class="ts-body-large max-w-[52ch] pb-10 text-ink-secondary min-[810px]:pb-14">
       We give teams and projects the support they need to ship, scale, and make an impact.
     </p>
 
@@ -48,24 +48,28 @@ const items = [
         height="1067"
         loading="lazy"
         decoding="async"
-        class="w-full h-[480px] object-cover object-center md:h-[560px] animate-ken-burns motion-reduce:animate-none"
+        class="animate-ken-burns h-[480px] w-full object-cover object-center motion-reduce:animate-none md:h-[560px]"
       />
     </div>
 
     <ul class="list-none p-0" role="list">
-      {items.map((item, i) => (
-        <li
-          class="support-item rounded-[20px] bg-sand px-8 py-10 min-[810px]:grid min-[810px]:grid-cols-[4.5rem_1fr] min-[810px]:gap-x-6 min-[810px]:px-12 min-[810px]:py-12"
-          data-i={i}
-        >
-          <span class="ts-body-large mb-3 block text-ink-secondary min-[810px]:mb-0 min-[810px]:pt-1">{item.number}</span>
-          <div>
-            <h3 class="ts-subheading text-ink">{item.heading}</h3>
-            <p class="ts-body mt-4 max-w-[52ch] text-ink-secondary">{item.body}</p>
-            <p class="ts-label mt-6 text-brand">{item.label}</p>
-          </div>
-        </li>
-      ))}
+      {
+        items.map((item, i) => (
+          <li
+            class="support-item rounded-[20px] bg-sand px-8 py-10 min-[810px]:grid min-[810px]:grid-cols-[4.5rem_1fr] min-[810px]:gap-x-6 min-[810px]:px-12 min-[810px]:py-12"
+            data-i={i}
+          >
+            <span class="ts-body-large mb-3 block text-ink-secondary min-[810px]:mb-0 min-[810px]:pt-1">
+              {item.number}
+            </span>
+            <div>
+              <h3 class="ts-subheading text-ink">{item.heading}</h3>
+              <p class="ts-body mt-4 max-w-[52ch] text-ink-secondary">{item.body}</p>
+              <p class="ts-label mt-6 text-brand">{item.label}</p>
+            </div>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </section>
@@ -74,7 +78,9 @@ const items = [
   .support-photo {
     opacity: 0;
     transform: translateY(12px);
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .support-photo.in-view {
     opacity: 1;
@@ -84,7 +90,10 @@ const items = [
   .support-item {
     opacity: 0;
     transform: translateY(40px) scale(0.97);
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s ease;
+    transition:
+      opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+      transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.2s ease;
     margin-bottom: 12px;
   }
   .support-item.in-view {
@@ -138,9 +147,7 @@ const items = [
     photoObserver.observe(photo);
   }
 
-  const supportItems = Array.from(
-    document.querySelectorAll<HTMLElement>(".support-item")
-  );
+  const supportItems = Array.from(document.querySelectorAll<HTMLElement>(".support-item"));
   if (supportItems.length) {
     const itemObserver = new IntersectionObserver(
       (entries) => {

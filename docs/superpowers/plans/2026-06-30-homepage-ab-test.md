@@ -20,19 +20,21 @@
 
 ## File Map
 
-| File | Change |
-|---|---|
-| `src/pages/index.astro` | Add anti-flicker script via `slot="head"` + Plausible tracking script at bottom of `<main>` |
-| `src/pages/home-new.astro` | Add Plausible tracking script at bottom of `<main>` |
+| File                       | Change                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------- |
+| `src/pages/index.astro`    | Add anti-flicker script via `slot="head"` + Plausible tracking script at bottom of `<main>` |
+| `src/pages/home-new.astro` | Add Plausible tracking script at bottom of `<main>`                                         |
 
 ---
 
 ### Task 1: Anti-flicker script on the control page (`index.astro`)
 
 **Files:**
+
 - Modify: `src/pages/index.astro`
 
 **Context:**
+
 - `Layout.astro` has a `<slot name="head" />` at line 127, before its Plausible queue script at line 130. Any element with `slot="head"` in `index.astro` is rendered there.
 - The Plausible queue (`window.plausible = window.plausible || function(...){}`) is set up in the layout `<head>` AFTER the slot, so `window.plausible` is NOT available inside a `slot="head"` script. The Plausible tracking call must go in a separate body-level script.
 - `location.replace('/home-new')` is used (not `location.href`) to prevent the control page being added to browser history, avoiding a broken back-button experience.
@@ -80,9 +82,7 @@ import "../styles/base.css";
   })();
 </script>
 
-<Layout
-  title="Tech For Palestine"
-  ...
+<Layout title="Tech For Palestine" ...
 ```
 
 - [ ] **Step 2: Add the Plausible tracking script at the bottom of `<main>`**
@@ -90,15 +90,14 @@ import "../styles/base.css";
 Locate the closing `</main>` tag in `src/pages/index.astro` and insert the tracking script immediately before it:
 
 ```astro
-  <script is:inline>
-    (function () {
-      var v = localStorage.getItem("ab-homepage-variant");
-      if (v === "control") {
-        window.plausible("ab-homepage", { props: { variant: "control" } });
-      }
-    })();
-  </script>
-</main>
+<script is:inline>
+  (function () {
+    var v = localStorage.getItem("ab-homepage-variant");
+    if (v === "control") {
+      window.plausible("ab-homepage", { props: { variant: "control" } });
+    }
+  })();
+</script>
 ```
 
 The guard `v === "control"` ensures the event only fires for users who were properly assigned through the A/B test (not someone who cleared their storage mid-session).
@@ -106,6 +105,7 @@ The guard `v === "control"` ensures the event only fires for users who were prop
 - [ ] **Step 3: Verify locally**
 
 Start the dev server:
+
 ```bash
 pnpm dev
 ```
@@ -113,6 +113,7 @@ pnpm dev
 Open `http://localhost:4321` in a browser with devtools open.
 
 **Test A — variant assignment:**
+
 1. Open Application → Local Storage → `http://localhost:4321`
 2. Confirm `ab-homepage-variant` is absent
 3. Hard-reload the page several times
@@ -121,12 +122,14 @@ Open `http://localhost:4321` in a browser with devtools open.
 6. If `"control"`: confirm the homepage renders normally
 
 **Test B — stickiness:**
+
 1. Set `ab-homepage-variant` to `"variant"` manually in devtools
 2. Navigate to `/` — should immediately redirect to `/home-new`
 3. Set `ab-homepage-variant` to `"control"` manually
 4. Navigate to `/` — should stay on `/`
 
 **Test C — Plausible event (control):**
+
 1. Set `ab-homepage-variant` to `"control"`
 2. Navigate to `/`
 3. Open Console and run: `window.plausible.q` — confirm an entry for `"ab-homepage"` with `{ variant: "control" }` is queued
@@ -143,9 +146,11 @@ git commit -m "feat(ab-test): add homepage A/B anti-flicker script and variant t
 ### Task 2: Plausible tracking on the variant page (`home-new.astro`)
 
 **Files:**
+
 - Modify: `src/pages/home-new.astro`
 
 **Context:**
+
 - `HomeLayout.astro` initialises the Plausible queue in the `<head>` (line 169–181), before `</body>`. Any `<script is:inline>` in the page body can safely call `window.plausible()`.
 - We only fire the event if `ab-homepage-variant === "variant"` in localStorage. This excludes visitors who navigated directly to `/home-new` without going through the A/B assignment, keeping the data clean.
 
@@ -154,15 +159,14 @@ git commit -m "feat(ab-test): add homepage A/B anti-flicker script and variant t
 Open `src/pages/home-new.astro`. Locate the closing `</main>` tag and insert immediately before it:
 
 ```astro
-  <script is:inline>
-    (function () {
-      var v = localStorage.getItem("ab-homepage-variant");
-      if (v === "variant") {
-        window.plausible("ab-homepage", { props: { variant: "new" } });
-      }
-    })();
-  </script>
-</main>
+<script is:inline>
+  (function () {
+    var v = localStorage.getItem("ab-homepage-variant");
+    if (v === "variant") {
+      window.plausible("ab-homepage", { props: { variant: "new" } });
+    }
+  })();
+</script>
 ```
 
 - [ ] **Step 2: Verify locally**
@@ -170,18 +174,21 @@ Open `src/pages/home-new.astro`. Locate the closing `</main>` tag and insert imm
 With the dev server running:
 
 **Test A — Plausible event fires for assigned variant users:**
+
 1. Set `ab-homepage-variant` to `"variant"` in devtools
 2. Navigate to `/home-new`
 3. Open Console, run: `window.plausible.q`
 4. Confirm an entry for `"ab-homepage"` with `{ variant: "new" }` is queued
 
 **Test B — event does NOT fire for direct visitors:**
+
 1. Clear `ab-homepage-variant` from localStorage (or delete the key)
 2. Navigate directly to `/home-new`
 3. Open Console, run: `window.plausible.q`
 4. Confirm NO `"ab-homepage"` entry is present
 
 **Test C — full flow end-to-end:**
+
 1. Clear all localStorage
 2. Navigate to `/`
 3. If redirected to `/home-new`: confirm `ab-homepage-variant === "variant"` and Plausible event queued with `variant: "new"`
@@ -216,6 +223,7 @@ Then in your dashboard reports, filter by the `variant` property to compare beha
 When you have a winner:
 
 **If `variant` wins (new design):**
+
 ```bash
 # 1. Replace index.astro content with home-new.astro content
 # 2. Delete home-new.astro
@@ -226,6 +234,7 @@ echo "/home-new / 301" >> public/_redirects
 ```
 
 **If `control` wins (old design):**
+
 ```bash
 # 1. Remove the anti-flicker script and tracking script from index.astro
 # 2. Delete home-new.astro

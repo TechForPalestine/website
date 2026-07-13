@@ -16,55 +16,73 @@ const amounts = [
 ---
 
 <section class="px-4 pb-4 min-[810px]:px-6 min-[810px]:pb-6" aria-labelledby="cta-heading">
-  <div class="cta-wrapper rounded-3xl bg-ink-dark pt-14 pb-14 min-[810px]:pt-20 min-[810px]:pb-20">
+  <div class="cta-wrapper rounded-3xl bg-ink-dark pb-14 pt-14 min-[810px]:pb-20 min-[810px]:pt-20">
     <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
-
       <div class="cta-hero mx-auto max-w-[640px] text-center">
-        <h2 id="cta-heading" class="ts-editorial text-page leading-[1.2]">
+        <h2 id="cta-heading" class="ts-editorial leading-[1.2] text-page">
           You've seen what we've built.<br />
           <span class="text-brand-light">Now build with us.</span>
         </h2>
-        <p class="ts-body mt-6 text-page/60 max-w-[480px] mx-auto leading-relaxed">
-          Join the coalition of professionals turning their skills into tools for liberation. The impact is real.
+        <p class="ts-body mx-auto mt-6 max-w-[480px] leading-relaxed text-page/60">
+          Join the coalition of professionals turning their skills into tools for liberation. The
+          impact is real.
         </p>
-        <p class="ts-body-small mt-4 text-page/50 max-w-[480px] mx-auto leading-relaxed">
-          {membershipLive
-            ? "Join to support our mission and get access to our member Hub, where you can volunteer your skills, connect with the community and receive advanced updates."
-            : "Join to support our mission. Volunteer your skills, connect with the community and make an impact."}
+        <p class="ts-body-small mx-auto mt-4 max-w-[480px] leading-relaxed text-page/50">
+          {
+            membershipLive
+              ? "Join to support our mission and get access to our member Hub, where you can volunteer your skills, connect with the community and receive advanced updates."
+              : "Join to support our mission. Volunteer your skills, connect with the community and make an impact."
+          }
         </p>
         <div class="mt-10">
-          {membershipLive
-            ? <Button href="/membership-new" variant="primary" size="lg" arrow>Become a member</Button>
-            : <Button href="/get-involved-new" variant="primary" size="lg" arrow>Get involved</Button>}
+          {
+            membershipLive ? (
+              <Button href="/membership-new" variant="primary" size="lg" arrow>
+                Become a member
+              </Button>
+            ) : (
+              <Button href="/get-involved-new" variant="primary" size="lg" arrow>
+                Get involved
+              </Button>
+            )
+          }
         </div>
       </div>
 
-      <div class="cta-donate mt-20 rounded-[20px] border border-page/20 bg-ink-dark p-6 min-[810px]:p-8 min-[810px]:mt-24">
+      <div
+        class="cta-donate mt-20 rounded-[20px] border border-page/20 bg-ink-dark p-6 min-[810px]:mt-24 min-[810px]:p-8"
+      >
         <p class="ts-body-small text-page/50">Can't join right now?</p>
-        <h3 class="ts-quote text-page mt-2">Donate to keep it running</h3>
-        <p class="ts-body mt-3 text-page/50 max-w-[420px] leading-relaxed">
-          One-time or recurring. Your donation helps us scale existing projects and launch new supported initiatives for a free Palestine.
+        <h3 class="ts-quote mt-2 text-page">Donate to keep it running</h3>
+        <p class="ts-body mt-3 max-w-[420px] leading-relaxed text-page/50">
+          One-time or recurring. Your donation helps us scale existing projects and launch new
+          supported initiatives for a free Palestine.
         </p>
 
         <div class="mt-6 flex flex-wrap gap-3">
-          {amounts.map((a) => (
-            <a
-              href={a.href}
-              class="ts-label inline-flex items-center justify-center rounded-pill border border-page/20 px-6 py-3 text-page transition-colors duration-150 hover:border-page/40 hover:bg-page/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-h-[44px]"
-            >
-              {a.label}
-            </a>
-          ))}
+          {
+            amounts.map((a) => (
+              <a
+                href={a.href}
+                class="ts-label inline-flex min-h-[44px] items-center justify-center rounded-pill border border-page/20 px-6 py-3 text-page transition-colors duration-150 hover:border-page/40 hover:bg-page/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                {a.label}
+              </a>
+            ))
+          }
         </div>
 
         <p class="ts-body-small mt-6 text-page/50">
           T4P is a 501(c)(3). Donations are tax deductible in the US.
         </p>
         <p class="ts-body-small mt-2 text-page/50">
-          <a href="/donate-new?variant=validaid" class="text-brand-light hover:underline inline-flex items-center min-h-[44px]" aria-label="Donate in the UK with Gift Aid">Click here</a> to donate in the UK with Gift Aid.
+          <a
+            href="/donate-new?variant=validaid"
+            class="inline-flex min-h-[44px] items-center text-brand-light hover:underline"
+            aria-label="Donate in the UK with Gift Aid">Click here</a
+          > to donate in the UK with Gift Aid.
         </p>
       </div>
-
     </div>
   </div>
 </section>
@@ -73,7 +91,8 @@ const amounts = [
   .cta-hero {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .cta-hero.in-view {
@@ -84,7 +103,8 @@ const amounts = [
   .cta-donate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.15s,
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.15s,
       translate 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.15s;
   }
   .cta-donate.in-view {
@@ -121,5 +141,7 @@ const amounts = [
     { threshold: 0.15 }
   );
 
-  document.querySelectorAll<HTMLElement>(".cta-hero, .cta-donate").forEach((el) => ctaObs.observe(el));
+  document
+    .querySelectorAll<HTMLElement>(".cta-hero, .cta-donate")
+    .forEach((el) => ctaObs.observe(el));
 </script>

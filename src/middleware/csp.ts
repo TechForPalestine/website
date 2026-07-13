@@ -2,7 +2,10 @@ import { defineMiddleware } from "astro:middleware";
 
 // HTMLRewriter is a Cloudflare Workers global — not available in Node types
 declare const HTMLRewriter: new () => {
-  on(selector: string, handlers: { element(el: { setAttribute(name: string, value: string): void }): void }): typeof HTMLRewriter.prototype;
+  on(
+    selector: string,
+    handlers: { element(el: { setAttribute(name: string, value: string): void }): void }
+  ): typeof HTMLRewriter.prototype;
   transform(response: Response): Response;
 };
 

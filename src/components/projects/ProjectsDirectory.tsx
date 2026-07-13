@@ -24,10 +24,7 @@ function LoadingGrid() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div
-          key={i}
-          className="h-56 animate-pulse rounded-[20px] border border-butter bg-sand"
-        />
+        <div key={i} className="h-56 animate-pulse rounded-[20px] border border-butter bg-sand" />
       ))}
     </div>
   );
@@ -93,9 +90,7 @@ export default function ProjectsDirectory({
 
   const handleTagToggle = (tag: Tag) => {
     setActiveTags((prev) =>
-      prev.some((t) => t.id === tag.id)
-        ? prev.filter((t) => t.id !== tag.id)
-        : [...prev, tag]
+      prev.some((t) => t.id === tag.id) ? prev.filter((t) => t.id !== tag.id) : [...prev, tag]
     );
   };
 
@@ -112,7 +107,7 @@ export default function ProjectsDirectory({
 
   return (
     <>
-      <div className="px-6 pt-10 pb-14 min-[810px]:px-10 min-[810px]:pt-12 min-[810px]:pb-20">
+      <div className="px-6 pb-14 pt-10 min-[810px]:px-10 min-[810px]:pb-20 min-[810px]:pt-12">
         <div className="mx-auto max-w-[1400px]">
           {/* Toolbar */}
           <div className="mb-8 flex flex-col gap-5">
@@ -164,11 +159,7 @@ export default function ProjectsDirectory({
               {mainProjects.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {mainProjects.map((project) => (
-                    <ProjectCard
-                      key={project.id}
-                      project={project}
-                      onClick={handleCardClick}
-                    />
+                    <ProjectCard key={project.id} project={project} onClick={handleCardClick} />
                   ))}
                 </div>
               ) : isFiltering ? (

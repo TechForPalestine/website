@@ -27,50 +27,85 @@ const photos = [
 ];
 ---
 
-<section class="overflow-x-clip bg-page px-6 pt-14 pb-14 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-20">
+<section
+  class="overflow-x-clip bg-page px-6 pb-14 pt-14 min-[810px]:px-10 min-[810px]:pb-20 min-[810px]:pt-20"
+>
   <div class="mx-auto max-w-[1400px]">
     <!-- Motif row -->
-    <div class="mb-10 flex items-center -space-x-[18px] sm:-space-x-[24px] min-[810px]:-space-x-[30px] motif-row" role="presentation" aria-hidden="true">
-      {[1, 2, 3, 4].map((_, i) => (
-        <img src="/images/logo.avif" alt="" width="128" height="163" loading="lazy" decoding="async" class={`w-20 sm:w-24 min-[810px]:w-32 shrink-0 motif-icon${i === 3 ? " hidden sm:block" : ""}`} data-index={i} />
-      ))}
+    <div
+      class="motif-row mb-10 flex items-center -space-x-[18px] sm:-space-x-[24px] min-[810px]:-space-x-[30px]"
+      role="presentation"
+      aria-hidden="true"
+    >
+      {
+        [1, 2, 3, 4].map((_, i) => (
+          <img
+            src="/images/logo.avif"
+            alt=""
+            width="128"
+            height="163"
+            loading="lazy"
+            decoding="async"
+            class={`w-20 shrink-0 sm:w-24 min-[810px]:w-32 motif-icon${i === 3 ? " hidden sm:block" : ""}`}
+            data-index={i}
+          />
+        ))
+      }
     </div>
 
     <!-- Editorial headline -->
-    <h2 class="ts-editorial mb-14 max-w-[52ch] text-ink min-[810px]:mb-20 manifesto-headline">
-      <span class="manifesto-text-a">Thousands of founders, tech workers, business professionals and advocates building tools and products that </span><span class="manifesto-text-b text-brand">protect, inform, resist, and rebuild.</span>
+    <h2 class="ts-editorial manifesto-headline mb-14 max-w-[52ch] text-ink min-[810px]:mb-20">
+      <span class="manifesto-text-a"
+        >Thousands of founders, tech workers, business professionals and advocates building tools
+        and products that
+      </span><span class="manifesto-text-b text-brand">protect, inform, resist, and rebuild.</span>
     </h2>
   </div>
 
   <!-- Stats + collage wrapper -->
   <div class="mx-auto max-w-[1400px]">
-    <dl class="stats-grid grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 min-[810px]:px-12 min-[810px]:pt-12 lg:grid-cols-5 lg:pb-64">
-      {stats.map((s) => (
-        <div class="last:col-span-2 sm:last:col-span-1">
-          <dt class="ts-stat text-ink" aria-label={`${s.value}+`}>
-            <span class="stat-value" data-target={s.value} aria-hidden="true">{s.value}</span><span class="text-brand" aria-hidden="true">+</span>
-          </dt>
-          <dd class="ts-body-large mt-1.5 text-ink-secondary">{s.label}</dd>
-        </div>
-      ))}
+    <dl
+      class="stats-grid grid grid-cols-2 gap-x-8 gap-y-8 rounded-lg bg-sand px-8 pb-56 pt-10 sm:grid-cols-3 min-[810px]:px-12 min-[810px]:pt-12 lg:grid-cols-5 lg:pb-64"
+    >
+      {
+        stats.map((s) => (
+          <div class="last:col-span-2 sm:last:col-span-1">
+            <dt class="ts-stat text-ink" aria-label={`${s.value}+`}>
+              <>
+                <span class="stat-value" data-target={s.value} aria-hidden="true">
+                  {s.value}
+                </span>
+                <span class="text-brand" aria-hidden="true">
+                  +
+                </span>
+              </>
+            </dt>
+            <dd class="ts-body-large mt-1.5 text-ink-secondary">{s.label}</dd>
+          </div>
+        ))
+      }
     </dl>
 
     <!-- Photo collage — pulled up over the stats padding -->
     <div class="relative -mt-48 lg:-mt-56">
       <div class="flex items-end justify-center">
-        {photos.map((p, i) => (
-          <div class={`collage-card collage-card-${i + 1} flex-1 overflow-hidden rounded-lg${i === 1 ? " hidden lg:block" : ""}${i === 3 ? " hidden sm:block" : ""}`}>
-            <img
-              src={p.src}
-              alt={p.alt}
-              width="400"
-              height="400"
-              loading="lazy"
-              class="h-[370px] w-full object-cover animate-ken-burns motion-reduce:animate-none"
-              decoding="async"
-            />
-          </div>
-        ))}
+        {
+          photos.map((p, i) => (
+            <div
+              class={`collage-card collage-card-${i + 1} flex-1 overflow-hidden rounded-lg${i === 1 ? " hidden lg:block" : ""}${i === 3 ? " hidden sm:block" : ""}`}
+            >
+              <img
+                src={p.src}
+                alt={p.alt}
+                width="400"
+                height="400"
+                loading="lazy"
+                class="animate-ken-burns h-[370px] w-full object-cover motion-reduce:animate-none"
+                decoding="async"
+              />
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
@@ -140,7 +175,9 @@ const photos = [
   const statsGrid = document.querySelector(".stats-grid");
   if (statsGrid) {
     const values = statsGrid.querySelectorAll<HTMLElement>(".stat-value");
-    values.forEach((el) => { el.textContent = "0"; });
+    values.forEach((el) => {
+      el.textContent = "0";
+    });
 
     const statsObserver = new IntersectionObserver(
       (entries) => {

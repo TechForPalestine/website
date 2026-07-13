@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 import MembershipCalculator from "./MembershipCalculator";
 
 const teams = [
   {
     name: "Coaching for Palestinian Entrepreneurs",
-    description:
-      "Helping Palestinian entrepreneurs build job skills for professional growth.",
+    description: "Helping Palestinian entrepreneurs build job skills for professional growth.",
   },
   {
     name: "Tech Accountability",
@@ -30,8 +24,7 @@ const teams = [
   },
   {
     name: "T4P Hackathons",
-    description:
-      "Kickstarting software solutions to movement problems.",
+    description: "Kickstarting software solutions to movement problems.",
   },
   {
     name: "Palestine Datasets",
@@ -133,15 +126,24 @@ export default function MembershipPage() {
       <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
         Becoming a member is the best way to support Tech for Palestine.
       </Typography>
-      <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+      <Typography
+        variant="body1"
+        sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+      >
         Members support T4P's work through dues and by joining teams to scale the movement.
       </Typography>
-      <Typography variant="body1" sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Membership dues support all T4P initiatives, including the 90+ external projects
-        we support through the Incubator, and teams working on tech complicity. Our best known successes include
-        UpScrolled, Boycat, Find a Protest, Apricot, and Thaura AI.
+      <Typography
+        variant="body1"
+        sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+      >
+        Membership dues support all T4P initiatives, including the 90+ external projects we support
+        through the Incubator, and teams working on tech complicity. Our best known successes
+        include UpScrolled, Boycat, Find a Protest, Apricot, and Thaura AI.
       </Typography>
-      <Typography variant="body1" sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+      <Typography
+        variant="body1"
+        sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+      >
         You'll be invited to join <strong>Hub</strong>, our member portal, where you can:
       </Typography>
       <Box
@@ -160,8 +162,12 @@ export default function MembershipPage() {
         <li>Start a team of your own, with T4P support and resources to help you grow</li>
         <li>Join community events, like the T4P Book Club and other member meetups</li>
       </Box>
-      <Typography variant="body1" sx={{ mb: 5, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
-        Whether you're a thinker, builder, leader, software developer, marketer, or activist, there's a place for you to contribute in your own way.
+      <Typography
+        variant="body1"
+        sx={{ mb: 5, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+      >
+        Whether you're a thinker, builder, leader, software developer, marketer, or activist,
+        there's a place for you to contribute in your own way.
       </Typography>
 
       {/* Team cards */}
@@ -203,7 +209,10 @@ export default function MembershipPage() {
       <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
         Membership Dues
       </Typography>
-      <Typography variant="body1" sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}>
+      <Typography
+        variant="body1"
+        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+      >
         {showCalculator
           ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
           : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary."}
@@ -234,15 +243,15 @@ export default function MembershipPage() {
               border: "1px solid #e5e7eb",
             }}
           >
-            <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
+            >
               Inclusivity &amp; waivers
             </Typography>
             <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
               Tech for Palestine aims for inclusivity. Please contact{" "}
-              <a
-                href="mailto:membership@techforpalestine.org"
-                className="text-[#168039] underline"
-              >
+              <a href="mailto:membership@techforpalestine.org" className="text-[#168039] underline">
                 membership@techforpalestine.org
               </a>{" "}
               to request a waiver of dues in the following circumstances:
@@ -265,19 +274,18 @@ export default function MembershipPage() {
               <li>Being a T4P paid staff member</li>
             </Box>
             <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
-              If you are in the US, your dues are tax deductible. If you are in the UK, contact us at{" "}
-              <a
-                href="mailto:membership@techforpalestine.org"
-                className="text-[#168039] underline"
-              >
+              If you are in the US, your dues are tax deductible. If you are in the UK, contact us
+              at{" "}
+              <a href="mailto:membership@techforpalestine.org" className="text-[#168039] underline">
                 membership@techforpalestine.org
               </a>{" "}
-              after signup and we will ensure that future donations are processed through our gift aid
-              partner.
+              after signup and we will ensure that future donations are processed through our gift
+              aid partner.
             </Typography>
             <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 0 }}>
-              Options to pay via DAF, cryptocurrency, foundations, and other methods will be supported
-              in the future. We will help you migrate to your preferred method of giving once available.
+              Options to pay via DAF, cryptocurrency, foundations, and other methods will be
+              supported in the future. We will help you migrate to your preferred method of giving
+              once available.
             </Typography>
           </Box>
 
@@ -290,14 +298,17 @@ export default function MembershipPage() {
               border: "1px solid #d1fae5",
             }}
           >
-            <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
+            >
               Get in touch
             </Typography>
             <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75 }}>
               If you have questions, set up an{" "}
               <a
                 href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
-                className="text-[#168039] underline font-semibold"
+                className="font-semibold text-[#168039] underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -306,7 +317,7 @@ export default function MembershipPage() {
               or reach out to us at{" "}
               <a
                 href="mailto:membership@techforpalestine.org"
-                className="text-[#168039] underline font-semibold"
+                className="font-semibold text-[#168039] underline"
               >
                 membership@techforpalestine.org
               </a>

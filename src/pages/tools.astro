@@ -124,13 +124,17 @@ const bottomRow = [
     <div class="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2">
       <!-- Right Featured Card -->
       <div class="flex flex-col justify-center rounded-xl border bg-white p-6 shadow">
-        <img src={rightCard.logo} alt={rightCard.name} class="mb-4 max-h-48 w-full object-contain" />
+        <img
+          src={rightCard.logo}
+          alt={rightCard.name}
+          class="mb-4 max-h-48 w-full object-contain"
+        />
         <h3 class="mb-2 text-2xl font-bold text-green-900">{rightCard.name}</h3>
         <p class="mb-4 text-sm text-gray-700">{rightCard.desc}</p>
         <a
           href={rightCard.link}
           target="_blank"
-          class="inline-block rounded-full bg-green-800 px-4 py-1 text-sm text-white transition hover:bg-green-900 text-center"
+          class="inline-block rounded-full bg-green-800 px-4 py-1 text-center text-sm text-white transition hover:bg-green-900"
         >
           {rightCard.name}
         </a>

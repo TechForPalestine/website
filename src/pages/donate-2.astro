@@ -186,7 +186,9 @@ import "../styles/base.css";
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       if (typeof (window as any).plausible !== "undefined") {
-        (window as any).plausible("Donate Form", { props: { donate_form_variant: "charitystack" } });
+        (window as any).plausible("Donate Form", {
+          props: { donate_form_variant: "charitystack" },
+        });
       }
 
       const script = document.createElement("script");

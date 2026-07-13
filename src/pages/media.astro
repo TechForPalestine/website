@@ -136,46 +136,58 @@ const newsletters = [
         <div class="mb-8">
           <h4 class="mb-2 text-lg font-semibold text-gray-800">Official Logos</h4>
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {[
-              { src: "/logos/Logo.png", label: "Logo (PNG)", bg: "bg-white" },
-              { src: "/logos/Logo.svg", label: "Logo (SVG)", bg: "bg-white" },
-              { src: "/logos/Logo---Transparent.png", label: "Logo Transparent (PNG)", bg: "bg-white" },
-              { src: "/logos/Logo-dark.png", label: "Logo Dark (PNG)", bg: "bg-black" },
-              { src: "/logos/Mark.png", label: "Mark (PNG)", bg: "bg-white" },
-              { src: "/logos/Mark---Transparent.png", label: "Mark Transparent (PNG)", bg: "bg-white" },
-              { src: "/logos/Mark-dark.png", label: "Mark Dark (PNG)", bg: "bg-black" },
-              { src: "/logos/Colors.png", label: "Color Palette", bg: "bg-white" },
-            ].map(({ src, label, bg }) => (
-              <div class="group relative overflow-hidden rounded-lg border shadow-sm">
-                <img src={src} alt={label} class={`h-28 w-full object-contain p-2 ${bg}`} />
-                <div class="px-2 py-1 text-center text-xs text-gray-500">{label}</div>
-                <a
-                  href={src}
-                  download
-                  class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
-                >
-                  Download
-                </a>
-              </div>
-            ))}
+            {
+              [
+                { src: "/logos/Logo.png", label: "Logo (PNG)", bg: "bg-white" },
+                { src: "/logos/Logo.svg", label: "Logo (SVG)", bg: "bg-white" },
+                {
+                  src: "/logos/Logo---Transparent.png",
+                  label: "Logo Transparent (PNG)",
+                  bg: "bg-white",
+                },
+                { src: "/logos/Logo-dark.png", label: "Logo Dark (PNG)", bg: "bg-black" },
+                { src: "/logos/Mark.png", label: "Mark (PNG)", bg: "bg-white" },
+                {
+                  src: "/logos/Mark---Transparent.png",
+                  label: "Mark Transparent (PNG)",
+                  bg: "bg-white",
+                },
+                { src: "/logos/Mark-dark.png", label: "Mark Dark (PNG)", bg: "bg-black" },
+                { src: "/logos/Colors.png", label: "Color Palette", bg: "bg-white" },
+              ].map(({ src, label, bg }) => (
+                <div class="group relative overflow-hidden rounded-lg border shadow-sm">
+                  <img src={src} alt={label} class={`h-28 w-full object-contain p-2 ${bg}`} />
+                  <div class="px-2 py-1 text-center text-xs text-gray-500">{label}</div>
+                  <a
+                    href={src}
+                    download
+                    class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+                  >
+                    Download
+                  </a>
+                </div>
+              ))
+            }
           </div>
 
           <!-- Non-image downloads -->
           <div class="mt-4 flex flex-wrap gap-3">
-            {[
-              { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
-              { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
-              { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
-            ].map(({ href, label }) => (
-              <a
-                href={href}
-                download
-                class="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:bg-gray-50"
-              >
-                <Icon name="mdi:download" class="h-4 w-4" />
-                {label}
-              </a>
-            ))}
+            {
+              [
+                { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
+                { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
+                { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
+              ].map(({ href, label }) => (
+                <a
+                  href={href}
+                  download
+                  class="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:bg-gray-50"
+                >
+                  <Icon name="mdi:download" class="h-4 w-4" />
+                  {label}
+                </a>
+              ))
+            }
           </div>
         </div>
 

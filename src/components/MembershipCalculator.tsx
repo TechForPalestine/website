@@ -54,8 +54,12 @@ export default function MembershipCalculator() {
   const isUSD = currency === "USD";
   const numericIncome = parseFloat(income);
   const hasValidIncome = !isNaN(numericIncome) && numericIncome > 0;
-  const monthlyIncome = hasValidIncome ? (incomeType === "monthly" ? numericIncome : numericIncome / 12) : 0;
-  const suggestedMonthly = Math.round((monthlyIncome * 0.006) * 100) / 100;
+  const monthlyIncome = hasValidIncome
+    ? incomeType === "monthly"
+      ? numericIncome
+      : numericIncome / 12
+    : 0;
+  const suggestedMonthly = Math.round(monthlyIncome * 0.006 * 100) / 100;
   const suggestedAnnual = Math.round(suggestedMonthly * 12 * 100) / 100;
 
   return (
@@ -108,7 +112,11 @@ export default function MembershipCalculator() {
                 gap: 2,
                 "& .MuiFormControlLabel-label": { fontSize: "0.75rem", color: "#374151" },
                 "& .MuiFormControlLabel-root": { mr: 0 },
-                "& .MuiRadio-root": { p: 0.5, color: "#9ca3af", "&.Mui-checked": { color: "#168039" } },
+                "& .MuiRadio-root": {
+                  p: 0.5,
+                  color: "#9ca3af",
+                  "&.Mui-checked": { color: "#168039" },
+                },
               }}
             >
               <FormControlLabel value="monthly" control={<Radio size="small" />} label="Monthly" />
@@ -149,11 +157,16 @@ export default function MembershipCalculator() {
           }}
         >
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#166534", lineHeight: 1.3 }}>
+            <Typography
+              sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#166534", lineHeight: 1.3 }}
+            >
               Suggested Monthly Dues:
             </Typography>
-            <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold", color: "#168039", lineHeight: 1.2 }}>
-              {currencyData.symbol}{suggestedMonthly.toFixed(2)}
+            <Typography
+              sx={{ fontSize: "1.4rem", fontWeight: "bold", color: "#168039", lineHeight: 1.2 }}
+            >
+              {currencyData.symbol}
+              {suggestedMonthly.toFixed(2)}
             </Typography>
             {!isUSD && (
               <Typography sx={{ fontSize: "0.7rem", color: "#6b7280" }}>
@@ -162,11 +175,16 @@ export default function MembershipCalculator() {
             )}
           </Box>
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#166534", lineHeight: 1.3 }}>
+            <Typography
+              sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#166534", lineHeight: 1.3 }}
+            >
               Suggested Annual Dues:
             </Typography>
-            <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold", color: "#168039", lineHeight: 1.2 }}>
-              {currencyData.symbol}{suggestedAnnual.toFixed(2)}
+            <Typography
+              sx={{ fontSize: "1.4rem", fontWeight: "bold", color: "#168039", lineHeight: 1.2 }}
+            >
+              {currencyData.symbol}
+              {suggestedAnnual.toFixed(2)}
             </Typography>
             {!isUSD && (
               <Typography sx={{ fontSize: "0.7rem", color: "#6b7280" }}>

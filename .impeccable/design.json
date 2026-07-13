@@ -4,44 +4,293 @@
   "title": "Design System: Tech for Palestine",
   "extensions": {
     "colorMeta": {
-      "page":         { "role": "neutral",   "displayName": "Warm Parchment",    "canonical": "oklch(99% 0.005 80)",  "tonalRamp": ["oklch(15% 0.005 80)","oklch(30% 0.005 80)","oklch(45% 0.005 80)","oklch(60% 0.005 80)","oklch(75% 0.005 80)","oklch(88% 0.005 80)","oklch(95% 0.005 80)","oklch(99% 0.005 80)"] },
-      "cream":        { "role": "neutral",   "displayName": "Cream",             "canonical": "oklch(97% 0.008 65)",  "tonalRamp": ["oklch(15% 0.008 65)","oklch(30% 0.008 65)","oklch(45% 0.008 65)","oklch(60% 0.008 65)","oklch(75% 0.008 65)","oklch(88% 0.008 65)","oklch(94% 0.008 65)","oklch(97% 0.008 65)"] },
-      "butter":       { "role": "neutral",   "displayName": "Butter",            "canonical": "oklch(95% 0.015 75)",  "tonalRamp": ["oklch(15% 0.015 75)","oklch(30% 0.015 75)","oklch(45% 0.015 75)","oklch(60% 0.015 75)","oklch(75% 0.015 75)","oklch(87% 0.015 75)","oklch(92% 0.015 75)","oklch(95% 0.015 75)"] },
-      "sand":         { "role": "neutral",   "displayName": "Sand",              "canonical": "oklch(96% 0.010 80)",  "tonalRamp": ["oklch(15% 0.010 80)","oklch(30% 0.010 80)","oklch(45% 0.010 80)","oklch(60% 0.010 80)","oklch(75% 0.010 80)","oklch(88% 0.010 80)","oklch(93% 0.010 80)","oklch(96% 0.010 80)"] },
-      "ink":          { "role": "neutral",   "displayName": "Ink",               "canonical": "oklch(20% 0.008 350)", "tonalRamp": ["oklch(20% 0.008 350)","oklch(32% 0.008 350)","oklch(44% 0.008 350)","oklch(56% 0.008 350)","oklch(68% 0.008 350)","oklch(80% 0.008 350)","oklch(90% 0.008 350)","oklch(97% 0.008 350)"] },
-      "ink-dark":     { "role": "neutral",   "displayName": "Ink Dark",          "canonical": "oklch(17% 0.006 350)", "tonalRamp": ["oklch(17% 0.006 350)","oklch(29% 0.006 350)","oklch(41% 0.006 350)","oklch(53% 0.006 350)","oklch(65% 0.006 350)","oklch(78% 0.006 350)","oklch(89% 0.006 350)","oklch(96% 0.006 350)"] },
-      "ink-secondary":{ "role": "neutral",   "displayName": "Ink Secondary",     "canonical": "oklch(48% 0.012 350)", "tonalRamp": ["oklch(15% 0.012 350)","oklch(28% 0.012 350)","oklch(40% 0.012 350)","oklch(48% 0.012 350)","oklch(62% 0.012 350)","oklch(74% 0.012 350)","oklch(85% 0.012 350)","oklch(95% 0.012 350)"] },
-      "ink-muted":    { "role": "neutral",   "displayName": "Ink Muted",         "canonical": "oklch(74% 0.002 0)",   "tonalRamp": ["oklch(20% 0.002 0)","oklch(35% 0.002 0)","oklch(50% 0.002 0)","oklch(62% 0.002 0)","oklch(74% 0.002 0)","oklch(84% 0.002 0)","oklch(91% 0.002 0)","oklch(97% 0.002 0)"] },
-      "ink-divider":  { "role": "neutral",   "displayName": "Ink Divider",       "canonical": "oklch(85% 0.002 0)",   "tonalRamp": ["oklch(20% 0.002 0)","oklch(35% 0.002 0)","oklch(50% 0.002 0)","oklch(65% 0.002 0)","oklch(75% 0.002 0)","oklch(85% 0.002 0)","oklch(92% 0.002 0)","oklch(97% 0.002 0)"] },
-      "logo-frame":   { "role": "neutral",   "displayName": "Logo Frame",        "canonical": "oklch(92% 0.018 75)",  "tonalRamp": ["oklch(15% 0.018 75)","oklch(30% 0.018 75)","oklch(45% 0.018 75)","oklch(60% 0.018 75)","oklch(75% 0.018 75)","oklch(85% 0.018 75)","oklch(92% 0.018 75)","oklch(97% 0.010 75)"] },
-      "brand":        { "role": "primary",   "displayName": "Pomegranate",       "canonical": "oklch(50% 0.12 352)",  "tonalRamp": ["oklch(18% 0.12 352)","oklch(27% 0.12 352)","oklch(36% 0.12 352)","oklch(44% 0.12 352)","oklch(50% 0.12 352)","oklch(62% 0.12 352)","oklch(75% 0.10 352)","oklch(90% 0.06 352)"] },
-      "brand-hover":  { "role": "primary",   "displayName": "Pomegranate Light", "canonical": "oklch(57% 0.13 352)",  "tonalRamp": ["oklch(20% 0.13 352)","oklch(30% 0.13 352)","oklch(40% 0.13 352)","oklch(50% 0.13 352)","oklch(57% 0.13 352)","oklch(68% 0.11 352)","oklch(80% 0.08 352)","oklch(93% 0.04 352)"] },
-      "brand-light":  { "role": "primary",   "displayName": "Pomegranate on Dark","canonical": "oklch(65% 0.14 12)",   "tonalRamp": ["oklch(22% 0.14 12)","oklch(33% 0.14 12)","oklch(44% 0.14 12)","oklch(55% 0.14 12)","oklch(65% 0.14 12)","oklch(76% 0.11 12)","oklch(86% 0.07 12)","oklch(94% 0.03 12)"] }
+      "page": {
+        "role": "neutral",
+        "displayName": "Warm Parchment",
+        "canonical": "oklch(99% 0.005 80)",
+        "tonalRamp": [
+          "oklch(15% 0.005 80)",
+          "oklch(30% 0.005 80)",
+          "oklch(45% 0.005 80)",
+          "oklch(60% 0.005 80)",
+          "oklch(75% 0.005 80)",
+          "oklch(88% 0.005 80)",
+          "oklch(95% 0.005 80)",
+          "oklch(99% 0.005 80)"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Cream",
+        "canonical": "oklch(97% 0.008 65)",
+        "tonalRamp": [
+          "oklch(15% 0.008 65)",
+          "oklch(30% 0.008 65)",
+          "oklch(45% 0.008 65)",
+          "oklch(60% 0.008 65)",
+          "oklch(75% 0.008 65)",
+          "oklch(88% 0.008 65)",
+          "oklch(94% 0.008 65)",
+          "oklch(97% 0.008 65)"
+        ]
+      },
+      "butter": {
+        "role": "neutral",
+        "displayName": "Butter",
+        "canonical": "oklch(95% 0.015 75)",
+        "tonalRamp": [
+          "oklch(15% 0.015 75)",
+          "oklch(30% 0.015 75)",
+          "oklch(45% 0.015 75)",
+          "oklch(60% 0.015 75)",
+          "oklch(75% 0.015 75)",
+          "oklch(87% 0.015 75)",
+          "oklch(92% 0.015 75)",
+          "oklch(95% 0.015 75)"
+        ]
+      },
+      "sand": {
+        "role": "neutral",
+        "displayName": "Sand",
+        "canonical": "oklch(96% 0.010 80)",
+        "tonalRamp": [
+          "oklch(15% 0.010 80)",
+          "oklch(30% 0.010 80)",
+          "oklch(45% 0.010 80)",
+          "oklch(60% 0.010 80)",
+          "oklch(75% 0.010 80)",
+          "oklch(88% 0.010 80)",
+          "oklch(93% 0.010 80)",
+          "oklch(96% 0.010 80)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(20% 0.008 350)",
+        "tonalRamp": [
+          "oklch(20% 0.008 350)",
+          "oklch(32% 0.008 350)",
+          "oklch(44% 0.008 350)",
+          "oklch(56% 0.008 350)",
+          "oklch(68% 0.008 350)",
+          "oklch(80% 0.008 350)",
+          "oklch(90% 0.008 350)",
+          "oklch(97% 0.008 350)"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Ink Dark",
+        "canonical": "oklch(17% 0.006 350)",
+        "tonalRamp": [
+          "oklch(17% 0.006 350)",
+          "oklch(29% 0.006 350)",
+          "oklch(41% 0.006 350)",
+          "oklch(53% 0.006 350)",
+          "oklch(65% 0.006 350)",
+          "oklch(78% 0.006 350)",
+          "oklch(89% 0.006 350)",
+          "oklch(96% 0.006 350)"
+        ]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "oklch(48% 0.012 350)",
+        "tonalRamp": [
+          "oklch(15% 0.012 350)",
+          "oklch(28% 0.012 350)",
+          "oklch(40% 0.012 350)",
+          "oklch(48% 0.012 350)",
+          "oklch(62% 0.012 350)",
+          "oklch(74% 0.012 350)",
+          "oklch(85% 0.012 350)",
+          "oklch(95% 0.012 350)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "oklch(74% 0.002 0)",
+        "tonalRamp": [
+          "oklch(20% 0.002 0)",
+          "oklch(35% 0.002 0)",
+          "oklch(50% 0.002 0)",
+          "oklch(62% 0.002 0)",
+          "oklch(74% 0.002 0)",
+          "oklch(84% 0.002 0)",
+          "oklch(91% 0.002 0)",
+          "oklch(97% 0.002 0)"
+        ]
+      },
+      "ink-divider": {
+        "role": "neutral",
+        "displayName": "Ink Divider",
+        "canonical": "oklch(85% 0.002 0)",
+        "tonalRamp": [
+          "oklch(20% 0.002 0)",
+          "oklch(35% 0.002 0)",
+          "oklch(50% 0.002 0)",
+          "oklch(65% 0.002 0)",
+          "oklch(75% 0.002 0)",
+          "oklch(85% 0.002 0)",
+          "oklch(92% 0.002 0)",
+          "oklch(97% 0.002 0)"
+        ]
+      },
+      "logo-frame": {
+        "role": "neutral",
+        "displayName": "Logo Frame",
+        "canonical": "oklch(92% 0.018 75)",
+        "tonalRamp": [
+          "oklch(15% 0.018 75)",
+          "oklch(30% 0.018 75)",
+          "oklch(45% 0.018 75)",
+          "oklch(60% 0.018 75)",
+          "oklch(75% 0.018 75)",
+          "oklch(85% 0.018 75)",
+          "oklch(92% 0.018 75)",
+          "oklch(97% 0.010 75)"
+        ]
+      },
+      "brand": {
+        "role": "primary",
+        "displayName": "Pomegranate",
+        "canonical": "oklch(50% 0.12 352)",
+        "tonalRamp": [
+          "oklch(18% 0.12 352)",
+          "oklch(27% 0.12 352)",
+          "oklch(36% 0.12 352)",
+          "oklch(44% 0.12 352)",
+          "oklch(50% 0.12 352)",
+          "oklch(62% 0.12 352)",
+          "oklch(75% 0.10 352)",
+          "oklch(90% 0.06 352)"
+        ]
+      },
+      "brand-hover": {
+        "role": "primary",
+        "displayName": "Pomegranate Light",
+        "canonical": "oklch(57% 0.13 352)",
+        "tonalRamp": [
+          "oklch(20% 0.13 352)",
+          "oklch(30% 0.13 352)",
+          "oklch(40% 0.13 352)",
+          "oklch(50% 0.13 352)",
+          "oklch(57% 0.13 352)",
+          "oklch(68% 0.11 352)",
+          "oklch(80% 0.08 352)",
+          "oklch(93% 0.04 352)"
+        ]
+      },
+      "brand-light": {
+        "role": "primary",
+        "displayName": "Pomegranate on Dark",
+        "canonical": "oklch(65% 0.14 12)",
+        "tonalRamp": [
+          "oklch(22% 0.14 12)",
+          "oklch(33% 0.14 12)",
+          "oklch(44% 0.14 12)",
+          "oklch(55% 0.14 12)",
+          "oklch(65% 0.14 12)",
+          "oklch(76% 0.11 12)",
+          "oklch(86% 0.07 12)",
+          "oklch(94% 0.03 12)"
+        ]
+      }
     },
     "typographyMeta": {
-      "display":  { "displayName": "Display (.ts-display)",     "purpose": "Hero headline. Used once per page. Fraunces 42→52→60px." },
-      "headline": { "displayName": "Editorial (.ts-editorial)", "purpose": "Section-opening statements. Manifesto, portfolio header. Fraunces 36→42→48px." },
-      "title":    { "displayName": "Heading (.ts-heading)",     "purpose": "Project names, sub-section headings. Fraunces 32→36→38px." },
-      "body":     { "displayName": "Body Large (.ts-body-large)","purpose": "Primary body copy. Outfit 18→20px, line-height 1.48. Max 65-75ch." },
-      "label":    { "displayName": "Overline (.ts-overline)",   "purpose": "Section eyebrows, uppercase tracked annotations. Outfit 12px, 0.12em, uppercase. Distinct from button label (.ts-label, 16-18px, not uppercase) and the Fraunces eyebrow (.ts-eyebrow, 18-24px serif)." }
+      "display": {
+        "displayName": "Display (.ts-display)",
+        "purpose": "Hero headline. Used once per page. Fraunces 42→52→60px."
+      },
+      "headline": {
+        "displayName": "Editorial (.ts-editorial)",
+        "purpose": "Section-opening statements. Manifesto, portfolio header. Fraunces 36→42→48px."
+      },
+      "title": {
+        "displayName": "Heading (.ts-heading)",
+        "purpose": "Project names, sub-section headings. Fraunces 32→36→38px."
+      },
+      "body": {
+        "displayName": "Body Large (.ts-body-large)",
+        "purpose": "Primary body copy. Outfit 18→20px, line-height 1.48. Max 65-75ch."
+      },
+      "label": {
+        "displayName": "Overline (.ts-overline)",
+        "purpose": "Section eyebrows, uppercase tracked annotations. Outfit 12px, 0.12em, uppercase. Distinct from button label (.ts-label, 16-18px, not uppercase) and the Fraunces eyebrow (.ts-eyebrow, 18-24px serif)."
+      }
     },
     "shadows": [
-      { "name": "logo-frame-ambient", "value": "0 6px 20px rgba(0,0,0,0.06)",                           "purpose": "Rotated butter accent behind logo frames." },
-      { "name": "logo-frame-lift",    "value": "0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05)", "purpose": "Logo card foreground — structural lift over accent." }
+      {
+        "name": "logo-frame-ambient",
+        "value": "0 6px 20px rgba(0,0,0,0.06)",
+        "purpose": "Rotated butter accent behind logo frames."
+      },
+      {
+        "name": "logo-frame-lift",
+        "value": "0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05)",
+        "purpose": "Logo card foreground — structural lift over accent."
+      }
     ],
     "motion": [
-      { "name": "blur-in",      "value": "opacity 0 filter blur(12px) translateY(20px) → opacity 1 filter blur(0) translateY(0)", "duration": "1.2s", "easing": "ease-out", "purpose": "Hero headline entrance. Used for primary copy only." },
-      { "name": "fade-up",      "value": "opacity 0 translateY(12px) → opacity 1 translateY(0)",         "duration": "0.6s", "easing": "ease-out", "purpose": "CTA and logo entrance after headline." },
-      { "name": "card-in",      "value": "opacity 0 scale(0.96) → opacity 1 scale(1)",                   "duration": "0.8s", "easing": "ease-out", "purpose": "Hero glass card entrance." },
-      { "name": "ken-burns",    "value": "scale(1) → scale(1.08) → scale(1)",                            "duration": "14s",  "easing": "ease-in-out", "purpose": "Subtle image life. Full-bleed hero and collage photos only. Always motion-reduce:animate-none." },
-      { "name": "portfolio-in", "value": "opacity 0 translateY(32px) → opacity 1 translateY(0)",         "duration": "0.7s", "easing": "ease-out", "purpose": "Portfolio card scroll-triggered entrance." },
-      { "name": "fade-left",    "value": "opacity 0 translateX(-16px) → opacity 1 translateX(0)",        "duration": "0.6s", "easing": "ease-out", "purpose": "Motif row icon stagger." }
+      {
+        "name": "blur-in",
+        "value": "opacity 0 filter blur(12px) translateY(20px) → opacity 1 filter blur(0) translateY(0)",
+        "duration": "1.2s",
+        "easing": "ease-out",
+        "purpose": "Hero headline entrance. Used for primary copy only."
+      },
+      {
+        "name": "fade-up",
+        "value": "opacity 0 translateY(12px) → opacity 1 translateY(0)",
+        "duration": "0.6s",
+        "easing": "ease-out",
+        "purpose": "CTA and logo entrance after headline."
+      },
+      {
+        "name": "card-in",
+        "value": "opacity 0 scale(0.96) → opacity 1 scale(1)",
+        "duration": "0.8s",
+        "easing": "ease-out",
+        "purpose": "Hero glass card entrance."
+      },
+      {
+        "name": "ken-burns",
+        "value": "scale(1) → scale(1.08) → scale(1)",
+        "duration": "14s",
+        "easing": "ease-in-out",
+        "purpose": "Subtle image life. Full-bleed hero and collage photos only. Always motion-reduce:animate-none."
+      },
+      {
+        "name": "portfolio-in",
+        "value": "opacity 0 translateY(32px) → opacity 1 translateY(0)",
+        "duration": "0.7s",
+        "easing": "ease-out",
+        "purpose": "Portfolio card scroll-triggered entrance."
+      },
+      {
+        "name": "fade-left",
+        "value": "opacity 0 translateX(-16px) → opacity 1 translateX(0)",
+        "duration": "0.6s",
+        "easing": "ease-out",
+        "purpose": "Motif row icon stagger."
+      }
     ],
     "breakpoints": [
-      { "name": "sm",  "value": "640px",  "note": "Mobile collage and motif adjustments" },
-      { "name": "md",  "value": "810px",  "note": "Hero layout switch: mobile scroll → desktop glass card" },
-      { "name": "lg",  "value": "1024px", "note": "Portfolio card 2-col, collage all 4 visible" },
-      { "name": "xl",  "value": "1200px", "note": "Logo repositions to bottom-right in hero card; type scale top step" }
+      { "name": "sm", "value": "640px", "note": "Mobile collage and motif adjustments" },
+      {
+        "name": "md",
+        "value": "810px",
+        "note": "Hero layout switch: mobile scroll → desktop glass card"
+      },
+      { "name": "lg", "value": "1024px", "note": "Portfolio card 2-col, collage all 4 visible" },
+      {
+        "name": "xl",
+        "value": "1200px",
+        "note": "Logo repositions to bottom-right in hero card; type scale top step"
+      }
     ]
   },
   "components": [
@@ -105,14 +354,46 @@
       "Every screen ends with a clear, direct call to action"
     ],
     "rules": [
-      { "name": "The One Accent Rule",         "body": "Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.", "section": "colors" },
-      { "name": "The Single Dark Surface Rule","body": "Exactly one dark panel exists: the closing CTA (ink-dark #201D1E), with brand-light #E8727F as its on-dark accent. It earns its inversion by being the terminal call to action. Do not introduce dark sections elsewhere.", "section": "colors" },
-      { "name": "The Tonal Depth Rule",        "body": "Depth is created by stepping through the neutral stack (Parchment → Cream → Sand → Butter), not by drop shadows. Shadows are reserved for interactive elements that need structural lift.", "section": "colors" },
-      { "name": "The No Pure Values Rule",     "body": "Never use #000000 or #ffffff. Every neutral carries a warm tint. Pure values feel clinical; tinted neutrals feel inhabited.", "section": "colors" },
-      { "name": "The Fraunces Hierarchy Rule", "body": "Fraunces owns display, editorial, stat, heading, subheading, quote, and the serif eyebrow (.ts-eyebrow). Outfit owns all interface text: body, label, overline, caption. The serif never appears in a button or overline; the sans never appears in a headline or stat.", "section": "typography" },
-      { "name": "The Line Length Rule",        "body": "Body copy never exceeds 75 characters per line. On wide viewports, constrain with max-w-[75ch] or equivalent.", "section": "typography" },
-      { "name": "The Flat-By-Default Rule",    "body": "A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step solves the same problem.", "section": "elevation" },
-      { "name": "The No Nested Card Rule",     "body": "Never place a card inside a card. The logo frame within a portfolio card is a logo display element, not a card.", "section": "components" }
+      {
+        "name": "The One Accent Rule",
+        "body": "Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Single Dark Surface Rule",
+        "body": "Exactly one dark panel exists: the closing CTA (ink-dark #201D1E), with brand-light #E8727F as its on-dark accent. It earns its inversion by being the terminal call to action. Do not introduce dark sections elsewhere.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tonal Depth Rule",
+        "body": "Depth is created by stepping through the neutral stack (Parchment → Cream → Sand → Butter), not by drop shadows. Shadows are reserved for interactive elements that need structural lift.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Pure Values Rule",
+        "body": "Never use #000000 or #ffffff. Every neutral carries a warm tint. Pure values feel clinical; tinted neutrals feel inhabited.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fraunces Hierarchy Rule",
+        "body": "Fraunces owns display, editorial, stat, heading, subheading, quote, and the serif eyebrow (.ts-eyebrow). Outfit owns all interface text: body, label, overline, caption. The serif never appears in a button or overline; the sans never appears in a headline or stat.",
+        "section": "typography"
+      },
+      {
+        "name": "The Line Length Rule",
+        "body": "Body copy never exceeds 75 characters per line. On wide viewports, constrain with max-w-[75ch] or equivalent.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step solves the same problem.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No Nested Card Rule",
+        "body": "Never place a card inside a card. The logo frame within a portfolio card is a logo display element, not a card.",
+        "section": "components"
+      }
     ],
     "dos": [
       "Use Pomegranate (#AB4956) only on CTAs, brand emphasis, and active states",
