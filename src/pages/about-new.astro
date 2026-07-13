@@ -6,6 +6,18 @@ import Button from "../components/ui/Button.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const founderSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Paul Biggar",
+  jobTitle: "Founder",
+  worksFor: {
+    "@type": "NonprofitOrganization",
+    name: "Tech for Palestine",
+  },
+  sameAs: ["https://blog.paulbiggar.com/", "https://circleci.com", "https://darklang.com"],
+};
 ---
 
 <HomeLayout
@@ -13,6 +25,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   description="Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation."
   noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(founderSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
     <!-- Hero -->
