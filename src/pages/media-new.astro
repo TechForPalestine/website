@@ -7,19 +7,38 @@ import Button from "../components/ui/Button.astro";
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
 const logos = [
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/75/The_Guardian_2018.svg", alt: "The Guardian" },
-  { src: "https://e7.pngegg.com/pngimages/669/74/png-clipart-tc-techcrunch-logo-illustration-techcrunch-logo-icons-logos-emojis-iconic-brands.png", alt: "TechCrunch" },
-  { src: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Al_Jazeera_Media_Network_Logo.svg/1280px-Al_Jazeera_Media_Network_Logo.svg.png", alt: "Al Jazeera" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Inc._%28business_magazine%29_logo.svg", alt: "Inc." },
-  { src: "https://ssir.org/images/resources/SSIR_Logo.RGB_Black_984x234.png", alt: "Stanford Social Innovation Review" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/4f/TRT_World_logosu.png", alt: "TRT World" },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/7/75/The_Guardian_2018.svg",
+    alt: "The Guardian",
+  },
+  {
+    src: "https://e7.pngegg.com/pngimages/669/74/png-clipart-tc-techcrunch-logo-illustration-techcrunch-logo-icons-logos-emojis-iconic-brands.png",
+    alt: "TechCrunch",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Al_Jazeera_Media_Network_Logo.svg/1280px-Al_Jazeera_Media_Network_Logo.svg.png",
+    alt: "Al Jazeera",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Inc._%28business_magazine%29_logo.svg",
+    alt: "Inc.",
+  },
+  {
+    src: "https://ssir.org/images/resources/SSIR_Logo.RGB_Black_984x234.png",
+    alt: "Stanford Social Innovation Review",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/4/4f/TRT_World_logosu.png",
+    alt: "TRT World",
+  },
 ];
 
 const leadArticle = {
   publication: "Stanford Social Innovation Review",
   date: "2024",
   headline: "Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights",
-  standfirst: "A Stanford Social Innovation Review deep-dive into how Tech for Palestine's incubator model is backing founders building tools for human rights and Palestinian liberation.",
+  standfirst:
+    "A Stanford Social Innovation Review deep-dive into how Tech for Palestine's incubator model is backing founders building tools for human rights and Palestinian liberation.",
   url: "https://ssir.org/articles/entry/tech-against-genocide",
 };
 
@@ -28,7 +47,8 @@ const articles = [
     publication: "TechCrunch",
     date: "Jan 2024",
     headline: "Tech for Palestine launches to provide tools to help support Palestinians",
-    description: "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
+    description:
+      "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
     url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
   },
   {
@@ -46,7 +66,8 @@ const articles = [
   {
     publication: "TRT World",
     date: "2024",
-    headline: "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
+    headline:
+      "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
     url: "https://www.trtworld.com/video/18268907",
   },
   {
@@ -67,7 +88,8 @@ const articles = [
     publication: "Muslim Tech Wire",
     date: "Jan 2024",
     headline: "Tech for Palestine — A Global Call",
-    description: "Coverage of the initiative's mission to support Palestine through open-source tools.",
+    description:
+      "Coverage of the initiative's mission to support Palestine through open-source tools.",
     url: "https://muslimtechwire.com/tech-for-palestine-launches",
   },
   {
@@ -82,22 +104,26 @@ const interviews = [
   {
     id: "SZYxUoHYPIg",
     title: "Gaza Diaries: Paul Biggar & Dr. Omar Suleiman",
-    description: "Founder Paul Biggar joins Dr. Omar Suleiman to discuss the role of tech in the Palestinian liberation movement.",
+    description:
+      "Founder Paul Biggar joins Dr. Omar Suleiman to discuss the role of tech in the Palestinian liberation movement.",
   },
   {
     id: "LzXASFo-cf0",
     title: "How Big Tech Enables Israel's Crimes",
-    description: "A deep conversation on the relationship between the tech industry and Israeli military operations.",
+    description:
+      "A deep conversation on the relationship between the tech industry and Israeli military operations.",
   },
   {
     id: "lQ5DLKLqUtg",
     title: "Voices of Impact: Tech for Palestine's Journey",
-    description: "An inside look at how Tech for Palestine grew from a single blog post to a global coalition of advocates.",
+    description:
+      "An inside look at how Tech for Palestine grew from a single blog post to a global coalition of advocates.",
   },
   {
     id: "8mdYIozAgBw",
     title: "TRT World Interview",
-    description: "TRT World sits down with Tech for Palestine on tech accountability and advocacy amid the ongoing genocide.",
+    description:
+      "TRT World sits down with Tech for Palestine on tech accountability and advocacy amid the ongoing genocide.",
   },
 ];
 
@@ -114,25 +140,45 @@ const darkAssets = [
   { label: "Logo Dark", file: "/logos/Logo-dark.png" },
   { label: "Mark Dark", file: "/logos/Mark-dark.png" },
 ];
+
+const pressSchema = {
+  "@context": "https://schema.org",
+  "@type": "NonprofitOrganization",
+  name: "Tech for Palestine",
+  url: "https://techforpalestine.org",
+  subjectOf: [leadArticle, ...articles].map((a) => ({
+    "@type": "NewsArticle",
+    headline: a.headline,
+    url: a.url,
+    publisher: {
+      "@type": "Organization",
+      name: a.publication,
+    },
+  })),
+};
 ---
 
 <HomeLayout
   title="Media & Press"
   description="Interviews, news coverage, press kit, and media resources for Tech for Palestine."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(pressSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-
     <!-- Masthead hero: nameplate + logos + email -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-
         <!-- Nameplate -->
         <div class="media-animate mb-12 min-[810px]:mb-16">
           <p class="ts-overline mb-6 text-ink-secondary">Media &amp; Press</p>
           <h1 class="ts-editorial mb-6 text-ink">
-            Interviews, news coverage, and thought leadership about <span class="text-brand">Tech for Palestine</span>.
+            Interviews, news coverage, and thought leadership about <span class="text-brand"
+              >Tech for Palestine</span
+            >.
           </h1>
           <div class="mt-10 h-px w-full bg-ink-divider"></div>
         </div>
@@ -142,30 +188,40 @@ const darkAssets = [
           <p class="ts-overline mb-3 text-ink-secondary">Media inquiries</p>
           <a
             href="mailto:media@techforpalestine.org"
-            class="ts-heading text-brand hover:text-brand-hover transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand rounded-sm"
+            class="ts-heading rounded-sm text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             media@techforpalestine.org
           </a>
-          <p class="ts-body mt-3 text-ink-secondary">For press inquiries, interviews, or media requests, please contact:</p>
+          <p class="ts-body mt-3 text-ink-secondary">
+            For press inquiries, interviews, or media requests, please contact:
+          </p>
         </div>
 
         <!-- Press kit intro -->
-        <div class="media-animate mt-12 min-[810px]:mt-16 border-t border-ink-divider pt-12 min-[810px]:pt-16">
+        <div
+          class="media-animate mt-12 border-t border-ink-divider pt-12 min-[810px]:mt-16 min-[810px]:pt-16"
+        >
           <p class="ts-overline mb-4 text-ink-secondary">For media</p>
-          <h2 class="ts-heading text-ink mb-6">Press kit</h2>
-          <p class="ts-body-large text-ink-secondary max-w-[65ch] mb-4">
-            Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy projects for Palestinian liberation. Our community spans thousands of volunteers, engineers, designers, and advocates worldwide. Use the assets below in coverage, attribution, and partner materials.
+          <h2 class="ts-heading mb-6 text-ink">Press kit</h2>
+          <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
+            Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and advocacy
+            projects for Palestinian liberation. Our community spans thousands of volunteers,
+            engineers, designers, and advocates worldwide. Use the assets below in coverage,
+            attribution, and partner materials.
           </p>
-          <p class="ts-body text-ink-secondary max-w-[65ch] mb-8">
-            Tech for Palestine ("T4P") is a coalition of thousands of founders, engineers, product marketers, investors and other professionals who are working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine. We support projects — whether collections of individuals, registered non-profits, or even companies — whose mission helps Palestine, especially advocacy groups building technical products or in the tech space.
+          <p class="ts-body mb-8 max-w-[65ch] text-ink-secondary">
+            Tech for Palestine ("T4P") is a coalition of thousands of founders, engineers, product
+            marketers, investors and other professionals who are working in support of Palestinian
+            liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their
+            work towards a Free Palestine. We support projects — whether collections of individuals,
+            registered non-profits, or even companies — whose mission helps Palestine, especially
+            advocacy groups building technical products or in the tech space.
           </p>
           <div class="flex flex-wrap gap-4">
             <Button href="/tech_for_palestine_press_kit.pdf" variant="primary" size="md" arrow>
               Download press kit (PDF)
             </Button>
-            <Button href="/logos.zip" variant="ghost" size="md">
-              Download all logos (ZIP)
-            </Button>
+            <Button href="/logos.zip" variant="ghost" size="md"> Download all logos (ZIP) </Button>
           </div>
         </div>
 
@@ -174,51 +230,18 @@ const darkAssets = [
           <p class="ts-overline mb-6 text-ink-secondary">Official logos</p>
 
           <!-- Light logos -->
-          <ul class="grid grid-cols-2 gap-3 min-[540px]:grid-cols-3 min-[810px]:grid-cols-3 mb-4 list-none p-0">
-            {lightAssets.map((asset) => (
-              <li>
-                <a
-                  href={asset.file}
-                  download
-                  class="asset-tile group relative block rounded-[16px] border border-butter overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                >
-                  <div class="bg-white flex items-center justify-center p-3 h-36">
-                    <img
-                      src={asset.file}
-                      alt={asset.label}
-                      class="max-h-full max-w-full object-contain"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div class="bg-page px-3 py-2 border-t border-butter">
-                    <span class="ts-body-small text-ink">{asset.label}</span>
-                  </div>
-                  <div class="absolute inset-0 flex items-center justify-center bg-ink/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100" aria-hidden="true">
-                    <span class="ts-label text-page flex items-center gap-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                      </svg>
-                      Download
-                    </span>
-                  </div>
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <!-- Dark logo panel -->
-          <div class="rounded-[20px] bg-ink-dark px-6 py-8 min-[810px]:px-8 mb-6">
-            <p class="ts-overline mb-6 text-page/40">Dark variants · for use on dark backgrounds</p>
-            <ul class="grid grid-cols-2 gap-3 list-none p-0">
-              {darkAssets.map((asset) => (
+          <ul
+            class="mb-4 grid list-none grid-cols-2 gap-3 p-0 min-[540px]:grid-cols-3 min-[810px]:grid-cols-3"
+          >
+            {
+              lightAssets.map((asset) => (
                 <li>
                   <a
                     href={asset.file}
                     download
-                    class="dark-asset-tile group relative block rounded-[12px] border border-page/10 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                    class="asset-tile group relative block overflow-hidden rounded-[16px] border border-butter focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                   >
-                    <div class="flex items-center justify-center p-3 h-36">
+                    <div class="flex h-36 items-center justify-center bg-white p-3">
                       <img
                         src={asset.file}
                         alt={asset.label}
@@ -227,12 +250,23 @@ const darkAssets = [
                         decoding="async"
                       />
                     </div>
-                    <div class="px-3 py-2 border-t border-page/10">
-                      <span class="ts-body-small text-page/60">{asset.label}</span>
+                    <div class="border-t border-butter bg-page px-3 py-2">
+                      <span class="ts-body-small text-ink">{asset.label}</span>
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center bg-page/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" aria-hidden="true">
-                      <span class="ts-label text-page flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <div
+                      class="absolute inset-0 flex items-center justify-center bg-ink/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                      aria-hidden="true"
+                    >
+                      <span class="ts-label flex items-center gap-2 text-page">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
                         </svg>
                         Download
@@ -240,54 +274,116 @@ const darkAssets = [
                     </div>
                   </a>
                 </li>
-              ))}
+              ))
+            }
+          </ul>
+
+          <!-- Dark logo panel -->
+          <div class="mb-6 rounded-[20px] bg-ink-dark px-6 py-8 min-[810px]:px-8">
+            <p class="ts-overline mb-6 text-page/40">Dark variants · for use on dark backgrounds</p>
+            <ul class="grid list-none grid-cols-2 gap-3 p-0">
+              {
+                darkAssets.map((asset) => (
+                  <li>
+                    <a
+                      href={asset.file}
+                      download
+                      class="dark-asset-tile group relative block overflow-hidden rounded-[12px] border border-page/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                    >
+                      <div class="flex h-36 items-center justify-center p-3">
+                        <img
+                          src={asset.file}
+                          alt={asset.label}
+                          class="max-h-full max-w-full object-contain"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      <div class="border-t border-page/10 px-3 py-2">
+                        <span class="ts-body-small text-page/60">{asset.label}</span>
+                      </div>
+                      <div
+                        class="absolute inset-0 flex items-center justify-center bg-page/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                        aria-hidden="true"
+                      >
+                        <span class="ts-label flex items-center gap-2 text-page">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                          </svg>
+                          Download
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </div>
           <div class="flex flex-wrap gap-3">
-            {[
-              { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
-              { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
-              { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
-            ].map(({ href, label }) => (
-              <a
-                href={href}
-                download
-                class="ts-body-small inline-flex items-center gap-2 rounded-pill border border-ink-divider bg-page px-4 py-2.5 text-ink transition-colors duration-150 hover:border-ink hover:bg-butter focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                </svg>
-                {label}
-              </a>
-            ))}
+            {
+              [
+                { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
+                { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
+                { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
+              ].map(({ href, label }) => (
+                <a
+                  href={href}
+                  download
+                  class="ts-body-small inline-flex items-center gap-2 rounded-pill border border-ink-divider bg-page px-4 py-2.5 text-ink transition-colors duration-150 hover:border-ink hover:bg-butter focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                  </svg>
+                  {label}
+                </a>
+              ))
+            }
           </div>
         </div>
-
       </div>
     </section>
 
     <!-- In the press -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-
         <!-- Publication logos -->
-        <div class="media-animate border-t border-b border-ink-divider py-8 mb-12 min-[810px]:mb-16">
+        <div
+          class="media-animate mb-12 border-b border-t border-ink-divider py-8 min-[810px]:mb-16"
+        >
           <ul
-            class="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 list-none p-0 w-full"
+            class="flex w-full list-none flex-wrap items-center justify-center gap-x-10 gap-y-8 p-0"
             role="list"
             aria-label="Publications that have covered Tech for Palestine"
           >
-            {logos.map((logo) => (
-              <li class="flex items-center">
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  loading="lazy"
-                  decoding="async"
-                  class="w-[120px] min-[810px]:w-[160px] object-contain"
-                />
-              </li>
-            ))}
+            {
+              logos.map((logo) => (
+                <li class="flex items-center">
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="w-[120px] object-contain min-[810px]:w-[160px]"
+                  />
+                </li>
+              ))
+            }
           </ul>
         </div>
 
@@ -302,20 +398,29 @@ const darkAssets = [
             href={leadArticle.url}
             target="_blank"
             rel="noopener noreferrer"
-            class="lead-card block rounded-[20px] border border-butter bg-page p-8 min-[810px]:p-12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            class="lead-card block rounded-[20px] border border-butter bg-page p-8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-[810px]:p-12"
           >
-            <div class="grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_auto] min-[810px]:items-end">
+            <div
+              class="grid grid-cols-1 gap-6 min-[810px]:grid-cols-[1fr_auto] min-[810px]:items-end"
+            >
               <div>
-                <p class="ts-caption text-ink-secondary mb-6">
-                  <span class="inline-block rounded border border-ink-divider px-2 py-0.5 ts-overline text-ink-secondary mr-3">Lead story</span>
+                <p class="ts-caption mb-6 text-ink-secondary">
+                  <span
+                    class="ts-overline mr-3 inline-block rounded border border-ink-divider px-2 py-0.5 text-ink-secondary"
+                    >Lead story</span
+                  >
                   {leadArticle.publication}
                   <span class="mx-1.5" aria-hidden="true">·</span>
                   {leadArticle.date}
                 </p>
-                <h3 class="ts-heading text-ink mb-4 max-w-[40ch] leading-snug">{leadArticle.headline}</h3>
-                <p class="ts-body text-ink-secondary max-w-[65ch]">{leadArticle.standfirst}</p>
+                <h3 class="ts-heading mb-4 max-w-[40ch] leading-snug text-ink">
+                  {leadArticle.headline}
+                </h3>
+                <p class="ts-body max-w-[65ch] text-ink-secondary">{leadArticle.standfirst}</p>
               </div>
-              <span class="ts-label flex items-center gap-2 text-brand whitespace-nowrap min-[810px]:self-end">
+              <span
+                class="ts-label flex items-center gap-2 whitespace-nowrap text-brand min-[810px]:self-end"
+              >
                 Read article<span class="sr-only"> (opens in new tab)</span>
                 <svg
                   width="16"
@@ -326,7 +431,7 @@ const darkAssets = [
                   stroke-width="2"
                   aria-hidden="true"
                 >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
+                  <path d="M5 12h14M13 6l6 6-6 6"></path>
                 </svg>
               </span>
             </div>
@@ -335,78 +440,83 @@ const darkAssets = [
 
         <!-- Coverage grid -->
         <ul
-          class="grid grid-cols-1 gap-4 min-[810px]:grid-cols-2 lg:grid-cols-3 list-none p-0"
+          class="grid list-none grid-cols-1 gap-4 p-0 min-[810px]:grid-cols-2 lg:grid-cols-3"
           role="list"
         >
-          {articles.map((article, i) => (
-            <li class="media-animate flex">
-              <a
-                href={article.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="press-card flex flex-1 flex-col rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                <p class="ts-caption text-ink-secondary mb-5">
-                  {article.publication}
-                  <span class="mx-1.5" aria-hidden="true">·</span>
-                  {article.date}
-                </p>
-                <h3 class="ts-subheading text-ink leading-snug">{article.headline}</h3>
-                {article.description && (
-                  <p class="ts-body-small text-ink-secondary mt-2 flex-1">{article.description}</p>
-                )}
-                <span class="ts-label mt-6 flex items-center gap-2 text-brand">
-                  Read article<span class="sr-only"> (opens in new tab)</span>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </span>
-              </a>
-            </li>
-          ))}
+          {
+            articles.map((article, i) => (
+              <li class="media-animate flex">
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="press-card flex flex-1 flex-col rounded-[20px] border border-butter bg-sand p-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-[810px]:p-8"
+                >
+                  <p class="ts-caption mb-5 text-ink-secondary">
+                    {article.publication}
+                    <span class="mx-1.5" aria-hidden="true">
+                      ·
+                    </span>
+                    {article.date}
+                  </p>
+                  <h3 class="ts-subheading leading-snug text-ink">{article.headline}</h3>
+                  {article.description && (
+                    <p class="ts-body-small mt-2 flex-1 text-ink-secondary">
+                      {article.description}
+                    </p>
+                  )}
+                  <span class="ts-label mt-6 flex items-center gap-2 text-brand">
+                    Read article<span class="sr-only"> (opens in new tab)</span>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
         </ul>
-
       </div>
     </section>
 
     <!-- Interviews -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-
         <div class="media-animate mb-12 min-[810px]:mb-16">
           <p class="ts-overline mb-4 text-ink-secondary">On camera</p>
           <h2 class="ts-editorial text-ink">Interviews</h2>
         </div>
 
         <div class="grid grid-cols-1 gap-8 min-[810px]:grid-cols-2">
-          {interviews.map((interview) => (
-            <div class="media-animate">
-              <div data-lenis-prevent class="rounded-[20px] overflow-hidden">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${interview.id}`}
-                  title={interview.title}
-                  class="aspect-video w-full"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
+          {
+            interviews.map((interview) => (
+              <div class="media-animate">
+                <div data-lenis-prevent class="overflow-hidden rounded-[20px]">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${interview.id}`}
+                    title={interview.title}
+                    class="aspect-video w-full"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                </div>
+                <div class="mt-4 px-1">
+                  <p class="ts-label mb-1 text-ink">{interview.title}</p>
+                  <p class="ts-body-small text-ink-secondary">{interview.description}</p>
+                </div>
               </div>
-              <div class="mt-4 px-1">
-                <p class="ts-label text-ink mb-1">{interview.title}</p>
-                <p class="ts-body-small text-ink-secondary">{interview.description}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
-
       </div>
     </section>
 
@@ -415,9 +525,10 @@ const darkAssets = [
       <div class="mx-auto max-w-[680px]">
         <div class="media-animate">
           <p class="ts-overline mb-4 text-ink-secondary">Stay informed</p>
-          <h2 class="ts-heading text-ink mb-6">Newsletter archive</h2>
-          <p class="ts-body-large text-ink-secondary mb-8">
-            Browse past updates from Tech for Palestine to stay informed on recent campaigns and progress.
+          <h2 class="ts-heading mb-6 text-ink">Newsletter archive</h2>
+          <p class="ts-body-large mb-8 text-ink-secondary">
+            Browse past updates from Tech for Palestine to stay informed on recent campaigns and
+            progress.
           </p>
           <Button href="https://updates.techforpalestine.org/" variant="ghost" size="md" arrow>
             View newsletters
@@ -425,7 +536,6 @@ const darkAssets = [
         </div>
       </div>
     </section>
-
   </main>
 </HomeLayout>
 
@@ -433,7 +543,9 @@ const darkAssets = [
   .media-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .media-animate.in-view {
     opacity: 1;
@@ -466,10 +578,16 @@ const darkAssets = [
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll(".media-animate").forEach((el) => obs.observe(el));
 </script>

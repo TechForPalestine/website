@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 interface EventItem {
   id: string;
   title: string;
-  date: string;       // "YYYY-MM-DD" format
+  date: string; // "YYYY-MM-DD" format
   status: string;
   location: string;
   image: string;
@@ -22,8 +22,18 @@ interface DateParts {
 }
 
 const MONTH_NAMES = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 function parseDateParts(dateStr: string): DateParts {
@@ -54,7 +64,13 @@ function ArrowRight({ size = 16 }: { size?: number }) {
   );
 }
 
-function SectionLabel({ accent = false, children }: { accent?: boolean; children: React.ReactNode }) {
+function SectionLabel({
+  accent = false,
+  children,
+}: {
+  accent?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div className="mb-8 flex items-center gap-5">
       <p className={`ts-overline shrink-0 ${accent ? "text-brand" : "text-ink-secondary"}`}>
@@ -69,7 +85,7 @@ function LoadingSkeleton() {
   return (
     <div>
       {/* Hero skeleton */}
-      <section className="bg-page px-6 pt-10 pb-14 min-[810px]:px-10 min-[810px]:pt-12 min-[810px]:pb-16">
+      <section className="bg-page px-6 pb-14 pt-10 min-[810px]:px-10 min-[810px]:pb-16 min-[810px]:pt-12">
         <div className="mx-auto max-w-[1400px]">
           <div className="mb-8 flex items-center gap-5">
             <div className="h-3 w-20 animate-pulse rounded-pill bg-butter" />
@@ -90,7 +106,7 @@ function LoadingSkeleton() {
       </section>
 
       {/* Archive row skeletons */}
-      <section className="bg-page px-6 pt-12 pb-16 min-[810px]:px-10 min-[810px]:pb-24">
+      <section className="bg-page px-6 pb-16 pt-12 min-[810px]:px-10 min-[810px]:pb-24">
         <div className="mx-auto max-w-[1400px]">
           <div className="mb-8 flex items-center gap-5">
             <div className="h-3 w-12 animate-pulse rounded-pill bg-butter" />
@@ -148,8 +164,10 @@ function HeroEvent({ event }: HeroEventProps) {
       <div className="flex flex-col gap-4 p-8 min-[810px]:p-10">
         {/* Date block */}
         <div>
-          <p className="ts-stat text-brand leading-none">{day}</p>
-          <p className="ts-overline text-ink-secondary">{month} {year}</p>
+          <p className="ts-stat leading-none text-brand">{day}</p>
+          <p className="ts-overline text-ink-secondary">
+            {month} {year}
+          </p>
         </div>
 
         {/* Title */}
@@ -166,7 +184,7 @@ function HeroEvent({ event }: HeroEventProps) {
 
         {/* Description */}
         {event.description && (
-          <p className="ts-body text-ink-secondary line-clamp-3 max-w-[55ch]">
+          <p className="ts-body line-clamp-3 max-w-[55ch] text-ink-secondary">
             {event.description}
           </p>
         )}
@@ -213,32 +231,32 @@ function LineupTile({ event }: LineupTileProps) {
       </div>
       {/* Content */}
       <div className="flex flex-1 flex-col gap-2 p-5">
-      {/* Date */}
-      <div>
-        <p className="ts-heading text-brand leading-none">{day}</p>
-        <p className="ts-overline text-ink-secondary">{month} {year}</p>
-      </div>
+        {/* Date */}
+        <div>
+          <p className="ts-heading leading-none text-brand">{day}</p>
+          <p className="ts-overline text-ink-secondary">
+            {month} {year}
+          </p>
+        </div>
 
-      {/* Title */}
-      <h3 className="ts-eyebrow text-ink mt-1 line-clamp-2">{event.title}</h3>
+        {/* Title */}
+        <h3 className="ts-eyebrow mt-1 line-clamp-2 text-ink">{event.title}</h3>
 
-      {/* Location */}
-      {event.location && (
-        <p className="ts-body-small text-ink-secondary">{event.location}</p>
-      )}
+        {/* Location */}
+        {event.location && <p className="ts-body-small text-ink-secondary">{event.location}</p>}
 
-      {/* Register link */}
-      {event.registerLink && (
-        <a
-          href={event.registerLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ts-label mt-auto inline-flex min-h-[44px] items-center gap-1 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-        >
-          Register
-          <ArrowRight size={13} />
-        </a>
-      )}
+        {/* Register link */}
+        {event.registerLink && (
+          <a
+            href={event.registerLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ts-label mt-auto inline-flex min-h-[44px] items-center gap-1 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            Register
+            <ArrowRight size={13} />
+          </a>
+        )}
       </div>
     </article>
   );
@@ -252,7 +270,7 @@ function LineupStrip({ events }: LineupStripProps) {
   return (
     <>
       {/* Mobile: horizontal scroll */}
-      <div className="flex flex-row gap-4 overflow-x-auto snap-x snap-mandatory pb-4 min-[640px]:hidden">
+      <div className="flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto pb-4 min-[640px]:hidden">
         {events.map((event) => (
           <LineupTile key={event.id} event={event} />
         ))}
@@ -295,7 +313,9 @@ function PastEventCard({ event }: { event: EventItem }) {
           <div className="flex flex-wrap gap-x-5 gap-y-1">
             <span className="ts-body-small text-ink-secondary">{full}</span>
             {event.time && <span className="ts-body-small text-ink-secondary">{event.time}</span>}
-            {event.location && <span className="ts-body-small text-ink-secondary">{event.location}</span>}
+            {event.location && (
+              <span className="ts-body-small text-ink-secondary">{event.location}</span>
+            )}
           </div>
           {event.description && (
             <p className="ts-body line-clamp-3 text-ink-secondary">{event.description}</p>
@@ -318,9 +338,13 @@ function PastEventCard({ event }: { event: EventItem }) {
   );
 }
 
-export default function EventsNew() {
-  const [events, setEvents] = useState<EventItem[]>([]);
-  const [loading, setLoading] = useState(true);
+interface EventsNewProps {
+  initialEvents?: EventItem[];
+}
+
+export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
+  const [events, setEvents] = useState<EventItem[]>(initialEvents);
+  const [loading, setLoading] = useState(initialEvents.length === 0);
 
   const showAll =
     typeof window !== "undefined"
@@ -328,6 +352,7 @@ export default function EventsNew() {
       : false;
 
   useEffect(() => {
+    if (!showAll && initialEvents.length > 0) return;
     setLoading(true);
     fetch(showAll ? "/api/events?showAll=yes" : "/api/events", { cache: "no-cache" })
       .then((r) => (r.ok ? r.json() : []))
@@ -355,7 +380,7 @@ export default function EventsNew() {
           {/* Tier 1 — Hero */}
           {heroEvent && (
             <section
-              className="bg-page px-6 pt-10 pb-14 min-[810px]:px-10 min-[810px]:pt-12 min-[810px]:pb-16"
+              className="bg-page px-6 pb-14 pt-10 min-[810px]:px-10 min-[810px]:pb-16 min-[810px]:pt-12"
               aria-label="Featured upcoming event"
             >
               <div className="mx-auto max-w-[1400px]">
@@ -381,7 +406,7 @@ export default function EventsNew() {
           {/* Tier 3 — Archive */}
           {past.length > 0 && (
             <section
-              className="bg-page px-6 pt-12 pb-16 min-[810px]:px-10 min-[810px]:pb-24"
+              className="bg-page px-6 pb-16 pt-12 min-[810px]:px-10 min-[810px]:pb-24"
               aria-label="Past events"
             >
               <div className="mx-auto max-w-[1400px]">

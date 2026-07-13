@@ -6,12 +6,42 @@ import Button from "../components/ui/Button.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to volunteer with Tech for Palestine",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Submit your application",
+      text: "Complete the volunteer application form to be matched with the right project or team.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Join our Discord",
+      text: "Join the Discord server and community calls to connect with the movement.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Stay connected",
+      text: "Follow Tech for Palestine on Instagram, Twitter, LinkedIn, YouTube, GitHub, and Bluesky.",
+    },
+  ],
+};
 ---
 
 <HomeLayout
-  title="Get Involved"
+  title="Volunteer With Us | Tech for Palestine"
   description="Join the Tech for Palestine volunteer community. Apply your skills to projects that amplify Palestinian voices and support the movement for liberation."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -55,29 +85,33 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h2 class="ts-heading mb-8 text-ink">Why Volunteer with Us?</h2>
           <ul class="space-y-5">
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Make a direct impact by applying your skills to projects that amplify Palestinian
-              voices and uplift the cause.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Make a direct impact by applying your skills to projects that amplify Palestinian voices
+              and uplift the cause.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Join a global network of technologists, creatives, entrepreneurs, professionals, and
-              activists united by a commitment to justice and human dignity for Palestinians.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Join a global network of technologists, creatives, entrepreneurs, professionals, and activists
+              united by a commitment to justice and human dignity for Palestinians.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Develop professionally while working on meaningful initiatives that create lasting
-              positive change.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Develop professionally while working on meaningful initiatives that create lasting positive
+              change.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Connect with like-minded individuals through community spaces, events, and
-              collaborative projects.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Connect with like-minded individuals through community spaces, events, and collaborative
+              projects.
             </li>
             <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-              Transform concern into concrete action with measurable outcomes for Palestinian
-              communities.
+              <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"
+              ></span>
+              Transform concern into concrete action with measurable outcomes for Palestinian communities.
             </li>
           </ul>
         </div>
@@ -94,26 +128,44 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <div class="rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
               <h3 class="ts-label mb-4 text-ink">Ongoing Volunteers</h3>
               <ul class="space-y-3">
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Regularly contribute your skills and collaborate with our project and/or T4P teams.
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Assignments are typically a minimum of 3 months.
                 </li>
               </ul>
             </div>
             <div class="rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
-              <h3 class="ts-label mb-4 text-ink">Subject Matter Expert &amp; One-Off Limited Engagements</h3>
+              <h3 class="ts-label mb-4 text-ink">
+                Subject Matter Expert &amp; One-Off Limited Engagements
+              </h3>
               <ul class="space-y-3">
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
-                  Offer short-term expertise and consultation to support specific projects and/or
-                  internal T4P teams.
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
+                  Offer short-term expertise and consultation to support specific projects and/or internal
+                  T4P teams.
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   One-off short projects (eg. user-testing, website redesign/updates, data-entry).
                 </li>
               </ul>
@@ -134,13 +186,16 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <a
               href="https://techforpalestine.org/volunteer-form"
               class="font-medium text-brand underline hover:text-brand-hover"
-            >volunteer application form</a>{" "}
-            to get matched with the right project or team—even if you're not sure how you want to
-            contribute!{" "}
+              >volunteer application form</a
+            >{" "}
+            to get matched with the right project or team—even if you're not sure how you want to contribute!{
+              " "
+            }
             <a
               href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
               class="font-medium text-brand underline hover:text-brand-hover"
-            >Check out specific roles we're looking for right now!</a>
+              >Check out specific roles we're looking for right now!</a
+            >
           </p>
         </div>
       </div>
@@ -156,16 +211,28 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <div class="rounded-[20px] border border-butter bg-sand p-6 min-[810px]:p-8">
               <h3 class="ts-label mb-4 text-ink">What We Expect</h3>
               <ul class="space-y-3">
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   A commitment of your time and expertise.
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Active collaboration and clear communication.
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Timely notification of any changes to your availability.
                 </li>
               </ul>
@@ -173,12 +240,20 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <div class="rounded-[20px] border border-butter bg-cream p-6 min-[810px]:p-8">
               <h3 class="ts-label mb-4 text-ink">What We Don't Expect</h3>
               <ul class="space-y-3">
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Daily or rigid meeting attendance, unless essential for your role.
                 </li>
-                <li class="ts-body-small flex items-baseline gap-2 text-ink-secondary leading-relaxed">
-                  <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                <li
+                  class="ts-body-small flex items-baseline gap-2 leading-relaxed text-ink-secondary"
+                >
+                  <span
+                    class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
+                    aria-hidden="true"></span>
                   Exclusive commitment—you are welcome to engage in other initiatives.
                 </li>
               </ul>
@@ -196,7 +271,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h2 class="ts-heading mb-12 text-ink">Next Steps</h2>
           <ol class="max-w-[75ch] space-y-10">
             <li class="flex items-start gap-6 min-[810px]:gap-8">
-              <span class="ts-display shrink-0 leading-none text-brand opacity-[0.2]" aria-hidden="true">01</span>
+              <span
+                class="ts-display shrink-0 leading-none text-brand opacity-[0.2]"
+                aria-hidden="true">01</span
+              >
               <div class="pt-1">
                 <p class="ts-label mb-2 text-ink">Submit your application</p>
                 <p class="ts-body-large text-ink-secondary">
@@ -204,37 +282,74 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
                   <a
                     href="https://techforpalestine.org/volunteer-form"
                     class="font-medium text-brand underline hover:text-brand-hover"
-                  >application form</a>{" "}
+                    >application form</a
+                  >{" "}
                   to be matched with the right project or team.
                 </p>
               </div>
             </li>
             <li class="flex items-start gap-6 min-[810px]:gap-8">
-              <span class="ts-display shrink-0 leading-none text-brand opacity-[0.2]" aria-hidden="true">02</span>
+              <span
+                class="ts-display shrink-0 leading-none text-brand opacity-[0.2]"
+                aria-hidden="true">02</span
+              >
               <div class="pt-1">
                 <p class="ts-label mb-2 text-ink">Join our Discord</p>
                 <p class="ts-body-large text-ink-secondary">
                   <a
                     href="https://techforpalestine.org/discord-invite"
                     class="font-medium text-brand underline hover:text-brand-hover"
-                  >Join our Discord server</a>{" "}
+                    >Join our Discord server</a
+                  >{" "}
                   and community calls to connect with the movement.
                 </p>
               </div>
             </li>
             <li class="flex items-start gap-6 min-[810px]:gap-8">
-              <span class="ts-display shrink-0 leading-none text-brand opacity-[0.2]" aria-hidden="true">03</span>
+              <span
+                class="ts-display shrink-0 leading-none text-brand opacity-[0.2]"
+                aria-hidden="true">03</span
+              >
               <div class="pt-1">
                 <p class="ts-label mb-2 text-ink">Stay connected</p>
                 <p class="ts-body-large text-ink-secondary">
                   Follow us on{" "}
-                  <a href="https://www.instagram.com/techforpalestine" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">Instagram</a>,{" "}
-                  <a href="https://twitter.com/tech4palestine" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">Twitter</a>,{" "}
-                  <a href="https://www.linkedin.com/company/techforpalestine/" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">LinkedIn</a>,{" "}
-                  <a href="https://www.youtube.com/@tech4palestine" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">YouTube</a>,{" "}
-                  <a href="https://github.com/TechForPalestine/" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">GitHub</a>,{" "}
-                  <a href="https://bsky.app/profile/techforpalestine.org" class="text-brand underline hover:text-brand-hover" target="_blank" rel="noopener noreferrer">Bluesky</a>,
-                  and more.
+                  <a
+                    href="https://www.instagram.com/techforpalestine"
+                    class="text-brand underline hover:text-brand-hover"
+                    target="_blank"
+                    rel="noopener noreferrer">Instagram</a
+                  >,{" "}
+                  <a
+                    href="https://twitter.com/tech4palestine"
+                    class="text-brand underline hover:text-brand-hover"
+                    target="_blank"
+                    rel="noopener noreferrer">Twitter</a
+                  >,{" "}
+                  <a
+                    href="https://www.linkedin.com/company/techforpalestine/"
+                    class="text-brand underline hover:text-brand-hover"
+                    target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a
+                  >,{" "}
+                  <a
+                    href="https://www.youtube.com/@tech4palestine"
+                    class="text-brand underline hover:text-brand-hover"
+                    target="_blank"
+                    rel="noopener noreferrer">YouTube</a
+                  >,{" "}
+                  <a
+                    href="https://github.com/TechForPalestine/"
+                    class="text-brand underline hover:text-brand-hover"
+                    target="_blank"
+                    rel="noopener noreferrer">GitHub</a
+                  >,{" "}
+                  <a
+                    href="https://bsky.app/profile/techforpalestine.org"
+                    class="text-brand underline hover:text-brand-hover"
+                    target="_blank"
+                    rel="noopener noreferrer">Bluesky</a
+                  >, and more.
                 </p>
               </div>
             </li>

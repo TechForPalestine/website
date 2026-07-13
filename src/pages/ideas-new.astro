@@ -32,7 +32,8 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
 
 <HomeLayout
   title="Project Ideas"
-  description="Browse and lead project ideas that support Palestinian freedom. Tech for Palestine builds bold projects to support Palestinian advocacy and counter pro-Israel propaganda. Explore new ideas, existing projects, and initiatives that have already started."
+  description="Browse and lead Palestinian advocacy project ideas from the Tech for Palestine Incubator — new, existing, and already-started initiatives."
+  noindex={true}
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
@@ -45,14 +46,14 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
             Turn bold ideas into <span class="text-brand">real impact</span>
           </h1>
           <p class="ts-body-large text-ink-secondary">
-            Tech for Palestine builds bold projects to support Palestinian freedom and counter pro-Israel propaganda.
+            Tech for Palestine builds bold projects to support Palestinian freedom and counter
+            pro-Israel propaganda.
           </p>
           <p class="ts-body-large text-ink-secondary">
-            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to help make them real.
+            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to
+            help make them real.
           </p>
-          <p class="ts-body-large text-ink-secondary">
-            Explore the ideas below and get involved.
-          </p>
+          <p class="ts-body-large text-ink-secondary">Explore the ideas below and get involved.</p>
           <div class="mt-8 flex flex-wrap gap-3">
             <Button
               href="https://projecthub.techforpalestine.org/apply"
@@ -62,13 +63,11 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
             >
               Apply now
             </Button>
-            <Button href="/incubator-new" variant="ghost" size="md">
-              About the Incubator
-            </Button>
+            <Button href="/incubator-new" variant="ghost" size="md"> About the Incubator </Button>
           </div>
         </div>
 
-        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14"></div>
       </div>
     </section>
 
@@ -77,7 +76,7 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
         newIdeas={newIdeas}
         existingIdeas={existingIdeas}
         startedIdeas={startedIdeas}
-        client:only="react"
+        client:load
       />
     </section>
 
@@ -138,7 +137,9 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
   .page-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .page-animate.in-view {
     opacity: 1;
@@ -158,10 +159,16 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

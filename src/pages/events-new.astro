@@ -1,35 +1,81 @@
 ---
 import { getEnv } from "../utils/getEnv";
+import { fetchNotionEvents } from "../store/notionClient";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
 import EventsNewComponent from "../components/events/EventsNew";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+interface EventItem {
+  id: string;
+  title: string;
+  date: string;
+  status: string;
+  location: string;
+  image: string;
+  link: string;
+  time?: string;
+  description?: string;
+  registerLink?: string;
+  recordingLink?: string;
+}
+
+const events: EventItem[] = await fetchNotionEvents(false, Astro.locals).catch(() => []);
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const nextEvent = events.find((e) => new Date(e.date) >= today);
+
+const eventSchema = nextEvent && {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: nextEvent.title,
+  startDate: nextEvent.date,
+  eventStatus: "https://schema.org/EventScheduled",
+  location: nextEvent.location
+    ? { "@type": "Place", name: nextEvent.location }
+    : {
+        "@type": "VirtualLocation",
+        url: nextEvent.link || "https://techforpalestine.org/events-new",
+      },
+  description: nextEvent.description,
+  organizer: {
+    "@type": "NonprofitOrganization",
+    name: "Tech for Palestine",
+    url: "https://techforpalestine.org",
+  },
+};
 ---
 
 <HomeLayout
   title="Events"
-  description="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation. Join our community webinars, workshops, and networking sessions."
+  description="Tech for Palestine community events — webinars, workshops, and networking sessions for builders and organizers in the Palestinian liberation movement."
+  noindex={true}
 >
+  <Fragment slot="head">
+    {eventSchema && <script type="application/ld+json" set:html={JSON.stringify(eventSchema)} />}
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <section class="bg-sand px-6 pt-14 pb-12 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-16">
+    <section class="bg-sand px-6 pb-12 pt-14 min-[810px]:px-10 min-[810px]:pb-16 min-[810px]:pt-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="page-animate">
           <p class="ts-overline mb-5 text-ink-secondary">Tech for Palestine</p>
           <h1 class="ts-editorial mb-5 text-ink">Events</h1>
           <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-            Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action.
+            Tech for Palestine events bring together builders, organizers, and allies to
+            collaborate, share ideas, and take action.
           </p>
         </div>
-        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14"></div>
       </div>
     </section>
 
     <section class="bg-page">
-      <EventsNewComponent client:only="react" />
+      <EventsNewComponent initialEvents={events} client:load />
     </section>
   </main>
 </HomeLayout>
@@ -38,7 +84,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   .page-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .page-animate.in-view {
     opacity: 1;
@@ -58,10 +106,16 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

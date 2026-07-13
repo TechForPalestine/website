@@ -11,6 +11,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 <HomeLayout
   title="Get Involved"
   description="Join our mission-driven community building tools and projects for Palestinian liberation. Volunteer, mentor, build, and more."
+  noindex={true}
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
@@ -60,7 +61,12 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               Connect with thousands of pro-Palestine advocates, volunteers, and project leaders in
               our vibrant Discord server.
             </p>
-            <Button href="https://techforpalestine.org/discord-invite" variant="primary" size="md" arrow>
+            <Button
+              href="https://techforpalestine.org/discord-invite"
+              variant="primary"
+              size="md"
+              arrow
+            >
               Join Discord
             </Button>
           </div>
@@ -125,7 +131,12 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               bring it to life.
             </p>
             <div class="mb-6 space-y-3">
-              <Button href="https://techforpalestine.org/project-application-form" variant="primary" size="md" arrow>
+              <Button
+                href="https://techforpalestine.org/project-application-form"
+                variant="primary"
+                size="md"
+                arrow
+              >
                 Apply to Incubator
               </Button>
               <div class="ts-body-small">
@@ -158,9 +169,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               Connect with other founders and CEOs who support the Palestinian cause. Share
               resources and build partnerships.
             </p>
-            <Button href="/e4p-new" variant="primary" size="md" arrow>
-              Join E4P
-            </Button>
+            <Button href="/e4p-new" variant="primary" size="md" arrow> Join E4P </Button>
           </div>
 
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
@@ -212,9 +221,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               Looking for talented Palestinian professionals? Connect with our network of skilled
               individuals across various fields.
             </p>
-            <Button href="/help/hire-new" variant="primary" size="md" arrow>
-              Find Talent
-            </Button>
+            <Button href="/help/hire-new" variant="primary" size="md" arrow> Find Talent </Button>
           </div>
 
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
@@ -238,9 +245,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             <p class="ts-body mb-6 text-ink-secondary">
               Explore our curated list of project ideas that could use your skills and passion.
             </p>
-            <Button href="/ideas-new" variant="primary" size="md" arrow>
-              View Ideas
-            </Button>
+            <Button href="/ideas-new" variant="primary" size="md" arrow> View Ideas </Button>
           </div>
         </div>
       </div>
@@ -267,9 +272,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             Not sure which option is right for you? Want to learn more about our mission? We'd love
             to hear from you!
           </p>
-          <Button href="/contact-new" variant="primary" size="md" arrow>
-            Contact Us
-          </Button>
+          <Button href="/contact-new" variant="primary" size="md" arrow> Contact Us </Button>
         </div>
       </div>
     </section>
@@ -280,7 +283,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   .gi-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .gi-animate.in-view {
     opacity: 1;
@@ -300,10 +305,16 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll(".gi-animate").forEach((el) => obs.observe(el));
 </script>

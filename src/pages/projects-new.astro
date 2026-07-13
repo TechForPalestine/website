@@ -4,24 +4,90 @@ import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
 import ProjectsDirectory from "../components/projects/ProjectsDirectory";
+import { sanitizeUrl, type ProjectItem, type Tag } from "../components/projects/projectData";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+
+const URL_FIELDS = [
+  "websiteUrl",
+  "logoUrl",
+  "twitterUrl",
+  "linkedinUrl",
+  "githubUrl",
+  "instagramUrl",
+  "facebookUrl",
+  "youtubeUrl",
+  "telegramUrl",
+  "mastodonUrl",
+  "blueskyUrl",
+  "tiktokUrl",
+  "signalUrl",
+  "upscrolledUrl",
+  "leaderPhoto",
+  "donationUrl",
+  "involvementUrl",
+] as const;
+
+let projects: ProjectItem[] = [];
+let tags: Tag[] = [];
+try {
+  const PROJECTHUB_API_KEY = getEnv("PROJECTHUB_API_KEY", Astro.locals);
+  const response = await fetch("https://projecthub.techforpalestine.org/api/public/projects", {
+    headers: { "X-API-Key": PROJECTHUB_API_KEY || "" },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    projects = Array.isArray(data) ? data : (data.projects ?? data.data ?? []);
+    tags = Array.isArray(data.tags) ? data.tags : [];
+    projects.forEach((project) => {
+      const record = project as unknown as Record<string, unknown>;
+      for (const field of URL_FIELDS) {
+        const val = record[field];
+        if (typeof val === "string") {
+          record[field] = sanitizeUrl(val) || undefined;
+        }
+      }
+    });
+  }
+} catch {
+  // Falls back to client-side fetch via ProjectsDirectory's own useEffect.
+}
+
+const projectListSchema = projects.length > 0 && {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: projects.slice(0, 50).map((project, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: project.name,
+    url: project.websiteUrl || undefined,
+  })),
+};
 ---
 
 <HomeLayout
   title="Incubator Projects"
   description="Explore the projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."
+  noindex={true}
 >
+  <Fragment slot="head">
+    {
+      projectListSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(projectListSchema)} />
+      )
+    }
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <section class="bg-page px-6 pt-14 pb-10 min-[810px]:px-10 min-[810px]:pt-20 min-[810px]:pb-14">
+    <section class="bg-page px-6 pb-10 pt-14 min-[810px]:px-10 min-[810px]:pb-14 min-[810px]:pt-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="page-animate">
           <p class="ts-overline mb-5 text-ink-secondary">The Incubator</p>
           <h1 class="ts-editorial mb-5 text-ink">Incubator Projects</h1>
           <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-            Every project below was built and led by volunteers who turned frustration into action. Explore what the movement has built, then help lead the next one.
+            Every project below was built and led by volunteers who turned frustration into action.
+            Explore what the movement has built, then help lead the next one.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <Button
@@ -32,25 +98,25 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             >
               Apply now
             </Button>
-            <Button href="/incubator-new" variant="ghost" size="md">
-              About the Incubator
-            </Button>
+            <Button href="/incubator-new" variant="ghost" size="md"> About the Incubator </Button>
           </div>
         </div>
-        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14" />
+        <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14"></div>
       </div>
     </section>
 
     <section class="bg-page">
-      <ProjectsDirectory client:only="react" />
+      <ProjectsDirectory initialProjects={projects} initialTags={tags} client:load />
     </section>
 
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="page-animate flex flex-col gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between">
+        <div
+          class="page-animate flex flex-col gap-6 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between"
+        >
           <div>
             <p class="ts-overline mb-3 text-ink-secondary">Ready to build?</p>
-            <h2 class="ts-heading text-ink max-w-[38ch]">Apply to the T4P Incubator Today!</h2>
+            <h2 class="ts-heading max-w-[38ch] text-ink">Apply to the T4P Incubator Today!</h2>
           </div>
           <div class="shrink-0">
             <Button
@@ -72,7 +138,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   .page-animate {
     opacity: 0;
     translate: 0 24px;
-    transition: opacity .8s cubic-bezier(.25,1,.5,1), translate .8s cubic-bezier(.25,1,.5,1);
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .page-animate.in-view {
     opacity: 1;
@@ -92,10 +160,16 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 </style>
 
 <script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in-view"); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
   document.querySelectorAll<HTMLElement>(".page-animate").forEach((el) => obs.observe(el));
 </script>

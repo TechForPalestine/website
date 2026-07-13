@@ -24,12 +24,30 @@ function FAQAccordionItem({ question, answer }: { question: string; answer: FAQI
           aria-hidden="true"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <line
+              x1="10"
+              y1="2"
+              x2="10"
+              y2="18"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <line
+              x1="2"
+              y1="10"
+              x2="18"
+              y2="10"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
           </svg>
         </span>
       </button>
-      <div className={`grid transition-all duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+      <div
+        className={`grid transition-all duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+      >
         <div className="overflow-hidden">
           <div className="ts-body max-w-[65ch] pb-6 text-ink-secondary">
             {typeof answer === "string" ? (
@@ -46,12 +64,17 @@ function FAQAccordionItem({ question, answer }: { question: string; answer: FAQI
   );
 }
 
-export default function FAQSection() {
-  const [faqs, setFaqs] = useState<FAQItem[]>([]);
-  const [loading, setLoading] = useState(true);
+interface FAQSectionProps {
+  initialFaqs?: FAQItem[];
+}
+
+export default function FAQSection({ initialFaqs = [] }: FAQSectionProps) {
+  const [faqs, setFaqs] = useState<FAQItem[]>(initialFaqs);
+  const [loading, setLoading] = useState(initialFaqs.length === 0);
 
   useEffect(() => {
     const showAll = new URLSearchParams(window.location.search).get("showAll") === "yes";
+    if (!showAll && initialFaqs.length > 0) return;
     fetch(showAll ? "/api/faq?showAll=yes" : "/api/faq", { cache: "no-cache" })
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setFaqs(data))

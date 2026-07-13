@@ -8,13 +8,23 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 <HomeLayout
   title="Contact Us"
   description="Get in touch with Tech for Palestine — general questions, media inquiries, or request an endorsement for your campaign."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: "contact@techforpalestine.org",
+      })}
+    />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
-
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-
         <div class="page-animate mb-14">
           <p class="ts-overline mb-6 text-ink-secondary">Tech for Palestine</p>
           <h1 class="ts-editorial mb-6 text-ink">Contact Us</h1>
@@ -25,7 +35,6 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
         </div>
 
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
-
           <div class="page-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sand">
               <svg
@@ -45,14 +54,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </div>
             <h2 class="ts-heading mb-2 text-ink">General Questions</h2>
             <p class="ts-body-small mb-4 text-ink-secondary">
-              For general inquiries about Tech for Palestine, our projects, or how to get
-              involved.
+              For general inquiries about Tech for Palestine, our projects, or how to get involved.
             </p>
             <a
-              id="contact-email"
-              href="#"
+              href="mailto:contact@techforpalestine.org"
               class="ts-body font-medium text-brand transition-colors hover:underline"
-            ></a>
+            >
+              contact@techforpalestine.org
+            </a>
           </div>
 
           <div class="page-animate rounded-xl border border-butter bg-cream p-8">
@@ -114,23 +123,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               Request an endorsement &rarr;
             </a>
           </div>
-
         </div>
       </div>
     </section>
-
   </main>
 </HomeLayout>
-
-<script>
-  (function () {
-    var el = document.getElementById("contact-email") as HTMLAnchorElement | null;
-    if (!el) return;
-    var e = "contact" + "@" + "techforpalestine.org";
-    el.href = "mailto:" + e;
-    el.textContent = e;
-  })();
-</script>
 
 <style>
   .page-animate {

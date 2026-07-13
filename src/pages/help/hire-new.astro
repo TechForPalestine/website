@@ -139,12 +139,28 @@ const resourceSections = [
     ],
   },
 ];
+const hireItemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: resourceSections
+    .flatMap((section) => section.resources)
+    .map((res, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: res.name,
+      url: res.url,
+    })),
+};
 ---
 
 <HomeLayout
   title="Jobs for Palestinians - Tech for Palestine"
   description="Find organizations that connect Palestinian job seekers with employers."
+  noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(hireItemListSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -204,9 +220,7 @@ const resourceSections = [
                         decoding="async"
                       />
                     </div>
-                    <p class="ts-label mb-2 text-ink group-hover:text-brand">
-                      {res.name}
-                    </p>
+                    <p class="ts-label mb-2 text-ink group-hover:text-brand">{res.name}</p>
                     <p class="ts-body-small mb-4 flex-1 leading-relaxed text-ink-secondary">
                       {res.description}
                     </p>
@@ -234,13 +248,14 @@ const resourceSections = [
 
 <style>
   .hire-card {
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    transition:
+      transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
       background-color 0.2s ease,
       border-color 0.2s ease;
   }
   .hire-card:hover {
     transform: translateY(-2px);
-    background-color: #FBF2ED;
+    background-color: #fbf2ed;
     border-color: transparent;
   }
 
