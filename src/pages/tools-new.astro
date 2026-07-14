@@ -102,15 +102,20 @@ const tools = [
   },
 ];
 
+const allTools = [...featured, ...tools];
 const toolsItemListSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  itemListElement: [...featured, ...tools].map((tool, index) => ({
+  numberOfItems: allTools.length,
+  itemListElement: allTools.map((tool, index) => ({
     "@type": "ListItem",
     position: index + 1,
-    name: tool.name,
-    description: tool.desc,
-    url: tool.link,
+    item: {
+      "@type": "SoftwareApplication",
+      name: tool.name,
+      description: tool.desc,
+      url: tool.link,
+    },
   })),
 };
 ---
@@ -144,7 +149,7 @@ const toolsItemListSchema = {
 
     <section class="bg-page px-6 pb-12 min-[810px]:px-10">
       <div class="mx-auto max-w-[1400px]">
-        <p class="page-animate ts-overline mb-4 text-ink-secondary">Featured</p>
+        <h2 class="page-animate ts-overline mb-4 text-ink-secondary">Featured</h2>
         <div class="page-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {
             featured.map((tool) => (
@@ -191,7 +196,7 @@ const toolsItemListSchema = {
 
     <section class="bg-page px-6 pb-14 min-[810px]:px-10 min-[810px]:pb-20">
       <div class="mx-auto max-w-[1400px]">
-        <p class="page-animate ts-overline mb-4 text-ink-secondary">More tools</p>
+        <h2 class="page-animate ts-overline mb-4 text-ink-secondary">More tools</h2>
         <div class="page-animate grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {
             tools.map((tool) => (

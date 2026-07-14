@@ -56,11 +56,17 @@ try {
 const projectListSchema = projects.length > 0 && {
   "@context": "https://schema.org",
   "@type": "ItemList",
+  numberOfItems: projects.length,
   itemListElement: projects.slice(0, 50).map((project, index) => ({
     "@type": "ListItem",
     position: index + 1,
-    name: project.name,
-    url: project.websiteUrl || undefined,
+    item: {
+      "@type": "SoftwareApplication",
+      name: project.name,
+      description: project.description || undefined,
+      url: project.websiteUrl || undefined,
+      image: project.logoUrl || undefined,
+    },
   })),
 };
 ---
@@ -106,6 +112,7 @@ const projectListSchema = projects.length > 0 && {
     </section>
 
     <section class="bg-page">
+      <h2 class="sr-only">Browse projects</h2>
       <ProjectsDirectory initialProjects={projects} initialTags={tags} client:load />
     </section>
 

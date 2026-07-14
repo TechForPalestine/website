@@ -17,11 +17,20 @@ try {
 
 const mapIdea = (idea: any) => {
   const plainText = idea.description.map((s: any) => s.plain_text).join("");
+  // Truncate at the last word boundary within the limit rather than a hard
+  // character cut, so structured-data descriptions read as clean sentence
+  // fragments instead of stopping mid-word.
+  let excerpt = plainText;
+  if (plainText.length > 150) {
+    const truncated = plainText.slice(0, 150);
+    const lastSpace = truncated.lastIndexOf(" ");
+    excerpt = (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated) + "...";
+  }
   return {
     id: idea.id,
     data: { title: idea.name, tags: [] },
     richTextDescription: idea.description,
-    excerpt: plainText.substring(0, 150) + (plainText.length > 150 ? "..." : ""),
+    excerpt,
   };
 };
 
@@ -91,6 +100,7 @@ const ideasListSchema = allIdeas.length > 0 && {
     </section>
 
     <section class="bg-page pt-10 min-[810px]:pt-12">
+      <h2 class="sr-only">Browse ideas</h2>
       <IdeasWithTabsNew
         newIdeas={newIdeas}
         existingIdeas={existingIdeas}

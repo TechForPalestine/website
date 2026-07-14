@@ -74,6 +74,7 @@ const peopleSchema = [...board, ...staff].map((member) => ({
   "@type": "Person",
   name: member.name,
   jobTitle: member.role,
+  image: new URL(member.image, "https://techforpalestine.org").toString(),
   worksFor: {
     "@type": "NonprofitOrganization",
     "@id": "https://techforpalestine.org/#organization",
@@ -84,6 +85,7 @@ const peopleSchema = [...board, ...staff].map((member) => ({
 <HomeLayout
   title="Team & Board | Tech for Palestine"
   description="Meet the dedicated leaders guiding Tech for Palestine's mission to support Palestinian liberation through technology and advocacy."
+  image="https://techforpalestine.org/paul-biggar.webp"
   noindex={true}
 >
   <Fragment slot="head">

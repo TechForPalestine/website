@@ -8,29 +8,26 @@ import HomeNavbar from "../components/home/HomeNavbar.astro";
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 const country = Astro.request.headers.get("cf-ipcountry") || "UNKNOWN";
 const isUK = country === "GB";
+// Server-rendered fallback variant (no A/B randomization) so the donation
+// form is present in the initial HTML for non-JS clients and crawlers —
+// the client-side A/B test below still overrides this for real visitors.
+const defaultFormId = isUK ? "form-validaid-link" : "form-qgiv-link";
 ---
 
 <HomeLayout
-  title="Donate | Tech for Palestine"
-  description="Support Tech for Palestine. Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine."
+  title="Donate to Tech for Palestine | Support Our Work"
+  description="Support Tech for Palestine, a 501(c)(3) nonprofit. Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine."
   noindex={true}
+  organizationSchemaExtra={{
+    potentialAction: {
+      "@type": "DonateAction",
+      name: "Donate to Tech for Palestine",
+      description:
+        "Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine.",
+      target: "https://techforpalestine.org/donate-new",
+    },
+  }}
 >
-  <Fragment slot="head">
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "NonprofitOrganization",
-        "@id": "https://techforpalestine.org/#organization",
-        potentialAction: {
-          "@type": "DonateAction",
-          name: "Donate to Tech for Palestine",
-          description:
-            "Your donation helps us strengthen existing projects and launch new initiatives for a free Palestine.",
-        },
-      })}
-    />
-  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -75,7 +72,7 @@ const isUK = country === "GB";
               </div>
 
               <!-- Variant B Non-UK: Qgiv + link to ValidAid -->
-              <div id="form-qgiv-link" hidden>
+              <div id="form-qgiv-link" hidden={defaultFormId !== "form-qgiv-link"}>
                 <p class="ts-body-small mb-4 text-ink-secondary">
                   If you are in the UK, <a
                     href="?variant=validaid"
@@ -94,7 +91,7 @@ const isUK = country === "GB";
               </div>
 
               <!-- Variant B UK: ValidAid + link to Qgiv -->
-              <div id="form-validaid-link" hidden>
+              <div id="form-validaid-link" hidden={defaultFormId !== "form-validaid-link"}>
                 <p class="ts-body-small mb-4 text-ink-secondary">
                   Not in the UK? <a
                     href="?variant=qgiv"
@@ -308,6 +305,14 @@ const isUK = country === "GB";
         trackingVariant = "qgiv + link";
       }
     }
+
+    // One variant is server-rendered visible (non-JS fallback) regardless of
+    // which variant this client ends up assigned to, so hide all three before
+    // revealing the chosen one to avoid showing two forms at once.
+    ["form-qgiv-only", "form-qgiv-link", "form-validaid-link"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
 
     const targetForm = document.getElementById(formToShow);
     if (targetForm) {

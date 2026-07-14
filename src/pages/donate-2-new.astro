@@ -13,23 +13,16 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   description="Alternate donation form for Tech for Palestine. Use this page if the primary donate form doesn't load in your browser."
   noindex={true}
   canonicalUrl="https://techforpalestine.org/donate"
+  organizationSchemaExtra={{
+    potentialAction: {
+      "@type": "DonateAction",
+      name: "Donate to Tech for Palestine",
+      description:
+        "Your donation helps us hire professionals, strengthen existing projects, and launch new initiatives for a free Palestine.",
+      target: "https://techforpalestine.org/donate-2-new",
+    },
+  }}
 >
-  <Fragment slot="head">
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "NonprofitOrganization",
-        "@id": "https://techforpalestine.org/#organization",
-        potentialAction: {
-          "@type": "DonateAction",
-          name: "Donate to Tech for Palestine",
-          description:
-            "Your donation helps us hire professionals, strengthen existing projects, and launch new initiatives for a free Palestine.",
-        },
-      })}
-    />
-  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
