@@ -16,7 +16,7 @@ function QgivEmbed() {
   }, []);
 
   return (
-    <div className="max-h-[640px] overflow-hidden">
+    <div className="max-h-[640px] overflow-hidden" data-lenis-prevent>
       <div
         className="qgiv-embed-container"
         data-qgiv-embed="true"
