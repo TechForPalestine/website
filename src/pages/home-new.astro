@@ -11,6 +11,7 @@ import OpeningsSection from "../components/home/OpeningsSection.astro";
 import PressSection from "../components/home/PressSection.astro";
 import CtaSection from "../components/home/CtaSection.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
+import SignUpFormHomeNew from "../structures/SignUpFormHomeNew.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
@@ -85,6 +86,11 @@ const openRolesSchema = openRoles.length > 0 && {
     {openRoles.length > 0 && <OpeningsSection membershipLive={membershipLive} roles={openRoles} />}
     <PressSection />
     <CtaSection membershipLive={membershipLive} />
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md">
+        <SignUpFormHomeNew />
+      </div>
+    </section>
     <script>
       try {
         const v = localStorage.getItem("ab-homepage-variant");
