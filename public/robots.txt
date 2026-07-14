@@ -1,4 +1,28 @@
 User-agent: *
 Allow: /
 
+# Explicit allow rules for major AI crawlers/answer engines (redundant with
+# the wildcard above, but keeps intent explicit if narrower rules are ever
+# added for other bots).
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://techforpalestine.org/sitemap-index.xml

@@ -25,9 +25,17 @@ const {
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
+// Site-wide internal links never use a trailing slash, so the canonical tag
+// shouldn't either — otherwise /page and /page/ resolve to the same content
+// with two different self-referential canonicals.
+const normalizedPathname =
+  Astro.url.pathname.length > 1 && Astro.url.pathname.endsWith("/")
+    ? Astro.url.pathname.slice(0, -1)
+    : Astro.url.pathname;
+
 const canonicalUrl =
   canonicalUrlOverride ||
-  new URL(Astro.url.pathname, Astro.site || "https://techforpalestine.org").toString();
+  new URL(normalizedPathname, Astro.site || "https://techforpalestine.org").toString();
 
 const organizationSchema = {
   "@context": "https://schema.org",
