@@ -15,9 +15,13 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "ContactPoint",
-        contactType: "customer support",
-        email: "contact@techforpalestine.org",
+        "@type": "NonprofitOrganization",
+        "@id": "https://techforpalestine.org/#organization",
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          email: "contact@techforpalestine.org",
+        },
       })}
     />
   </Fragment>
@@ -30,11 +34,17 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <h1 class="ts-editorial mb-6 text-ink">Contact Us</h1>
           <p class="ts-body max-w-[65ch] text-ink-secondary">
             Have a question, media inquiry, or want to request an endorsement? We'd love to hear
-            from you.
+            from you. Tech for Palestine is a volunteer-powered 501(c)(3) nonprofit, so most inboxes
+            below are staffed part-time — we aim to respond to general and media inquiries within
+            5-7 business days, and endorsement requests follow the same timeline. If your question
+            is about how to get involved, donate, or join the Incubator, check our <a
+              href="/faq-new"
+              class="text-brand underline hover:text-brand-hover">FAQ</a
+            > first — it covers the most common questions we receive.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div class="page-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sand">
               <svg
@@ -54,7 +64,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </div>
             <h2 class="ts-heading mb-2 text-ink">General Questions</h2>
             <p class="ts-body-small mb-4 text-ink-secondary">
-              For general inquiries about Tech for Palestine, our projects, or how to get involved.
+              For general inquiries about Tech for Palestine, our Incubator projects, membership,
+              volunteering, or how to get involved. This is also the right inbox for accessibility
+              requests or if you're not sure which team to reach.
             </p>
             <a
               href="mailto:contact@techforpalestine.org"
@@ -83,8 +95,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </div>
             <h2 class="ts-heading mb-2 text-ink">Media &amp; Press</h2>
             <p class="ts-body-small mb-4 text-ink-secondary">
-              Journalists and media professionals can find press resources and contact information
-              on our media page.
+              Journalists and media professionals can find our press kit, past coverage, and
+              interview contact information on our media page. For time-sensitive press inquiries,
+              mention your deadline in the subject line.
             </p>
             <a
               href="/media-new"
@@ -113,8 +126,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </div>
             <h2 class="ts-heading mb-2 text-ink">Endorsements</h2>
             <p class="ts-body-small mb-4 text-ink-secondary">
-              Seeking a T4P endorsement for your campaign or organization? Learn what we look for
-              and submit a request.
+              Seeking a T4P endorsement for your campaign or organization? We review requests within
+              5-7 days — learn what we look for and submit a request.
             </p>
             <a
               href="/endorsements-new"
@@ -123,7 +136,60 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               Request an endorsement &rarr;
             </a>
           </div>
+
+          <div class="page-animate rounded-xl border border-butter bg-cream p-8">
+            <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sand">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="h-6 w-6 text-brand"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="ts-heading mb-2 text-ink">Registered Address</h2>
+            <p class="ts-body-small mb-4 text-ink-secondary">
+              Tech for Palestine is a registered 501(c)(3) nonprofit (EIN 99-3441367). Our full
+              financial and legal details are on our <a
+                href="/legal-new"
+                class="text-brand underline hover:text-brand-hover">Legal &amp; Financial Notice</a
+              > page.
+            </p>
+            <p class="ts-body font-medium text-ink">
+              548 Market St #266950, San Francisco, CA 94104-5401, US
+            </p>
+          </div>
         </div>
+
+        <p class="page-animate ts-body-small mt-10 max-w-[65ch] text-ink-secondary">
+          Prefer social media? We're active on <a
+            href="https://www.instagram.com/techforpalestine"
+            class="text-brand underline hover:text-brand-hover"
+            target="_blank"
+            rel="noopener noreferrer">Instagram</a
+          >, <a
+            href="https://twitter.com/tech4palestine"
+            class="text-brand underline hover:text-brand-hover"
+            target="_blank"
+            rel="noopener noreferrer">X/Twitter</a
+          >, and <a
+            href="https://www.linkedin.com/company/techforpalestine/"
+            class="text-brand underline hover:text-brand-hover"
+            target="_blank"
+            rel="noopener noreferrer">LinkedIn</a
+          >, though email remains the fastest way to reach the right team.
+        </p>
       </div>
     </section>
   </main>

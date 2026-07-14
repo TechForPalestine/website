@@ -34,6 +34,24 @@ const fallbackFaqs: FAQItem[] = [
     answer:
       "The T4P Incubator helps advocates build, grow, and scale technical projects that support Palestinian freedom, providing mentorship, community, and resources to project leaders.",
   },
+  {
+    id: "fallback-donate",
+    question: "How can I donate to Tech for Palestine?",
+    answer:
+      "You can donate directly on our Donate page. Tech for Palestine is a registered 501(c)(3) nonprofit (EIN 99-3441367), so US donations are generally tax-deductible.",
+  },
+  {
+    id: "fallback-membership",
+    question: "How much are Tech for Palestine membership dues?",
+    answer:
+      "We suggest monthly dues equal to one hour's salary, though you can contribute any amount. Fee waivers are available — see the Membership page for eligibility.",
+  },
+  {
+    id: "fallback-mentor",
+    question: "How do I become a mentor?",
+    answer:
+      "Submit a Mentor Application. If your profile fits, you'll be invited to interview with the Tech for Palestine team, then matched with an Incubator project that needs your expertise.",
+  },
 ];
 
 const notionFaqs: FAQItem[] = await fetchNotionFAQ(false, Astro.locals).catch(() => []);

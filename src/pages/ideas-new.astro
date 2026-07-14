@@ -28,6 +28,18 @@ const mapIdea = (idea: any) => {
 const newIdeas = rawIdeas.filter((i) => i.category === "new").map(mapIdea);
 const existingIdeas = rawIdeas.filter((i) => i.category === "existing").map(mapIdea);
 const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIdea);
+
+const allIdeas = [...newIdeas, ...existingIdeas, ...startedIdeas];
+const ideasListSchema = allIdeas.length > 0 && {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: allIdeas.slice(0, 50).map((idea, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: idea.data.title,
+    description: idea.excerpt || undefined,
+  })),
+};
 ---
 
 <HomeLayout
@@ -35,6 +47,13 @@ const startedIdeas = rawIdeas.filter((i) => i.category === "started").map(mapIde
   description="Browse and lead Palestinian advocacy project ideas from the Tech for Palestine Incubator — new, existing, and already-started initiatives."
   noindex={true}
 >
+  <Fragment slot="head">
+    {
+      ideasListSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(ideasListSchema)} />
+      )
+    }
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">

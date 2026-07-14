@@ -151,6 +151,25 @@ const hireItemListSchema = {
       url: res.url,
     })),
 };
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Tech for Palestine",
+      item: "https://techforpalestine.org/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Jobs for Palestinians",
+      item: "https://techforpalestine.org/help/hire-new",
+    },
+  ],
+};
 ---
 
 <HomeLayout
@@ -160,6 +179,7 @@ const hireItemListSchema = {
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(hireItemListSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 

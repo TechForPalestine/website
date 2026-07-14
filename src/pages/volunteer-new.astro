@@ -6,32 +6,6 @@ import Button from "../components/ui/Button.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-
-const howToSchema = {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  name: "How to volunteer with Tech for Palestine",
-  step: [
-    {
-      "@type": "HowToStep",
-      position: 1,
-      name: "Submit your application",
-      text: "Complete the volunteer application form to be matched with the right project or team.",
-    },
-    {
-      "@type": "HowToStep",
-      position: 2,
-      name: "Join our Discord",
-      text: "Join the Discord server and community calls to connect with the movement.",
-    },
-    {
-      "@type": "HowToStep",
-      position: 3,
-      name: "Stay connected",
-      text: "Follow Tech for Palestine on Instagram, Twitter, LinkedIn, YouTube, GitHub, and Bluesky.",
-    },
-  ],
-};
 ---
 
 <HomeLayout
@@ -39,9 +13,6 @@ const howToSchema = {
   description="Join the Tech for Palestine volunteer community. Apply your skills to projects that amplify Palestinian voices and support the movement for liberation."
   noindex={true}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
-  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -180,7 +151,7 @@ const howToSchema = {
       <div class="mx-auto max-w-[1400px]">
         <div class="volunteer-animate max-w-[75ch]">
           <p class="ts-overline mb-6 text-ink-secondary">Getting started</p>
-          <h2 class="ts-heading mb-8 text-ink">How to Join?</h2>
+          <h2 class="ts-heading mb-8 text-ink">How do I volunteer with Tech for Palestine?</h2>
           <p class="ts-body-large text-ink-secondary">
             Complete our{" "}
             <a

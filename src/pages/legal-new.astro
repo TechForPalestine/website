@@ -17,7 +17,11 @@ const webPageSchema = {
 };
 ---
 
-<HomeLayout title={pageTitle} description={pageDescription} noindex={true}>
+<HomeLayout
+  title={`${pageTitle} | Tech for Palestine`}
+  description={pageDescription}
+  noindex={true}
+>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
   </Fragment>

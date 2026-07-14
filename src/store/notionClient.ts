@@ -292,3 +292,44 @@ export const fetchNotionAgenda = async (locals?: any) => {
     speakers,
   };
 };
+
+export const fetchE4PSignatories = async (locals?: any) => {
+  const secret = getEnv("NOTION_SECRET", locals);
+  const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);
+
+  if (!secret || !databaseId) {
+    throw new Error(
+      "Missing Notion credentials: NOTION_SECRET and NOTION_SIGNATORIES_DB_ID are required"
+    );
+  }
+
+  const notionAxios = createNotionAxios(secret);
+  const response = await notionAxios.post(`databases/${databaseId}/query`, {
+    filter: {
+      property: "Approved",
+      checkbox: {
+        equals: true,
+      },
+    },
+    sorts: [
+      {
+        property: "Signed At",
+        direction: "ascending",
+      },
+    ],
+  });
+
+  return response.data.results.map((page: any) => {
+    const props = page.properties;
+
+    return {
+      id: page.id,
+      name: titleText(props["Name"]),
+      company: richText(props["Company"]),
+      position: richText(props["Position"]),
+      linkedinUrl: props["LinkedIn URL"]?.url || "",
+      signedAt: props["Signed At"]?.date?.start || "",
+      approved: props["Approved"]?.checkbox || false,
+    };
+  });
+};

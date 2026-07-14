@@ -33,6 +33,29 @@ const logos = [
   },
 ];
 
+const MONTHS: Record<string, string> = {
+  Jan: "01",
+  Feb: "02",
+  Mar: "03",
+  Apr: "04",
+  May: "05",
+  Jun: "06",
+  Jul: "07",
+  Aug: "08",
+  Sep: "09",
+  Oct: "10",
+  Nov: "11",
+  Dec: "12",
+};
+
+// Converts a display date like "Jan 2024" or "2024" into an ISO 8601 date
+// (year-month or year precision — we only ever know month/year for these).
+const toIsoDate = (displayDate: string): string => {
+  const [month, year] = displayDate.split(" ");
+  if (year && MONTHS[month]) return `${year}-${MONTHS[month]}`;
+  return displayDate;
+};
+
 const leadArticle = {
   publication: "Stanford Social Innovation Review",
   date: "2024",
@@ -144,12 +167,12 @@ const darkAssets = [
 const pressSchema = {
   "@context": "https://schema.org",
   "@type": "NonprofitOrganization",
-  name: "Tech for Palestine",
-  url: "https://techforpalestine.org",
+  "@id": "https://techforpalestine.org/#organization",
   subjectOf: [leadArticle, ...articles].map((a) => ({
     "@type": "NewsArticle",
     headline: a.headline,
     url: a.url,
+    datePublished: toIsoDate(a.date),
     publisher: {
       "@type": "Organization",
       name: a.publication,
@@ -411,7 +434,7 @@ const pressSchema = {
                   >
                   {leadArticle.publication}
                   <span class="mx-1.5" aria-hidden="true">·</span>
-                  {leadArticle.date}
+                  <time datetime={toIsoDate(leadArticle.date)}>{leadArticle.date}</time>
                 </p>
                 <h3 class="ts-heading mb-4 max-w-[40ch] leading-snug text-ink">
                   {leadArticle.headline}
@@ -457,7 +480,7 @@ const pressSchema = {
                     <span class="mx-1.5" aria-hidden="true">
                       ·
                     </span>
-                    {article.date}
+                    <time datetime={toIsoDate(article.date)}>{article.date}</time>
                   </p>
                   <h3 class="ts-subheading leading-snug text-ink">{article.headline}</h3>
                   {article.description && (

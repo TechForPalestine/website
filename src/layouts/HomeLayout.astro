@@ -12,6 +12,7 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  canonicalUrl?: string;
 }
 
 const {
@@ -19,18 +20,27 @@ const {
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
   noindex = false,
+  canonicalUrl: canonicalUrlOverride,
 } = Astro.props;
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
-const canonicalUrl = new URL(
-  Astro.url.pathname,
-  Astro.site || "https://techforpalestine.org"
-).toString();
+// Site-wide internal links never use a trailing slash, so the canonical tag
+// shouldn't either — otherwise /page and /page/ resolve to the same content
+// with two different self-referential canonicals.
+const normalizedPathname =
+  Astro.url.pathname.length > 1 && Astro.url.pathname.endsWith("/")
+    ? Astro.url.pathname.slice(0, -1)
+    : Astro.url.pathname;
+
+const canonicalUrl =
+  canonicalUrlOverride ||
+  new URL(normalizedPathname, Astro.site || "https://techforpalestine.org").toString();
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "NonprofitOrganization",
+  "@id": "https://techforpalestine.org/#organization",
   name: "Tech for Palestine",
   url: "https://techforpalestine.org",
   logo: "https://techforpalestine.org/t4p-social-logo.png",

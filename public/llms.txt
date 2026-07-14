@@ -1,0 +1,32 @@
+# Tech for Palestine
+
+> Tech for Palestine is a 501(c)(3) nonprofit (EIN 99-3441367) that incubates and scales tech and advocacy projects for Palestinian liberation. It is a coalition of thousands of founders, engineers, product marketers, investors, and other professionals in the tech industry supporting Palestinian liberation.
+
+Tech for Palestine's mission is to harness technology and human innovation for a free and truly sovereign Palestine. It operates primarily as an incubator: it provides mentorship, tech volunteers, marketing support, and community connections to help early-stage Palestinian-advocacy projects start, grow, and scale. Tech for Palestine is not itself a single product — it is the organization behind an independent portfolio of tools (news coverage, boycott and accountability tools, protest-finding tools, datasets, and more) built and run by the movement.
+
+## Key pages
+
+- [About](https://techforpalestine.org/about): Mission, founder, and organizational background.
+- [Donate](https://techforpalestine.org/donate): Support Tech for Palestine's work; donations are generally tax-deductible in the US.
+- [Incubator](https://techforpalestine.org/incubator): How the T4P Incubator supports early-stage advocacy projects with mentorship, volunteers, and funding.
+- [Projects](https://techforpalestine.org/projects): Directory of active Incubator projects.
+- [Ideas](https://techforpalestine.org/ideas): Project ideas available for advocates to pick up and lead.
+- [Membership](https://techforpalestine.org/membership): Paid membership program — suggested dues, fee waivers, and benefits.
+- [Volunteer](https://techforpalestine.org/volunteer): How to volunteer skills and time to Incubator projects.
+- [Mentorship](https://techforpalestine.org/mentorship): How to become a mentor for Incubator projects.
+- [Get Involved](https://techforpalestine.org/get-involved): Overview of every way to contribute — volunteering, mentoring, membership, and building.
+- [Events](https://techforpalestine.org/events): Community webinars, workshops, and in-person gatherings.
+- [FAQ](https://techforpalestine.org/faq): Answers to common questions about T4P's mission and programs.
+- [Team](https://techforpalestine.org/team): Board and staff leadership.
+- [Media](https://techforpalestine.org/media): Press coverage, interviews, and brand/press-kit assets.
+- [Tools](https://techforpalestine.org/tools): Directory of Palestinian-advocacy tools built by the movement.
+- [Entrepreneurs for Palestine](https://techforpalestine.org/e4p): A global community of founders and CEOs pledging to steer hiring, sourcing, and fundraising in support of Palestinian liberation.
+- [Legal & Financial Notice](https://techforpalestine.org/legal): 501(c)(3) status, EIN, and financial transparency.
+
+## Organization facts
+
+- Legal name: Tech for Palestine
+- Entity type: 501(c)(3) nonprofit
+- EIN: 99-3441367
+- Registered address: 548 Market St #266950, San Francisco, CA 94104-5401, US
+- Website: https://techforpalestine.org

@@ -76,7 +76,7 @@ const peopleSchema = [...board, ...staff].map((member) => ({
   jobTitle: member.role,
   worksFor: {
     "@type": "NonprofitOrganization",
-    name: "Tech for Palestine",
+    "@id": "https://techforpalestine.org/#organization",
   },
 }));
 ---
