@@ -26,7 +26,12 @@ let openRoles: Array<{
 }> = [];
 
 try {
-  const res = await fetch("https://hub.techforpalestine.org/api/public/open-roles");
+  // This blocks SSR on every request (open-roles has averaged ~0.7-0.8s
+  // round-trip in production) — bound it so a slow/hanging upstream can't
+  // stall the page indefinitely.
+  const res = await fetch("https://hub.techforpalestine.org/api/public/open-roles", {
+    signal: AbortSignal.timeout(3000),
+  });
   if (res.ok) {
     openRoles = await res.json();
   }
