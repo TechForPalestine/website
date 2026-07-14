@@ -164,31 +164,28 @@ const darkAssets = [
   { label: "Mark Dark", file: "/logos/Mark-dark.png" },
 ];
 
-const pressSchema = {
-  "@context": "https://schema.org",
-  "@type": "NonprofitOrganization",
-  "@id": "https://techforpalestine.org/#organization",
-  subjectOf: [leadArticle, ...articles].map((a) => ({
-    "@type": "NewsArticle",
-    headline: a.headline,
-    url: a.url,
-    datePublished: toIsoDate(a.date),
-    publisher: {
-      "@type": "Organization",
-      name: a.publication,
-    },
-  })),
-};
+// Mentions rather than NewsArticle: these articles are hosted on third-party
+// publications' own domains, not this page, so NewsArticle (which expects an
+// `author` and describes content published at this URL) doesn't apply.
+const pressMentions = [leadArticle, ...articles].map((a) => ({
+  "@type": "CreativeWork",
+  headline: a.headline,
+  url: a.url,
+  datePublished: toIsoDate(a.date),
+  publisher: {
+    "@type": "Organization",
+    name: a.publication,
+  },
+}));
 ---
 
 <HomeLayout
-  title="Media & Press | Tech for Palestine"
-  description="Interviews, news coverage, press kit, and media resources for Tech for Palestine."
+  title="Media & Press Coverage | Tech for Palestine"
+  description="Press coverage, interviews, and media resources for Tech for Palestine — featured by TechCrunch, Al Jazeera, The Guardian, and more."
+  image="https://techforpalestine.org/images/press/ssir-tech-against-genocide.jpg"
   noindex={true}
+  organizationSchemaExtra={{ mentions: pressMentions }}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(pressSchema)} />
-  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">

@@ -7,13 +7,19 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
 const pageTitle = "Privacy Policy";
 const pageDescription =
-  "How Tech for Palestine collects, uses, and protects your personal information.";
+  "How Tech for Palestine, a 501(c)(3) nonprofit, collects, uses, shares, and protects the personal information of volunteers, donors, and website visitors.";
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://techforpalestine.org/privacy-policy-new",
+  url: "https://techforpalestine.org/privacy-policy-new",
   name: pageTitle,
   description: pageDescription,
   dateModified: "2025-08-05",
+  publisher: {
+    "@type": "NonprofitOrganization",
+    "@id": "https://techforpalestine.org/#organization",
+  },
 };
 ---
 

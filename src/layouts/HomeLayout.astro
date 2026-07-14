@@ -13,6 +13,11 @@ interface Props {
   image?: string;
   noindex?: boolean;
   canonicalUrl?: string;
+  // Extra JSON-LD properties to merge into the sitewide NonprofitOrganization
+  // node (e.g. a page-specific contactPoint or potentialAction). Pages must
+  // not emit their own NonprofitOrganization script sharing the same @id —
+  // separate <script> tags aren't reliably merged by structured-data parsers.
+  organizationSchemaExtra?: Record<string, unknown>;
 }
 
 const {
@@ -21,6 +26,7 @@ const {
   image = "https://techforpalestine.org/t4p-social-logo.png",
   noindex = false,
   canonicalUrl: canonicalUrlOverride,
+  organizationSchemaExtra,
 } = Astro.props;
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
@@ -41,6 +47,7 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "NonprofitOrganization",
   "@id": "https://techforpalestine.org/#organization",
+  ...organizationSchemaExtra,
   name: "Tech for Palestine",
   url: "https://techforpalestine.org",
   logo: "https://techforpalestine.org/t4p-social-logo.png",

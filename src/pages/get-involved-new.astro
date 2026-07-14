@@ -10,9 +10,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Get Involved | Tech for Palestine",
+  "@id": "https://techforpalestine.org/get-involved-new",
+  url: "https://techforpalestine.org/get-involved-new",
+  name: "Get Involved with Tech for Palestine | Volunteer & More",
   description:
-    "Join our mission-driven community building tools and projects for Palestinian liberation. Volunteer, mentor, build, and more.",
+    "Join our mission-driven community building tools and projects for Palestinian liberation. Volunteer, mentor, contribute your skills, or help lead a project.",
   isPartOf: {
     "@type": "NonprofitOrganization",
     "@id": "https://techforpalestine.org/#organization",
@@ -21,8 +23,8 @@ const webPageSchema = {
 ---
 
 <HomeLayout
-  title="Get Involved | Tech for Palestine"
-  description="Join our mission-driven community building tools and projects for Palestinian liberation. Volunteer, mentor, build, and more."
+  title="Get Involved with Tech for Palestine | Volunteer & More"
+  description="Join our mission-driven community building tools and projects for Palestinian liberation. Volunteer, mentor, contribute your skills, or help lead a project."
   noindex={true}
 >
   <Fragment slot="head">
@@ -57,6 +59,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -89,6 +92,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -126,6 +130,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -165,6 +170,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -190,6 +196,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -217,6 +224,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -242,6 +250,7 @@ const webPageSchema = {
           <div class="gi-animate rounded-xl border border-butter bg-cream p-8">
             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-butter">
               <svg
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

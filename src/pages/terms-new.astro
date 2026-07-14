@@ -7,13 +7,19 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
 const pageTitle = "Terms & Conditions";
 const pageDescription =
-  "Terms of Service governing your use of Tech for Palestine's website and services.";
+  "Terms of Service governing your use of Tech for Palestine's website, incubator application portal, and related advocacy and community services.";
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://techforpalestine.org/terms-new",
+  url: "https://techforpalestine.org/terms-new",
   name: pageTitle,
   description: pageDescription,
   dateModified: "2025-08-05",
+  publisher: {
+    "@type": "NonprofitOrganization",
+    "@id": "https://techforpalestine.org/#organization",
+  },
 };
 ---
 
@@ -122,6 +128,12 @@ const webPageSchema = {
                   >Privacy Policy</a
                 > (which is incorporated herein by reference). If you do not agree with any part of these
                 Terms or our Privacy Policy, you must not use our Services.
+              </p>
+              <p class="ts-body leading-relaxed text-ink-secondary">
+                For our full financial and legal disclosures, including our EIN and 501(c)(3)
+                status, see our <a href="/legal-new" class="text-brand hover:underline"
+                  >Financial &amp; Legal Notice</a
+                >.
               </p>
               <p class="ts-body leading-relaxed text-ink-secondary">
                 Please read these Terms carefully. They constitute a legally binding agreement

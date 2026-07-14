@@ -2,6 +2,17 @@
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
+
+// Search/AI crawlers must never be enrolled in the client-side A/B redirect:
+// home-new is noindex, and a crawler that randomly lands there (via
+// location.replace) makes Google's indexing signal for "/" — the site's most
+// important URL — non-deterministic across crawls. Bots always get the
+// stable, indexable content on this page.
+const userAgent = Astro.request.headers.get("user-agent") || "";
+const isBot =
+  /bot|crawl|spider|slurp|facebookexternalhit|GPTBot|ChatGPT|CCBot|Claude-Web|ClaudeBot|PerplexityBot|anthropic|Applebot|ia_archiver/i.test(
+    userAgent
+  );
 ---
 
 <Layout
@@ -9,8 +20,9 @@ import "../styles/base.css";
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
   image="https://techforpalestine.org/happy-kids.jpg"
 >
-  <script is:inline slot="head">
+  <script is:inline slot="head" define:vars={{ isBot }}>
     (function () {
+      if (isBot) return;
       try {
         var key = "ab-homepage-variant";
         var v = localStorage.getItem(key);
