@@ -15,9 +15,13 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "ContactPoint",
-        contactType: "customer support",
-        email: "contact@techforpalestine.org",
+        "@type": "NonprofitOrganization",
+        "@id": "https://techforpalestine.org/#organization",
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          email: "contact@techforpalestine.org",
+        },
       })}
     />
   </Fragment>

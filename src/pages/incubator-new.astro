@@ -7,44 +7,6 @@ import Button from "../components/ui/Button.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-
-const howToSchema = {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  name: "How to apply to the Tech for Palestine Incubator",
-  step: [
-    {
-      "@type": "HowToStep",
-      position: 1,
-      name: "Application form",
-      text: "Fill out the application (takes 10 to 30 minutes).",
-    },
-    {
-      "@type": "HowToStep",
-      position: 2,
-      name: "Review",
-      text: "We review your application and invite selected projects for an interview. We may reach out for more information.",
-    },
-    {
-      "@type": "HowToStep",
-      position: 3,
-      name: "Interview",
-      text: "A 30-minute call focusing on the impact you intend to have and how you plan to get there. No slides needed. Interviews are very direct and aim to push you on your understanding of the problem and the impact you might have.",
-    },
-    {
-      "@type": "HowToStep",
-      position: 4,
-      name: "Decision",
-      text: "We aim to notify all applicants within 10 days of application. Interviews and decisions happen twice weekly. In some cases we may ask more questions after the interview.",
-    },
-    {
-      "@type": "HowToStep",
-      position: 5,
-      name: "Onboarding",
-      text: "If admitted, you receive next steps and access to all Tech for Palestine resources.",
-    },
-  ],
-};
 ---
 
 <HomeLayout
@@ -52,9 +14,6 @@ const howToSchema = {
   description="The Tech for Palestine Incubator supports early-stage advocacy projects with mentorship, volunteers, and funding for Palestinian liberation."
   noindex={true}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
-  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">
     <!-- Hero -->

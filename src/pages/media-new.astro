@@ -144,8 +144,7 @@ const darkAssets = [
 const pressSchema = {
   "@context": "https://schema.org",
   "@type": "NonprofitOrganization",
-  name: "Tech for Palestine",
-  url: "https://techforpalestine.org",
+  "@id": "https://techforpalestine.org/#organization",
   subjectOf: [leadArticle, ...articles].map((a) => ({
     "@type": "NewsArticle",
     headline: a.headline,

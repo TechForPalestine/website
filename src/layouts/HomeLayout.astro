@@ -12,6 +12,7 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  canonicalUrl?: string;
 }
 
 const {
@@ -19,18 +20,19 @@ const {
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
   noindex = false,
+  canonicalUrl: canonicalUrlOverride,
 } = Astro.props;
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
-const canonicalUrl = new URL(
-  Astro.url.pathname,
-  Astro.site || "https://techforpalestine.org"
-).toString();
+const canonicalUrl =
+  canonicalUrlOverride ||
+  new URL(Astro.url.pathname, Astro.site || "https://techforpalestine.org").toString();
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "NonprofitOrganization",
+  "@id": "https://techforpalestine.org/#organization",
   name: "Tech for Palestine",
   url: "https://techforpalestine.org",
   logo: "https://techforpalestine.org/t4p-social-logo.png",
