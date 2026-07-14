@@ -1,5 +1,6 @@
 ---
 import { getEnv } from "../../utils/getEnv";
+import { fetchE4PSignatories } from "../../store/notionClient";
 import HomeLayout from "../../layouts/HomeLayout.astro";
 import HomeNavbar from "../../components/home/HomeNavbar.astro";
 import Button from "../../components/ui/Button.astro";
@@ -7,6 +8,26 @@ import SignatoriesNew from "../../components/SignatoriesNew.tsx";
 import PledgeForm from "../../components/PledgeForm.tsx";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+const signatories = await fetchE4PSignatories(Astro.locals).catch(() => []);
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Entrepreneurs for Palestine",
+      item: "https://techforpalestine.org/e4p-new",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "E4P Pledge",
+      item: "https://techforpalestine.org/e4p/pledge-new",
+    },
+  ],
+};
 ---
 
 <HomeLayout
@@ -14,6 +35,9 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   description="Entrepreneurs and founders pledging to steer their companies' hiring, operations, and fundraising in support of Palestinian liberation."
   noindex={true}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
@@ -45,25 +69,24 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           <div class="flex flex-col gap-6">
             <p class="ts-body-large text-ink-secondary">
               We, entrepreneurs, founders, and CEOs, as witnesses of the genocide in Gaza and the
-              77-year long colonization and occupation of Palestine, are signing this open letter
-              in order to pledge our support for the Palestinian struggle for justice, equality
-              and liberation and to boycott Israeli businesses and all businesses who are
-              complicit in perpetuating the Israeli colonial system of oppression and apartheid in
-              Palestine.
+              77-year long colonization and occupation of Palestine, are signing this open letter in
+              order to pledge our support for the Palestinian struggle for justice, equality and
+              liberation and to boycott Israeli businesses and all businesses who are complicit in
+              perpetuating the Israeli colonial system of oppression and apartheid in Palestine.
             </p>
 
             <p class="ts-body-large text-ink-secondary">
               The private sector, and especially the tech and startup industry, has historically
               played a very important role in legitimizing the state of Israel and deepening the
-              ongoing dispossession of Palestinians. Now is the time for private businesses to
-              take a strong stance against the current genocide in Gaza, and against the
-              colonization of Palestine.
+              ongoing dispossession of Palestinians. Now is the time for private businesses to take
+              a strong stance against the current genocide in Gaza, and against the colonization of
+              Palestine.
             </p>
 
             <p class="ts-body-large text-ink-secondary">
               We assert that all companies, no matter where they are based, can make an impact by
-              adopting this position across their activities: hiring, supply chain, trade
-              relations, raising capital, and more.
+              adopting this position across their activities: hiring, supply chain, trade relations,
+              raising capital, and more.
             </p>
 
             <p class="ts-body-large text-ink-secondary">
@@ -96,10 +119,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             </ul>
 
             <p class="ts-body-large text-ink-secondary">
-              In making this pledge, we reject any kind of discrimination on the basis of
-              ethnicity, race, or religion, including antisemitism and islamophobia. We stand
-              against Zionism as an ideology and we promote values such as democracy, equality,
-              self-determination and justice.
+              In making this pledge, we reject any kind of discrimination on the basis of ethnicity,
+              race, or religion, including antisemitism and islamophobia. We stand against Zionism
+              as an ideology and we promote values such as democracy, equality, self-determination
+              and justice.
             </p>
 
             <p class="ts-body-large text-ink-secondary">
@@ -149,7 +172,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
         <div class="pledge-animate">
           <p class="ts-overline mb-6 text-ink-secondary">Full list</p>
           <h2 class="ts-heading mb-10 text-ink">Signatories</h2>
-          <SignatoriesNew client:only="react" />
+          <SignatoriesNew client:load initialSignatories={signatories} />
         </div>
       </div>
     </section>

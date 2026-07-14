@@ -31,6 +31,17 @@ try {
     openRoles = await res.json();
   }
 } catch {}
+
+const openRolesSchema = openRoles.length > 0 && {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: openRoles.map((role, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: role.title,
+    description: role.description || undefined,
+  })),
+};
 ---
 
 <HomeLayout
@@ -38,6 +49,11 @@ try {
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation."
   noindex={true}
 >
+  {
+    openRolesSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(openRolesSchema)} slot="head" />
+    )
+  }
   <link
     rel="preload"
     as="image"

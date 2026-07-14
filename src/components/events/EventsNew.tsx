@@ -163,12 +163,12 @@ function HeroEvent({ event }: HeroEventProps) {
       {/* Content side */}
       <div className="flex flex-col gap-4 p-8 min-[810px]:p-10">
         {/* Date block */}
-        <div>
-          <p className="ts-stat leading-none text-brand">{day}</p>
-          <p className="ts-overline text-ink-secondary">
+        <time dateTime={event.date}>
+          <span className="ts-stat block leading-none text-brand">{day}</span>
+          <span className="ts-overline block text-ink-secondary">
             {month} {year}
-          </p>
-        </div>
+          </span>
+        </time>
 
         {/* Title */}
         <h2 className="ts-editorial text-ink">{event.title}</h2>
@@ -232,12 +232,12 @@ function LineupTile({ event }: LineupTileProps) {
       {/* Content */}
       <div className="flex flex-1 flex-col gap-2 p-5">
         {/* Date */}
-        <div>
-          <p className="ts-heading leading-none text-brand">{day}</p>
-          <p className="ts-overline text-ink-secondary">
+        <time dateTime={event.date}>
+          <span className="ts-heading block leading-none text-brand">{day}</span>
+          <span className="ts-overline block text-ink-secondary">
             {month} {year}
-          </p>
-        </div>
+          </span>
+        </time>
 
         {/* Title */}
         <h3 className="ts-eyebrow mt-1 line-clamp-2 text-ink">{event.title}</h3>
@@ -311,7 +311,9 @@ function PastEventCard({ event }: { event: EventItem }) {
           </div>
           <h2 className="ts-subheading break-words text-ink">{event.title}</h2>
           <div className="flex flex-wrap gap-x-5 gap-y-1">
-            <span className="ts-body-small text-ink-secondary">{full}</span>
+            <time dateTime={event.date} className="ts-body-small text-ink-secondary">
+              {full}
+            </time>
             {event.time && <span className="ts-body-small text-ink-secondary">{event.time}</span>}
             {event.location && (
               <span className="ts-body-small text-ink-secondary">{event.location}</span>

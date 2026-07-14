@@ -12,9 +12,10 @@ const founderSchema = {
   "@type": "Person",
   name: "Paul Biggar",
   jobTitle: "Founder",
+  image: "https://techforpalestine.org/paul-biggar.webp",
   worksFor: {
     "@type": "NonprofitOrganization",
-    name: "Tech for Palestine",
+    "@id": "https://techforpalestine.org/#organization",
   },
   sameAs: ["https://blog.paulbiggar.com/", "https://circleci.com", "https://darklang.com"],
 };
@@ -45,7 +46,10 @@ const founderSchema = {
               >
             </h1>
             <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
-              Technology should disrupt the status quo — not serve it.
+              <strong class="font-medium text-ink"
+                >Tech for Palestine is a 501(c)(3) nonprofit that incubates and scales tech and
+                advocacy projects for Palestinian liberation.</strong
+              > Technology should disrupt the status quo — not serve it.
             </p>
             <p class="ts-body-large mb-4 max-w-[65ch] text-ink-secondary">
               For decades, the narrative about Palestine has been shaped by selective historical

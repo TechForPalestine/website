@@ -59,6 +59,7 @@ const eventSchema = {
   endDate: "2025-11-08T16:00:00Z",
   eventStatus: "https://schema.org/EventCompleted",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  image: ["https://techforpalestine.org/t4p-social-logo.png"],
   location: {
     "@type": "Place",
     name: "Palestine House",
@@ -72,8 +73,7 @@ const eventSchema = {
   },
   organizer: {
     "@type": "NonprofitOrganization",
-    name: "Tech for Palestine",
-    url: "https://techforpalestine.org",
+    "@id": "https://techforpalestine.org/#organization",
   },
   description:
     "A full day event for T4P community members with workshops and networking opportunities.",

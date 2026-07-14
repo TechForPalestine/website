@@ -34,6 +34,7 @@ const eventSchema = nextEvent && {
   name: nextEvent.title,
   startDate: nextEvent.date,
   eventStatus: "https://schema.org/EventScheduled",
+  image: [nextEvent.image || "https://techforpalestine.org/t4p-social-logo.png"],
   location: nextEvent.location
     ? { "@type": "Place", name: nextEvent.location }
     : {
@@ -43,8 +44,7 @@ const eventSchema = nextEvent && {
   description: nextEvent.description,
   organizer: {
     "@type": "NonprofitOrganization",
-    name: "Tech for Palestine",
-    url: "https://techforpalestine.org",
+    "@id": "https://techforpalestine.org/#organization",
   },
 };
 ---
@@ -68,6 +68,13 @@ const eventSchema = nextEvent && {
           <p class="ts-body-large max-w-[65ch] text-ink-secondary">
             Tech for Palestine events bring together builders, organizers, and allies to
             collaborate, share ideas, and take action.
+          </p>
+          <p class="ts-body mt-4 max-w-[65ch] text-ink-secondary">
+            Expect a mix of formats: virtual webinars and workshops open to the whole community,
+            in-person gatherings in cities with an active T4P presence, and community calls where
+            Incubator projects share progress and recruit volunteers. Most events are free and open
+            to anyone supporting Palestinian liberation through tech — recordings are posted
+            afterward for sessions that can't be attended live.
           </p>
         </div>
         <div class="mt-10 h-px w-full bg-ink-divider min-[810px]:mt-14"></div>

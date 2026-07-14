@@ -29,30 +29,41 @@ function QgivEmbed() {
 }
 
 export default function MembershipDues() {
-  const [showCalculator] = useState<boolean>(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlParam = urlParams.get("calculator");
-    if (urlParam === "yes") return true;
-    if (urlParam === "no") return false;
-
-    const stored = localStorage.getItem("membership_ab_variant");
-    if (stored === "Calculator") return true;
-    if (stored === "No Calculator") return false;
-
-    const assigned = Math.random() < 0.5;
-    localStorage.setItem("membership_ab_variant", assigned ? "Calculator" : "No Calculator");
-    return assigned;
-  });
+  // Default to the no-calculator variant so this renders identically during
+  // SSR (no window/localStorage access) before the A/B assignment runs below.
+  const [showCalculator, setShowCalculator] = useState(false);
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlParam = urlParams.get("calculator");
+
+    let assigned: boolean;
+    if (urlParam === "yes") {
+      assigned = true;
+    } else if (urlParam === "no") {
+      assigned = false;
+    } else {
+      const stored = localStorage.getItem("membership_ab_variant");
+      if (stored === "Calculator") {
+        assigned = true;
+      } else if (stored === "No Calculator") {
+        assigned = false;
+      } else {
+        assigned = Math.random() < 0.5;
+        localStorage.setItem("membership_ab_variant", assigned ? "Calculator" : "No Calculator");
+      }
+    }
+
+    setShowCalculator(assigned);
+
     if (typeof window.plausible !== "undefined") {
       window.plausible("Membership Page", {
         props: {
-          membership_variant: showCalculator ? "Calculator" : "No Calculator",
+          membership_variant: assigned ? "Calculator" : "No Calculator",
         },
       });
     }
-  }, [showCalculator]);
+  }, []);
 
   return (
     <div>
