@@ -1,0 +1,197 @@
+---
+import { getEnv } from "../../utils/getEnv";
+import HomeLayout from "../../layouts/HomeLayout.astro";
+import HomeNavbar from "../../components/home/HomeNavbar.astro";
+import Button from "../../components/ui/Button.astro";
+import SignatoriesNew from "../../components/SignatoriesNew.tsx";
+import PledgeForm from "../../components/PledgeForm.tsx";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="E4P Pledge | Tech for Palestine"
+  description="Entrepreneurs and founders pledging to steer their companies' hiring, operations, and fundraising in support of Palestinian liberation."
+  noindex={true}
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="pledge-animate max-w-[680px]">
+          <p class="ts-overline mb-6 text-ink-secondary">Entrepreneurs for Palestine</p>
+          <h1 class="ts-editorial mb-6 text-ink">
+            The <span class="text-brand">E4P Pledge</span>
+          </h1>
+          <p class="ts-body-large mb-10 max-w-[65ch] text-ink-secondary">
+            An open letter from entrepreneurs, founders, and CEOs pledging to use our companies'
+            hiring, operations, and fundraising to support the Palestinian struggle for justice,
+            equality, and liberation.
+          </p>
+          <Button href="#sign" variant="primary" size="md" arrow>Sign the pledge</Button>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Pledge -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="pledge-animate max-w-[65ch]">
+          <p class="ts-overline mb-6 text-ink-secondary">Our pledge</p>
+          <h2 class="ts-heading mb-8 text-ink">What we're signing</h2>
+
+          <div class="flex flex-col gap-6">
+            <p class="ts-body-large text-ink-secondary">
+              We, entrepreneurs, founders, and CEOs, as witnesses of the genocide in Gaza and the
+              77-year long colonization and occupation of Palestine, are signing this open letter
+              in order to pledge our support for the Palestinian struggle for justice, equality
+              and liberation and to boycott Israeli businesses and all businesses who are
+              complicit in perpetuating the Israeli colonial system of oppression and apartheid in
+              Palestine.
+            </p>
+
+            <p class="ts-body-large text-ink-secondary">
+              The private sector, and especially the tech and startup industry, has historically
+              played a very important role in legitimizing the state of Israel and deepening the
+              ongoing dispossession of Palestinians. Now is the time for private businesses to
+              take a strong stance against the current genocide in Gaza, and against the
+              colonization of Palestine.
+            </p>
+
+            <p class="ts-body-large text-ink-secondary">
+              We assert that all companies, no matter where they are based, can make an impact by
+              adopting this position across their activities: hiring, supply chain, trade
+              relations, raising capital, and more.
+            </p>
+
+            <p class="ts-body-large text-ink-secondary">
+              Therefore <span class="font-medium text-ink"
+                >we pledge to steer our companies' hiring policies, operations, delivery of goods,
+                provision of services, fundraising, and PR activities in order to support Palestine
+                and Palestinians in their fight for self-determination and ownership of the land
+                despite military, political, and economic efforts to displace and eliminate them.
+                This may include:</span
+              >
+            </p>
+
+            <ul class="flex flex-col gap-4">
+              <li class="ts-body-large flex gap-3 text-ink-secondary">
+                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"></span>
+                <span>
+                  Hiring Palestinian talent, donating to Palestinian causes, incorporating
+                  Palestinian suppliers in our supply chains, and raising money from investors who
+                  support the Palestinian cause.
+                </span>
+              </li>
+              <li class="ts-body-large flex gap-3 text-ink-secondary">
+                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"></span>
+                <span>
+                  Carrying out strategic boycotts of Israeli and other businesses, entities and
+                  individuals who support Zionism and are complicit in the current genocide and the
+                  ongoing colonization of Palestine, to the extent permitted by law.
+                </span>
+              </li>
+            </ul>
+
+            <p class="ts-body-large text-ink-secondary">
+              In making this pledge, we reject any kind of discrimination on the basis of
+              ethnicity, race, or religion, including antisemitism and islamophobia. We stand
+              against Zionism as an ideology and we promote values such as democracy, equality,
+              self-determination and justice.
+            </p>
+
+            <p class="ts-body-large text-ink-secondary">
+              Through this pledge, we join the wider BDS movement and we aim to exert pressure on
+              Israel and its economy, following the example of successful international campaigns
+              such as the anti-apartheid movement in the case of South Africa.
+            </p>
+
+            <p class="ts-body-large text-ink-secondary">
+              We call on entrepreneurs globally to sign this letter and to join the movement for a
+              free Palestine.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pull-quote signature moment -->
+    <section class="bg-cream px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="pledge-animate max-w-[860px]">
+          <p class="ts-overline mb-8 text-ink-secondary">The commitment</p>
+          <blockquote class="ts-display mb-10 font-serif italic leading-tight text-ink">
+            &ldquo;We pledge to steer our companies' <span class="text-brand">hiring policies</span
+            >, operations, delivery of goods, provision of services, <span class="text-brand"
+              >fundraising</span
+            >, and PR activities in order to support Palestine.&rdquo;
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign now -->
+    <section id="sign" class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[720px]">
+        <div class="pledge-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Sign now</p>
+          <h2 class="ts-heading mb-10 text-ink">Add your name</h2>
+          <PledgeForm client:only="react" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Signatories -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="pledge-animate">
+          <p class="ts-overline mb-6 text-ink-secondary">Full list</p>
+          <h2 class="ts-heading mb-10 text-ink">Signatories</h2>
+          <SignatoriesNew client:only="react" />
+        </div>
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .pledge-animate {
+    opacity: 0;
+    translate: 0 24px;
+    transition:
+      opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+      translate 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .pledge-animate.in-view {
+    opacity: 1;
+    translate: none;
+  }
+  :global(html.no-js) .pledge-animate {
+    opacity: 1;
+    translate: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pledge-animate {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  document.querySelectorAll(".pledge-animate").forEach((el) => obs.observe(el));
+</script>

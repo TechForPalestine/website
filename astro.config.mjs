@@ -91,6 +91,7 @@ export default defineConfig({
           "/events-new/",
           "/home-new/",
           "/endorsements-new/",
+          "/e4p/pledge-new/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
