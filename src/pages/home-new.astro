@@ -27,10 +27,12 @@ let openRoles: Array<{
 
 try {
   // This blocks SSR on every request (open-roles has averaged ~0.7-0.8s
-  // round-trip in production) — bound it so a slow/hanging upstream can't
-  // stall the page indefinitely.
+  // round-trip in production). The openings section is below the fold and
+  // already renders fine with zero roles, so cap the wait tightly rather
+  // than at 3s — a slow/hanging upstream should cost this page far less
+  // than that off its TTFB/LCP.
   const res = await fetch("https://hub.techforpalestine.org/api/public/open-roles", {
-    signal: AbortSignal.timeout(3000),
+    signal: AbortSignal.timeout(1200),
   });
   if (res.ok) {
     openRoles = await res.json();
