@@ -8,6 +8,18 @@ import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
 import { reportError } from "../lib/report-error";
 
+interface Props {
+  // "new" (bg-ink/brand-light) matches home-new's editorial palette.
+  // "old" (bg-green-700/white) matches index.astro's existing green-700
+  // CTA/overline color used throughout contact.astro, faq.astro, etc. —
+  // bg-ink/brand-light belongs to the redesign, not the old homepage.
+  theme?: "new" | "old";
+}
+
+const { theme = "new" } = Astro.props;
+const bgClass = theme === "old" ? "bg-green-700" : "bg-ink";
+const pulseClass = theme === "old" ? "bg-white" : "bg-brand-light";
+
 const ctx = Astro.locals.runtime?.ctx;
 
 let calls: CommunityCall[] = [];
@@ -49,17 +61,20 @@ const localTime = call
 {
   shouldShow && call && (
     <div
-      class="cc-banner flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-ink px-4 py-2.5 text-center text-sm font-medium text-white"
+      class={`cc-banner flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2.5 text-center text-sm font-medium text-white ${bgClass}`}
       data-start-iso={call.startUtcIso}
       data-state={state}
     >
       <span class="cc-banner-live hidden items-center gap-1.5" data-cc-banner-state="live">
-        <span class="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-light" />
+        <span class={`inline-block h-1.5 w-1.5 animate-pulse rounded-full ${pulseClass}`} />
         We're live now
       </span>
       <span data-cc-banner-state="upcoming">
-        Community Call — <span data-cc-banner-time>{localTime}</span>
-        <span data-cc-banner-relative />
+        Community Call —{" "}
+        <>
+          <span data-cc-banner-time>{localTime}</span>
+          <span data-cc-banner-relative />
+        </>
       </span>
       <a href="/community-call" class="underline">
         <span data-cc-banner-cta="live">Join →</span>
