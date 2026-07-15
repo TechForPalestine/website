@@ -40,35 +40,36 @@ A few variables are read directly via `process.env` / `import.meta.env` in confi
 
 Ground truth = every `getEnv("X", ...)` call in `src/`, plus the build-time reads above. Cross-checked against `.env.example`, `.env`, `.dev.vars` (presence only — I did not read or record any secret values).
 
-| Variable                    | Read via                     | In `.env.example`? | In local `.env`? | In local `.dev.vars`? | Consumers                                                  |
-| --------------------------- | ---------------------------- | :----------------: | :--------------: | :-------------------: | ---------------------------------------------------------- |
-| `NOTION_SECRET`             | `getEnv`                     |         ✅         |        ✅        |          ❌           | All Notion routes                                          |
-| `NOTION_DB_ID`              | `getEnv`                     |         ✅         |        ✅        |          ❌           | Events                                                     |
-| `NOTION_SIGNATORIES_DB_ID`  | `getEnv`                     |         ✅         |        ✅        |          ❌           | E4P pledge/signatories                                     |
-| `NOTION_FAQ_DB_ID`          | `getEnv`                     |         ✅         |        ✅        |          ❌           | FAQ                                                        |
-| `NOTION_IDEAS_DB_ID`        | `getEnv`                     |         ✅         |        ✅        |          ❌           | Ideas                                                      |
-| `NOTION_AGENDA_DB_ID`       | `getEnv`                     |         ✅         |        ✅        |          ❌           | Agenda/speakers                                            |
-| `NOTION_ENDORSEMENTS_DB_ID` | `getEnv`                     |         ✅         |        ✅        |          ❌           | Endorsement requests                                       |
-| `NOTION_SPEAKERS_DB_ID`     | —                            |         ✅         |        ✅        |          ❌           | **Not read anywhere in code** — see [NOTION.md](NOTION.md) |
-| `PROJECTHUB_API_KEY`        | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/projects`                                            |
-| `PUBLIC_API_URL`            | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | `/api/project-proxy` — always 503 locally without it       |
-| `PUBLIC_SECRET_KEY`         | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | `/api/project-proxy` — always 503 locally without it       |
-| `HUB_API_URL`               | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                 |
-| `HUB_API_KEY`               | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                 |
-| `EO_API_KEY`                | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/donation-complete`, `/api/membership-complete`       |
-| `PLAUSIBLE_API_KEY`         | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/admin/conversion-stats`                              |
-| `ADMIN_USERNAME`            | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                        |
-| `ADMIN_PASSWORD`            | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                        |
-| `SENTRY_WEBHOOK_SECRET`     | `getEnv`                     |         ✅         |        ❌        |      ⚠️ **typo**      | `/api/sentry-webhook` — see gap below                      |
-| `MATTERMOST_URL`            | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                      |
-| `MATTERMOST_BOT_TOKEN`      | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                      |
-| `MATTERMOST_CHANNEL_ID`     | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                      |
-| `MEMBERSHIP_LIVE`           | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | Feature flag on every `-new` page — always `false` locally |
-| `SENTRY_DSN`                | `process.env` (build/server) |         ✅         |        ✅        |          ✅           | `sentry.server.config.js`                                  |
-| `SENTRY_ENVIRONMENT`        | `process.env`                |         ✅         |        ✅        |          ✅           | `sentry.server.config.js`                                  |
-| `PUBLIC_SENTRY_DSN`         | `import.meta.env`            |         ✅         |        ✅        |          ✅           | `sentry.client.config.js` (bundled into browser JS)        |
-| `PUBLIC_SENTRY_ENVIRONMENT` | `import.meta.env`            |         ✅         |        ✅        |          ✅           | `sentry.client.config.js` (bundled into browser JS)        |
-| `SENTRY_AUTH_TOKEN`         | `process.env` (build only)   |         ✅         |        ✅        |          ✅           | `astro.config.mjs`, source-map upload during `pnpm build`  |
+| Variable                       | Read via                     | In `.env.example`? | In local `.env`? | In local `.dev.vars`? | Consumers                                                                           |
+| ------------------------------ | ---------------------------- | :----------------: | :--------------: | :-------------------: | ----------------------------------------------------------------------------------- |
+| `NOTION_SECRET`                | `getEnv`                     |         ✅         |        ✅        |          ❌           | All Notion routes                                                                   |
+| `NOTION_DB_ID`                 | `getEnv`                     |         ✅         |        ✅        |          ❌           | Events                                                                              |
+| `NOTION_SIGNATORIES_DB_ID`     | `getEnv`                     |         ✅         |        ✅        |          ❌           | E4P pledge/signatories                                                              |
+| `NOTION_FAQ_DB_ID`             | `getEnv`                     |         ✅         |        ✅        |          ❌           | FAQ                                                                                 |
+| `NOTION_IDEAS_DB_ID`           | `getEnv`                     |         ✅         |        ✅        |          ❌           | Ideas                                                                               |
+| `NOTION_AGENDA_DB_ID`          | `getEnv`                     |         ✅         |        ✅        |          ❌           | Agenda/speakers                                                                     |
+| `NOTION_ENDORSEMENTS_DB_ID`    | `getEnv`                     |         ✅         |        ✅        |          ❌           | Endorsement requests                                                                |
+| `NOTION_COMMUNITY_CALLS_DB_ID` | `getEnv`                     |         ✅         |    ❌ **new**    |          ❌           | Community Call page/banner — add to local `.env` and the Cloudflare Pages dashboard |
+| `NOTION_SPEAKERS_DB_ID`        | —                            |         ✅         |        ✅        |          ❌           | **Not read anywhere in code** — see [NOTION.md](NOTION.md)                          |
+| `PROJECTHUB_API_KEY`           | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/projects`                                                                     |
+| `PUBLIC_API_URL`               | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | `/api/project-proxy` — always 503 locally without it                                |
+| `PUBLIC_SECRET_KEY`            | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | `/api/project-proxy` — always 503 locally without it                                |
+| `HUB_API_URL`                  | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                                          |
+| `HUB_API_KEY`                  | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                                          |
+| `EO_API_KEY`                   | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/donation-complete`, `/api/membership-complete`                                |
+| `PLAUSIBLE_API_KEY`            | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/admin/conversion-stats`                                                       |
+| `ADMIN_USERNAME`               | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                                                 |
+| `ADMIN_PASSWORD`               | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                                                 |
+| `SENTRY_WEBHOOK_SECRET`        | `getEnv`                     |         ✅         |        ❌        |      ⚠️ **typo**      | `/api/sentry-webhook` — see gap below                                               |
+| `MATTERMOST_URL`               | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                                               |
+| `MATTERMOST_BOT_TOKEN`         | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                                               |
+| `MATTERMOST_CHANNEL_ID`        | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/sentry-webhook`                                                               |
+| `MEMBERSHIP_LIVE`              | `getEnv`                     |   ❌ **missing**   |        ❌        |          ❌           | Feature flag on every `-new` page — always `false` locally                          |
+| `SENTRY_DSN`                   | `process.env` (build/server) |         ✅         |        ✅        |          ✅           | `sentry.server.config.js`                                                           |
+| `SENTRY_ENVIRONMENT`           | `process.env`                |         ✅         |        ✅        |          ✅           | `sentry.server.config.js`                                                           |
+| `PUBLIC_SENTRY_DSN`            | `import.meta.env`            |         ✅         |        ✅        |          ✅           | `sentry.client.config.js` (bundled into browser JS)                                 |
+| `PUBLIC_SENTRY_ENVIRONMENT`    | `import.meta.env`            |         ✅         |        ✅        |          ✅           | `sentry.client.config.js` (bundled into browser JS)                                 |
+| `SENTRY_AUTH_TOKEN`            | `process.env` (build only)   |         ✅         |        ✅        |          ✅           | `astro.config.mjs`, source-map upload during `pnpm build`                           |
 
 ## Gaps found in this audit (2026-07-11)
 

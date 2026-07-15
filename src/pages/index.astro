@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
+import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import "../styles/base.css";
 
 // Search/AI crawlers must never be enrolled in the client-side A/B redirect:
@@ -36,6 +37,7 @@ const isBot =
       } catch (e) {}
     })();
   </script>
+  <CommunityCallBanner />
   <main>
     <!-- Hero Section -->
     <section

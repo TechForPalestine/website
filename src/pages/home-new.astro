@@ -12,6 +12,7 @@ import PressSection from "../components/home/PressSection.astro";
 import CtaSection from "../components/home/CtaSection.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import SignUpFormHomeNew from "../structures/SignUpFormHomeNew.astro";
+import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
@@ -75,6 +76,7 @@ const openRolesSchema = openRoles.length > 0 && {
     href="/images/new-homepage/manifesto/who-are-we-4.webp"
     slot="head"
   />
+  <CommunityCallBanner />
   <HomeNavbar membershipLive={membershipLive} />
   <main>
     <HeroSection membershipLive={membershipLive} />

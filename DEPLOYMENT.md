@@ -15,7 +15,7 @@ Set the following in the Cloudflare Pages dashboard (Production and Preview are 
 
 - `NOTION_SECRET` — shared integration token
 - `NOTION_DB_ID` — Events database ID
-- `NOTION_SIGNATORIES_DB_ID`, `NOTION_FAQ_DB_ID`, `NOTION_IDEAS_DB_ID`, `NOTION_AGENDA_DB_ID`, `NOTION_ENDORSEMENTS_DB_ID`
+- `NOTION_SIGNATORIES_DB_ID`, `NOTION_FAQ_DB_ID`, `NOTION_IDEAS_DB_ID`, `NOTION_AGENDA_DB_ID`, `NOTION_ENDORSEMENTS_DB_ID`, `NOTION_COMMUNITY_CALLS_DB_ID`
 - `NOTION_SPEAKERS_DB_ID` — listed for completeness; not currently read by any route
 
 **ProjectHub / generic proxy** ([docs/PROJECTS.md](docs/PROJECTS.md))

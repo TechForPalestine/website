@@ -1,6 +1,8 @@
 # Redirects for renamed pages
 /resources /faq 301
 /resources/ /faq 301
+/community-calls /community-call 301
+/community-calls/ /community-call 301
 /project/* /projects 301
 /project-apply /projects 301
 /project-details/* /projects 301
