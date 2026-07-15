@@ -1,0 +1,144 @@
+---
+// Shared between index.astro (old homepage) and home-new.astro (new
+// homepage) — see design doc for why the insertion point differs between
+// the two (Layout.astro renders <Navigation /> above the slot; HomeLayout
+// does not).
+import * as Sentry from "@sentry/astro";
+import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
+import { featuredCall, callState } from "../utils/communityCall";
+import { reportError } from "../lib/report-error";
+
+const ctx = Astro.locals.runtime?.ctx;
+
+let calls: CommunityCall[] = [];
+try {
+  calls = await Promise.race([
+    fetchCommunityCalls(Astro.locals),
+    new Promise<CommunityCall[]>((_, reject) =>
+      setTimeout(() => reject(new Error("community call banner fetch timed out")), 1200)
+    ),
+  ]);
+} catch (error) {
+  reportError(error, { context: "CommunityCallBanner: fetchCommunityCalls" });
+  ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+}
+
+const now = new Date();
+const call = featuredCall(calls, now);
+const state = call ? callState(call, now) : null;
+
+// The banner only ever flags something time-sensitive — never renders for
+// "none scheduled" or "ended", and only for "upcoming" within 7 days.
+const BANNER_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+const shouldShow =
+  call &&
+  (state === "live" ||
+    (state === "upcoming" &&
+      new Date(call.startUtcIso).getTime() - now.getTime() < BANNER_WINDOW_MS));
+
+const localTime = call
+  ? new Date(call.startUtcIso).toLocaleString(undefined, {
+      weekday: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    })
+  : "";
+---
+
+{
+  shouldShow && call && (
+    <div
+      class="cc-banner flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-ink px-4 py-2.5 text-center text-sm font-medium text-white"
+      data-start-iso={call.startUtcIso}
+      data-state={state}
+    >
+      <span class="cc-banner-live hidden items-center gap-1.5" data-cc-banner-state="live">
+        <span class="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-light" />
+        We're live now
+      </span>
+      <span data-cc-banner-state="upcoming">
+        Community Call — <span data-cc-banner-time>{localTime}</span>
+      </span>
+      <a href="/community-call" class="underline">
+        <span data-cc-banner-cta="live">Join →</span>
+        <span data-cc-banner-cta="soon">Join →</span>
+        <span data-cc-banner-cta="far">Add to calendar →</span>
+      </a>
+    </div>
+  )
+}
+
+<script>
+  const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  const banner = document.querySelector<HTMLElement>(".cc-banner");
+  if (banner) {
+    const startIso = banner.dataset.startIso;
+    if (startIso) {
+      const start = new Date(startIso).getTime();
+      const now = Date.now();
+
+      let state: "upcoming" | "live" | "ended" = "upcoming";
+      if (now >= start && now < start + LIVE_WINDOW_MS) state = "live";
+      else if (now >= start + LIVE_WINDOW_MS) state = "ended";
+      banner.dataset.state = state;
+
+      // Server-rendered time is in the SERVER's time zone (Cloudflare's edge
+      // runtime is UTC, not the visitor's) — replace with the visitor's.
+      const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
+      if (timeEl) {
+        timeEl.textContent = new Date(startIso).toLocaleString(undefined, {
+          weekday: "short",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZoneName: "short",
+        });
+      }
+
+      // Ended (or the fetch's featured-call selection went stale in cache) —
+      // this banner has nothing time-sensitive left to say. Hide entirely
+      // rather than show "ended" content, which the banner never does.
+      if (state === "ended") {
+        banner.style.display = "none";
+      } else {
+        const cta = start - now < DAY_MS ? "soon" : "far";
+        banner
+          .querySelectorAll<HTMLElement>("[data-cc-banner-cta]")
+          .forEach((el) => (el.style.display = "none"));
+        const active = banner.querySelector<HTMLElement>(
+          `[data-cc-banner-cta="${state === "live" ? "live" : cta}"]`
+        );
+        if (active) active.style.display = "inline";
+      }
+    }
+  }
+</script>
+
+<style>
+  .cc-banner[data-state="live"] .cc-banner-live {
+    display: flex;
+  }
+  .cc-banner[data-state="live"] [data-cc-banner-state="upcoming"] {
+    display: none;
+  }
+  .cc-banner:not([data-state="live"]) [data-cc-banner-state="live"] {
+    display: none;
+  }
+  /* No-JS / pre-hydration fallback: show the safe default (7 days out is
+     the common case), then the inline script narrows it to "soon"/"live"
+     once real time is available. */
+  [data-cc-banner-cta] {
+    display: none;
+  }
+  [data-cc-banner-cta="far"] {
+    display: inline;
+  }
+  .cc-banner[data-state="live"] [data-cc-banner-cta="far"] {
+    display: none;
+  }
+  .cc-banner[data-state="live"] [data-cc-banner-cta="live"] {
+    display: inline;
+  }
+</style>

@@ -5,12 +5,14 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  noindex?: boolean;
 }
 
 const {
   title,
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
+  noindex = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(
@@ -27,6 +29,7 @@ const canonicalUrl = new URL(
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="me" href="https://infosec.exchange/@tech4palestine" />
     <script type="speculationrules">
       {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getEnv } from "../utils/getEnv.js";
+import { sanitizeUrl } from "../components/projects/projectData";
 
 // Helper function to create Notion axios instance with runtime environment variables
 function createNotionAxios(secret: string) {
@@ -40,6 +41,75 @@ function titleText(prop: NotionTitleProperty | undefined, fallback = ""): string
 
 function richText(prop: NotionRichTextProperty | undefined, fallback = ""): string {
   return prop?.rich_text?.[0]?.plain_text || fallback;
+}
+
+interface NotionDateProperty {
+  date?: { start: string; time_zone?: string | null } | null;
+}
+
+interface NotionUrlProperty {
+  url?: string | null;
+}
+
+// Notion returns `start` two different ways depending on whether the date
+// property has an explicit time zone override:
+//   - no override: the UTC offset is embedded in `start` itself, e.g.
+//     "2026-07-22T17:00:00.000-04:00" — Date.parse handles this correctly.
+//   - override set: `start` has NO offset ("2026-07-22T17:00:00.000") and
+//     the zone lives separately in `time_zone`. Parsing that string with
+//     `new Date()` would use the *server's* zone, not the call's — wrong
+//     for every visitor outside that zone. Resolve it explicitly instead.
+function resolveDateToUtcIso(prop: NotionDateProperty | undefined): string | null {
+  const start = prop?.date?.start;
+  if (!start) return null;
+
+  // Date-only rows ("2026-07-22", no time component) can't anchor a live
+  // window — reject rather than silently defaulting to UTC midnight.
+  if (!start.includes("T")) return null;
+
+  const timeZone = prop?.date?.time_zone;
+  if (!timeZone) {
+    const parsed = new Date(start);
+    return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
+  }
+
+  const [datePart, timePart] = start.split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, secondMs] = timePart.split(":");
+  const second = Number((secondMs || "0").split(".")[0]);
+
+  // Standard offset-discovery trick: guess the instant is UTC, ask the
+  // target time zone what wall-clock time that instant shows, then correct
+  // by the difference. Handles arbitrary IANA zones with no dependency.
+  const guessUtc = Date.UTC(year, month - 1, day, Number(hour), Number(minute), second);
+
+  let formatted: Intl.DateTimeFormatPart[];
+  try {
+    formatted = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      hourCycle: "h23",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }).formatToParts(new Date(guessUtc));
+  } catch {
+    return null;
+  }
+
+  const part = (type: string) => formatted.find((p) => p.type === type)?.value;
+  const asIfUtc = Date.UTC(
+    Number(part("year")),
+    Number(part("month")) - 1,
+    Number(part("day")),
+    Number(part("hour")),
+    Number(part("minute")),
+    Number(part("second"))
+  );
+
+  return new Date(guessUtc - (asIfUtc - guessUtc)).toISOString();
 }
 
 export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) => {
@@ -332,4 +402,65 @@ export const fetchE4PSignatories = async (locals?: any) => {
       approved: props["Approved"]?.checkbox || false,
     };
   });
+};
+
+export interface CommunityCall {
+  id: string;
+  title: string;
+  description: string;
+  startUtcIso: string;
+  youtubeUrl: string;
+  youtubeVerticalUrl: string;
+  linkedinUrl: string;
+  xUrl: string;
+}
+
+function communityCallUrl(prop: NotionUrlProperty | undefined): string {
+  return sanitizeUrl(prop?.url || undefined);
+}
+
+export const fetchCommunityCalls = async (locals?: any): Promise<CommunityCall[]> => {
+  const secret = getEnv("NOTION_SECRET", locals);
+  const dbId = getEnv("NOTION_COMMUNITY_CALLS_DB_ID", locals);
+
+  if (!secret || !dbId) {
+    throw new Error(
+      "Missing Notion credentials: NOTION_SECRET and NOTION_COMMUNITY_CALLS_DB_ID are required"
+    );
+  }
+
+  const notionAxios = createNotionAxios(secret);
+  const response = await notionAxios.post(`databases/${dbId}/query`, {
+    filter: {
+      property: "Visibility",
+      checkbox: {
+        equals: true,
+      },
+    },
+  });
+
+  const calls: CommunityCall[] = response.data.results
+    .map((page: any) => {
+      const props = page.properties;
+      const startUtcIso = resolveDateToUtcIso(props["Date"]);
+      // A row with no usable start time can't anchor the state machine —
+      // drop it rather than let it masquerade as scheduled.
+      if (!startUtcIso) return null;
+
+      return {
+        id: page.id,
+        title: titleText(props["Title"], "Community Call"),
+        description: richText(props["Description"]),
+        startUtcIso,
+        youtubeUrl: communityCallUrl(props["YouTube URL"]),
+        youtubeVerticalUrl: communityCallUrl(props["YouTube Vertical URL"]),
+        linkedinUrl: communityCallUrl(props["LinkedIn URL"]),
+        xUrl: communityCallUrl(props["X URL"]),
+      };
+    })
+    .filter((call: CommunityCall | null): call is CommunityCall => call !== null);
+
+  return calls.sort(
+    (a, b) => new Date(b.startUtcIso).getTime() - new Date(a.startUtcIso).getTime()
+  );
 };
