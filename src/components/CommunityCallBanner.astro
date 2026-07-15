@@ -116,17 +116,22 @@ const localTime = call
       // Append a relative countdown alongside the absolute time once close
       // to the call — a static snapshot at load time, not a ticking
       // countdown (see design doc). Absolute time stays put either way.
+      //
+      // Leading ​ (zero-width space): no visible space before "(", but
+      // still gives the browser a valid line-break point. Without it,
+      // "GMT+3(Starts" is one unbreakable run that overflows/clips on
+      // narrow viewports instead of wrapping.
       const relativeEl = banner.querySelector<HTMLElement>("[data-cc-banner-relative]");
       if (relativeEl && state !== "live") {
         const remaining = start - now;
         if (remaining < 15 * 60 * 1000) {
-          relativeEl.textContent = "(Starting soon)";
+          relativeEl.textContent = "​(Starting soon)";
         } else if (remaining < 60 * 60 * 1000) {
           const mins = Math.round(remaining / 60000);
-          relativeEl.textContent = `(Starts in ${mins} min)`;
+          relativeEl.textContent = `​(Starts in ${mins} min)`;
         } else if (remaining < DAY_MS) {
           const hours = Math.round(remaining / (60 * 60 * 1000));
-          relativeEl.textContent = `(Starts in ${hours} hour${hours === 1 ? "" : "s"})`;
+          relativeEl.textContent = `​(Starts in ${hours} hour${hours === 1 ? "" : "s"})`;
         }
       }
 
