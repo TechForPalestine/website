@@ -57,7 +57,9 @@ const localTime = call
         <span class="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-light" />
         We're live now
       </span>
-      <span data-cc-banner-state="upcoming">Community Call — {localTime}</span>
+      <span data-cc-banner-state="upcoming">
+        Community Call — <span data-cc-banner-time>{localTime}</span>
+      </span>
       <a href="/community-call" class="underline">
         <span data-cc-banner-cta="live">Join →</span>
         <span data-cc-banner-cta="soon">Join →</span>
@@ -82,6 +84,18 @@ const localTime = call
       if (now >= start && now < start + LIVE_WINDOW_MS) state = "live";
       else if (now >= start + LIVE_WINDOW_MS) state = "ended";
       banner.dataset.state = state;
+
+      // Server-rendered time is in the SERVER's time zone (Cloudflare's edge
+      // runtime is UTC, not the visitor's) — replace with the visitor's.
+      const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
+      if (timeEl) {
+        timeEl.textContent = new Date(startIso).toLocaleString(undefined, {
+          weekday: "short",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZoneName: "short",
+        });
+      }
 
       // Ended (or the fetch's featured-call selection went stale in cache) —
       // this banner has nothing time-sensitive left to say. Hide entirely

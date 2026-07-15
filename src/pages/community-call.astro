@@ -50,7 +50,7 @@ function googleCalendarUrl(c: CommunityCall): string {
   const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   const params = new URLSearchParams({
     action: "TEMPLATE",
-    text: c.title,
+    text: `T4P: ${c.title}`,
     dates: `${fmt(start)}/${fmt(end)}`,
     details: `${c.description}\n\nDetails: https://techforpalestine.org/community-call`,
   });
@@ -111,11 +111,7 @@ function googleCalendarUrl(c: CommunityCall): string {
                 {formatLocalDate(call.startUtcIso)}
               </p>
 
-              <div
-                class="flex flex-col items-center gap-4"
-                data-cc-state="upcoming"
-                style="display: none"
-              >
+              <div class="flex flex-col items-center gap-4" data-cc-state="upcoming">
                 {call.youtubeUrl ? (
                   <Button href={call.youtubeUrl} variant="primary" size="lg" arrow>
                     Watch on YouTube
@@ -144,11 +140,7 @@ function googleCalendarUrl(c: CommunityCall): string {
                 </a>
               </div>
 
-              <div
-                class="flex flex-col items-center gap-4"
-                data-cc-state="live"
-                style="display: none"
-              >
+              <div class="flex flex-col items-center gap-4" data-cc-state="live">
                 {call.youtubeUrl && (
                   <Button href={call.youtubeUrl} variant="primary" size="lg" arrow>
                     Watch on YouTube
@@ -169,11 +161,7 @@ function googleCalendarUrl(c: CommunityCall): string {
                 )}
               </div>
 
-              <div
-                class="flex flex-col items-center gap-4"
-                data-cc-state="ended"
-                style="display: none"
-              >
+              <div class="flex flex-col items-center gap-4" data-cc-state="ended">
                 <p class="ts-body-small mb-2 text-ink-secondary">
                   This call has ended. Recordings, if available, are linked below.
                 </p>
@@ -228,12 +216,30 @@ function googleCalendarUrl(c: CommunityCall): string {
       if (startIso) {
         const state = computeState(startIso, new Date());
         page.dataset.state = state;
+
+        // The server-rendered date/time is formatted in the SERVER's time
+        // zone (Cloudflare's edge runtime is UTC, not the visitor's) — swap
+        // it here for one computed in the actual visitor's local time zone.
+        const datetimeEl = page.querySelector<HTMLElement>("[data-cc-datetime]");
+        if (datetimeEl) {
+          datetimeEl.textContent = new Date(startIso).toLocaleString(undefined, {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            timeZoneName: "short",
+          });
+        }
       }
     }
   </script>
 
   <style>
-    [data-cc-state] {
+    /* div[data-cc-state], not the bare attribute selector — needs to
+       out-specificity Tailwind's .flex utility on the same element, or the
+       show/hide outcome depends on stylesheet load order. */
+    div[data-cc-state] {
       display: none;
     }
     .cc-page[data-state="upcoming"] [data-cc-state="upcoming"] {
