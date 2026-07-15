@@ -19,6 +19,9 @@ interface Props {
 const { theme = "new" } = Astro.props;
 const bgClass = theme === "old" ? "bg-green-700" : "bg-ink";
 const pulseClass = theme === "old" ? "bg-white" : "bg-brand-light";
+// The old homepage links to the old-design counterpart page, not the new
+// design — see docs/superpowers/specs/2026-07-15-community-call-design.md.
+const targetHref = theme === "old" ? "/community-call-old" : "/community-call";
 
 const ctx = Astro.locals.runtime?.ctx;
 
@@ -76,7 +79,7 @@ const localTime = call
           <span data-cc-banner-relative />
         </>
       </span>
-      <a href="/community-call" class="underline">
+      <a href={targetHref} class="underline">
         <span data-cc-banner-cta="live">Join →</span>
         <span data-cc-banner-cta="soon">Join →</span>
         <span data-cc-banner-cta="far">Add to calendar →</span>
