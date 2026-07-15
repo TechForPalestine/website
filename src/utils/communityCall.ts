@@ -2,7 +2,7 @@ import type { CommunityCall } from "../store/notionClient";
 
 export type CommunityCallState = "upcoming" | "live" | "ended";
 
-const LIVE_WINDOW_MS = 3 * 60 * 60 * 1000; // 3h — see design doc for why not 90min
+const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000; // 2h — see design doc for why not 90min
 const ENDED_GRACE_MS = 7 * 24 * 60 * 60 * 1000; // how long an ended call still "counts"
 
 export function callState(call: CommunityCall, now: Date): CommunityCallState {

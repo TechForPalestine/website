@@ -29,7 +29,7 @@ The stream links change every month and are maintained by a human in Notion. The
 | -------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | URL structure        | `/community-call` = new design (indexed, shareable); `/community-call-old` = old design (noindex, excluded) | The shared link must be the new design. Inverts the repo's `-new` convention: here the _old_ page is the throwaway.               |
 | Notion schema        | One row per call                                                                                            | Schema is expensive to change later. Gives date-derived state, staging, and a free archive.                                       |
-| Live detection       | Date + assumed 3h window, computed client-side                                                              | No human toggle; client-side so the 300s cache can't render a stale "LIVE NOW".                                                   |
+| Live detection       | Date + assumed 2h window, computed client-side                                                              | No human toggle; client-side so the 300s cache can't render a stale "LIVE NOW".                                                   |
 | YouTube presentation | One primary "Watch on YouTube" (widescreen) + "Prefer vertical? →" text link                                | Desktop/mobile are _format_ preferences, not device constraints. Every phone plays widescreen fine; vertical is worse for slides. |
 | Banner               | Slim bar, 7-day window, non-dismissible                                                                     | The visibility gate already solves banner-blindness; dismissal solves it a second time at much higher cost.                       |
 | Calendar             | Per-call Google Calendar link (`<a>`, no `.ics` route)                                                      | Dates move, so a recurring `RRULE` hold would drift and lie.                                                                      |
@@ -78,7 +78,7 @@ callState(call, now)     -> "upcoming" | "live" | "ended"
 
 `featuredCall` picks the one call the page is about, in strict priority order:
 
-1. a call currently live (`date <= now < date+3h`), else
+1. a call currently live (`date <= now < date+2h`), else
 2. the soonest upcoming call, else
 3. the most recent ended call, **if it ended within the last 7 days**, else
 4. `null` → the none-scheduled state
@@ -99,10 +99,10 @@ Derived from `featuredCall` above; conditions are evaluated in that priority ord
 | ------------------ | ----------------------------------- | ----------------------------------------------------------------------- |
 | **None scheduled** | `featuredCall` is `null`            | "Next call not scheduled yet" + email signup as primary CTA             |
 | **Upcoming**       | `now < date`                        | Local date/time, add-to-calendar, stream buttons, pitch                 |
-| **Live**           | `date <= now < date+3h`             | Pulsing indicator, buttons promoted to top                              |
-| **Ended**          | `now >= date+3h`, ended <7 days ago | Links relabelled as recordings; copy must not assert a recording exists |
+| **Live**           | `date <= now < date+2h`             | Pulsing indicator, buttons promoted to top                              |
+| **Ended**          | `now >= date+2h`, ended <7 days ago | Links relabelled as recordings; copy must not assert a recording exists |
 
-3h, not 90min: a call that runs long must not flip to "watch the recording" while people are still on it.
+2h, not 90min: a call that runs long must not flip to "watch the recording" while people are still on it.
 
 State is computed **client-side** from an ISO instant in a `data-` attribute.
 

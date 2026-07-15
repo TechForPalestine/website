@@ -200,7 +200,7 @@ function googleCalendarUrl(c: CommunityCall): string {
   </main>
 
   <script>
-    const LIVE_WINDOW_MS = 3 * 60 * 60 * 1000;
+    const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
 
     function computeState(startIso: string, now: Date): "upcoming" | "live" | "ended" {
       const start = new Date(startIso).getTime();
