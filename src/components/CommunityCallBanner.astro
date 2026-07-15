@@ -73,11 +73,7 @@ const localTime = call
         We're live now
       </span>
       <span data-cc-banner-state="upcoming">
-        Community Call —{" "}
-        <>
-          <span data-cc-banner-time>{localTime}</span>
-          <span data-cc-banner-relative />
-        </>
+        Community Call — <span data-cc-banner-time>{localTime}</span>
       </span>
       <a href={targetHref} class="underline">
         <span data-cc-banner-cta="live">Join →</span>
@@ -114,23 +110,6 @@ const localTime = call
           minute: "2-digit",
           timeZoneName: "short",
         });
-      }
-
-      // Append a relative countdown alongside the absolute time once close
-      // to the call — a static snapshot at load time, not a ticking
-      // countdown (see design doc). Absolute time stays put either way.
-      const relativeEl = banner.querySelector<HTMLElement>("[data-cc-banner-relative]");
-      if (relativeEl && state !== "live") {
-        const remaining = start - now;
-        if (remaining < 15 * 60 * 1000) {
-          relativeEl.textContent = " (Starting soon)";
-        } else if (remaining < 60 * 60 * 1000) {
-          const mins = Math.round(remaining / 60000);
-          relativeEl.textContent = ` (Starts in ${mins} min)`;
-        } else if (remaining < DAY_MS) {
-          const hours = Math.round(remaining / (60 * 60 * 1000));
-          relativeEl.textContent = ` (Starts in ${hours} hour${hours === 1 ? "" : "s"})`;
-        }
       }
 
       // Ended (or the fetch's featured-call selection went stale in cache) —
