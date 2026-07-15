@@ -9,6 +9,7 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
+import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";
 
 const ctx = Astro.locals.runtime?.ctx;
@@ -28,14 +29,7 @@ const initialState = call ? callState(call, now) : null;
 Astro.response.headers.set("Cache-Control", "public, max-age=300");
 
 function formatLocalDate(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  });
+  return formatLongCallTime(iso, now);
 }
 
 function googleCalendarUrl(c: CommunityCall): string {
@@ -200,6 +194,8 @@ function googleCalendarUrl(c: CommunityCall): string {
   </main>
 
   <script>
+    import { formatLongCallTime } from "../utils/formatCallTime";
+
     const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
 
     function computeState(startIso: string, now: Date): "upcoming" | "live" | "ended" {
@@ -216,19 +212,13 @@ function googleCalendarUrl(c: CommunityCall): string {
       if (startIso) {
         page.dataset.state = computeState(startIso, new Date());
 
-        // The server-rendered date/time is formatted in the SERVER's time
-        // zone (Cloudflare's edge runtime is UTC, not the visitor's) — swap
-        // it here for one computed in the actual visitor's local time zone.
+        // The server-rendered date/time (and "Today"/"Tomorrow" framing) is
+        // computed in the SERVER's time zone and calendar day (Cloudflare's
+        // edge runtime is UTC, not the visitor's) — swap it here for one
+        // computed in the visitor's actual local time zone.
         const datetimeEl = page.querySelector<HTMLElement>("[data-cc-datetime]");
         if (datetimeEl) {
-          datetimeEl.textContent = new Date(startIso).toLocaleString(undefined, {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            timeZoneName: "short",
-          });
+          datetimeEl.textContent = formatLongCallTime(startIso, new Date());
         }
       }
     }

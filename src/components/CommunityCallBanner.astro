@@ -7,6 +7,22 @@ import * as Sentry from "@sentry/astro";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
 import { reportError } from "../lib/report-error";
+import { formatShortCallTime } from "../utils/formatCallTime";
+
+interface Props {
+  // "new" (bg-ink/brand-light) matches home-new's editorial palette.
+  // "old" (bg-green-700/white) matches index.astro's existing green-700
+  // CTA/overline color used throughout contact.astro, faq.astro, etc. —
+  // bg-ink/brand-light belongs to the redesign, not the old homepage.
+  theme?: "new" | "old";
+}
+
+const { theme = "new" } = Astro.props;
+const bgClass = theme === "old" ? "bg-green-700" : "bg-ink";
+const pulseClass = theme === "old" ? "bg-white" : "bg-brand-light";
+// The old homepage links to the old-design counterpart page, not the new
+// design — see docs/superpowers/specs/2026-07-15-community-call-design.md.
+const targetHref = theme === "old" ? "/community-call-old" : "/community-call";
 
 const ctx = Astro.locals.runtime?.ctx;
 
@@ -36,31 +52,24 @@ const shouldShow =
     (state === "upcoming" &&
       new Date(call.startUtcIso).getTime() - now.getTime() < BANNER_WINDOW_MS));
 
-const localTime = call
-  ? new Date(call.startUtcIso).toLocaleString(undefined, {
-      weekday: "short",
-      hour: "numeric",
-      minute: "2-digit",
-      timeZoneName: "short",
-    })
-  : "";
+const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
 ---
 
 {
   shouldShow && call && (
     <div
-      class="cc-banner flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-ink px-4 py-2.5 text-center text-sm font-medium text-white"
+      class={`cc-banner flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2.5 text-center text-sm font-medium text-white ${bgClass}`}
       data-start-iso={call.startUtcIso}
       data-state={state}
     >
       <span class="cc-banner-live hidden items-center gap-1.5" data-cc-banner-state="live">
-        <span class="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-light" />
+        <span class={`inline-block h-1.5 w-1.5 animate-pulse rounded-full ${pulseClass}`} />
         We're live now
       </span>
       <span data-cc-banner-state="upcoming">
         Community Call — <span data-cc-banner-time>{localTime}</span>
       </span>
-      <a href="/community-call" class="underline">
+      <a href={targetHref} class="underline">
         <span data-cc-banner-cta="live">Join →</span>
         <span data-cc-banner-cta="soon">Join →</span>
         <span data-cc-banner-cta="far">Add to calendar →</span>
@@ -70,6 +79,8 @@ const localTime = call
 }
 
 <script>
+  import { formatShortCallTime } from "../utils/formatCallTime";
+
   const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
   const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -85,16 +96,12 @@ const localTime = call
       else if (now >= start + LIVE_WINDOW_MS) state = "ended";
       banner.dataset.state = state;
 
-      // Server-rendered time is in the SERVER's time zone (Cloudflare's edge
+      // Server-rendered time (and "Today"/"Tomorrow" framing) is computed
+      // in the SERVER's time zone and calendar day (Cloudflare's edge
       // runtime is UTC, not the visitor's) — replace with the visitor's.
       const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
       if (timeEl) {
-        timeEl.textContent = new Date(startIso).toLocaleString(undefined, {
-          weekday: "short",
-          hour: "numeric",
-          minute: "2-digit",
-          timeZoneName: "short",
-        });
+        timeEl.textContent = formatShortCallTime(startIso, new Date());
       }
 
       // Ended (or the fetch's featured-call selection went stale in cache) —
