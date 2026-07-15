@@ -7,6 +7,7 @@ import * as Sentry from "@sentry/astro";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
 import { reportError } from "../lib/report-error";
+import { formatShortCallTime } from "../utils/formatCallTime";
 
 interface Props {
   // "new" (bg-ink/brand-light) matches home-new's editorial palette.
@@ -51,13 +52,7 @@ const shouldShow =
     (state === "upcoming" &&
       new Date(call.startUtcIso).getTime() - now.getTime() < BANNER_WINDOW_MS));
 
-const localTime = call
-  ? new Date(call.startUtcIso).toLocaleString(undefined, {
-      weekday: "short",
-      hour: "numeric",
-      minute: "2-digit",
-    })
-  : "";
+const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
 ---
 
 {
@@ -84,6 +79,8 @@ const localTime = call
 }
 
 <script>
+  import { formatShortCallTime } from "../utils/formatCallTime";
+
   const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
   const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -99,15 +96,12 @@ const localTime = call
       else if (now >= start + LIVE_WINDOW_MS) state = "ended";
       banner.dataset.state = state;
 
-      // Server-rendered time is in the SERVER's time zone (Cloudflare's edge
+      // Server-rendered time (and "Today"/"Tomorrow" framing) is computed
+      // in the SERVER's time zone and calendar day (Cloudflare's edge
       // runtime is UTC, not the visitor's) — replace with the visitor's.
       const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
       if (timeEl) {
-        timeEl.textContent = new Date(startIso).toLocaleString(undefined, {
-          weekday: "short",
-          hour: "numeric",
-          minute: "2-digit",
-        });
+        timeEl.textContent = formatShortCallTime(startIso, new Date());
       }
 
       // Ended (or the fetch's featured-call selection went stale in cache) —
