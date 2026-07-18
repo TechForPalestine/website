@@ -8,3 +8,5 @@
 /project-details/* /projects 301
 /mentor-application /mentorship 301
 /admin/dropped-conversions /admin/conversions 301
+/index-new / 301
+/index-new/ / 301
