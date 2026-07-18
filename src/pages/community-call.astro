@@ -101,9 +101,16 @@ function googleCalendarUrl(c: CommunityCall): string {
                 We're live now
               </p>
 
-              <p class="ts-body mb-8 text-center text-ink" data-cc-datetime>
+              <p class="ts-body mb-8 text-center text-ink invisible" data-cc-datetime>
                 {formatLocalDate(call.startUtcIso)}
               </p>
+              <noscript>
+                <style>
+                  [data-cc-datetime] {
+                    visibility: visible;
+                  }
+                </style>
+              </noscript>
 
               <div class="flex flex-col items-center gap-4" data-cc-state="upcoming">
                 {call.youtubeUrl ? (
@@ -175,7 +182,7 @@ function googleCalendarUrl(c: CommunityCall): string {
               </div>
 
               {call.xUrl && (
-                <p class="ts-body-small mt-8 text-center text-ink-muted">
+                <p class="cc-x-stream ts-body-small mt-8 text-center text-ink-muted">
                   Also streaming to{" "}
                   <a href={call.xUrl} class="underline">
                     X
@@ -220,6 +227,7 @@ function googleCalendarUrl(c: CommunityCall): string {
         const datetimeEl = page.querySelector<HTMLElement>("[data-cc-datetime]");
         if (datetimeEl) {
           datetimeEl.textContent = formatLongCallTime(startIso, new Date());
+          datetimeEl.classList.remove("invisible");
         }
       }
     }
@@ -243,6 +251,9 @@ function googleCalendarUrl(c: CommunityCall): string {
     }
     .cc-page[data-state="ended"] [data-cc-state="ended"] {
       display: flex;
+    }
+    .cc-page[data-state="ended"] .cc-x-stream {
+      display: none;
     }
   </style>
 </HomeLayout>
