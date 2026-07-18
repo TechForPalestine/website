@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../../store/eventsClient";
+import { groupIntoSections, type EventSection } from "../../utils/eventSections";
+import { buildGoogleCalendarLink } from "../../utils/googleCalendarLink";
+import { toWebcalUrl } from "../../utils/webcal";
+import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
 
-interface EventItem {
-  id: string;
-  title: string;
-  date: string; // "YYYY-MM-DD" format
-  status: string;
-  location: string;
-  image: string;
-  link: string;
-  time?: string;
-  description?: string;
-  registerLink?: string;
-  recordingLink?: string;
+const PAST_EVENTS_PAGE_SIZE = 5;
+
+interface SelectedEvent {
+  event: EventItem;
+  isPast: boolean;
+}
+
+const EventModalContext = createContext<(selected: SelectedEvent) => void>(() => {});
+
+function isEventPast(event: EventItem): boolean {
+  return !event.dateUtcIso || new Date(event.dateUtcIso).getTime() < Date.now();
 }
 
 interface DateParts {
@@ -64,68 +68,78 @@ function ArrowRight({ size = 16 }: { size?: number }) {
   );
 }
 
-function SectionLabel({
-  accent = false,
-  children,
-}: {
-  accent?: boolean;
-  children: React.ReactNode;
-}) {
+function ChevronDown({ size = 18, expanded }: { size?: number; expanded: boolean }) {
   return (
-    <div className="mb-8 flex items-center gap-5">
-      <p className={`ts-overline shrink-0 ${accent ? "text-brand" : "text-ink-secondary"}`}>
-        {children}
-      </p>
-      <div className={`h-px flex-1 ${accent ? "bg-brand/20" : "bg-ink-divider"}`} />
-    </div>
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="transition-transform duration-200"
+      style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
+function CalendarPlus({ size = 15 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18M12 14v6M9 17h6" />
+    </svg>
+  );
+}
+
+function CloseIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
   );
 }
 
 function LoadingSkeleton() {
   return (
     <div>
-      {/* Hero skeleton */}
-      <section className="bg-page px-6 pb-14 pt-10 min-[810px]:px-10 min-[810px]:pb-16 min-[810px]:pt-12">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="mb-8 flex items-center gap-5">
-            <div className="h-3 w-20 animate-pulse rounded-pill bg-butter" />
-            <div className="h-px flex-1 bg-ink-divider" />
-          </div>
-          <div className="grid min-[810px]:grid-cols-[55%_45%]">
-            <div className="aspect-[3/2] w-full animate-pulse bg-butter min-[810px]:aspect-auto min-[810px]:min-h-[380px]" />
-            <div className="flex flex-col gap-4 p-8">
-              <div className="h-12 w-16 animate-pulse rounded-sm bg-butter" />
-              <div className="h-8 w-3/4 animate-pulse rounded-sm bg-butter" />
-              <div className="h-4 w-1/2 animate-pulse rounded-sm bg-butter" />
-              <div className="mt-2 h-4 w-full animate-pulse rounded-sm bg-butter" />
-              <div className="h-4 w-5/6 animate-pulse rounded-sm bg-butter" />
-              <div className="mt-4 h-11 w-32 animate-pulse rounded-pill bg-butter" />
+      {Array.from({ length: 2 }).map((_, i) => (
+        <section key={i} className="bg-page px-6 py-12 min-[810px]:px-10 min-[810px]:py-16">
+          <div className="mx-auto max-w-[1400px]">
+            <div className="mb-2 h-6 w-64 animate-pulse rounded-sm bg-butter" />
+            <div className="mb-8 h-4 w-96 max-w-full animate-pulse rounded-sm bg-butter" />
+            <div className="grid gap-6 min-[810px]:grid-cols-2">
+              <div className="aspect-[4/3] w-full animate-pulse rounded-[20px] bg-butter" />
+              <div className="aspect-[4/3] w-full animate-pulse rounded-[20px] bg-butter" />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Archive row skeletons */}
-      <section className="bg-page px-6 pb-16 pt-12 min-[810px]:px-10 min-[810px]:pb-24">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="mb-8 flex items-center gap-5">
-            <div className="h-3 w-12 animate-pulse rounded-pill bg-butter" />
-            <div className="h-px flex-1 bg-ink-divider" />
-          </div>
-          <div className="divide-y divide-ink-divider">
-            {Array.from({ length: 2 }).map((_, i) => (
-              <div key={i} className="flex items-baseline gap-4 py-4">
-                <div className="h-3 w-8 animate-pulse rounded-sm bg-butter" />
-                <div className="flex flex-1 flex-col gap-1.5">
-                  <div className="h-5 w-2/3 animate-pulse rounded-sm bg-butter" />
-                  <div className="h-3.5 w-1/3 animate-pulse rounded-sm bg-butter" />
-                </div>
-                <div className="h-4 w-12 animate-pulse rounded-sm bg-butter" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      ))}
     </div>
   );
 }
@@ -138,18 +152,200 @@ function EmptyState() {
   );
 }
 
-interface HeroEventProps {
-  event: EventItem;
+interface SubscribeNoteProps {
+  icsUrl: string;
 }
 
-function HeroEvent({ event }: HeroEventProps) {
-  const [imgFailed, setImgFailed] = useState(false);
-  const { day, month, year } = parseDateParts(event.date);
+function SubscribeNote({ icsUrl }: SubscribeNoteProps) {
+  if (!icsUrl) return null;
 
   return (
-    <div className="grid min-[810px]:grid-cols-[55%_45%]">
-      {/* Image side */}
-      <div className="flex aspect-[3/2] items-center justify-center overflow-hidden bg-sand min-[810px]:aspect-auto min-[810px]:min-h-[380px]">
+    <div className="mx-auto max-w-[1400px] px-6 pt-10 min-[810px]:px-10">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-butter bg-sand px-6 py-4">
+        <p className="ts-body-small text-ink-secondary">
+          Want every new T4P event on your own calendar automatically?
+        </p>
+        <a
+          href={toWebcalUrl(icsUrl)}
+          className="ts-label inline-flex items-center gap-2 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        >
+          <CalendarPlus />
+          Subscribe to this calendar
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function EventDescription({ text }: { text: string }) {
+  const blocks = parseEventDescription(text);
+
+  return (
+    <div className="ts-body flex flex-col gap-3 text-ink-secondary">
+      {blocks.map((block, i) => {
+        if (block.type === "hr") return <hr key={i} className="border-ink-divider" />;
+        if (block.type === "heading") {
+          return (
+            <h4 key={i} className="ts-eyebrow text-ink">
+              {renderInlineText(block.text, `h-${i}`)}
+            </h4>
+          );
+        }
+        if (block.type === "list") {
+          const ListTag = block.ordered ? "ol" : "ul";
+          return (
+            <ListTag key={i} className={block.ordered ? "list-decimal pl-5" : "list-disc pl-5"}>
+              {block.items.map((item, j) => (
+                <li key={j}>{renderInlineText(item, `l-${i}-${j}`)}</li>
+              ))}
+            </ListTag>
+          );
+        }
+        return <p key={i}>{renderInlineText(block.text, `p-${i}`)}</p>;
+      })}
+    </div>
+  );
+}
+
+interface EventModalProps {
+  selected: SelectedEvent;
+  onClose: () => void;
+}
+
+function EventModal({ selected, onClose }: EventModalProps) {
+  const { event, isPast } = selected;
+  const { day, month, year, full } = parseDateParts(event.date);
+  const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
+  const calendarLink = isPast ? null : buildGoogleCalendarLink(event);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    // This site's pages scroll via Lenis (window.__lenis), which intercepts
+    // wheel/touch events itself — CSS `overflow: hidden` on html/body alone
+    // doesn't stop it. Stop Lenis while the modal is open, same pattern as
+    // ProjectDrawer.tsx.
+    const lenis = (window as any).__lenis;
+    lenis?.stop();
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      lenis?.start();
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 p-4"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-[20px] bg-page"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={event.title}
+      >
+        <div data-lenis-prevent className="overflow-y-auto overscroll-y-contain">
+          <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-sand">
+            <img
+              src={event.image}
+              alt={event.title}
+              className="h-full w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-page text-ink transition-colors duration-150 hover:bg-brand hover:text-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              <CloseIcon />
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-4 p-6 min-[640px]:p-8">
+            <time dateTime={event.date}>
+              <span className="ts-heading block leading-none text-brand">{day}</span>
+              <span className="ts-overline block text-ink-secondary">
+                {month} {year}
+              </span>
+            </time>
+
+            <h2 className="ts-subheading text-ink">{event.title}</h2>
+
+            <p className="ts-body-small text-ink-secondary">
+              {full}
+              {event.time && <span> · {event.time}</span>}
+              {event.location && <span> · {event.location}</span>}
+            </p>
+
+            {event.description && <EventDescription text={event.description} />}
+          </div>
+        </div>
+
+        {(infoLink || event.locationLink || calendarLink) && (
+          <div className="flex shrink-0 flex-wrap items-center gap-4 border-t border-ink-divider p-6 min-[640px]:p-8">
+            {infoLink && (
+              <a
+                href={infoLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-page transition-colors duration-150 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
+              >
+                {infoLabel}
+                <ArrowRight size={16} />
+              </a>
+            )}
+            {event.locationLink && (
+              <a
+                href={event.locationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ts-label inline-flex items-center text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                View location
+              </a>
+            )}
+            {calendarLink && (
+              <a
+                href={calendarLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ts-label inline-flex items-center gap-1.5 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                <CalendarPlus />
+                Add to calendar
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface FeaturedCardProps {
+  event: EventItem;
+  isPast: boolean;
+}
+
+function FeaturedCard({ event, isPast }: FeaturedCardProps) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const { day, month, year } = parseDateParts(event.date);
+  const calendarLink = isPast ? null : buildGoogleCalendarLink(event);
+  const openModal = useContext(EventModalContext);
+  const showPopup = hasMeaningfulDescription(event);
+  const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
+
+  return (
+    <article className="flex flex-col overflow-hidden rounded-[20px] border border-butter bg-page">
+      <div className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-sand">
         <img
           src={imgFailed ? "/images/default.jpg" : event.image}
           alt={event.title}
@@ -159,21 +355,16 @@ function HeroEvent({ event }: HeroEventProps) {
           decoding="async"
         />
       </div>
-
-      {/* Content side */}
-      <div className="flex flex-col gap-4 p-8 min-[810px]:p-10">
-        {/* Date block */}
+      <div className="flex flex-1 flex-col gap-3 p-6 min-[810px]:p-8">
         <time dateTime={event.date}>
-          <span className="ts-stat block leading-none text-brand">{day}</span>
+          <span className="ts-heading block leading-none text-brand">{day}</span>
           <span className="ts-overline block text-ink-secondary">
             {month} {year}
           </span>
         </time>
 
-        {/* Title */}
-        <h2 className="ts-editorial text-ink">{event.title}</h2>
+        <h3 className="ts-subheading text-ink">{event.title}</h3>
 
-        {/* Meta */}
         {(event.time || event.location) && (
           <p className="ts-body-small text-ink-secondary">
             {event.time && <span>{event.time}</span>}
@@ -182,247 +373,230 @@ function HeroEvent({ event }: HeroEventProps) {
           </p>
         )}
 
-        {/* Description */}
         {event.description && (
-          <p className="ts-body line-clamp-3 max-w-[55ch] text-ink-secondary">
-            {event.description}
-          </p>
+          <p className="ts-body line-clamp-3 text-ink-secondary">{event.description}</p>
         )}
 
-        {/* Register CTA */}
-        {event.registerLink && (
-          <div className="mt-2">
-            <a
-              href={event.registerLink}
-              target="_blank"
-              rel="noopener noreferrer"
+        <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
+          {showPopup ? (
+            <button
+              type="button"
+              onClick={() => openModal({ event, isPast })}
               className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-page transition-colors duration-150 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
             >
-              Register
+              More info
               <ArrowRight size={16} />
+            </button>
+          ) : (
+            infoLink && (
+              <a
+                href={infoLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-page transition-colors duration-150 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
+              >
+                {infoLabel}
+                <ArrowRight size={16} />
+              </a>
+            )
+          )}
+          {calendarLink && (
+            <a
+              href={calendarLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ts-label inline-flex items-center gap-1.5 text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              <CalendarPlus />
+              Add to calendar
             </a>
-          </div>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+interface PastEventRowProps {
+  event: EventItem;
+}
+
+function PastEventRow({ event }: PastEventRowProps) {
+  const { full } = parseDateParts(event.date);
+  const openModal = useContext(EventModalContext);
+  const isPast = isEventPast(event);
+  const showPopup = hasMeaningfulDescription(event);
+  const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
+
+  return (
+    <div className="border-b border-ink-divider py-3 last:border-b-0">
+      <div className="flex items-center justify-between gap-4">
+        <p className="ts-label min-w-0 flex-1 truncate text-ink">{event.title}</p>
+        {showPopup ? (
+          <button
+            type="button"
+            onClick={() => openModal({ event, isPast })}
+            className="ts-label shrink-0 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            More info
+          </button>
+        ) : infoLink ? (
+          <a
+            href={infoLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ts-label shrink-0 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            {infoLabel}
+          </a>
+        ) : (
+          <span className="ts-label shrink-0 text-ink-secondary/50">—</span>
         )}
       </div>
+      <p className="ts-body-small mt-1 text-ink-secondary">
+        {full}
+        {event.time && <span> · {event.time}</span>}
+        {event.location && <span> · {event.location}</span>}
+      </p>
     </div>
   );
 }
 
-interface LineupTileProps {
-  event: EventItem;
-}
-
-function LineupTile({ event }: LineupTileProps) {
-  const [imgFailed, setImgFailed] = useState(false);
-  const { day, month, year } = parseDateParts(event.date);
-
-  return (
-    <article className="flex w-[240px] shrink-0 snap-start flex-col gap-0 overflow-hidden rounded-[20px] border border-butter bg-page min-[640px]:w-auto">
-      {/* Image */}
-      <div className="aspect-[16/9] w-full bg-sand">
-        <img
-          src={imgFailed ? "/images/default.jpg" : event.image}
-          alt={event.title}
-          className="h-full w-full object-contain"
-          onError={() => setImgFailed(true)}
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-      {/* Content */}
-      <div className="flex flex-1 flex-col gap-2 p-5">
-        {/* Date */}
-        <time dateTime={event.date}>
-          <span className="ts-heading block leading-none text-brand">{day}</span>
-          <span className="ts-overline block text-ink-secondary">
-            {month} {year}
-          </span>
-        </time>
-
-        {/* Title */}
-        <h3 className="ts-eyebrow mt-1 line-clamp-2 text-ink">{event.title}</h3>
-
-        {/* Location */}
-        {event.location && <p className="ts-body-small text-ink-secondary">{event.location}</p>}
-
-        {/* Register link */}
-        {event.registerLink && (
-          <a
-            href={event.registerLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ts-label mt-auto inline-flex min-h-[44px] items-center gap-1 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-          >
-            Register
-            <ArrowRight size={13} />
-          </a>
-        )}
-      </div>
-    </article>
-  );
-}
-
-interface LineupStripProps {
+interface PastEventsListProps {
   events: EventItem[];
 }
 
-function LineupStrip({ events }: LineupStripProps) {
-  return (
-    <>
-      {/* Mobile: horizontal scroll */}
-      <div className="flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto pb-4 min-[640px]:hidden">
-        {events.map((event) => (
-          <LineupTile key={event.id} event={event} />
-        ))}
-      </div>
+function PastEventsList({ events }: PastEventsListProps) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? events : events.slice(0, PAST_EVENTS_PAGE_SIZE);
+  const remaining = events.length - visible.length;
 
-      {/* Tablet+: grid */}
-      <div className="hidden grid-cols-2 gap-4 min-[640px]:grid min-[1024px]:grid-cols-3">
-        {events.map((event) => (
-          <LineupTile key={event.id} event={event} />
+  return (
+    <div>
+      <p className="ts-overline mb-4 text-ink-secondary">Past events</p>
+      <div>
+        {visible.map((event) => (
+          <PastEventRow key={event.id} event={event} />
         ))}
       </div>
-    </>
+      {remaining > 0 && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className="ts-label mt-4 text-brand transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        >
+          Show {remaining} more
+        </button>
+      )}
+    </div>
   );
 }
 
-function PastEventCard({ event }: { event: EventItem }) {
-  const [imgFailed, setImgFailed] = useState(false);
-  const { full } = parseDateParts(event.date);
+interface EventSectionBlockProps {
+  section: EventSection;
+}
+
+const FEATURED_COUNT = 2;
+
+function EventSectionBlock({ section }: EventSectionBlockProps) {
+  const { def, upcoming, past } = section;
+  const [expanded, setExpanded] = useState(true);
+
+  // Always feature the most-recent events (soonest-upcoming first, filling
+  // any remaining slots from the latest past events) rather than only ever
+  // spotlighting upcoming ones — most categories are past-heavy.
+  const featuredUpcoming = upcoming.slice(0, FEATURED_COUNT);
+  const featuredPast = past.slice(0, FEATURED_COUNT - featuredUpcoming.length);
+  const featured = [
+    ...featuredUpcoming.map((event) => ({ event, isPast: false })),
+    ...featuredPast.map((event) => ({ event, isPast: true })),
+  ];
+  const rest = [...upcoming.slice(featuredUpcoming.length), ...past.slice(featuredPast.length)];
 
   return (
-    <article className="overflow-hidden rounded-[20px] border border-butter bg-sand transition-colors duration-200 hover:bg-cream">
-      <div className="flex flex-col min-[640px]:flex-row">
-        <div className="bg-butter/50 min-[640px]:w-2/5 min-[640px]:shrink-0">
-          <img
-            src={imgFailed ? "/images/default.jpg" : event.image}
-            alt={event.title}
-            className="aspect-[4/3] h-full w-full object-contain opacity-80"
-            onError={() => setImgFailed(true)}
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-        <div className="flex flex-1 flex-col gap-3 p-6 min-[810px]:p-8">
+    <section
+      className="border-t border-ink-divider bg-page px-6 py-12 min-[810px]:px-10 min-[810px]:py-16"
+      aria-label={def.title}
+    >
+      <div className="mx-auto max-w-[1400px]">
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <span className="ts-overline inline-block rounded-pill border border-ink-divider bg-butter px-3 py-1 text-ink-secondary">
-              Past
-            </span>
+            <h2 className="ts-editorial mb-3 text-ink">{def.title}</h2>
+            <p className="ts-body max-w-[65ch] text-ink-secondary">{def.subtitle}</p>
           </div>
-          <h2 className="ts-subheading break-words text-ink">{event.title}</h2>
-          <div className="flex flex-wrap gap-x-5 gap-y-1">
-            <time dateTime={event.date} className="ts-body-small text-ink-secondary">
-              {full}
-            </time>
-            {event.time && <span className="ts-body-small text-ink-secondary">{event.time}</span>}
-            {event.location && (
-              <span className="ts-body-small text-ink-secondary">{event.location}</span>
-            )}
-          </div>
-          {event.description && (
-            <p className="ts-body line-clamp-3 text-ink-secondary">{event.description}</p>
-          )}
-          {event.recordingLink && (
-            <div className="mt-auto pt-2">
-              <a
-                href={event.recordingLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ts-label inline-flex min-h-[44px] items-center gap-2 rounded-pill border border-ink bg-transparent px-5 py-3.5 text-ink transition-colors duration-150 hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-[0.98]"
-              >
-                Watch recording
-              </a>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => setExpanded((prev) => !prev)}
+            aria-expanded={expanded}
+            aria-label={expanded ? "Collapse section" : "Expand section"}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-butter text-ink transition-colors duration-150 hover:bg-brand hover:text-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            <ChevronDown expanded={expanded} size={18} />
+          </button>
         </div>
+
+        {expanded && (
+          <div
+            className={
+              rest.length > 0
+                ? "mt-8 grid gap-8 min-[900px]:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]"
+                : "mt-8"
+            }
+          >
+            <div className="grid gap-6 min-[640px]:grid-cols-2">
+              {featured.map(({ event, isPast }) => (
+                <FeaturedCard key={event.id} event={event} isPast={isPast} />
+              ))}
+            </div>
+
+            {rest.length > 0 && <PastEventsList events={rest} />}
+          </div>
+        )}
       </div>
-    </article>
+    </section>
   );
 }
 
 interface EventsNewProps {
   initialEvents?: EventItem[];
+  icsUrl?: string;
 }
 
-export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
+export default function EventsNew({ initialEvents = [], icsUrl = "" }: EventsNewProps) {
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialEvents.length === 0);
-
-  const showAll =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("showAll") === "yes"
-      : false;
+  const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
 
   useEffect(() => {
-    if (!showAll && initialEvents.length > 0) return;
+    if (initialEvents.length > 0) return;
     setLoading(true);
-    fetch(showAll ? "/api/events?showAll=yes" : "/api/events", { cache: "no-cache" })
+    fetch("/api/events", { cache: "no-cache" })
       .then((r) => (r.ok ? r.json() : []))
       .then((data: EventItem[]) => setEvents(data))
       .finally(() => setLoading(false));
   }, []);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const upcoming = events.filter((e) => new Date(e.date) >= today);
-  const past = events.filter((e) => new Date(e.date) < today);
-
-  const heroEvent = upcoming[0] ?? null;
-  const lineupEvents = upcoming.slice(1);
+  const sections = groupIntoSections(events);
 
   return (
-    <div className="pb-16 min-[810px]:pb-24">
-      {loading ? (
-        <LoadingSkeleton />
-      ) : events.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <>
-          {/* Tier 1 — Hero */}
-          {heroEvent && (
-            <section
-              className="bg-page px-6 pb-14 pt-10 min-[810px]:px-10 min-[810px]:pb-16 min-[810px]:pt-12"
-              aria-label="Featured upcoming event"
-            >
-              <div className="mx-auto max-w-[1400px]">
-                <SectionLabel accent>Upcoming</SectionLabel>
-                <HeroEvent event={heroEvent} />
-              </div>
-            </section>
-          )}
-
-          {/* Tier 2 — Lineup strip */}
-          {lineupEvents.length > 0 && (
-            <section
-              className="bg-sand px-6 py-12 min-[810px]:px-10 min-[810px]:py-14"
-              aria-label="More upcoming events"
-            >
-              <div className="mx-auto max-w-[1400px]">
-                <p className="ts-overline mb-6 text-ink-secondary">Also upcoming</p>
-                <LineupStrip events={lineupEvents} />
-              </div>
-            </section>
-          )}
-
-          {/* Tier 3 — Archive */}
-          {past.length > 0 && (
-            <section
-              className="bg-page px-6 pb-16 pt-12 min-[810px]:px-10 min-[810px]:pb-24"
-              aria-label="Past events"
-            >
-              <div className="mx-auto max-w-[1400px]">
-                <SectionLabel accent>Past</SectionLabel>
-                <div className="space-y-4">
-                  {past.map((event) => (
-                    <PastEventCard key={event.id} event={event} />
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-        </>
+    <EventModalContext.Provider value={setSelectedEvent}>
+      <div className="pb-16 min-[810px]:pb-24">
+        {loading ? (
+          <LoadingSkeleton />
+        ) : events.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <>
+            <SubscribeNote icsUrl={icsUrl} />
+            {sections.map((section) => (
+              <EventSectionBlock key={section.def.key} section={section} />
+            ))}
+          </>
+        )}
+      </div>
+      {selectedEvent && (
+        <EventModal selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
       )}
-    </div>
+    </EventModalContext.Provider>
   );
 }

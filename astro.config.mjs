@@ -65,7 +65,6 @@ export default defineConfig({
           "/donate-2/",
           "/donate-new/",
           "/donate-2-new/",
-          "/event-details/",
           "/404/",
           "/about-new/",
           "/team-new/",

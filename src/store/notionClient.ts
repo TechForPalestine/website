@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getEnv } from "../utils/getEnv.js";
 import { sanitizeUrl } from "../components/projects/projectData";
+import { resolveDateToUtcIso } from "../utils/icalDate";
 
 // Helper function to create Notion axios instance with runtime environment variables
 function createNotionAxios(secret: string) {
@@ -43,153 +44,9 @@ function richText(prop: NotionRichTextProperty | undefined, fallback = ""): stri
   return prop?.rich_text?.[0]?.plain_text || fallback;
 }
 
-interface NotionDateProperty {
-  date?: { start: string; time_zone?: string | null } | null;
-}
-
 interface NotionUrlProperty {
   url?: string | null;
 }
-
-// Notion returns `start` two different ways depending on whether the date
-// property has an explicit time zone override:
-//   - no override: the UTC offset is embedded in `start` itself, e.g.
-//     "2026-07-22T17:00:00.000-04:00" — Date.parse handles this correctly.
-//   - override set: `start` has NO offset ("2026-07-22T17:00:00.000") and
-//     the zone lives separately in `time_zone`. Parsing that string with
-//     `new Date()` would use the *server's* zone, not the call's — wrong
-//     for every visitor outside that zone. Resolve it explicitly instead.
-function resolveDateToUtcIso(prop: NotionDateProperty | undefined): string | null {
-  const start = prop?.date?.start;
-  if (!start) return null;
-
-  // Date-only rows ("2026-07-22", no time component) can't anchor a live
-  // window — reject rather than silently defaulting to UTC midnight.
-  if (!start.includes("T")) return null;
-
-  const timeZone = prop?.date?.time_zone;
-  if (!timeZone) {
-    const parsed = new Date(start);
-    return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
-  }
-
-  const [datePart, timePart] = start.split("T");
-  const [year, month, day] = datePart.split("-").map(Number);
-  const [hour, minute, secondMs] = timePart.split(":");
-  const second = Number((secondMs || "0").split(".")[0]);
-
-  // Standard offset-discovery trick: guess the instant is UTC, ask the
-  // target time zone what wall-clock time that instant shows, then correct
-  // by the difference. Handles arbitrary IANA zones with no dependency.
-  const guessUtc = Date.UTC(year, month - 1, day, Number(hour), Number(minute), second);
-
-  let formatted: Intl.DateTimeFormatPart[];
-  try {
-    formatted = new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      hourCycle: "h23",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    }).formatToParts(new Date(guessUtc));
-  } catch {
-    return null;
-  }
-
-  const part = (type: string) => formatted.find((p) => p.type === type)?.value;
-  const asIfUtc = Date.UTC(
-    Number(part("year")),
-    Number(part("month")) - 1,
-    Number(part("day")),
-    Number(part("hour")),
-    Number(part("minute")),
-    Number(part("second"))
-  );
-
-  return new Date(guessUtc - (asIfUtc - guessUtc)).toISOString();
-}
-
-export const fetchNotionEvents = async (showAll: boolean = false, locals?: any) => {
-  const secret = getEnv("NOTION_SECRET", locals);
-  const dbId = getEnv("NOTION_DB_ID", locals);
-
-  if (!secret || !dbId) {
-    throw new Error("Missing Notion credentials: NOTION_SECRET and NOTION_DB_ID are required");
-  }
-
-  const notionAxios = createNotionAxios(secret);
-  const filter = showAll
-    ? {}
-    : {
-        filter: {
-          property: "Visibility",
-          checkbox: {
-            equals: true,
-          },
-        },
-      };
-
-  const response = await notionAxios.post(`databases/${dbId}/query`, filter);
-
-  const events = response.data.results.map((page: any) => {
-    const props = page.properties;
-
-    const headerImage = fileUrl(props["Header"], "/images/default.jpg");
-    const description = richText(props["Description"]);
-    const registerLink = props["Link to registration"]?.url || "";
-    const recordingLink = props["Link to recording"]?.url || "";
-
-    return {
-      id: page.id,
-      title: titleText(props["Title"], "Untitled"),
-      date: props["Date of event"]?.date?.start || "",
-      status: props["Stage"]?.select?.name || "",
-      location: props["Type of event"]?.multi_select?.[0]?.name || "",
-      image: headerImage,
-      link: page.url,
-      description,
-      registerLink,
-      recordingLink,
-    };
-  });
-
-  // Sort by date (descending)
-  return events.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-};
-
-export const fetchNotionEventById = async (pageId: string, locals?: any) => {
-  const secret = getEnv("NOTION_SECRET", locals);
-
-  if (!secret) {
-    throw new Error("Missing Notion credentials: NOTION_SECRET is required");
-  }
-
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.get(`pages/${pageId}`);
-
-  const props = response.data.properties;
-
-  const headerImage = fileUrl(props["Header"], "/images/default.jpg");
-  const description = richText(props["Description"]);
-  const registerLink = props["Link to registration"]?.url || "";
-  const recordingLink = props["Link to recording"]?.url || "";
-
-  return {
-    id: response.data.id,
-    title: titleText(props["Title"], "Untitled"),
-    date: props["Date of event"]?.date?.start || "",
-    status: props["Stage"]?.select?.name || "",
-    location: props["Type of event"]?.multi_select?.[0]?.name || "",
-    image: headerImage,
-    link: response.data.url,
-    description,
-    registerLink,
-    recordingLink,
-  };
-};
 
 export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => {
   const secret = getEnv("NOTION_SECRET", locals);
