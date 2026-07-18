@@ -17,8 +17,6 @@ export interface EventSection {
   past: EventItem[];
 }
 
-const OTHERS_KEY = "others";
-
 // Order matters: sections are checked top to bottom and the first match wins,
 // so a multi-tag event (e.g. "webinar,roundtable") lands in Roundtable, not Others.
 export const SECTION_DEFS: EventSectionDef[] = [
@@ -55,14 +53,9 @@ export const SECTION_DEFS: EventSectionDef[] = [
   },
 ];
 
-const OTHERS_DEF: EventSectionDef = {
-  key: OTHERS_KEY,
-  title: "Others",
-  subtitle: "More events from across the community.",
-  matchTags: [],
-};
-
-function sectionForEvent(event: EventItem): EventSectionDef {
+// Events whose tags/title don't match any named section are dropped —
+// there's no catch-all "Others" bucket.
+function sectionForEvent(event: EventItem): EventSectionDef | null {
   for (const def of SECTION_DEFS) {
     if (event.tags.some((tag) => def.matchTags.includes(tag))) return def;
   }
@@ -74,7 +67,7 @@ function sectionForEvent(event: EventItem): EventSectionDef {
     if (def.titleKeywords?.every((word) => title.includes(word))) return def;
   }
 
-  return OTHERS_DEF;
+  return null;
 }
 
 export function groupIntoSections(events: EventItem[], nowMs: number = Date.now()): EventSection[] {
@@ -82,6 +75,7 @@ export function groupIntoSections(events: EventItem[], nowMs: number = Date.now(
 
   for (const event of events) {
     const def = sectionForEvent(event);
+    if (!def) continue;
     if (!byKey.has(def.key)) byKey.set(def.key, { def, upcoming: [], past: [] });
 
     const section = byKey.get(def.key)!;
@@ -99,9 +93,9 @@ export function groupIntoSections(events: EventItem[], nowMs: number = Date.now(
     section.past.sort((a, b) => timeOf(b) - timeOf(a));
   }
 
-  const ordered = [...SECTION_DEFS, OTHERS_DEF]
-    .map((def) => byKey.get(def.key))
-    .filter((section): section is EventSection => Boolean(section));
+  const ordered = SECTION_DEFS.map((def) => byKey.get(def.key)).filter(
+    (section): section is EventSection => Boolean(section)
+  );
 
   return ordered;
 }
