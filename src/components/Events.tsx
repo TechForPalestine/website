@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  Chip,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -253,7 +254,7 @@ function FeaturedEventCard({ event, isPast }: { event: EventItem; isPast: boolea
 
   return (
     <Card className="flex flex-col overflow-hidden rounded-2xl border border-gray-200">
-      <Box className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-gray-100">
+      <Box className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gray-100">
         <img
           src={imgFailed ? "/images/default.jpg" : event.image}
           alt={event.title}
@@ -262,6 +263,14 @@ function FeaturedEventCard({ event, isPast }: { event: EventItem; isPast: boolea
           loading="lazy"
           decoding="async"
         />
+        {!isPast && (
+          <Chip
+            label="Upcoming"
+            size="small"
+            className="absolute left-3 top-3"
+            sx={{ backgroundColor: GREEN, color: "#fff", fontWeight: 600 }}
+          />
+        )}
       </Box>
       <Box className="flex flex-1 flex-col gap-3 p-6">
         <time dateTime={event.date}>
@@ -361,9 +370,19 @@ function PastEventRow({ event }: { event: EventItem }) {
   return (
     <Box className="border-b border-gray-200 py-3 last:border-b-0">
       <Box className="flex items-center justify-between gap-4">
-        <Typography className="min-w-0 flex-1 truncate font-medium text-gray-900">
-          {event.title}
-        </Typography>
+        <Box className="flex min-w-0 flex-1 items-center gap-2">
+          {!isPast && (
+            <Chip
+              label="Upcoming"
+              size="small"
+              className="shrink-0"
+              sx={{ backgroundColor: GREEN, color: "#fff", fontWeight: 600, height: 20 }}
+            />
+          )}
+          <Typography className="min-w-0 truncate font-medium text-gray-900">
+            {event.title}
+          </Typography>
+        </Box>
         {showPopup ? (
           <Link
             component="button"

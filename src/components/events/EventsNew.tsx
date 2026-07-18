@@ -345,7 +345,7 @@ function FeaturedCard({ event, isPast }: FeaturedCardProps) {
 
   return (
     <article className="flex flex-col overflow-hidden rounded-[20px] border border-butter bg-page">
-      <div className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-sand">
+      <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-sand">
         <img
           src={imgFailed ? "/images/default.jpg" : event.image}
           alt={event.title}
@@ -354,6 +354,11 @@ function FeaturedCard({ event, isPast }: FeaturedCardProps) {
           loading="lazy"
           decoding="async"
         />
+        {!isPast && (
+          <span className="ts-overline absolute left-4 top-4 rounded-pill bg-brand px-3 py-1 text-page">
+            Upcoming
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-6 min-[810px]:p-8">
         <time dateTime={event.date}>
@@ -431,7 +436,14 @@ function PastEventRow({ event }: PastEventRowProps) {
   return (
     <div className="border-b border-ink-divider py-3 last:border-b-0">
       <div className="flex items-center justify-between gap-4">
-        <p className="ts-label min-w-0 flex-1 truncate text-ink">{event.title}</p>
+        <p className="ts-label flex min-w-0 flex-1 items-center gap-2 truncate text-ink">
+          {!isPast && (
+            <span className="ts-overline shrink-0 rounded-pill bg-brand px-2 py-0.5 text-page">
+              Upcoming
+            </span>
+          )}
+          <span className="truncate">{event.title}</span>
+        </p>
         {showPopup ? (
           <button
             type="button"
