@@ -110,3 +110,17 @@ Full index: [docs/README.md](docs/README.md). Highlights: [docs/ARCHITECTURE.md]
 Always verify the working branch hasn't been merged before committing. Use `git log --oneline main..HEAD` to check for unmerged commits before starting new work on a branch.
 
 - When I say "ship it" I want you to create a new branch (if we're on main or a previously merged feature branch), stage and commit new edits, push it to github and open a PR.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues on `TechForPalestine/website`, managed via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five-role vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout — `CONTEXT.md` + `docs/adr/` at the repo root (not yet created; skills create them lazily). See `docs/agents/domain.md`.
