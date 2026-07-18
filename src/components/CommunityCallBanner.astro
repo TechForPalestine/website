@@ -67,8 +67,15 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
         We're live now
       </span>
       <span data-cc-banner-state="upcoming">
-        Community Call — <span data-cc-banner-time>{localTime}</span>
+        Community Call — <span class="invisible" data-cc-banner-time>{localTime}</span>
       </span>
+      <noscript>
+        <style>
+          [data-cc-banner-time] {
+            visibility: visible;
+          }
+        </style>
+      </noscript>
       <a href={targetHref} class="underline">
         <span data-cc-banner-cta="live">Join →</span>
         <span data-cc-banner-cta="soon">Join →</span>
@@ -102,6 +109,7 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
       const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
       if (timeEl) {
         timeEl.textContent = formatShortCallTime(startIso, new Date());
+        timeEl.classList.remove("invisible");
       }
 
       // Ended (or the fetch's featured-call selection went stale in cache) —

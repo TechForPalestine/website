@@ -57,7 +57,6 @@ export default defineConfig({
       filter: (page) => {
         const exclude = [
           "/coming-soon/",
-          "/index-new/",
           "/incubator-new/",
           "/project-details-temp/",
           "/project/",
