@@ -32,6 +32,11 @@ const PAST_EVENTS_PAGE_SIZE = 5;
 const RED = "#EA4335";
 const RED_HOVER = "#C5341F";
 const GREEN = "#168039";
+// Dedicated "Upcoming" status color — kept separate from GREEN (used for
+// action links) so it stays consistent with the same muted sage used on
+// the new-design events page instead of a generic bright green.
+const POSITIVE = "#5C7A52";
+const POSITIVE_TINT = "#EDF1E8";
 
 interface SelectedEvent {
   event: EventItem;
@@ -253,8 +258,15 @@ function FeaturedEventCard({ event, isPast }: { event: EventItem; isPast: boolea
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
 
   return (
-    <Card className="flex flex-col overflow-hidden rounded-2xl border border-gray-200">
-      <Box className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gray-100">
+    <Card
+      className="flex flex-col overflow-hidden rounded-2xl"
+      sx={
+        isPast
+          ? { border: "1px solid", borderColor: "grey.200" }
+          : { border: "2px solid", borderColor: POSITIVE, backgroundColor: POSITIVE_TINT }
+      }
+    >
+      <Box className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-gray-100">
         <img
           src={imgFailed ? "/images/default.jpg" : event.image}
           alt={event.title}
@@ -263,28 +275,33 @@ function FeaturedEventCard({ event, isPast }: { event: EventItem; isPast: boolea
           loading="lazy"
           decoding="async"
         />
-        {!isPast && (
-          <Chip
-            label="Upcoming"
-            size="small"
-            className="absolute left-3 top-3"
-            sx={{ backgroundColor: GREEN, color: "#fff", fontWeight: 600 }}
-          />
-        )}
       </Box>
       <Box className="flex flex-1 flex-col gap-3 p-6">
-        <time dateTime={event.date}>
-          <Typography
-            component="span"
-            className="block font-bold leading-none"
-            sx={{ color: RED, fontSize: "2rem" }}
-          >
-            {day}
-          </Typography>
-          <Typography component="span" variant="caption" className="block text-gray-500">
-            {month} {year}
-          </Typography>
-        </time>
+        <Box className="flex items-start justify-between gap-3">
+          <time dateTime={event.date}>
+            <Typography
+              component="span"
+              className="block font-bold leading-none"
+              sx={{ color: RED, fontSize: "2rem" }}
+            >
+              {day}
+            </Typography>
+            <Typography component="span" variant="caption" className="block text-gray-500">
+              {month} {year}
+            </Typography>
+          </time>
+          {!isPast && (
+            <Chip
+              label="UPCOMING"
+              sx={{
+                backgroundColor: POSITIVE,
+                color: "#fff",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+              }}
+            />
+          )}
+        </Box>
 
         <Typography variant="h6" className="font-bold tracking-tight text-gray-900">
           {event.title}
@@ -373,10 +390,16 @@ function PastEventRow({ event }: { event: EventItem }) {
         <Box className="flex min-w-0 flex-1 items-center gap-2">
           {!isPast && (
             <Chip
-              label="Upcoming"
+              label="UPCOMING"
               size="small"
               className="shrink-0"
-              sx={{ backgroundColor: GREEN, color: "#fff", fontWeight: 600, height: 20 }}
+              sx={{
+                backgroundColor: POSITIVE,
+                color: "#fff",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                height: 22,
+              }}
             />
           )}
           <Typography className="min-w-0 truncate font-medium text-gray-900">

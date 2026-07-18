@@ -344,8 +344,14 @@ function FeaturedCard({ event, isPast }: FeaturedCardProps) {
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-[20px] border border-butter bg-page">
-      <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-sand">
+    <article
+      className={
+        isPast
+          ? "flex flex-col overflow-hidden rounded-[20px] border border-butter bg-page"
+          : "flex flex-col overflow-hidden rounded-[20px] border-2 border-positive bg-positive-tint"
+      }
+    >
+      <div className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-sand">
         <img
           src={imgFailed ? "/images/default.jpg" : event.image}
           alt={event.title}
@@ -354,19 +360,22 @@ function FeaturedCard({ event, isPast }: FeaturedCardProps) {
           loading="lazy"
           decoding="async"
         />
-        {!isPast && (
-          <span className="ts-overline absolute left-4 top-4 rounded-pill bg-brand px-3 py-1 text-page">
-            Upcoming
-          </span>
-        )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-6 min-[810px]:p-8">
-        <time dateTime={event.date}>
-          <span className="ts-heading block leading-none text-brand">{day}</span>
-          <span className="ts-overline block text-ink-secondary">
-            {month} {year}
-          </span>
-        </time>
+        <div className="flex items-start justify-between gap-3">
+          <time dateTime={event.date}>
+            <span className="ts-heading block leading-none text-brand">{day}</span>
+            <span className="ts-overline block text-ink-secondary">
+              {month} {year}
+            </span>
+          </time>
+          {!isPast && (
+            <span className="ts-label inline-flex items-center gap-1.5 rounded-pill bg-positive px-3.5 py-1.5 font-bold uppercase tracking-wide text-white">
+              <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+              Upcoming
+            </span>
+          )}
+        </div>
 
         <h3 className="ts-subheading text-ink">{event.title}</h3>
 
@@ -438,7 +447,8 @@ function PastEventRow({ event }: PastEventRowProps) {
       <div className="flex items-center justify-between gap-4">
         <p className="ts-label flex min-w-0 flex-1 items-center gap-2 truncate text-ink">
           {!isPast && (
-            <span className="ts-overline shrink-0 rounded-pill bg-brand px-2 py-0.5 text-page">
+            <span className="ts-caption inline-flex shrink-0 items-center gap-1 rounded-pill bg-positive px-2.5 py-1 font-bold uppercase tracking-wide text-white">
+              <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
               Upcoming
             </span>
           )}
