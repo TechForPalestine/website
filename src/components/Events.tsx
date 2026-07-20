@@ -199,7 +199,6 @@ function EventDetailsDialog({
         <Typography variant="body2" className="text-gray-500">
           {full}
           {event.time && <span> · {event.time}</span>}
-          {event.location && <span> · {event.location}</span>}
         </Typography>
 
         {event.description && <EventDescription text={event.description} />}

@@ -282,7 +282,6 @@ function EventModal({ selected, onClose }: EventModalProps) {
             <p className="ts-body-small text-ink-secondary">
               {full}
               {event.time && <span> · {event.time}</span>}
-              {event.location && <span> · {event.location}</span>}
             </p>
 
             {event.description && <EventDescription text={event.description} />}
