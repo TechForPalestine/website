@@ -13,7 +13,6 @@ import {
   Chip,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -307,20 +306,12 @@ function FeaturedEventCard({ event, isPast }: { event: EventItem; isPast: boolea
           {event.title}
         </Typography>
 
-        {(event.time || event.location) && (
+        {event.time && (
           <Box className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-            {event.time && (
-              <span className="flex items-center gap-1">
-                <AccessTimeIcon fontSize="small" />
-                {event.time}
-              </span>
-            )}
-            {event.location && (
-              <span className="flex items-center gap-1">
-                <LocationOnIcon fontSize="small" />
-                {event.location}
-              </span>
-            )}
+            <span className="flex items-center gap-1">
+              <AccessTimeIcon fontSize="small" />
+              {event.time}
+            </span>
           </Box>
         )}
 
@@ -435,7 +426,6 @@ function PastEventRow({ event }: { event: EventItem }) {
       <Typography variant="body2" className="mt-1 text-gray-500">
         {full}
         {event.time && <span> · {event.time}</span>}
-        {event.location && <span> · {event.location}</span>}
       </Typography>
     </Box>
   );

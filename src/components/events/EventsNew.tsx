@@ -379,13 +379,7 @@ function FeaturedCard({ event, isPast }: FeaturedCardProps) {
 
         <h3 className="ts-subheading text-ink">{event.title}</h3>
 
-        {(event.time || event.location) && (
-          <p className="ts-body-small text-ink-secondary">
-            {event.time && <span>{event.time}</span>}
-            {event.time && event.location && <span> · </span>}
-            {event.location && <span>{event.location}</span>}
-          </p>
-        )}
+        {event.time && <p className="ts-body-small text-ink-secondary">{event.time}</p>}
 
         {event.description && (
           <p className="ts-body line-clamp-3 text-ink-secondary">{event.description}</p>
@@ -478,7 +472,6 @@ function PastEventRow({ event }: PastEventRowProps) {
       <p className="ts-body-small mt-1 text-ink-secondary">
         {full}
         {event.time && <span> · {event.time}</span>}
-        {event.location && <span> · {event.location}</span>}
       </p>
     </div>
   );
