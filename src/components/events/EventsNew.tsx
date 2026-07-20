@@ -288,7 +288,7 @@ function EventModal({ selected, onClose }: EventModalProps) {
           </div>
         </div>
 
-        {(infoLink || calendarLink) && (
+        {(infoLink || event.locationLink || calendarLink) && (
           <div className="flex shrink-0 flex-wrap items-center gap-4 border-t border-ink-divider p-6 min-[640px]:p-8">
             {infoLink && (
               <a
@@ -299,6 +299,16 @@ function EventModal({ selected, onClose }: EventModalProps) {
               >
                 {infoLabel}
                 <ArrowRight size={16} />
+              </a>
+            )}
+            {event.locationLink && (
+              <a
+                href={event.locationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ts-label inline-flex items-center text-ink-secondary transition-colors duration-150 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                View location
               </a>
             )}
             {calendarLink && (

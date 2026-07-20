@@ -203,7 +203,7 @@ function EventDetailsDialog({
 
         {event.description && <EventDescription text={event.description} />}
       </DialogContent>
-      {(infoLink || calendarLink) && (
+      {(infoLink || event.locationLink || calendarLink) && (
         <DialogActions className="flex-wrap gap-4 border-t border-gray-200 px-6 py-4">
           {infoLink && (
             <Button
@@ -219,6 +219,16 @@ function EventDetailsDialog({
             >
               {infoLabel}
             </Button>
+          )}
+          {event.locationLink && (
+            <Link
+              href={event.locationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-gray-600 hover:underline"
+            >
+              View location
+            </Link>
           )}
           {calendarLink && (
             <Link
