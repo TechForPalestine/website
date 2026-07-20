@@ -96,7 +96,7 @@ export function renderInlineText(text: string, keyPrefix: string): React.ReactNo
               href={segment}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline"
+              className="break-all underline"
             >
               {segment}
             </a>

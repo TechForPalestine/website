@@ -110,7 +110,7 @@ function EventDescription({ text }: { text: string }) {
   const blocks = parseEventDescription(text);
 
   return (
-    <Box className="flex flex-col gap-3">
+    <Box className="flex flex-col gap-3 break-words">
       {blocks.map((block, i) => {
         if (block.type === "hr") {
           return <Box key={i} component="hr" className="border-gray-200" />;
@@ -203,7 +203,7 @@ function EventDetailsDialog({
 
         {event.description && <EventDescription text={event.description} />}
       </DialogContent>
-      {(infoLink || event.locationLink || calendarLink) && (
+      {(infoLink || calendarLink) && (
         <DialogActions className="flex-wrap gap-4 border-t border-gray-200 px-6 py-4">
           {infoLink && (
             <Button
@@ -219,16 +219,6 @@ function EventDetailsDialog({
             >
               {infoLabel}
             </Button>
-          )}
-          {event.locationLink && (
-            <Link
-              href={event.locationLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-gray-600 hover:underline"
-            >
-              View location
-            </Link>
           )}
           {calendarLink && (
             <Link
