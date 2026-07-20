@@ -11,10 +11,13 @@ The site deploys automatically to Cloudflare Pages on push to `main`.
 
 Set the following in the Cloudflare Pages dashboard (Production and Preview are separate — set both). See `.env.example` for the canonical list; grouped here by subsystem (docs in parens). For how `.env`/`.dev.vars`/the dashboard interact locally, and a full audit of what's actually wired up, see [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md).
 
+**Events** ([docs/EVENTS.md](docs/EVENTS.md))
+
+- `EVENTS_ICS_URL` — public ICS calendar feed URL (includes an auth token as a query param); fetched server-side only
+
 **Notion** ([docs/NOTION.md](docs/NOTION.md))
 
 - `NOTION_SECRET` — shared integration token
-- `NOTION_DB_ID` — Events database ID
 - `NOTION_SIGNATORIES_DB_ID`, `NOTION_FAQ_DB_ID`, `NOTION_IDEAS_DB_ID`, `NOTION_AGENDA_DB_ID`, `NOTION_ENDORSEMENTS_DB_ID`, `NOTION_COMMUNITY_CALLS_DB_ID`
 - `NOTION_SPEAKERS_DB_ID` — listed for completeness; not currently read by any route
 

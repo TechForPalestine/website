@@ -1,10 +1,9 @@
 # Notion Integration
 
-Notion is the CMS for most semi-dynamic content on the site. There are **8 separate Notion databases**, each with its own env var and consuming route(s).
+Notion is the CMS for most semi-dynamic content on the site. There are **7 separate Notion databases**, each with its own env var and consuming route(s). Events used to be a Notion database too — that integration was removed in favor of a public ICS calendar feed; see [EVENTS.md](EVENTS.md).
 
 | Database                   | Env var (ID)                   | Fetcher / route                                                                                                                                                                | Consumed by                                                                                                  |
 | -------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Events                     | `NOTION_DB_ID`                 | `fetchNotionEvents()` / `fetchNotionEventById()` in `src/store/notionClient.ts`; `/api/events`                                                                                 | `events.astro`, `Events.tsx` — full detail in [EVENTS.md](EVENTS.md)                                         |
 | FAQ                        | `NOTION_FAQ_DB_ID`             | `fetchNotionFAQ()`; `/api/faq`                                                                                                                                                 | `faq.astro`                                                                                                  |
 | Ideas                      | `NOTION_IDEAS_DB_ID`           | `fetchNotionIdeas()`; `/api/ideas`                                                                                                                                             | `ideas.astro`                                                                                                |
 | Agenda / Speakers          | `NOTION_AGENDA_DB_ID`          | `fetchNotionAgenda()`; `/api/speakers`                                                                                                                                         | London Gathering agenda page — resolves `Moderator` relation properties against speaker pages in the same DB |
@@ -22,10 +21,10 @@ New Notion-backed features should default to pattern 1 (`notionClient.ts`) for r
 
 ## Data shape quirks worth knowing
 
-- Notion property names are matched by their exact display name in the database (`props["Date of event"]`, `props["Link to registration"]`, etc.) — renaming a property in Notion silently breaks the mapping (returns empty string, no error).
-- Most fetchers default missing/optional fields to `""` rather than `null`/`undefined`, and events specifically fall back to `/images/default.jpg` when no header image is set.
-- Events and FAQ both filter on a `Visibility` checkbox property by default; pass `showAll=yes` as a query param to bypass it (used by admin/preview tooling, not the public pages).
-- **Notion-hosted image URLs expire after roughly 1 hour** (an Notion/AWS S3 signed-URL limitation). The Events page has no server-side proxy/cache for this anymore (see [EVENTS.md](EVENTS.md) — the Cloudflare Worker image proxy was removed in PR #415); the frontend just falls back to the default image on load error.
+- Notion property names are matched by their exact display name in the database (`props["Question"]`, `props["Name"]`, etc.) — renaming a property in Notion silently breaks the mapping (returns empty string, no error).
+- Most fetchers default missing/optional fields to `""` rather than `null`/`undefined`.
+- FAQ filters on a `Visibility` checkbox property by default; pass `showAll=yes` as a query param to bypass it (used by admin/preview tooling, not the public pages).
+- **Notion-hosted image URLs expire after roughly 1 hour** (a Notion/AWS S3 signed-URL limitation) — there is no server-side proxy/cache for Notion-hosted images (the Cloudflare Worker image proxy was removed in PR #415); consumers fall back to a default image on load error.
 
 ## Env vars
 

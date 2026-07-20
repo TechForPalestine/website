@@ -1,28 +1,15 @@
 ---
 import { getEnv } from "../utils/getEnv";
-import { fetchNotionEvents } from "../store/notionClient";
+import { fetchEvents, type EventItem } from "../store/eventsClient";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
 import EventsNewComponent from "../components/events/EventsNew";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+const icsUrl = getEnv("EVENTS_ICS_URL", Astro.locals) || "";
 
-interface EventItem {
-  id: string;
-  title: string;
-  date: string;
-  status: string;
-  location: string;
-  image: string;
-  link: string;
-  time?: string;
-  description?: string;
-  registerLink?: string;
-  recordingLink?: string;
-}
-
-const events: EventItem[] = await fetchNotionEvents(false, Astro.locals).catch(() => []);
+const events: EventItem[] = await fetchEvents(Astro.locals).catch(() => []);
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -82,7 +69,7 @@ const eventSchema = nextEvent && {
     </section>
 
     <section class="bg-page">
-      <EventsNewComponent initialEvents={events} client:load />
+      <EventsNewComponent initialEvents={events} icsUrl={icsUrl} client:load />
     </section>
   </main>
 </HomeLayout>

@@ -10,3 +10,5 @@
 /admin/dropped-conversions /admin/conversions 301
 /index-new / 301
 /index-new/ / 301
+/event-details /events 301
+/event-details/ /events 301

@@ -3,21 +3,15 @@ import Layout from "../layouts/Layout.astro";
 import EventsComponent from "../components/Events.tsx";
 import "../styles/base.css";
 import PageHeader from "../components/PageHeader.astro";
+import type { EventItem } from "../store/eventsClient";
+import { getEnv } from "../utils/getEnv";
 
-let events: any[] = [];
+let events: EventItem[] = [];
 let loading: boolean = true;
 
 // Skip SSR fetch for now - let client handle it
 
-// TODO: Re-enable SSR once we fix the 30-second delay
-// try {
-//     events = await fetchNotionEvents();
-//     console.log(`SSR: Loaded ${events.length} events for initial page load`);
-//     loading = false;
-// } catch (err) {
-//     loading = true;
-//     console.error("SSR: Error fetching events:", err);
-// }
+const icsUrl = getEnv("EVENTS_ICS_URL", Astro.locals) || "";
 ---
 
 <Layout
@@ -30,5 +24,5 @@ let loading: boolean = true;
     subtitle="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action."
   />
 
-  <EventsComponent events={events} loading={loading} client:only="react" />
+  <EventsComponent events={events} loading={loading} icsUrl={icsUrl} client:only="react" />
 </Layout>
