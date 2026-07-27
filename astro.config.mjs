@@ -80,6 +80,7 @@ export default defineConfig({
           "/volunteer-new/",
           "/e4p-new/",
           "/help/hire-new/",
+          "/mentorship/",
           "/mentorship-new/",
           "/london-gathering-new/",
           "/get-involved-new/",
