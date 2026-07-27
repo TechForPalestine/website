@@ -6,7 +6,11 @@
 /project/* /projects 301
 /project-apply /projects 301
 /project-details/* /projects 301
-/mentor-application /mentorship 301
+/mentor-application / 301
+/mentorship / 301
+/mentorship/ / 301
+/mentorship-new / 301
+/mentorship-new/ / 301
 /admin/dropped-conversions /admin/conversions 301
 /index-new / 301
 /index-new/ / 301
