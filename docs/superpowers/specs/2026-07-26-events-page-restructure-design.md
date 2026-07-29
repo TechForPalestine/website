@@ -41,7 +41,7 @@ Replace the current layout — five stacked category sections, each internally s
 
 **Past Events** (existing category sections, retained, rendered below Upcoming):
 - Same 5 `SECTION_DEFS` sections and headings as today (`eventSections.ts:22-54`).
-- Each section becomes a pure archive: only past events, compact rows only (no featured-card treatment), existing collapse/expand toggle and 5-at-a-time "Show more" pagination unchanged.
+- Each section becomes a pure archive, rendered as a horizontal carousel of uniform cards (see §3) — no featured-card treatment, no visual distinction between any two events in the same category. Existing collapse/expand toggle retained; the 5-at-a-time "Show more" pagination is replaced by carousel scrolling.
 - Because every event here is past by construction, the "Upcoming" pill logic in `PastEventRow` (`EventsNew.tsx:442-447`) is removed entirely — it can never fire in this zone and its removal simplifies the row.
 
 Section-membership logic (which category an event belongs to) is unchanged; only the upcoming/past split point moves from "per-category" to "whole-page."
@@ -55,12 +55,16 @@ Each card in the merged list:
 - **One primary CTA button**, chosen via existing `primaryEventLink()` priority for upcoming events (`registerLink` → `watchLink`), falling back to "Add to calendar" (Google Calendar link, already built for the modal footer, `EventsNew.tsx` modal footer) when neither exists. Every card gets exactly one clear action — this directly fixes the "in-person events have no useful action" complaint.
 - Visual treatment: the current bold "Upcoming" card style (`border-2 border-positive bg-positive-tint`, `EventsNew.tsx:346-352`) applies to every card in this zone unconditionally — no per-card pill needed since the whole zone is upcoming by construction.
 
-### 3. Past event row + recording badge
+### 3. Past events carousel + recording badge
 
-Each row in a category archive:
-- Date, title (existing `PastEventRow` fields) — category tag is omitted here since it's redundant under a category heading.
-- **Recording badge**: a small "▶ Watch recording" tag/link shown only when `event.recordingLink` is present. No badge, no "unavailable" label, when it's absent — keeps older events visually quiet since Paul is only adding video going forward.
-- Clicking a row still opens the existing `EventModal` unchanged (gated on `hasMeaningfulDescription`, `eventsClient.ts:342-346`) for full description and all links. The badge is a fast-path signal, not a replacement for the modal.
+Revised per stakeholder feedback: rather than a paginated vertical list (which recreated the "first N look special, rest are hidden" problem this redesign is meant to fix), each category's past events render as a **horizontal carousel of uniform cards**:
+
+- Every card is the same size and style — no card is visually privileged over another. This replaces the old featured-card/compact-row split entirely.
+- Each card shows: date, title, and a **recording badge** ("▶ Watch recording") only when `event.recordingLink` is present — no badge, no "unavailable" label, when it's absent.
+- The carousel shows roughly **3.5 cards** at the viewport width — the partial 4th card is deliberately cropped so its edge is visible, signaling there's more to scroll to.
+- A right-arrow control advances the carousel by one card-width; on touch devices, swipe left/right also works. (A left arrow appears once the user has scrolled past the first card, to go back.)
+- Clicking a card still opens the existing `EventModal` unchanged (gated on `hasMeaningfulDescription`, `eventsClient.ts:342-346`) for full description and all links. The badge is a fast-path signal, not a replacement for the modal.
+- The existing category collapse/expand toggle is retained above each carousel; the old 5-at-a-time "Show more" pagination is removed and replaced by carousel scrolling.
 
 ### 4. Empty state
 
@@ -70,10 +74,14 @@ If there are zero upcoming events across all categories (`upcoming.length === 0`
 
 with an anchor link that scrolls to the Past Events zone.
 
-### 5. Data/component impact summary
+### 5. Section anchors
 
-- `eventSections.ts`: add a page-level split — compute one merged, sorted `upcoming` array across all sections, and keep `groupIntoSections()` (or a variant of it) returning past-only events per section. No changes to `EventItem`/`fetchEvents`.
-- `EventsNew.tsx`: replace the per-section `FEATURED_COUNT` fallback logic (`513-528`) with (a) one new "Upcoming Events" block rendered above the section loop, and (b) simplified `PastEventRow`/section rendering with the "Upcoming" pill branch removed.
+Each category heading in the Past Events zone (In-Person, Occupied Tech Podcast, Community Calls, Roundtable, Book Club) gets a stable HTML `id` (e.g. `#book-club`) derived from the section's slug, so a direct link like `/events-new#book-club` scrolls straight to that category. This is a small addition to whichever component renders `EventSectionBlock` headings — no data changes required.
+
+### 6. Data/component impact summary
+
+- `eventSections.ts`: add a page-level split — compute one merged, sorted `upcoming` array across all sections, and keep `groupIntoSections()` (or a variant of it) returning past-only events per section. Add a stable slug/id per section for anchor links. No changes to `EventItem`/`fetchEvents`.
+- `EventsNew.tsx`: replace the per-section `FEATURED_COUNT` fallback logic (`513-528`) with (a) one new "Upcoming Events" block rendered above the section loop, and (b) a new horizontal carousel component replacing `PastEventRow`'s paginated list, with the "Upcoming" pill branch removed entirely. Section heading elements get an `id` attribute for anchor linking.
 - No changes to `EventModal`, `eventsClient.ts`, or the legacy `/events` page.
 
 ## Open questions for implementation
