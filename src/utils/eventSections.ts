@@ -55,7 +55,7 @@ export const SECTION_DEFS: EventSectionDef[] = [
 
 // Events whose tags/title don't match any named section are dropped —
 // there's no catch-all "Others" bucket.
-function sectionForEvent(event: EventItem): EventSectionDef | null {
+export function sectionForEvent(event: EventItem): EventSectionDef | null {
   for (const def of SECTION_DEFS) {
     if (event.tags.some((tag) => def.matchTags.includes(tag))) return def;
   }
@@ -68,6 +68,60 @@ function sectionForEvent(event: EventItem): EventSectionDef | null {
   }
 
   return null;
+}
+
+// Organizers often title events "<Category>: <subject>" (e.g. "Book Club:
+// The General's Son by Miko Peled", "Roundtable: Hiring Palestinian Talent")
+// — redundant once the category is already shown as a tag or section
+// heading. Strips that prefix when it matches the event's own section title;
+// leaves the title untouched for sections that don't follow this convention
+// (Community Calls, In-Person Events) since their titles carry other
+// information (the month, a city name) that isn't just the category name.
+export function displayTitle(event: EventItem): string {
+  const def = sectionForEvent(event);
+  if (!def) return event.title;
+
+  const prefix = `${def.title}:`;
+  if (!event.title.toLowerCase().startsWith(prefix.toLowerCase())) return event.title;
+
+  return event.title.slice(prefix.length).trim();
+}
+
+export interface UpcomingEvent {
+  event: EventItem;
+  sectionDef: EventSectionDef;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Merges every category into one soonest-first list for the page-level
+// "Upcoming Events" zone, capped to a rolling window so a category with many
+// recurring instances scheduled far out can't push the archive down the page.
+export function getUpcomingEvents(
+  events: EventItem[],
+  windowDays: number,
+  nowMs: number = Date.now()
+): { items: UpcomingEvent[]; hasMore: boolean } {
+  const windowEndMs = nowMs + windowDays * DAY_MS;
+  const items: UpcomingEvent[] = [];
+  let hasMore = false;
+
+  for (const event of events) {
+    const sectionDef = sectionForEvent(event);
+    if (!sectionDef) continue;
+
+    const eventTime = timeOf(event);
+    if (eventTime < nowMs) continue;
+    if (eventTime > windowEndMs) {
+      hasMore = true;
+      continue;
+    }
+    items.push({ event, sectionDef });
+  }
+
+  items.sort((a, b) => timeOf(a.event) - timeOf(b.event));
+
+  return { items, hasMore };
 }
 
 export function groupIntoSections(events: EventItem[], nowMs: number = Date.now()): EventSection[] {

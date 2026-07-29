@@ -349,13 +349,11 @@ export function primaryEventLink(event: EventItem, isPast: boolean): { link: str
   if (isPast) {
     // Registration is closed once an event is over — never offer it here,
     // even if the feed still has a registerLink set.
-    if (event.recordingLink) return { link: event.recordingLink, label: "Watch recording" };
     if (event.watchLink) return { link: event.watchLink, label: "Watch online" };
     return { link: "", label: "" };
   }
   if (event.registerLink) return { link: event.registerLink, label: "Register" };
   if (event.watchLink) return { link: event.watchLink, label: "Watch online" };
-  if (event.recordingLink) return { link: event.recordingLink, label: "Watch recording" };
   return { link: "", label: "" };
 }
 

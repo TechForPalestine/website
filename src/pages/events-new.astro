@@ -7,7 +7,6 @@ import Button from "../components/ui/Button.astro";
 import EventsNewComponent from "../components/events/EventsNew";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-const icsUrl = getEnv("EVENTS_ICS_URL", Astro.locals) || "";
 
 const events: EventItem[] = await fetchEvents(Astro.locals).catch(() => []);
 
@@ -69,7 +68,7 @@ const eventSchema = nextEvent && {
     </section>
 
     <section class="bg-page">
-      <EventsNewComponent initialEvents={events} icsUrl={icsUrl} client:load />
+      <EventsNewComponent initialEvents={events} client:load />
     </section>
   </main>
 </HomeLayout>

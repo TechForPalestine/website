@@ -2,8 +2,9 @@ import React from "react";
 
 // The Mattermost calendar plugin's event descriptions use a small, consistent
 // subset of Markdown: "## " headings, "---" rules, "- "/"1. " lists, blank-line
-// paragraphs, **bold**, and bare URLs. This isn't full CommonMark support —
-// just what's actually observed in the feed.
+// paragraphs, **bold**, *italic* (sometimes wrapping a link), [label](url)
+// links, and bare URLs. This isn't full CommonMark support — just what's
+// actually observed in the feed.
 export type DescriptionBlock =
   | { type: "heading"; text: string }
   | { type: "hr" }
@@ -67,10 +68,43 @@ export function parseEventDescription(description: string): DescriptionBlock[] {
   return blocks;
 }
 
-const URL_PATTERN = /(https?:\/\/[^\s)]+)/g;
+const EMPHASIS_PATTERN = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;
+const BOLD_RE = /^\*\*([^*]+)\*\*$/;
+const ITALIC_RE = /^\*([^*]+)\*$/;
 
-// Renders **bold** spans, auto-links bare URLs, and turns single newlines
-// into <br/> — the only inline markup the feed's descriptions use. No raw
+const LINK_OR_URL_PATTERN = /(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|https?:\/\/[^\s)]+)/g;
+const LINK_RE = /^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/;
+
+// Auto-links [label](url) markdown links and bare URLs within a span of text
+// that's already been stripped of ** / * emphasis markers.
+function renderLinksAndUrls(text: string, keyPrefix: string): React.ReactNode[] {
+  return text
+    .split(LINK_OR_URL_PATTERN)
+    .filter(Boolean)
+    .map((part, i) => {
+      const key = `${keyPrefix}-l${i}`;
+      const linkMatch = part.match(LINK_RE);
+      if (linkMatch) {
+        return (
+          <a key={key} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="underline">
+            {linkMatch[1]}
+          </a>
+        );
+      }
+      if (/^https?:\/\//.test(part)) {
+        return (
+          <a key={key} href={part} target="_blank" rel="noopener noreferrer" className="break-all underline">
+            {part}
+          </a>
+        );
+      }
+      return <React.Fragment key={key}>{part}</React.Fragment>;
+    });
+}
+
+// Renders **bold**/*italic* spans (a link can appear nested inside either,
+// e.g. "*Summary taken from ... [Just World Books](url)*"), auto-links bare
+// URLs and [label](url) links, and turns single newlines into <br/>. No raw
 // HTML is ever injected, so there's no sanitization surface to worry about.
 export function renderInlineText(text: string, keyPrefix: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
@@ -78,34 +112,26 @@ export function renderInlineText(text: string, keyPrefix: string): React.ReactNo
   text.split("\n").forEach((line, lineIndex) => {
     if (lineIndex > 0) nodes.push(<br key={`${keyPrefix}-br-${lineIndex}`} />);
 
-    line.split(/(\*\*[^*]+\*\*)/g).forEach((part, partIndex) => {
-      const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
-      const partKey = `${keyPrefix}-${lineIndex}-${partIndex}`;
-      if (boldMatch) {
-        nodes.push(<strong key={partKey}>{boldMatch[1]}</strong>);
-        return;
-      }
+    line
+      .split(EMPHASIS_PATTERN)
+      .filter(Boolean)
+      .forEach((part, partIndex) => {
+        const key = `${keyPrefix}-${lineIndex}-${partIndex}`;
 
-      part.split(URL_PATTERN).forEach((segment, segmentIndex) => {
-        if (!segment) return;
-        const segmentKey = `${partKey}-${segmentIndex}`;
-        if (/^https?:\/\//.test(segment)) {
-          nodes.push(
-            <a
-              key={segmentKey}
-              href={segment}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="break-all underline"
-            >
-              {segment}
-            </a>
-          );
-        } else {
-          nodes.push(<React.Fragment key={segmentKey}>{segment}</React.Fragment>);
+        const boldMatch = part.match(BOLD_RE);
+        if (boldMatch) {
+          nodes.push(<strong key={key}>{renderLinksAndUrls(boldMatch[1], key)}</strong>);
+          return;
         }
+
+        const italicMatch = part.match(ITALIC_RE);
+        if (italicMatch) {
+          nodes.push(<em key={key}>{renderLinksAndUrls(italicMatch[1], key)}</em>);
+          return;
+        }
+
+        nodes.push(...renderLinksAndUrls(part, key));
       });
-    });
   });
 
   return nodes;
