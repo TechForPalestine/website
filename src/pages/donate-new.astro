@@ -103,7 +103,7 @@ const defaultFormId = isUK ? "form-validaid-link" : "form-qgiv-link";
                     id="validaid-iframe-event-236"
                     src="https://validaid.org/embed/event/236"
                     title="Tech for Palestine"
-                    class="w-full border-0"
+                    class="validaid-iframe w-full border-0"
                     allow="payment"></iframe>
                 </div>
               </div>
@@ -225,6 +225,10 @@ const defaultFormId = isUK ? "form-validaid-link" : "form-qgiv-link";
 <style>
   :global(iframe.qgiv-embed) {
     height: 800px !important;
+  }
+
+  .validaid-iframe {
+    height: 800px;
   }
 
   .donate-animate {
