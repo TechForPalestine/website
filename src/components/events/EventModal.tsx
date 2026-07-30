@@ -3,6 +3,7 @@ import { primaryEventLink } from "../../store/eventsClient";
 import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
 import { ArrowRight, CloseIcon, parseDateParts, type SelectedEvent } from "./eventsShared";
+import { EventPreviewImage } from "./EventPreviewImage";
 
 function EventDescription({ text }: { text: string }) {
   const blocks = parseEventDescription(text);
@@ -79,13 +80,7 @@ export function EventModal({ selected, onClose }: EventModalProps) {
       >
         <div data-lenis-prevent className="overflow-y-auto overscroll-y-contain">
           <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-sand">
-            <img
-              src={event.image}
-              alt={title}
-              className="h-full w-full object-contain"
-              loading="lazy"
-              decoding="async"
-            />
+            <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
             <button
               type="button"
               onClick={onClose}

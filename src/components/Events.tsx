@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -28,10 +28,17 @@ import {
 } from "../utils/eventSections";
 import { copyAnchorLink } from "../utils/copyAnchorLink";
 import { parseEventDescription, renderInlineText } from "../utils/eventDescription";
+import { EventPreviewImage } from "./events/EventPreviewImage";
+import {
+  EventModalContext,
+  parseDateParts,
+  useCarouselScroll,
+  weekdayAbbrev,
+  type SelectedEvent,
+} from "./events/eventsShared";
 
 const UPCOMING_WINDOW_DAYS = 60;
 const COPIED_FEEDBACK_MS = 1500;
-const SCROLL_EDGE_TOLERANCE_PX = 8;
 
 // This page's own accent palette — same structure/content as the new-design
 // events page, deliberately kept on this site's original MUI colors rather
@@ -40,55 +47,9 @@ const RED = "#EA4335";
 const RED_HOVER = "#C5341F";
 const GREEN = "#168039";
 
-interface SelectedEvent {
-  event: EventItem;
-  isPast: boolean;
-}
-
-const EventModalContext = createContext<(selected: SelectedEvent) => void>(() => {});
-
 interface EventsProps {
   events: EventItem[];
   loading?: boolean;
-}
-
-interface DateParts {
-  day: number;
-  month: string;
-  year: string;
-  full: string;
-}
-
-const MONTH_NAMES = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-function parseDateParts(dateStr: string): DateParts {
-  const [year, month, day] = dateStr.split("-");
-  return {
-    day: parseInt(day, 10),
-    month: MONTH_NAMES[parseInt(month, 10) - 1],
-    year,
-    full: `${parseInt(day, 10)} ${MONTH_NAMES[parseInt(month, 10) - 1]} ${year}`,
-  };
-}
-
-function weekdayAbbrev(dateStr: string): string {
-  const [year, month, day] = dateStr.split("-").map(Number);
-  return WEEKDAY_NAMES[new Date(year, month - 1, day).getDay()];
 }
 
 // A hashtag-style permalink button next to a category heading, so a specific
@@ -187,7 +148,7 @@ function EventDetailsDialog({
   return (
     <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
       <Box className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-gray-100">
-        <img src={event.image} alt={title} className="h-full w-full object-contain" />
+        <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
         <IconButton
           onClick={onClose}
           aria-label="Close"
@@ -384,7 +345,6 @@ function UpcomingEventsSection({ events }: { events: EventItem[] }) {
 // ---------- Past Events ----------
 
 function PastEventCard({ event }: { event: EventItem }) {
-  const [imgFailed, setImgFailed] = useState(false);
   const { full } = parseDateParts(event.date);
   const openModal = useContext(EventModalContext);
   const showPopup = hasMeaningfulDescription(event);
@@ -393,15 +353,8 @@ function PastEventCard({ event }: { event: EventItem }) {
 
   return (
     <Card className="flex h-full flex-col overflow-hidden rounded-2xl" sx={{ border: "1px solid", borderColor: "grey.200" }}>
-      <Box className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-gray-100">
-        <img
-          src={imgFailed ? "/images/default.jpg" : event.image}
-          alt={title}
-          className="h-full w-full object-contain"
-          onError={() => setImgFailed(true)}
-          loading="lazy"
-          decoding="async"
-        />
+      <Box className="flex aspect-video items-center justify-center overflow-hidden bg-gray-100">
+        <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
       </Box>
       <Box className="flex flex-1 flex-col gap-2 p-4">
         <Typography variant="body2" className="text-gray-500">
@@ -448,33 +401,8 @@ function PastEventCard({ event }: { event: EventItem }) {
 // card is a native side effect of overflow, not a manual crop. Mirrors the
 // same component on /events-new.
 function PastEventsCarousel({ events }: { events: EventItem[] }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const updateScrollState = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > SCROLL_EDGE_TOLERANCE_PX);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - SCROLL_EDGE_TOLERANCE_PX);
-  }, []);
-
-  useEffect(() => {
-    updateScrollState();
-    const el = trackRef.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(updateScrollState);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [updateScrollState, events.length]);
-
-  const scrollByCard = (direction: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-carousel-card]");
-    const amount = card ? card.getBoundingClientRect().width + 16 : el.clientWidth * 0.8;
-    el.scrollBy({ left: amount * direction });
-  };
+  const { trackRef, canScrollLeft, canScrollRight, updateScrollState, scrollByCard } =
+    useCarouselScroll(events.length);
 
   return (
     <Box className="relative">

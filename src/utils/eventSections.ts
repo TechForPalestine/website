@@ -1,4 +1,7 @@
 import type { EventItem } from "../store/eventsClient";
+import { youtubeThumbnailSources } from "./youtubeThumbnail";
+
+const COMMUNITY_CALLS_SECTION_KEY = "community-calls";
 
 export interface EventSectionDef {
   key: string;
@@ -13,7 +16,6 @@ export interface EventSectionDef {
 
 export interface EventSection {
   def: EventSectionDef;
-  upcoming: EventItem[];
   past: EventItem[];
 }
 
@@ -87,6 +89,28 @@ export function displayTitle(event: EventItem): string {
   return event.title.slice(prefix.length).trim();
 }
 
+export interface PreviewImageSources {
+  primary: string;
+  fallback: string | null;
+}
+
+// Community Calls are recorded to the same generic "T4P Monthly Community
+// Call" banner every month, so the banner image carries no information about
+// which call it actually is — the YouTube thumbnail (when a recording
+// exists) is far more identifiable at a glance. Scoped to Community Calls
+// only: other categories' banners are per-event and already meaningful.
+//
+// `fallback` is only set when `primary` is a YouTube thumbnail: the HD
+// maxresdefault.jpg isn't guaranteed to exist, so callers (EventPreviewImage)
+// need a second URL to drop down to.
+export function previewImageSources(event: EventItem): PreviewImageSources {
+  if (event.recordingLink && sectionForEvent(event)?.key === COMMUNITY_CALLS_SECTION_KEY) {
+    const sources = youtubeThumbnailSources(event.recordingLink);
+    if (sources) return sources;
+  }
+  return { primary: event.image, fallback: null };
+}
+
 export interface UpcomingEvent {
   event: EventItem;
   sectionDef: EventSectionDef;
@@ -130,20 +154,20 @@ export function groupIntoSections(events: EventItem[], nowMs: number = Date.now(
   for (const event of events) {
     const def = sectionForEvent(event);
     if (!def) continue;
-    if (!byKey.has(def.key)) byKey.set(def.key, { def, upcoming: [], past: [] });
+    if (!byKey.has(def.key)) byKey.set(def.key, { def, past: [] });
 
     const section = byKey.get(def.key)!;
     const eventTime = event.dateUtcIso ? new Date(event.dateUtcIso).getTime() : 0;
-    if (eventTime >= nowMs) {
-      section.upcoming.push(event);
-    } else {
+    // Upcoming events are surfaced separately via getUpcomingEvents(); this
+    // grouping only feeds the past-events archive, so events that haven't
+    // happened yet are simply skipped here.
+    if (eventTime < nowMs) {
       section.past.push(event);
     }
   }
 
-  // Upcoming soonest-first, past most-recent-first.
+  // Most-recent-first.
   for (const section of byKey.values()) {
-    section.upcoming.sort((a, b) => timeOf(a) - timeOf(b));
     section.past.sort((a, b) => timeOf(b) - timeOf(a));
   }
 

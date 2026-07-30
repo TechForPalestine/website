@@ -1,14 +1,21 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../../store/eventsClient";
 import { displayTitle, type EventSection } from "../../utils/eventSections";
-import { ArrowRight, CategoryAnchorButton, ChevronDown, EventModalContext, parseDateParts } from "./eventsShared";
+import {
+  ArrowRight,
+  CategoryAnchorButton,
+  ChevronDown,
+  EventModalContext,
+  parseDateParts,
+  useCarouselScroll,
+} from "./eventsShared";
+import { EventPreviewImage } from "./EventPreviewImage";
 
 interface PastEventCardProps {
   event: EventItem;
 }
 
 function PastEventCard({ event }: PastEventCardProps) {
-  const [imgFailed, setImgFailed] = useState(false);
   const { full } = parseDateParts(event.date);
   const openModal = useContext(EventModalContext);
   const showPopup = hasMeaningfulDescription(event);
@@ -16,15 +23,8 @@ function PastEventCard({ event }: PastEventCardProps) {
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[16px] border border-butter bg-page">
-      <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-sand">
-        <img
-          src={imgFailed ? "/images/default.jpg" : event.image}
-          alt={displayTitle(event)}
-          className="h-full w-full object-contain"
-          onError={() => setImgFailed(true)}
-          loading="lazy"
-          decoding="async"
-        />
+      <div className="flex aspect-video items-center justify-center overflow-hidden bg-sand">
+        <EventPreviewImage event={event} alt={displayTitle(event)} className="h-full w-full object-contain" />
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <p className="ts-body-small text-ink-secondary">{full}</p>
@@ -58,8 +58,6 @@ function PastEventCard({ event }: PastEventCardProps) {
   );
 }
 
-const SCROLL_EDGE_TOLERANCE_PX = 8;
-
 interface PastEventsCarouselProps {
   events: EventItem[];
 }
@@ -71,33 +69,8 @@ interface PastEventsCarouselProps {
 // partial trailing card is a native side effect of overflow, not a manual
 // crop, so it always matches however many actually fit.
 function PastEventsCarousel({ events }: PastEventsCarouselProps) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const updateScrollState = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > SCROLL_EDGE_TOLERANCE_PX);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - SCROLL_EDGE_TOLERANCE_PX);
-  }, []);
-
-  useEffect(() => {
-    updateScrollState();
-    const el = trackRef.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(updateScrollState);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [updateScrollState, events.length]);
-
-  const scrollByCard = (direction: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-carousel-card]");
-    const amount = card ? card.getBoundingClientRect().width + 16 : el.clientWidth * 0.8;
-    el.scrollBy({ left: amount * direction });
-  };
+  const { trackRef, canScrollLeft, canScrollRight, updateScrollState, scrollByCard } =
+    useCarouselScroll(events.length);
 
   return (
     <div className="relative">

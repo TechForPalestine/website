@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import type { EventItem } from "../../store/eventsClient";
 import { copyAnchorLink } from "../../utils/copyAnchorLink";
 
@@ -8,10 +8,6 @@ export interface SelectedEvent {
 }
 
 export const EventModalContext = createContext<(selected: SelectedEvent) => void>(() => {});
-
-export function isEventPast(event: EventItem): boolean {
-  return !event.dateUtcIso || new Date(event.dateUtcIso).getTime() < Date.now();
-}
 
 export interface DateParts {
   day: number;
@@ -108,6 +104,43 @@ export function CloseIcon({ size = 18 }: { size?: number }) {
       <path d="M18 6L6 18M6 6l12 12" />
     </svg>
   );
+}
+
+const SCROLL_EDGE_TOLERANCE_PX = 8;
+
+// Drives the past-events carousel's arrow buttons and their visibility. Pure
+// scroll bookkeeping shared by both the new (Tailwind) and legacy (MUI) past
+// events carousels — only the rendered markup around it differs.
+export function useCarouselScroll(itemCount: number) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > SCROLL_EDGE_TOLERANCE_PX);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - SCROLL_EDGE_TOLERANCE_PX);
+  }, []);
+
+  useEffect(() => {
+    updateScrollState();
+    const el = trackRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [updateScrollState, itemCount]);
+
+  const scrollByCard = (direction: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>("[data-carousel-card]");
+    const amount = card ? card.getBoundingClientRect().width + 16 : el.clientWidth * 0.8;
+    el.scrollBy({ left: amount * direction });
+  };
+
+  return { trackRef, canScrollLeft, canScrollRight, updateScrollState, scrollByCard };
 }
 
 const COPIED_FEEDBACK_MS = 1500;
