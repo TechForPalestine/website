@@ -1,69 +1,527 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, Card, Chip, Button, Link, CircularProgress, Fade } from "@mui/material";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar";
-import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import RefreshIcon from "@mui/icons-material/Refresh";
+import { useContext, useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Card,
+  Button,
+  Link,
+  Fade,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Chip,
+} from "@mui/material";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import CloseIcon from "@mui/icons-material/Close";
+import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../store/eventsClient";
+import {
+  displayTitle,
+  getUpcomingEvents,
+  groupIntoSections,
+  type EventSection,
+  type UpcomingEvent,
+} from "../utils/eventSections";
+import { copyAnchorLink } from "../utils/copyAnchorLink";
+import { parseEventDescription, renderInlineText } from "../utils/eventDescription";
+import { EventPreviewImage } from "./events/EventPreviewImage";
+import {
+  EventModalContext,
+  parseDateParts,
+  useCarouselScroll,
+  weekdayAbbrev,
+  type SelectedEvent,
+} from "./events/eventsShared";
 
-interface EventItem {
-  id: string;
-  title: string;
-  date: string;
-  status: string;
-  location: string;
-  image: string;
-  link: string;
-  time?: string;
-  description?: string;
-  registerLink?: string;
-  recordingLink?: string;
-}
+const UPCOMING_WINDOW_DAYS = 60;
+const COPIED_FEEDBACK_MS = 1500;
+
+// This page's own accent palette — same structure/content as the new-design
+// events page, deliberately kept on this site's original MUI colors rather
+// than the new page's cream/rose design tokens.
+const RED = "#EA4335";
+const RED_HOVER = "#C5341F";
+const GREEN = "#168039";
 
 interface EventsProps {
   events: EventItem[];
   loading?: boolean;
 }
 
-// Helper function to compare events arrays for changes
-const hasEventChanges = (oldEvents: EventItem[], newEvents: EventItem[]): boolean => {
-  if (oldEvents.length !== newEvents.length) {
-    return true;
-  }
+// A hashtag-style permalink button next to a category heading, so a specific
+// section (e.g. Book Club) can be shared directly instead of the whole page.
+// Mirrors the same feature on /events-new.
+function CategoryAnchorButton({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
 
-  // Create maps for efficient lookup
-  const oldEventMap = new Map(oldEvents.map((event) => [event.id, event]));
-  const newEventMap = new Map(newEvents.map((event) => [event.id, event]));
+  const handleClick = async () => {
+    const ok = await copyAnchorLink(slug);
+    if (!ok) return;
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+  };
 
-  // Check if any old event has been deleted
-  for (const oldEvent of oldEvents) {
-    if (!newEventMap.has(oldEvent.id)) {
-      return true; // Event was deleted
-    }
-  }
+  return (
+    <Box component="span" className="relative inline-flex shrink-0">
+      <Link
+        component="button"
+        type="button"
+        onClick={handleClick}
+        aria-label="Copy link to this section"
+        className="font-bold no-underline"
+        sx={{ color: "grey.400", fontSize: "1.25rem", "&:hover": { color: RED } }}
+      >
+        #
+      </Link>
+      {copied && (
+        <Typography
+          component="span"
+          role="status"
+          className="absolute left-1/2 whitespace-nowrap rounded-full px-3 py-1 text-white"
+          sx={{ top: -34, transform: "translateX(-50%)", backgroundColor: "grey.900", fontSize: "0.75rem" }}
+        >
+          Copied!
+        </Typography>
+      )}
+    </Box>
+  );
+}
 
-  // Check if any new event was added or existing event was modified
-  return newEvents.some((newEvent) => {
-    const oldEvent = oldEventMap.get(newEvent.id);
-    if (!oldEvent) {
-      return true; // New event
-    }
+function EventDescription({ text }: { text: string }) {
+  const blocks = parseEventDescription(text);
 
-    // Compare key properties that might change
-    return (
-      oldEvent.title !== newEvent.title ||
-      oldEvent.date !== newEvent.date ||
-      oldEvent.status !== newEvent.status ||
-      oldEvent.location !== newEvent.location ||
-      oldEvent.description !== newEvent.description ||
-      oldEvent.registerLink !== newEvent.registerLink ||
-      oldEvent.recordingLink !== newEvent.recordingLink ||
-      oldEvent.image !== newEvent.image
-    );
-  });
-};
+  return (
+    <Box className="flex flex-col gap-3 break-words">
+      {blocks.map((block, i) => {
+        if (block.type === "hr") {
+          return <Box key={i} component="hr" className="border-gray-200" />;
+        }
+        if (block.type === "heading") {
+          return (
+            <Typography key={i} variant="subtitle1" className="font-bold text-gray-900">
+              {renderInlineText(block.text, `h-${i}`)}
+            </Typography>
+          );
+        }
+        if (block.type === "list") {
+          return (
+            <Box
+              key={i}
+              component={block.ordered ? "ol" : "ul"}
+              className={block.ordered ? "list-decimal pl-5" : "list-disc pl-5"}
+            >
+              {block.items.map((item, j) => (
+                <Typography key={j} component="li" variant="body2" className="text-gray-600">
+                  {renderInlineText(item, `l-${i}-${j}`)}
+                </Typography>
+              ))}
+            </Box>
+          );
+        }
+        return (
+          <Typography key={i} variant="body2" className="text-gray-600">
+            {renderInlineText(block.text, `p-${i}`)}
+          </Typography>
+        );
+      })}
+    </Box>
+  );
+}
+
+function EventDetailsDialog({
+  selected,
+  onClose,
+}: {
+  selected: SelectedEvent | null;
+  onClose: () => void;
+}) {
+  if (!selected) return null;
+  const { event, isPast } = selected;
+  const { day, month, year, full } = parseDateParts(event.date);
+  const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
+  const title = displayTitle(event);
+
+  return (
+    <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
+      <Box className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-gray-100">
+        <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
+        <IconButton
+          onClick={onClose}
+          aria-label="Close"
+          sx={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            backgroundColor: "#fff",
+            "&:hover": { backgroundColor: RED, color: "#fff" },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <DialogContent className="flex flex-col gap-4">
+        <time dateTime={event.date}>
+          <Typography
+            component="span"
+            className="block font-bold leading-none"
+            sx={{ color: RED, fontSize: "2rem" }}
+          >
+            {day}
+          </Typography>
+          <Typography component="span" variant="caption" className="block text-gray-500">
+            {month} {year}
+          </Typography>
+        </time>
+
+        <Typography variant="h5" className="font-bold tracking-tight text-gray-900">
+          {title}
+        </Typography>
+
+        <Typography variant="body2" className="text-gray-500">
+          {full}
+          {event.time && <span> · {event.time}</span>}
+        </Typography>
+
+        {event.description && <EventDescription text={event.description} />}
+      </DialogContent>
+      {(infoLink || event.locationLink) && (
+        <DialogActions className="flex-wrap gap-4 border-t border-gray-200 px-6 py-4">
+          {infoLink && (
+            <Button
+              href={infoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="contained"
+              endIcon={<ArrowForwardIcon fontSize="small" />}
+              sx={{
+                backgroundColor: RED,
+                "&:hover": { backgroundColor: RED_HOVER },
+              }}
+            >
+              {infoLabel}
+            </Button>
+          )}
+          {event.locationLink && (
+            <Link
+              href={event.locationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-gray-600 hover:underline"
+            >
+              View location
+            </Link>
+          )}
+        </DialogActions>
+      )}
+    </Dialog>
+  );
+}
+
+// ---------- Upcoming Events ----------
+
+function UpcomingEventCard({ item }: { item: UpcomingEvent }) {
+  const { event, sectionDef } = item;
+  const { day, month } = parseDateParts(event.date);
+  const weekday = weekdayAbbrev(event.date);
+  const openModal = useContext(EventModalContext);
+  const showPopup = hasMeaningfulDescription(event);
+  const { link: infoLink, label: infoLabel } = primaryEventLink(event, false);
+  const title = displayTitle(event);
+
+  return (
+    <Box
+      className="flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:gap-6"
+      sx={{ border: "1px solid", borderColor: "grey.200", borderLeft: `4px solid ${RED}` }}
+    >
+      <time dateTime={event.date} className="flex shrink-0 flex-col items-center">
+        <Typography variant="caption" className="text-gray-500">
+          {weekday}
+        </Typography>
+        <Typography className="font-bold leading-none" sx={{ color: RED, fontSize: "1.75rem" }}>
+          {day}
+        </Typography>
+        <Typography variant="caption" className="text-gray-500">
+          {month}
+        </Typography>
+      </time>
+
+      <Box className="min-w-0 flex-1">
+        <Chip
+          label={sectionDef.title}
+          size="small"
+          className="mb-1.5"
+          sx={{ backgroundColor: "grey.100", fontWeight: 600 }}
+        />
+        <Typography variant="subtitle1" className="truncate font-bold text-gray-900">
+          {title}
+        </Typography>
+        {event.time && (
+          <Typography variant="body2" className="text-gray-500">
+            {event.time}
+          </Typography>
+        )}
+      </Box>
+
+      <Box className="flex shrink-0 flex-wrap items-center gap-4">
+        {showPopup ? (
+          <Button
+            onClick={() => openModal({ event, isPast: false })}
+            variant="contained"
+            endIcon={<ArrowForwardIcon fontSize="small" />}
+            sx={{ backgroundColor: RED, "&:hover": { backgroundColor: RED_HOVER } }}
+          >
+            More info
+          </Button>
+        ) : infoLink ? (
+          <Button
+            href={infoLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="contained"
+            endIcon={<ArrowForwardIcon fontSize="small" />}
+            sx={{ backgroundColor: RED, "&:hover": { backgroundColor: RED_HOVER } }}
+          >
+            {infoLabel}
+          </Button>
+        ) : (
+          <Typography variant="body2" className="text-gray-300">
+            —
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  );
+}
+
+function NoUpcomingEvents() {
+  return (
+    <Box
+      className="rounded-2xl border border-dashed px-6 py-10 text-center"
+      sx={{ borderColor: "grey.300", backgroundColor: "grey.50" }}
+    >
+      <Typography variant="body1" className="text-gray-600">
+        No upcoming events right now — check back soon, or{" "}
+        <Link href="#past-events" sx={{ color: RED }} className="hover:underline">
+          browse recordings below
+        </Link>
+        .
+      </Typography>
+    </Box>
+  );
+}
+
+function UpcomingEventsSection({ events }: { events: EventItem[] }) {
+  const { items, hasMore } = getUpcomingEvents(events, UPCOMING_WINDOW_DAYS);
+
+  return (
+    <Box component="section" aria-label="Upcoming Events">
+      <Typography variant="h4" className="mb-8 font-bold tracking-tight text-gray-900">
+        Upcoming Events
+      </Typography>
+
+      {items.length === 0 ? (
+        <NoUpcomingEvents />
+      ) : (
+        <div className="flex flex-col gap-4">
+          {items.map((item) => (
+            <UpcomingEventCard key={item.event.id} item={item} />
+          ))}
+        </div>
+      )}
+
+      {hasMore && (
+        <Typography variant="body2" className="mt-6 text-gray-500">
+          More events are already scheduled beyond the next {UPCOMING_WINDOW_DAYS} days.
+        </Typography>
+      )}
+    </Box>
+  );
+}
+
+// ---------- Past Events ----------
+
+function PastEventCard({ event }: { event: EventItem }) {
+  const { full } = parseDateParts(event.date);
+  const openModal = useContext(EventModalContext);
+  const showPopup = hasMeaningfulDescription(event);
+  const { link: infoLink, label: infoLabel } = primaryEventLink(event, true);
+  const title = displayTitle(event);
+
+  return (
+    <Card className="flex h-full flex-col overflow-hidden rounded-2xl" sx={{ border: "1px solid", borderColor: "grey.200" }}>
+      <Box className="flex aspect-video items-center justify-center overflow-hidden bg-gray-100">
+        <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
+      </Box>
+      <Box className="flex flex-1 flex-col gap-2 p-4">
+        <Typography variant="body2" className="text-gray-500">
+          {full}
+        </Typography>
+        <Typography variant="subtitle2" className="line-clamp-2 font-bold text-gray-900">
+          {title}
+        </Typography>
+        <Box className="mt-auto pt-2">
+          {showPopup ? (
+            <Link
+              component="button"
+              type="button"
+              onClick={() => openModal({ event, isPast: true })}
+              className="font-medium hover:underline"
+              sx={{ color: GREEN }}
+            >
+              More info
+            </Link>
+          ) : infoLink ? (
+            <Link
+              href={infoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium hover:underline"
+              sx={{ color: GREEN }}
+            >
+              {infoLabel}
+            </Link>
+          ) : (
+            <Typography variant="body2" className="text-gray-300">
+              —
+            </Typography>
+          )}
+        </Box>
+      </Box>
+    </Card>
+  );
+}
+
+// A horizontal, uniform-card carousel — every past event gets equal visual
+// weight (no "featured 2 + hidden rest" split). Cards are sized so ~3.5 are
+// visible on desktop, narrowing on smaller viewports; the partial trailing
+// card is a native side effect of overflow, not a manual crop. Mirrors the
+// same component on /events-new.
+function PastEventsCarousel({ events }: { events: EventItem[] }) {
+  const { trackRef, canScrollLeft, canScrollRight, updateScrollState, scrollByCard } =
+    useCarouselScroll(events.length);
+
+  return (
+    <Box className="relative">
+      {canScrollLeft && (
+        <IconButton
+          onClick={() => scrollByCard(-1)}
+          aria-label="Show earlier past events"
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            position: "absolute",
+            top: "50%",
+            left: -12,
+            zIndex: 10,
+            transform: "translateY(-50%)",
+            width: 44,
+            height: 44,
+            padding: 0,
+            backgroundColor: "grey.100",
+            boxShadow: 1,
+            "&:hover": { backgroundColor: RED, color: "#fff" },
+          }}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+      )}
+
+      <Box
+        ref={trackRef}
+        onScroll={updateScrollState}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Past events"
+        tabIndex={0}
+        className="flex gap-4 overflow-x-auto motion-safe:scroll-smooth motion-reduce:scroll-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EA4335] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {events.map((event) => (
+          <div key={event.id} data-carousel-card className="w-[68%] shrink-0 min-[640px]:w-[42%] min-[900px]:w-[29%]">
+            <PastEventCard event={event} />
+          </div>
+        ))}
+      </Box>
+
+      {canScrollRight && (
+        <IconButton
+          onClick={() => scrollByCard(1)}
+          aria-label="Show more past events"
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            position: "absolute",
+            top: "50%",
+            right: -12,
+            zIndex: 10,
+            transform: "translateY(-50%)",
+            width: 44,
+            height: 44,
+            padding: 0,
+            backgroundColor: "grey.100",
+            boxShadow: 1,
+            "&:hover": { backgroundColor: RED, color: "#fff" },
+          }}
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      )}
+    </Box>
+  );
+}
+
+// Renders a category as a pure archive: no featured/highlighted cards. A
+// category with zero past events is skipped entirely (its anchor link is
+// only valid once it has at least one past event to show).
+function PastEventsCategorySection({ section }: { section: EventSection }) {
+  const { def, past } = section;
+  const [expanded, setExpanded] = useState(true);
+
+  if (past.length === 0) return null;
+
+  return (
+    <Box
+      component="section"
+      id={def.key}
+      aria-label={def.title}
+      className="border-t pt-12"
+      sx={{ borderColor: "grey.200", scrollMarginTop: "96px" }}
+    >
+      <Box className="flex items-start justify-between gap-4">
+        <Box>
+          <Typography variant="h5" className="mb-1 flex items-center gap-2 font-bold tracking-tight text-gray-900">
+            <CategoryAnchorButton slug={def.key} />
+            {def.title}
+          </Typography>
+          <Typography variant="body2" className="text-gray-500">
+            {def.subtitle}
+          </Typography>
+        </Box>
+        <IconButton
+          onClick={() => setExpanded((prev) => !prev)}
+          aria-expanded={expanded}
+          aria-label={expanded ? "Collapse section" : "Expand section"}
+          className="shrink-0"
+          sx={{
+            backgroundColor: "grey.100",
+            "&:hover": { backgroundColor: RED, color: "#fff" },
+          }}
+        >
+          <ExpandMoreIcon
+            sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "0.2s" }}
+          />
+        </IconButton>
+      </Box>
+
+      {expanded && (
+        <Box className="mt-8">
+          <PastEventsCarousel events={past} />
+        </Box>
+      )}
+    </Box>
+  );
+}
 
 export default function Events({
   events: initialEvents,
@@ -71,19 +529,13 @@ export default function Events({
 }: EventsProps) {
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialLoading);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [showEvents, setShowEvents] = useState(initialEvents.length > 0);
+  const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
 
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
-  const showAll = params?.showAll === "yes";
-
-  // Function to fetch fresh events (for refresh button)
-  const fetchFreshEvents = async () => {
-    const wasRefreshing = events.length > 0; // Track if we're refreshing existing events
+  const fetchEvents = async () => {
     setLoading(true);
     try {
-      const response = await fetch(showAll ? "/api/events?showAll=yes" : "/api/events", {
+      const response = await fetch("/api/events", {
         cache: "no-cache",
         headers: {
           "Cache-Control": "no-cache",
@@ -92,38 +544,24 @@ export default function Events({
       });
 
       if (response.ok) {
-        const newEvents = await response.json();
+        const newEvents: EventItem[] = await response.json();
         setEvents(newEvents);
-        setLastUpdated(new Date());
-        if (newEvents.length > 0) {
-          // Only trigger fade-in if this is initial load, not a refresh
-          if (!wasRefreshing) {
-            setShowEvents(true);
-          }
-        } else {
-          setShowEvents(false);
-        }
+        setShowEvents(newEvents.length > 0);
       }
-    } catch (error) {
+    } catch {
       /*
        * intentional silent error handling: user sees existing/cached events on fetch failure.
        * console.error provides no value in production at this stage; users don't
        * see it, monitoring systems don't capture it; it's purely a debugging tool.
-       * if error visibility is needed, potential implementation suggestions could include:
-       * - user-facing feedback: Material-UI Snackbar/Alert component
-       * - production monitoring: Sentry/LogRocket integration in catch block
-       * - error state management: const [error, setError] = useState<string | null>(null)
-       *   (although I really do not like using useState for this, or at all)
        */
     } finally {
       setLoading(false);
     }
   };
 
-  // Only fetch fresh events if we don't have initial data
   useEffect(() => {
     if (initialEvents.length === 0 && initialLoading) {
-      fetchFreshEvents();
+      fetchEvents();
     } else {
       setLoading(false);
       if (initialEvents.length > 0) {
@@ -132,220 +570,87 @@ export default function Events({
     }
   }, []);
 
-  // Debug logging for state changes
+  // This whole component renders client-side only (client:only="react"), so a
+  // direct link to a category (e.g. /events#book-club) has nothing in the DOM
+  // yet when the browser tries its native hash scroll — scroll to it ourselves
+  // once the section is actually rendered.
   useEffect(() => {
-    console.log("Loading state changed:", loading);
-  }, [loading]);
+    if (loading || events.length === 0) return;
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    document.getElementById(hash)?.scrollIntoView({ block: "start" });
+  }, [loading, events.length]);
 
-  useEffect(() => {
-    console.log("Events state changed:", {
-      count: events.length,
-      firstEventTitle: events[0]?.title,
-    });
-  }, [events]);
+  const sections = groupIntoSections(events);
+  const hasPastEvents = sections.some((section) => section.past.length > 0);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      {/* Status indicator */}
-      <Box className="mb-4 flex items-center justify-between">
-        <Typography variant="caption" className="text-gray-500">
-          Last updated: {lastUpdated.toLocaleTimeString()}
-        </Typography>
-        <Box className="flex items-center gap-4">
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={fetchFreshEvents}
-            disabled={loading}
-            startIcon={
-              loading ? (
-                <CircularProgress size={14} thickness={4} />
-              ) : (
-                <RefreshIcon fontSize="small" />
-              )
-            }
-            className="text-xs transition-opacity"
-            sx={{
-              opacity: loading ? 0.7 : 1,
-              "&:hover": {
-                opacity: loading ? 0.7 : 1,
-              },
-            }}
-          >
-            {loading ? "Refreshing..." : "Refresh"}
-          </Button>
-        </Box>
-      </Box>
-
-      {/* Skeleton loading state */}
-      {loading && events.length === 0 && (
-        <div className="space-y-6">
-          {[...Array(3)].map((_, index) => (
-            <Box
-              key={`skeleton-${index}`}
-              className="animate-pulse rounded-lg bg-gray-100 p-6 shadow"
-            >
-              <div className="mb-2 h-4 w-2/3 rounded bg-gray-200"></div>
-              <div className="mb-2 h-3 w-1/3 rounded bg-gray-200"></div>
-              <div className="h-24 w-full rounded bg-gray-200"></div>
-            </Box>
-          ))}
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!loading && events.length === 0 && (
-        <Fade in={!loading && events.length === 0}>
-          <Box className="py-12 text-center">
-            <EventBusyIcon
-              sx={{
-                fontSize: 64,
-                color: "text.secondary",
-                marginBottom: 2,
-                opacity: 0.5,
-              }}
-            />
-            <Typography variant="h6" className="mb-2 text-gray-700">
-              No events found
-            </Typography>
-            <Typography variant="body2" className="text-gray-500">
-              There are no events available at the moment. Check back later!
-            </Typography>
-          </Box>
-        </Fade>
-      )}
-
-      {/* Events list with fade-in animation */}
-      {events.length > 0 && (
-        <Fade in={showEvents} timeout={500}>
+    <EventModalContext.Provider value={setSelectedEvent}>
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        {loading && events.length === 0 && (
           <div className="space-y-6">
-            {events.map((event, i) => {
-              // Parse date string without timezone conversion
-              const [year, month, day] = event.date.split("-");
-              const monthNames = [
-                "JAN",
-                "FEB",
-                "MAR",
-                "APR",
-                "MAY",
-                "JUN",
-                "JUL",
-                "AUG",
-                "SEP",
-                "OCT",
-                "NOV",
-                "DEC",
-              ];
-              const monthName = monthNames[parseInt(month) - 1];
-              const dayNum = parseInt(day);
-
-              // Automatically determine if event is past or upcoming based on date
-              const eventDate = new Date(event.date);
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              const isPast = eventDate < today;
-              const autoStatus = isPast ? "Past" : "Upcoming";
-
-              return (
-                <Card
-                  key={i}
-                  className="group flex flex-col items-start gap-4 rounded-2xl border border-gray-200 bg-white p-6 no-underline shadow-sm transition hover:shadow-md md:flex-row"
-                >
-                  {/* Image */}
-                  <Box className="relative w-full md:w-1/3">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="aspect-[4/3] w-full rounded-xl bg-gray-100 object-contain"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        if (target.src !== "/images/default.jpg") {
-                          target.src = "/images/default.jpg";
-                        }
-                      }}
-                    />
-                  </Box>
-
-                  {/* Content */}
-                  <Box className="flex-1 space-y-2 px-2">
-                    <Box className="flex flex-wrap items-center gap-2">
-                      <Typography variant="h6" className="font-bold tracking-tight text-gray-900">
-                        {event.title}
-                      </Typography>
-                      <Chip
-                        size="small"
-                        label={autoStatus}
-                        sx={{
-                          backgroundColor: isPast ? "#EA4335" : "#168039",
-                          color: "#fff",
-                          fontWeight: 500,
-                        }}
-                      />
-                    </Box>
-
-                    {/* Meta */}
-                    <Box className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                      <span className="flex items-center gap-1">
-                        <CalendarTodayIcon fontSize="small" />
-                        {monthName} {dayNum}, {year}
-                      </span>
-                      {event.time && (
-                        <span className="flex items-center gap-1">
-                          <AccessTimeIcon fontSize="small" />
-                          {event.time}
-                        </span>
-                      )}
-                      {event.location && (
-                        <span className="flex items-center gap-1">
-                          <LocationOnIcon fontSize="small" />
-                          {event.location}
-                        </span>
-                      )}
-                    </Box>
-
-                    {/* Description */}
-                    {event.description && (
-                      <Typography variant="body2" className="text-sm leading-relaxed text-gray-600">
-                        {event.description}
-                      </Typography>
-                    )}
-
-                    {/* Footer */}
-                    <Box className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                      <Box className="flex gap-3 text-sm">
-                        {event.registerLink && !isPast && (
-                          <Link
-                            href={event.registerLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center font-medium text-[#EA4335] hover:underline"
-                          >
-                            <EditCalendarIcon fontSize="small" className="mr-1" />
-                            Register
-                          </Link>
-                        )}
-                        {event.recordingLink && (
-                          <Link
-                            href={event.recordingLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center font-medium text-[#168039] hover:underline"
-                          >
-                            <VideoLibraryIcon fontSize="small" className="mr-1" />
-                            Recording
-                          </Link>
-                        )}
-                      </Box>
-                    </Box>
-                  </Box>
-                </Card>
-              );
-            })}
+            {[...Array(3)].map((_, index) => (
+              <Box
+                key={`skeleton-${index}`}
+                className="animate-pulse rounded-lg bg-gray-100 p-6 shadow"
+              >
+                <div className="mb-2 h-4 w-2/3 rounded bg-gray-200"></div>
+                <div className="mb-2 h-3 w-1/3 rounded bg-gray-200"></div>
+                <div className="h-24 w-full rounded bg-gray-200"></div>
+              </Box>
+            ))}
           </div>
-        </Fade>
-      )}
-    </div>
+        )}
+
+        {!loading && events.length === 0 && (
+          <Fade in={!loading && events.length === 0}>
+            <Box className="py-12 text-center">
+              <EventBusyIcon
+                sx={{
+                  fontSize: 64,
+                  color: "text.secondary",
+                  marginBottom: 2,
+                  opacity: 0.5,
+                }}
+              />
+              <Typography variant="h6" className="mb-2 text-gray-700">
+                No events found
+              </Typography>
+              <Typography variant="body2" className="text-gray-500">
+                There are no events available at the moment. Check back later!
+              </Typography>
+            </Box>
+          </Fade>
+        )}
+
+        {events.length > 0 && (
+          <Fade in={showEvents} timeout={500}>
+            <div>
+              <UpcomingEventsSection events={events} />
+
+              {hasPastEvents && (
+                <Box
+                  id="past-events"
+                  component="section"
+                  className="border-t pt-14"
+                  sx={{ borderColor: "grey.200", scrollMarginTop: "96px" }}
+                >
+                  <Typography variant="h4" className="font-bold tracking-tight text-gray-900">
+                    Past Events
+                  </Typography>
+                </Box>
+              )}
+
+              <div className="mt-12 space-y-12">
+                {sections.map((section) => (
+                  <PastEventsCategorySection key={section.def.key} section={section} />
+                ))}
+              </div>
+            </div>
+          </Fade>
+        )}
+      </div>
+      <EventDetailsDialog selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
+    </EventModalContext.Provider>
   );
 }

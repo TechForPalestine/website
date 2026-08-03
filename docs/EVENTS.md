@@ -1,74 +1,87 @@
 # Events Page Documentation
 
-The events page (`/events`) displays Tech for Palestine events fetched from a Notion database. See [NOTION.md](NOTION.md) for how this fits into the broader Notion integration, and [ARCHITECTURE.md](ARCHITECTURE.md) for the SSR/islands model these components use.
+The events pages (`/events` and `/events-new`) display Tech for Palestine events fetched from a
+public **ICS calendar feed** (Mattermost's Events Calendar plugin, hosted at
+`chat.techforpalestine.org`). See [ARCHITECTURE.md](ARCHITECTURE.md) for the SSR/islands model
+these components use. Events used to come from Notion — that integration was removed; Notion is
+still used for FAQ, ideas, agenda, signatories, and community calls (see [NOTION.md](NOTION.md)).
 
 ## Architecture Overview
 
 ```
-Notion Database → API Route → Frontend Component
-                     ↓              ↓
-              /api/events    Events.tsx
+ICS Feed → eventsClient.ts → API Route → Frontend Component
+                                 ↓              ↓
+                          /api/events    Events.tsx / EventsNew.tsx
 ```
+
+Both pages group events into categories (by the feed's `CATEGORIES` tags) and split each
+category into upcoming (featured) vs. past events. The grouping logic is shared
+(`src/utils/eventSections.ts`); each page renders it with its own UI.
 
 ## Components
 
-### 1. Events Page (`src/pages/events.astro`)
+### 1. Events Client (`src/store/eventsClient.ts`)
 
-Entry point that fetches initial events data server-side and renders the Events island with it as props.
+- `fetchEvents(locals?)`: fetches the ICS feed URL from `EVENTS_ICS_URL` (via `getEnv()`),
+  parses it (line unfolding, property parsing, text unescaping — no external ICS library),
+  and returns a flat `EventItem[]` sorted by date descending.
+- Events tagged `testing` in `CATEGORIES` are always dropped.
+- `URL` in the feed is overloaded (map pin for in-person events, registration link for
+  online events) — only known registration hosts (`zoom.us`, `docs.google.com`,
+  `streamyard.com`) are treated as `registerLink`; anything else becomes `locationLink`.
+- Server-side only — never runs in the browser, since the feed URL contains an auth token.
 
-```astro
----
-import { fetchNotionEvents } from "../store/notionClient";
-let events = await fetchNotionEvents();
----
+### 2. Category Grouping (`src/utils/eventSections.ts`)
 
-<Events events={events} loading={loading} client:only="react" />
-```
+- `SECTION_DEFS`: ordered list of sections — Occupied Tech Podcast, Community Calls,
+  In-Person Events, Roundtable, Book Club — each with the feed tags that route into it.
+- `groupIntoSections(events)`: buckets events into sections by tag (first match wins), splits
+  each into `upcoming`/`past`, and appends a catch-all **Others** section for events whose tags
+  don't match a named section. A named section with zero events is omitted entirely.
 
-### 2. Events Component (`src/components/Events.tsx`)
+### 3. Pages & Components
 
-React island that handles:
+- **`src/pages/events.astro`** → `src/components/Events.tsx` — Material-UI styled page, one
+  section per category, upcoming events shown before past within each section.
+- **`src/pages/events-new.astro`** → `src/components/events/EventsNew.tsx` — new design-system
+  styled page, one section per category with featured cards for upcoming events and a compact
+  "Past events" list alongside.
+- Both fetch initial data server-side (`fetchEvents(Astro.locals)`) and re-fetch client-side
+  from `/api/events` on mount if no SSR data was passed.
 
-- **Fetch on mount**: if no initial SSR data was passed, fetches `/api/events` (or `/api/events?showAll=yes`) itself.
-- **Manual refresh**: a refresh button re-fetches `/api/events`; there is **no automatic polling** — earlier versions of this doc described a 30-second auto-refresh interval, but the current component has no `setInterval` and only refetches on mount or on user action.
-- **Error handling**: on a failed fetch, the catch block is intentionally silent (documented inline in the component) — the user just keeps seeing whatever events were already loaded.
-- **Change detection** (`hasEventsChanged`): compares event arrays field-by-field so a refresh only triggers a re-render when something actually changed.
-- Responsive card layout with Material-UI, fade-in on first load.
+### 4. API Route (`src/pages/api/events.ts`)
 
-### 3. API Route (`src/pages/api/events.ts`)
-
-Astro API endpoint that:
-
-- Fetches events from Notion via `fetchNotionEvents()` in `notionClient.ts`.
-- Returns fresh data without caching (`no-cache, no-store, must-revalidate` headers — also enforced unconditionally by the `cache-control` middleware on all `/api/*` routes, see [ARCHITECTURE.md](ARCHITECTURE.md)).
+- Calls `fetchEvents(locals)`.
+- Returns fresh data without caching (`no-cache, no-store, must-revalidate` headers — also
+  enforced unconditionally by the `cache-control` middleware on all `/api/*` routes, see
+  [ARCHITECTURE.md](ARCHITECTURE.md)).
 - Reports errors via `reportError()` and returns a generic 500 on failure.
-
-### 4. Notion Client (`src/store/notionClient.ts`)
-
-- `fetchNotionEvents(showAll?, locals?)`: queries the events database, filtered on the `Visibility` checkbox property unless `showAll` is true; sorted by date descending.
-- `fetchNotionEventById(pageId, locals?)`: single-event lookup, used by `event-details.astro` → `EventDetails.tsx`.
-- Both map raw Notion page properties (`Title`, `Date of event`, `Stage`, `Type of event`, `Header`, `Description`, `Link to registration`, `Link to recording`) into the flat `EventItem` shape below.
 
 ## Event Data Structure
 
 ```typescript
 interface EventItem {
-  id: string; // Notion page ID
-  title: string; // Event title
-  date: string; // ISO date string
-  status: string; // "Past" or "Upcoming"
-  location: string; // Event type/location
-  image: string; // Header image URL (direct Notion URL or default)
-  link: string; // Notion page URL
-  description?: string; // Event description
-  registerLink?: string; // Registration URL
-  recordingLink?: string; // Recording URL
+  id: string; // ICS UID
+  title: string; // Event title (SUMMARY)
+  date: string; // "YYYY-MM-DD", local wall-clock date from the feed
+  status: string; // ICS STATUS (usually "CONFIRMED")
+  location: string; // Free-text location; empty if LOCATION is a bare URL
+  locationLink: string; // Map link for in-person events, "" otherwise
+  image: string; // IMAGE/ATTACH URL, or /images/default.jpg
+  link: string; // Best available link (register, then recording)
+  time?: string; // Formatted local time, e.g. "9:00 AM"
+  description?: string; // DESCRIPTION with the trailing Organizer/Tags/Recording/Banner block stripped
+  registerLink?: string; // Registration URL (X-REGISTRATION-URL or a known registration host)
+  recordingLink?: string; // X-RECORDING-URL
+  tags: string[]; // Lowercased CATEGORIES values, used for section grouping
+  dateUtcIso: string | null; // Resolved UTC instant, used for upcoming/past comparisons
 }
 ```
 
 ## Image Handling
 
-Notion images are served as direct Notion-hosted URLs — **there is no image proxy or caching layer** (the earlier Cloudflare Worker image proxy was removed in PR #415). On load error, the frontend falls back to the default image:
+Feed images (`IMAGE`/`ATTACH` properties) are served as direct `chat.techforpalestine.org` URLs
+— there is no proxy/cache layer. On load error, the frontend falls back to the default image:
 
 ```tsx
 <img
@@ -81,64 +94,75 @@ Notion images are served as direct Notion-hosted URLs — **there is no image pr
 />
 ```
 
-**Notion-hosted image URLs expire after roughly 1 hour** (a Notion/S3 signed-URL limitation). Since there's no proxy/cache anymore, an event page left open for a while, or a cached SSR response, may show broken images until the fallback kicks in or the page is refreshed and re-fetches fresh URLs from Notion.
-
 ## Environment Variables
 
 ```bash
-NOTION_SECRET=secret_xxx
-NOTION_DB_ID=database-id
+EVENTS_ICS_URL=https://chat.techforpalestine.org/plugins/com.techforpalestine.events-calendar/api/v1/public/calendars/by-id/<calendar-id>/ics?token=<token>
 ```
+
+This is a bearer-style secret embedded in the URL — set it via the Cloudflare Pages dashboard
+in production and `.dev.vars` locally (never hardcode it in source or `wrangler.toml`). It's
+resolved through `getEnv()` and only ever fetched server-side.
 
 ## File Structure
 
 ```
 src/
 ├── pages/
-│   ├── events.astro              # Events page entry point
-│   ├── event-details.astro       # Individual event details
-│   └── api/events.ts            # API endpoint
+│   ├── events.astro              # Events page entry point (MUI)
+│   ├── events-new.astro          # Events page entry point (new design)
+│   └── api/events.ts             # API endpoint
 ├── components/
-│   ├── Events.tsx               # Main events component
-│   └── EventDetails.tsx         # Event detail component
-└── store/
-    └── notionClient.ts          # Notion API integration
+│   ├── Events.tsx                # MUI events component, category sections
+│   └── events/
+│       └── EventsNew.tsx         # New-design events component, category sections
+├── store/
+│   └── eventsClient.ts           # ICS feed fetch + parse
+└── utils/
+    ├── eventSections.ts          # Category grouping (shared by both pages)
+    └── icalDate.ts                # TZID → UTC date resolution (shared with community calls)
 ```
 
 ## Troubleshooting
 
-### Images Not Loading
-
-1. Notion-hosted images expire after ~1 hour — this is a Notion limitation, not a bug.
-2. The component falls back to `/images/default.jpg` on error; a manual refresh re-fetches current URLs from Notion.
-
 ### Events Not Updating
 
-1. There's no background polling — the user must click refresh or reload the page.
-2. Check Notion API credentials (`NOTION_SECRET`, `NOTION_DB_ID`).
-3. Verify database permissions and the `Visibility` checkbox on the relevant Notion rows.
-4. Check browser console for API errors (fetch failures are caught silently in the UI, so nothing shows on-page).
+1. There's no background polling — the user must click refresh (MUI page) or reload the page.
+2. Check `EVENTS_ICS_URL` is set and the feed is reachable.
+3. Check browser console / Sentry for fetch failures.
+
+### An Event Is In The Wrong Category / Missing
+
+- Check the event's `CATEGORIES` tags in the source calendar (Mattermost Events Calendar
+  plugin) against the tag → section mapping in `src/utils/eventSections.ts`.
+- Events tagged `testing` are always dropped, regardless of other tags.
 
 ## API Reference
 
 ### GET /api/events
 
-Returns array of event objects sorted by date (newest first).
+Returns a flat array of event objects sorted by date (newest first); pages group them into
+categories client- or server-side via `groupIntoSections`.
 
 **Response:**
 
 ```json
 [
   {
-    "id": "notion-page-id",
-    "title": "Event Title",
-    "date": "2025-07-23",
-    "status": "Upcoming",
-    "location": "Virtual",
-    "image": "https://notion-hosted-url.com/...",
-    "description": "Event description",
-    "registerLink": "https://register.url",
-    "recordingLink": null
+    "id": "dd579e59-53f1-4a9f-9df7-fd09997b092d@events.t4p",
+    "title": "Entrepreneurs for Palestine Official Launch",
+    "date": "2025-02-26",
+    "status": "CONFIRMED",
+    "location": "",
+    "locationLink": "",
+    "image": "https://chat.techforpalestine.org/.../banner",
+    "link": "https://youtu.be/w22SyQY1bwI",
+    "time": "9:00 AM",
+    "description": "Join us for the official launch of T4P's newest initiative...",
+    "registerLink": "",
+    "recordingLink": "https://youtu.be/w22SyQY1bwI",
+    "tags": ["online"],
+    "dateUtcIso": "2025-02-26T08:00:00.000Z"
   }
 ]
 ```
@@ -149,4 +173,4 @@ Returns array of event objects sorted by date (newest first).
 pnpm dev  # Start Astro dev server on :4321
 ```
 
-Copy `.env.example` to `.env` and fill in `NOTION_SECRET`/`NOTION_DB_ID` before testing locally.
+Set `EVENTS_ICS_URL` in `.dev.vars` before testing locally.

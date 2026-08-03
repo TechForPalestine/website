@@ -29,6 +29,13 @@ export default {
           hover: "#D35464",
           light: "#E8727F",
         },
+        // Muted warm sage — a "positive/upcoming" status color derived to sit
+        // next to the cream/butter/rose palette instead of a generic bright
+        // green.
+        positive: {
+          DEFAULT: "#5C7A52",
+          tint: "#EDF1E8",
+        },
       },
       fontFamily: {
         serif: ["Fraunces", "Fraunces Placeholder", "serif"],
