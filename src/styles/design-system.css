@@ -218,10 +218,6 @@ html.no-js .hero-logo {
   filter: none;
 }
 
-html.no-js .scroll-indicator {
-  animation: none;
-}
-
 @keyframes blurIn {
   from {
     opacity: 0;
@@ -272,6 +268,16 @@ html.no-js .scroll-indicator {
 }
 .hero-logo {
   animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) 1.3s both;
+}
+
+/* Mobile hero card: headline + CTA sit directly on the image, no desktop-length delay */
+@media (max-width: 809px) {
+  .hero-h1-a.hero-mobile-fast {
+    animation-delay: 0.1s;
+  }
+  .hero-cta-b.hero-mobile-fast {
+    animation-delay: 0.3s;
+  }
 }
 
 @keyframes kenBurns {
@@ -370,22 +376,6 @@ html.no-js .scroll-indicator {
   animation-delay: 10.5s;
 }
 
-/* Scroll indicator bounce */
-@keyframes scrollBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(6px);
-    opacity: 0.6;
-  }
-}
-.scroll-indicator {
-  animation: scrollBounce 1.8s ease-in-out infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   /* Hero — show at final resting state immediately */
   .hero-card {
@@ -402,11 +392,6 @@ html.no-js .scroll-indicator {
     opacity: 1;
     transform: none;
     filter: none;
-  }
-
-  /* Scroll indicator — stop bouncing */
-  .scroll-indicator {
-    animation: none;
   }
 
   /* Ken-burns — disable on all images */

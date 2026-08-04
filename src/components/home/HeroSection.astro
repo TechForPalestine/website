@@ -20,35 +20,21 @@ const { membershipLive = false } = Astro.props;
       class="animate-ken-burns h-[calc(100svh-2rem)] min-h-[500px] w-full object-cover object-center motion-reduce:animate-none sm:h-[calc(100svh-3rem)]"
     />
 
-    <!-- Mobile overlay (below 810px): logo + scroll down -->
-    <div class="absolute inset-0 flex flex-col items-center gap-6 pt-16 min-[810px]:hidden">
-      <div class="hero-logo">
-        <img
-          src="/logos/logo-dark.webp"
-          alt="Tech for Palestine"
-          width="163"
-          height="48"
-          class="h-12 w-auto"
-        />
+    <!-- Mobile overlay (below 810px): headline + primary CTA, same hierarchy as desktop -->
+    <div class="absolute inset-0 flex flex-col justify-end p-4 min-[810px]:hidden">
+      <div class="hero-card rounded-3xl bg-[#ffffffa3] px-4 py-5">
+        <h1 class="ts-display hero-h1-a hero-mobile-fast mb-4 text-left text-ink">
+          Join the movement behind 90+ projects for Palestine
+        </h1>
+        <div class="hero-cta-b hero-mobile-fast">
+          <Button
+            href={membershipLive ? "/membership" : "/get-involved-new"}
+            variant="primary"
+            size="lg"
+            arrow>{membershipLive ? "Become a member" : "Get involved"}</Button
+          >
+        </div>
       </div>
-      <a
-        href="#mobile-content"
-        class="hero-cta-a ts-label flex flex-col items-center gap-2 rounded-sm text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-      >
-        Scroll down
-        <svg
-          class="scroll-indicator"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          aria-hidden="true"
-        >
-          <path d="M12 5v14M5 13l7 7 7-7"></path>
-        </svg>
-      </a>
     </div>
 
     <!-- Desktop overlay (810px+): full hero card -->
@@ -118,35 +104,22 @@ const { membershipLive = false } = Astro.props;
   </div>
 
   <!-- Mobile content below hero (below 810px) -->
-  <div id="mobile-content" class="pt-20 min-[810px]:hidden">
-    <h1 class="ts-display hero-h1-a mb-8 text-left text-ink">
-      Join the movement behind 90+ projects for Palestine
-    </h1>
-    <div class="flex flex-col items-start gap-4">
-      <div class="hero-cta-a">
-        <Button href="#portfolio" variant="ghost" class="!border-transparent hover:!bg-transparent">
-          See what we've built
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            aria-hidden="true"
-          >
-            <path d="M12 5v14M5 13l7 7 7-7"></path>
-          </svg>
-        </Button>
-      </div>
-      <div class="hero-cta-b">
-        <Button
-          href={membershipLive ? "/membership" : "/get-involved-new"}
-          variant="primary"
-          size="lg"
-          arrow>{membershipLive ? "Become a member" : "Get involved"}</Button
+  <div id="mobile-content" class="pt-8 min-[810px]:hidden">
+    <div class="hero-cta-a">
+      <Button href="#portfolio" variant="ghost" class="!border-transparent hover:!bg-transparent">
+        See what we've built
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          aria-hidden="true"
         >
-      </div>
+          <path d="M12 5v14M5 13l7 7 7-7"></path>
+        </svg>
+      </Button>
     </div>
   </div>
 </section>
