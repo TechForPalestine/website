@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { primaryEventLink } from "../../store/eventsClient";
 import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
+import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 import { ArrowRight, CloseIcon, parseDateParts, type SelectedEvent } from "./eventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
@@ -46,22 +47,16 @@ export function EventModal({ selected, onClose }: EventModalProps) {
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
   const title = displayTitle(event);
 
+  useBodyScrollLock(true);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKeyDown);
 
-    // This site's pages scroll via Lenis (window.__lenis), which intercepts
-    // wheel/touch events itself — CSS `overflow: hidden` on html/body alone
-    // doesn't stop it. Stop Lenis while the modal is open, same pattern as
-    // ProjectDrawer.tsx.
-    const lenis = (window as any).__lenis;
-    lenis?.stop();
-
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      lenis?.start();
     };
   }, [onClose]);
 
@@ -78,7 +73,7 @@ export function EventModal({ selected, onClose }: EventModalProps) {
         aria-modal="true"
         aria-label={title}
       >
-        <div data-lenis-prevent className="overflow-y-auto overscroll-y-contain">
+        <div className="overflow-y-auto overscroll-y-contain">
           <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-sand">
             <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
             <button
