@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 import RichTextRenderer from "./RichTextRenderer.tsx";
+import { useBodyScrollLock } from "../utils/useBodyScrollLock";
 import type { RichTextSegment, NotionRichText } from "../types/richText";
 
 type Idea = {
@@ -58,18 +59,7 @@ export default function IdeasWithTabsNew({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [activeIdea]);
 
-  // Freeze Lenis (smooth scroll) while modal is open so wheel events can't move the page.
-  useEffect(() => {
-    const lenis = (window as any).__lenis;
-    if (activeIdea) {
-      lenis?.stop();
-    } else {
-      lenis?.start();
-    }
-    return () => {
-      lenis?.start();
-    };
-  }, [activeIdea]);
+  useBodyScrollLock(Boolean(activeIdea));
 
   const openIdea = (idea: Idea) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -182,7 +172,6 @@ export default function IdeasWithTabsNew({
         >
           <div
             ref={panelRef}
-            data-lenis-prevent
             className={[
               "relative max-h-[90vh] w-full max-w-2xl overflow-y-auto overscroll-y-contain rounded-[20px] border border-butter bg-page p-6 shadow-xl min-[810px]:p-8",
               "transition-all duration-300 ease-out motion-reduce:transition-none",

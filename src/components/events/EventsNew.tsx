@@ -53,9 +53,8 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
 
   // Direct links to a category (e.g. /events-new#book-club) land here before
   // this island has rendered its sections, so the browser's native hash jump
-  // has nothing to scroll to yet. This page scrolls via Lenis (window.__lenis),
-  // which intercepts native scrolling, so once content is up we scroll to the
-  // hash target ourselves — same pattern as the modal's Lenis stop/start.
+  // has nothing to scroll to yet — scroll to the hash target ourselves once
+  // content is up.
   useEffect(() => {
     if (loading) return;
     const hash = window.location.hash.slice(1);
@@ -63,12 +62,7 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
     const target = document.getElementById(hash);
     if (!target) return;
 
-    const lenis = (window as any).__lenis;
-    if (lenis?.scrollTo) {
-      lenis.scrollTo(target);
-    } else {
-      target.scrollIntoView({ block: "start" });
-    }
+    target.scrollIntoView({ block: "start" });
   }, [loading]);
 
   const sections = groupIntoSections(events);

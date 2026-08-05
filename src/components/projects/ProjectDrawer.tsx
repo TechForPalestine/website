@@ -9,6 +9,7 @@ import {
   formatDate,
 } from "./projectData";
 import { getActiveSocialFields, getSocialHref } from "./socialIcons";
+import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 
 interface ProjectDrawerProps {
   project: ProjectItem | null;
@@ -90,18 +91,7 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
     }
   }, [open]);
 
-  // Freeze Lenis (smooth scroll) while modal is open so wheel events can't move the page.
-  useEffect(() => {
-    const lenis = (window as any).__lenis;
-    if (open) {
-      lenis?.stop();
-    } else {
-      lenis?.start();
-    }
-    return () => {
-      lenis?.start();
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   // Focus management + ESC key
   useEffect(() => {
@@ -170,7 +160,6 @@ export default function ProjectDrawer({ project, open, onClose, triggerRef }: Pr
     >
       <div
         ref={panelRef}
-        data-lenis-prevent
         className={[
           "relative max-h-[90vh] w-full max-w-2xl overflow-y-auto overscroll-y-contain rounded-[20px] border border-butter bg-page p-6 shadow-xl min-[810px]:p-8",
           "transition-all duration-300 ease-out motion-reduce:transition-none",
