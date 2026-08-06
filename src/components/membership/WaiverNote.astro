@@ -1,0 +1,37 @@
+---
+/**
+ * Inclusivity / waiver small-print shown beneath the membership CTAs.
+ * The fuller version (banking access, gift aid, DAF, crypto) lives beside the
+ * Qgiv form in `MembershipDues`; this is the short public-facing statement.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+
+const reasons = [
+  "Being located in, or a refugee from Gaza or the West Bank",
+  "Not being able to afford membership due to personal circumstances",
+];
+---
+
+<div class:list={["ts-body-small max-w-[65ch] text-ink-secondary", className]}>
+  <p>
+    Tech for Palestine aims for inclusivity. Please contact <a
+      href="mailto:membership@techforpalestine.org"
+      class="text-brand underline hover:text-brand-hover">membership@techforpalestine.org</a
+    > to request a waiver of dues in the following circumstances:
+  </p>
+  <ul class="mt-2 space-y-1">
+    {
+      reasons.map((reason) => (
+        <li class="flex items-baseline gap-2">
+          <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true" />
+          {reason}
+        </li>
+      ))
+    }
+  </ul>
+  <p class="mt-2">If you are in the US, your dues are tax deductible.</p>
+</div>

@@ -129,7 +129,7 @@ export default function MembershipCalculator() {
         <div className="mt-5 grid grid-cols-2 gap-3" aria-live="polite">
           <div className="rounded-[12px] bg-sand px-5 py-4">
             <p className="ts-body-small mb-1 text-ink-secondary">Monthly dues</p>
-            <p className="font-fraunces text-3xl text-brand">
+            <p className="font-serif text-3xl text-brand">
               {currencyData.symbol}
               {suggestedMonthly.toFixed(2)}
             </p>
@@ -141,7 +141,7 @@ export default function MembershipCalculator() {
           </div>
           <div className="rounded-[12px] bg-sand px-5 py-4">
             <p className="ts-body-small mb-1 text-ink-secondary">Annual dues</p>
-            <p className="font-fraunces text-3xl text-brand">
+            <p className="font-serif text-3xl text-brand">
               {currencyData.symbol}
               {suggestedAnnual.toFixed(2)}
             </p>

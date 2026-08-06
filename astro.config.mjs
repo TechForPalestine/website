@@ -76,6 +76,7 @@ export default defineConfig({
           "/js/web.js/",
           "/admin/conversions/",
           "/membership-new/",
+          "/supporting-member-new/",
           "/volunteer-new/",
           "/e4p-new/",
           "/help/hire-new/",

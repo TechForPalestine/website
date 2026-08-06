@@ -1,0 +1,152 @@
+---
+import { getEnv } from "../utils/getEnv";
+import HomeLayout from "../layouts/HomeLayout.astro";
+import HomeNavbar from "../components/home/HomeNavbar.astro";
+import Button from "../components/ui/Button.astro";
+import TestimonialsSection from "../components/home/TestimonialsSection.astro";
+import BenefitsTable from "../components/membership/BenefitsTable.astro";
+import LogoWall from "../components/membership/LogoWall.astro";
+import MembershipDues from "../components/membership/MembershipDues";
+import WaiverNote from "../components/membership/WaiverNote.astro";
+
+const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
+---
+
+<HomeLayout
+  title="Become a Supporting Member | Tech for Palestine"
+  description="Support Tech for Palestine financially without joining a team. Supporting Members fund initiatives for Palestinian liberation, get event invites, and receive project updates."
+  noindex={true}
+>
+  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
+
+  <main class="pt-20">
+    <!-- Hero -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <h1 class="ts-editorial mb-10 max-w-[20ch] text-ink">
+            Become a <span class="text-brand">Supporting Member</span>
+          </h1>
+
+          <!-- Contained, centred photo rather than a hero banner -->
+          <img
+            src="/images/membership/supporting-panel.webp"
+            alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
+            class="mx-auto mb-10 w-full max-w-[560px] rounded-[20px]"
+            width="1600"
+            height="1068"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+
+          <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+            Tech for Palestine's coalition of founders, engineers, investors and other professionals
+            are helping Palestine advocates scale their work. Tens of thousands of Israeli <em
+              >hasbara</em
+            > (propaganda) projects exist, so we're creating thousands of initiatives for Palestinian
+            liberation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reach -->
+    <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <p class="mb-10 font-serif text-4xl leading-tight text-ink min-[810px]:text-5xl">
+            <span class="text-brand">10M+ Users</span> Across <span class="text-brand"
+              >90+ Projects</span
+            >
+          </p>
+          <LogoWall />
+        </div>
+      </div>
+    </section>
+
+    <!-- What you get -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <p class="ts-body-large mb-10 max-w-[70ch] text-ink-secondary">
+            Want to support T4P's work, but don't have time to get involved in teams or join the
+            community? Become a Supporting Member to support our work financially, receive invites
+            to events and get updates about our progress:
+          </p>
+
+          <div class="max-w-[1000px]">
+            <BenefitsTable />
+          </div>
+
+          <div class="mt-10 flex flex-col gap-3 min-[560px]:flex-row min-[560px]:items-center">
+            <Button href="#join" variant="primary" size="md" arrow>
+              Become a Supporting Member
+            </Button>
+            <Button href="/donate" variant="text" class="min-[560px]:ml-3">
+              Donate without joining
+            </Button>
+          </div>
+
+          <WaiverNote class="mt-10" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Join -->
+    <section id="join" class="scroll-mt-24 bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="membership-animate">
+          <MembershipDues client:load tier="supporting" />
+        </div>
+      </div>
+    </section>
+
+    <TestimonialsSection membershipLive={membershipLive} />
+  </main>
+</HomeLayout>
+
+<style>
+  .membership-animate {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .membership-animate.visible {
+    animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  :global(html.no-js) .membership-animate {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .membership-animate {
+      opacity: 1;
+      transform: none;
+    }
+    .membership-animate.visible {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll<HTMLElement>(".membership-animate");
+  if (sections.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    sections.forEach((el) => observer.observe(el));
+  } else {
+    sections.forEach((el) => {
+      el.classList.add("visible");
+    });
+  }
+</script>

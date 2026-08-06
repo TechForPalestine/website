@@ -1,39 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import MembershipCalculator from "./MembershipCalculator";
+import QgivJoin from "./QgivJoin";
+import type { MembershipTier } from "./qgiv";
 
-function QgivEmbed() {
-  const scriptLoadedRef = useRef(false);
-
-  useEffect(() => {
-    if (scriptLoadedRef.current) return;
-    scriptLoadedRef.current = true;
-
-    const script = document.createElement("script");
-    script.src = "https://secure.qgiv.com/resources/core/js/embed.js";
-    script.id = "qgiv-embedjs";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  return (
-    <div className="max-h-[640px] overflow-hidden">
-      <div
-        className="qgiv-embed-container"
-        data-qgiv-embed="true"
-        data-embed-id="88902"
-        data-embed="https://secure.qgiv.com/for/dafize/embed/88902/"
-        data-width="630"
-      />
-    </div>
-  );
+interface MembershipDuesProps {
+  tier?: MembershipTier;
 }
 
-export default function MembershipDues() {
+const MAIL = "mailto:membership@techforpalestine.org";
+const LINK = "text-brand underline hover:text-brand-hover";
+
+const WAIVER_REASONS = [
+  "Not having access to banking services/debit card",
+  "Being located in Gaza or the West Bank",
+  "Being a refugee from Gaza or the West Bank evacuated during the genocide",
+  "Not being able to afford membership due to personal circumstances",
+  "Being a T4P paid staff member",
+];
+
+export default function MembershipDues({ tier = "member" }: MembershipDuesProps) {
   // Default to the no-calculator variant so this renders identically during
   // SSR (no window/localStorage access) before the A/B assignment runs below.
   const [showCalculator, setShowCalculator] = useState(false);
+  const [variant, setVariant] = useState<string | undefined>(undefined);
+
+  const runsCalculatorTest = tier === "member";
 
   useEffect(() => {
+    if (!runsCalculatorTest) return;
+
     const urlParams = new URLSearchParams(window.location.search);
     const urlParam = urlParams.get("calculator");
 
@@ -54,25 +49,28 @@ export default function MembershipDues() {
       }
     }
 
+    const assignedVariant = assigned ? "Calculator" : "No Calculator";
     setShowCalculator(assigned);
+    setVariant(assignedVariant);
 
     if (typeof window.plausible !== "undefined") {
       window.plausible("Membership Page", {
-        props: {
-          membership_variant: assigned ? "Calculator" : "No Calculator",
-        },
+        props: { membership_variant: assignedVariant },
       });
     }
-  }, []);
+  }, [runsCalculatorTest]);
+
+  const intro =
+    tier === "supporting"
+      ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary."
+      : showCalculator
+        ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
+        : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
 
   return (
     <div>
       {/* Intro copy — left-aligned with the section heading */}
-      <p className="ts-body-large mb-3 max-w-[75ch] text-ink-secondary">
-        {showCalculator
-          ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
-          : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary."}
-      </p>
+      <p className="ts-body-large mb-3 max-w-[75ch] text-ink-secondary">{intro}</p>
 
       {/* Calculator + form — constrained width, left-aligned */}
       <div className="mx-auto max-w-[800px]">
@@ -80,7 +78,7 @@ export default function MembershipDues() {
 
         {/* Form + side info */}
         <div className="mt-3 grid grid-cols-1 items-start gap-6 min-[810px]:grid-cols-[1fr_340px]">
-          <QgivEmbed />
+          <QgivJoin tier={tier} variant={variant} />
 
           {/* Side info */}
           <div className="flex flex-col gap-3">
@@ -88,22 +86,13 @@ export default function MembershipDues() {
               <p className="ts-body-small mb-2 font-semibold text-ink">Inclusivity &amp; waivers</p>
               <p className="ts-body-small mb-2 leading-relaxed text-ink-secondary">
                 Tech for Palestine aims for inclusivity. Please contact{" "}
-                <a
-                  href="mailto:membership@techforpalestine.org"
-                  className="text-brand underline hover:text-brand-hover"
-                >
+                <a href={MAIL} className={LINK}>
                   membership@techforpalestine.org
                 </a>{" "}
                 to request a waiver of dues in the following circumstances:
               </p>
               <ul className="mb-2 space-y-1 pl-3">
-                {[
-                  "Not having access to banking services/debit card",
-                  "Being located in Gaza or the West Bank",
-                  "Being a refugee from Gaza or the West Bank evacuated during the genocide",
-                  "Not being able to afford membership due to personal circumstances",
-                  "Being a T4P paid staff member",
-                ].map((item) => (
+                {WAIVER_REASONS.map((item) => (
                   <li
                     key={item}
                     className="ts-body-small flex items-baseline gap-2 text-ink-secondary"
@@ -119,10 +108,7 @@ export default function MembershipDues() {
               <p className="ts-body-small mb-2 leading-relaxed text-ink-secondary">
                 If you are in the US, your dues are tax deductible. If you are in the UK, contact us
                 at{" "}
-                <a
-                  href="mailto:membership@techforpalestine.org"
-                  className="text-brand underline hover:text-brand-hover"
-                >
+                <a href={MAIL} className={LINK}>
                   membership@techforpalestine.org
                 </a>{" "}
                 after signup and we will ensure that future donations are processed through our gift
@@ -141,17 +127,14 @@ export default function MembershipDues() {
                 If you have questions, set up an{" "}
                 <a
                   href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
-                  className="font-semibold text-brand underline hover:text-brand-hover"
+                  className={`font-semibold ${LINK}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   intro call
                 </a>{" "}
                 or reach out to us at{" "}
-                <a
-                  href="mailto:membership@techforpalestine.org"
-                  className="font-semibold text-brand underline hover:text-brand-hover"
-                >
+                <a href={MAIL} className={`font-semibold ${LINK}`}>
                   membership@techforpalestine.org
                 </a>
                 !
