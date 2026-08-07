@@ -30,7 +30,7 @@ const rowSx = {
   display: "flex",
   alignItems: "center",
   gap: 1.5,
-  mb: 1,
+  mb: 1.5,
 };
 
 const labelSx = {
@@ -67,10 +67,11 @@ export default function MembershipCalculator() {
       sx={{
         maxWidth: 600,
         mx: "auto",
-        borderRadius: 2,
+        borderRadius: 3,
         border: "2px solid #168039",
         backgroundColor: "white",
-        p: 1.5,
+        boxShadow: "0 4px 14px -6px rgba(17, 107, 47, 0.2)",
+        p: 2,
         mb: 4,
       }}
     >
@@ -149,10 +150,10 @@ export default function MembershipCalculator() {
           sx={{
             display: "flex",
             gap: 1,
-            mt: 0.5,
-            p: 1.5,
+            mt: 1,
+            p: 2,
             backgroundColor: "#f0fdf4",
-            borderRadius: 1.5,
+            borderRadius: 2,
             border: "2px solid #168039",
           }}
         >

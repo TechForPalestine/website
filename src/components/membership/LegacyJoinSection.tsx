@@ -11,7 +11,8 @@ interface LegacyJoinSectionProps {
   heading?: string;
 }
 
-const LINK = "text-[#168039] underline";
+const LINK =
+  "text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm";
 const MAIL = "mailto:membership@techforpalestine.org";
 
 const WAIVER_REASONS = [
@@ -99,16 +100,23 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "1fr 340px" },
-          gap: 3,
+          gap: 3.5,
           mt: 3,
           alignItems: "start",
         }}
       >
         <QgivJoin tier={tier} variant={variant} />
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
           <Box
-            sx={{ p: 3, borderRadius: 2, backgroundColor: "#f9fafb", border: "1px solid #e5e7eb" }}
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              backgroundColor: "#f9fafb",
+              border: "1px solid #e5e7eb",
+              transition: "border-color 150ms ease",
+              "&:hover": { borderColor: "#d1d5db" },
+            }}
           >
             <Typography
               variant="body2"
@@ -155,7 +163,14 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
           </Box>
 
           <Box
-            sx={{ p: 3, borderRadius: 2, backgroundColor: "#f0fdf4", border: "1px solid #d1fae5" }}
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              backgroundColor: "#f0fdf4",
+              border: "1px solid #d1fae5",
+              transition: "border-color 150ms ease",
+              "&:hover": { borderColor: "#168039" },
+            }}
           >
             <Typography
               variant="body2"

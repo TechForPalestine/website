@@ -14,9 +14,9 @@ import "../styles/base.css";
   <main>
     <PageHeader overline="Tech for Palestine" title="Become a member to support and grow our work" />
 
-    <div class="mx-auto max-w-6xl px-6 pb-24 pt-4 sm:px-8">
+    <div class="mx-auto max-w-6xl px-6 pb-24 pt-6 sm:px-8">
       <!-- Hero: intro copy + benefits beside the photo, rather than stacked -->
-      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
+      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
         <div>
           <p class="text-lg leading-relaxed text-zinc-700">
             <strong>T4P Members</strong> and <strong>Supporting Members</strong> drive and sustain our
@@ -25,7 +25,7 @@ import "../styles/base.css";
           <p class="mt-4 text-lg leading-relaxed text-zinc-700">
             Members join our community to work directly on advocacy projects and help run T4P:
           </p>
-          <ul class="ml-3 mt-2 list-disc space-y-2 pl-2 text-lg leading-relaxed text-zinc-700">
+          <ul class="ml-3 mt-3 list-disc space-y-2.5 pl-2 text-lg leading-relaxed text-zinc-700">
             {memberBenefits.map((benefit) => <li>{benefit}</li>)}
           </ul>
         </div>
@@ -33,7 +33,7 @@ import "../styles/base.css";
         <img
           src="/images/membership/members-group.webp"
           alt="Tech for Palestine members gathered outside a venue at a community event"
-          class="w-full rounded-2xl"
+          class="w-full rounded-2xl shadow-sm ring-1 ring-zinc-900/5"
           width="1600"
           height="1232"
           loading="eager"
@@ -41,7 +41,7 @@ import "../styles/base.css";
         />
       </div>
 
-      <div class="mt-12">
+      <div class="mt-16">
         <MembershipPage client:only="react" />
       </div>
     </div>
