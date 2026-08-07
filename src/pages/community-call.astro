@@ -1,16 +1,13 @@
 ---
 import * as Sentry from "@sentry/astro";
-import HomeLayout from "../layouts/HomeLayout.astro";
-import HomeNavbar from "../components/home/HomeNavbar.astro";
-import Button from "../components/ui/Button.astro";
-import SignUpFormHomeNew from "../structures/SignUpFormHomeNew.astro";
-import { getEnv } from "../utils/getEnv";
+import Layout from "../layouts/Layout.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+import "../styles/base.css";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
 import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";
 
-const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 const ctx = Astro.locals.runtime?.ctx;
 
 let calls: CommunityCall[] = [];
@@ -24,13 +21,6 @@ try {
 const now = new Date();
 const call = featuredCall(calls, now);
 const initialState = call ? callState(call, now) : null;
-
-const pageTitle = call
-  ? `${call.title} | Tech for Palestine`
-  : "Community Call | Tech for Palestine";
-const pageDescription = call
-  ? call.description || "Join the next Tech for Palestine community call."
-  : "The Tech for Palestine community call — a recurring open call for the coalition. Sign up to hear when the next one is scheduled.";
 
 Astro.response.headers.set("Cache-Control", "public, max-age=300");
 
@@ -52,157 +42,155 @@ function googleCalendarUrl(c: CommunityCall): string {
 }
 ---
 
-<HomeLayout title={pageTitle} description={pageDescription}>
-  <HomeNavbar membershipLive={membershipLive} alwaysVisible />
-
-  <main class="pt-20">
-    {
-      !call && (
-        <section class="bg-sand px-6 py-20 min-[810px]:px-10 min-[810px]:py-28">
-          <div class="mx-auto max-w-[720px] text-center">
-            <p class="ts-overline mb-5 text-ink-secondary">Tech for Palestine</p>
-            <h1 class="ts-editorial mb-5 text-ink">Community Call</h1>
-            <p class="ts-body-large mx-auto mb-4 max-w-[60ch] text-ink-secondary">
-              Tech for Palestine holds a recurring open call for the coalition — updates from the
-              Incubator, project spotlights, and a chance to ask questions live.
-            </p>
-            <p class="ts-body mx-auto mb-10 max-w-[55ch] text-ink-secondary">
-              The next call isn't scheduled yet. Sign up below and we'll let you know as soon as a
-              date is set.
-            </p>
-            <SignUpFormHomeNew />
-          </div>
-        </section>
-      )
-    }
-
-    {
-      call && (
-        <section
-          class="cc-page bg-sand px-6 py-20 min-[810px]:px-10 min-[810px]:py-28"
-          data-start-iso={call.startUtcIso}
-          data-state={initialState}
-        >
-          <div class="mx-auto max-w-[720px]">
-            <p class="ts-overline mb-5 text-center text-ink-secondary">Tech for Palestine</p>
-            <h1 class="ts-editorial mb-5 text-center text-ink">{call.title}</h1>
-            {call.description && (
-              <p class="ts-body-large mx-auto mb-10 max-w-[60ch] text-center text-ink-secondary">
-                {call.description}
+<Layout
+  title={call ? `${call.title} | Tech for Palestine` : "Community Call | Tech for Palestine"}
+  description={call
+    ? call.description || "Join the next Tech for Palestine community call."
+    : "The Tech for Palestine community call — a recurring open call for the coalition."}
+>
+  <main>
+    <div class="px-6 py-24 sm:py-32 lg:px-8">
+      <div class="mx-auto max-w-4xl">
+        {
+          !call && (
+            <div class="text-center">
+              <p class="text-base font-semibold uppercase tracking-widest text-green-700">
+                Tech for Palestine
               </p>
-            )}
-
-            <div class="rounded-lg border border-ink-divider bg-white p-8 min-[810px]:p-10">
-              <p
-                class="cc-live-indicator ts-label mb-4 hidden items-center justify-center gap-2 text-brand"
-                data-cc-state="live"
-              >
-                <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-brand" />
-                We're live now
+              <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Community Call
+              </h1>
+              <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+                Tech for Palestine holds a recurring open call for the coalition — updates from the
+                Incubator, project spotlights, and a chance to ask questions live.
               </p>
-
-              <p class="ts-body mb-8 text-center text-ink invisible" data-cc-datetime>
-                {formatLocalDate(call.startUtcIso)}
+              <p class="mx-auto mt-4 max-w-xl text-base text-gray-600">
+                The next call isn't scheduled yet. Sign up below and we'll let you know as soon as a
+                date is set.
               </p>
-              <noscript>
-                <style>
-                  [data-cc-datetime] {
-                    visibility: visible;
-                  }
-                </style>
-              </noscript>
-
-              <div class="flex flex-col items-center gap-4" data-cc-state="upcoming">
-                {call.youtubeUrl ? (
-                  <Button href={call.youtubeUrl} variant="primary" size="lg" arrow>
-                    Watch on YouTube
-                  </Button>
-                ) : (
-                  <p class="ts-body text-ink-secondary">Stream links go live closer to the call.</p>
-                )}
-                {call.youtubeVerticalUrl && (
-                  <a
-                    href={call.youtubeVerticalUrl}
-                    class="ts-body-small text-ink-secondary underline"
-                  >
-                    Prefer vertical? Watch the mobile stream →
-                  </a>
-                )}
-                {call.linkedinUrl && (
-                  <a href={call.linkedinUrl} class="ts-label text-ink underline">
-                    Also on LinkedIn Events →
-                  </a>
-                )}
-                <a
-                  href={googleCalendarUrl(call)}
-                  class="ts-body-small text-ink-secondary underline"
-                >
-                  Add to calendar
-                </a>
+              <div class="mt-10">
+                <SignUpForm />
               </div>
-
-              <div class="flex flex-col items-center gap-4" data-cc-state="live">
-                {call.youtubeUrl && (
-                  <Button href={call.youtubeUrl} variant="primary" size="lg" arrow>
-                    Watch on YouTube
-                  </Button>
-                )}
-                {call.youtubeVerticalUrl && (
-                  <a
-                    href={call.youtubeVerticalUrl}
-                    class="ts-body-small text-ink-secondary underline"
-                  >
-                    Prefer vertical? Watch the mobile stream →
-                  </a>
-                )}
-                {call.linkedinUrl && (
-                  <a href={call.linkedinUrl} class="ts-label text-ink underline">
-                    Also on LinkedIn Events →
-                  </a>
-                )}
-              </div>
-
-              <div class="flex flex-col items-center gap-4" data-cc-state="ended">
-                <p class="ts-body-small mb-2 text-ink-secondary">
-                  This call has ended. Recordings, if available, are linked below.
-                </p>
-                {call.youtubeUrl && (
-                  <Button href={call.youtubeUrl} variant="ghost" size="md" arrow>
-                    Watch the recording
-                  </Button>
-                )}
-                {call.youtubeVerticalUrl && (
-                  <a
-                    href={call.youtubeVerticalUrl}
-                    class="ts-body-small text-ink-secondary underline"
-                  >
-                    Vertical recording →
-                  </a>
-                )}
-              </div>
-
-              {call.xUrl && (
-                <p class="cc-x-stream ts-body-small mt-8 text-center text-ink-muted">
-                  Also streaming to{" "}
-                  <a href={call.xUrl} class="underline">
-                    X
-                  </a>{" "}
-                  — the stream will be available there as soon as it starts.
-                </p>
-              )}
             </div>
-          </div>
-        </section>
-      )
-    }
+          )
+        }
+
+        {
+          call && (
+            <div class="cc-page-old" data-start-iso={call.startUtcIso} data-state={initialState}>
+              <div class="text-center">
+                <p class="text-base font-semibold uppercase tracking-widest text-green-700">
+                  Tech for Palestine
+                </p>
+                <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                  {call.title}
+                </h1>
+                {call.description && (
+                  <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+                    {call.description}
+                  </p>
+                )}
+              </div>
+
+              <div class="mt-12 rounded-xl border border-gray-200 bg-white p-8 shadow-sm sm:p-10">
+                <p
+                  class="cc-live-indicator mb-4 hidden items-center justify-center gap-2 font-semibold text-green-700"
+                  data-cc-state="live"
+                >
+                  <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-green-600" />
+                  We're live now
+                </p>
+
+                <p class="mb-8 text-center text-gray-900" data-cc-datetime>
+                  {formatLocalDate(call.startUtcIso)}
+                </p>
+
+                <div class="flex flex-col items-center gap-4" data-cc-state="upcoming">
+                  {call.youtubeUrl ? (
+                    <a
+                      href={call.youtubeUrl}
+                      class="rounded-lg bg-green-700 px-8 py-3 font-medium text-white transition-colors duration-200 hover:bg-green-800"
+                    >
+                      Watch on YouTube
+                    </a>
+                  ) : (
+                    <p class="text-gray-600">Stream links go live closer to the call.</p>
+                  )}
+                  {call.youtubeVerticalUrl && (
+                    <a href={call.youtubeVerticalUrl} class="text-sm text-gray-600 underline">
+                      Prefer vertical? Watch the mobile stream →
+                    </a>
+                  )}
+                  {call.linkedinUrl && (
+                    <a href={call.linkedinUrl} class="font-medium text-gray-900 underline">
+                      Also on LinkedIn Events →
+                    </a>
+                  )}
+                  <a href={googleCalendarUrl(call)} class="text-sm text-gray-600 underline">
+                    Add to calendar
+                  </a>
+                </div>
+
+                <div class="flex flex-col items-center gap-4" data-cc-state="live">
+                  {call.youtubeUrl && (
+                    <a
+                      href={call.youtubeUrl}
+                      class="rounded-lg bg-green-700 px-8 py-3 font-medium text-white transition-colors duration-200 hover:bg-green-800"
+                    >
+                      Watch on YouTube
+                    </a>
+                  )}
+                  {call.youtubeVerticalUrl && (
+                    <a href={call.youtubeVerticalUrl} class="text-sm text-gray-600 underline">
+                      Prefer vertical? Watch the mobile stream →
+                    </a>
+                  )}
+                  {call.linkedinUrl && (
+                    <a href={call.linkedinUrl} class="font-medium text-gray-900 underline">
+                      Also on LinkedIn Events →
+                    </a>
+                  )}
+                </div>
+
+                <div class="flex flex-col items-center gap-4" data-cc-state="ended">
+                  <p class="mb-2 text-sm text-gray-600">
+                    This call has ended. Recordings, if available, are linked below.
+                  </p>
+                  {call.youtubeUrl && (
+                    <a
+                      href={call.youtubeUrl}
+                      class="rounded-lg border-2 border-gray-900 px-8 py-3 font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-900 hover:text-white"
+                    >
+                      Watch the recording
+                    </a>
+                  )}
+                  {call.youtubeVerticalUrl && (
+                    <a href={call.youtubeVerticalUrl} class="text-sm text-gray-600 underline">
+                      Vertical recording →
+                    </a>
+                  )}
+                </div>
+
+                {call.xUrl && (
+                  <p class="mt-8 text-center text-sm text-gray-500">
+                    Also streaming to{" "}
+                    <a href={call.xUrl} class="underline">
+                      X
+                    </a>{" "}
+                    — the stream will be available there as soon as it starts.
+                  </p>
+                )}
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
   </main>
 
   <script>
     import { formatLongCallTime } from "../utils/formatCallTime";
 
-    // Corrects the server-rendered state guess for visitors hitting a
-    // cached copy of this page (Cache-Control: max-age=300) after the
-    // call's status has actually changed.
     const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
 
     function computeState(startIso: string, now: Date): "upcoming" | "live" | "ended" {
@@ -213,12 +201,11 @@ function googleCalendarUrl(c: CommunityCall): string {
       return "ended";
     }
 
-    const page = document.querySelector<HTMLElement>(".cc-page");
+    const page = document.querySelector<HTMLElement>(".cc-page-old");
     if (page) {
       const startIso = page.dataset.startIso;
       if (startIso) {
-        const state = computeState(startIso, new Date());
-        page.dataset.state = state;
+        page.dataset.state = computeState(startIso, new Date());
 
         // The server-rendered date/time (and "Today"/"Tomorrow" framing) is
         // computed in the SERVER's time zone and calendar day (Cloudflare's
@@ -227,7 +214,6 @@ function googleCalendarUrl(c: CommunityCall): string {
         const datetimeEl = page.querySelector<HTMLElement>("[data-cc-datetime]");
         if (datetimeEl) {
           datetimeEl.textContent = formatLongCallTime(startIso, new Date());
-          datetimeEl.classList.remove("invisible");
         }
       }
     }
@@ -240,20 +226,17 @@ function googleCalendarUrl(c: CommunityCall): string {
     div[data-cc-state] {
       display: none;
     }
-    .cc-page[data-state="upcoming"] [data-cc-state="upcoming"] {
+    .cc-page-old[data-state="upcoming"] [data-cc-state="upcoming"] {
       display: flex;
     }
-    .cc-page[data-state="live"] [data-cc-state="live"] {
+    .cc-page-old[data-state="live"] [data-cc-state="live"] {
       display: flex;
     }
-    .cc-page[data-state="live"] .cc-live-indicator {
+    .cc-page-old[data-state="live"] .cc-live-indicator {
       display: flex;
     }
-    .cc-page[data-state="ended"] [data-cc-state="ended"] {
+    .cc-page-old[data-state="ended"] [data-cc-state="ended"] {
       display: flex;
-    }
-    .cc-page[data-state="ended"] .cc-x-stream {
-      display: none;
     }
   </style>
-</HomeLayout>
+</Layout>

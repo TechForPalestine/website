@@ -16,5 +16,66 @@
 /index-new/ / 301
 /event-details /events 301
 /event-details/ /events 301
+
+# Homepage A/B test closed out; -new redesign shelved (control wins). Redirect
+# orphaned draft pages to their legacy counterparts. /mentorship-new is
+# excluded on purpose — both /mentorship and /mentorship-new already 301 to /.
+/home-new / 301
+/home-new/ / 301
+/about-new /about 301
+/about-new/ /about 301
+/contact-new /contact 301
+/contact-new/ /contact 301
+/donate-new /donate 301
+/donate-new/ /donate 301
+/donate-2-new /donate-2 301
+/donate-2-new/ /donate-2 301
+/e4p-new /e4p 301
+/e4p-new/ /e4p 301
+/e4p/pledge-new /e4p/pledge 301
+/e4p/pledge-new/ /e4p/pledge 301
+/endorsements-new /endorsements 301
+/endorsements-new/ /endorsements 301
+/events-new /events 301
+/events-new/ /events 301
+/faq-new /faq 301
+/faq-new/ /faq 301
+/get-involved-new /get-involved 301
+/get-involved-new/ /get-involved 301
+/help/hire-new /help/hire 301
+/help/hire-new/ /help/hire 301
+/ideas-new /ideas 301
+/ideas-new/ /ideas 301
+/incubator-new /incubator 301
+/incubator-new/ /incubator 301
+/legal-new /legal 301
+/legal-new/ /legal 301
+/london-gathering-new /london-gathering 301
+/london-gathering-new/ /london-gathering 301
+/media-new /media 301
+/media-new/ /media 301
+/membership-new /membership 301
+/membership-new/ /membership 301
+/privacy-policy-new /privacy-policy 301
+/privacy-policy-new/ /privacy-policy 301
+/projects-new /projects 301
+/projects-new/ /projects 301
+/team-new /team 301
+/team-new/ /team 301
+/terms-new /terms 301
+/terms-new/ /terms 301
+/tools-new /tools 301
+/tools-new/ /tools 301
+/volunteer-new /volunteer 301
+/volunteer-new/ /volunteer 301
+
+# /community-call reverted to the old design; new-design page removed.
+/community-call-old /community-call 301
+/community-call-old/ /community-call 301
+
+# -new redesign shelved (see above) also covers the membership pages built
+# after that decision landed; /supporting-member-new never launched.
+/supporting-member-new /supporting-member 301
+/supporting-member-new/ /supporting-member 301
 /supporting-members /supporting-member 301
 /supporting-members/ /supporting-member 301
