@@ -36,7 +36,7 @@ const rowSx = {
 const labelSx = {
   fontSize: "0.875rem",
   fontWeight: 600,
-  color: "#1B2420",
+  color: "#1f2937",
   whiteSpace: "nowrap",
   minWidth: 110,
 };
@@ -67,9 +67,8 @@ export default function MembershipCalculator() {
       sx={{
         maxWidth: 600,
         mx: "auto",
-        borderRadius: "10px",
-        border: "1px solid #E4DFD3",
-        borderLeft: "3px solid #168039",
+        borderRadius: 2,
+        border: "2px solid #168039",
         backgroundColor: "white",
         p: 1.5,
         mb: 4,
@@ -85,8 +84,8 @@ export default function MembershipCalculator() {
             sx={{
               fontSize: "0.875rem",
               backgroundColor: "white",
-              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#E4DFD3" },
-              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#B9AFA0" },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#d1d5db" },
+              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#9ca3af" },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#168039" },
             }}
           >
@@ -111,11 +110,11 @@ export default function MembershipCalculator() {
               sx={{
                 flexWrap: "nowrap",
                 gap: 2,
-                "& .MuiFormControlLabel-label": { fontSize: "0.75rem", color: "#3F4A43" },
+                "& .MuiFormControlLabel-label": { fontSize: "0.75rem", color: "#374151" },
                 "& .MuiFormControlLabel-root": { mr: 0 },
                 "& .MuiRadio-root": {
                   p: 0.5,
-                  color: "#B9AFA0",
+                  color: "#9ca3af",
                   "&.Mui-checked": { color: "#168039" },
                 },
               }}
@@ -135,8 +134,8 @@ export default function MembershipCalculator() {
             flex: 1,
             "& .MuiOutlinedInput-root": {
               backgroundColor: "white",
-              "& fieldset": { borderColor: "#E4DFD3" },
-              "&:hover fieldset": { borderColor: "#B9AFA0" },
+              "& fieldset": { borderColor: "#d1d5db" },
+              "&:hover fieldset": { borderColor: "#9ca3af" },
               "&.Mui-focused fieldset": { borderColor: "#168039" },
             },
           }}
@@ -152,55 +151,43 @@ export default function MembershipCalculator() {
             gap: 1,
             mt: 0.5,
             p: 1.5,
-            backgroundColor: "#F2EEE4",
-            borderRadius: "8px",
-            border: "1px solid #168039",
+            backgroundColor: "#f0fdf4",
+            borderRadius: 1.5,
+            border: "2px solid #168039",
           }}
         >
           <Box sx={{ flex: 1 }}>
             <Typography
-              sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#116b2f", lineHeight: 1.3 }}
+              sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#166534", lineHeight: 1.3 }}
             >
               Suggested Monthly Dues:
             </Typography>
             <Typography
-              sx={{
-                fontFamily: "'Fraunces', 'Fraunces Placeholder', serif",
-                fontSize: "1.5rem",
-                fontWeight: 600,
-                color: "#168039",
-                lineHeight: 1.2,
-              }}
+              sx={{ fontSize: "1.4rem", fontWeight: "bold", color: "#168039", lineHeight: 1.2 }}
             >
               {currencyData.symbol}
               {suggestedMonthly.toFixed(2)}
             </Typography>
             {!isUSD && (
-              <Typography sx={{ fontSize: "0.7rem", color: "#6B7A70" }}>
+              <Typography sx={{ fontSize: "0.7rem", color: "#6b7280" }}>
                 (~${Math.round(suggestedMonthly * currencyData.usdRate)} USD)
               </Typography>
             )}
           </Box>
           <Box sx={{ flex: 1 }}>
             <Typography
-              sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#116b2f", lineHeight: 1.3 }}
+              sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#166534", lineHeight: 1.3 }}
             >
               Suggested Annual Dues:
             </Typography>
             <Typography
-              sx={{
-                fontFamily: "'Fraunces', 'Fraunces Placeholder', serif",
-                fontSize: "1.5rem",
-                fontWeight: 600,
-                color: "#168039",
-                lineHeight: 1.2,
-              }}
+              sx={{ fontSize: "1.4rem", fontWeight: "bold", color: "#168039", lineHeight: 1.2 }}
             >
               {currencyData.symbol}
               {suggestedAnnual.toFixed(2)}
             </Typography>
             {!isUSD && (
-              <Typography sx={{ fontSize: "0.7rem", color: "#6B7A70" }}>
+              <Typography sx={{ fontSize: "0.7rem", color: "#6b7280" }}>
                 (~${Math.round(suggestedAnnual * currencyData.usdRate)} USD)
               </Typography>
             )}

@@ -17,7 +17,7 @@ const REASONS = [
  */
 export default function LegacyWaiverNote({ className = "" }: LegacyWaiverNoteProps) {
   return (
-    <div className={`text-sm leading-relaxed text-[#6B7A70] ${className}`}>
+    <div className={`text-sm leading-relaxed text-zinc-500 ${className}`}>
       <p>
         Tech for Palestine aims for inclusivity. Please contact{" "}
         <a href="mailto:membership@techforpalestine.org" className="text-[#168039] underline">
@@ -25,7 +25,7 @@ export default function LegacyWaiverNote({ className = "" }: LegacyWaiverNotePro
         </a>{" "}
         to request a waiver of dues in the following circumstances:
       </p>
-      <ul className="my-2 ml-6 list-disc space-y-0.5 marker:text-[#168039]">
+      <ul className="my-2 ml-6 list-disc space-y-0.5">
         {REASONS.map((reason) => (
           <li key={reason}>{reason}</li>
         ))}

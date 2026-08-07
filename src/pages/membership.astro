@@ -3,52 +3,37 @@ import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import MembershipPage from "../components/MembershipPage.tsx";
 import TestimonialsMarquee from "../components/TestimonialsMarquee.astro";
-import TriMark from "../components/membership/TriMark.astro";
 import { memberBenefits } from "../data/membershipBenefits";
 import "../styles/base.css";
-import "@fontsource/fraunces/latin-400.css";
-import "@fontsource/fraunces/latin-600.css";
-import "@fontsource/outfit/latin-400.css";
-import "@fontsource/outfit/latin-500.css";
-import "@fontsource/outfit/latin-600.css";
 ---
 
 <Layout
   title="Become a Member - Tech for Palestine"
   description="Join the coalition working on impactful initiatives for Palestinian liberation. Members drive and sustain our work through dues, teams, and community."
 >
-  <main class="bg-[#FAF8F3] font-sans">
+  <main>
     <PageHeader overline="Tech for Palestine" title="Become a member to support and grow our work" />
 
     <div class="mx-auto max-w-6xl px-6 pb-24 pt-4 sm:px-8">
       <!-- Hero: intro copy + benefits beside the photo, rather than stacked -->
       <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
         <div>
-          <TriMark class="mb-5" />
-          <p class="text-lg leading-relaxed text-[#3F4A43]">
-            <strong class="text-[#1B2420]">T4P Members</strong> and <strong class="text-[#1B2420]"
-              >Supporting Members</strong
-            > drive and sustain our work for Palestinian liberation.
+          <p class="text-lg leading-relaxed text-zinc-700">
+            <strong>T4P Members</strong> and <strong>Supporting Members</strong> drive and sustain our
+            work for Palestinian liberation.
           </p>
-          <p class="mt-4 text-lg leading-relaxed text-[#3F4A43]">
+          <p class="mt-4 text-lg leading-relaxed text-zinc-700">
             Members join our community to work directly on advocacy projects and help run T4P:
           </p>
-          <ul class="mt-4 space-y-2.5 text-lg leading-relaxed text-[#3F4A43]">
-            {
-              memberBenefits.map((benefit) => (
-                <li class="flex gap-3">
-                  <span class="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#168039]" />
-                  <span>{benefit}</span>
-                </li>
-              ))
-            }
+          <ul class="ml-3 mt-2 list-disc space-y-2 pl-2 text-lg leading-relaxed text-zinc-700">
+            {memberBenefits.map((benefit) => <li>{benefit}</li>)}
           </ul>
         </div>
 
         <img
           src="/images/membership/members-group.webp"
           alt="Tech for Palestine members gathered outside a venue at a community event"
-          class="w-full rounded-[10px] border border-[#E4DFD3]"
+          class="w-full rounded-2xl"
           width="1600"
           height="1232"
           loading="eager"
@@ -56,7 +41,7 @@ import "@fontsource/outfit/latin-600.css";
         />
       </div>
 
-      <div class="mt-14">
+      <div class="mt-12">
         <MembershipPage client:only="react" />
       </div>
     </div>
