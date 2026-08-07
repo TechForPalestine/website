@@ -28,11 +28,10 @@ const testimonials = getTestimonials(membershipLive);
   <div class="mx-auto max-w-6xl px-6 sm:px-8">
     <h2 class="text-3xl font-extrabold tracking-tight text-zinc-900">{heading}</h2>
     <p class="mt-3 max-w-2xl text-lg text-zinc-600">{subheading}</p>
-  </div>
 
-  <div class="legacy-marquee mt-10 overflow-hidden" aria-label="Testimonials carousel">
-    <div class="legacy-marquee-track flex w-max gap-6 px-6 will-change-transform">
-      {
+    <div class="legacy-marquee -mx-6 mt-10 overflow-hidden sm:-mx-8" aria-label="Testimonials carousel">
+      <div class="legacy-marquee-track flex w-max gap-6 px-6 will-change-transform sm:px-8">
+        {
         [...testimonials, ...testimonials, ...testimonials].map((t, i) => (
           <figure
             class:list={[
@@ -94,6 +93,7 @@ const testimonials = getTestimonials(membershipLive);
           </figure>
         ))
       }
+      </div>
     </div>
   </div>
 </section>
