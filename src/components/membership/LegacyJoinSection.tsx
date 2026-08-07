@@ -88,7 +88,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
       )}
       <Typography
         variant="body1"
-        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151", maxWidth: 700 }}
       >
         {intro}
       </Typography>

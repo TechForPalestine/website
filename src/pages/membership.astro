@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import MembershipPage from "../components/MembershipPage.tsx";
 import TestimonialsMarquee from "../components/TestimonialsMarquee.astro";
+import { memberBenefits } from "../data/membershipBenefits";
 import "../styles/base.css";
 ---
 
@@ -13,21 +14,36 @@ import "../styles/base.css";
   <main>
     <PageHeader overline="Tech for Palestine" title="Become a member to support and grow our work" />
 
-    <!-- Members photo — a contained, centred photo rather than a hero banner -->
-    <div class="mx-auto max-w-[560px] px-6 sm:px-8">
-      <img
-        src="/images/membership/members-group.webp"
-        alt="Tech for Palestine members gathered outside a venue at a community event"
-        class="w-full rounded-2xl"
-        width="1600"
-        height="1232"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
+    <div class="mx-auto max-w-6xl px-6 pb-24 pt-4 sm:px-8">
+      <!-- Hero: intro copy + benefits beside the photo, rather than stacked -->
+      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
+        <div>
+          <p class="text-lg leading-relaxed text-zinc-700">
+            <strong>T4P Members</strong> and <strong>Supporting Members</strong> drive and sustain our
+            work for Palestinian liberation.
+          </p>
+          <p class="mt-4 text-lg leading-relaxed text-zinc-700">
+            Members join our community to work directly on advocacy projects and help run T4P:
+          </p>
+          <ul class="ml-3 mt-2 list-disc space-y-2 pl-2 text-lg leading-relaxed text-zinc-700">
+            {memberBenefits.map((benefit) => <li>{benefit}</li>)}
+          </ul>
+        </div>
 
-    <div class="mx-auto max-w-4xl px-6 pb-24 pt-12 sm:px-8">
-      <MembershipPage client:only="react" />
+        <img
+          src="/images/membership/members-group.webp"
+          alt="Tech for Palestine members gathered outside a venue at a community event"
+          class="w-full rounded-2xl"
+          width="1600"
+          height="1232"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mt-12">
+        <MembershipPage client:only="react" />
+      </div>
     </div>
 
     <TestimonialsMarquee />

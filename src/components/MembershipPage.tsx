@@ -2,47 +2,12 @@ import { Box, Typography } from "@mui/material";
 import LegacyJoinSection from "./membership/LegacyJoinSection";
 import LegacyWaiverNote from "./membership/LegacyWaiverNote";
 
-const MEMBER_BENEFITS = [
-  "Meet and connect with fellow activists",
-  "Join regional summits, online webinars, book clubs and other events",
-  "Attend weekly All Hands and internal meetings (Marketing, Engineering, Events, etc.)",
-  "Volunteer for our projects",
-  "Participate in internal chatroom conversations",
-  "Take part in one-off quests and missions to expand your personal advocacy",
-  "Receive updates on our latest projects and teams",
-  "Propose and start new initiatives for Palestinian liberation",
-];
-
 const bodySx = { mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" } as const;
+const proseSx = { ...bodySx, maxWidth: 700 } as const;
 
 export default function MembershipPage() {
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto" }}>
-      <Typography variant="body1" sx={bodySx}>
-        <strong>T4P Members</strong> and <strong>Supporting Members</strong> drive and sustain our
-        work for Palestinian liberation.
-      </Typography>
-
-      <Typography variant="body1" sx={{ ...bodySx, mb: 1 }}>
-        Members join our community to work directly on advocacy projects and help run T4P:
-      </Typography>
-      <Box
-        component="ul"
-        sx={{
-          ml: 3,
-          pl: 2,
-          mb: 4,
-          color: "#374151",
-          fontSize: "1.125rem",
-          listStyleType: "disc",
-          "& li": { mb: 0.75, lineHeight: 1.75 },
-        }}
-      >
-        {MEMBER_BENEFITS.map((benefit) => (
-          <li key={benefit}>{benefit}</li>
-        ))}
-      </Box>
-
+    <Box sx={{ maxWidth: 960, mx: "auto" }}>
       {/* Supporting Member fork */}
       <Box
         sx={{
@@ -61,13 +26,13 @@ export default function MembershipPage() {
         </a>
       </Box>
 
-      <Typography variant="body1" sx={bodySx}>
+      <Typography variant="body1" sx={proseSx}>
         Members and Supporting Members also support T4P financially. Membership dues allow T4P to
         support our teams, and provide grants and services to projects in the Incubator through
         full-time dedicated staff. Dues are pay-what-you-can, and we suggest a monthly amount equal
         to 1 hour of income (1/2000th of your annual income).
       </Typography>
-      <Typography variant="body1" sx={{ ...bodySx, mb: 4 }}>
+      <Typography variant="body1" sx={{ ...proseSx, mb: 4 }}>
         Whether you&apos;re a thinker, builder, leader, software developer, marketer, or activist,
         there&apos;s a place for you to contribute in your own way.
       </Typography>
@@ -88,7 +53,7 @@ export default function MembershipPage() {
         </a>
       </Box>
 
-      <LegacyWaiverNote className="mb-12" />
+      <LegacyWaiverNote className="mb-12 max-w-[700px]" />
 
       <LegacyJoinSection tier="member" />
     </Box>

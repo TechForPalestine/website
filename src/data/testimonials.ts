@@ -31,20 +31,6 @@ export function getTestimonials(membershipLive = false): Testimonial[] {
     },
     {
       quote:
-        "Tech for Palestine has been a true partner to UpScrolled from the early days, opening doors to their ecosystem and standing by us at every step of the journey.",
-      name: "Issam Hijazi",
-      role: "Founder, UpScrolled",
-      headshot: "/images/new-homepage/testimonials/issam-hijazi.webp",
-    },
-    {
-      quote:
-        "With the volunteers and partnerships provided, we went from a minimally viable concept to a full-fledged global platform reaching millions of accounts each month.",
-      name: "Nima Akram",
-      role: "Founder, Newscord",
-      headshot: "/images/new-homepage/testimonials/newscord.webp",
-    },
-    {
-      quote:
         "T4P isn't just a projects incubator, it incubated me too. As someone from Gaza, being part of a team that actively supports and advocates for Palestine makes this work feel deeply personal.",
       name: "Mohanad",
       role: `${volunteerTitle}, Tech for Palestine`,
@@ -52,10 +38,24 @@ export function getTestimonials(membershipLive = false): Testimonial[] {
     },
     {
       quote:
+        "Tech for Palestine has been a true partner to UpScrolled from the early days, opening doors to their ecosystem and standing by us at every step of the journey.",
+      name: "Issam Hijazi",
+      role: "Founder, UpScrolled",
+      headshot: "/images/new-homepage/testimonials/issam-hijazi.webp",
+    },
+    {
+      quote:
         "Being part of Tech for Palestine is not a duty, it is a privilege. This is work we do to help forge a future for everyone who is being oppressed.",
       name: "Veda",
       role: `${volunteerTitle}, Tech for Palestine`,
       headshot: "/images/new-homepage/testimonials/anonymous.svg",
+    },
+    {
+      quote:
+        "With the volunteers and partnerships provided, we went from a minimally viable concept to a full-fledged global platform reaching millions of accounts each month.",
+      name: "Nima Akram",
+      role: "Founder, Newscord",
+      headshot: "/images/new-homepage/testimonials/newscord.webp",
     },
     {
       quote:

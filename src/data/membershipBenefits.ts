@@ -37,6 +37,18 @@ export const membershipBenefits: MembershipBenefit[] = [
   },
 ];
 
+/** What members do once they join — shown on /membership beside the hero photo. */
+export const memberBenefits: string[] = [
+  "Meet and connect with fellow activists",
+  "Join regional summits, online webinars, book clubs and other events",
+  "Attend weekly All Hands and internal meetings (Marketing, Engineering, Events, etc.)",
+  "Volunteer for our projects",
+  "Participate in internal chatroom conversations",
+  "Take part in one-off quests and missions to expand your personal advocacy",
+  "Receive updates on our latest projects and teams",
+  "Propose and start new initiatives for Palestinian liberation",
+];
+
 export interface ShowcaseProject {
   name: string;
   logo: string;

@@ -19,28 +19,30 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
   <main>
     <PageHeader overline="Tech for Palestine" title="Become a Supporting Member" />
 
-    <!-- Contained, centred photo rather than a hero banner -->
-    <div class="mx-auto max-w-[560px] px-6 sm:px-8">
-      <img
-        src="/images/membership/supporting-panel.webp"
-        alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
-        class="w-full rounded-2xl"
-        width="1600"
-        height="1068"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
+    <div class="mx-auto max-w-6xl px-6 pb-24 pt-4 sm:px-8">
+      <!-- Hero: opening copy beside the photo, rather than stacked -->
+      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
+        <p class="max-w-[700px] text-lg leading-relaxed text-zinc-700">
+          Tech for Palestine's coalition of founders, engineers, investors and other professionals
+          are helping Palestine advocates scale their work. Tens of thousands of Israeli <em
+            >hasbara</em
+          > (propaganda) projects exist, so we're creating thousands of initiatives for Palestinian
+          liberation.
+        </p>
 
-    <div class="mx-auto max-w-4xl px-6 pb-24 pt-12 sm:px-8">
-      <p class="text-lg leading-relaxed text-zinc-700">
-        Tech for Palestine's coalition of founders, engineers, investors and other professionals are
-        helping Palestine advocates scale their work. Tens of thousands of Israeli <em>hasbara</em> (propaganda)
-        projects exist, so we're creating thousands of initiatives for Palestinian liberation.
-      </p>
+        <img
+          src="/images/membership/supporting-panel.webp"
+          alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
+          class="w-full rounded-2xl"
+          width="1600"
+          height="1068"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
 
       <!-- Reach -->
-      <p class="mt-10 text-xl font-bold text-zinc-900">10M+ Users Across 90+ Projects</p>
+      <p class="mt-12 text-xl font-bold text-zinc-900">10M+ Users Across 90+ Projects</p>
       <ul
         class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5"
         aria-label={logoWallLabel}
@@ -63,7 +65,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
       </ul>
 
       <!-- Pitch -->
-      <p class="mt-10 text-lg leading-relaxed text-zinc-700">
+      <p class="mt-10 max-w-[700px] text-lg leading-relaxed text-zinc-700">
         Want to support T4P's work, but don't have time to get involved in teams or join the
         community? Become a Supporting Member to support our work financially, receive invites to
         events and get updates about our progress:
@@ -77,11 +79,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
           </caption>
           <thead class="bg-zinc-50">
             <tr>
-              <th
-                scope="col"
-                class="px-6 py-4 text-sm font-semibold uppercase tracking-wide text-zinc-500"
-                >What you get</th
-              >
+              <th scope="col" class="px-6 py-4 text-sm font-semibold text-zinc-500"></th>
               <th
                 scope="col"
                 class="w-[170px] px-4 py-4 text-center text-sm font-semibold text-zinc-900"
@@ -177,7 +175,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
         </a>
       </div>
 
-      <LegacyWaiverNote className="mt-10" />
+      <LegacyWaiverNote className="mt-10 max-w-[700px]" />
 
       <div class="mt-12">
         <LegacyJoinSection client:only="react" tier="supporting" />
