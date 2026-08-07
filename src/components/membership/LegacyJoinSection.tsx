@@ -22,7 +22,7 @@ const WAIVER_REASONS = [
   "Being a T4P paid staff member",
 ];
 
-const bodySx = { color: "#374151", lineHeight: 1.75, mb: 1.5 } as const;
+const bodySx = { color: "#3F4A43", lineHeight: 1.75, mb: 1.5 } as const;
 
 /**
  * Payment surface for the legacy (green/grey) design system: the Qgiv embed, the
@@ -82,13 +82,22 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   return (
     <Box id="join" sx={{ scrollMarginTop: "80px" }}>
       {heading && (
-        <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
+        <Typography
+          variant="h5"
+          component="h2"
+          sx={{
+            mb: 3,
+            fontFamily: "'Fraunces', 'Fraunces Placeholder', serif",
+            fontWeight: 600,
+            color: "#1B2420",
+          }}
+        >
           {heading}
         </Typography>
       )}
       <Typography
         variant="body1"
-        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151", maxWidth: 700 }}
+        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#3F4A43", maxWidth: 700 }}
       >
         {intro}
       </Typography>
@@ -108,11 +117,11 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Box
-            sx={{ p: 3, borderRadius: 2, backgroundColor: "#f9fafb", border: "1px solid #e5e7eb" }}
+            sx={{ p: 3, borderRadius: "10px", backgroundColor: "#FFFFFF", border: "1px solid #E4DFD3" }}
           >
             <Typography
               variant="body2"
-              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
+              sx={{ fontWeight: 700, color: "#1B2420", mb: 1.5, fontSize: "0.95rem" }}
             >
               Inclusivity &amp; waivers
             </Typography>
@@ -129,9 +138,10 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 ml: 3,
                 pl: 2,
                 mb: 2,
-                color: "#374151",
+                color: "#3F4A43",
                 listStyleType: "disc",
                 "& li": { mb: 0.5, lineHeight: 1.75, fontSize: "0.875rem" },
+                "& li::marker": { color: "#168039" },
               }}
             >
               {WAIVER_REASONS.map((reason) => (
@@ -155,15 +165,21 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
           </Box>
 
           <Box
-            sx={{ p: 3, borderRadius: 2, backgroundColor: "#f0fdf4", border: "1px solid #d1fae5" }}
+            sx={{
+              p: 3,
+              borderRadius: "10px",
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #E4DFD3",
+              borderLeft: "3px solid #168039",
+            }}
           >
             <Typography
               variant="body2"
-              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
+              sx={{ fontWeight: 700, color: "#1B2420", mb: 1.5, fontSize: "0.95rem" }}
             >
               Get in touch
             </Typography>
-            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75 }}>
+            <Typography variant="body2" sx={{ color: "#3F4A43", lineHeight: 1.75 }}>
               If you have questions, set up an{" "}
               <a
                 href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"

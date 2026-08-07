@@ -1,0 +1,20 @@
+---
+/**
+ * Signature element for the membership / supporting-member pair: a small
+ * three-segment hairline (green / ink / red) that opens each substantive
+ * section — hero, stat, comparison table, join panel — in place of the
+ * generic full-width `<hr>` used elsewhere on legacy pages. Purely
+ * decorative, so it's hidden from assistive tech.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["flex items-center gap-1", className]} aria-hidden="true">
+  <span class="h-[3px] w-4 rounded-full bg-[#168039]"></span>
+  <span class="h-[3px] w-4 rounded-full bg-[#1B2420]"></span>
+  <span class="h-[3px] w-4 rounded-full bg-[#B3272D]"></span>
+</div>

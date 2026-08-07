@@ -4,8 +4,14 @@ import PageHeader from "../components/PageHeader.astro";
 import LegacyJoinSection from "../components/membership/LegacyJoinSection";
 import LegacyWaiverNote from "../components/membership/LegacyWaiverNote";
 import TestimonialsMarquee from "../components/TestimonialsMarquee.astro";
+import TriMark from "../components/membership/TriMark.astro";
 import { membershipBenefits, showcaseProjects } from "../data/membershipBenefits";
 import "../styles/base.css";
+import "@fontsource/fraunces/latin-400.css";
+import "@fontsource/fraunces/latin-600.css";
+import "@fontsource/outfit/latin-400.css";
+import "@fontsource/outfit/latin-500.css";
+import "@fontsource/outfit/latin-600.css";
 
 const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProjects
   .map((p) => p.name)
@@ -16,24 +22,27 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
   title="Become a Supporting Member - Tech for Palestine"
   description="Support Tech for Palestine financially without joining a team. Supporting Members fund initiatives for Palestinian liberation, get event invites, and receive project updates."
 >
-  <main>
+  <main class="bg-[#FAF8F3] font-sans">
     <PageHeader overline="Tech for Palestine" title="Become a Supporting Member" />
 
     <div class="mx-auto max-w-6xl px-6 pb-24 pt-4 sm:px-8">
       <!-- Hero: opening copy beside the photo, rather than stacked -->
       <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
-        <p class="max-w-[700px] text-lg leading-relaxed text-zinc-700">
-          Tech for Palestine's coalition of founders, engineers, investors and other professionals
-          are helping Palestine advocates scale their work. Tens of thousands of Israeli <em
-            >hasbara</em
-          > (propaganda) projects exist, so we're creating thousands of initiatives for Palestinian
-          liberation.
-        </p>
+        <div>
+          <TriMark class="mb-5" />
+          <p class="max-w-[700px] text-lg leading-relaxed text-[#3F4A43]">
+            Tech for Palestine's coalition of founders, engineers, investors and other professionals
+            are helping Palestine advocates scale their work. Tens of thousands of Israeli <em
+              >hasbara</em
+            > (propaganda) projects exist, so we're creating thousands of initiatives for Palestinian
+            liberation.
+          </p>
+        </div>
 
         <img
           src="/images/membership/supporting-panel.webp"
           alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
-          class="w-full rounded-2xl"
+          class="w-full rounded-[10px] border border-[#E4DFD3]"
           width="1600"
           height="1068"
           loading="eager"
@@ -42,52 +51,62 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
       </div>
 
       <!-- Reach -->
-      <p class="mt-12 text-xl font-bold text-zinc-900">10M+ Users Across 90+ Projects</p>
-      <ul
-        class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5"
-        aria-label={logoWallLabel}
-      >
-        {
-          showcaseProjects.map((project) => (
-            <li class="flex h-[80px] items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 py-2">
-              <img
-                src={project.logo}
-                alt=""
-                width="220"
-                height="64"
-                loading="lazy"
-                decoding="async"
-                class="max-h-[40px] w-full max-w-[130px] object-contain"
-              />
-            </li>
-          ))
-        }
-      </ul>
+      <div class="mt-16 border-t border-[#E4DFD3] pt-10">
+        <TriMark class="mb-4" />
+        <p class="flex flex-wrap items-baseline gap-x-3">
+          <span class="font-serif text-5xl font-semibold leading-none text-[#1B2420] sm:text-6xl">
+            10M+
+          </span>
+          <span class="text-lg font-medium text-[#3F4A43] sm:text-xl">
+            Users Across 90+ Projects
+          </span>
+        </p>
+        <ul
+          class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5"
+          aria-label={logoWallLabel}
+        >
+          {
+            showcaseProjects.map((project) => (
+              <li class="flex h-[80px] items-center justify-center rounded-[10px] border border-[#E4DFD3] bg-white px-3 py-2 transition-colors hover:border-[#168039]/40">
+                <img
+                  src={project.logo}
+                  alt=""
+                  width="220"
+                  height="64"
+                  loading="lazy"
+                  decoding="async"
+                  class="max-h-[40px] w-full max-w-[130px] object-contain"
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
 
       <!-- Pitch -->
-      <p class="mt-10 max-w-[700px] text-lg leading-relaxed text-zinc-700">
+      <p class="mt-12 max-w-[700px] text-lg leading-relaxed text-[#3F4A43]">
         Want to support T4P's work, but don't have time to get involved in teams or join the
         community? Become a Supporting Member to support our work financially, receive invites to
         events and get updates about our progress:
       </p>
 
       <!-- Comparison table -->
-      <div class="mt-8 hidden overflow-hidden rounded-2xl border border-zinc-200 md:block">
+      <div class="mt-8 hidden overflow-hidden rounded-[10px] border border-[#E4DFD3] md:block">
         <table class="w-full border-collapse text-left">
           <caption class="sr-only">
             Benefits included with Supporting Membership compared with full Membership
           </caption>
-          <thead class="bg-zinc-50">
+          <thead class="bg-[#F2EEE4]">
             <tr>
-              <th scope="col" class="px-6 py-4 text-sm font-semibold text-zinc-500"></th>
+              <th scope="col" class="px-6 py-4 text-sm font-semibold text-[#6B7A70]"></th>
               <th
                 scope="col"
-                class="w-[170px] px-4 py-4 text-center text-sm font-semibold text-zinc-900"
+                class="w-[170px] px-4 py-4 text-center text-sm font-semibold text-[#1B2420]"
                 >Supporting Member</th
               >
               <th
                 scope="col"
-                class="w-[170px] px-4 py-4 text-center text-sm font-semibold text-zinc-900"
+                class="w-[170px] px-4 py-4 text-center text-sm font-semibold text-[#1B2420]"
                 >Member</th
               >
             </tr>
@@ -95,8 +114,8 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
           <tbody>
             {
               membershipBenefits.map((benefit) => (
-                <tr class="border-t border-zinc-200">
-                  <th scope="row" class="px-6 py-4 font-normal text-zinc-800">
+                <tr class="border-t border-[#E4DFD3]">
+                  <th scope="row" class="px-6 py-4 font-normal text-[#3F4A43]">
                     {benefit.label}
                   </th>
                   {[benefit.supporting, benefit.member].map((included) => (
@@ -121,7 +140,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
                         </>
                       ) : (
                         <>
-                          <span class="text-zinc-400" aria-hidden="true">
+                          <span class="text-[#B9AFA0]" aria-hidden="true">
                             —
                           </span>
                           <span class="sr-only">Not included</span>
@@ -139,20 +158,20 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
       <ul class="mt-8 flex flex-col gap-3 md:hidden">
         {
           membershipBenefits.map((benefit) => (
-            <li class="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-              <p class="text-zinc-800">{benefit.label}</p>
-              <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-zinc-600">
+            <li class="rounded-[10px] border border-[#E4DFD3] bg-[#F2EEE4] p-4">
+              <p class="text-[#3F4A43]">{benefit.label}</p>
+              <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-[#6B7A70]">
                 <span>
                   Supporting Member:{" "}
                   <span
-                    class={benefit.supporting ? "font-semibold text-[#168039]" : "text-zinc-400"}
+                    class={benefit.supporting ? "font-semibold text-[#168039]" : "text-[#B9AFA0]"}
                   >
                     {benefit.supporting ? "Included" : "Not included"}
                   </span>
                 </span>
                 <span>
                   Member:{" "}
-                  <span class={benefit.member ? "font-semibold text-[#168039]" : "text-zinc-400"}>
+                  <span class={benefit.member ? "font-semibold text-[#168039]" : "text-[#B9AFA0]"}>
                     {benefit.member ? "Included" : "Not included"}
                   </span>
                 </span>
@@ -166,11 +185,14 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
       <div class="mt-10 flex flex-wrap items-center gap-4">
         <a
           href="#join"
-          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#116b2f]"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#116b2f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168039]"
         >
           Become a Supporting Member
         </a>
-        <a href="/donate" class="font-medium text-zinc-600 underline hover:text-zinc-900">
+        <a
+          href="/donate"
+          class="inline-flex min-h-[44px] items-center font-medium text-[#3F4A43] underline hover:text-[#1B2420]"
+        >
           Donate without joining
         </a>
       </div>
