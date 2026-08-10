@@ -168,6 +168,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
       <div class="mt-11 flex flex-wrap items-center gap-5">
         <a
           href="#join"
+          data-track-join-click="primary_cta"
           class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
         >
           Become a Supporting Member
@@ -189,4 +190,18 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
 
     <TestimonialsMarquee />
   </main>
+
+  <script>
+    document.querySelectorAll<HTMLAnchorElement>("[data-track-join-click]").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (typeof window.plausible === "undefined") return;
+        window.plausible("Membership Join Click", {
+          props: {
+            cta_location: link.dataset.trackJoinClick ?? "unknown",
+            destination: link.getAttribute("href") ?? "",
+          },
+        });
+      });
+    });
+  </script>
 </Layout>
