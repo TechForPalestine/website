@@ -5,14 +5,6 @@ import LegacyWaiverNote from "./membership/LegacyWaiverNote";
 const bodySx = { mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" } as const;
 const proseSx = { ...bodySx, maxWidth: 700 } as const;
 
-function trackJoinClick(ctaLocation: string, destination: string): void {
-  if (typeof window.plausible !== "undefined") {
-    window.plausible("Membership Join Click", {
-      props: { cta_location: ctaLocation, destination },
-    });
-  }
-}
-
 export default function MembershipPage() {
   return (
     <Box sx={{ maxWidth: 960, mx: "auto" }}>
@@ -35,7 +27,6 @@ export default function MembershipPage() {
         </Typography>
         <a
           href="/supporting-member"
-          onClick={() => trackJoinClick("fork_card", "/supporting-member")}
           className="inline-flex items-center gap-1.5 font-semibold text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm"
         >
           Become a Supporting Member <span aria-hidden="true">&rarr;</span>
@@ -57,14 +48,12 @@ export default function MembershipPage() {
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3, mb: 5 }}>
         <a
           href="#join"
-          onClick={() => trackJoinClick("primary_cta", "#join")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
         >
           Become a member
         </a>
         <a
           href="/supporting-member"
-          onClick={() => trackJoinClick("secondary_cta", "/supporting-member")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-zinc-900 px-6 py-3 font-semibold text-zinc-900 transition-all duration-150 hover:border-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
         >
           Become a Supporting Member
