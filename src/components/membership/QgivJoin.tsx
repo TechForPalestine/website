@@ -1,5 +1,11 @@
 import { useEffect, useRef } from "react";
-import { QGIV_EMBED_SCRIPT, QGIV_FORMS, qgivEmbedUrl, type MembershipTier } from "./qgiv";
+import {
+  QGIV_EMBED_SCRIPT,
+  QGIV_FORMS,
+  qgivEmbedUrl,
+  type MembershipTier,
+  type QgivPrefill,
+} from "./qgiv";
 
 interface QgivJoinProps {
   tier: MembershipTier;
@@ -9,6 +15,7 @@ interface QgivJoinProps {
    */
   variant?: string;
   className?: string;
+  prefill?: QgivPrefill;
 }
 
 interface QgivTransactionDetail {
@@ -26,7 +33,7 @@ interface QgivTransactionDetail {
  * embed and the listener — keeping them apart is what caused /membership-new to
  * silently stop sending Hub invites and EmailOctopus tags.
  */
-export default function QgivJoin({ tier, variant, className }: QgivJoinProps) {
+export default function QgivJoin({ tier, variant, className, prefill }: QgivJoinProps) {
   const form = QGIV_FORMS[tier];
   const scriptLoadedRef = useRef(false);
 
@@ -100,7 +107,7 @@ export default function QgivJoin({ tier, variant, className }: QgivJoinProps) {
         className="qgiv-embed-container"
         data-qgiv-embed="true"
         data-embed-id={form.embedId}
-        data-embed={qgivEmbedUrl(form)}
+        data-embed={qgivEmbedUrl(form, prefill)}
         data-width="630"
       />
     </div>
