@@ -131,7 +131,14 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 re-adds Qgiv's embed.js tag; the script throws on the
                 redeclaration and the embed breaks. Toggling visibility keeps
                 the script's one-time init intact. */}
-            <Box sx={{ display: step === "about-you" ? "block" : "none" }}>
+            <Box
+              sx={{
+                display: step === "about-you" ? "flex" : "none",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
               <AboutYouStep
                 onContinue={(data) => {
                   setAboutYou(data);
