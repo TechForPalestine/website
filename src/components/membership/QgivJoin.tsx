@@ -70,6 +70,7 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
     const container = containerRef.current;
     const mountedAt = Date.now();
     const pendingTimeouts: number[] = [];
+    let watchedIframe: HTMLIFrameElement | null = null;
 
     function markLoaded() {
       const remaining = MIN_LOADING_DISPLAY_MS - (Date.now() - mountedAt);
@@ -80,23 +81,38 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
       }
     }
 
-    if (container.childElementCount > 0) {
-      markLoaded();
-      return;
+    // Qgiv inserts an (initially empty) <iframe> into the container well
+    // before its cross-origin document finishes loading. Watching for the
+    // iframe's own `load` event — not just its insertion — is what actually
+    // tracks the payment form becoming visible, not just present in the DOM.
+    function checkContainer(): boolean {
+      const iframe = container.querySelector("iframe");
+      if (iframe) {
+        if (watchedIframe !== iframe) {
+          watchedIframe = iframe;
+          iframe.addEventListener("load", markLoaded, { once: true });
+        }
+        return true;
+      }
+      if (container.childElementCount > 0) {
+        markLoaded();
+        return true;
+      }
+      return false;
     }
 
     const observer = new MutationObserver(() => {
-      if (container.childElementCount > 0) {
-        markLoaded();
-        observer.disconnect();
-      }
+      if (checkContainer()) observer.disconnect();
     });
     observer.observe(container, { childList: true, subtree: true });
+
+    if (checkContainer()) observer.disconnect();
 
     pendingTimeouts.push(window.setTimeout(() => setEmbedLoaded(true), EMBED_LOAD_TIMEOUT_MS));
 
     return () => {
       observer.disconnect();
+      watchedIframe?.removeEventListener("load", markLoaded);
       pendingTimeouts.forEach((id) => window.clearTimeout(id));
     };
   }, [form.embedId]);
