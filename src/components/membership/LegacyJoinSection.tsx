@@ -121,7 +121,12 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
               </Button>
             )}
           </Box>
-          {step === "about-you" ? (
+          {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the visitor
+              first reaches payment. Unmounting it (e.g. via "Edit your info" then
+              back) re-runs its script-injection effect, which re-adds Qgiv's
+              embed.js tag; the script throws on the redeclaration and the embed
+              breaks. Toggling visibility keeps the script's one-time init intact. */}
+          <Box sx={{ display: step === "about-you" ? "block" : "none" }}>
             <AboutYouStep
               onContinue={(data) => {
                 setAboutYou(data);
@@ -129,8 +134,11 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
               }}
               initialValues={aboutYou ?? undefined}
             />
-          ) : (
-            <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+          </Box>
+          {aboutYou && (
+            <Box sx={{ display: step === "payment" ? "block" : "none" }}>
+              <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+            </Box>
           )}
         </Box>
 

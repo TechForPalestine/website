@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   QGIV_EMBED_SCRIPT,
   QGIV_FORMS,
@@ -6,6 +6,11 @@ import {
   type MembershipTier,
   type QgivPrefill,
 } from "./qgiv";
+
+const QGIV_EMBED_SCRIPT_ID = "qgiv-embedjs";
+/** Fail-open cap on the loading overlay: hide it even if we never observe
+ * Qgiv populate the container, so a detection miss doesn't block the embed. */
+const EMBED_LOAD_TIMEOUT_MS = 8000;
 
 interface QgivJoinProps {
   tier: MembershipTier;
@@ -36,16 +41,48 @@ interface QgivTransactionDetail {
 export default function QgivJoin({ tier, variant, className, prefill }: QgivJoinProps) {
   const form = QGIV_FORMS[tier];
   const scriptLoadedRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [embedLoaded, setEmbedLoaded] = useState(false);
 
   useEffect(() => {
     if (!form.embedId || scriptLoadedRef.current) return;
     scriptLoadedRef.current = true;
 
+    // Guard against a duplicate <script> tag: Qgiv's embed.js declares
+    // top-level identifiers that throw a SyntaxError on redeclaration if the
+    // script is injected twice (e.g. this component briefly remounting).
+    if (document.getElementById(QGIV_EMBED_SCRIPT_ID)) return;
+
     const script = document.createElement("script");
     script.src = QGIV_EMBED_SCRIPT;
-    script.id = "qgiv-embedjs";
+    script.id = QGIV_EMBED_SCRIPT_ID;
     script.async = true;
     document.body.appendChild(script);
+  }, [form.embedId]);
+
+  useEffect(() => {
+    if (!form.embedId || !containerRef.current) return;
+
+    const container = containerRef.current;
+    if (container.childElementCount > 0) {
+      setEmbedLoaded(true);
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      if (container.childElementCount > 0) {
+        setEmbedLoaded(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(container, { childList: true, subtree: true });
+
+    const timeout = window.setTimeout(() => setEmbedLoaded(true), EMBED_LOAD_TIMEOUT_MS);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timeout);
+    };
   }, [form.embedId]);
 
   useEffect(() => {
@@ -103,13 +140,21 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
 
   return (
     <div className={className ?? "max-h-[640px] overflow-hidden"}>
-      <div
-        className="qgiv-embed-container"
-        data-qgiv-embed="true"
-        data-embed-id={form.embedId}
-        data-embed={qgivEmbedUrl(form, prefill)}
-        data-width="630"
-      />
+      <div className="relative min-h-[400px]">
+        {!embedLoaded && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-50">
+            <span className="text-sm text-zinc-500">Loading secure payment form&hellip;</span>
+          </div>
+        )}
+        <div
+          ref={containerRef}
+          className="qgiv-embed-container"
+          data-qgiv-embed="true"
+          data-embed-id={form.embedId}
+          data-embed={qgivEmbedUrl(form, prefill)}
+          data-width="630"
+        />
+      </div>
     </div>
   );
 }
