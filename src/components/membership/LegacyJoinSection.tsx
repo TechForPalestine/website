@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import MembershipCalculator from "../MembershipCalculator";
 import QgivJoin from "./QgivJoin";
@@ -15,6 +15,9 @@ interface LegacyJoinSectionProps {
 const LINK =
   "text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm";
 const MAIL = "mailto:membership@techforpalestine.org";
+/** Shared fixed height for the About You / payment panel, matching QgivJoin's
+ * own max-height cap, so switching between the two never resizes the panel. */
+const JOIN_PANEL_HEIGHT = 640;
 
 /**
  * Payment surface for the legacy (green/grey) design system: the Qgiv embed, the
@@ -29,26 +32,8 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   const [variant, setVariant] = useState<string | undefined>(undefined);
   const [step, setStep] = useState<"about-you" | "payment">("about-you");
   const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
-  const [panelHeight, setPanelHeight] = useState<number | undefined>(undefined);
-  const panelContentRef = useRef<HTMLDivElement | null>(null);
 
   const runsCalculatorTest = tier === "member";
-
-  // The About You form and the Qgiv payment embed are very different heights.
-  // Measuring the visible child and animating the wrapper to match avoids a
-  // jarring instant jump when switching between them (or when the embed
-  // itself grows once it finishes loading).
-  useEffect(() => {
-    const node = panelContentRef.current;
-    if (!node) return;
-
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (entry) setPanelHeight(entry.contentRect.height);
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
 
   function splitName(name: string): { firstName: string; lastName: string } {
     const [firstName, ...rest] = name.trim().split(/\s+/);
@@ -139,29 +124,27 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
               </Button>
             )}
           </Box>
-          <Box sx={{ height: panelHeight, overflow: "hidden", transition: "height 300ms ease" }}>
-            <Box ref={panelContentRef}>
-              {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
-                  visitor first reaches payment. Unmounting it (e.g. via "Edit your
-                  info" then back) re-runs its script-injection effect, which
-                  re-adds Qgiv's embed.js tag; the script throws on the
-                  redeclaration and the embed breaks. Toggling visibility keeps
-                  the script's one-time init intact. */}
-              <Box sx={{ display: step === "about-you" ? "block" : "none" }}>
-                <AboutYouStep
-                  onContinue={(data) => {
-                    setAboutYou(data);
-                    setStep("payment");
-                  }}
-                  initialValues={aboutYou ?? undefined}
-                />
-              </Box>
-              {aboutYou && (
-                <Box sx={{ display: step === "payment" ? "block" : "none" }}>
-                  <QgivJoin tier={tier} variant={variant} prefill={prefill} />
-                </Box>
-              )}
+          <Box sx={{ height: JOIN_PANEL_HEIGHT, overflow: "hidden" }}>
+            {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
+                visitor first reaches payment. Unmounting it (e.g. via "Edit your
+                info" then back) re-runs its script-injection effect, which
+                re-adds Qgiv's embed.js tag; the script throws on the
+                redeclaration and the embed breaks. Toggling visibility keeps
+                the script's one-time init intact. */}
+            <Box sx={{ display: step === "about-you" ? "block" : "none" }}>
+              <AboutYouStep
+                onContinue={(data) => {
+                  setAboutYou(data);
+                  setStep("payment");
+                }}
+                initialValues={aboutYou ?? undefined}
+              />
             </Box>
+            {aboutYou && (
+              <Box sx={{ display: step === "payment" ? "block" : "none" }}>
+                <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+              </Box>
+            )}
           </Box>
         </Box>
 
