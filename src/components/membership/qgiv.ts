@@ -15,6 +15,12 @@ export interface QgivForm {
   url: string;
 }
 
+export interface QgivPrefill {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export const QGIV_FORMS: Record<MembershipTier, QgivForm> = {
   member: {
     embedId: "88902",
@@ -33,6 +39,30 @@ export const QGIV_FORMS: Record<MembershipTier, QgivForm> = {
 
 export const QGIV_EMBED_SCRIPT = "https://secure.qgiv.com/resources/core/js/embed.js";
 
-export function qgivEmbedUrl(form: QgivForm): string {
-  return `${form.url}/embed/${form.embedId}/`;
+/**
+ * Qgiv pre-fills hosted/embedded form fields via a documented URL suffix:
+ * `/v/first_name=...,last_name=...,email=...`. Empty values are omitted so an
+ * unknown first/last name doesn't send a stray `first_name=` pair.
+ */
+function buildPrefillSegment(prefill?: QgivPrefill): string {
+  if (!prefill) return "";
+
+  const pairs = (
+    [
+      ["first_name", prefill.firstName],
+      ["last_name", prefill.lastName],
+      ["email", prefill.email],
+    ] as const
+  ).filter(([, value]) => value.length > 0);
+
+  if (pairs.length === 0) return "";
+
+  return pairs.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join(",");
+}
+
+export function qgivEmbedUrl(form: QgivForm, prefill?: QgivPrefill): string {
+  const segment = buildPrefillSegment(prefill);
+  return segment
+    ? `${form.url}/embed/${form.embedId}/v/${segment}`
+    : `${form.url}/embed/${form.embedId}/`;
 }
