@@ -11,6 +11,10 @@ const QGIV_EMBED_SCRIPT_ID = "qgiv-embedjs";
 /** Fail-open cap on the loading overlay: hide it even if we never observe
  * Qgiv populate the container, so a detection miss doesn't block the embed. */
 const EMBED_LOAD_TIMEOUT_MS = 8000;
+/** Floor on how long the loading overlay stays up: when the script is already
+ * cached, Qgiv can populate the container within a few milliseconds, which
+ * makes the overlay flash and disappear before a visitor perceives it. */
+const MIN_LOADING_DISPLAY_MS = 500;
 
 interface QgivJoinProps {
   tier: MembershipTier;
@@ -64,24 +68,36 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
     if (!form.embedId || !containerRef.current) return;
 
     const container = containerRef.current;
+    const mountedAt = Date.now();
+    const pendingTimeouts: number[] = [];
+
+    function markLoaded() {
+      const remaining = MIN_LOADING_DISPLAY_MS - (Date.now() - mountedAt);
+      if (remaining > 0) {
+        pendingTimeouts.push(window.setTimeout(() => setEmbedLoaded(true), remaining));
+      } else {
+        setEmbedLoaded(true);
+      }
+    }
+
     if (container.childElementCount > 0) {
-      setEmbedLoaded(true);
+      markLoaded();
       return;
     }
 
     const observer = new MutationObserver(() => {
       if (container.childElementCount > 0) {
-        setEmbedLoaded(true);
+        markLoaded();
         observer.disconnect();
       }
     });
     observer.observe(container, { childList: true, subtree: true });
 
-    const timeout = window.setTimeout(() => setEmbedLoaded(true), EMBED_LOAD_TIMEOUT_MS);
+    pendingTimeouts.push(window.setTimeout(() => setEmbedLoaded(true), EMBED_LOAD_TIMEOUT_MS));
 
     return () => {
       observer.disconnect();
-      window.clearTimeout(timeout);
+      pendingTimeouts.forEach((id) => window.clearTimeout(id));
     };
   }, [form.embedId]);
 
@@ -142,7 +158,8 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
     <div className={className ?? "max-h-[640px] overflow-hidden"}>
       <div className="relative min-h-[400px]">
         {!embedLoaded && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-50">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-zinc-50">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-[#168039]" />
             <span className="text-sm text-zinc-500">Loading secure payment form&hellip;</span>
           </div>
         )}
