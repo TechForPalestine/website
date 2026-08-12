@@ -105,6 +105,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
             setAboutYou(data);
             setStep("payment");
           }}
+          initialValues={aboutYou ?? undefined}
         />
       </Box>
     );

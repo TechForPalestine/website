@@ -8,6 +8,8 @@ export interface AboutYouData {
 
 interface AboutYouStepProps {
   onContinue: (data: AboutYouData) => void;
+  /** Pre-fills the fields when the visitor returns to this step from payment. */
+  initialValues?: AboutYouData;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -17,9 +19,9 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * is handed to the Qgiv payment step. Validates on submit only, matching the
  * email format `/api/membership-complete.ts` validates server-side.
  */
-export default function AboutYouStep({ onContinue }: AboutYouStepProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+export default function AboutYouStep({ onContinue, initialValues }: AboutYouStepProps) {
+  const [name, setName] = useState(initialValues?.name ?? "");
+  const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
 
