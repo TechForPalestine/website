@@ -46,10 +46,6 @@ export default function AboutYouStep({ onContinue, initialValues }: AboutYouStep
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 480 }}>
-      <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
-        Step 1/2 &mdash; About You
-      </Typography>
-
       <TextField
         label="Name"
         value={name}
