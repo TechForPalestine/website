@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import MembershipCalculator from "../MembershipCalculator";
 import QgivJoin from "./QgivJoin";
@@ -29,8 +29,26 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   const [variant, setVariant] = useState<string | undefined>(undefined);
   const [step, setStep] = useState<"about-you" | "payment">("about-you");
   const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
+  const [panelHeight, setPanelHeight] = useState<number | undefined>(undefined);
+  const panelContentRef = useRef<HTMLDivElement | null>(null);
 
   const runsCalculatorTest = tier === "member";
+
+  // The About You form and the Qgiv payment embed are very different heights.
+  // Measuring the visible child and animating the wrapper to match avoids a
+  // jarring instant jump when switching between them (or when the embed
+  // itself grows once it finishes loading).
+  useEffect(() => {
+    const node = panelContentRef.current;
+    if (!node) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry) setPanelHeight(entry.contentRect.height);
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   function splitName(name: string): { firstName: string; lastName: string } {
     const [firstName, ...rest] = name.trim().split(/\s+/);
@@ -121,25 +139,30 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
               </Button>
             )}
           </Box>
-          {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the visitor
-              first reaches payment. Unmounting it (e.g. via "Edit your info" then
-              back) re-runs its script-injection effect, which re-adds Qgiv's
-              embed.js tag; the script throws on the redeclaration and the embed
-              breaks. Toggling visibility keeps the script's one-time init intact. */}
-          <Box sx={{ display: step === "about-you" ? "block" : "none" }}>
-            <AboutYouStep
-              onContinue={(data) => {
-                setAboutYou(data);
-                setStep("payment");
-              }}
-              initialValues={aboutYou ?? undefined}
-            />
-          </Box>
-          {aboutYou && (
-            <Box sx={{ display: step === "payment" ? "block" : "none" }}>
-              <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+          <Box sx={{ height: panelHeight, overflow: "hidden", transition: "height 300ms ease" }}>
+            <Box ref={panelContentRef}>
+              {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
+                  visitor first reaches payment. Unmounting it (e.g. via "Edit your
+                  info" then back) re-runs its script-injection effect, which
+                  re-adds Qgiv's embed.js tag; the script throws on the
+                  redeclaration and the embed breaks. Toggling visibility keeps
+                  the script's one-time init intact. */}
+              <Box sx={{ display: step === "about-you" ? "block" : "none" }}>
+                <AboutYouStep
+                  onContinue={(data) => {
+                    setAboutYou(data);
+                    setStep("payment");
+                  }}
+                  initialValues={aboutYou ?? undefined}
+                />
+              </Box>
+              {aboutYou && (
+                <Box sx={{ display: step === "payment" ? "block" : "none" }}>
+                  <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+                </Box>
+              )}
             </Box>
-          )}
+          </Box>
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
