@@ -69,25 +69,27 @@ export default function AboutYouStep({ onContinue, initialValues }: AboutYouStep
         autoComplete="email"
       />
 
-      <Typography variant="body2" sx={{ color: "#374151", mt: 2, mb: 3 }}>
+      <Typography variant="body2" sx={{ color: "#374151", mt: 2, mb: 3, textAlign: "center" }}>
         You&apos;ll be redirected to our secure payment partner to complete your membership.
       </Typography>
 
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{
-          backgroundColor: "#168039",
-          borderRadius: 999,
-          px: 4,
-          py: 1.5,
-          fontWeight: 600,
-          textTransform: "none",
-          "&:hover": { backgroundColor: "#116b2f" },
-        }}
-      >
-        Next
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: "#168039",
+            borderRadius: 999,
+            px: 4,
+            py: 1.5,
+            fontWeight: 600,
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#116b2f" },
+          }}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 }

@@ -172,7 +172,7 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
 
   return (
     <div className={className ?? "max-h-[640px] overflow-hidden"}>
-      <div className="relative min-h-[400px]">
+      <div className="relative min-h-[640px]">
         {!embedLoaded && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-zinc-50">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-[#168039]" />
