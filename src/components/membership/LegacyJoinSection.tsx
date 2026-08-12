@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import MembershipCalculator from "../MembershipCalculator";
 import QgivJoin from "./QgivJoin";
-import type { MembershipTier } from "./qgiv";
+import AboutYouStep, { type AboutYouData } from "./AboutYouStep";
+import type { MembershipTier, QgivPrefill } from "./qgiv";
 
 interface LegacyJoinSectionProps {
   tier: MembershipTier;
@@ -36,8 +37,19 @@ const bodySx = { color: "#374151", lineHeight: 1.75, mb: 1.5 } as const;
 export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionProps) {
   const [showCalculator, setShowCalculator] = useState(false);
   const [variant, setVariant] = useState<string | undefined>(undefined);
+  const [step, setStep] = useState<"about-you" | "payment">("about-you");
+  const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
 
   const runsCalculatorTest = tier === "member";
+
+  function splitName(name: string): { firstName: string; lastName: string } {
+    const [firstName, ...rest] = name.trim().split(/\s+/);
+    return { firstName: firstName ?? "", lastName: rest.join(" ") };
+  }
+
+  const prefill: QgivPrefill | undefined = aboutYou
+    ? { ...splitName(aboutYou.name), email: aboutYou.email }
+    : undefined;
 
   useEffect(() => {
     if (!runsCalculatorTest) return;
@@ -80,8 +92,37 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
         ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
         : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
 
+  if (step === "about-you") {
+    return (
+      <Box id="join" sx={{ scrollMarginTop: "80px" }}>
+        {heading && (
+          <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
+            {heading}
+          </Typography>
+        )}
+        <AboutYouStep
+          onContinue={(data) => {
+            setAboutYou(data);
+            setStep("payment");
+          }}
+        />
+      </Box>
+    );
+  }
+
   return (
     <Box id="join" sx={{ scrollMarginTop: "80px" }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
+        <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
+          Step 2/2 &mdash; Payment
+        </Typography>
+        <Button
+          onClick={() => setStep("about-you")}
+          sx={{ textTransform: "none", color: "#374151", fontWeight: 600 }}
+        >
+          &larr; Edit your info
+        </Button>
+      </Box>
       {heading && (
         <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
           {heading}
@@ -105,7 +146,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
           alignItems: "start",
         }}
       >
-        <QgivJoin tier={tier} variant={variant} />
+        <QgivJoin tier={tier} variant={variant} prefill={prefill} />
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
           <Box
