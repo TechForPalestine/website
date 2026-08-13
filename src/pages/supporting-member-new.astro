@@ -20,7 +20,8 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <!-- Hero -->
+    <!-- Hero: intro copy beside the photo, matching /supporting-member's
+         layout rather than stacking the photo above the copy. -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="membership-animate">
@@ -28,25 +29,25 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
             Become a <span class="text-brand">Supporting Member</span>
           </h1>
 
-          <!-- Contained, centred photo rather than a hero banner -->
-          <img
-            src="/images/membership/supporting-panel.webp"
-            alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
-            class="mb-10 w-full max-w-[560px] rounded-[20px]"
-            width="1600"
-            height="1068"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
+            <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+              Tech for Palestine's coalition of founders, engineers, investors and other
+              professionals are helping Palestine advocates scale their work. Tens of thousands of
+              Israeli <em>hasbara</em> (propaganda) projects exist, so we're creating thousands of
+              initiatives for Palestinian liberation.
+            </p>
 
-          <p class="ts-body-large max-w-[65ch] text-ink-secondary">
-            Tech for Palestine's coalition of founders, engineers, investors and other professionals
-            are helping Palestine advocates scale their work. Tens of thousands of Israeli <em
-              >hasbara</em
-            > (propaganda) projects exist, so we're creating thousands of initiatives for Palestinian
-            liberation.
-          </p>
+            <img
+              src="/images/membership/supporting-panel.webp"
+              alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
+              class="w-full rounded-[20px]"
+              width="1600"
+              height="1068"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </div>
         </div>
       </div>
     </section>
