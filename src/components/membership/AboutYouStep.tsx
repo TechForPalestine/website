@@ -10,6 +10,13 @@ interface AboutYouStepProps {
   onContinue: (data: AboutYouData) => void;
   /** Pre-fills the fields when the visitor returns to this step from payment. */
   initialValues?: AboutYouData;
+  /** Drops the MUI button's Material elevation shadow. The design-system
+   * pages (`MembershipDues.tsx`) surround this component with flat,
+   * shadow-less Tailwind buttons (`Button.astro`); the default MUI
+   * `variant="contained"` shadow clashes there. The legacy pages
+   * (`LegacyJoinSection.tsx`) already use shadowed CTAs elsewhere, so they
+   * keep the default (`flatButton` omitted/false). */
+  flatButton?: boolean;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -19,7 +26,11 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * is handed to the Qgiv payment step. Validates on submit only, matching the
  * email format `/api/membership-complete.ts` validates server-side.
  */
-export default function AboutYouStep({ onContinue, initialValues }: AboutYouStepProps) {
+export default function AboutYouStep({
+  onContinue,
+  initialValues,
+  flatButton = false,
+}: AboutYouStepProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
@@ -77,6 +88,7 @@ export default function AboutYouStep({ onContinue, initialValues }: AboutYouStep
         <Button
           type="submit"
           variant="contained"
+          disableElevation={flatButton}
           sx={{
             backgroundColor: "#168039",
             borderRadius: 999,
@@ -84,7 +96,11 @@ export default function AboutYouStep({ onContinue, initialValues }: AboutYouStep
             py: 1.5,
             fontWeight: 600,
             textTransform: "none",
-            "&:hover": { backgroundColor: "#116b2f" },
+            boxShadow: flatButton ? "none" : undefined,
+            "&:hover": {
+              backgroundColor: "#116b2f",
+              boxShadow: flatButton ? "none" : undefined,
+            },
           }}
         >
           Next

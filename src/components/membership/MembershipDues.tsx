@@ -134,7 +134,7 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
       >
         <div style={{ overflow: "hidden", minHeight: 0 }}>
           {/* Calculator + form — constrained width, left-aligned */}
-          <div className="mx-auto max-w-[800px]">
+          <div className="max-w-[800px]">
             {/* Form + side info */}
             <div className="mt-3 grid grid-cols-1 items-start gap-6 min-[810px]:grid-cols-[1fr_340px]">
               <div>
@@ -177,6 +177,7 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
                         setStep("payment");
                       }}
                       initialValues={aboutYou ?? undefined}
+                      flatButton
                     />
                   </div>
                   {aboutYou && (
