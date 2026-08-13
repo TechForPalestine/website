@@ -116,51 +116,63 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
         {intro}
       </Typography>
 
-      <Box sx={{ display: revealed ? "block" : "none" }}>
-        {showCalculator && step === "payment" && <MembershipCalculator />}
-
-        <Box sx={{ mt: 3 }}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
-            <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
-              {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
-            </Typography>
-            {step === "payment" && (
-              <Button
-                onClick={() => setStep("about-you")}
-                sx={{ textTransform: "none", color: "#374151", fontWeight: 600 }}
-              >
-                &larr; Edit your info
-              </Button>
-            )}
-          </Box>
-          <Box sx={{ height: JOIN_PANEL_HEIGHT, overflow: "hidden" }}>
-            {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
-                visitor first reaches payment. Unmounting it (e.g. via "Edit your
-                info" then back) re-runs its script-injection effect, which
-                re-adds Qgiv's embed.js tag; the script throws on the
-                redeclaration and the embed breaks. Toggling visibility keeps
-                the script's one-time init intact. */}
-            <Box
-              sx={{
-                display: step === "about-you" ? "flex" : "none",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-              }}
-            >
-              <AboutYouStep
-                onContinue={(data) => {
-                  setAboutYou(data);
-                  setStep("payment");
-                }}
-                initialValues={aboutYou ?? undefined}
-              />
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateRows: revealed ? "1fr" : "0fr",
+          opacity: revealed ? 1 : 0,
+          transition: "grid-template-rows 350ms ease, opacity 350ms ease",
+        }}
+      >
+        <Box sx={{ overflow: "hidden", minHeight: 0 }}>
+          <Box sx={{ mt: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+              <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
+                {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
+              </Typography>
+              {step === "payment" && (
+                <Button
+                  onClick={() => setStep("about-you")}
+                  sx={{ textTransform: "none", color: "#374151", fontWeight: 600 }}
+                >
+                  &larr; Edit your info
+                </Button>
+              )}
             </Box>
-            {aboutYou && (
-              <Box sx={{ display: step === "payment" ? "block" : "none" }}>
-                <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+            {showCalculator && step === "payment" && (
+              <Box sx={{ mb: 2 }}>
+                <MembershipCalculator />
               </Box>
             )}
+            <Box sx={{ height: JOIN_PANEL_HEIGHT, overflow: "hidden" }}>
+              {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
+                  visitor first reaches payment. Unmounting it (e.g. via "Edit your
+                  info" then back) re-runs its script-injection effect, which
+                  re-adds Qgiv's embed.js tag; the script throws on the
+                  redeclaration and the embed breaks. Toggling visibility keeps
+                  the script's one-time init intact. */}
+              <Box
+                sx={{
+                  display: step === "about-you" ? "flex" : "none",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <AboutYouStep
+                  onContinue={(data) => {
+                    setAboutYou(data);
+                    setStep("payment");
+                  }}
+                  initialValues={aboutYou ?? undefined}
+                />
+              </Box>
+              {aboutYou && (
+                <Box sx={{ display: step === "payment" ? "block" : "none" }}>
+                  <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>
