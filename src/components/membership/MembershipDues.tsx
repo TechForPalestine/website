@@ -8,17 +8,6 @@ interface MembershipDuesProps {
   tier?: MembershipTier;
 }
 
-const MAIL = "mailto:membership@techforpalestine.org";
-const LINK = "text-brand underline hover:text-brand-hover";
-
-const WAIVER_REASONS = [
-  "Not having access to banking services/debit card",
-  "Being located in Gaza or the West Bank",
-  "Being a refugee from Gaza or the West Bank evacuated during the genocide",
-  "Not being able to afford membership due to personal circumstances",
-  "Being a T4P paid staff member",
-];
-
 /** Hides the "Become a member" CTA anchors once the join form is revealed —
  * clicking them again is pointless once the form is already showing. These
  * anchors live outside this component's tree (siblings in the enclosing
@@ -134,98 +123,54 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
       >
         <div style={{ overflow: "hidden", minHeight: 0 }}>
           {/* Calculator + form — constrained width, centered */}
-          <div className="mx-auto max-w-[800px]">
-            <div className="mt-3">
-              <div className="mx-auto max-w-[700px]">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
-                    {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
-                  </p>
-                  {step === "payment" && (
-                    <button
-                      type="button"
-                      onClick={() => setStep("about-you")}
-                      className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
-                    >
-                      &larr; Edit your info
-                    </button>
-                  )}
-                </div>
-                {showCalculator && step === "payment" && (
-                  <div className="mb-4">
-                    <MembershipCalculator />
-                  </div>
-                )}
-                <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
-                  {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
-                      the visitor first reaches payment. Unmounting it (e.g. via
-                      "Edit your info" then back) re-runs its script-injection
-                      effect, which re-adds Qgiv's embed.js tag; the script
-                      throws on the redeclaration and the embed breaks. Toggling
-                      visibility keeps the script's one-time init intact. */}
-                  <div
-                    style={{
-                      display: step === "about-you" ? "flex" : "none",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <AboutYouStep
-                      onContinue={(data) => {
-                        setAboutYou(data);
-                        setStep("payment");
-                      }}
-                      initialValues={aboutYou ?? undefined}
-                      flatButton
-                    />
-                  </div>
-                  {aboutYou && (
-                    <div style={{ display: step === "payment" ? "block" : "none" }}>
-                      <QgivJoin tier={tier} variant={variant} prefill={prefill} />
-                    </div>
-                  )}
-                </div>
+          <div className="mx-auto mt-3 max-w-[700px]">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
+                {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
+              </p>
+              {step === "payment" && (
+                <button
+                  type="button"
+                  onClick={() => setStep("about-you")}
+                  className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
+                >
+                  &larr; Edit your info
+                </button>
+              )}
+            </div>
+            {showCalculator && step === "payment" && (
+              <div className="mb-4">
+                <MembershipCalculator />
               </div>
-
-              {/* Inclusivity & waivers */}
-              <div className="mt-6 rounded-[16px] border border-butter bg-page p-4">
-                <p className="ts-body-small mb-2 font-semibold text-ink">Inclusivity &amp; waivers</p>
-                <p className="ts-body-small mb-2 leading-relaxed text-ink-secondary">
-                  Tech for Palestine aims for inclusivity. Please contact{" "}
-                  <a href={MAIL} className={LINK}>
-                    membership@techforpalestine.org
-                  </a>{" "}
-                  to request a waiver of dues in the following circumstances:
-                </p>
-                <ul className="mb-2 space-y-1 pl-3">
-                  {WAIVER_REASONS.map((item) => (
-                    <li
-                      key={item}
-                      className="ts-body-small flex items-baseline gap-2 text-ink-secondary"
-                    >
-                      <span
-                        className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand"
-                        aria-hidden="true"
-                      />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <p className="ts-body-small mb-2 leading-relaxed text-ink-secondary">
-                  If you are in the US, your dues are tax deductible. If you are in the UK, contact us
-                  at{" "}
-                  <a href={MAIL} className={LINK}>
-                    membership@techforpalestine.org
-                  </a>{" "}
-                  after signup and we will ensure that future donations are processed through our gift
-                  aid partner.
-                </p>
-                <p className="ts-body-small leading-relaxed text-ink-secondary">
-                  Options to pay via DAF, cryptocurrency, foundations, and other methods will be
-                  supported in the future. We will help you migrate to your preferred method of giving
-                  once available.
-                </p>
+            )}
+            <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
+              {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
+                  the visitor first reaches payment. Unmounting it (e.g. via
+                  "Edit your info" then back) re-runs its script-injection
+                  effect, which re-adds Qgiv's embed.js tag; the script
+                  throws on the redeclaration and the embed breaks. Toggling
+                  visibility keeps the script's one-time init intact. */}
+              <div
+                style={{
+                  display: step === "about-you" ? "flex" : "none",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AboutYouStep
+                  onContinue={(data) => {
+                    setAboutYou(data);
+                    setStep("payment");
+                  }}
+                  initialValues={aboutYou ?? undefined}
+                  flatButton
+                />
               </div>
+              {aboutYou && (
+                <div style={{ display: step === "payment" ? "block" : "none" }}>
+                  <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+                </div>
+              )}
             </div>
           </div>
         </div>
