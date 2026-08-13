@@ -30,6 +30,14 @@ function hideJoinCtas(): void {
  * the Qgiv payment form needs more room, rather than clipping it. */
 const JOIN_PANEL_HEIGHT = 640;
 
+/** How long the "Next" button shows its own spinner before the payment step
+ * is revealed. Without this floor the swap is instant and the button's
+ * loading state never becomes visible — the visitor would see the button
+ * vanish and a second, differently-positioned spinner (QgivJoin's) appear in
+ * its place instead of one continuous loading experience anchored to their
+ * click. Mirrors the MIN_LOADING_DISPLAY_MS floor QgivJoin already uses. */
+const NEXT_BUTTON_LOADING_MS = 400;
+
 /**
  * Payment surface for the legacy (green/grey) design system: the Qgiv embed
  * and the dues calculator A/B test.
@@ -44,8 +52,18 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   const [step, setStep] = useState<"about-you" | "payment">("about-you");
   const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [advancingToPayment, setAdvancingToPayment] = useState(false);
 
   const runsCalculatorTest = tier === "member";
+
+  function handleAboutYouContinue(data: AboutYouData) {
+    setAboutYou(data);
+    setAdvancingToPayment(true);
+    window.setTimeout(() => {
+      setStep("payment");
+      setAdvancingToPayment(false);
+    }, NEXT_BUTTON_LOADING_MS);
+  }
 
   function splitName(name: string): { firstName: string; lastName: string } {
     const [firstName, ...rest] = name.trim().split(/\s+/);
@@ -160,7 +178,17 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 <MembershipCalculator />
               </Box>
             )}
-            <Box sx={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
+            <Box
+              sx={{
+                // Only forced on the About You step, so short content there
+                // doesn't look collapsed. On the payment step, QgivJoin
+                // reserves its own height (only while its embed is loading),
+                // so it isn't doubled up here once the real, often-shorter
+                // Qgiv form has rendered.
+                minHeight: step === "about-you" ? JOIN_PANEL_HEIGHT : undefined,
+                display: "grid",
+              }}
+            >
               {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
                   visitor first reaches payment. Unmounting it (e.g. via "Edit your
                   info" then back) re-runs its script-injection effect, which
@@ -175,11 +203,9 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 }}
               >
                 <AboutYouStep
-                  onContinue={(data) => {
-                    setAboutYou(data);
-                    setStep("payment");
-                  }}
+                  onContinue={handleAboutYouContinue}
                   initialValues={aboutYou ?? undefined}
+                  submitting={advancingToPayment}
                 />
               </Box>
               {aboutYou && (

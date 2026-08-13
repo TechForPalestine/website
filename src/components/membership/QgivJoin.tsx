@@ -217,7 +217,12 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
 
   return (
     <div className={className}>
-      <div className="relative" style={{ minHeight: 640 }}>
+      {/* minHeight only while loading: it reserves room for the spinner
+          overlay so the panel doesn't collapse, but Qgiv's real form is
+          often shorter than 640px (especially on narrow viewports) — keeping
+          the forced height after load leaves dead whitespace below the
+          embed. */}
+      <div className="relative" style={{ minHeight: embedLoaded ? undefined : 640 }}>
         {!embedLoaded && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-zinc-50">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-[#168039]" />
@@ -233,6 +238,15 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
           data-width="630"
         />
       </div>
+      {/* Qgiv's embed.js sets a default iframe height (observed: 1000px) via
+          the `height` HTML attribute, then narrows it once its resize
+          postMessage fires — which hasn't reliably landed here, leaving dead
+          space below the visibly shorter membership form. `/donate` and
+          `/donate-new` hit the same issue and fix it the same way: a plain
+          CSS rule beats an HTML attribute in the cascade without needing
+          `!important`, capping the iframe box directly rather than a
+          wrapping element Qgiv's script may detach from. */}
+      <style>{`.qgiv-embed-container iframe.qgiv-embed { max-height: 720px; }`}</style>
     </div>
   );
 }
