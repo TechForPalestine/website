@@ -15,6 +15,11 @@ interface ImportMetaEnv {
 declare global {
   interface Window {
     plausible: (event: string, options?: any) => void;
+    /** Sticky flag set immediately before dispatching the
+     * "membership:reveal-join" CustomEvent, so a click that fires before the
+     * React island hydrates (and registers its listener) isn't lost. Checked
+     * on mount by LegacyJoinSection in addition to listening for the event. */
+    __membershipRevealJoin?: boolean;
   }
 }
 

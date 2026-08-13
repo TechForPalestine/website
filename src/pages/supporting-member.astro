@@ -204,6 +204,13 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
   <script>
     document.querySelectorAll<HTMLAnchorElement>("[data-track-join-click]").forEach((link) => {
       link.addEventListener("click", () => {
+        // Set a sticky flag before dispatching: this script runs at parse
+        // time, but the LegacyJoinSection React island only registers its
+        // "membership:reveal-join" listener once it hydrates (after the
+        // React/MUI chunks load). A click before hydration would otherwise
+        // dispatch to no listener and be lost. The island checks this flag
+        // on mount in addition to listening for the event.
+        window.__membershipRevealJoin = true;
         window.dispatchEvent(new CustomEvent("membership:reveal-join"));
 
         if (typeof window.plausible === "undefined") return;

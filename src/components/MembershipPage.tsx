@@ -7,6 +7,12 @@ const proseSx = { ...bodySx, maxWidth: 700 } as const;
 
 function handleJoinClick(ctaLocation: "primary_cta" | "secondary_cta") {
   return () => {
+    // Set the sticky flag before dispatching, for consistency with the
+    // vanilla-script CTA on /supporting-member (see supporting-member.astro).
+    // This page's CTA lives inside the same island as the listener, so the
+    // flag isn't strictly needed here to avoid a race, but keeping the same
+    // event/flag contract on both pages avoids surprises if that ever changes.
+    window.__membershipRevealJoin = true;
     window.dispatchEvent(new CustomEvent("membership:reveal-join"));
     if (typeof window.plausible !== "undefined") {
       window.plausible("Membership Join Click", {

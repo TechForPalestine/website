@@ -77,6 +77,17 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   }, [runsCalculatorTest]);
 
   useEffect(() => {
+    // The CTA that dispatches "membership:reveal-join" may fire before this
+    // island hydrates and registers its listener (e.g. the plain <a> CTAs on
+    // /supporting-member, tracked by a vanilla <script> that runs at parse
+    // time). The dispatcher also sets a sticky window flag first, so a click
+    // that arrives before hydration isn't lost — check it on mount here.
+    // Also honor a direct "#join" deep link, since the form is hidden until
+    // revealed and the browser would otherwise scroll to an empty section.
+    if (window.__membershipRevealJoin || window.location.hash === "#join") {
+      setRevealed(true);
+    }
+
     function handleReveal() {
       setRevealed(true);
     }
@@ -87,7 +98,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   const intro =
     tier === "supporting"
       ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary."
-      : showCalculator
+      : showCalculator && step === "payment"
         ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
         : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
 
