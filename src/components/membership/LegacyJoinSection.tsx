@@ -141,7 +141,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
         }}
       >
         <Box sx={{ overflow: "hidden", minHeight: 0 }}>
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mt: 3, maxWidth: 700 }}>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
               <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
                 {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
