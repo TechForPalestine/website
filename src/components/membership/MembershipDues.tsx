@@ -136,53 +136,55 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
           {/* Calculator + form — constrained width, centered */}
           <div className="mx-auto max-w-[800px]">
             <div className="mt-3">
-              <div className="mb-3 flex items-center justify-between">
-                <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
-                  {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
-                </p>
-                {step === "payment" && (
-                  <button
-                    type="button"
-                    onClick={() => setStep("about-you")}
-                    className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
-                  >
-                    &larr; Edit your info
-                  </button>
-                )}
-              </div>
-              {showCalculator && step === "payment" && (
-                <div className="mb-4">
-                  <MembershipCalculator />
+              <div className="mx-auto max-w-[700px]">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
+                    {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
+                  </p>
+                  {step === "payment" && (
+                    <button
+                      type="button"
+                      onClick={() => setStep("about-you")}
+                      className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
+                    >
+                      &larr; Edit your info
+                    </button>
+                  )}
                 </div>
-              )}
-              <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
-                {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
-                    the visitor first reaches payment. Unmounting it (e.g. via
-                    "Edit your info" then back) re-runs its script-injection
-                    effect, which re-adds Qgiv's embed.js tag; the script
-                    throws on the redeclaration and the embed breaks. Toggling
-                    visibility keeps the script's one-time init intact. */}
-                <div
-                  style={{
-                    display: step === "about-you" ? "flex" : "none",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <AboutYouStep
-                    onContinue={(data) => {
-                      setAboutYou(data);
-                      setStep("payment");
-                    }}
-                    initialValues={aboutYou ?? undefined}
-                    flatButton
-                  />
-                </div>
-                {aboutYou && (
-                  <div style={{ display: step === "payment" ? "block" : "none" }}>
-                    <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+                {showCalculator && step === "payment" && (
+                  <div className="mb-4">
+                    <MembershipCalculator />
                   </div>
                 )}
+                <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
+                  {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
+                      the visitor first reaches payment. Unmounting it (e.g. via
+                      "Edit your info" then back) re-runs its script-injection
+                      effect, which re-adds Qgiv's embed.js tag; the script
+                      throws on the redeclaration and the embed breaks. Toggling
+                      visibility keeps the script's one-time init intact. */}
+                  <div
+                    style={{
+                      display: step === "about-you" ? "flex" : "none",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <AboutYouStep
+                      onContinue={(data) => {
+                        setAboutYou(data);
+                        setStep("payment");
+                      }}
+                      initialValues={aboutYou ?? undefined}
+                      flatButton
+                    />
+                  </div>
+                  {aboutYou && (
+                    <div style={{ display: step === "payment" ? "block" : "none" }}>
+                      <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Inclusivity & waivers */}
