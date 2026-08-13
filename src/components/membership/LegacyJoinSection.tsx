@@ -96,7 +96,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
         {intro}
       </Typography>
 
-      {showCalculator && <MembershipCalculator />}
+      {showCalculator && step === "payment" && <MembershipCalculator />}
 
       <Box sx={{ mt: 3 }}>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
