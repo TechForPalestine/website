@@ -80,7 +80,14 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           </div>
 
           <div class="mt-10 flex flex-col gap-3 min-[560px]:flex-row min-[560px]:items-center">
-            <Button href="#join" variant="primary" size="md" arrow>
+            <Button
+              href="#join"
+              variant="primary"
+              size="md"
+              arrow
+              data-track-join-click="primary_cta"
+              data-membership-cta="true"
+            >
               Become a Supporting Member
             </Button>
             <Button href="/donate" variant="text" class="min-[560px]:ml-3">
@@ -99,6 +106,22 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
         <div class="membership-animate">
           <MembershipDues client:load tier="supporting" />
         </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
+      <div class="mx-auto flex max-w-[1400px] justify-center">
+        <Button
+          href="#join"
+          variant="primary"
+          size="md"
+          arrow
+          data-track-join-click="secondary_cta"
+          data-membership-cta="true"
+        >
+          Become a Supporting Member
+        </Button>
       </div>
     </section>
 
@@ -149,4 +172,27 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       el.classList.add("visible");
     });
   }
+</script>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("[data-track-join-click]").forEach((link) => {
+    link.addEventListener("click", () => {
+      // Set a sticky flag before dispatching: this script runs at parse
+      // time, but the MembershipDues React island only registers its
+      // "membership:reveal-join" listener once it hydrates. A click before
+      // hydration would otherwise dispatch to no listener and be lost. The
+      // island checks this flag on mount in addition to listening for the
+      // event.
+      window.__membershipRevealJoin = true;
+      window.dispatchEvent(new CustomEvent("membership:reveal-join"));
+
+      if (typeof window.plausible === "undefined") return;
+      window.plausible("Membership Join Click", {
+        props: {
+          cta_location: link.dataset.trackJoinClick ?? "unknown",
+          destination: link.getAttribute("href") ?? "",
+        },
+      });
+    });
+  });
 </script>
