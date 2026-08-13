@@ -5,6 +5,17 @@ import LegacyWaiverNote from "./membership/LegacyWaiverNote";
 const bodySx = { mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" } as const;
 const proseSx = { ...bodySx, maxWidth: 700 } as const;
 
+function handleJoinClick(ctaLocation: "primary_cta" | "secondary_cta") {
+  return () => {
+    window.dispatchEvent(new CustomEvent("membership:reveal-join"));
+    if (typeof window.plausible !== "undefined") {
+      window.plausible("Membership Join Click", {
+        props: { cta_location: ctaLocation, destination: "#join" },
+      });
+    }
+  };
+}
+
 export default function MembershipPage() {
   return (
     <Box sx={{ maxWidth: 960, mx: "auto" }}>
@@ -48,6 +59,7 @@ export default function MembershipPage() {
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3, mb: 5 }}>
         <a
           href="#join"
+          onClick={handleJoinClick("primary_cta")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
         >
           Become a member
@@ -63,6 +75,16 @@ export default function MembershipPage() {
       <LegacyWaiverNote className="mb-12 max-w-[700px]" />
 
       <LegacyJoinSection tier="member" />
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+        <a
+          href="#join"
+          onClick={handleJoinClick("secondary_cta")}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
+        >
+          Become a member
+        </a>
+      </Box>
     </Box>
   );
 }
