@@ -7,10 +7,12 @@ const REASONS = [
   "Not being able to afford membership due to personal circumstances",
 ];
 
+const LINK =
+  "text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm";
+
 /**
- * Short inclusivity / waiver statement shown beneath the membership CTAs on the
- * legacy-design pages. The fuller version sits beside the payment form in
- * `LegacyJoinSection`.
+ * Inclusivity / waiver statement plus "Get in touch" contact info, shown
+ * beneath the membership CTAs on the legacy-design pages.
  *
  * Plain Tailwind rather than MUI so it can render statically (no client
  * directive) when used directly from an `.astro` page.
@@ -22,10 +24,7 @@ export default function LegacyWaiverNote({ className = "" }: LegacyWaiverNotePro
     >
       <p>
         Tech for Palestine aims for inclusivity. Please contact{" "}
-        <a
-          href="mailto:membership@techforpalestine.org"
-          className="text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm"
-        >
+        <a href="mailto:membership@techforpalestine.org" className={LINK}>
           membership@techforpalestine.org
         </a>{" "}
         to request a waiver of dues in the following circumstances:
@@ -36,6 +35,22 @@ export default function LegacyWaiverNote({ className = "" }: LegacyWaiverNotePro
         ))}
       </ul>
       <p>If you are in the US, your dues are tax deductible.</p>
+      <p className="mt-3">
+        Have questions? Set up an{" "}
+        <a
+          href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
+          className={`font-semibold ${LINK}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          intro call
+        </a>{" "}
+        or reach out to us at{" "}
+        <a href="mailto:membership@techforpalestine.org" className={`font-semibold ${LINK}`}>
+          membership@techforpalestine.org
+        </a>
+        !
+      </p>
     </div>
   );
 }

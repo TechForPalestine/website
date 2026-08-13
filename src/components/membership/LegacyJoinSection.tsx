@@ -12,16 +12,13 @@ interface LegacyJoinSectionProps {
   heading?: string;
 }
 
-const LINK =
-  "text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm";
-const MAIL = "mailto:membership@techforpalestine.org";
 /** Shared fixed height for the About You / payment panel, matching QgivJoin's
  * own max-height cap, so switching between the two never resizes the panel. */
 const JOIN_PANEL_HEIGHT = 640;
 
 /**
- * Payment surface for the legacy (green/grey) design system: the Qgiv embed, the
- * dues calculator A/B test, and the detailed waiver / contact side panel.
+ * Payment surface for the legacy (green/grey) design system: the Qgiv embed
+ * and the dues calculator A/B test.
  *
  * The design-system equivalent is `MembershipDues.tsx`. The two are kept apart
  * because `Layout.astro` does not load `design-system.css`, so the `ts-*`
@@ -101,95 +98,48 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
 
       {showCalculator && <MembershipCalculator />}
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr", md: "1fr 340px" },
-          gap: 3.5,
-          mt: 3,
-          alignItems: "start",
-        }}
-      >
-        <Box>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
-            <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
-              {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
-            </Typography>
-            {step === "payment" && (
-              <Button
-                onClick={() => setStep("about-you")}
-                sx={{ textTransform: "none", color: "#374151", fontWeight: 600 }}
-              >
-                &larr; Edit your info
-              </Button>
-            )}
-          </Box>
-          <Box sx={{ height: JOIN_PANEL_HEIGHT, overflow: "hidden" }}>
-            {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
-                visitor first reaches payment. Unmounting it (e.g. via "Edit your
-                info" then back) re-runs its script-injection effect, which
-                re-adds Qgiv's embed.js tag; the script throws on the
-                redeclaration and the embed breaks. Toggling visibility keeps
-                the script's one-time init intact. */}
-            <Box
-              sx={{
-                display: step === "about-you" ? "flex" : "none",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-              }}
+      <Box sx={{ mt: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+          <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
+            {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
+          </Typography>
+          {step === "payment" && (
+            <Button
+              onClick={() => setStep("about-you")}
+              sx={{ textTransform: "none", color: "#374151", fontWeight: 600 }}
             >
-              <AboutYouStep
-                onContinue={(data) => {
-                  setAboutYou(data);
-                  setStep("payment");
-                }}
-                initialValues={aboutYou ?? undefined}
-              />
-            </Box>
-            {aboutYou && (
-              <Box sx={{ display: step === "payment" ? "block" : "none" }}>
-                <QgivJoin tier={tier} variant={variant} prefill={prefill} />
-              </Box>
-            )}
-          </Box>
+              &larr; Edit your info
+            </Button>
+          )}
         </Box>
-
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+        <Box sx={{ height: JOIN_PANEL_HEIGHT, overflow: "hidden" }}>
+          {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
+              visitor first reaches payment. Unmounting it (e.g. via "Edit your
+              info" then back) re-runs its script-injection effect, which
+              re-adds Qgiv's embed.js tag; the script throws on the
+              redeclaration and the embed breaks. Toggling visibility keeps
+              the script's one-time init intact. */}
           <Box
             sx={{
-              p: 3,
-              borderRadius: 3,
-              backgroundColor: "#f0fdf4",
-              border: "1px solid #d1fae5",
-              transition: "border-color 150ms ease",
-              "&:hover": { borderColor: "#168039" },
+              display: step === "about-you" ? "flex" : "none",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
             }}
           >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
-            >
-              Get in touch
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75 }}>
-              If you are in the US, your dues are tax deductible. If you have any questions, set up
-              an{" "}
-              <a
-                href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
-                className={`font-semibold ${LINK}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                intro call
-              </a>{" "}
-              or reach out to us at{" "}
-              <a href={MAIL} className={`font-semibold ${LINK}`}>
-                membership@techforpalestine.org
-              </a>
-              !
-            </Typography>
+            <AboutYouStep
+              onContinue={(data) => {
+                setAboutYou(data);
+                setStep("payment");
+              }}
+              initialValues={aboutYou ?? undefined}
+            />
           </Box>
+          {aboutYou && (
+            <Box sx={{ display: step === "payment" ? "block" : "none" }}>
+              <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
