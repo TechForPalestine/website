@@ -66,6 +66,7 @@ export default function MembershipPage() {
         <a
           href="#join"
           onClick={handleJoinClick("primary_cta")}
+          data-membership-cta="true"
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
         >
           Become a member
@@ -86,6 +87,7 @@ export default function MembershipPage() {
         <a
           href="#join"
           onClick={handleJoinClick("secondary_cta")}
+          data-membership-cta="true"
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
         >
           Become a member

@@ -12,6 +12,18 @@ interface LegacyJoinSectionProps {
   heading?: string;
 }
 
+/** Hides the "Become a member" CTA anchors once the join form is revealed —
+ * clicking them again is pointless once the form is already showing. These
+ * anchors live outside this component's tree (siblings in MembershipPage.tsx,
+ * or plain HTML in supporting-member.astro), so a DOM query is the simplest
+ * way to reach all of them uniformly. The reveal is one-directional (there is
+ * no "un-reveal" path), so there is no corresponding un-hide routine. */
+function hideJoinCtas(): void {
+  document.querySelectorAll<HTMLElement>("[data-membership-cta]").forEach((el) => {
+    el.style.display = "none";
+  });
+}
+
 /** Shared minimum height for the About You / payment panel, matching QgivJoin's
  * own minimum, so short content (the loading spinner, the About You form)
  * doesn't look collapsed. The panel is allowed to grow taller than this when
@@ -88,10 +100,12 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
     // revealed and the browser would otherwise scroll to an empty section.
     if (window.__membershipRevealJoin || window.location.hash === "#join") {
       setRevealed(true);
+      hideJoinCtas();
     }
 
     function handleReveal() {
       setRevealed(true);
+      hideJoinCtas();
     }
     window.addEventListener("membership:reveal-join", handleReveal);
     return () => window.removeEventListener("membership:reveal-join", handleReveal);
