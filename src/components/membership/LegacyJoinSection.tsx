@@ -160,7 +160,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 <MembershipCalculator />
               </Box>
             )}
-            <Box sx={{ minHeight: JOIN_PANEL_HEIGHT }}>
+            <Box sx={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
               {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
                   visitor first reaches payment. Unmounting it (e.g. via "Edit your
                   info" then back) re-runs its script-injection effect, which

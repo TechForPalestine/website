@@ -133,8 +133,8 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
         }}
       >
         <div style={{ overflow: "hidden", minHeight: 0 }}>
-          {/* Calculator + form — constrained width, left-aligned */}
-          <div className="max-w-[800px]">
+          {/* Calculator + form — constrained width, centered */}
+          <div className="mx-auto max-w-[800px]">
             {/* Form + side info */}
             <div className="mt-3 grid grid-cols-1 items-start gap-6 min-[810px]:grid-cols-[1fr_340px]">
               <div>
@@ -157,7 +157,7 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
                     <MembershipCalculator />
                   </div>
                 )}
-                <div style={{ minHeight: JOIN_PANEL_HEIGHT }}>
+                <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
                   {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
                       the visitor first reaches payment. Unmounting it (e.g. via
                       "Edit your info" then back) re-runs its script-injection
