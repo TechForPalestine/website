@@ -135,61 +135,58 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
         <div style={{ overflow: "hidden", minHeight: 0 }}>
           {/* Calculator + form — constrained width, centered */}
           <div className="mx-auto max-w-[800px]">
-            {/* Form + side info */}
-            <div className="mt-3 grid grid-cols-1 items-start gap-6 min-[810px]:grid-cols-[1fr_340px]">
-              <div>
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
-                    {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
-                  </p>
-                  {step === "payment" && (
-                    <button
-                      type="button"
-                      onClick={() => setStep("about-you")}
-                      className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
-                    >
-                      &larr; Edit your info
-                    </button>
-                  )}
+            <div className="mt-3">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
+                  {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
+                </p>
+                {step === "payment" && (
+                  <button
+                    type="button"
+                    onClick={() => setStep("about-you")}
+                    className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
+                  >
+                    &larr; Edit your info
+                  </button>
+                )}
+              </div>
+              {showCalculator && step === "payment" && (
+                <div className="mb-4">
+                  <MembershipCalculator />
                 </div>
-                {showCalculator && step === "payment" && (
-                  <div className="mb-4">
-                    <MembershipCalculator />
+              )}
+              <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
+                {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
+                    the visitor first reaches payment. Unmounting it (e.g. via
+                    "Edit your info" then back) re-runs its script-injection
+                    effect, which re-adds Qgiv's embed.js tag; the script
+                    throws on the redeclaration and the embed breaks. Toggling
+                    visibility keeps the script's one-time init intact. */}
+                <div
+                  style={{
+                    display: step === "about-you" ? "flex" : "none",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <AboutYouStep
+                    onContinue={(data) => {
+                      setAboutYou(data);
+                      setStep("payment");
+                    }}
+                    initialValues={aboutYou ?? undefined}
+                    flatButton
+                  />
+                </div>
+                {aboutYou && (
+                  <div style={{ display: step === "payment" ? "block" : "none" }}>
+                    <QgivJoin tier={tier} variant={variant} prefill={prefill} />
                   </div>
                 )}
-                <div style={{ minHeight: JOIN_PANEL_HEIGHT, display: "grid" }}>
-                  {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
-                      the visitor first reaches payment. Unmounting it (e.g. via
-                      "Edit your info" then back) re-runs its script-injection
-                      effect, which re-adds Qgiv's embed.js tag; the script
-                      throws on the redeclaration and the embed breaks. Toggling
-                      visibility keeps the script's one-time init intact. */}
-                  <div
-                    style={{
-                      display: step === "about-you" ? "flex" : "none",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <AboutYouStep
-                      onContinue={(data) => {
-                        setAboutYou(data);
-                        setStep("payment");
-                      }}
-                      initialValues={aboutYou ?? undefined}
-                      flatButton
-                    />
-                  </div>
-                  {aboutYou && (
-                    <div style={{ display: step === "payment" ? "block" : "none" }}>
-                      <QgivJoin tier={tier} variant={variant} prefill={prefill} />
-                    </div>
-                  )}
-                </div>
               </div>
 
-              {/* Side info */}
-              <div className="rounded-[16px] border border-butter bg-page p-4">
+              {/* Inclusivity & waivers */}
+              <div className="mt-6 rounded-[16px] border border-butter bg-page p-4">
                 <p className="ts-body-small mb-2 font-semibold text-ink">Inclusivity &amp; waivers</p>
                 <p className="ts-body-small mb-2 leading-relaxed text-ink-secondary">
                   Tech for Palestine aims for inclusivity. Please contact{" "}

@@ -6,19 +6,9 @@ import Button from "../components/ui/Button.astro";
 import TestimonialsSection from "../components/home/TestimonialsSection.astro";
 import MembershipDues from "../components/membership/MembershipDues";
 import WaiverNote from "../components/membership/WaiverNote.astro";
+import { memberBenefits } from "../data/membershipBenefits";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
-
-const memberBenefits = [
-  "Meet and connect with fellow activists",
-  "Join regional summits, online webinars, book clubs and other events",
-  "Attend weekly All Hands and internal meetings (Marketing, Engineering, Events, etc.)",
-  "Volunteer for our projects",
-  "Participate in internal chatroom conversations",
-  "Take part in one-off quests and missions to expand your personal advocacy",
-  "Receive updates on our latest projects and teams",
-  "Propose and start new initiatives for Palestinian liberation",
-];
 ---
 
 <HomeLayout
