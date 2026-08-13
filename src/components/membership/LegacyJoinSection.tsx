@@ -12,8 +12,10 @@ interface LegacyJoinSectionProps {
   heading?: string;
 }
 
-/** Shared fixed height for the About You / payment panel, matching QgivJoin's
- * own max-height cap, so switching between the two never resizes the panel. */
+/** Shared minimum height for the About You / payment panel, matching QgivJoin's
+ * own minimum, so short content (the loading spinner, the About You form)
+ * doesn't look collapsed. The panel is allowed to grow taller than this when
+ * the Qgiv payment form needs more room, rather than clipping it. */
 const JOIN_PANEL_HEIGHT = 640;
 
 /**
@@ -144,7 +146,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 <MembershipCalculator />
               </Box>
             )}
-            <Box sx={{ height: JOIN_PANEL_HEIGHT, overflow: "hidden" }}>
+            <Box sx={{ minHeight: JOIN_PANEL_HEIGHT }}>
               {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
                   visitor first reaches payment. Unmounting it (e.g. via "Edit your
                   info" then back) re-runs its script-injection effect, which
@@ -156,7 +158,6 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                   display: step === "about-you" ? "flex" : "none",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: "100%",
                 }}
               >
                 <AboutYouStep
