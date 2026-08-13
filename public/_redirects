@@ -54,8 +54,6 @@
 /london-gathering-new/ /london-gathering 301
 /media-new /media 301
 /media-new/ /media 301
-/membership-new /membership 301
-/membership-new/ /membership 301
 /privacy-policy-new /privacy-policy 301
 /privacy-policy-new/ /privacy-policy 301
 /projects-new /projects 301
@@ -73,9 +71,5 @@
 /community-call-old /community-call 301
 /community-call-old/ /community-call 301
 
-# -new redesign shelved (see above) also covers the membership pages built
-# after that decision landed; /supporting-member-new never launched.
-/supporting-member-new /supporting-member 301
-/supporting-member-new/ /supporting-member 301
 /supporting-members /supporting-member 301
 /supporting-members/ /supporting-member 301
