@@ -129,12 +129,17 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
     return () => window.removeEventListener("membership:reveal-join", handleReveal);
   }, []);
 
-  const intro =
-    tier === "supporting"
+  // The supporting tier always gets the calculator; the member tier only gets
+  // it in the "Calculator" A/B arm.
+  const calculatorVisible = step === "payment" && (tier === "supporting" || showCalculator);
+
+  const intro = calculatorVisible
+    ? tier === "supporting"
+      ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
+      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
+    : tier === "supporting"
       ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary."
-      : showCalculator && step === "payment"
-        ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
-        : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
+      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
 
   return (
     <Box id="join" sx={{ scrollMarginTop: "80px" }}>
@@ -143,12 +148,6 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
           {heading}
         </Typography>
       )}
-      <Typography
-        variant="body1"
-        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151", maxWidth: 700 }}
-      >
-        {intro}
-      </Typography>
 
       <Box
         sx={{
@@ -173,7 +172,15 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
                 </Button>
               )}
             </Box>
-            {showCalculator && step === "payment" && (
+            {step === "payment" && (
+              <Typography
+                variant="body1"
+                sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+              >
+                {intro}
+              </Typography>
+            )}
+            {calculatorVisible && (
               <Box sx={{ mb: 2 }}>
                 <MembershipCalculator />
               </Box>

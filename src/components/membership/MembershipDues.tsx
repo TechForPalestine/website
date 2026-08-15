@@ -119,18 +119,20 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
     return () => window.removeEventListener("membership:reveal-join", handleReveal);
   }, []);
 
-  const intro =
-    tier === "supporting"
+  // The supporting tier always gets the calculator; the member tier only gets
+  // it in the "Calculator" A/B arm.
+  const calculatorVisible = step === "payment" && (tier === "supporting" || showCalculator);
+
+  const intro = calculatorVisible
+    ? tier === "supporting"
+      ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
+      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
+    : tier === "supporting"
       ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary."
-      : showCalculator && step === "payment"
-        ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
-        : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
+      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
 
   return (
     <div>
-      {/* Intro copy — left-aligned with the section heading */}
-      <p className="ts-body-large mb-3 max-w-[75ch] text-ink-secondary">{intro}</p>
-
       <div
         style={{
           display: "grid",
@@ -156,7 +158,10 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
                 </button>
               )}
             </div>
-            {showCalculator && step === "payment" && (
+            {step === "payment" && (
+              <p className="ts-body-large mb-3 text-ink-secondary">{intro}</p>
+            )}
+            {calculatorVisible && (
               <div className="mb-4">
                 <MembershipCalculator />
               </div>
