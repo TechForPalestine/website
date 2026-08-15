@@ -1,0 +1,95 @@
+---
+import { membershipBenefits as benefits } from "../../data/membershipBenefits";
+
+/**
+ * Supporting Member vs Member benefit comparison.
+ *
+ * Rendered as a real table at >=810px and as stacked per-benefit cards below,
+ * so it stays readable on phones without turning the markup into divs. Every
+ * cell carries screen-reader text — an empty cell is ambiguous to a screen
+ * reader, so "not included" is stated explicitly.
+ */
+const columnHeaderClass = "ts-label px-4 py-4 text-center align-bottom text-ink";
+---
+
+<!-- Table view -->
+<div class="hidden overflow-hidden rounded-[20px] border border-butter min-[810px]:block">
+  <table class="w-full border-collapse text-left">
+    <caption class="sr-only">
+      Benefits included with Supporting Membership compared with full Membership
+    </caption>
+    <thead class="bg-sand">
+      <tr>
+        <th scope="col" class="px-6 py-4"></th>
+        <th scope="col" class={`${columnHeaderClass} w-[180px]`}>Supporting Member</th>
+        <th scope="col" class={`${columnHeaderClass} w-[180px]`}>Member</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        benefits.map((benefit) => (
+          <tr class="border-t border-ink-divider/60">
+            <th scope="row" class="ts-body max-w-[520px] px-6 py-4 font-normal text-ink">
+              {benefit.label}
+            </th>
+            {[benefit.supporting, benefit.member].map((included) => (
+              <td class="px-4 py-4 text-center">
+                {included ? (
+                  <>
+                    <svg
+                      class="inline-block text-brand"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.25"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 10.5 8 14.5 16 6" />
+                    </svg>
+                    <span class="sr-only">Included</span>
+                  </>
+                ) : (
+                  <>
+                    <span class="text-ink-muted" aria-hidden="true">
+                      —
+                    </span>
+                    <span class="sr-only">Not included</span>
+                  </>
+                )}
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Stacked view -->
+<ul class="flex flex-col gap-3 min-[810px]:hidden">
+  {
+    benefits.map((benefit) => (
+      <li class="rounded-[16px] border border-butter bg-sand p-4">
+        <p class="ts-body text-ink">{benefit.label}</p>
+        <p class="ts-body-small mt-3 flex flex-wrap gap-x-5 gap-y-1 text-ink-secondary">
+          <span>
+            Supporting Member:{" "}
+            <span class={benefit.supporting ? "font-medium text-brand" : "text-ink-muted"}>
+              {benefit.supporting ? "Included" : "Not included"}
+            </span>
+          </span>
+          <span>
+            Member:{" "}
+            <span class={benefit.member ? "font-medium text-brand" : "text-ink-muted"}>
+              {benefit.member ? "Included" : "Not included"}
+            </span>
+          </span>
+        </p>
+      </li>
+    ))
+  }
+</ul>

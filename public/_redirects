@@ -54,8 +54,6 @@
 /london-gathering-new/ /london-gathering 301
 /media-new /media 301
 /media-new/ /media 301
-/membership-new /membership 301
-/membership-new/ /membership 301
 /privacy-policy-new /privacy-policy 301
 /privacy-policy-new/ /privacy-policy 301
 /projects-new /projects 301
@@ -72,3 +70,6 @@
 # /community-call reverted to the old design; new-design page removed.
 /community-call-old /community-call 301
 /community-call-old/ /community-call 301
+
+/supporting-members /supporting-member 301
+/supporting-members/ /supporting-member 301

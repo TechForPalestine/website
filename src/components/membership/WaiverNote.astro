@@ -1,0 +1,52 @@
+---
+/**
+ * Inclusivity / waiver statement shown beneath the membership CTAs, matching
+ * `LegacyWaiverNote.tsx`'s content on the legacy pages.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+
+const reasons = [
+  "Being located in, or a refugee from Gaza or the West Bank",
+  "Not being able to afford membership due to personal circumstances",
+];
+---
+
+<div class:list={["ts-body-small max-w-[65ch] text-ink-secondary", className]}>
+  <p>
+    Tech for Palestine aims for inclusivity. Please contact <a
+      href="mailto:membership@techforpalestine.org"
+      class="text-brand underline hover:text-brand-hover">membership@techforpalestine.org</a
+    > to request a waiver of dues in the following circumstances:
+  </p>
+  <ul class="mt-2 space-y-1">
+    {
+      reasons.map((reason) => (
+        <li class="flex items-baseline gap-2">
+          <span class="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden="true" />
+          {reason}
+        </li>
+      ))
+    }
+  </ul>
+  <p class="mt-2">If you are in the US, your dues are tax deductible.</p>
+  <p class="mt-3">
+    Have questions? Set up an{" "}
+    <a
+      href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
+      class="text-brand underline hover:text-brand-hover"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      intro call
+    </a>{" "}
+    or reach out to us at{" "}
+    <a href="mailto:membership@techforpalestine.org" class="text-brand underline hover:text-brand-hover">
+      membership@techforpalestine.org
+    </a>
+    !
+  </p>
+</div>

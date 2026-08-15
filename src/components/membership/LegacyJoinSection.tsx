@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import MembershipCalculator from "./MembershipCalculator";
+import { Box, Typography, Button } from "@mui/material";
+import MembershipCalculator from "../MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import AboutYouStep, { type AboutYouData } from "./AboutYouStep";
 import type { MembershipTier, QgivPrefill } from "./qgiv";
 
-interface MembershipDuesProps {
-  tier?: MembershipTier;
+interface LegacyJoinSectionProps {
+  tier: MembershipTier;
+  /** Optional section heading. Omitted on the membership pages, which follow
+   * the brief's headingless prose structure. */
+  heading?: string;
 }
 
 /** Hides the "Become a member" CTA anchors once the join form is revealed —
  * clicking them again is pointless once the form is already showing. These
- * anchors live outside this component's tree (siblings in the enclosing
- * page), so a DOM query is the simplest way to reach all of them uniformly.
- * The reveal is one-directional (there is no "un-reveal" path), so there is
- * no corresponding un-hide routine. */
+ * anchors live outside this component's tree (siblings in MembershipPage.tsx,
+ * or plain HTML in supporting-member.astro), so a DOM query is the simplest
+ * way to reach all of them uniformly. The reveal is one-directional (there is
+ * no "un-reveal" path), so there is no corresponding un-hide routine. */
 function hideJoinCtas(): void {
   document.querySelectorAll<HTMLElement>("[data-membership-cta]").forEach((el) => {
     el.style.display = "none";
@@ -34,9 +38,15 @@ const JOIN_PANEL_HEIGHT = 640;
  * click. Mirrors the MIN_LOADING_DISPLAY_MS floor QgivJoin already uses. */
 const NEXT_BUTTON_LOADING_MS = 400;
 
-export default function MembershipDues({ tier = "member" }: MembershipDuesProps) {
-  // Default to the no-calculator variant so this renders identically during
-  // SSR (no window/localStorage access) before the A/B assignment runs below.
+/**
+ * Payment surface for the legacy (green/grey) design system: the Qgiv embed
+ * and the dues calculator A/B test.
+ *
+ * The design-system equivalent is `MembershipDues.tsx`. The two are kept apart
+ * because `Layout.astro` does not load `design-system.css`, so the `ts-*`
+ * typography scale the new component relies on is unavailable here.
+ */
+export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionProps) {
   const [showCalculator, setShowCalculator] = useState(false);
   const [variant, setVariant] = useState<string | undefined>(undefined);
   const [step, setStep] = useState<"about-you" | "payment">("about-you");
@@ -100,12 +110,12 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
 
   useEffect(() => {
     // The CTA that dispatches "membership:reveal-join" may fire before this
-    // island hydrates and registers its listener (e.g. plain <a> CTAs tracked
-    // by a vanilla <script> that runs at parse time). The dispatcher also
-    // sets a sticky window flag first, so a click that arrives before
-    // hydration isn't lost — check it on mount here. Also honor a direct
-    // "#join" deep link, since the form is hidden until revealed and the
-    // browser would otherwise scroll to an empty section.
+    // island hydrates and registers its listener (e.g. the plain <a> CTAs on
+    // /supporting-member, tracked by a vanilla <script> that runs at parse
+    // time). The dispatcher also sets a sticky window flag first, so a click
+    // that arrives before hydration isn't lost — check it on mount here.
+    // Also honor a direct "#join" deep link, since the form is hidden until
+    // revealed and the browser would otherwise scroll to an empty section.
     if (window.__membershipRevealJoin || window.location.hash === "#join") {
       setRevealed(true);
       hideJoinCtas();
@@ -132,42 +142,51 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
       : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
 
   return (
-    <div>
-      <div
-        style={{
+    <Box id="join" sx={{ scrollMarginTop: "80px" }}>
+      {heading && (
+        <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
+          {heading}
+        </Typography>
+      )}
+
+      <Box
+        sx={{
           display: "grid",
           gridTemplateRows: revealed ? "1fr" : "0fr",
           opacity: revealed ? 1 : 0,
           transition: "grid-template-rows 350ms ease, opacity 350ms ease",
         }}
       >
-        <div style={{ overflow: "hidden", minHeight: 0 }}>
-          {/* Calculator + form — constrained width, centered */}
-          <div className="mx-auto mt-3 max-w-[700px]">
-            <div className="mb-3 flex items-center justify-between">
-              <p className="ts-body-small font-bold uppercase tracking-wide text-brand">
+        <Box sx={{ overflow: "hidden", minHeight: 0 }}>
+          <Box sx={{ mt: 3, maxWidth: 700, mx: "auto" }}>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+              <Typography variant="overline" sx={{ color: "#168039", fontWeight: 700, letterSpacing: 1 }}>
                 {step === "about-you" ? "Step 1/2 — About You" : "Step 2/2 — Payment"}
-              </p>
+              </Typography>
               {step === "payment" && (
-                <button
-                  type="button"
+                <Button
                   onClick={() => setStep("about-you")}
-                  className="ts-body-small font-semibold text-ink-secondary hover:text-ink"
+                  sx={{ textTransform: "none", color: "#374151", fontWeight: 600 }}
                 >
                   &larr; Edit your info
-                </button>
+                </Button>
               )}
-            </div>
+            </Box>
             {step === "payment" && (
-              <p className="ts-body-large mb-3 text-ink-secondary">{intro}</p>
+              <Typography
+                variant="body1"
+                sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
+              >
+                {intro}
+              </Typography>
             )}
             {calculatorVisible && (
-              <div className="mb-4">
+              <Box sx={{ mb: 2 }}>
                 <MembershipCalculator />
-              </div>
+              </Box>
             )}
-            <div
-              style={{
+            <Box
+              sx={{
                 // Only forced on the About You step, so short content there
                 // doesn't look collapsed. On the payment step, QgivJoin
                 // reserves its own height (only while its embed is loading),
@@ -177,14 +196,14 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
                 display: "grid",
               }}
             >
-              {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once
-                  the visitor first reaches payment. Unmounting it (e.g. via
-                  "Edit your info" then back) re-runs its script-injection
-                  effect, which re-adds Qgiv's embed.js tag; the script
-                  throws on the redeclaration and the embed breaks. Toggling
-                  visibility keeps the script's one-time init intact. */}
-              <div
-                style={{
+              {/* QgivJoin stays mounted (hidden via CSS, never unmounted) once the
+                  visitor first reaches payment. Unmounting it (e.g. via "Edit your
+                  info" then back) re-runs its script-injection effect, which
+                  re-adds Qgiv's embed.js tag; the script throws on the
+                  redeclaration and the embed breaks. Toggling visibility keeps
+                  the script's one-time init intact. */}
+              <Box
+                sx={{
                   display: step === "about-you" ? "flex" : "none",
                   alignItems: "center",
                   justifyContent: "center",
@@ -193,19 +212,18 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
                 <AboutYouStep
                   onContinue={handleAboutYouContinue}
                   initialValues={aboutYou ?? undefined}
-                  flatButton
                   submitting={advancingToPayment}
                 />
-              </div>
+              </Box>
               {aboutYou && (
-                <div style={{ display: step === "payment" ? "block" : "none" }}>
+                <Box sx={{ display: step === "payment" ? "block" : "none" }}>
                   <QgivJoin tier={tier} variant={variant} prefill={prefill} />
-                </div>
+                </Box>
               )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }

@@ -19,6 +19,21 @@ const EO_MEMBERS_LIST_URL =
   "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
 const MAX_NAME_LENGTH = 200;
 
+/**
+ * Membership tiers, keyed by the `tier` field the client may send.
+ *
+ * The tier is an allowlist lookup, never passed through to EmailOctopus
+ * verbatim — this endpoint is unauthenticated (origin-gated only), so an
+ * attacker must not be able to choose arbitrary tags or reach the Hub.
+ *
+ * Supporting Members fund the work but do not join teams or the member chat, so
+ * they are deliberately excluded from the Hub invite.
+ */
+const TIERS = {
+  member: { tag: "member", hubInvite: true },
+  supporting: { tag: "Supporting Member", hubInvite: false },
+} as const;
+
 export const POST: APIRoute = async ({ request, locals }) => {
   const origin = request.headers.get("Origin");
   if (!isAllowedOrigin(origin, ORIGIN_POLICY)) {
@@ -41,7 +56,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   }
 
-  const { email, firstName, lastName } = body as Record<string, unknown>;
+  const { email, firstName, lastName, tier: rawTier } = body as Record<string, unknown>;
+
+  // Anything unrecognised falls back to `member`, preserving the behaviour of
+  // clients deployed before this field existed.
+  const tier = rawTier === "supporting" ? TIERS.supporting : TIERS.member;
 
   if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return new Response(JSON.stringify({ message: "Invalid or missing email" }), {
@@ -60,7 +79,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     await Promise.allSettled([
-      hubApiUrl && hubApiKey
+      tier.hubInvite && hubApiUrl && hubApiKey
         ? fetch(`${hubApiUrl}/api/auth/invite`, {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${hubApiKey}` },
@@ -90,7 +109,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
               api_key: eoApiKey,
               email_address: email,
               fields: { FirstName: safeFirst, LastName: safeLast },
-              tags: ["member"],
+              tags: [tier.tag],
               status: "SUBSCRIBED",
             }),
           })

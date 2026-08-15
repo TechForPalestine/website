@@ -6,6 +6,7 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  hideDonatePopout?: boolean;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
   noindex = false,
+  hideDonatePopout = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(
@@ -154,12 +156,16 @@ const canonicalUrl = new URL(
     <Navigation />
 
     <!-- Floating Donate Button -->
-    <a
-      href="/donate"
-      class="donate-link fixed right-0 top-1/2 z-50 hidden origin-center -translate-y-1/2 rotate-180 rounded-bl-none rounded-br-lg rounded-tl-none rounded-tr-lg bg-green-800 px-3 py-5 text-white shadow-lg transition [writing-mode:vertical-rl] hover:bg-green-900 md:block"
-    >
-      Donate
-    </a>
+    {
+      !hideDonatePopout && (
+        <a
+          href="/donate"
+          class="donate-link fixed right-0 top-1/2 z-50 hidden origin-center -translate-y-1/2 rotate-180 rounded-bl-none rounded-br-lg rounded-tl-none rounded-tr-lg bg-green-800 px-3 py-5 text-white shadow-lg transition [writing-mode:vertical-rl] hover:bg-green-900 md:block"
+        >
+          Donate
+        </a>
+      )
+    }
 
     <div class="flex-grow">
       <slot />

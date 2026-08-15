@@ -2,31 +2,51 @@
 import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import MembershipPage from "../components/MembershipPage.tsx";
+import TestimonialsMarquee from "../components/TestimonialsMarquee.astro";
+import { memberBenefits } from "../data/membershipBenefits";
 import "../styles/base.css";
 ---
 
 <Layout
-  title="Membership - Tech for Palestine"
-  description="Join the coalition working on impactful initiatives for Palestinian liberation. Browse activism initiatives looking for your skills, or start an initiative of your own with T4P support."
+  title="Become a Member - Tech for Palestine"
+  description="Join the coalition working on impactful initiatives for Palestinian liberation. Members drive and sustain our work through dues, teams, and community."
+  hideDonatePopout
 >
   <main>
-    <PageHeader
-      overline="Tech for Palestine"
-      title="Membership"
-      subtitle="Join our coalition working for Palestinian liberation."
-    />
+    <PageHeader overline="Tech for Palestine" title="Become a member to support and grow our work" />
 
-    <!-- Hero banner -->
-    <div class="h-[420px] w-full overflow-hidden">
-      <img
-        src="/images/membership-hero.jpg"
-        alt="Tech for Palestine community members applauding at an event"
-        class="h-full w-full object-cover [object-position:center_30%]"
-      />
+    <div class="mx-auto max-w-6xl px-6 pb-24 pt-6 sm:px-8">
+      <!-- Hero: intro copy + benefits beside the photo, rather than stacked -->
+      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
+        <div>
+          <p class="text-lg leading-relaxed text-zinc-700">
+            <strong>T4P Members</strong> and <strong>Supporting Members</strong> drive and sustain our
+            work for Palestinian liberation.
+          </p>
+          <p class="mt-4 text-lg leading-relaxed text-zinc-700">
+            Members join our community to work directly on advocacy projects and help run T4P:
+          </p>
+          <ul class="ml-3 mt-3 list-disc space-y-2.5 pl-2 text-lg leading-relaxed text-zinc-700">
+            {memberBenefits.map((benefit) => <li>{benefit}</li>)}
+          </ul>
+        </div>
+
+        <img
+          src="/images/membership/members-group.webp"
+          alt="Tech for Palestine members gathered outside a venue at a community event"
+          class="w-full rounded-2xl shadow-sm ring-1 ring-zinc-900/5"
+          width="1600"
+          height="1232"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mt-16">
+        <MembershipPage client:only="react" />
+      </div>
     </div>
 
-    <div class="mx-auto max-w-4xl px-6 pb-24 pt-12 sm:px-8">
-      <MembershipPage client:only="react" />
-    </div>
+    <TestimonialsMarquee />
   </main>
 </Layout>

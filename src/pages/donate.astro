@@ -7,7 +7,7 @@ const country = Astro.request.headers.get("cf-ipcountry") || "UNKNOWN";
 const isUK = country === "GB";
 ---
 
-<Layout title="Donate">
+<Layout title="Donate" hideDonatePopout>
   <div class="relative bg-gradient-to-b from-green-50 via-white to-blue-50">
     <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <!-- Hero -->

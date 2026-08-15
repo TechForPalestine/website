@@ -4,61 +4,45 @@ import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
 import TestimonialsSection from "../components/home/TestimonialsSection.astro";
+import BenefitsTable from "../components/membership/BenefitsTable.astro";
+import LogoWall from "../components/membership/LogoWall.astro";
 import MembershipDues from "../components/membership/MembershipDues";
 import WaiverNote from "../components/membership/WaiverNote.astro";
-import { memberBenefits } from "../data/membershipBenefits";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 ---
 
 <HomeLayout
-  title="Become a Member of Tech for Palestine | Support Our Mission"
-  description="Join the coalition working on initiatives for Palestinian liberation. Members drive and sustain our work through dues, teams, and community."
+  title="Become a Supporting Member | Tech for Palestine"
+  description="Support Tech for Palestine financially without joining a team. Supporting Members fund initiatives for Palestinian liberation, get event invites, and receive project updates."
   noindex={true}
 >
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 
   <main class="pt-20">
-    <!-- Hero: intro copy + benefits beside the photo, matching /membership's
+    <!-- Hero: intro copy beside the photo, matching /supporting-member's
          layout rather than stacking the photo above the copy. -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="membership-animate">
           <h1 class="ts-editorial mb-10 max-w-[20ch] text-ink">
-            Become a member to support and <span class="text-brand">grow our work</span>
+            Become a <span class="text-brand">Supporting Member</span>
           </h1>
 
           <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
-            <div>
-              <p class="ts-body-large max-w-[55ch] text-ink-secondary">
-                <strong class="font-medium text-ink">T4P Members</strong> and <strong
-                  class="font-medium text-ink">Supporting Members</strong
-                > drive and sustain our work for Palestinian liberation.
-              </p>
-              <p class="ts-body-large mt-4 max-w-[65ch] text-ink-secondary">
-                Members join our community to work directly on advocacy projects and help run T4P:
-              </p>
-              <ul class="mt-3 max-w-[600px] space-y-3">
-                {
-                  memberBenefits.map((benefit) => (
-                    <li class="ts-body-large flex items-baseline gap-3 text-ink-secondary">
-                      <span
-                        class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
-                        aria-hidden="true"
-                      />
-                      {benefit}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
+            <p class="ts-body-large max-w-[65ch] text-ink-secondary">
+              Tech for Palestine's coalition of founders, engineers, investors and other
+              professionals are helping Palestine advocates scale their work. Tens of thousands of
+              Israeli <em>hasbara</em> (propaganda) projects exist, so we're creating thousands of
+              initiatives for Palestinian liberation.
+            </p>
 
             <img
-              src="/images/membership/members-group.webp"
-              alt="Tech for Palestine members gathered outside a venue at a community event"
+              src="/images/membership/supporting-panel.webp"
+              alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
               class="w-full rounded-[20px]"
               width="1600"
-              height="1232"
+              height="1068"
               loading="eager"
               decoding="async"
               fetchpriority="high"
@@ -68,38 +52,35 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       </div>
     </section>
 
-    <!-- Supporting Member fork -->
+    <!-- Reach -->
     <section class="bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="membership-animate">
-          <div class="max-w-[820px] rounded-[24px] border-2 border-brand bg-cream p-6 min-[810px]:p-8">
-            <p class="ts-body-large font-medium text-ink">
-              Don't have time to contribute directly?
-            </p>
-            <Button href="/supporting-member-new" variant="text" arrow class="mt-3">
-              Become a Supporting Member
-            </Button>
-          </div>
+          <p class="mb-10 font-serif text-4xl leading-tight text-ink min-[810px]:text-5xl">
+            <span class="text-brand">10M+ Users</span> Across <span class="text-brand"
+              >90+ Projects</span
+            >
+          </p>
+          <LogoWall />
         </div>
       </div>
     </section>
 
-    <!-- Why dues -->
+    <!-- What you get -->
     <section class="bg-page px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
-        <div class="membership-animate max-w-[65ch]">
-          <p class="ts-body-large mb-5 text-ink-secondary">
-            Members and Supporting Members also support T4P financially. Membership dues allow T4P
-            to support our teams, and provide grants and services to projects in the Incubator
-            through full-time dedicated staff. Dues are pay-what-you-can, and we suggest a monthly
-            amount equal to 1 hour of income (1/2000th of your annual income).
-          </p>
-          <p class="ts-body-large text-ink-secondary">
-            Whether you're a thinker, builder, leader, software developer, marketer, or activist,
-            there's a place for you to contribute in your own way.
+        <div class="membership-animate">
+          <p class="ts-body-large mb-10 max-w-[70ch] text-ink-secondary">
+            Want to support T4P's work, but don't have time to get involved in teams or join the
+            community? Become a Supporting Member to support our work financially, receive invites
+            to events and get updates about our progress:
           </p>
 
-          <div class="mt-10 flex flex-col gap-3 min-[560px]:flex-row min-[560px]:flex-wrap">
+          <div class="max-w-[1000px]">
+            <BenefitsTable />
+          </div>
+
+          <div class="mt-10 flex flex-col gap-3 min-[560px]:flex-row min-[560px]:items-center">
             <Button
               href="#join"
               variant="primary"
@@ -108,10 +89,10 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
               data-track-join-click="primary_cta"
               data-membership-cta="true"
             >
-              Become a member
-            </Button>
-            <Button href="/supporting-member-new" variant="ghost" size="md">
               Become a Supporting Member
+            </Button>
+            <Button href="/donate" variant="text" class="min-[560px]:ml-3">
+              Donate without joining
             </Button>
           </div>
 
@@ -120,11 +101,11 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       </div>
     </section>
 
-    <!-- Join: dues calculator + Qgiv form -->
+    <!-- Join -->
     <section id="join" class="scroll-mt-24 bg-sand px-6 py-14 min-[810px]:px-10 min-[810px]:py-20">
       <div class="mx-auto max-w-[1400px]">
         <div class="membership-animate">
-          <MembershipDues client:only="react" tier="member" />
+          <MembershipDues client:only="react" tier="supporting" />
         </div>
       </div>
     </section>
@@ -140,12 +121,12 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
           data-track-join-click="secondary_cta"
           data-membership-cta="true"
         >
-          Become a member
+          Become a Supporting Member
         </Button>
       </div>
     </section>
 
-    <TestimonialsSection membershipLive={membershipLive} />
+    <TestimonialsSection membershipLive={membershipLive} heading="Your support in" accent="action." />
   </main>
 </HomeLayout>
 

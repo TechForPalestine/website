@@ -1,0 +1,32 @@
+---
+/**
+ * Project logos shown alongside the reach stat on the Supporting Member page.
+ *
+ * The logos are illustrative of the stat rather than navigational, so each
+ * image is `alt=""` and the group carries a single accessible label.
+ */
+import { showcaseProjects as projects } from "../../data/membershipBenefits";
+
+const label = `Projects supported by Tech for Palestine: ${projects.map((p) => p.name).join(", ")}`;
+---
+
+<ul
+  class="grid grid-cols-2 gap-3 min-[560px]:grid-cols-3 min-[810px]:grid-cols-5"
+  aria-label={label}
+>
+  {
+    projects.map((project) => (
+      <li class="flex h-[88px] items-center justify-center rounded-[16px] border border-butter bg-white px-4 py-3">
+        <img
+          src={project.logo}
+          alt=""
+          width="220"
+          height="64"
+          loading="lazy"
+          decoding="async"
+          class="max-h-[44px] w-full max-w-[140px] object-contain"
+        />
+      </li>
+    ))
+  }
+</ul>

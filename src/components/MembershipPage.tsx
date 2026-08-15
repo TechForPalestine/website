@@ -1,330 +1,97 @@
-import { useEffect, useRef, useState } from "react";
-import { Box, Typography, Card, CardContent } from "@mui/material";
-import MembershipCalculator from "./MembershipCalculator";
+import { Box, Typography } from "@mui/material";
+import LegacyJoinSection from "./membership/LegacyJoinSection";
+import LegacyWaiverNote from "./membership/LegacyWaiverNote";
 
-const teams = [
-  {
-    name: "Coaching for Palestinian Entrepreneurs",
-    description: "Helping Palestinian entrepreneurs build job skills for professional growth.",
-  },
-  {
-    name: "Tech Accountability",
-    description:
-      "Running campaigns that hold tech companies accountable for supporting war crimes.",
-  },
-  {
-    name: "Legal Aid",
-    description:
-      "Providing pro-bono legal aid to advocacy projects & cases of discrimination against Palestinians or pro-Palestine speech.",
-  },
-  {
-    name: "Research Team",
-    description:
-      "Supporting research across T4P projects and initiatives, including topics such as Big Tech & tech complicity, social media suppression & content moderation, AI, digital tools employed for surveillance, and more.",
-  },
-  {
-    name: "T4P Hackathons",
-    description: "Kickstarting software solutions to movement problems.",
-  },
-  {
-    name: "Palestine Datasets",
-    description:
-      "Maintaining open datasets documenting the human toll of the genocide, so that journalists, researchers, artists, and advocates can tell the story.",
-  },
-];
+const bodySx = { mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" } as const;
+const proseSx = { ...bodySx, maxWidth: 700 } as const;
 
-function QgivEmbed() {
-  const scriptLoadedRef = useRef(false);
-
-  useEffect(() => {
-    if (scriptLoadedRef.current) return;
-    scriptLoadedRef.current = true;
-
-    const script = document.createElement("script");
-    script.src = "https://secure.qgiv.com/resources/core/js/embed.js";
-    script.id = "qgiv-embedjs";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  return (
-    <Box sx={{ overflow: "hidden" }}>
-      <div
-        className="qgiv-embed-container"
-        data-qgiv-embed="true"
-        data-embed-id="88902"
-        data-embed="https://secure.qgiv.com/for/dafize/embed/88902/"
-        data-width="630"
-      />
-    </Box>
-  );
+function handleJoinClick(ctaLocation: "primary_cta" | "secondary_cta") {
+  return () => {
+    // Set the sticky flag before dispatching, for consistency with the
+    // vanilla-script CTA on /supporting-member (see supporting-member.astro).
+    // This page's CTA lives inside the same island as the listener, so the
+    // flag isn't strictly needed here to avoid a race, but keeping the same
+    // event/flag contract on both pages avoids surprises if that ever changes.
+    window.__membershipRevealJoin = true;
+    window.dispatchEvent(new CustomEvent("membership:reveal-join"));
+    if (typeof window.plausible !== "undefined") {
+      window.plausible("Membership Join Click", {
+        props: { cta_location: ctaLocation, destination: "#join" },
+      });
+    }
+  };
 }
 
 export default function MembershipPage() {
-  const [showCalculator] = useState<boolean>(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlParam = urlParams.get("calculator");
-    if (urlParam === "yes") return true;
-    if (urlParam === "no") return false;
-
-    const stored = localStorage.getItem("membership_ab_variant");
-    if (stored === "Calculator") return true;
-    if (stored === "No Calculator") return false;
-
-    const assigned = Math.random() < 0.5;
-    localStorage.setItem("membership_ab_variant", assigned ? "Calculator" : "No Calculator");
-    return assigned;
-  });
-
-  useEffect(() => {
-    if (typeof window.plausible !== "undefined") {
-      window.plausible("Membership Page", {
-        props: { membership_variant: showCalculator ? "Calculator" : "No Calculator" },
-      });
-    }
-  }, [showCalculator]);
-
-  useEffect(() => {
-    const variant = showCalculator ? "Calculator" : "No Calculator";
-
-    function handleDonationComplete(event: Event) {
-      const detail = (event as CustomEvent).detail ?? {};
-      const transaction = detail?.QGIV?.transaction ?? {};
-
-      if (typeof window.plausible !== "undefined") {
-        window.plausible("Membership-complete", {
-          props: {
-            amount: transaction.total != null ? String(transaction.total) : "",
-            membership_variant: variant,
-          },
-        });
-      }
-
-      const contact = detail?.QGIV?.contact ?? {};
-      const email = contact.email ?? "";
-
-      if (email) {
-        fetch("/api/membership-complete", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            firstName: contact.firstName ?? "",
-            lastName: contact.lastName ?? "",
-          }),
-        }).catch(() => {});
-      }
-    }
-
-    document.addEventListener("QGIV.donationComplete", handleDonationComplete);
-    return () => document.removeEventListener("QGIV.donationComplete", handleDonationComplete);
-  }, [showCalculator]);
-
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto" }}>
-      {/* Intro */}
-      <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
-        Becoming a member is the best way to support Tech for Palestine.
-      </Typography>
-      <Typography
-        variant="body1"
-        sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
-      >
-        Members support T4P's work through dues and by joining teams to scale the movement.
-      </Typography>
-      <Typography
-        variant="body1"
-        sx={{ mb: 2, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
-      >
-        Membership dues support all T4P initiatives, including the 90+ external projects we support
-        through the Incubator, and teams working on tech complicity. Our best known successes
-        include UpScrolled, Boycat, Find a Protest, Apricot, and Thaura AI.
-      </Typography>
-      <Typography
-        variant="body1"
-        sx={{ mb: 1, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
-      >
-        You'll be invited to join <strong>Hub</strong>, our member portal, where you can:
-      </Typography>
-      <Box
-        component="ul"
-        sx={{
-          ml: 3,
-          pl: 2,
-          mb: 2,
-          color: "#374151",
-          fontSize: "1.125rem",
-          listStyleType: "disc",
-          "& li": { mb: 0.75, lineHeight: 1.75 },
-        }}
-      >
-        <li>Join advocacy and support teams, working directly on Palestinian liberation</li>
-        <li>Start a team of your own, with T4P support and resources to help you grow</li>
-        <li>Join community events, like the T4P Book Club and other member meetups</li>
-      </Box>
-      <Typography
-        variant="body1"
-        sx={{ mb: 5, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
-      >
-        Whether you're a thinker, builder, leader, software developer, marketer, or activist,
-        there's a place for you to contribute in your own way.
-      </Typography>
-
-      {/* Team cards */}
-      <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
-        A few examples of our teams:
-      </Typography>
-
+    <Box sx={{ maxWidth: 960, mx: "auto" }}>
+      {/* Supporting Member fork */}
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-          gap: 2,
-          mb: 6,
+          mb: 5,
+          p: { xs: 3, sm: 3.5 },
+          borderRadius: 3,
+          backgroundColor: "#f0fdf4",
+          border: "2px solid #168039",
+          transition: "box-shadow 150ms ease, transform 150ms ease",
+          "&:hover": {
+            boxShadow: "0 8px 20px -8px rgba(17, 107, 47, 0.35)",
+          },
         }}
       >
-        {teams.map((team) => (
-          <Card
-            key={team.name}
-            variant="outlined"
-            sx={{ borderRadius: 2, borderColor: "#e5e7eb", height: "100%" }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography
-                variant="h6"
-                component="h3"
-                sx={{ fontWeight: 700, mb: 1, fontSize: "1rem", color: "#111827" }}
-              >
-                {team.name}
-              </Typography>
-              <Typography variant="body2" sx={{ color: "#6b7280", lineHeight: 1.7 }}>
-                {team.description}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+        <Typography variant="body1" sx={{ fontWeight: 700, color: "#111827", mb: 1 }}>
+          Don&apos;t have time to contribute directly?
+        </Typography>
+        <a
+          href="/supporting-member"
+          className="inline-flex items-center gap-1.5 font-semibold text-[#168039] underline decoration-1 underline-offset-2 transition-colors hover:text-[#116b2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2 focus-visible:rounded-sm"
+        >
+          Become a Supporting Member <span aria-hidden="true">&rarr;</span>
+        </a>
       </Box>
 
-      {/* Membership Dues */}
-      <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 700, color: "#111827" }}>
-        Membership Dues
+      <Typography variant="body1" sx={proseSx}>
+        Members and Supporting Members also support T4P financially. Membership dues allow T4P to
+        support our teams, and provide grants and services to projects in the Incubator through
+        full-time dedicated staff. Dues are pay-what-you-can, and we suggest a monthly amount equal
+        to 1 hour of income (1/2000th of your annual income).
       </Typography>
-      <Typography
-        variant="body1"
-        sx={{ mb: 3, fontSize: "1.125rem", lineHeight: 1.75, color: "#374151" }}
-      >
-        {showCalculator
-          ? "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
-          : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary."}
+      <Typography variant="body1" sx={{ ...proseSx, mb: 5 }}>
+        Whether you&apos;re a thinker, builder, leader, software developer, marketer, or activist,
+        there&apos;s a place for you to contribute in your own way.
       </Typography>
 
-      {showCalculator && <MembershipCalculator />}
+      {/* CTAs */}
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3, mb: 5 }}>
+        <a
+          href="#join"
+          onClick={handleJoinClick("primary_cta")}
+          data-membership-cta="true"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
+        >
+          Become a member
+        </a>
+        <a
+          href="/supporting-member"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-zinc-900 px-6 py-3 font-semibold text-zinc-900 transition-all duration-150 hover:border-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+        >
+          Become a Supporting Member
+        </a>
+      </Box>
 
-      {/* Payment form + side info */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr", md: "1fr 340px" },
-          gap: 3,
-          mt: 3,
-          alignItems: "start",
-        }}
-      >
-        <QgivEmbed />
+      <LegacyWaiverNote className="mb-12 max-w-[700px]" />
 
-        {/* Side info */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {/* Inclusivity / waiver note */}
-          <Box
-            sx={{
-              p: 3,
-              borderRadius: 2,
-              backgroundColor: "#f9fafb",
-              border: "1px solid #e5e7eb",
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
-            >
-              Inclusivity &amp; waivers
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
-              Tech for Palestine aims for inclusivity. Please contact{" "}
-              <a href="mailto:membership@techforpalestine.org" className="text-[#168039] underline">
-                membership@techforpalestine.org
-              </a>{" "}
-              to request a waiver of dues in the following circumstances:
-            </Typography>
-            <Box
-              component="ul"
-              sx={{
-                ml: 3,
-                pl: 2,
-                mb: 2,
-                color: "#374151",
-                listStyleType: "disc",
-                "& li": { mb: 0.5, lineHeight: 1.75, fontSize: "0.875rem" },
-              }}
-            >
-              <li>Not having access to banking services/debit card</li>
-              <li>Being located in Gaza or the West Bank</li>
-              <li>Being a refugee from Gaza or the West Bank evacuated during the genocide</li>
-              <li>Not being able to afford membership due to personal circumstances</li>
-              <li>Being a T4P paid staff member</li>
-            </Box>
-            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 1.5 }}>
-              If you are in the US, your dues are tax deductible. If you are in the UK, contact us
-              at{" "}
-              <a href="mailto:membership@techforpalestine.org" className="text-[#168039] underline">
-                membership@techforpalestine.org
-              </a>{" "}
-              after signup and we will ensure that future donations are processed through our gift
-              aid partner.
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75, mb: 0 }}>
-              Options to pay via DAF, cryptocurrency, foundations, and other methods will be
-              supported in the future. We will help you migrate to your preferred method of giving
-              once available.
-            </Typography>
-          </Box>
+      <LegacyJoinSection tier="member" />
 
-          {/* Contact */}
-          <Box
-            sx={{
-              p: 3,
-              borderRadius: 2,
-              backgroundColor: "#f0fdf4",
-              border: "1px solid #d1fae5",
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 700, color: "#111827", mb: 1.5, fontSize: "0.95rem" }}
-            >
-              Get in touch
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#374151", lineHeight: 1.75 }}>
-              If you have questions, set up an{" "}
-              <a
-                href="https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call?month=2026-03"
-                className="font-semibold text-[#168039] underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                intro call
-              </a>{" "}
-              or reach out to us at{" "}
-              <a
-                href="mailto:membership@techforpalestine.org"
-                className="font-semibold text-[#168039] underline"
-              >
-                membership@techforpalestine.org
-              </a>
-              !
-            </Typography>
-          </Box>
-        </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+        <a
+          href="#join"
+          onClick={handleJoinClick("secondary_cta")}
+          data-membership-cta="true"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#168039] px-6 py-3 font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#116b2f] hover:shadow-md active:bg-[#116b2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168039] focus-visible:ring-offset-2"
+        >
+          Become a member
+        </a>
       </Box>
     </Box>
   );
