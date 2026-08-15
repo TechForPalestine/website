@@ -54,6 +54,14 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
   const appliedPrefillKeyRef = useRef<string | null>(null);
   const [embedLoaded, setEmbedLoaded] = useState(false);
 
+  // Both parents rebuild `prefill` fresh on every render, so its object
+  // identity changes even when the values don't. The reload effect below keys
+  // off this stable signature instead: depending on the object itself made an
+  // unrelated re-render (e.g. the step swap 400ms after "Next") tear down the
+  // in-flight iframe `load` listener and its fail-open timeout, then bail out
+  // on the same-key guard — leaving the spinner up forever.
+  const prefillSignature = prefillKey(prefill);
+
   useEffect(() => {
     if (!form.embedId || scriptLoadedRef.current) return;
     scriptLoadedRef.current = true;
@@ -135,9 +143,8 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
     const iframe = iframeRef.current;
     if (!iframe) return;
 
-    const key = prefillKey(prefill);
-    if (appliedPrefillKeyRef.current === key) return;
-    appliedPrefillKeyRef.current = key;
+    if (appliedPrefillKeyRef.current === prefillSignature) return;
+    appliedPrefillKeyRef.current = prefillSignature;
 
     const reloadedAt = Date.now();
     const pendingTimeouts: number[] = [];
@@ -160,7 +167,10 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
       iframe.removeEventListener("load", markLoaded);
       pendingTimeouts.forEach((id) => window.clearTimeout(id));
     };
-  }, [prefill, form]);
+    // `prefill` is read to build the URL but intentionally not a dependency —
+    // see the `prefillSignature` comment above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefillSignature, form]);
 
   useEffect(() => {
     function handleDonationComplete(event: Event) {
