@@ -1,7 +1,14 @@
 import React from "react";
 import type { RichTextSegment, RichTextRendererProps, NotionRichText } from "../types/richText";
 
-const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className = "" }) => {
+const RichTextRenderer: React.FC<RichTextRendererProps> = ({
+  richText,
+  className = "",
+  linkClassName = "text-brand",
+  mutedTextClassName = "text-ink-secondary",
+  accentTextClassName = "text-brand",
+  codeClassName = "bg-sand",
+}) => {
   // Handle both direct array and Notion API response format
   const segments: RichTextSegment[] = Array.isArray(richText)
     ? richText
@@ -161,11 +168,11 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
       style.textDecoration = (style.textDecoration || "") + " underline";
     }
     if (annotations.code) {
-      classes.push("font-mono bg-sand px-1 py-0.5 rounded text-sm");
+      classes.push(`font-mono ${codeClassName} px-1 py-0.5 rounded text-sm`);
     }
     if (annotations.color && annotations.color !== "default") {
       const colorMap: Record<string, string> = {
-        gray: "text-ink-secondary",
+        gray: mutedTextClassName,
         brown: "text-amber-800",
         orange: "text-orange-600",
         yellow: "text-yellow-600",
@@ -173,7 +180,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
         blue: "text-blue-600",
         purple: "text-purple-600",
         pink: "text-pink-600",
-        red: "text-brand",
+        red: accentTextClassName,
       };
       if (colorMap[annotations.color]) {
         classes.push(colorMap[annotations.color]);
@@ -191,7 +198,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ richText, className
           target={linkUrl.startsWith("http") ? "_blank" : undefined}
           rel={linkUrl.startsWith("http") ? "noopener noreferrer" : undefined}
           style={style}
-          className={`text-brand hover:underline ${classes.join(" ")}`}
+          className={`${linkClassName} hover:underline ${classes.join(" ")}`}
         >
           {content}
         </a>

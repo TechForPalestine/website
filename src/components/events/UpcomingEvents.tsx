@@ -1,7 +1,13 @@
 import { useContext } from "react";
-import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../../store/eventsClient";
+import {
+  hasMeaningfulDescription,
+  primaryEventLink,
+  type EventItem,
+} from "../../store/eventsClient";
 import { displayTitle, getUpcomingEvents, type UpcomingEvent } from "../../utils/eventSections";
-import { ArrowRight, EventModalContext, parseDateParts, weekdayAbbrev } from "./eventsShared";
+import { formatSpeakerList, getDescriptionExcerpt, getEventSpeakers } from "../../utils/eventDescription";
+import { ArrowRight, EventModalContext, useEventDate } from "./eventsShared";
+import { EventPreviewImage } from "./EventPreviewImage";
 
 const UPCOMING_WINDOW_DAYS = 60;
 
@@ -11,15 +17,42 @@ interface UpcomingEventCardProps {
 
 function UpcomingEventCard({ item }: UpcomingEventCardProps) {
   const { event, sectionDef } = item;
-  const { day, month } = parseDateParts(event.date);
-  const weekday = weekdayAbbrev(event.date);
+  const {
+    parts: { day, month },
+    weekday,
+    time,
+    isoDate,
+  } = useEventDate(event);
   const openModal = useContext(EventModalContext);
   const showPopup = hasMeaningfulDescription(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, false);
+  const speakers = event.description ? getEventSpeakers(event.description) : [];
+  const teaser = speakers.length > 0
+    ? `Featuring ${formatSpeakerList(speakers)}`
+    : event.description
+      ? getDescriptionExcerpt(event.description)
+      : "";
 
   return (
-    <article className="flex flex-col gap-4 rounded-[16px] border border-ink-divider border-l-4 border-l-brand bg-page p-5 min-[640px]:flex-row min-[640px]:items-center min-[640px]:gap-6">
-      <time dateTime={event.date} className="flex shrink-0 flex-col items-center">
+    <article className="flex flex-col gap-4 rounded-[16px] border border-l-4 border-ink-divider border-l-brand bg-page p-5 min-[640px]:flex-row min-[640px]:items-center min-[640px]:gap-6">
+      {/* Mobile-only lead image: on the stacked mobile layout this reads as
+          a proper card banner. At the 640px row layout there's no good
+          place for it alongside a centered date badge and a single text
+          column, so it drops entirely rather than being squeezed in as a
+          small thumbnail. */}
+      <EventPreviewImage
+        event={event}
+        alt=""
+        className="aspect-video w-full rounded-[12px] bg-sand object-cover min-[640px]:hidden"
+      />
+
+      {/* Fixed width (not shrink-to-fit) at the row breakpoint: without it,
+          this box sizes itself to whichever child is widest — a 2-digit day
+          number is wider than the weekday text, a 1-digit day number is
+          narrower — so every card's box ends up a different width and the
+          centered content lands at a different x per card. A shared fixed
+          width makes every card's date column line up like a table column. */}
+      <time dateTime={isoDate} className="flex shrink-0 flex-col items-center min-[640px]:w-16">
         <span className="ts-overline text-ink-secondary">{weekday}</span>
         <span className="ts-heading leading-none text-brand">{day}</span>
         <span className="ts-overline text-ink-secondary">{month}</span>
@@ -30,7 +63,8 @@ function UpcomingEventCard({ item }: UpcomingEventCardProps) {
           {sectionDef.title}
         </span>
         <h3 className="ts-subheading truncate text-ink">{displayTitle(event)}</h3>
-        {event.time && <p className="ts-body-small text-ink-secondary">{event.time}</p>}
+        {time && <p className="ts-body-small text-ink-secondary">{time}</p>}
+        {teaser && <p className="ts-body-small mt-1 line-clamp-2 text-ink-secondary">{teaser}</p>}
       </div>
 
       <div className="flex shrink-0 flex-wrap items-center gap-4">

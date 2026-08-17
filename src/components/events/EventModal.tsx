@@ -3,7 +3,7 @@ import { primaryEventLink } from "../../store/eventsClient";
 import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
-import { ArrowRight, CloseIcon, parseDateParts, type SelectedEvent } from "./eventsShared";
+import { ArrowRight, CloseIcon, useEventDate, type SelectedEvent } from "./eventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
 function EventDescription({ text }: { text: string }) {
@@ -43,7 +43,12 @@ interface EventModalProps {
 
 export function EventModal({ selected, onClose }: EventModalProps) {
   const { event, isPast } = selected;
-  const { day, month, year, full } = parseDateParts(event.date);
+  const {
+    parts: { day, month, year },
+    weekday,
+    time,
+    isoDate,
+  } = useEventDate(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
   const title = displayTitle(event);
 
@@ -74,8 +79,18 @@ export function EventModal({ selected, onClose }: EventModalProps) {
         aria-label={title}
       >
         <div className="overflow-y-auto overscroll-y-contain">
-          <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-sand">
-            <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
+          {/* No fixed aspect ratio or box height here: YouTube thumbnails
+              are 16:9, but flyer-style previews are often taller. Forcing
+              w-full with a height cap on the box clips the image via
+              overflow-hidden instead of shrinking it — cap only the img's
+              own max-height and let width follow the ratio, so the box
+              sizes itself exactly to the (uncropped) rendered image. */}
+          <div className="relative flex items-center justify-center bg-sand">
+            <EventPreviewImage
+              event={event}
+              alt={title}
+              className="max-h-[70vh] w-auto max-w-full object-contain"
+            />
             <button
               type="button"
               onClick={onClose}
@@ -87,7 +102,7 @@ export function EventModal({ selected, onClose }: EventModalProps) {
           </div>
 
           <div className="flex flex-col gap-4 p-6 min-[640px]:p-8">
-            <time dateTime={event.date}>
+            <time dateTime={isoDate}>
               <span className="ts-heading block leading-none text-brand">{day}</span>
               <span className="ts-overline block text-ink-secondary">
                 {month} {year}
@@ -96,9 +111,12 @@ export function EventModal({ selected, onClose }: EventModalProps) {
 
             <h2 className="ts-subheading text-ink">{title}</h2>
 
+            {/* Day/month/year is already shown above in the date badge —
+                this line adds the info the badge doesn't carry (weekday,
+                time) instead of repeating the same date. */}
             <p className="ts-body-small text-ink-secondary">
-              {full}
-              {event.time && <span> · {event.time}</span>}
+              {weekday}
+              {time && <span> · {time}</span>}
             </p>
 
             {event.description && <EventDescription text={event.description} />}

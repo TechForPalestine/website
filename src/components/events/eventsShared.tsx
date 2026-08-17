@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import type { EventItem } from "../../store/eventsClient";
 import { copyAnchorLink } from "../../utils/copyAnchorLink";
 
@@ -33,7 +33,7 @@ const MONTH_NAMES = [
 
 const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export function parseDateParts(dateStr: string): DateParts {
+function parseDateParts(dateStr: string): DateParts {
   const [year, month, day] = dateStr.split("-");
   return {
     day: parseInt(day, 10),
@@ -45,9 +45,68 @@ export function parseDateParts(dateStr: string): DateParts {
 
 // Weekday is derived separately (rather than folded into DateParts) since only
 // the Upcoming Events list needs it, for Kate's "how far out is this" ask.
-export function weekdayAbbrev(dateStr: string): string {
+function weekdayAbbrev(dateStr: string): string {
   const [year, month, day] = dateStr.split("-").map(Number);
   return WEEKDAY_NAMES[new Date(year, month - 1, day).getDay()];
+}
+
+// The ICS feed states times as wall clock in the *organizer's* zone (a TZID on
+// DTSTART, currently Asia/Jerusalem), so `event.date` and `event.time` are only
+// right for visitors who happen to live there — a 19:30 Jerusalem call rendered
+// "7:30 PM" for a visitor whose own clock read 18:30. `event.dateUtcIso` is the
+// actual instant, so derive everything shown from that instead and every
+// visitor reads the event in their own zone.
+//
+// The catch is SSR: the Cloudflare runtime's zone is UTC, so formatting during
+// a server render would bake in UTC and then mismatch on hydration. Islands
+// mounted `client:only` never server-render and can format on their first pass;
+// `client:load` ones have to wait for mount. VisitorZoneContext carries that
+// distinction — the default suits client:only, and a client:load island wraps
+// itself in a provider fed by useVisitorZoneReady().
+export const VisitorZoneContext = createContext(true);
+
+export function useVisitorZoneReady(): boolean {
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
+  return ready;
+}
+
+export interface EventDateDisplay {
+  parts: DateParts;
+  weekday: string;
+  time?: string;
+  isoDate: string;
+}
+
+function pad(value: number): string {
+  return String(value).padStart(2, "0");
+}
+
+export function useEventDate(event: EventItem): EventDateDisplay {
+  const zoneReady = useContext(VisitorZoneContext);
+
+  // All-day events carry no instant (dateUtcIso is null by design), so their
+  // organizer-supplied date is the only date there is — and it's zone-free.
+  const instant = zoneReady && event.dateUtcIso ? new Date(event.dateUtcIso) : null;
+  if (!instant || Number.isNaN(instant.getTime())) {
+    return {
+      parts: parseDateParts(event.date),
+      weekday: weekdayAbbrev(event.date),
+      time: event.time,
+      isoDate: event.date,
+    };
+  }
+
+  const day = instant.getDate();
+  const month = MONTH_NAMES[instant.getMonth()];
+  const year = String(instant.getFullYear());
+
+  return {
+    parts: { day, month, year, full: `${day} ${month} ${year}` },
+    weekday: WEEKDAY_NAMES[instant.getDay()],
+    time: instant.toLocaleString(undefined, { hour: "numeric", minute: "2-digit" }),
+    isoDate: `${year}-${pad(instant.getMonth() + 1)}-${pad(day)}`,
+  };
 }
 
 export function ArrowRight({ size = 16 }: { size?: number }) {

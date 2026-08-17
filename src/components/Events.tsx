@@ -1,23 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Card,
-  Button,
-  Link,
-  Fade,
-  IconButton,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Chip,
-} from "@mui/material";
-import EventBusyIcon from "@mui/icons-material/EventBusy";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import CloseIcon from "@mui/icons-material/Close";
+import { Dialog, DialogContent, DialogActions } from "@mui/material";
 import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../store/eventsClient";
 import {
   displayTitle,
@@ -27,25 +9,57 @@ import {
   type UpcomingEvent,
 } from "../utils/eventSections";
 import { copyAnchorLink } from "../utils/copyAnchorLink";
-import { parseEventDescription, renderInlineText } from "../utils/eventDescription";
+import {
+  formatSpeakerList,
+  getDescriptionExcerpt,
+  getEventSpeakers,
+  parseEventDescription,
+  renderInlineText,
+} from "../utils/eventDescription";
 import { EventPreviewImage } from "./events/EventPreviewImage";
 import {
+  ArrowRight,
+  ChevronDown,
+  CloseIcon,
   EventModalContext,
-  parseDateParts,
   useCarouselScroll,
-  weekdayAbbrev,
+  useEventDate,
   type SelectedEvent,
 } from "./events/eventsShared";
 
 const UPCOMING_WINDOW_DAYS = 60;
 const COPIED_FEEDBACK_MS = 1500;
 
+// Font sizes only (not family/weight/color) matched to /events-new's type
+// scale in src/styles/design-system.css, stepped at the same 390/810/1200
+// breakpoints. Each constant is named after the .ts-* role it mirrors.
+const TS_EDITORIAL_SIZE =
+  "text-[36px] leading-[1.18] min-[810px]:text-[42px] min-[1200px]:text-[48px]"; // section headings
+const TS_HEADING_SIZE =
+  "text-[32px] leading-[1.22] min-[810px]:text-[36px] min-[1200px]:text-[38px]"; // day-of-month numerals
+const TS_SUBHEADING_SIZE =
+  "text-[28px] leading-[1.22] min-[810px]:text-[30px] min-[1200px]:text-[32px]"; // event titles
+const TS_EYEBROW_SIZE =
+  "text-[18px] leading-[1.32] min-[810px]:text-[19px] min-[1200px]:text-[24px]"; // description sub-headings
+const TS_BODY_LARGE_SIZE = "text-[18px] leading-[1.48] min-[810px]:text-[20px]"; // empty-state message
+const TS_BODY_SIZE = "text-[16px] leading-[1.22] min-[810px]:text-[18px]"; // category subtitle, description paragraphs
+const TS_LABEL_SIZE = "text-[16px] leading-[1] min-[810px]:text-[18px]"; // button labels, past-card titles
+const TS_BODY_SMALL_SIZE = "text-[14px] leading-[1.22] min-[810px]:text-[16px]"; // event time/date supporting text
+const TS_CAPTION_SIZE = "text-[14px] leading-[1]"; // category chip pill
+const TS_OVERLINE_SIZE = "text-[12px]"; // weekday/month labels — already matches text-xs
+
 // This page's own accent palette — same structure/content as the new-design
-// events page, deliberately kept on this site's original MUI colors rather
-// than the new page's cream/rose design tokens.
-const RED = "#EA4335";
-const RED_HOVER = "#C5341F";
-const GREEN = "#168039";
+// events page, deliberately kept on this site's original colors rather than
+// the new page's cream/rose design tokens. MUI is retained only for the
+// modal Dialog (focus trap, escape handling, scroll lock); everything else
+// is plain markup so the page shares the site's font and visual weight.
+//
+// Colors are expressed as Tailwind arbitrary values so they stay literal:
+// red #EA4335 (accent), #C5341F (hover), green #168039 (past-card links).
+const PRIMARY_BUTTON_CLASSES = `inline-flex min-h-[44px] items-center gap-2 rounded-full bg-[#EA4335] px-6 py-2.5 font-medium text-white transition-colors duration-150 hover:bg-[#C5341F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] active:scale-[0.98] ${TS_LABEL_SIZE}`;
+
+const CAROUSEL_ARROW_CLASSES =
+  "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-gray-100 text-gray-700 shadow-sm transition-colors duration-150 hover:bg-[#EA4335] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] sm:flex";
 
 interface EventsProps {
   events: EventItem[];
@@ -66,28 +80,24 @@ function CategoryAnchorButton({ slug }: { slug: string }) {
   };
 
   return (
-    <Box component="span" className="relative inline-flex shrink-0">
-      <Link
-        component="button"
+    <span className="relative inline-flex shrink-0">
+      <button
         type="button"
         onClick={handleClick}
         aria-label="Copy link to this section"
-        className="font-bold no-underline"
-        sx={{ color: "grey.400", fontSize: "1.25rem", "&:hover": { color: RED } }}
+        className={`inline-flex h-11 w-11 items-center justify-center font-bold text-gray-400 transition-colors duration-150 hover:text-[#EA4335] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_EDITORIAL_SIZE}`}
       >
         #
-      </Link>
+      </button>
       {copied && (
-        <Typography
-          component="span"
+        <span
           role="status"
-          className="absolute left-1/2 whitespace-nowrap rounded-full px-3 py-1 text-white"
-          sx={{ top: -34, transform: "translateX(-50%)", backgroundColor: "grey.900", fontSize: "0.75rem" }}
+          className={`absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1 text-white ${TS_CAPTION_SIZE}`}
         >
           Copied!
-        </Typography>
+        </span>
       )}
-    </Box>
+    </span>
   );
 }
 
@@ -95,40 +105,40 @@ function EventDescription({ text }: { text: string }) {
   const blocks = parseEventDescription(text);
 
   return (
-    <Box className="flex flex-col gap-3 break-words">
+    <div className="flex flex-col gap-3 break-words">
       {blocks.map((block, i) => {
         if (block.type === "hr") {
-          return <Box key={i} component="hr" className="border-gray-200" />;
+          return <hr key={i} className="border-gray-200" />;
         }
         if (block.type === "heading") {
           return (
-            <Typography key={i} variant="subtitle1" className="font-bold text-gray-900">
+            <p key={i} className={`font-bold text-gray-900 ${TS_EYEBROW_SIZE}`}>
               {renderInlineText(block.text, `h-${i}`)}
-            </Typography>
+            </p>
           );
         }
         if (block.type === "list") {
+          const ListTag = block.ordered ? "ol" : "ul";
           return (
-            <Box
+            <ListTag
               key={i}
-              component={block.ordered ? "ol" : "ul"}
-              className={block.ordered ? "list-decimal pl-5" : "list-disc pl-5"}
+              className={`${block.ordered ? "list-decimal pl-5" : "list-disc pl-5"} ${TS_BODY_SIZE}`}
             >
               {block.items.map((item, j) => (
-                <Typography key={j} component="li" variant="body2" className="text-gray-600">
+                <li key={j} className="text-gray-600">
                   {renderInlineText(item, `l-${i}-${j}`)}
-                </Typography>
+                </li>
               ))}
-            </Box>
+            </ListTag>
           );
         }
         return (
-          <Typography key={i} variant="body2" className="text-gray-600">
+          <p key={i} className={`text-gray-600 ${TS_BODY_SIZE}`}>
             {renderInlineText(block.text, `p-${i}`)}
-          </Typography>
+          </p>
         );
       })}
-    </Box>
+    </div>
   );
 }
 
@@ -139,81 +149,110 @@ function EventDetailsDialog({
   selected: SelectedEvent | null;
   onClose: () => void;
 }) {
+  // The body is split out so its hooks aren't called conditionally — `selected`
+  // toggles between null and set every time the dialog opens.
   if (!selected) return null;
+  return <EventDetailsDialogBody selected={selected} onClose={onClose} />;
+}
+
+function EventDetailsDialogBody({
+  selected,
+  onClose,
+}: {
+  selected: SelectedEvent;
+  onClose: () => void;
+}) {
   const { event, isPast } = selected;
-  const { day, month, year, full } = parseDateParts(event.date);
+  const {
+    parts: { day, month, year },
+    weekday,
+    time,
+    isoDate,
+  } = useEventDate(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
   const title = displayTitle(event);
 
+  // MUI Dialog is kept for its focus trap, escape handling, and scroll lock;
+  // everything inside the paper is plain markup.
   return (
-    <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
-      <Box className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-gray-100">
-        <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
-        <IconButton
+    <Dialog
+      open
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{ sx: { borderRadius: "16px" } }}
+    >
+      {/* No fixed aspect ratio or box height here: YouTube thumbnails are
+          16:9, but flyer-style previews are often taller. Forcing w-full
+          with a height cap on the box clips the image via overflow-hidden
+          instead of shrinking it — cap only the img's own max-height and
+          let width follow the ratio, so the box sizes itself exactly to
+          the (uncropped) rendered image. */}
+      <div className="relative flex items-center justify-center bg-gray-100">
+        <EventPreviewImage
+          event={event}
+          alt={title}
+          className="max-h-[70vh] w-auto max-w-full object-contain"
+        />
+        <button
+          type="button"
           onClick={onClose}
           aria-label="Close"
-          sx={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            backgroundColor: "#fff",
-            "&:hover": { backgroundColor: RED, color: "#fff" },
-          }}
+          className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-700 shadow-sm transition-colors duration-150 hover:bg-[#EA4335] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
         >
           <CloseIcon />
-        </IconButton>
-      </Box>
+        </button>
+      </div>
       <DialogContent className="flex flex-col gap-4">
-        <time dateTime={event.date}>
-          <Typography
-            component="span"
-            className="block font-bold leading-none"
-            sx={{ color: RED, fontSize: "2rem" }}
+        <time dateTime={isoDate}>
+          <span
+            className={`block font-bold leading-none tracking-tight text-[#EA4335] ${TS_HEADING_SIZE}`}
           >
             {day}
-          </Typography>
-          <Typography component="span" variant="caption" className="block text-gray-500">
+          </span>
+          <span
+            className={`mt-1 block font-medium uppercase tracking-wide text-gray-500 ${TS_OVERLINE_SIZE}`}
+          >
             {month} {year}
-          </Typography>
+          </span>
         </time>
 
-        <Typography variant="h5" className="font-bold tracking-tight text-gray-900">
+        <h2 className={`font-bold tracking-tight text-gray-900 ${TS_SUBHEADING_SIZE}`}>
           {title}
-        </Typography>
+        </h2>
 
-        <Typography variant="body2" className="text-gray-500">
-          {full}
-          {event.time && <span> · {event.time}</span>}
-        </Typography>
+        {/* Day/month/year is already shown above in the date badge — this
+            line adds the info the badge doesn't carry (weekday, time)
+            instead of repeating the same date. */}
+        <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>
+          {weekday}
+          {time && <span> · {time}</span>}
+        </p>
 
         {event.description && <EventDescription text={event.description} />}
       </DialogContent>
       {(infoLink || event.locationLink) && (
         <DialogActions className="flex-wrap gap-4 border-t border-gray-200 px-6 py-4">
           {infoLink && (
-            <Button
+            <a
               href={infoLink}
               target="_blank"
               rel="noopener noreferrer"
-              variant="contained"
-              endIcon={<ArrowForwardIcon fontSize="small" />}
-              sx={{
-                backgroundColor: RED,
-                "&:hover": { backgroundColor: RED_HOVER },
-              }}
+              className={PRIMARY_BUTTON_CLASSES}
             >
               {infoLabel}
-            </Button>
+              <ArrowRight size={16} />
+            </a>
           )}
           {event.locationLink && (
-            <Link
+            <a
               href={event.locationLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-gray-600 hover:underline"
+              className="font-medium text-gray-600 underline-offset-4 transition-colors duration-150 hover:text-gray-900 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
             >
               View location
-            </Link>
+            </a>
           )}
         </DialogActions>
       )}
@@ -225,92 +264,108 @@ function EventDetailsDialog({
 
 function UpcomingEventCard({ item }: { item: UpcomingEvent }) {
   const { event, sectionDef } = item;
-  const { day, month } = parseDateParts(event.date);
-  const weekday = weekdayAbbrev(event.date);
+  const {
+    parts: { day, month },
+    weekday,
+    time,
+    isoDate,
+  } = useEventDate(event);
   const openModal = useContext(EventModalContext);
   const showPopup = hasMeaningfulDescription(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, false);
   const title = displayTitle(event);
+  const speakers = event.description ? getEventSpeakers(event.description) : [];
+  const teaser = speakers.length > 0
+    ? `Featuring ${formatSpeakerList(speakers)}`
+    : event.description
+      ? getDescriptionExcerpt(event.description)
+      : "";
 
   return (
-    <Box
-      className="flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:gap-6"
-      sx={{ border: "1px solid", borderColor: "grey.200", borderLeft: `4px solid ${RED}` }}
-    >
-      <time dateTime={event.date} className="flex shrink-0 flex-col items-center">
-        <Typography variant="caption" className="text-gray-500">
+    <article className="flex flex-col gap-4 rounded-2xl border border-l-4 border-gray-200 border-l-[#EA4335] p-5 sm:flex-row sm:items-center sm:gap-6">
+      {/* Mobile-only lead image: on the stacked mobile layout this reads as
+          a proper card banner. At sm (row layout) there's no good place for
+          it alongside a centered date badge and a single text column, so it
+          drops entirely rather than being squeezed in as a small thumbnail. */}
+      <EventPreviewImage
+        event={event}
+        alt=""
+        className="aspect-video w-full rounded-xl bg-gray-100 object-cover sm:hidden"
+      />
+
+      {/* Fixed width (not shrink-to-fit) at the row breakpoint: without it,
+          this box sizes itself to whichever child is widest — a 2-digit day
+          number is wider than the weekday text, a 1-digit day number is
+          narrower — so every card's box ends up a different width and the
+          centered content lands at a different x per card. A shared fixed
+          width makes every card's date column line up like a table column. */}
+      <time dateTime={isoDate} className="flex shrink-0 flex-col items-center sm:w-16">
+        <span className={`font-medium uppercase tracking-wide text-gray-500 ${TS_OVERLINE_SIZE}`}>
           {weekday}
-        </Typography>
-        <Typography className="font-bold leading-none" sx={{ color: RED, fontSize: "1.75rem" }}>
+        </span>
+        <span
+          className={`font-bold leading-none tracking-tight text-[#EA4335] ${TS_HEADING_SIZE}`}
+        >
           {day}
-        </Typography>
-        <Typography variant="caption" className="text-gray-500">
+        </span>
+        <span className={`font-medium uppercase tracking-wide text-gray-500 ${TS_OVERLINE_SIZE}`}>
           {month}
-        </Typography>
+        </span>
       </time>
 
-      <Box className="min-w-0 flex-1">
-        <Chip
-          label={sectionDef.title}
-          size="small"
-          className="mb-1.5"
-          sx={{ backgroundColor: "grey.100", fontWeight: 600 }}
-        />
-        <Typography variant="subtitle1" className="truncate font-bold text-gray-900">
-          {title}
-        </Typography>
-        {event.time && (
-          <Typography variant="body2" className="text-gray-500">
-            {event.time}
-          </Typography>
-        )}
-      </Box>
+      <div className="min-w-0 flex-1">
+        <span
+          className={`mb-1.5 inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 font-semibold text-gray-700 ${TS_CAPTION_SIZE}`}
+        >
+          {sectionDef.title}
+        </span>
+        <h3 className={`truncate font-bold text-gray-900 ${TS_SUBHEADING_SIZE}`}>{title}</h3>
+        {time && <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>{time}</p>}
+        {teaser && <p className={`mt-1 line-clamp-2 text-gray-500 ${TS_BODY_SMALL_SIZE}`}>{teaser}</p>}
+      </div>
 
-      <Box className="flex shrink-0 flex-wrap items-center gap-4">
+      <div className="flex shrink-0 flex-wrap items-center gap-4">
         {showPopup ? (
-          <Button
+          <button
+            type="button"
             onClick={() => openModal({ event, isPast: false })}
-            variant="contained"
-            endIcon={<ArrowForwardIcon fontSize="small" />}
-            sx={{ backgroundColor: RED, "&:hover": { backgroundColor: RED_HOVER } }}
+            className={PRIMARY_BUTTON_CLASSES}
           >
             More info
-          </Button>
+            <ArrowRight size={16} />
+          </button>
         ) : infoLink ? (
-          <Button
+          <a
             href={infoLink}
             target="_blank"
             rel="noopener noreferrer"
-            variant="contained"
-            endIcon={<ArrowForwardIcon fontSize="small" />}
-            sx={{ backgroundColor: RED, "&:hover": { backgroundColor: RED_HOVER } }}
+            className={PRIMARY_BUTTON_CLASSES}
           >
             {infoLabel}
-          </Button>
+            <ArrowRight size={16} />
+          </a>
         ) : (
-          <Typography variant="body2" className="text-gray-300">
-            —
-          </Typography>
+          <span className={`text-gray-400 ${TS_LABEL_SIZE}`}>—</span>
         )}
-      </Box>
-    </Box>
+      </div>
+    </article>
   );
 }
 
 function NoUpcomingEvents() {
   return (
-    <Box
-      className="rounded-2xl border border-dashed px-6 py-10 text-center"
-      sx={{ borderColor: "grey.300", backgroundColor: "grey.50" }}
-    >
-      <Typography variant="body1" className="text-gray-600">
+    <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center">
+      <p className={`text-gray-600 ${TS_BODY_SIZE}`}>
         No upcoming events right now — check back soon, or{" "}
-        <Link href="#past-events" sx={{ color: RED }} className="hover:underline">
+        <a
+          href="#past-events"
+          className="font-medium text-[#EA4335] underline-offset-4 transition-colors duration-150 hover:text-[#C5341F] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
+        >
           browse recordings below
-        </Link>
+        </a>
         .
-      </Typography>
-    </Box>
+      </p>
+    </div>
   );
 }
 
@@ -318,10 +373,10 @@ function UpcomingEventsSection({ events }: { events: EventItem[] }) {
   const { items, hasMore } = getUpcomingEvents(events, UPCOMING_WINDOW_DAYS);
 
   return (
-    <Box component="section" aria-label="Upcoming Events">
-      <Typography variant="h4" className="mb-8 font-bold tracking-tight text-gray-900">
+    <section aria-label="Upcoming Events">
+      <h2 className={`mb-8 font-bold tracking-tight text-gray-900 ${TS_EDITORIAL_SIZE}`}>
         Upcoming Events
-      </Typography>
+      </h2>
 
       {items.length === 0 ? (
         <NoUpcomingEvents />
@@ -334,64 +389,57 @@ function UpcomingEventsSection({ events }: { events: EventItem[] }) {
       )}
 
       {hasMore && (
-        <Typography variant="body2" className="mt-6 text-gray-500">
+        <p className={`mt-6 text-gray-500 ${TS_BODY_SMALL_SIZE}`}>
           More events are already scheduled beyond the next {UPCOMING_WINDOW_DAYS} days.
-        </Typography>
+        </p>
       )}
-    </Box>
+    </section>
   );
 }
 
 // ---------- Past Events ----------
 
 function PastEventCard({ event }: { event: EventItem }) {
-  const { full } = parseDateParts(event.date);
+  const {
+    parts: { full },
+  } = useEventDate(event);
   const openModal = useContext(EventModalContext);
   const showPopup = hasMeaningfulDescription(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, true);
   const title = displayTitle(event);
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden rounded-2xl" sx={{ border: "1px solid", borderColor: "grey.200" }}>
-      <Box className="flex aspect-video items-center justify-center overflow-hidden bg-gray-100">
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-[border-color,box-shadow] duration-150 hover:border-gray-300 hover:shadow-sm">
+      <div className="flex aspect-video items-center justify-center overflow-hidden bg-gray-100">
         <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
-      </Box>
-      <Box className="flex flex-1 flex-col gap-2 p-4">
-        <Typography variant="body2" className="text-gray-500">
-          {full}
-        </Typography>
-        <Typography variant="subtitle2" className="line-clamp-2 font-bold text-gray-900">
-          {title}
-        </Typography>
-        <Box className="mt-auto pt-2">
+      </div>
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>{full}</p>
+        <h3 className={`line-clamp-2 font-bold text-gray-900 ${TS_LABEL_SIZE}`}>{title}</h3>
+        <div className="mt-auto pt-2">
           {showPopup ? (
-            <Link
-              component="button"
+            <button
               type="button"
               onClick={() => openModal({ event, isPast: true })}
-              className="font-medium hover:underline"
-              sx={{ color: GREEN }}
+              className={`font-medium text-[#168039] underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_LABEL_SIZE}`}
             >
               More info
-            </Link>
+            </button>
           ) : infoLink ? (
-            <Link
+            <a
               href={infoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium hover:underline"
-              sx={{ color: GREEN }}
+              className={`font-medium text-[#168039] underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_LABEL_SIZE}`}
             >
               {infoLabel}
-            </Link>
+            </a>
           ) : (
-            <Typography variant="body2" className="text-gray-300">
-              —
-            </Typography>
+            <span className={`text-gray-400 ${TS_LABEL_SIZE}`}>—</span>
           )}
-        </Box>
-      </Box>
-    </Card>
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -405,69 +453,55 @@ function PastEventsCarousel({ events }: { events: EventItem[] }) {
     useCarouselScroll(events.length);
 
   return (
-    <Box className="relative">
+    <div className="relative">
       {canScrollLeft && (
-        <IconButton
+        <button
+          type="button"
           onClick={() => scrollByCard(-1)}
           aria-label="Show earlier past events"
-          sx={{
-            display: { xs: "none", sm: "flex" },
-            position: "absolute",
-            top: "50%",
-            left: -12,
-            zIndex: 10,
-            transform: "translateY(-50%)",
-            width: 44,
-            height: 44,
-            padding: 0,
-            backgroundColor: "grey.100",
-            boxShadow: 1,
-            "&:hover": { backgroundColor: RED, color: "#fff" },
-          }}
+          className={`${CAROUSEL_ARROW_CLASSES} -left-3 rotate-180`}
         >
-          <ChevronLeftIcon />
-        </IconButton>
+          <ArrowRight size={18} />
+        </button>
       )}
 
-      <Box
+      <div
         ref={trackRef}
         onScroll={updateScrollState}
         role="region"
         aria-roledescription="carousel"
         aria-label="Past events"
         tabIndex={0}
-        className="flex gap-4 overflow-x-auto motion-safe:scroll-smooth motion-reduce:scroll-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EA4335] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EA4335] motion-safe:scroll-smooth motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden"
       >
         {events.map((event) => (
-          <div key={event.id} data-carousel-card className="w-[68%] shrink-0 min-[640px]:w-[42%] min-[900px]:w-[29%]">
+          <div
+            key={event.id}
+            data-carousel-card
+            className="w-[68%] shrink-0 min-[640px]:w-[42%] min-[900px]:w-[29%]"
+          >
             <PastEventCard event={event} />
           </div>
         ))}
-      </Box>
+      </div>
 
       {canScrollRight && (
-        <IconButton
-          onClick={() => scrollByCard(1)}
-          aria-label="Show more past events"
-          sx={{
-            display: { xs: "none", sm: "flex" },
-            position: "absolute",
-            top: "50%",
-            right: -12,
-            zIndex: 10,
-            transform: "translateY(-50%)",
-            width: 44,
-            height: 44,
-            padding: 0,
-            backgroundColor: "grey.100",
-            boxShadow: 1,
-            "&:hover": { backgroundColor: RED, color: "#fff" },
-          }}
-        >
-          <ChevronRightIcon />
-        </IconButton>
+        <>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent"
+          />
+          <button
+            type="button"
+            onClick={() => scrollByCard(1)}
+            aria-label="Show more past events"
+            className={`${CAROUSEL_ARROW_CLASSES} -right-3`}
+          >
+            <ArrowRight size={18} />
+          </button>
+        </>
       )}
-    </Box>
+    </div>
   );
 }
 
@@ -481,45 +515,95 @@ function PastEventsCategorySection({ section }: { section: EventSection }) {
   if (past.length === 0) return null;
 
   return (
-    <Box
-      component="section"
+    <section
       id={def.key}
       aria-label={def.title}
-      className="border-t pt-12"
-      sx={{ borderColor: "grey.200", scrollMarginTop: "96px" }}
+      className="scroll-mt-24 border-t border-gray-200 pt-12"
     >
-      <Box className="flex items-start justify-between gap-4">
-        <Box>
-          <Typography variant="h5" className="mb-1 flex items-center gap-2 font-bold tracking-tight text-gray-900">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3
+            className={`mb-1 flex items-center gap-2 font-bold tracking-tight text-gray-900 ${TS_EDITORIAL_SIZE}`}
+          >
             <CategoryAnchorButton slug={def.key} />
             {def.title}
-          </Typography>
-          <Typography variant="body2" className="text-gray-500">
-            {def.subtitle}
-          </Typography>
-        </Box>
-        <IconButton
+          </h3>
+          <p className={`text-gray-500 ${TS_BODY_SIZE}`}>{def.subtitle}</p>
+        </div>
+        <button
+          type="button"
           onClick={() => setExpanded((prev) => !prev)}
           aria-expanded={expanded}
           aria-label={expanded ? "Collapse section" : "Expand section"}
-          className="shrink-0"
-          sx={{
-            backgroundColor: "grey.100",
-            "&:hover": { backgroundColor: RED, color: "#fff" },
-          }}
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-700 transition-colors duration-150 hover:bg-[#EA4335] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
         >
-          <ExpandMoreIcon
-            sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "0.2s" }}
-          />
-        </IconButton>
-      </Box>
+          <ChevronDown expanded={expanded} size={18} />
+        </button>
+      </div>
 
       {expanded && (
-        <Box className="mt-8">
+        <div className="mt-8">
           <PastEventsCarousel events={past} />
-        </Box>
+        </div>
       )}
-    </Box>
+    </section>
+  );
+}
+
+// ---------- Page states ----------
+
+// Mirrors the real page shape (upcoming rows, then a past-events card row) so
+// the layout doesn't jump when content arrives.
+function LoadingSkeleton() {
+  return (
+    <div aria-hidden="true">
+      <div className="mb-8 h-8 w-56 animate-pulse rounded bg-gray-100" />
+      <div className="flex flex-col gap-4">
+        {[...Array(2)].map((_, index) => (
+          <div
+            key={`upcoming-skeleton-${index}`}
+            className="flex items-center gap-6 rounded-2xl border border-gray-200 p-5"
+          >
+            <div className="h-14 w-10 shrink-0 animate-pulse rounded bg-gray-100" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-24 animate-pulse rounded bg-gray-100" />
+              <div className="h-4 w-2/3 animate-pulse rounded bg-gray-100" />
+            </div>
+            <div className="hidden h-11 w-32 shrink-0 animate-pulse rounded-full bg-gray-100 sm:block" />
+          </div>
+        ))}
+      </div>
+      <div className="mt-14 border-t border-gray-200 pt-12">
+        <div className="mb-8 h-7 w-48 animate-pulse rounded bg-gray-100" />
+        <div className="flex gap-4 overflow-hidden">
+          {[...Array(4)].map((_, index) => (
+            <div
+              key={`past-skeleton-${index}`}
+              className="w-[68%] shrink-0 min-[640px]:w-[42%] min-[900px]:w-[29%]"
+            >
+              <div className="overflow-hidden rounded-2xl border border-gray-200">
+                <div className="aspect-video animate-pulse bg-gray-100" />
+                <div className="space-y-2 p-4">
+                  <div className="h-3 w-24 animate-pulse rounded bg-gray-100" />
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
+      <p className={`mb-2 font-bold text-gray-900 ${TS_BODY_LARGE_SIZE}`}>No events found</p>
+      <p className={`text-gray-500 ${TS_BODY_SIZE}`}>
+        There are no events available at the moment. Check back later!
+      </p>
+    </div>
   );
 }
 
@@ -529,7 +613,6 @@ export default function Events({
 }: EventsProps) {
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialLoading);
-  const [showEvents, setShowEvents] = useState(initialEvents.length > 0);
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
 
   const fetchEvents = async () => {
@@ -546,7 +629,6 @@ export default function Events({
       if (response.ok) {
         const newEvents: EventItem[] = await response.json();
         setEvents(newEvents);
-        setShowEvents(newEvents.length > 0);
       }
     } catch {
       /*
@@ -564,9 +646,6 @@ export default function Events({
       fetchEvents();
     } else {
       setLoading(false);
-      if (initialEvents.length > 0) {
-        setShowEvents(true);
-      }
     }
   }, []);
 
@@ -587,67 +666,31 @@ export default function Events({
   return (
     <EventModalContext.Provider value={setSelectedEvent}>
       <div className="mx-auto max-w-6xl px-4 py-10">
-        {loading && events.length === 0 && (
-          <div className="space-y-6">
-            {[...Array(3)].map((_, index) => (
-              <Box
-                key={`skeleton-${index}`}
-                className="animate-pulse rounded-lg bg-gray-100 p-6 shadow"
-              >
-                <div className="mb-2 h-4 w-2/3 rounded bg-gray-200"></div>
-                <div className="mb-2 h-3 w-1/3 rounded bg-gray-200"></div>
-                <div className="h-24 w-full rounded bg-gray-200"></div>
-              </Box>
-            ))}
-          </div>
-        )}
+        {loading && events.length === 0 && <LoadingSkeleton />}
 
-        {!loading && events.length === 0 && (
-          <Fade in={!loading && events.length === 0}>
-            <Box className="py-12 text-center">
-              <EventBusyIcon
-                sx={{
-                  fontSize: 64,
-                  color: "text.secondary",
-                  marginBottom: 2,
-                  opacity: 0.5,
-                }}
-              />
-              <Typography variant="h6" className="mb-2 text-gray-700">
-                No events found
-              </Typography>
-              <Typography variant="body2" className="text-gray-500">
-                There are no events available at the moment. Check back later!
-              </Typography>
-            </Box>
-          </Fade>
-        )}
+        {!loading && events.length === 0 && <EmptyState />}
 
         {events.length > 0 && (
-          <Fade in={showEvents} timeout={500}>
-            <div>
-              <UpcomingEventsSection events={events} />
+          <div>
+            <UpcomingEventsSection events={events} />
 
-              {hasPastEvents && (
-                <Box
-                  id="past-events"
-                  component="section"
-                  className="border-t pt-14"
-                  sx={{ borderColor: "grey.200", scrollMarginTop: "96px" }}
-                >
-                  <Typography variant="h4" className="font-bold tracking-tight text-gray-900">
-                    Past Events
-                  </Typography>
-                </Box>
-              )}
+            {hasPastEvents && (
+              <section
+                id="past-events"
+                className="mt-14 scroll-mt-24 border-t border-gray-200 pt-14"
+              >
+                <h2 className={`font-bold tracking-tight text-gray-900 ${TS_EDITORIAL_SIZE}`}>
+                  Past Events
+                </h2>
+              </section>
+            )}
 
-              <div className="mt-12 space-y-12">
-                {sections.map((section) => (
-                  <PastEventsCategorySection key={section.def.key} section={section} />
-                ))}
-              </div>
+            <div className="mt-12 space-y-12">
+              {sections.map((section) => (
+                <PastEventsCategorySection key={section.def.key} section={section} />
+              ))}
             </div>
-          </Fade>
+          </div>
         )}
       </div>
       <EventDetailsDialog selected={selectedEvent} onClose={() => setSelectedEvent(null)} />

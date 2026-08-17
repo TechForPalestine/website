@@ -23,7 +23,13 @@ export default function FAQAccordion({ question, answer }: FAQAccordionProps) {
         {typeof answer === "string" ? (
           <Typography>{answer}</Typography>
         ) : Array.isArray(answer) ? (
-          <RichTextRenderer richText={answer} />
+          <RichTextRenderer
+            richText={answer}
+            linkClassName="text-blue-600"
+            mutedTextClassName="text-gray-500"
+            accentTextClassName="text-red-600"
+            codeClassName="bg-gray-100"
+          />
         ) : (
           answer
         )}

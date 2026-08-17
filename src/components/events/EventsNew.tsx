@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import type { EventItem } from "../../store/eventsClient";
 import { groupIntoSections } from "../../utils/eventSections";
-import { EventModalContext, type SelectedEvent } from "./eventsShared";
+import {
+  EventModalContext,
+  useVisitorZoneReady,
+  VisitorZoneContext,
+  type SelectedEvent,
+} from "./eventsShared";
 import { EventModal } from "./EventModal";
 import { UpcomingEventsSection } from "./UpcomingEvents";
 import { PastEventsCategorySection } from "./PastEventsCarousel";
@@ -41,6 +46,9 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialEvents.length === 0);
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
+  // This island is mounted `client:load`, so it server-renders first. Event
+  // times only become the visitor's own after mount — see VisitorZoneContext.
+  const visitorZoneReady = useVisitorZoneReady();
 
   useEffect(() => {
     if (initialEvents.length > 0) return;
@@ -69,32 +77,37 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
   const hasPastEvents = sections.some((section) => section.past.length > 0);
 
   return (
-    <EventModalContext.Provider value={setSelectedEvent}>
-      <div className="pb-16 min-[810px]:pb-24">
-        {loading ? (
-          <LoadingSkeleton />
-        ) : events.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <>
-            <UpcomingEventsSection events={events} />
+    <VisitorZoneContext.Provider value={visitorZoneReady}>
+      <EventModalContext.Provider value={setSelectedEvent}>
+        <div className="pb-16 min-[810px]:pb-24">
+          {loading ? (
+            <LoadingSkeleton />
+          ) : events.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <>
+              <UpcomingEventsSection events={events} />
 
-            {hasPastEvents && (
-              <div id="past-events" className="scroll-mt-24 bg-page px-6 pt-14 min-[810px]:px-10 min-[810px]:pt-20">
-                <div className="mx-auto max-w-[1400px] border-t border-ink-divider pt-14 min-[810px]:pt-16">
-                  <h2 className="ts-editorial text-ink">Past Events</h2>
+              {hasPastEvents && (
+                <div
+                  id="past-events"
+                  className="scroll-mt-24 bg-page px-6 pt-14 min-[810px]:px-10 min-[810px]:pt-20"
+                >
+                  <div className="mx-auto max-w-[1400px] border-t border-ink-divider pt-14 min-[810px]:pt-16">
+                    <h2 className="ts-editorial text-ink">Past Events</h2>
+                  </div>
                 </div>
-              </div>
-            )}
-            {sections.map((section) => (
-              <PastEventsCategorySection key={section.def.key} section={section} />
-            ))}
-          </>
+              )}
+              {sections.map((section) => (
+                <PastEventsCategorySection key={section.def.key} section={section} />
+              ))}
+            </>
+          )}
+        </div>
+        {selectedEvent && (
+          <EventModal selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
         )}
-      </div>
-      {selectedEvent && (
-        <EventModal selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
-      )}
-    </EventModalContext.Provider>
+      </EventModalContext.Provider>
+    </VisitorZoneContext.Provider>
   );
 }

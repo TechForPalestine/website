@@ -1,8 +1,6 @@
 import type { EventItem } from "../store/eventsClient";
 import { youtubeThumbnailSources } from "./youtubeThumbnail";
 
-const COMMUNITY_CALLS_SECTION_KEY = "community-calls";
-
 export interface EventSectionDef {
   key: string;
   title: string;
@@ -94,20 +92,22 @@ export interface PreviewImageSources {
   fallback: string | null;
 }
 
-// Community Calls are recorded to the same generic "T4P Monthly Community
-// Call" banner every month, so the banner image carries no information about
-// which call it actually is — the YouTube thumbnail (when a recording
-// exists) is far more identifiable at a glance. Scoped to Community Calls
-// only: other categories' banners are per-event and already meaningful.
+// A real recording/stream thumbnail is generally more identifiable at a
+// glance than a static event banner (most visibly true for Community Calls,
+// which reuse the same generic "T4P Monthly Community Call" graphic every
+// month, but it applies to any event) — so prefer it whenever the recording
+// or watch link resolves to a YouTube video, for every category, not just
+// Community Calls. Falls back to the feed's own image when neither link is
+// a YouTube URL (e.g. a Zoom link, or no recording yet).
 //
 // `fallback` is only set when `primary` is a YouTube thumbnail: the HD
 // maxresdefault.jpg isn't guaranteed to exist, so callers (EventPreviewImage)
 // need a second URL to drop down to.
 export function previewImageSources(event: EventItem): PreviewImageSources {
-  if (event.recordingLink && sectionForEvent(event)?.key === COMMUNITY_CALLS_SECTION_KEY) {
-    const sources = youtubeThumbnailSources(event.recordingLink);
-    if (sources) return sources;
-  }
+  const sources =
+    (event.recordingLink && youtubeThumbnailSources(event.recordingLink)) ||
+    (event.watchLink && youtubeThumbnailSources(event.watchLink));
+  if (sources) return sources;
   return { primary: event.image, fallback: null };
 }
 

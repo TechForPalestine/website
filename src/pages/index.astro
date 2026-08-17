@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
+import UpcomingEventPopup from "../components/UpcomingEventPopup.tsx";
 import "../styles/base.css";
 ---
 
@@ -635,4 +636,5 @@ import "../styles/base.css";
       </div>
     </section>
   </main>
+  <UpcomingEventPopup client:only="react" />
 </Layout>

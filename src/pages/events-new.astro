@@ -10,15 +10,21 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
 const events: EventItem[] = await fetchEvents(Astro.locals).catch(() => []);
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-const nextEvent = events.find((e) => new Date(e.date) >= today);
+// Pick and describe the next event by its instant, not by the organizer-zone
+// `date` string — that one is a day off for part of the world.
+// `fetchEvents` doesn't return the feed in date order, so pick the soonest
+// upcoming event explicitly — and compare instants rather than the
+// organizer-zone `date` string, which is a day off for part of the world.
+const now = Date.now();
+const nextEvent = events
+  .filter((e) => e.dateUtcIso && new Date(e.dateUtcIso).getTime() >= now)
+  .sort((a, b) => new Date(a.dateUtcIso!).getTime() - new Date(b.dateUtcIso!).getTime())[0];
 
 const eventSchema = nextEvent && {
   "@context": "https://schema.org",
   "@type": "Event",
   name: nextEvent.title,
-  startDate: nextEvent.date,
+  startDate: nextEvent.dateUtcIso,
   eventStatus: "https://schema.org/EventScheduled",
   image: [nextEvent.image || "https://techforpalestine.org/t4p-social-logo.png"],
   location: nextEvent.location
