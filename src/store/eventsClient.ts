@@ -5,14 +5,18 @@ import { reportError } from "../lib/report-error";
 export interface EventItem {
   id: string;
   title: string;
-  date: string; // "YYYY-MM-DD", local wall-clock date from the feed
+  // `date` and `time` are wall clock in the *organizer's* zone (the DTSTART
+  // TZID), not the visitor's — only safe to display for all-day events, which
+  // have no instant. Everything else should render from `dateUtcIso`; see
+  // useEventDate() in components/events/eventsShared.tsx.
+  date: string; // "YYYY-MM-DD" in the organizer's zone
   status: string;
   location: string;
   locationLink: string; // map link for in-person events, "" otherwise
   watchLink: string; // online join/stream link (e.g. a YouTube channel), "" otherwise
   image: string;
   link: string;
-  time?: string;
+  time?: string; // e.g. "7:30 PM" in the organizer's zone; absent for all-day events
   description?: string;
   registerLink?: string;
   recordingLink?: string;
@@ -174,7 +178,7 @@ function resolveLinks(properties: RawProperty[]): {
   return { registerLink: "", locationLink: "", watchLink: urlValue };
 }
 
-function formatLocalTime(timePart: string): string {
+function formatOrganizerLocalTime(timePart: string): string {
   const hour = Number(timePart.slice(0, 2));
   const minute = timePart.slice(2, 4);
   const period = hour >= 12 ? "PM" : "AM";
@@ -205,7 +209,7 @@ function parseVEvent(block: string[]): EventItem | null {
   if (!isAllDay) {
     const [rawDate, rawTime] = dtstart.value.replace("Z", "").split("T");
     date = `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`;
-    time = formatLocalTime(rawTime);
+    time = formatOrganizerLocalTime(rawTime);
   } else {
     date = `${dtstart.value.slice(0, 4)}-${dtstart.value.slice(4, 6)}-${dtstart.value.slice(6, 8)}`;
   }
@@ -295,7 +299,9 @@ function parseIcsCalendar(raw: string): EventItem[] {
     }
   }
 
-  return dedupeCommunityCallDuplicates(Array.from(byOccurrence.values()).map((entry) => entry.event));
+  return dedupeCommunityCallDuplicates(
+    Array.from(byOccurrence.values()).map((entry) => entry.event)
+  );
 }
 
 const COMMUNITY_CALL_TITLE_RE = /^(t4p\s+)?(monthly\s+)?community\s+(monthly\s+)?call/i;
@@ -345,7 +351,10 @@ export function hasMeaningfulDescription(event: EventItem): boolean {
   return (event.description?.trim().length ?? 0) >= MEANINGFUL_DESCRIPTION_MIN_LENGTH;
 }
 
-export function primaryEventLink(event: EventItem, isPast: boolean): { link: string; label: string } {
+export function primaryEventLink(
+  event: EventItem,
+  isPast: boolean
+): { link: string; label: string } {
   if (isPast) {
     // Registration is closed once an event is over — never offer it here,
     // even if the feed still has a registerLink set.

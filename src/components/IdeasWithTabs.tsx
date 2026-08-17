@@ -161,6 +161,10 @@ export default function IdeasWithTabs({
                 <RichTextRenderer
                   richText={activeIdea.richTextDescription}
                   className="!font-sans"
+                  linkClassName="text-blue-600"
+                  mutedTextClassName="text-gray-500"
+                  accentTextClassName="text-red-600"
+                  codeClassName="bg-gray-100"
                 />
               </div>
 

@@ -14,7 +14,8 @@ interface EventPreviewImageProps {
 // Shared by both events pages (the legacy MUI page imports this directly
 // too — plain <img>, no MUI-specific behavior needed).
 //
-// For a YouTube-backed preview (Community Calls), maxresdefault.jpg doesn't
+// For a YouTube-backed preview (any event with a recording/stream link),
+// maxresdefault.jpg doesn't
 // 404 when missing — YouTube serves a 120x90 grey placeholder with a 200
 // status — so failure is detected on load via its fixed size, not onError,
 // and only then do we drop to the guaranteed-to-exist hqdefault.jpg.

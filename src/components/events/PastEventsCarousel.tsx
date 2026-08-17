@@ -1,13 +1,17 @@
 import { useContext, useState } from "react";
-import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../../store/eventsClient";
+import {
+  hasMeaningfulDescription,
+  primaryEventLink,
+  type EventItem,
+} from "../../store/eventsClient";
 import { displayTitle, type EventSection } from "../../utils/eventSections";
 import {
   ArrowRight,
   CategoryAnchorButton,
   ChevronDown,
   EventModalContext,
-  parseDateParts,
   useCarouselScroll,
+  useEventDate,
 } from "./eventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
@@ -16,7 +20,9 @@ interface PastEventCardProps {
 }
 
 function PastEventCard({ event }: PastEventCardProps) {
-  const { full } = parseDateParts(event.date);
+  const {
+    parts: { full },
+  } = useEventDate(event);
   const openModal = useContext(EventModalContext);
   const showPopup = hasMeaningfulDescription(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, true);
@@ -24,7 +30,11 @@ function PastEventCard({ event }: PastEventCardProps) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[16px] border border-butter bg-page">
       <div className="flex aspect-video items-center justify-center overflow-hidden bg-sand">
-        <EventPreviewImage event={event} alt={displayTitle(event)} className="h-full w-full object-contain" />
+        <EventPreviewImage
+          event={event}
+          alt={displayTitle(event)}
+          className="h-full w-full object-contain"
+        />
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <p className="ts-body-small text-ink-secondary">{full}</p>
@@ -92,7 +102,7 @@ function PastEventsCarousel({ events }: PastEventsCarouselProps) {
         aria-roledescription="carousel"
         aria-label="Past events"
         tabIndex={0}
-        className="flex gap-4 overflow-x-auto motion-safe:scroll-smooth motion-reduce:scroll-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-safe:scroll-smooth motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden"
       >
         {events.map((event) => (
           <div
