@@ -7,10 +7,28 @@ import { ArrowRight, CloseIcon, useEventDate } from "./events/eventsShared";
 const SHOW_DELAY_MS = 2000;
 const UPCOMING_WINDOW_DAYS = 60;
 const DISMISSED_KEY = "dismissed_event_popup_id";
+/** Beyond this many days out, a relative label ("In 6 days") reads as noise
+ * rather than urgency, so the popup falls back to the plain weekday/date. */
+const URGENCY_WINDOW_DAYS = 6;
 
 function track(name: string, event: EventItem) {
   if (typeof window.plausible === "undefined") return;
   window.plausible(name, { props: { event_id: event.id, event_title: event.title } });
+}
+
+/** "Today" / "Tomorrow" / "In N days" for events happening soon, or null once
+ * an event is far enough out that urgency framing would be misleading. */
+function relativeDayLabel(isoDate: string): string | null {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  const eventDay = new Date(year, month - 1, day);
+  const today = new Date();
+  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const diffDays = Math.round((eventDay.getTime() - todayMidnight.getTime()) / 86_400_000);
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Tomorrow";
+  if (diffDays > 1 && diffDays <= URGENCY_WINDOW_DAYS) return `In ${diffDays} days`;
+  return null;
 }
 
 function PopupCard({
@@ -26,8 +44,15 @@ function PopupCard({
     parts: { day, month },
     weekday,
     time,
+    isoDate,
   } = useEventDate(event);
   const { link, label } = primaryEventLink(event, false);
+  // "Register" reads as a form to fill out; "Save my spot" reads as claiming
+  // something scarce. Overridden here rather than in primaryEventLink()
+  // itself, since that label is shared with the full /events page and its
+  // cards, where the more neutral wording still fits.
+  const ctaLabel = label === "Register" ? "Save my spot" : label;
+  const urgency = relativeDayLabel(isoDate);
   const title = displayTitle(event);
 
   return (
@@ -53,28 +78,52 @@ function PopupCard({
       </div>
 
       <div className="min-w-0 flex-1 sm:flex-none sm:p-4">
+        {urgency && (
+          <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-[#EA4335]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#EA4335]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#EA4335]" />
+            {urgency}
+          </span>
+        )}
         <p className="truncate text-xs font-medium uppercase tracking-wide text-gray-500">
           {weekday}, {month} {day}
           {time ? ` · ${time}` : ""}
         </p>
-        <h3 className="truncate font-bold text-gray-900">{title}</h3>
-        <div className="mt-2 flex items-center gap-3">
+        {/* The title links to the same registration page as the CTA below —
+            that page has the full event details, so it doubles as a "more
+            info" surface for anyone who reads the headline before noticing
+            the button. */}
+        <h3 className="truncate font-bold text-gray-900">
+          {link ? (
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("Event Popup Title Click", event)}
+              className="hover:underline"
+            >
+              {title}
+            </a>
+          ) : (
+            title
+          )}
+        </h3>
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {link && (
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track("Event Popup Register Click", event)}
-              className="inline-flex items-center gap-1 rounded-full bg-[#EA4335] px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#C5341F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#EA4335] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#C5341F] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
             >
-              {label}
-              <ArrowRight size={14} />
+              {ctaLabel}
+              <ArrowRight size={15} />
             </a>
           )}
           <a
             href="/events"
             onClick={() => track("Event Popup All Events Click", event)}
-            className="hidden text-sm font-medium text-gray-600 underline-offset-4 hover:text-gray-900 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] sm:inline"
+            className="text-sm font-medium text-gray-600 underline-offset-4 hover:text-gray-900 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
           >
             All events
           </a>
