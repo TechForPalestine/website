@@ -40,21 +40,17 @@ const NEXT_BUTTON_LOADING_MS = 400;
 
 /**
  * Payment surface for the legacy (green/grey) design system: the Qgiv embed
- * and the dues calculator A/B test.
+ * and the dues calculator.
  *
  * The design-system equivalent is `MembershipDues.tsx`. The two are kept apart
  * because `Layout.astro` does not load `design-system.css`, so the `ts-*`
  * typography scale the new component relies on is unavailable here.
  */
 export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionProps) {
-  const [showCalculator, setShowCalculator] = useState(false);
-  const [variant, setVariant] = useState<string | undefined>(undefined);
   const [step, setStep] = useState<"about-you" | "payment">("about-you");
   const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [advancingToPayment, setAdvancingToPayment] = useState(false);
-
-  const runsCalculatorTest = tier === "member";
 
   function handleAboutYouContinue(data: AboutYouData) {
     setAboutYou(data);
@@ -73,40 +69,6 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
   const prefill: QgivPrefill | undefined = aboutYou
     ? { ...splitName(aboutYou.name), email: aboutYou.email }
     : undefined;
-
-  useEffect(() => {
-    if (!runsCalculatorTest) return;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlParam = urlParams.get("calculator");
-
-    let assigned: boolean;
-    if (urlParam === "yes") {
-      assigned = true;
-    } else if (urlParam === "no") {
-      assigned = false;
-    } else {
-      const stored = localStorage.getItem("membership_ab_variant");
-      if (stored === "Calculator") {
-        assigned = true;
-      } else if (stored === "No Calculator") {
-        assigned = false;
-      } else {
-        assigned = Math.random() < 0.5;
-        localStorage.setItem("membership_ab_variant", assigned ? "Calculator" : "No Calculator");
-      }
-    }
-
-    const assignedVariant = assigned ? "Calculator" : "No Calculator";
-    setShowCalculator(assigned);
-    setVariant(assignedVariant);
-
-    if (typeof window.plausible !== "undefined") {
-      window.plausible("Membership Page", {
-        props: { membership_variant: assignedVariant },
-      });
-    }
-  }, [runsCalculatorTest]);
 
   useEffect(() => {
     // The CTA that dispatches "membership:reveal-join" may fire before this
@@ -129,17 +91,12 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
     return () => window.removeEventListener("membership:reveal-join", handleReveal);
   }, []);
 
-  // The supporting tier always gets the calculator; the member tier only gets
-  // it in the "Calculator" A/B arm.
-  const calculatorVisible = step === "payment" && (tier === "supporting" || showCalculator);
+  const calculatorVisible = step === "payment";
 
-  const intro = calculatorVisible
-    ? tier === "supporting"
+  const intro =
+    tier === "supporting"
       ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
-      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:"
-    : tier === "supporting"
-      ? "Contribute any amount for supporting membership dues. We suggest monthly dues equal to one hour's salary."
-      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary.";
+      : "Contribute any amount for membership dues. We suggest monthly dues equal to one hour's salary, which you can calculate below:";
 
   return (
     <Box id="join" sx={{ scrollMarginTop: "80px" }}>
@@ -217,7 +174,7 @@ export default function LegacyJoinSection({ tier, heading }: LegacyJoinSectionPr
               </Box>
               {aboutYou && (
                 <Box sx={{ display: step === "payment" ? "block" : "none" }}>
-                  <QgivJoin tier={tier} variant={variant} prefill={prefill} />
+                  <QgivJoin tier={tier} prefill={prefill} />
                 </Box>
               )}
             </Box>

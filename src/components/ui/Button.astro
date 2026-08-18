@@ -1,7 +1,7 @@
 ---
 interface Props {
   variant?: "primary" | "ghost" | "text";
-  size?: "md" | "lg";
+  size?: "md" | "lg" | "xl";
   href?: string;
   arrow?: boolean;
   class?: string;
@@ -22,6 +22,7 @@ const base =
 const sizes = {
   md: "px-5 py-3.5",
   lg: "px-10 py-5 min-[810px]:px-11",
+  xl: "btn-xl px-10 py-7 min-[810px]:px-14 min-[810px]:py-8",
 };
 
 const variants = {
@@ -41,8 +42,8 @@ const Tag = href ? "a" : "button";
   {
     arrow && (
       <svg
-        width="16"
-        height="16"
+        width={size === "xl" ? "32" : "16"}
+        height={size === "xl" ? "32" : "16"}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -54,3 +55,12 @@ const Tag = href ? "a" : "button";
     )
   }
 </Tag>
+
+<style>
+  /* Doubles the visual size of the "lg" primary CTA — bigger than the
+     shared ts-label scale allows without touching that scale's font-size
+     everywhere else it's used. */
+  .btn-xl {
+    font-size: 32px;
+  }
+</style>
