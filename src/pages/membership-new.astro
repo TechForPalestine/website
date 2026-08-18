@@ -135,7 +135,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
         <Button
           href="#join"
           variant="primary"
-          size="md"
+          size="xl"
           arrow
           data-track-join-click="secondary_cta"
           data-membership-cta="true"
@@ -145,7 +145,7 @@ const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
       </div>
     </section>
 
-    <TestimonialsSection membershipLive={membershipLive} />
+    <TestimonialsSection membershipLive={membershipLive} background="green" />
   </main>
 </HomeLayout>
 

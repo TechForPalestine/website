@@ -22,11 +22,6 @@ function prefillKey(prefill?: QgivPrefill): string {
 
 interface QgivJoinProps {
   tier: MembershipTier;
-  /**
-   * Plausible prop recording which membership-page A/B variant the visitor saw.
-   * Only meaningful for the `member` tier.
-   */
-  variant?: string;
   className?: string;
   prefill?: QgivPrefill;
 }
@@ -46,7 +41,7 @@ interface QgivTransactionDetail {
  * embed and the listener — keeping them apart is what caused /membership-new to
  * silently stop sending Hub invites and EmailOctopus tags.
  */
-export default function QgivJoin({ tier, variant, className, prefill }: QgivJoinProps) {
+export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
   const form = QGIV_FORMS[tier];
   const scriptLoadedRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -183,7 +178,6 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
           props: {
             amount: transaction.total != null ? String(transaction.total) : "",
             membership_tier: tier,
-            ...(variant ? { membership_variant: variant } : {}),
           },
         });
       }
@@ -205,7 +199,7 @@ export default function QgivJoin({ tier, variant, className, prefill }: QgivJoin
 
     document.addEventListener("QGIV.donationComplete", handleDonationComplete);
     return () => document.removeEventListener("QGIV.donationComplete", handleDonationComplete);
-  }, [tier, variant]);
+  }, [tier]);
 
   // Safety net for a tier whose embed ID has been cleared: link out to the
   // hosted form so the page still converts, at the cost of losing completion

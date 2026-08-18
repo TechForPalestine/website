@@ -13,18 +13,21 @@ interface Props {
   membershipLive?: boolean;
   heading?: string;
   subheading?: string;
+  background?: "default" | "green";
 }
 
 const {
   membershipLive = false,
   heading = "What it's like to work with T4P",
   subheading = "Project leaders, mentors, and members on their time inside the coalition.",
+  background = "default",
 } = Astro.props;
 
 const testimonials = getTestimonials(membershipLive);
+const sectionBgClass = background === "green" ? "border-green-100 bg-green-50" : "border-zinc-200 bg-zinc-50";
 ---
 
-<section class="border-t border-zinc-200 bg-zinc-50 py-16">
+<section class:list={["border-t py-16", sectionBgClass]}>
   <div class="mx-auto max-w-6xl px-6 sm:px-8">
     <h2 class="text-3xl font-extrabold tracking-tight text-zinc-900">{heading}</h2>
     <p class="mt-3 max-w-2xl text-lg text-zinc-600">{subheading}</p>

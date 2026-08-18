@@ -10,6 +10,7 @@ interface Props {
   accent?: string;
   /** Right-hand supporting line, beside the heading on wide viewports. */
   subheading?: string;
+  background?: "default" | "green";
 }
 
 const {
@@ -18,12 +19,14 @@ const {
   heading = "What it's like to",
   accent = "work with T4P",
   subheading = "Project leaders, mentors, and members on their time inside the coalition.",
+  background = "default",
 } = Astro.props;
 
 const testimonials = getTestimonials(membershipLive);
+const sectionBgClass = background === "green" ? "bg-positive-tint" : "bg-page";
 ---
 
-<section class="bg-page pb-14 pt-14 min-[810px]:pb-20 min-[810px]:pt-20">
+<section class:list={[sectionBgClass, "pb-14 pt-14 min-[810px]:pb-20 min-[810px]:pt-20"]}>
   <div class="mx-auto max-w-[1400px] px-6 min-[810px]:px-10">
     <div
       class="testimonials-header mb-12 grid grid-cols-1 gap-6 min-[810px]:mb-16 min-[810px]:grid-cols-[1fr_1fr] min-[810px]:items-end"
