@@ -242,15 +242,6 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
           data-width="630"
         />
       </div>
-      {/* Qgiv's embed.js sets a default iframe height (observed: 1000px) via
-          the `height` HTML attribute, then narrows it once its resize
-          postMessage fires — which hasn't reliably landed here, leaving dead
-          space below the visibly shorter membership form. `/donate` and
-          `/donate-new` hit the same issue and fix it the same way: a plain
-          CSS rule beats an HTML attribute in the cascade without needing
-          `!important`, capping the iframe box directly rather than a
-          wrapping element Qgiv's script may detach from. */}
-      <style>{`.qgiv-embed-container iframe.qgiv-embed { max-height: 720px; }`}</style>
     </div>
   );
 }
