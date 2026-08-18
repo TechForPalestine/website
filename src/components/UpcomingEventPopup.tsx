@@ -16,19 +16,30 @@ function track(name: string, event: EventItem) {
   window.plausible(name, { props: { event_id: event.id, event_title: event.title } });
 }
 
-/** "Today" / "Tomorrow" / "In N days" for events happening soon, or null once
- * an event is far enough out that urgency framing would be misleading. */
-function relativeDayLabel(isoDate: string): string | null {
+function daysUntil(isoDate: string): number {
   const [year, month, day] = isoDate.split("-").map(Number);
   const eventDay = new Date(year, month - 1, day);
   const today = new Date();
   const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const diffDays = Math.round((eventDay.getTime() - todayMidnight.getTime()) / 86_400_000);
+  return Math.round((eventDay.getTime() - todayMidnight.getTime()) / 86_400_000);
+}
 
+/** "Today" / "Tomorrow" / "In N days" for events happening soon, or null once
+ * an event is far enough out that urgency framing would be misleading. */
+function relativeDayLabel(diffDays: number): string | null {
   if (diffDays === 0) return "Today";
   if (diffDays === 1) return "Tomorrow";
   if (diffDays > 1 && diffDays <= URGENCY_WINDOW_DAYS) return `In ${diffDays} days`;
   return null;
+}
+
+/** A plain scheduling question as the CTA lead-in — works the same for a
+ * roundtable, a book club, or a conference, since it doesn't try to
+ * characterize the event's content (the title above it already does that). */
+function freeDayQuestion(diffDays: number, weekday: string): string {
+  if (diffDays === 0) return "Free today?";
+  if (diffDays === 1) return "Free tomorrow?";
+  return `Free this ${weekday}?`;
 }
 
 function PopupCard({
@@ -52,7 +63,9 @@ function PopupCard({
   // itself, since that label is shared with the full /events page and its
   // cards, where the more neutral wording still fits.
   const ctaLabel = label === "Register" ? "Save my spot" : label;
-  const urgency = relativeDayLabel(isoDate);
+  const diffDays = daysUntil(isoDate);
+  const urgency = relativeDayLabel(diffDays);
+  const question = freeDayQuestion(diffDays, weekday);
   const title = displayTitle(event);
 
   return (
@@ -107,6 +120,7 @@ function PopupCard({
             title
           )}
         </h3>
+        <p className="mt-1 text-sm text-gray-700">{question}</p>
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {link && (
             <a
