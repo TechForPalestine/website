@@ -2,6 +2,7 @@ import axios from "axios";
 import { getEnv } from "../utils/getEnv.js";
 import { sanitizeUrl } from "../components/projects/projectData";
 import { resolveDateToUtcIso } from "../utils/icalDate";
+import type { RichTextSegment } from "../types/richText";
 
 // Helper function to create Notion axios instance with runtime environment variables
 function createNotionAxios(secret: string) {
@@ -265,6 +266,7 @@ export interface CommunityCall {
   id: string;
   title: string;
   description: string;
+  descriptionRichText: RichTextSegment[];
   startUtcIso: string;
   youtubeUrl: string;
   youtubeVerticalUrl: string;
@@ -304,10 +306,13 @@ export const fetchCommunityCalls = async (locals?: any): Promise<CommunityCall[]
       // drop it rather than let it masquerade as scheduled.
       if (!startUtcIso) return null;
 
+      const descriptionRichText: RichTextSegment[] = props["Description"]?.rich_text || [];
+
       return {
         id: page.id,
         title: titleText(props["Title"], "Community Call"),
-        description: richText(props["Description"]),
+        description: descriptionRichText.map((segment) => segment.plain_text).join(""),
+        descriptionRichText,
         startUtcIso,
         youtubeUrl: communityCallUrl(props["YouTube URL"]),
         youtubeVerticalUrl: communityCallUrl(props["YouTube Vertical URL"]),
