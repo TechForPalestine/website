@@ -135,12 +135,14 @@ function stripInlineRegistrationLines(description: string): string {
   return kept.join("\n");
 }
 
+export const DEFAULT_EVENT_IMAGE = "/images/default.jpg";
+
 function extractImage(properties: RawProperty[]): string {
   const image = properties.find((p) => p.name === "IMAGE");
   if (image?.value) return image.value;
   const attach = properties.find((p) => p.name === "ATTACH");
   if (attach?.value) return attach.value;
-  return "/images/default.jpg";
+  return DEFAULT_EVENT_IMAGE;
 }
 
 function matchesHost(url: string, hosts: string[]): boolean {
