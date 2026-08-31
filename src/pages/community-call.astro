@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
+import RichTextRenderer from "../components/RichTextRenderer";
 import { featuredCall, callState } from "../utils/communityCall";
 import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";
@@ -85,10 +86,17 @@ function googleCalendarUrl(c: CommunityCall): string {
                 <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                   {call.title}
                 </h1>
-                {call.description && (
-                  <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-                    {call.description}
-                  </p>
+                {call.descriptionRichText.length > 0 && (
+                  <div class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+                    <RichTextRenderer
+                      richText={call.descriptionRichText}
+                      linkClassName="text-green-700"
+                      mutedTextClassName="text-gray-500"
+                      accentTextClassName="text-red-600"
+                      codeClassName="bg-gray-100"
+                      client:load
+                    />
+                  </div>
                 )}
               </div>
 
