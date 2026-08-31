@@ -1,6 +1,7 @@
 ---
 import { getEnv } from "../utils/getEnv";
 import { fetchEvents, type EventItem } from "../store/eventsClient";
+import { eventMetaTags } from "../utils/eventMeta";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
 import Button from "../components/ui/Button.astro";
@@ -9,6 +10,12 @@ import EventsNewComponent from "../components/events/EventsNew";
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
 const events: EventItem[] = await fetchEvents(Astro.locals).catch(() => []);
+
+// A shared `?event=<id>` link (see the modal's "copy link" button) should
+// preview as that specific event, not the generic Events page.
+const linkedEventId = Astro.url.searchParams.get("event");
+const linkedEvent = linkedEventId ? events.find((e) => e.id === linkedEventId) : undefined;
+const meta = linkedEvent ? eventMetaTags(linkedEvent) : null;
 
 // Pick and describe the next event by its instant, not by the organizer-zone
 // `date` string — that one is a day off for part of the world.
@@ -42,8 +49,10 @@ const eventSchema = nextEvent && {
 ---
 
 <HomeLayout
-  title="Events | Tech for Palestine"
-  description="Tech for Palestine community events — webinars, workshops, and networking sessions for builders and organizers in the Palestinian liberation movement."
+  title={meta?.title ?? "Events | Tech for Palestine"}
+  description={meta?.description ??
+    "Tech for Palestine community events — webinars, workshops, and networking sessions for builders and organizers in the Palestinian liberation movement."}
+  image={meta?.image}
   noindex={true}
 >
   <Fragment slot="head">

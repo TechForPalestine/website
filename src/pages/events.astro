@@ -3,17 +3,29 @@ import Layout from "../layouts/Layout.astro";
 import EventsComponent from "../components/Events.tsx";
 import "../styles/base.css";
 import PageHeader from "../components/PageHeader.astro";
-import type { EventItem } from "../store/eventsClient";
+import { fetchEvents, type EventItem } from "../store/eventsClient";
+import { eventMetaTags } from "../utils/eventMeta";
 
 let events: EventItem[] = [];
 let loading: boolean = true;
 
 // Skip SSR fetch for now - let client handle it
+
+// Exception to the above: a shared `?event=<id>` link (see the modal's "copy
+// link" button) needs a real title/description/image for its link preview,
+// which only a server-side fetch can provide before the client ever renders.
+const linkedEventId = Astro.url.searchParams.get("event");
+const linkedEvent = linkedEventId
+  ? (await fetchEvents(Astro.locals).catch(() => [])).find((e) => e.id === linkedEventId)
+  : undefined;
+const meta = linkedEvent ? eventMetaTags(linkedEvent) : null;
 ---
 
 <Layout
-  title="Events - Tech for Palestine"
-  description="Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation. Join our community webinars, workshops, and networking sessions."
+  title={meta?.title ?? "Events - Tech for Palestine"}
+  description={meta?.description ??
+    "Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation. Join our community webinars, workshops, and networking sessions."}
+  image={meta?.image}
 >
   <PageHeader
     overline="Tech for Palestine"
