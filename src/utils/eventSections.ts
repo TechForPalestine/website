@@ -1,4 +1,4 @@
-import type { EventItem } from "../store/eventsClient";
+import { DEFAULT_EVENT_IMAGE, type EventItem } from "../store/eventsClient";
 import { youtubeThumbnailSources } from "./youtubeThumbnail";
 
 export interface EventSectionDef {
@@ -92,23 +92,22 @@ export interface PreviewImageSources {
   fallback: string | null;
 }
 
-// A real recording/stream thumbnail is generally more identifiable at a
-// glance than a static event banner (most visibly true for Community Calls,
-// which reuse the same generic "T4P Monthly Community Call" graphic every
-// month, but it applies to any event) — so prefer it whenever the recording
-// or watch link resolves to a YouTube video, for every category, not just
-// Community Calls. Falls back to the feed's own image when neither link is
-// a YouTube URL (e.g. a Zoom link, or no recording yet).
+// Prefer the organizer's own flyer/banner set in Mattermost when there is
+// one — it's the event's intended presentation. Only fall back to a YouTube
+// recording/stream thumbnail when no flyer was set (the feed then defaults
+// `image` to "/images/default.jpg").
 //
 // `fallback` is only set when `primary` is a YouTube thumbnail: the HD
 // maxresdefault.jpg isn't guaranteed to exist, so callers (EventPreviewImage)
 // need a second URL to drop down to.
 export function previewImageSources(event: EventItem): PreviewImageSources {
+  if (event.image !== DEFAULT_EVENT_IMAGE) {
+    return { primary: event.image, fallback: null };
+  }
   const sources =
     (event.recordingLink && youtubeThumbnailSources(event.recordingLink)) ||
     (event.watchLink && youtubeThumbnailSources(event.watchLink));
-  if (sources) return sources;
-  return { primary: event.image, fallback: null };
+  return sources || { primary: event.image, fallback: null };
 }
 
 export interface UpcomingEvent {
