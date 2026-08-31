@@ -181,3 +181,10 @@ export function groupIntoSections(events: EventItem[], nowMs: number = Date.now(
 function timeOf(event: EventItem): number {
   return event.dateUtcIso ? new Date(event.dateUtcIso).getTime() : 0;
 }
+
+// Mirrors the past/upcoming split used when building sections, for callers
+// (e.g. a deep-linked event) that need to classify a single event on its own
+// rather than via groupIntoSections/getUpcomingEvents.
+export function isEventPast(event: EventItem, nowMs: number = Date.now()): boolean {
+  return timeOf(event) < nowMs;
+}

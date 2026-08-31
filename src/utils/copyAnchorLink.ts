@@ -13,3 +13,20 @@ export async function copyAnchorLink(slug: string): Promise<boolean> {
     return false;
   }
 }
+
+// Same pattern, but for a single event rather than a whole category: encodes
+// the event's (ICS UID) id as a `?event=` query param so the URL round-trips
+// through EventItem.id lookups elsewhere (see isEventPast/groupIntoSections
+// callers reading this param back out on mount).
+export async function copyEventLink(id: string): Promise<boolean> {
+  const search = `?event=${encodeURIComponent(id)}`;
+  const url = `${window.location.origin}${window.location.pathname}${search}`;
+  history.replaceState(null, "", `${window.location.pathname}${search}`);
+
+  try {
+    await navigator.clipboard.writeText(url);
+    return true;
+  } catch {
+    return false;
+  }
+}

@@ -1,14 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogActions } from "@mui/material";
 import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../store/eventsClient";
 import {
   displayTitle,
   getUpcomingEvents,
   groupIntoSections,
+  isEventPast,
   type EventSection,
   type UpcomingEvent,
 } from "../utils/eventSections";
-import { copyAnchorLink } from "../utils/copyAnchorLink";
+import { copyAnchorLink, copyEventLink } from "../utils/copyAnchorLink";
 import {
   formatSpeakerList,
   getDescriptionExcerpt,
@@ -22,6 +23,7 @@ import {
   ChevronDown,
   CloseIcon,
   EventModalContext,
+  ShareIcon,
   useCarouselScroll,
   useEventDate,
   type SelectedEvent,
@@ -171,6 +173,14 @@ function EventDetailsDialogBody({
   } = useEventDate(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
   const title = displayTitle(event);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = async () => {
+    const ok = await copyEventLink(event.id);
+    if (!ok) return;
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+  };
 
   // MUI Dialog is kept for its focus trap, escape handling, and scroll lock;
   // everything inside the paper is plain markup.
@@ -194,6 +204,24 @@ function EventDetailsDialogBody({
           alt={title}
           className="max-h-[70vh] w-auto max-w-full object-contain"
         />
+        <span className="absolute right-16 top-3 inline-flex">
+          <button
+            type="button"
+            onClick={handleCopyLink}
+            aria-label="Copy link to this event"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-700 shadow-sm transition-colors duration-150 hover:bg-[#EA4335] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
+          >
+            <ShareIcon />
+          </button>
+          {copied && (
+            <span
+              role="status"
+              className={`absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1 text-white ${TS_CAPTION_SIZE}`}
+            >
+              Copied!
+            </span>
+          )}
+        </span>
         <button
           type="button"
           onClick={onClose}
@@ -614,6 +642,7 @@ export default function Events({
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialLoading);
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
+  const deepLinkHandled = useRef(false);
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -658,6 +687,19 @@ export default function Events({
     const hash = window.location.hash.slice(1);
     if (!hash) return;
     document.getElementById(hash)?.scrollIntoView({ block: "start" });
+  }, [loading, events.length]);
+
+  // A "Copy link" button in the event modal encodes the event's id as
+  // ?event=<id> (see copyEventLink) — re-open that event's modal on load so
+  // the link is actually shareable, not just a URL that looks specific.
+  useEffect(() => {
+    if (loading || events.length === 0 || deepLinkHandled.current) return;
+    deepLinkHandled.current = true;
+    const id = new URLSearchParams(window.location.search).get("event");
+    if (!id) return;
+    const event = events.find((e) => e.id === id);
+    if (!event) return;
+    setSelectedEvent({ event, isPast: isEventPast(event) });
   }, [loading, events.length]);
 
   const sections = groupIntoSections(events);
