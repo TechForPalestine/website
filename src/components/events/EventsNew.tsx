@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { EventItem } from "../../store/eventsClient";
 import { groupIntoSections, isEventPast } from "../../utils/eventSections";
+import { clearEventLinkParam } from "../../utils/copyAnchorLink";
 import {
   EventModalContext,
   useVisitorZoneReady,
@@ -119,7 +120,13 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
           )}
         </div>
         {selectedEvent && (
-          <EventModal selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
+          <EventModal
+            selected={selectedEvent}
+            onClose={() => {
+              setSelectedEvent(null);
+              clearEventLinkParam();
+            }}
+          />
         )}
       </EventModalContext.Provider>
     </VisitorZoneContext.Provider>

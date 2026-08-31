@@ -9,7 +9,7 @@ import {
   type EventSection,
   type UpcomingEvent,
 } from "../utils/eventSections";
-import { copyAnchorLink, copyEventLink } from "../utils/copyAnchorLink";
+import { copyAnchorLink, copyEventLink, clearEventLinkParam } from "../utils/copyAnchorLink";
 import {
   formatSpeakerList,
   getDescriptionExcerpt,
@@ -735,7 +735,13 @@ export default function Events({
           </div>
         )}
       </div>
-      <EventDetailsDialog selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
+      <EventDetailsDialog
+        selected={selectedEvent}
+        onClose={() => {
+          setSelectedEvent(null);
+          clearEventLinkParam();
+        }}
+      />
     </EventModalContext.Provider>
   );
 }

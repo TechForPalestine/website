@@ -30,3 +30,13 @@ export async function copyEventLink(id: string): Promise<boolean> {
     return false;
   }
 }
+
+// Strips a `?event=` param left by copyEventLink (or a pasted deep link) once
+// its modal is closed, so the URL doesn't keep pointing at an event that's no
+// longer on screen.
+export function clearEventLinkParam(): void {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("event")) return;
+  url.searchParams.delete("event");
+  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
