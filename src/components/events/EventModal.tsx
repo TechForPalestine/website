@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { primaryEventLink } from "../../store/eventsClient";
 import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
-import { ArrowRight, CloseIcon, useEventDate, type SelectedEvent } from "./eventsShared";
+import { copyEventLink } from "../../utils/copyAnchorLink";
+import { ArrowRight, CloseIcon, ShareIcon, useEventDate, type SelectedEvent } from "./eventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
+
+const COPIED_FEEDBACK_MS = 1500;
 
 function EventDescription({ text }: { text: string }) {
   const blocks = parseEventDescription(text);
@@ -51,8 +54,16 @@ export function EventModal({ selected, onClose }: EventModalProps) {
   } = useEventDate(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, isPast);
   const title = displayTitle(event);
+  const [copied, setCopied] = useState(false);
 
   useBodyScrollLock(true);
+
+  const handleCopyLink = async () => {
+    const ok = await copyEventLink(event.id);
+    if (!ok) return;
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+  };
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -91,6 +102,24 @@ export function EventModal({ selected, onClose }: EventModalProps) {
               alt={title}
               className="max-h-[70vh] w-auto max-w-full object-contain"
             />
+            <span className="absolute right-16 top-4 inline-flex">
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                aria-label="Copy link to this event"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-page text-ink transition-colors duration-150 hover:bg-brand hover:text-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                <ShareIcon />
+              </button>
+              {copied && (
+                <span
+                  role="status"
+                  className="ts-caption absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-pill bg-ink px-2.5 py-1 text-page"
+                >
+                  Copied!
+                </span>
+              )}
+            </span>
             <button
               type="button"
               onClick={onClose}
