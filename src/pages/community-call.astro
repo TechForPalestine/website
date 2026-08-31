@@ -87,7 +87,7 @@ function googleCalendarUrl(c: CommunityCall): string {
                   {call.title}
                 </h1>
                 {call.descriptionRichText.length > 0 && (
-                  <div class="cc-description mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+                  <div class="cc-description mx-auto mt-6 max-w-2xl text-left text-lg leading-8 text-gray-600">
                     <RichTextRenderer
                       richText={call.descriptionRichText}
                       linkClassName="text-green-700"
@@ -228,14 +228,6 @@ function googleCalendarUrl(c: CommunityCall): string {
   </script>
 
   <style>
-    /* The description sits in a text-center ancestor for the title/intro
-       copy, but list-disc bullets anchor to the <ul>'s left edge — combined
-       with centered text that puts the bullet dot far from its line. Lists
-       read correctly left-aligned regardless of the surrounding heading. */
-    .cc-description :global(ul) {
-      text-align: left;
-    }
-
     /* div[data-cc-state], not the bare attribute selector — needs to
        out-specificity Tailwind's .flex utility on the same element, or the
        show/hide outcome depends on stylesheet load order. */
