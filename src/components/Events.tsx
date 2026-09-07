@@ -22,8 +22,8 @@ import {
   ArrowRight,
   ChevronDown,
   CloseIcon,
+  CopyIcon,
   EventModalContext,
-  ShareIcon,
   useCarouselScroll,
   useEventDate,
   type SelectedEvent,
@@ -31,6 +31,7 @@ import {
 
 const UPCOMING_WINDOW_DAYS = 60;
 const COPIED_FEEDBACK_MS = 1500;
+const EVENT_COPY_FEEDBACK_MS = 2500;
 
 // Font sizes only (not family/weight/color) matched to /events-new's type
 // scale in src/styles/design-system.css, stepped at the same 390/810/1200
@@ -179,7 +180,7 @@ function EventDetailsDialogBody({
     const ok = await copyEventLink(event.id);
     if (!ok) return;
     setCopied(true);
-    window.setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+    window.setTimeout(() => setCopied(false), EVENT_COPY_FEEDBACK_MS);
   };
 
   // MUI Dialog is kept for its focus trap, escape handling, and scroll lock;
@@ -211,14 +212,14 @@ function EventDetailsDialogBody({
             aria-label="Copy link to this event"
             className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-700 shadow-sm transition-colors duration-150 hover:bg-[#EA4335] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
           >
-            <ShareIcon />
+            <CopyIcon />
           </button>
           {copied && (
             <span
               role="status"
-              className={`absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1 text-white ${TS_CAPTION_SIZE}`}
+              className={`absolute right-0 top-full mt-2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1.5 text-white ${TS_CAPTION_SIZE}`}
             >
-              Copied!
+              Event URL copied to clipboard successfully
             </span>
           )}
         </span>

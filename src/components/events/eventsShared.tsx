@@ -147,7 +147,7 @@ export function ChevronDown({ size = 18, expanded }: { size?: number; expanded: 
   );
 }
 
-export function ShareIcon({ size = 18 }: { size?: number }) {
+export function CopyIcon({ size = 18 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -160,11 +160,8 @@ export function ShareIcon({ size = 18 }: { size?: number }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <circle cx="18" cy="5" r="3" />
-      <circle cx="6" cy="12" r="3" />
-      <circle cx="18" cy="19" r="3" />
-      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+      <rect x="9" y="9" width="12" height="12" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
     </svg>
   );
 }
