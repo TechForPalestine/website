@@ -217,7 +217,7 @@ function EventDetailsDialogBody({
           {copied && (
             <span
               role="status"
-              className={`absolute -top-9 right-0 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1.5 text-white ${TS_CAPTION_SIZE}`}
+              className={`absolute right-0 top-full mt-2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1.5 text-white ${TS_CAPTION_SIZE}`}
             >
               Event URL copied to clipboard successfully
             </span>

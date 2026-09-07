@@ -114,7 +114,7 @@ export function EventModal({ selected, onClose }: EventModalProps) {
               {copied && (
                 <span
                   role="status"
-                  className="ts-caption absolute -top-8 right-0 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-page"
+                  className="ts-caption absolute right-0 top-full mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-page"
                 >
                   Event URL copied to clipboard successfully
                 </span>
