@@ -4,10 +4,10 @@ import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 import { copyEventLink } from "../../utils/copyAnchorLink";
-import { ArrowRight, CloseIcon, ShareIcon, useEventDate, type SelectedEvent } from "./eventsShared";
+import { ArrowRight, CloseIcon, CopyIcon, useEventDate, type SelectedEvent } from "./eventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
-const COPIED_FEEDBACK_MS = 1500;
+const COPIED_FEEDBACK_MS = 2500;
 
 function EventDescription({ text }: { text: string }) {
   const blocks = parseEventDescription(text);
@@ -109,14 +109,14 @@ export function EventModal({ selected, onClose }: EventModalProps) {
                 aria-label="Copy link to this event"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-page text-ink transition-colors duration-150 hover:bg-brand hover:text-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                <ShareIcon />
+                <CopyIcon />
               </button>
               {copied && (
                 <span
                   role="status"
-                  className="ts-caption absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-pill bg-ink px-2.5 py-1 text-page"
+                  className="ts-caption absolute -top-8 right-0 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-page"
                 >
-                  Copied!
+                  Event URL copied to clipboard successfully
                 </span>
               )}
             </span>
