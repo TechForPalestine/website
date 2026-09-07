@@ -61,7 +61,7 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
               <img
                 src="/mark-transparent.png"
                 alt="Tech for Palestine logo"
-                class="h-16 w-auto transition-transform duration-200 group-hover:scale-105"
+                class="h-16 w-auto transition-transform duration-200 motion-safe:group-hover:scale-105"
               />
             </a>
           </div>
@@ -76,7 +76,7 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
           <div class="pt-6">
             <a
               href="/donate"
-              class="inline-flex transform items-center rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-6 py-3 font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:from-green-700 hover:to-green-800 hover:shadow-md"
+              class="inline-flex items-center rounded-lg bg-accent px-6 py-3 font-semibold text-white transition duration-200 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.98] motion-safe:hover:-translate-y-0.5"
             >
               Support Our Work
               <svg
@@ -101,17 +101,21 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
           {
             Object.entries(footerNavigation).map(([category, { href, links }]) => (
               <div class="space-y-4">
-                <a
-                  href={href}
-                  class="block text-base font-bold text-gray-900 transition-colors duration-200 hover:text-blue-600"
-                >
-                  {category}
-                </a>
+                {href ? (
+                  <a
+                    href={href}
+                    class="block text-base font-semibold text-gray-900 transition-colors duration-200 hover:text-accent"
+                  >
+                    {category}
+                  </a>
+                ) : (
+                  <p class="block text-base font-semibold text-gray-900">{category}</p>
+                )}
                 <div class="space-y-3">
                   {links.map(([label, linkHref]) => (
                     <a
                       href={linkHref}
-                      class="block whitespace-nowrap text-sm text-gray-600 transition-all duration-200 hover:translate-x-1 hover:text-gray-900"
+                      class="block whitespace-nowrap text-sm text-gray-600 transition-all duration-200 hover:text-gray-900 motion-safe:hover:translate-x-1"
                       target={
                         linkHref.startsWith("http") || linkHref.startsWith("mailto:")
                           ? "_blank"
@@ -141,17 +145,17 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
         >
           <a
             href="/privacy-policy"
-            class="whitespace-nowrap transition-colors duration-200 hover:text-gray-900"
+            class="-mx-2 inline-flex min-h-[44px] items-center whitespace-nowrap px-2 transition-colors duration-200 hover:text-gray-900"
             >Privacy Policy</a
           >
           <a
             href="/terms"
-            class="whitespace-nowrap transition-colors duration-200 hover:text-gray-900"
+            class="-mx-2 inline-flex min-h-[44px] items-center whitespace-nowrap px-2 transition-colors duration-200 hover:text-gray-900"
             >Terms of Service</a
           >
           <a
             href="/legal"
-            class="whitespace-nowrap transition-colors duration-200 hover:text-gray-900"
+            class="-mx-2 inline-flex min-h-[44px] items-center whitespace-nowrap px-2 font-medium underline decoration-1 underline-offset-4 transition-colors duration-200 hover:text-gray-900"
             >Legal & Financial</a
           >
         </div>

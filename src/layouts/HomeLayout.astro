@@ -1,6 +1,7 @@
 ---
 import FooterSection from "../components/home/FooterSection.astro";
 import { getEnv } from "../utils/getEnv";
+import { organizationSchema as organizationSchema_ } from "../utils/organizationSchema";
 import "@fontsource/fraunces/latin-400.css";
 import "@fontsource/outfit/latin-400.css";
 import "@fontsource/outfit/latin-500.css";
@@ -43,35 +44,7 @@ const canonicalUrl =
   canonicalUrlOverride ||
   new URL(normalizedPathname, Astro.site || "https://techforpalestine.org").toString();
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "NonprofitOrganization",
-  "@id": "https://techforpalestine.org/#organization",
-  ...organizationSchemaExtra,
-  name: "Tech for Palestine",
-  url: "https://techforpalestine.org",
-  logo: "https://techforpalestine.org/t4p-social-logo.png",
-  taxID: "99-3441367",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "548 Market St #266950",
-    addressLocality: "San Francisco",
-    addressRegion: "CA",
-    postalCode: "94104-5401",
-    addressCountry: "US",
-  },
-  sameAs: [
-    "https://www.instagram.com/techforpalestine",
-    "https://twitter.com/tech4palestine",
-    "https://github.com/TechForPalestine/",
-    "https://www.linkedin.com/company/techforpalestine/",
-    "https://infosec.exchange/@tech4palestine",
-    "https://www.youtube.com/@tech4palestine",
-    "https://techforpalestine.org/discord-invite",
-    "https://www.tiktok.com/@techforpalestine",
-    "https://bsky.app/profile/techforpalestine.org",
-  ],
-};
+const organizationSchema = organizationSchema_(organizationSchemaExtra);
 ---
 
 <!doctype html>

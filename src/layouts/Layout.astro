@@ -1,6 +1,16 @@
 ---
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import { organizationSchema } from "../utils/organizationSchema";
+// ?url lets Vite resolve the content-hashed asset path for the preload hints.
+import frauncesWoff2 from "@fontsource/fraunces/files/fraunces-latin-400-normal.woff2?url";
+import outfitWoff2 from "@fontsource/outfit/files/outfit-latin-400-normal.woff2?url";
+// Site fonts live in the layout (not per-page) so the shared Navigation and
+// Footer render in the brand faces on every page, not just the homepage.
+import "@fontsource/fraunces/latin-400.css";
+import "@fontsource/outfit/latin-400.css";
+import "@fontsource/outfit/latin-500.css";
+import "@fontsource/outfit/latin-600.css";
 interface Props {
   title: string;
   description?: string;
@@ -33,6 +43,9 @@ const canonicalUrl = new URL(
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="me" href="https://infosec.exchange/@tech4palestine" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin="anonymous" href={frauncesWoff2} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin="anonymous" href={outfitWoff2} />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema())} />
     <script type="speculationrules">
       {
         "prerender": [{ "urls": ["/", "/about", "/incubator", "/tools", "/help/hire"] }]
@@ -153,6 +166,12 @@ const canonicalUrl = new URL(
     </script>
   </head>
   <body class="relative flex min-h-screen flex-col bg-white text-gray-900">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[1001] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+    >
+      Skip to content
+    </a>
     <Navigation />
 
     <!-- Floating Donate Button -->
@@ -167,7 +186,7 @@ const canonicalUrl = new URL(
       )
     }
 
-    <div class="flex-grow">
+    <div id="main-content" tabindex="-1" class="flex-grow focus:outline-none">
       <slot />
     </div>
     <Footer />

@@ -3,633 +3,569 @@ import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import "../styles/base.css";
+
+const stats = [
+  { value: "90+", label: "Projects incubated" },
+  { value: "3,000+", label: "Worldwide volunteers" },
+  { value: "350+", label: "Entrepreneurs for Palestine" },
+  { value: "50+", label: "Investors for Palestine" },
+];
+
+type Project = {
+  name: string;
+  href: string;
+  logo: string;
+  logoBg?: string;
+  metrics: string[];
+  blurb: string;
+  role: string;
+  external?: boolean;
+};
+
+const projects: Project[] = [
+  {
+    name: "Upscrolled",
+    href: "https://upscrolled.com/en/",
+    logo: "/images/new-homepage/upscrolled_logo.webp",
+    metrics: ["#1 on the global App Store", "0 → 5M users in 7 months"],
+    blurb:
+      "The social platform with no shadowbans and no algorithmic games. Every voice gets equal reach.",
+    role: "Launched and scaled via T4P incubator and ecosystem partners.",
+    external: true,
+  },
+  {
+    name: "Boycat",
+    href: "https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch",
+    logo: "/images/new-homepage/Boycat_logo.webp",
+    metrics: ["$500M in products boycotted", "3M+ users"],
+    blurb:
+      "Scan any product to check its ethical compliance and find alternatives in real time. Official BDS partner app.",
+    role: "Connected to BDS partnership through T4P.",
+    external: true,
+  },
+  {
+    name: "Thaura.ai",
+    href: "https://www.thaura.ai/",
+    logo: "/images/new-homepage/thaura.jpeg",
+    metrics: ["The ethical alternative to traditional LLMs"],
+    blurb: "AI built ethically, designed around environmental, social, and privacy concerns.",
+    role: "Launched via T4P network to profitability.",
+    external: true,
+  },
+  {
+    name: "Find a Protest",
+    href: "https://www.findaprotest.info/",
+    logo: "/images/new-homepage/findaprotest_b.webp",
+    logoBg: "bg-[#9FBAA9]",
+    metrics: ["500k visits per week"],
+    blurb:
+      "Find and subscribe to protests in your area, powered by organizers, communities, and volunteer data collectors.",
+    role: "Refocused and volunteer-powered through T4P.",
+    external: true,
+  },
+  {
+    name: "Apricot",
+    href: "https://apricotinternational.org/",
+    logo: "/images/new-homepage/Apricot.webp",
+    metrics: ["$1M+ paid to placed talent"],
+    blurb:
+      "Connecting top tech talent from the Middle East, including Palestinian refugees with US tech companies.",
+    role: "Customer introductions and strategic refocus via T4P.",
+    external: true,
+  },
+  {
+    name: "Newscord",
+    href: "https://newscord.org/",
+    logo: "/images/new-homepage/newscord.webp",
+    metrics: ["40k+ messages to accountable media for biased reporting"],
+    blurb:
+      "A platform for AI-powered news summaries across hundreds of sources, exposing media bias in every language.",
+    role: "MVP refocused and partnered with T4P ecosystem partners.",
+    external: true,
+  },
+];
+
+// Icon paths kept from the original section, standardised to one stroke weight.
+const help = [
+  {
+    title: "Volunteer Network",
+    body: "Access to 3,000+ skilled volunteers, including engineers, marketers and designers, with a dedicated recruitment team to match you.",
+    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z",
+  },
+  {
+    title: "Funding",
+    body: "Small grants for most accepted projects. Simple process, no strings attached. We fund what works.",
+    icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+  },
+  {
+    title: "Mentorship",
+    body: "Strategy sessions and optional weekly dedicated mentors. Real guidance from people who've built before.",
+    icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
+  },
+  {
+    title: "Launch Support",
+    body: "Access to engineering, security, and marketing expertise, marketing launches, and a network of 10k+ early testers.",
+    icon: "M13 10V3L4 14h7v7l9-11h-7z",
+  },
+];
+
+const press = [
+  {
+    outlet: "Stanford Social Innovation Review",
+    title: "Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights",
+    href: "https://ssir.org/articles/entry/tech-against-genocide",
+    image: "ssir-tech-against-genocide",
+    alt: "Stanford Social Innovation Review",
+  },
+  {
+    outlet: "TRT World",
+    title:
+      "Tech for Palestine initiative supports advocacy and accountability amid Israel's use of AI",
+    href: "https://www.trtworld.com/video/18268907",
+    image: "trt-world",
+    alt: "TRT World",
+  },
+  {
+    outlet: "Al Jazeera",
+    title: "What's UpScrolled, the app gaining popularity after TikTok's US takeover?",
+    href: "https://www.aljazeera.com/news/2026/1/29/whats-upscrolled-the-app-gaining-popularity-after-tiktoks-us-takeover",
+    image: "aljazeera-upscrolled",
+    alt: "Al Jazeera",
+  },
+  {
+    outlet: "TechCrunch",
+    title: "Tech for Palestine launches to provide tools to help support Palestinians",
+    href: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
+    image: "techcrunch-launch",
+    alt: "TechCrunch",
+  },
+  {
+    outlet: "Tech Times",
+    title: "Pro-Palestinian Tech Workers Rally Behind 'Tech for Palestine' Coalition",
+    href: "https://www.techtimes.com/articles/300271/20240102/pro-palestinian-tech-workers-rally-behind-tech-for-palestine-coalition.htm",
+    image: "techtimes-rally",
+    alt: "Tech Times",
+  },
+  {
+    outlet: "EUReports",
+    title: "Barcelona cements its position as epicentre of technological solidarity with Palestine",
+    href: "https://eureports.com/2026/04/barcelona-cements-its-position-as-epicentre-of-technological-solidarity-with-palestine/?_thumbnail_id=30865",
+    image: "eureports-barcelona",
+    alt: "Barcelona tech solidarity",
+  },
+];
+
+// An ItemList of the portfolio, so the page's central evidence is machine
+// readable. The NonprofitOrganization node comes from Layout.astro; never
+// emit a second node sharing its @id.
+const portfolioSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Projects incubated by Tech for Palestine",
+  itemListElement: projects.map((p, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: { "@type": "Organization", name: p.name, url: p.href, description: p.blurb },
+  })),
+};
+
+// Type scale: 1.25 (major third) off a 16px base. Declared once here so the
+// four h2s and the CTA h2 are the same object, and tracking is a function of
+// size rather than per-section taste.
+//   h1 40/56/68  h2 32/36/40  stat 40/48  metric 20  h3 18  body 16/17  small 15
+const h1Class =
+  "mt-9 max-w-[20ch] text-balance font-serif text-[2.5rem] font-normal leading-[1.1] tracking-[-0.02em] text-stone-900 md:text-[3.5rem] md:leading-[1.06] xl:text-[4.25rem] xl:leading-[1.03]";
+const h2Class =
+  "text-balance font-serif text-[2rem] font-normal leading-[1.12] tracking-[-0.014em] md:text-[2.25rem] lg:text-[2.5rem]";
+
+// Separation is carried entirely by fill against the section ground: no
+// borders, no shadows. Sections alternate white / paper / pale-green so every
+// card contrasts its own ground, and hover deepens the card fill.
+// Matches the hero text column's horizontal inset exactly, so every section
+// shares the hero's left axis rather than sitting in a narrower centred column.
+const container = "px-6 md:px-12 xl:px-16 2xl:px-28";
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
+const focusOnPaper = `${focusRing} focus-visible:ring-offset-paper`;
+const focusOnWhite = `${focusRing} focus-visible:ring-offset-white`;
+const buttonPrimary = `inline-flex items-center justify-center rounded-pill bg-accent px-8 py-4 text-lg font-medium text-white transition-colors duration-150 hover:bg-accent-hover ${focusOnWhite}`;
+const buttonSecondary = `inline-flex items-center justify-center rounded-pill bg-accent-tint px-8 py-4 text-lg font-medium text-accent transition-colors duration-150 hover:bg-accent-tile ${focusOnWhite}`;
+// No borders and no shadows anywhere: a card is defined purely by its fill
+// against the section ground (1.37:1), and hover deepens that fill.
+const cardOnPaper = `group flex h-full flex-col rounded-md bg-white transition-colors duration-150 hover:bg-accent-tint ${focusOnPaper}`;
+const cardOnWhite = `group flex h-full flex-col rounded-md bg-paper transition-colors duration-150 hover:bg-accent-tint ${focusOnWhite}`;
 ---
 
 <Layout
   title="Tech For Palestine"
   description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
-  image="https://techforpalestine.org/happy-kids.jpg"
+  image="https://techforpalestine.org/images/home/og-home.jpg"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(portfolioSchema)} />
   <CommunityCallBanner theme="old" />
-  <main>
+  <main class="font-sans text-stone-900 antialiased">
     <!-- Hero Section -->
     <section
-      class="flex min-h-[calc(100vh-5rem)] flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-center"
+      class="flex min-h-[calc(100dvh-5rem)] flex-col-reverse bg-white lg:grid lg:grid-cols-2 lg:items-stretch"
     >
-      <div class="flex min-h-fit flex-col items-center justify-center space-y-8 py-16 text-left">
-        <div class="w-full space-y-6 px-6 md:px-12 lg:px-16 lg:pr-8 2xl:px-28">
-          <!-- Colored bars -->
-          <div class="flex items-center gap-1.5">
-            <div class="lg:w-22 h-2 w-24 rounded-full bg-[#268024]"></div>
-            <div class="h-2 w-8 rounded-full bg-[#e4312b] lg:w-8"></div>
-            <div class="h-2 w-5 rounded-full bg-black lg:w-5"></div>
-          </div>
+      <div
+        class="flex flex-col justify-center px-6 py-16 md:px-12 lg:py-24 lg:pr-12 xl:pl-16 2xl:pl-28"
+      >
+        <!-- Colored bars -->
+        <div class="flex items-center gap-1.5" aria-hidden="true">
+          <div class="h-2 w-24 rounded-pill bg-flag-green"></div>
+          <div class="h-2 w-8 rounded-pill bg-flag-red"></div>
+          <div class="h-2 w-5 rounded-pill bg-stone-900"></div>
+        </div>
 
-          <h1 class="text-4xl font-bold md:text-5xl">
-            Join the tech movement behind
-            <span class="text-[#268024] lg:my-2 lg:inline-block">90+ projects for Palestine</span>
-          </h1>
-          <p class="text-lg text-gray-700 2xl:text-xl">
-            Tech for Palestine (T4P) is a 501(c)(3) nonprofit starting and scaling initiatives for
-            Palestinian liberation.
-          </p>
-          <p class="text-lg text-gray-700 2xl:text-xl">
-            We support anyone with a meaningful idea, whether it's working against media censorship,
-            using tech to aid protests, scaling boycotts, pushing for tech divestment, supporting
-            Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
-          </p>
-          <div class="pt-6">
-            <a
-              href="/incubator"
-              class="rounded-md bg-green-800 px-8 py-3 text-center text-lg font-medium text-white hover:bg-green-700"
-            >
-              Apply to the Incubator
-            </a>
-          </div>
+        <h1 class={h1Class}>
+          Join the tech movement behind <span class="text-accent">90+ projects for Palestine</span>
+        </h1>
+
+        <p
+          class="mt-7 max-w-[58ch] text-pretty border-l-2 border-accent pl-5 text-xl leading-[1.55] text-stone-800 2xl:text-[1.375rem]"
+        >
+          Tech for Palestine (T4P) is a 501(c)(3) nonprofit starting and scaling initiatives for
+          Palestinian liberation.
+        </p>
+        <p
+          class="mt-5 max-w-[62ch] text-pretty text-xl leading-[1.55] text-stone-600 2xl:text-[1.375rem]"
+        >
+          We support anyone with a meaningful idea, whether it's working against media censorship,
+          using tech to aid protests, scaling boycotts, pushing for tech divestment, supporting
+          Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
+        </p>
+
+        <div class="mt-10">
+          <a href="/incubator" class={buttonPrimary}>Apply to the Incubator</a>
         </div>
       </div>
-      <figure class="relative h-[32rem] bg-zinc-50 lg:h-full">
-        <img
-          src="/happy-kids.jpg"
-          class="h-full w-full object-cover"
-          alt="Happy kids in Palestine"
-        />
-        <figcaption class="absolute bottom-2 right-2 text-xs text-white">®Motaz Azaiza</figcaption>
+
+      <figure class="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 lg:aspect-auto">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/images/home/hero-960.webp 960w, /images/home/hero-1200.webp 1200w, /images/home/hero-1600.webp 1600w, /images/home/hero-2048.webp 2048w"
+            sizes="(min-width: 1024px) 75vw, 100vw"
+          />
+          <img
+            src="/images/home/hero-2048.jpg"
+            srcset="/images/home/hero-960.jpg 960w, /images/home/hero-1200.jpg 1200w, /images/home/hero-1600.jpg 1600w, /images/home/hero-2048.jpg 2048w"
+            sizes="(min-width: 1024px) 75vw, 100vw"
+            width="2048"
+            height="1365"
+            alt="Happy kids in Palestine"
+            class="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+        <div
+          class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-stone-950/65 to-transparent"
+          aria-hidden="true"
+        >
+        </div>
+        <figcaption class="absolute bottom-4 right-5 text-sm font-medium text-white/95">
+          ®Motaz Azaiza
+        </figcaption>
       </figure>
     </section>
 
     <!-- Stats Row -->
-    <section class="border-y border-gray-200 bg-gray-50 py-10">
-      <div class="mx-auto max-w-7xl px-6 md:px-8">
-        <div class="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
-          <div class="space-y-2">
-            <p class="text-4xl font-bold text-[#268024]">90+</p>
-            <p class="text-base text-gray-600">Projects incubated</p>
-          </div>
-          <div class="space-y-2">
-            <p class="text-4xl font-bold text-[#268024]">3,000+</p>
-            <p class="text-base text-gray-600">Worldwide volunteers</p>
-          </div>
-          <div class="space-y-2">
-            <p class="text-4xl font-bold text-[#268024]">350+</p>
-            <p class="text-base text-gray-600">Entrepreneurs for Palestine</p>
-          </div>
-          <div class="space-y-2">
-            <p class="text-4xl font-bold text-[#268024]">50+</p>
-            <p class="text-base text-gray-600">Investors for Palestine</p>
-          </div>
-        </div>
-      </div>
+    <section aria-label="Tech for Palestine by the numbers" class="bg-accent-tint">
+      <dl
+        class="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-12 px-6 py-16 text-center md:px-8 lg:grid-cols-4 lg:gap-x-12"
+      >
+        {
+          stats.map(({ value, label }) => (
+            <div class="flex flex-col">
+              <dt class="order-2 mt-3 text-lg leading-snug text-stone-700">{label}</dt>
+              <dd class="order-1 font-serif text-[2.5rem] leading-none tracking-[-0.02em] text-accent md:text-[3rem]">
+                {value}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
     </section>
 
     <!-- Featured Projects Section -->
-    <section class="bg-white py-20">
-      <div class="mx-auto max-w-7xl px-6 md:px-8">
+    <section class="bg-paper py-20 lg:py-28">
+      <div class={container}>
         <div class="mb-14 text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Projects that came through T4P
-          </h2>
+          <h2 class={`${h2Class} text-stone-900`}>Projects that came through T4P</h2>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <!-- Upscrolled -->
-          <a
-            href="https://upscrolled.com/en/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <div class="mb-4 flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white"
-              >
-                <img
-                  src="/images/new-homepage/upscrolled_logo.webp"
-                  alt="Upscrolled logo"
-                  class="h-full w-full object-contain"
-                />
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Upscrolled</h3>
-            </div>
-            <div class="mb-4 space-y-1">
-              <p class="text-xl font-bold leading-tight text-gray-900">
-                #1 on the global App Store
-              </p>
-              <p class="text-xl font-bold leading-tight text-gray-900">0 → 5M users in 7 months</p>
-            </div>
-            <p class="mb-3 text-sm leading-relaxed text-gray-600">
-              The social platform with no shadowbans and no algorithmic games. Every voice gets
-              equal reach.
-            </p>
-            <p class="mt-auto text-sm text-gray-500">
-              Launched and scaled via T4P incubator and ecosystem partners.
-            </p>
-          </a>
+        <ul role="list" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+          {
+            projects.map((p) => (
+              <li>
+                <a
+                  href={p.href}
+                  target={p.external ? "_blank" : undefined}
+                  rel={p.external ? "noopener noreferrer" : undefined}
+                  class={`${cardOnPaper} p-8`}
+                >
+                  <div class="mb-5 flex items-center gap-3.5">
+                    <span
+                      class={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-pill ${p.logoBg ?? "bg-accent-tint"}`}
+                    >
+                      <img
+                        src={p.logo}
+                        alt=""
+                        width="48"
+                        height="48"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-full w-full object-contain p-1.5"
+                      />
+                    </span>
+                    <h3 class="text-xl font-semibold leading-tight text-stone-900 transition-colors duration-150 group-hover:text-accent">
+                      {p.name}
+                      {p.external && <span class="sr-only"> (opens in a new tab)</span>}
+                    </h3>
+                  </div>
 
-          <!-- Boycat -->
-          <a
-            href="https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <div class="mb-4 flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white"
-              >
-                <img
-                  src="/images/new-homepage/Boycat_logo.webp"
-                  alt="Boycat logo"
-                  class="h-full w-full object-contain"
-                />
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Boycat</h3>
-            </div>
-            <div class="mb-4 space-y-1">
-              <p class="text-xl font-bold leading-tight text-gray-900">
-                $500M in products boycotted
-              </p>
-              <p class="text-xl font-bold leading-tight text-gray-900">3M+ users</p>
-            </div>
-            <p class="mb-3 text-sm leading-relaxed text-gray-600">
-              Scan any product to check its ethical compliance and find alternatives in real time.
-              Official BDS partner app.
-            </p>
-            <p class="mt-auto text-sm text-gray-500">Connected to BDS partnership through T4P.</p>
-          </a>
+                  <div class="mb-4 space-y-1">
+                    {p.metrics.map((m) => (
+                      <p class="text-balance font-serif text-[1.375rem] leading-[1.3] text-stone-900">
+                        {m}
+                      </p>
+                    ))}
+                  </div>
 
-          <!-- Thaura.ai -->
-          <a
-            href="https://www.thaura.ai/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <div class="mb-4 flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white"
-              >
-                <img
-                  src="/images/new-homepage/thaura.jpeg"
-                  alt="Thaura logo"
-                  class="h-full w-full object-contain"
-                />
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Thaura.ai</h3>
-            </div>
-            <div class="mb-4 space-y-1">
-              <p class="text-xl font-bold leading-tight text-gray-900">
-                The ethical alternative to traditional LLMs
-              </p>
-            </div>
-            <p class="mb-3 text-sm leading-relaxed text-gray-600">
-              AI built ethically, designed around environmental, social, and privacy concerns.
-            </p>
-            <p class="mt-auto text-sm text-gray-500">Launched via T4P network to profitability.</p>
-          </a>
-
-          <!-- Find a Protest -->
-          <a
-            href="https://www.findaprotest.info/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <div class="mb-4 flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-[#9FBAA9]"
-              >
-                <img
-                  src="/images/new-homepage/findaprotest_b.webp"
-                  alt="Find a Protest logo"
-                  class="h-full w-full object-contain px-1"
-                />
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">
-                Find a Protest
-              </h3>
-            </div>
-            <div class="mb-4 space-y-1">
-              <p class="text-xl font-bold leading-tight text-gray-900">500k visits per week</p>
-            </div>
-            <p class="mb-3 text-sm leading-relaxed text-gray-600">
-              Find and subscribe to protests in your area, powered by organizers, communities, and
-              volunteer data collectors.
-            </p>
-            <p class="mt-auto text-sm text-gray-500">
-              Refocused and volunteer-powered through T4P.
-            </p>
-          </a>
-
-          <!-- Apricot -->
-          <a
-            href="https://apricotinternational.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <div class="mb-4 flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white"
-              >
-                <img
-                  src="/images/new-homepage/Apricot.webp"
-                  alt="Apricot logo"
-                  class="h-full w-full object-contain"
-                />
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Apricot</h3>
-            </div>
-            <div class="mb-4 space-y-1">
-              <p class="text-xl font-bold leading-tight text-gray-900">
-                $1M+ paid to placed talent
-              </p>
-            </div>
-            <p class="mb-3 text-sm leading-relaxed text-gray-600">
-              Connecting top tech talent from the Middle East, including Palestinian refugees with
-              US tech companies.
-            </p>
-            <p class="mt-auto text-sm text-gray-500">
-              Customer introductions and strategic refocus via T4P.
-            </p>
-          </a>
-
-          <!-- Newscord -->
-          <a
-            href="https://newscord.org/"
-            class="group flex flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <div class="mb-4 flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white"
-              >
-                <img
-                  src="/images/new-homepage/newscord.webp"
-                  alt="Newscord logo"
-                  class="h-full w-full object-contain"
-                />
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 group-hover:text-green-800">Newscord</h3>
-            </div>
-            <div class="mb-4 space-y-1">
-              <p class="text-xl font-bold leading-tight text-gray-900">
-                40k+ messages to accountable media for biased reporting
-              </p>
-            </div>
-            <p class="mb-3 text-sm leading-relaxed text-gray-600">
-              A platform for AI-powered news summaries across hundreds of sources, exposing media
-              bias in every language.
-            </p>
-            <p class="mt-auto text-sm text-gray-500">
-              MVP refocused and partnered with T4P ecosystem partners.
-            </p>
-          </a>
-        </div>
+                  <p class="max-w-[58ch] text-pretty text-lg leading-relaxed text-stone-600">
+                    {p.blurb}
+                  </p>
+                  <p class="mt-auto pt-6 text-base leading-snug text-stone-500">{p.role}</p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
 
         <div class="mt-12 flex flex-col justify-center gap-4 sm:flex-row">
-          <a
-            href="/projects"
-            class="rounded-md bg-green-800 px-8 py-3 text-center text-lg font-medium text-white hover:bg-green-700"
-          >
-            Browse All Projects
-          </a>
-          <a
-            href="/incubator"
-            class="rounded-md border-2 border-green-800 px-8 py-3 text-center text-lg font-medium text-green-800 hover:bg-green-50"
-          >
-            Apply to the Incubator
-          </a>
+          <a href="/projects" class={buttonPrimary}>Browse All Projects</a>
+          <a href="/incubator" class={buttonSecondary}>Apply to the Incubator</a>
         </div>
       </div>
     </section>
 
     <!-- How We Help Section -->
-    <section class="bg-gray-50 py-20">
-      <div class="mx-auto max-w-7xl px-6 md:px-8">
+    <section class="bg-white py-20 lg:py-28">
+      <div class={container}>
         <div class="mb-14 text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            How we help projects succeed
-          </h2>
-          <p class="mt-4 text-lg text-gray-600">
+          <h2 class={`${h2Class} text-stone-900`}>How we help projects succeed</h2>
+          <p class="mx-auto mt-5 max-w-[52ch] text-pretty text-xl leading-relaxed text-stone-600">
             We provide the support needed to ship, scale, and make an impact:
           </p>
         </div>
 
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          <!-- Volunteer Network -->
-          <div class="rounded-2xl bg-white p-8 shadow-sm">
-            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
-              <svg
-                class="h-6 w-6 text-green-800"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-3 text-lg font-bold text-gray-900">Volunteer Network</h3>
-            <p class="text-gray-600">
-              Access to 3,000+ skilled volunteers — engineers, marketers, designers and more — with
-              a dedicated recruitment team to match you.
-            </p>
-          </div>
-
-          <!-- Funding -->
-          <div class="rounded-2xl bg-white p-8 shadow-sm">
-            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
-              <svg
-                class="h-6 w-6 text-green-800"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-3 text-lg font-bold text-gray-900">Funding</h3>
-            <p class="text-gray-600">
-              Small grants for most accepted projects. Simple process, no strings attached. We fund
-              what works.
-            </p>
-          </div>
-
-          <!-- Mentorship -->
-          <div class="rounded-2xl bg-white p-8 shadow-sm">
-            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
-              <svg
-                class="h-6 w-6 text-green-800"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-3 text-lg font-bold text-gray-900">Mentorship</h3>
-            <p class="text-gray-600">
-              Strategy sessions and optional weekly dedicated mentors. Real guidance from people
-              who've built before.
-            </p>
-          </div>
-
-          <!-- Launch Support -->
-          <div class="rounded-2xl bg-white p-8 shadow-sm">
-            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
-              <svg
-                class="h-6 w-6 text-green-800"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-3 text-lg font-bold text-gray-900">Launch Support</h3>
-            <p class="text-gray-600">
-              Access to engineering, security, and marketing expertise, marketing launches, and a
-              network of 10k+ early testers.
-            </p>
-          </div>
-        </div>
+        <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-8">
+          {
+            help.map(({ title, body, icon }) => (
+              <li>
+                <div class="relative flex h-full flex-col overflow-hidden rounded-md bg-accent-tint p-8">
+                  {/* Soft corner arc: a circle pushed past the corner and clipped. */}
+                  <span
+                    class="pointer-events-none absolute -bottom-12 -right-12 h-40 w-40 rounded-pill bg-accent-tile"
+                    aria-hidden="true"
+                  />
+                  <span
+                    class="relative mb-6 flex h-12 w-12 items-center justify-center rounded-pill bg-accent-tile"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="h-6 w-6 text-accent"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d={icon} />
+                    </svg>
+                  </span>
+                  <h3 class="relative font-serif text-2xl leading-tight text-stone-900">{title}</h3>
+                  <p class="relative mt-3.5 max-w-[42ch] text-pretty text-lg leading-relaxed text-stone-700">
+                    {body}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 
     <!-- In the Press Section -->
-    <section class="bg-white py-20">
-      <div class="mx-auto max-w-7xl px-6 md:px-8">
+    <section class="bg-white py-20 lg:py-28">
+      <div class={container}>
         <div class="mb-14 text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">In the press</h2>
+          <h2 class={`${h2Class} text-stone-900`}>In the press</h2>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Stanford Social Innovation Review -->
-          <a
-            href="https://ssir.org/articles/entry/tech-against-genocide"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <img
-              src="/images/press/ssir-tech-against-genocide.jpg"
-              alt="Stanford Social Innovation Review"
-              class="h-40 w-full object-cover"
-            />
-            <div class="flex flex-col p-6">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
-                Stanford Social Innovation Review
-              </p>
-              <p
-                class="min-h-16 flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800"
-              >
-                Tech for Palestine Business Incubator Supports Entrepreneurs Protecting Human Rights
-              </p>
-              <span class="mt-4 inline-block text-sm text-gray-500 group-hover:text-green-700"
-                >Read article →</span
-              >
-            </div>
-          </a>
-
-          <!-- TRT World -->
-          <a
-            href="https://www.trtworld.com/video/18268907"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <img
-              src="/images/press/trt-world.jpeg"
-              alt="TRT World"
-              class="h-40 w-full object-cover object-top"
-            />
-            <div class="flex flex-col p-6">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
-                TRT World
-              </p>
-              <p
-                class="min-h-16 flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800"
-              >
-                Tech for Palestine initiative supports advocacy and accountability amid Israel's use
-                of AI
-              </p>
-              <span class="mt-4 inline-block text-sm text-gray-500 group-hover:text-green-700"
-                >Read article →</span
-              >
-            </div>
-          </a>
-
-          <!-- Al Jazeera -->
-          <a
-            href="https://www.aljazeera.com/news/2026/1/29/whats-upscrolled-the-app-gaining-popularity-after-tiktoks-us-takeover"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <img
-              src="/images/press/aljazeera-upscrolled.jpg"
-              alt="Al Jazeera"
-              class="h-40 w-full object-cover object-top"
-            />
-            <div class="flex flex-col p-6">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
-                Al Jazeera
-              </p>
-              <p
-                class="min-h-16 flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800"
-              >
-                What's UpScrolled, the app gaining popularity after TikTok's US takeover?
-              </p>
-              <span class="mt-4 inline-block text-sm text-gray-500 group-hover:text-green-700"
-                >Read article →</span
-              >
-            </div>
-          </a>
-
-          <!-- TechCrunch -->
-          <a
-            href="https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <img
-              src="/images/press/techcrunch-launch.jpg"
-              alt="TechCrunch"
-              class="h-40 w-full object-cover"
-            />
-            <div class="flex flex-col p-6">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
-                TechCrunch
-              </p>
-              <p
-                class="min-h-16 flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800"
-              >
-                Tech for Palestine launches to provide tools to help support Palestinians
-              </p>
-              <span class="mt-4 inline-block text-sm text-gray-500 group-hover:text-green-700"
-                >Read article →</span
-              >
-            </div>
-          </a>
-
-          <!-- Tech Times -->
-          <a
-            href="https://www.techtimes.com/articles/300271/20240102/pro-palestinian-tech-workers-rally-behind-tech-for-palestine-coalition.htm"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <img
-              src="/images/press/techtimes-rally.jpg"
-              alt="Tech Times"
-              class="h-40 w-full object-cover"
-            />
-            <div class="flex flex-col p-6">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
-                Tech Times
-              </p>
-              <p
-                class="min-h-16 flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800"
-              >
-                Pro-Palestinian Tech Workers Rally Behind 'Tech for Palestine' Coalition
-              </p>
-              <span class="mt-4 inline-block text-sm text-gray-500 group-hover:text-green-700"
-                >Read article →</span
-              >
-            </div>
-          </a>
-
-          <!-- EUReports -->
-          <a
-            href="https://eureports.com/2026/04/barcelona-cements-its-position-as-epicentre-of-technological-solidarity-with-palestine/?_thumbnail_id=30865"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-green-600 hover:shadow-md"
-          >
-            <img
-              src="/images/press/eureports-barcelona.jpg"
-              alt="Barcelona tech solidarity"
-              class="h-40 w-full object-cover"
-            />
-            <div class="flex flex-col p-6">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-[#268024]">
-                EUReports
-              </p>
-              <p
-                class="min-h-16 flex-1 text-base font-medium leading-snug text-gray-900 group-hover:text-green-800"
-              >
-                Barcelona cements its position as epicentre of technological solidarity with
-                Palestine
-              </p>
-              <span class="mt-4 inline-block text-sm text-gray-500 group-hover:text-green-700"
-                >Read article →</span
-              >
-            </div>
-          </a>
-        </div>
+        <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+          {
+            press.map((a) => (
+              <li>
+                <a
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={`${cardOnWhite} overflow-hidden`}
+                >
+                  <div class="aspect-[16/10] overflow-hidden bg-stone-300">
+                    <picture>
+                      <source type="image/webp" srcset={`/images/home/press/${a.image}.webp`} />
+                      <img
+                        src={`/images/home/press/${a.image}.jpg`}
+                        alt={a.alt}
+                        width="800"
+                        height="500"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-full w-full object-cover"
+                      />
+                    </picture>
+                  </div>
+                  <div class="flex flex-1 flex-col p-8">
+                    <p class="mb-2.5 text-base font-medium text-accent">{a.outlet}</p>
+                    <p class="max-w-[38ch] text-pretty text-lg font-medium leading-snug text-stone-900 transition-colors duration-150 group-hover:text-accent">
+                      {a.title}
+                      <span class="sr-only"> (opens in a new tab)</span>
+                    </p>
+                    <span class="mt-6 text-base font-medium text-accent" aria-hidden="true">
+                      Read article →
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-green-800 py-24">
-      <div class="mx-auto max-w-4xl px-6 text-center md:px-8">
-        <h2 class="mb-12 text-4xl font-bold leading-tight text-white sm:text-5xl">
-          You've seen what we've built.<br />Now build with us.
-        </h2>
-
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <!-- Support Us -->
-          <div class="flex flex-col rounded-2xl bg-green-900 p-8 text-left">
-            <h3 class="mb-3 text-xl font-bold text-white">Support Us</h3>
-            <p class="mb-8 flex-1 text-sm leading-relaxed text-green-100">
-              Your donation helps us hire professionals, strengthen existing projects, and launch
-              new initiatives for a free Palestine.
-            </p>
-            <a
-              href="/donate"
-              class="block rounded-lg bg-white px-6 py-3 text-center text-base font-semibold text-green-800 transition hover:bg-green-50"
+    <section class="bg-accent py-20 lg:py-28">
+      <div class={container}>
+        <div class="mx-auto max-w-6xl">
+          <div class="text-center">
+            <h2 class={`${h2Class} text-white`}>
+              You've seen what we've built.<br class="hidden sm:inline" /> Now build with us.
+            </h2>
+            <p
+              class="mx-auto mt-5 max-w-[54ch] text-pretty text-xl leading-relaxed text-accent-tint"
             >
-              Donate
-            </a>
+              Your support helps us grow this work and create more opportunities for a free and
+              brighter Palestine.
+            </p>
           </div>
 
-          <!-- Get Involved -->
-          <div class="flex flex-col rounded-2xl bg-green-900 p-8 text-left">
-            <h3 class="mb-3 text-xl font-bold text-white">Get Involved</h3>
-            <p class="mb-8 flex-1 text-sm leading-relaxed text-green-100">
-              Join our mission-driven community to volunteer, collaborate, and innovate for
-              Palestinian liberation. There are many ways to contribute your skills and passion.
-            </p>
-            <a
-              href="/get-involved"
-              class="block rounded-lg border border-white bg-transparent px-6 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-green-800"
-            >
-              Get Involved
-            </a>
+          <div class="mt-14 grid grid-cols-1 gap-6 text-left sm:grid-cols-2">
+            <!-- Support Us -->
+            <div class="flex flex-col rounded-md bg-accent-panel p-8">
+              <span
+                class="mb-6 flex h-12 w-12 items-center justify-center rounded-pill bg-white/10"
+                aria-hidden="true"
+              >
+                <svg
+                  class="h-6 w-6 text-accent-tint"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                  ></path>
+                </svg>
+              </span>
+              <h3 class="font-serif text-2xl leading-tight text-white">Support Us</h3>
+              <p
+                class="mb-8 mt-3.5 max-w-[46ch] flex-1 text-pretty text-lg leading-relaxed text-stone-200"
+              >
+                Your donation helps us hire professionals, strengthen existing projects, and launch
+                new initiatives for a free Palestine.
+              </p>
+              <a
+                href="/donate"
+                class="inline-flex min-h-[44px] items-center gap-3 self-start rounded-pill bg-white px-7 py-3.5 text-lg font-medium text-accent-panel transition-colors duration-150 hover:bg-accent-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-accent-panel"
+              >
+                Donate
+                <svg
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h13m0 0l-5-5m5 5l-5 5"></path>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Get Involved -->
+            <div class="flex flex-col rounded-md bg-accent-panel2 p-8">
+              <span
+                class="mb-6 flex h-12 w-12 items-center justify-center rounded-pill bg-white/10"
+                aria-hidden="true"
+              >
+                <svg
+                  class="h-6 w-6 text-accent-tint"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                </svg>
+              </span>
+              <h3 class="font-serif text-2xl leading-tight text-white">Get Involved</h3>
+              <p
+                class="mb-8 mt-3.5 max-w-[46ch] flex-1 text-pretty text-lg leading-relaxed text-stone-200"
+              >
+                Join our mission-driven community to volunteer, collaborate, and innovate for
+                Palestinian liberation. There are many ways to contribute your skills and passion.
+              </p>
+              <a
+                href="/get-involved"
+                class="inline-flex min-h-[44px] items-center gap-3 self-start rounded-pill bg-white/15 px-7 py-3.5 text-lg font-medium text-white transition-colors duration-150 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-accent-panel2"
+              >
+                Get Involved
+                <svg
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h13m0 0l-5-5m5 5l-5 5"></path>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Mailing List Section -->
-    <section class="bg-white py-16">
+    <section class="bg-white py-20 lg:py-28">
       <div class="mx-auto flex max-w-xl flex-col items-center justify-center px-6 text-center">
         <SignUpForm />
       </div>

@@ -6,6 +6,7 @@ Tech for Palestine's mission is to harness technology and human innovation for a
 
 ## Key pages
 
+- [Homepage](https://techforpalestine.org/): The incubator behind 90+ projects for a free Palestine — headline portfolio outcomes, what T4P provides to projects, and press coverage.
 - [About](https://techforpalestine.org/about): Mission, founder, and organizational background.
 - [Donate](https://techforpalestine.org/donate): Support Tech for Palestine's work; donations are generally tax-deductible in the US.
 - [Incubator](https://techforpalestine.org/incubator): How the T4P Incubator supports early-stage advocacy projects with mentorship, volunteers, and funding.
@@ -22,6 +23,22 @@ Tech for Palestine's mission is to harness technology and human innovation for a
 - [Tools](https://techforpalestine.org/tools): Directory of Palestinian-advocacy tools built by the movement.
 - [Entrepreneurs for Palestine](https://techforpalestine.org/e4p): A global community of founders and CEOs pledging to steer hiring, sourcing, and fundraising in support of Palestinian liberation.
 - [Legal & Financial Notice](https://techforpalestine.org/legal): 501(c)(3) status, EIN, and financial transparency.
+
+## Scale
+
+- 90+ projects incubated
+- 3,000+ volunteers worldwide
+- 350+ Entrepreneurs for Palestine signatories
+- 50+ Investors for Palestine
+
+## Selected portfolio outcomes
+
+- Upscrolled — 5M users in 7 months and #1 on the global App Store. A social platform with no shadowbans or algorithmic ranking. Launched and scaled through the T4P incubator.
+- Boycat — $500M of products boycotted across 3M+ users. Scan a product for ethical compliance and find alternatives; the official BDS partner app. Connected to the BDS partnership by T4P.
+- Find a Protest — 500k visits per week. Protest listings powered by organizers and volunteer data collectors. Refocused and volunteer-powered through T4P.
+- Apricot — $1M+ paid to placed talent, connecting Middle Eastern and Palestinian refugee tech workers with US companies. Customer introductions and strategic refocus via T4P.
+- Newscord — 40k+ messages sent to hold outlets accountable for biased reporting, plus AI news summaries across hundreds of sources. MVP refocused with T4P ecosystem partners.
+- Thaura.ai — profitable, an ethical alternative to the major LLMs built around environmental, social, and privacy concerns. Launched via the T4P network.
 
 ## Organization facts
 
