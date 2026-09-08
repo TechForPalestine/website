@@ -1,5 +1,6 @@
 ---
 import Socials from "../components/Socials.astro";
+import OpenRoles from "../components/volunteer/OpenRoles.tsx";
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
 ---
@@ -20,19 +21,25 @@ import "../styles/base.css";
 
     <!-- New Buttons Section -->
     <section class="mx-auto max-w-4xl px-6">
-      <div class="flex justify-center space-x-4">
+      <div class="flex justify-center">
         <a
           href="https://techforpalestine.org/volunteer-form"
           class="inline-flex items-center rounded-full bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-indigo-700"
         >
           Apply to Volunteer Now
         </a>
-        <a
-          href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
-          class="inline-flex items-center rounded-full bg-green-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-green-700"
-        >
-          Current Volunteer Needs
-        </a>
+      </div>
+    </section>
+
+    <!-- Open Roles -->
+    <section id="open-roles" class="mx-auto max-w-5xl scroll-mt-24 px-6">
+      <h2 class="text-3xl font-bold text-gray-800">Current volunteer needs</h2>
+      <p class="mt-3 max-w-[70ch] text-lg text-gray-600">
+        Roles open right now across coalition projects and Tech for Palestine teams. Project roles
+        go through our volunteer application; T4P team roles are filled through membership.
+      </p>
+      <div class="mt-8">
+        <OpenRoles client:only="react" />
       </div>
     </section>
 
@@ -106,10 +113,7 @@ import "../styles/base.css";
                 href="https://techforpalestine.org/volunteer-form"
                 class="font-medium text-indigo-600 hover:underline">volunteer application form</a
               > to get matched with the right project or team—even if you're not sure how you want to
-              contribute! <a
-                href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
-                class="text-indigo-600 hover:underline"
-              >
+              contribute! <a href="#open-roles" class="text-indigo-600 hover:underline">
                 (Check out specific roles we're looking for right now!)</a
               >
             </p>
@@ -171,18 +175,12 @@ import "../styles/base.css";
         </p>
       </div>
 
-      <div class="mt-8 flex justify-center space-x-4">
+      <div class="mt-8 flex justify-center">
         <a
           href="https://techforpalestine.org/volunteer-form"
           class="inline-flex items-center rounded-full bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-indigo-700"
         >
           Apply to Volunteer Now
-        </a>
-        <a
-          href="https://techforpalestine.notion.site/75a9979ec7de4a7db123e54e56546f27?v=d641a2a6722047efbc18a323ece981d0&pvs=74"
-          class="inline-flex items-center rounded-full bg-green-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-green-700"
-        >
-          Current Volunteer Needs
         </a>
       </div>
     </section>
