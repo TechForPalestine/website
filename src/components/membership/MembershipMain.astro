@@ -226,6 +226,7 @@ const cx = designSystem
         {
           accordionItems.map((item) => (
             <details
+              data-accordion
               class={`group overflow-hidden ${cx.cardRadius} ${cx.cardBorder} border-t-[3px] border-t-[#157A3E] ${cx.cardBg} shadow-sm`}
               open={item.open}
             >
@@ -238,7 +239,9 @@ const cx = designSystem
                   +
                 </span>
               </summary>
-              <p class={`px-5 pb-4 ${cx.answer}`}>{item.answer}</p>
+              <p data-accordion-content class={`px-5 pb-4 ${cx.answer}`}>
+                {item.answer}
+              </p>
             </details>
           ))
         }
@@ -527,4 +530,56 @@ const cx = designSystem
     );
     observer.observe(heroJoinCard);
   }
+
+  // Native <details> snaps open/closed instantly. Animate it by intercepting
+  // the summary click, driving the answer's height with the Web Animations
+  // API, and only flipping `open` ourselves once the animation settles —
+  // `open` still reflects real state throughout for assistive tech and the
+  // group-open: icon rotation, it's just delayed to match what's on screen.
+  const ACCORDION_ANIMATION_MS = 250;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll<HTMLDetailsElement>("[data-accordion]").forEach((details) => {
+    const summary = details.querySelector("summary");
+    const content = details.querySelector<HTMLElement>("[data-accordion-content]");
+    if (!summary || !content) return;
+
+    let animation: Animation | undefined;
+
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      if (prefersReducedMotion) {
+        details.open = !details.open;
+        return;
+      }
+
+      animation?.cancel();
+      content.style.overflow = "hidden";
+
+      if (details.open) {
+        const startHeight = content.scrollHeight;
+        animation = content.animate([{ height: `${startHeight}px` }, { height: "0px" }], {
+          duration: ACCORDION_ANIMATION_MS,
+          easing: "ease",
+        });
+        animation.onfinish = () => {
+          details.open = false;
+          content.style.overflow = "";
+          content.style.height = "";
+        };
+      } else {
+        details.open = true;
+        const targetHeight = content.scrollHeight;
+        animation = content.animate([{ height: "0px" }, { height: `${targetHeight}px` }], {
+          duration: ACCORDION_ANIMATION_MS,
+          easing: "ease",
+        });
+        animation.onfinish = () => {
+          content.style.overflow = "";
+          content.style.height = "";
+        };
+      }
+    });
+  });
 </script>
