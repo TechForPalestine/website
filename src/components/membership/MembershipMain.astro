@@ -107,10 +107,10 @@ const cx = designSystem
       container: "mx-auto max-w-[1280px]",
       eyebrow: "text-xs font-bold uppercase tracking-[0.14em] text-[#157A3E]",
       h1: "text-[38px] font-extrabold leading-[1.05] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]",
-      lede: "text-lg leading-relaxed text-ink min-[810px]:text-xl",
+      lede: "text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]",
       heroRadius: "rounded-md",
       h2: "text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]",
-      body: "text-base leading-relaxed text-ink-secondary",
+      body: "text-[17px] leading-relaxed text-ink-secondary",
       bandBg: "bg-[#E7F2E9]",
       bandBorder: "border-[#D2E4D6]",
       navEyebrow: "text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]",
@@ -123,17 +123,17 @@ const cx = designSystem
       barBorder: "border-ink-divider",
       barText: "text-[17px] font-bold tracking-tight text-ink",
       barLink: "text-sm text-ink-secondary",
-      quote: "text-lg leading-relaxed tracking-tight text-ink",
+      quote: "text-[19px] leading-relaxed tracking-tight text-ink",
       name: "text-[13px] font-bold text-ink",
       role: "text-[13px] text-ink-secondary",
       question: "text-base font-bold tracking-tight text-ink",
-      answer: "text-[15px] leading-relaxed text-ink-secondary",
+      answer: "text-[16px] leading-relaxed text-ink-secondary",
       suggestedShell: "rounded-lg bg-[#F2F3EE]",
       suggestedLabel: "text-[11px] font-bold uppercase tracking-[0.12em] text-[#157A3E]",
-      suggestedBody: "text-[17px] leading-relaxed text-ink",
+      suggestedBody: "text-[18px] leading-relaxed text-ink",
       dueCardShell: "rounded-lg border border-ink-divider",
       dueCardTitle: "text-[17px] font-bold tracking-tight text-ink",
-      dueCardBody: "text-[15px] leading-relaxed text-ink-secondary",
+      dueCardBody: "text-[16px] leading-relaxed text-ink-secondary",
       dueCardLink: "text-[13px] font-bold text-[#157A3E]",
       ctaShell: "rounded-md bg-[#101010]",
       ctaText: "text-lg font-bold tracking-tight text-white",
@@ -311,7 +311,7 @@ const cx = designSystem
           you sustain our operations so we stay accountable to our community and not external
           funders.
         </p>
-        <p class={`mt-5 font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-base leading-relaxed"}`}>
+        <p class={`mt-5 font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-[17px] leading-relaxed"}`}>
           Dues sustain T4P projects:<br />
           Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship for projects via
           T4P staff support, software access, partnerships and grants.
@@ -331,9 +331,23 @@ const cx = designSystem
             T4P aims for inclusivity. Email us for a waiver if you are located in, or a refugee
             from Gaza or West Bank, or if personal circumstances make dues unaffordable.
           </p>
-          <a href="mailto:membership@techforpalestine.org" class={cx.dueCardLink}>
-            Request a waiver →
-          </a>
+          <span class="relative inline-flex">
+            <a
+              href="mailto:membership@techforpalestine.org"
+              data-copy-email="membership@techforpalestine.org"
+              class={cx.dueCardLink}
+            >
+              Request a waiver →
+            </a>
+            <span
+              role="status"
+              data-copy-confirm
+              hidden
+              class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+            >
+              membership@techforpalestine.org copied to clipboard
+            </span>
+          </span>
         </div>
         <div class={`p-6 ${cx.dueCardShell}`}>
           <h3 class={`mb-2.5 ${cx.dueCardTitle}`}>I don't have time to contribute</h3>
@@ -354,9 +368,23 @@ const cx = designSystem
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" class={cx.dueCardLink}>
               Book an intro call →
             </a>
-            <a href="mailto:membership@techforpalestine.org" class={cx.dueCardLink}>
-              Email us →
-            </a>
+            <span class="relative inline-flex">
+              <a
+                href="mailto:membership@techforpalestine.org"
+                data-copy-email="membership@techforpalestine.org"
+                class={cx.dueCardLink}
+              >
+                Email us →
+              </a>
+              <span
+                role="status"
+                data-copy-confirm
+                hidden
+                class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+              >
+                membership@techforpalestine.org copied to clipboard
+              </span>
+            </span>
           </div>
         </div>
       </div>
@@ -425,6 +453,29 @@ const cx = designSystem
           props: { cta_location: location, destination: "#join" },
         });
       }
+    });
+  });
+
+  const COPY_CONFIRM_MS = 1500;
+
+  // mailto: links silently do nothing when the browser has no default mail
+  // client registered — copying the address is a fallback that always gives
+  // the visitor something, without blocking the native mailto navigation for
+  // visitors who do have one.
+  document.querySelectorAll<HTMLAnchorElement>("[data-copy-email]").forEach((anchor) => {
+    const confirm = anchor.parentElement?.querySelector<HTMLElement>("[data-copy-confirm]");
+    anchor.addEventListener("click", () => {
+      const email = anchor.getAttribute("data-copy-email");
+      if (!email || !confirm) return;
+      navigator.clipboard
+        .writeText(email)
+        .then(() => {
+          confirm.hidden = false;
+          window.setTimeout(() => {
+            confirm.hidden = true;
+          }, COPY_CONFIRM_MS);
+        })
+        .catch(() => {});
     });
   });
 </script>
