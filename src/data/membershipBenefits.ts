@@ -19,19 +19,19 @@ export const membershipBenefits: MembershipBenefit[] = [
   { label: "Receive updates on our latest projects and teams", supporting: true, member: true },
   {
     label:
-      "Support our projects via mentorship or be contacted when your subject matter expertise may be valuable",
+      "Support our projects via mentorship, or be contacted when your subject matter expertise may be valuable",
     supporting: true,
     member: true,
   },
   {
-    label: "Participate in internal teams building advocacy projects",
+    label: "Participate in advocacy projects",
     supporting: false,
     member: true,
   },
   { label: "Join our internal member chat community", supporting: false, member: true },
   {
     label:
-      "Help run T4P by joining our internal teams in areas like marketing, engineering, finance, and compliance",
+      "Help run T4P by joining our support teams in areas like marketing, engineering, finance, and compliance",
     supporting: false,
     member: true,
   },

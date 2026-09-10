@@ -15,7 +15,46 @@ const CURRENCIES = [
   { code: "ZAR", symbol: "R", name: "South African Rand", usdRate: 0.055 },
 ];
 
-export default function MembershipCalculator() {
+interface MembershipCalculatorProps {
+  /** Accent theme for the border and result figures. `"brand"` (default) matches
+   * the design-system rose brand color used by `MembershipDues`; `"green"` matches
+   * the membership join flow's green accent (`JoinFlow`), which is deliberately
+   * distinct from the site's rose `brand` token. */
+  theme?: "brand" | "green";
+  /** Uses the design system's ts-* typography scale instead of plain Tailwind
+   * sizes — only correct where `design-system.css` is loaded. See the same
+   * prop on `JoinFlow`. */
+  designSystem?: boolean;
+}
+
+const THEME_CLASSES: Record<"brand" | "green", { border: string; text: string; ring: string; focusBorder: string }> = {
+  brand: {
+    border: "border-brand",
+    text: "text-brand",
+    ring: "focus:ring-brand",
+    focusBorder: "focus:border-brand",
+  },
+  green: {
+    border: "border-[#157A3E]",
+    text: "text-[#157A3E]",
+    ring: "focus:ring-[#157A3E]",
+    focusBorder: "focus:border-[#157A3E]",
+  },
+};
+
+export default function MembershipCalculator({
+  theme = "brand",
+  designSystem = false,
+}: MembershipCalculatorProps) {
+  const accent = THEME_CLASSES[theme];
+  const labelClass = designSystem ? "ts-label text-ink" : "text-sm font-medium text-ink";
+  const overlineClass = designSystem
+    ? "ts-overline text-ink-secondary"
+    : "text-xs font-medium uppercase tracking-[0.12em] text-ink-secondary";
+  const resultLabelClass = designSystem ? "ts-body-small text-ink-secondary" : "text-sm text-ink-secondary";
+  const resultFigureClass = designSystem ? "ts-stat" : "font-serif text-3xl";
+  const resultSubClass = designSystem ? "ts-caption text-ink-muted" : "text-sm text-ink-muted";
+  const emptyStateClass = designSystem ? "ts-body-small text-ink-muted" : "text-sm text-ink-muted";
   const [incomeType, setIncomeType] = useState<"annual" | "monthly">("monthly");
   const [income, setIncome] = useState<string>("");
   const [currency, setCurrency] = useState<string>("USD");
@@ -33,18 +72,15 @@ export default function MembershipCalculator() {
   const suggestedAnnual = Math.round(suggestedMonthly * 12 * 100) / 100;
 
   return (
-    <div className="mb-8 rounded-[20px] border-2 border-brand bg-page p-6 min-[810px]:p-8">
+    <div className={`mb-8 rounded-[20px] border-2 ${accent.border} bg-page p-6 min-[810px]:p-8`}>
       {/* Header */}
-      <p className="ts-overline mb-5 text-left text-ink-secondary">Calculate your suggested dues</p>
+      <p className={`mb-5 text-left ${overlineClass}`}>Calculate your suggested dues</p>
 
       {/* Inputs — single row on desktop */}
       <div className="flex flex-col gap-3 min-[640px]:flex-row min-[640px]:items-end">
         {/* Currency */}
         <div className="flex-1">
-          <label
-            htmlFor="calc-currency"
-            className="ts-body-small mb-1.5 block font-medium text-ink"
-          >
+          <label htmlFor="calc-currency" className={`mb-1.5 block ${labelClass}`}>
             Currency
           </label>
           <div className="relative">
@@ -52,7 +88,7 @@ export default function MembershipCalculator() {
               id="calc-currency"
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-butter bg-sand px-3 py-2.5 pr-8 text-sm text-ink focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+              className={`w-full appearance-none rounded-lg border border-butter bg-sand px-3 py-2.5 pr-8 text-sm text-ink focus:outline-none focus:ring-1 ${accent.focusBorder} ${accent.ring}`}
             >
               {CURRENCIES.map((curr) => (
                 <option key={curr.code} value={curr.code}>
@@ -82,7 +118,7 @@ export default function MembershipCalculator() {
 
         {/* Period toggle */}
         <div>
-          <p className="ts-body-small mb-1.5 font-medium text-ink">Period</p>
+          <p className={`mb-1.5 ${labelClass}`}>Period</p>
           <div className="flex rounded-lg border border-butter bg-sand p-0.5">
             {(["monthly", "annual"] as const).map((type) => (
               <button
@@ -103,7 +139,7 @@ export default function MembershipCalculator() {
 
         {/* Amount */}
         <div className="flex-1">
-          <label htmlFor="calc-income" className="ts-body-small mb-1.5 block font-medium text-ink">
+          <label htmlFor="calc-income" className={`mb-1.5 block ${labelClass}`}>
             {incomeType === "monthly" ? "Monthly income" : "Annual income"}
           </label>
           <div className="relative">
@@ -118,7 +154,7 @@ export default function MembershipCalculator() {
               value={income}
               onChange={(e) => setIncome(e.target.value)}
               placeholder={incomeType === "annual" ? "60 000" : "5 000"}
-              className="w-full rounded-lg border border-butter bg-sand py-2.5 pl-7 pr-3 text-sm text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+              className={`w-full rounded-lg border border-butter bg-sand py-2.5 pl-7 pr-3 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 ${accent.focusBorder} ${accent.ring}`}
             />
           </div>
         </div>
@@ -128,32 +164,32 @@ export default function MembershipCalculator() {
       {hasValidIncome ? (
         <div className="mt-5 grid grid-cols-2 gap-3" aria-live="polite">
           <div className="rounded-[12px] bg-sand px-5 py-4">
-            <p className="ts-body-small mb-1 text-ink-secondary">Monthly dues</p>
-            <p className="font-serif text-3xl text-brand">
+            <p className={`mb-1 ${resultLabelClass}`}>Monthly dues</p>
+            <p className={`${resultFigureClass} ${accent.text}`}>
               {currencyData.symbol}
               {suggestedMonthly.toFixed(2)}
             </p>
             {!isUSD && (
-              <p className="ts-body-small mt-0.5 text-ink-muted">
+              <p className={`mt-0.5 ${resultSubClass}`}>
                 ~${Math.round(suggestedMonthly * currencyData.usdRate)} USD
               </p>
             )}
           </div>
           <div className="rounded-[12px] bg-sand px-5 py-4">
-            <p className="ts-body-small mb-1 text-ink-secondary">Annual dues</p>
-            <p className="font-serif text-3xl text-brand">
+            <p className={`mb-1 ${resultLabelClass}`}>Annual dues</p>
+            <p className={`${resultFigureClass} ${accent.text}`}>
               {currencyData.symbol}
               {suggestedAnnual.toFixed(2)}
             </p>
             {!isUSD && (
-              <p className="ts-body-small mt-0.5 text-ink-muted">
+              <p className={`mt-0.5 ${resultSubClass}`}>
                 ~${Math.round(suggestedAnnual * currencyData.usdRate)} USD
               </p>
             )}
           </div>
         </div>
       ) : (
-        <p className="ts-body-small mt-4 text-center text-ink-muted">
+        <p className={`mt-4 text-center ${emptyStateClass}`}>
           Enter your income above to see a suggested amount.
         </p>
       )}
