@@ -60,14 +60,18 @@ export default function MembershipCalculator({
   // `bg-page`/`bg-sand`/`border-butter`/`rounded-[20px]` are the design
   // system's own surface tokens and corner radius — correct on
   // /membership-new, but they read as the redesign bleeding into the legacy
-  // /membership page. Plain mode uses the same light-gray tint and 8px
-  // radius already used elsewhere on that page instead.
+  // /membership page. Plain mode instead reuses the exact devices JoinFlow
+  // already established one step earlier in the same flow: a plain white
+  // card (like every other card on the page) and the same green tint
+  // TierCard uses for "this one's selected/active" — one consistent signal,
+  // not a third surface color.
   const shellRadius = designSystem ? "rounded-[20px]" : "rounded-lg";
-  const shellBg = designSystem ? "bg-page" : "bg-[#F2F3EE]";
+  const shellBg = designSystem ? "bg-page" : "bg-white";
   const controlBorder = designSystem ? "border-butter" : "border-ink-divider";
   const controlBg = designSystem ? "bg-sand" : "bg-white";
   const tileRadius = designSystem ? "rounded-[12px]" : "rounded-lg";
-  const tileBg = designSystem ? "bg-sand" : "bg-white";
+  const tileBg = designSystem ? "bg-sand" : "bg-[#F0F7F2]";
+  const toggleActiveBg = designSystem ? "bg-ink" : "bg-[#157A3E]";
   const [incomeType, setIncomeType] = useState<"annual" | "monthly">("monthly");
   const [income, setIncome] = useState<string>("");
   const [currency, setCurrency] = useState<string>("USD");
@@ -140,7 +144,7 @@ export default function MembershipCalculator({
                 onClick={() => setIncomeType(type)}
                 className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-150 ${
                   incomeType === type
-                    ? "bg-ink text-white shadow-sm"
+                    ? `${toggleActiveBg} text-white shadow-sm`
                     : "text-ink-secondary hover:text-ink"
                 }`}
               >
