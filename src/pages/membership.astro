@@ -1,9 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import MembershipMain from "../components/membership/MembershipMain.astro";
-import "@fontsource/fraunces/latin-400.css";
+// Outfit 600/700/800 — font-semibold/bold/extrabold appear throughout this
+// page's headings, labels, and buttons. Without the actual weight files,
+// the browser synthesizes ("faux") bold from whichever weight IS loaded,
+// which reads as cramped/squished at larger sizes. No Fraunces import here:
+// the plain-mode rendering never uses font-serif (that's design-system-only).
 import "@fontsource/outfit/latin-400.css";
 import "@fontsource/outfit/latin-500.css";
+import "@fontsource/outfit/latin-600.css";
+import "@fontsource/outfit/latin-700.css";
+import "@fontsource/outfit/latin-800.css";
 import "../styles/base.css";
 ---
 
