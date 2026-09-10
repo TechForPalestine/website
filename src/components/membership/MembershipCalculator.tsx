@@ -52,9 +52,22 @@ export default function MembershipCalculator({
     ? "ts-overline text-ink-secondary"
     : "text-xs font-medium uppercase tracking-[0.12em] text-ink-secondary";
   const resultLabelClass = designSystem ? "ts-body-small text-ink-secondary" : "text-sm text-ink-secondary";
-  const resultFigureClass = designSystem ? "ts-stat" : "font-serif text-3xl";
+  // font-serif (Fraunces) is a design-system-only choice — plain mode uses a
+  // bold sans figure instead of pulling in the redesign's editorial font.
+  const resultFigureClass = designSystem ? "ts-stat" : "text-3xl font-bold";
   const resultSubClass = designSystem ? "ts-caption text-ink-muted" : "text-sm text-ink-muted";
   const emptyStateClass = designSystem ? "ts-body-small text-ink-muted" : "text-sm text-ink-muted";
+  // `bg-page`/`bg-sand`/`border-butter`/`rounded-[20px]` are the design
+  // system's own surface tokens and corner radius — correct on
+  // /membership-new, but they read as the redesign bleeding into the legacy
+  // /membership page. Plain mode uses the same light-gray tint and 8px
+  // radius already used elsewhere on that page instead.
+  const shellRadius = designSystem ? "rounded-[20px]" : "rounded-lg";
+  const shellBg = designSystem ? "bg-page" : "bg-[#F2F3EE]";
+  const controlBorder = designSystem ? "border-butter" : "border-ink-divider";
+  const controlBg = designSystem ? "bg-sand" : "bg-white";
+  const tileRadius = designSystem ? "rounded-[12px]" : "rounded-lg";
+  const tileBg = designSystem ? "bg-sand" : "bg-white";
   const [incomeType, setIncomeType] = useState<"annual" | "monthly">("monthly");
   const [income, setIncome] = useState<string>("");
   const [currency, setCurrency] = useState<string>("USD");
@@ -72,7 +85,7 @@ export default function MembershipCalculator({
   const suggestedAnnual = Math.round(suggestedMonthly * 12 * 100) / 100;
 
   return (
-    <div className={`mb-8 rounded-[20px] border-2 ${accent.border} bg-page p-6 min-[810px]:p-8`}>
+    <div className={`mb-8 ${shellRadius} border-2 ${accent.border} ${shellBg} p-6 min-[810px]:p-8`}>
       {/* Header */}
       <p className={`mb-5 text-left ${overlineClass}`}>Calculate your suggested dues</p>
 
@@ -88,7 +101,7 @@ export default function MembershipCalculator({
               id="calc-currency"
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className={`w-full appearance-none rounded-lg border border-butter bg-sand px-3 py-2.5 pr-8 text-sm text-ink focus:outline-none focus:ring-1 ${accent.focusBorder} ${accent.ring}`}
+              className={`w-full appearance-none rounded-lg border ${controlBorder} ${controlBg} px-3 py-2.5 pr-8 text-sm text-ink focus:outline-none focus:ring-1 ${accent.focusBorder} ${accent.ring}`}
             >
               {CURRENCIES.map((curr) => (
                 <option key={curr.code} value={curr.code}>
@@ -119,7 +132,7 @@ export default function MembershipCalculator({
         {/* Period toggle */}
         <div>
           <p className={`mb-1.5 ${labelClass}`}>Period</p>
-          <div className="flex rounded-lg border border-butter bg-sand p-0.5">
+          <div className={`flex rounded-lg border ${controlBorder} ${controlBg} p-0.5`}>
             {(["monthly", "annual"] as const).map((type) => (
               <button
                 key={type}
@@ -154,7 +167,7 @@ export default function MembershipCalculator({
               value={income}
               onChange={(e) => setIncome(e.target.value)}
               placeholder={incomeType === "annual" ? "60 000" : "5 000"}
-              className={`w-full rounded-lg border border-butter bg-sand py-2.5 pl-7 pr-3 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 ${accent.focusBorder} ${accent.ring}`}
+              className={`w-full rounded-lg border ${controlBorder} ${controlBg} py-2.5 pl-7 pr-3 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 ${accent.focusBorder} ${accent.ring}`}
             />
           </div>
         </div>
@@ -163,7 +176,7 @@ export default function MembershipCalculator({
       {/* Results */}
       {hasValidIncome ? (
         <div className="mt-5 grid grid-cols-2 gap-3" aria-live="polite">
-          <div className="rounded-[12px] bg-sand px-5 py-4">
+          <div className={`${tileRadius} ${tileBg} px-5 py-4`}>
             <p className={`mb-1 ${resultLabelClass}`}>Monthly dues</p>
             <p className={`${resultFigureClass} ${accent.text}`}>
               {currencyData.symbol}
@@ -175,7 +188,7 @@ export default function MembershipCalculator({
               </p>
             )}
           </div>
-          <div className="rounded-[12px] bg-sand px-5 py-4">
+          <div className={`${tileRadius} ${tileBg} px-5 py-4`}>
             <p className={`mb-1 ${resultLabelClass}`}>Annual dues</p>
             <p className={`${resultFigureClass} ${accent.text}`}>
               {currencyData.symbol}

@@ -69,7 +69,7 @@ function getStyles(designSystem: boolean): StyleSet {
   }
   return {
     stepLabel: "text-[11px] font-bold uppercase tracking-[0.12em] text-[#157A3E]",
-    heading: "text-2xl font-extrabold tracking-tight text-ink",
+    heading: "text-2xl font-extrabold text-ink",
     fieldLabel: "text-sm font-semibold text-ink",
     input: "text-[15px] text-ink",
     button: "text-[15px] font-bold rounded-full",

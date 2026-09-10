@@ -106,10 +106,10 @@ const cx = designSystem
       shellPad: "px-6 py-16 min-[810px]:py-20",
       container: "mx-auto max-w-[1280px]",
       eyebrow: "text-xs font-bold uppercase tracking-[0.14em] text-[#157A3E]",
-      h1: "text-[38px] font-extrabold leading-[1.05] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]",
+      h1: "text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]",
       lede: "text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]",
       heroRadius: "rounded-md",
-      h2: "text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]",
+      h2: "text-[28px] font-extrabold leading-tight text-ink min-[810px]:text-[38px]",
       body: "text-[17px] leading-relaxed text-ink-secondary",
       bandBg: "bg-[#E7F2E9]",
       bandBorder: "border-[#D2E4D6]",
@@ -117,26 +117,26 @@ const cx = designSystem
       cardRadius: "rounded-lg",
       cardBorder: "border border-[#D2E4D6]",
       cardBg: "bg-white",
-      cardTitle: "text-[17px] font-bold leading-snug tracking-tight text-ink",
+      cardTitle: "text-[17px] font-bold leading-snug text-ink",
       cardLink: "text-sm font-bold text-[#157A3E]",
       barBg: "bg-[#F2F3EE]",
       barBorder: "border-ink-divider",
-      barText: "text-[17px] font-bold tracking-tight text-ink",
+      barText: "text-[17px] font-bold text-ink",
       barLink: "text-sm text-ink-secondary",
       quote: "text-[19px] leading-relaxed tracking-tight text-ink",
       name: "text-[13px] font-bold text-ink",
       role: "text-[13px] text-ink-secondary",
-      question: "text-base font-bold tracking-tight text-ink",
+      question: "text-base font-bold text-ink",
       answer: "text-[16px] leading-relaxed text-ink-secondary",
       suggestedShell: "rounded-lg bg-[#F2F3EE]",
       suggestedLabel: "text-[11px] font-bold uppercase tracking-[0.12em] text-[#157A3E]",
       suggestedBody: "text-[18px] leading-relaxed text-ink",
       dueCardShell: "rounded-lg border border-ink-divider",
-      dueCardTitle: "text-[17px] font-bold tracking-tight text-ink",
+      dueCardTitle: "text-[17px] font-bold text-ink",
       dueCardBody: "text-[16px] leading-relaxed text-ink-secondary",
       dueCardLink: "text-[13px] font-bold text-[#157A3E]",
       ctaShell: "rounded-md bg-[#101010]",
-      ctaText: "text-lg font-bold tracking-tight text-white",
+      ctaText: "text-lg font-bold text-white",
       ctaButton: "text-sm font-bold rounded-full bg-white text-[#101010] hover:bg-white/90",
     };
 ---
@@ -215,8 +215,8 @@ const cx = designSystem
           leader, developer, marketer or activist.
         </p>
         <img
-          src="/images/membership/supporting-panel.webp"
-          alt="A speaker addressing the audience during a Tech for Palestine panel discussion"
+          src="/images/membership/member-panel.webp"
+          alt="A Tech for Palestine member speaking on a panel at a community event"
           width="1600"
           height="1068"
           class={`mt-7 block h-auto w-full ${cx.heroRadius}`}
@@ -358,7 +358,10 @@ const cx = designSystem
             You can become a Supporting Member if you would like to support T4P financially and
             receive updates.
           </p>
-          <a href="#join" data-track-join-click="dues_supporting" class={cx.dueCardLink}>
+          <a
+            href={designSystem ? "/supporting-member-new" : "/supporting-member"}
+            class={cx.dueCardLink}
+          >
             Become a Supporting Member →
           </a>
         </div>
