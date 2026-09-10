@@ -405,6 +405,16 @@ const cx = designSystem
       </div>
     </div>
   </section>
+
+  <a
+    href="#join"
+    id="membership-floating-cta"
+    data-track-join-click="floating_cta"
+    hidden
+    class={`fixed bottom-4 inset-x-4 z-40 rounded-pill bg-[#157A3E] px-6 py-3.5 text-center text-white shadow-lg opacity-0 translate-y-2 pointer-events-none transition-[opacity,transform] duration-200 hover:bg-[#0e5a2f] motion-reduce:translate-y-0 motion-reduce:transition-opacity sm:inset-x-auto sm:bottom-6 sm:right-6 ${designSystem ? "ts-label" : "text-sm font-bold"}`}
+  >
+    Become a member
+  </a>
 </div>
 
 <style>
@@ -478,4 +488,43 @@ const cx = designSystem
         .catch(() => {});
     });
   });
+
+  // The join card is only sticky within the hero section's own row (see
+  // `#join`'s `lg:sticky lg:top-24`) — once that section scrolls past, there's
+  // no persistent way back to the form until the next inline "Join now" CTA.
+  // This floating button fills that gap without opening a second form: it
+  // just scrolls back up to the real one.
+  const floatingCta = document.getElementById("membership-floating-cta");
+  const heroJoinCard = document.getElementById("join");
+  const FLOATING_CTA_TRANSITION_MS = 200;
+  let floatingCtaHideTimeout: number | undefined;
+
+  if (floatingCta && heroJoinCard) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        window.clearTimeout(floatingCtaHideTimeout);
+        if (entry.isIntersecting) {
+          floatingCta.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+          floatingCta.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+          floatingCtaHideTimeout = window.setTimeout(() => {
+            floatingCta.hidden = true;
+          }, FLOATING_CTA_TRANSITION_MS);
+        } else {
+          floatingCta.hidden = false;
+          // Two rAFs, not one: removing `hidden` and toggling the opacity
+          // classes in the same frame skips the transition entirely — the
+          // browser needs a style flush in between to register the "before"
+          // state before the "after" state kicks off the animation.
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              floatingCta.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+              floatingCta.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+            });
+          });
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(heroJoinCard);
+  }
 </script>
