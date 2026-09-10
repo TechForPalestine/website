@@ -1,9 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import PageHeader from "../components/PageHeader.astro";
-import MembershipPage from "../components/MembershipPage.tsx";
-import TestimonialsMarquee from "../components/TestimonialsMarquee.astro";
-import { memberBenefits } from "../data/membershipBenefits";
+import MembershipMain from "../components/membership/MembershipMain.astro";
+// Outfit 600/700/800 — font-semibold/bold/extrabold appear throughout this
+// page's headings, labels, and buttons. Without the actual weight files,
+// the browser synthesizes ("faux") bold from whichever weight IS loaded,
+// which reads as cramped/squished at larger sizes. No Fraunces import here:
+// the plain-mode rendering never uses font-serif (that's design-system-only).
+import "@fontsource/outfit/latin-400.css";
+import "@fontsource/outfit/latin-500.css";
+import "@fontsource/outfit/latin-600.css";
+import "@fontsource/outfit/latin-700.css";
+import "@fontsource/outfit/latin-800.css";
 import "../styles/base.css";
 ---
 
@@ -13,40 +20,6 @@ import "../styles/base.css";
   hideDonatePopout
 >
   <main>
-    <PageHeader overline="Tech for Palestine" title="Become a member to support and grow our work" />
-
-    <div class="mx-auto max-w-6xl px-6 pb-24 pt-6 sm:px-8">
-      <!-- Hero: intro copy + benefits beside the photo, rather than stacked -->
-      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
-        <div>
-          <p class="text-lg leading-relaxed text-zinc-700">
-            <strong>T4P Members</strong> and <strong>Supporting Members</strong> drive and sustain our
-            work for Palestinian liberation.
-          </p>
-          <p class="mt-4 text-lg leading-relaxed text-zinc-700">
-            Members join our community to work directly on advocacy projects and help run T4P:
-          </p>
-          <ul class="ml-3 mt-3 list-disc space-y-2.5 pl-2 text-lg leading-relaxed text-zinc-700">
-            {memberBenefits.map((benefit) => <li>{benefit}</li>)}
-          </ul>
-        </div>
-
-        <img
-          src="/images/membership/members-group.webp"
-          alt="Tech for Palestine members gathered outside a venue at a community event"
-          class="w-full rounded-2xl shadow-sm ring-1 ring-zinc-900/5"
-          width="1600"
-          height="1232"
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-
-      <div class="mt-16">
-        <MembershipPage client:only="react" />
-      </div>
-    </div>
-
-    <TestimonialsMarquee background="green" />
+    <MembershipMain />
   </main>
 </Layout>

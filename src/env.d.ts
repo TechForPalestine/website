@@ -20,6 +20,16 @@ declare global {
      * React island hydrates (and registers its listener) isn't lost. Checked
      * on mount by LegacyJoinSection in addition to listening for the event. */
     __membershipRevealJoin?: boolean;
+    /** Qgiv's embed.js attaches this global. `initializeEmbeds` re-scans the
+     * DOM for `[data-qgiv-embed]` containers and is safe to call repeatedly —
+     * it skips any container that already has children. QgivJoin calls it
+     * directly when a second QgivJoin mounts after the script has already
+     * run (e.g. switching membership tiers in the join flow). */
+    QGIV?: {
+      Embed?: {
+        initializeEmbeds?: () => void;
+      };
+    };
   }
 }
 
