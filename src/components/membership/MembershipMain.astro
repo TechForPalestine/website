@@ -17,7 +17,13 @@ const { membershipLive = false, designSystem = false } = Astro.props;
 const testimonials = getTestimonials(membershipLive);
 const mohanad = testimonials.find((t) => t.name === "Mohanad");
 const veda = testimonials.find((t) => t.name === "Veda");
-const featuredTestimonials = [mohanad, veda].filter((t): t is NonNullable<typeof t> => Boolean(t));
+// Both are shown here as "Volunteer & member" regardless of the sitewide
+// membershipLive rollout flag testimonials.ts otherwise reads — this page
+// is specifically about membership, so it's worth naming both roles rather
+// than picking one via that flag.
+const featuredTestimonials = [mohanad, veda]
+  .filter((t): t is NonNullable<typeof t> => Boolean(t))
+  .map((t) => ({ ...t, role: "Volunteer & member, Tech for Palestine" }));
 
 const CALENDLY_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
 
