@@ -1,10 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { Box, Typography, TextField, Button, CircularProgress } from "@mui/material";
+import { validateAboutYou, type AboutYouData } from "./aboutYou";
 
-export interface AboutYouData {
-  name: string;
-  email: string;
-}
+export type { AboutYouData };
 
 interface AboutYouStepProps {
   onContinue: (data: AboutYouData) => void;
@@ -24,8 +22,6 @@ interface AboutYouStepProps {
    * feedback appearing lower on the page once the panel swaps. */
   submitting?: boolean;
 }
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * Step 1 of the membership join flow: collects name/email before the visitor
@@ -49,10 +45,10 @@ export default function AboutYouStep({
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
 
-    const nextNameError = trimmedName.length === 0 ? "Please enter your name." : "";
-    const nextEmailError = EMAIL_PATTERN.test(trimmedEmail)
-      ? ""
-      : "Please enter a valid email address.";
+    const { nameError: nextNameError, emailError: nextEmailError } = validateAboutYou(
+      trimmedName,
+      trimmedEmail,
+    );
 
     setNameError(nextNameError);
     setEmailError(nextEmailError);

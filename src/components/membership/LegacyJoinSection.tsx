@@ -14,8 +14,8 @@ interface LegacyJoinSectionProps {
 
 /** Hides the "Become a member" CTA anchors once the join form is revealed —
  * clicking them again is pointless once the form is already showing. These
- * anchors live outside this component's tree (siblings in MembershipPage.tsx,
- * or plain HTML in supporting-member.astro), so a DOM query is the simplest
+ * anchors live outside this component's tree (plain HTML in
+ * supporting-member.astro), so a DOM query is the simplest
  * way to reach all of them uniformly. The reveal is one-directional (there is
  * no "un-reveal" path), so there is no corresponding un-hide routine. */
 function hideJoinCtas(): void {

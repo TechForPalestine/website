@@ -64,7 +64,18 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
     // Guard against a duplicate <script> tag: Qgiv's embed.js declares
     // top-level identifiers that throw a SyntaxError on redeclaration if the
     // script is injected twice (e.g. this component briefly remounting).
-    if (document.getElementById(QGIV_EMBED_SCRIPT_ID)) return;
+    if (document.getElementById(QGIV_EMBED_SCRIPT_ID)) {
+      // The script already ran its one-time initializeEmbeds() scan before this
+      // container existed (e.g. a second tier's QgivJoin mounted after the
+      // visitor switches tiers in the join flow). Re-run the scan directly
+      // instead of re-injecting the script, since embed.js's own renderEmbeds()
+      // skips any container that already has children — it's safe to call
+      // repeatedly. Deferred a tick so this container is in the DOM first.
+      window.setTimeout(() => {
+        window.QGIV?.Embed?.initializeEmbeds?.();
+      }, 0);
+      return;
+    }
 
     const script = document.createElement("script");
     script.src = QGIV_EMBED_SCRIPT;
@@ -229,7 +240,7 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
       <div className="relative" style={{ minHeight: embedLoaded ? undefined : 640 }}>
         {!embedLoaded && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-zinc-50">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-[#168039]" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-[#157A3E]" />
             <span className="text-sm text-zinc-500">Loading secure payment form&hellip;</span>
           </div>
         )}

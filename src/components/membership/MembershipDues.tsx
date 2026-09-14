@@ -118,7 +118,7 @@ export default function MembershipDues({ tier = "member" }: MembershipDuesProps)
             )}
             {calculatorVisible && (
               <div className="mb-4">
-                <MembershipCalculator />
+                <MembershipCalculator designSystem />
               </div>
             )}
             <div

@@ -4,6 +4,15 @@ import { getEnv } from "../utils/getEnv";
 import "@fontsource/fraunces/latin-400.css";
 import "@fontsource/outfit/latin-400.css";
 import "@fontsource/outfit/latin-500.css";
+// font-semibold/bold/extrabold (600/700/800) are used throughout the
+// design system (headings, labels, buttons), but only 400/500 were ever
+// loaded — every heavier weight was rendering as browser-synthesized
+// ("faux") bold, which reads as cramped/squished at larger sizes since the
+// browser just algorithmically emboldens the 500 weight's glyphs instead of
+// using Outfit's actual bold strokes and spacing.
+import "@fontsource/outfit/latin-600.css";
+import "@fontsource/outfit/latin-700.css";
+import "@fontsource/outfit/latin-800.css";
 import "../styles/base.css";
 import "../styles/design-system.css";
 
