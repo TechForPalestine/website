@@ -1,5 +1,6 @@
 ---
 import JoinFlow from "./JoinFlow";
+import FlagStripe from "../FlagStripe.astro";
 import { getTestimonials } from "../../data/testimonials";
 
 interface Props {
@@ -206,7 +207,7 @@ const cx = designSystem
         </a>
       </div>
     </div>
-    <div class="flag-stripe" aria-hidden="true"></div>
+    <FlagStripe />
   </section>
 
   <section id="inside" class={`${cx.shellPad} ${designSystem ? "bg-page" : ""}`}>
@@ -308,7 +309,7 @@ const cx = designSystem
         }
       </div>
     </div>
-    <div class="flag-stripe" aria-hidden="true"></div>
+    <FlagStripe />
   </section>
 
   <section id="dues" class={`${cx.shellPad} ${designSystem ? "bg-page" : ""}`}>
@@ -428,43 +429,6 @@ const cx = designSystem
     Become a member
   </a>
 </div>
-
-<style>
-  @keyframes flagFlow {
-    from {
-      background-position: 0% 50%;
-    }
-    to {
-      background-position: -200% 50%;
-    }
-  }
-
-  .flag-stripe {
-    height: 4px;
-    margin: 0 0 10px;
-    background: linear-gradient(
-        to right,
-        #101010,
-        #ffffff,
-        #157a3e,
-        #ce1126,
-        #101010,
-        #ffffff,
-        #157a3e,
-        #ce1126,
-        #101010
-      )
-      0% 0% / 200% 100%;
-    animation: flagFlow 14s linear infinite;
-    box-shadow: 0 0 0 1px rgba(16, 16, 16, 0.12);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .flag-stripe {
-      animation: none;
-    }
-  }
-</style>
 
 <script>
   document.querySelectorAll<HTMLElement>("[data-track-join-click]").forEach((anchor) => {
