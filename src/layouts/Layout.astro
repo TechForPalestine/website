@@ -1,6 +1,15 @@
 ---
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+// Outfit 400/500/600/700/800 — matches the weights used across the site's
+// font-normal/medium/semibold/bold/extrabold classes. Without the actual
+// weight files, the browser synthesizes ("faux") bold from whichever weight
+// IS loaded, which reads as cramped/squished at larger sizes.
+import "@fontsource/outfit/latin-400.css";
+import "@fontsource/outfit/latin-500.css";
+import "@fontsource/outfit/latin-600.css";
+import "@fontsource/outfit/latin-700.css";
+import "@fontsource/outfit/latin-800.css";
 interface Props {
   title: string;
   description?: string;

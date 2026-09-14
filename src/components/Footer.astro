@@ -2,15 +2,14 @@
 import Container from "./Container.astro";
 import Socials from "./Socials.astro";
 
-// Footer navigation matching the new navbar structure
+// Mirrors the navbar's categories/links exactly (src/components/NavBar.svelte navigation map)
 const footerNavigation: Record<string, { href?: string; links: [string, string][] }> = {
   About: {
     href: "/about",
     links: [
       ["Our Organization", "/about"],
-      // ["Mission & Vision", "/coming-soon"],
       ["Team", "/team"],
-      ["Media", "/media"],
+      ["FAQ", "/faq"],
       ["Contact Us", "/contact"],
     ],
   },
@@ -26,31 +25,29 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
   "Get Involved": {
     href: "/get-involved",
     links: [
-      ["Overview", "/get-involved"],
-      ["Join our Discord", "https://techforpalestine.org/discord-invite"],
-      ["E4P", "/e4p"],
-      // ["Investors for Palestine", "/coming-soon"],
-      ["Volunteer", "/volunteer"],
+      ["Become a Member", "/membership"],
+      ["Donate", "/donate"],
       ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
+      ["Volunteer", "/volunteer"],
+      ["E4P", "/e4p"],
       ["Hire Palestinians", "/help/hire"],
+      ["Join our Discord", "https://techforpalestine.org/discord-invite"],
     ],
   },
-  Learn: {
-    // href: "/coming-soon",
+  Events: {
+    href: "/events",
     links: [
-      ["Past Updates", "https://updates.techforpalestine.org"],
       ["Past Events", "/events"],
-      // ["Shopping Ethically", "/coming-soon"],
-      // ["How to Boycott", "/coming-soon"],
-      // ["Tech Complicity", "/coming-soon"],
-      ["Vercel", "/vercel"],
-      ["FAQ", "/faq"],
+      ["Brussels 2026", "https://brussels2026.techforpalestine.org/"],
+      ["Barcelona 2026", "https://barcelona2026.techforpalestine.org/"],
+      ["Bay Area 2026", "https://summit.techforpalestine.org"],
+      ["London 2025", "/london-gathering"],
     ],
   },
 };
 ---
 
-<footer class="mt-20 border-t border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100">
+<footer class="mt-20 border-t border-gray-200 bg-white">
   <Container>
     <div class="py-20">
       <div class="grid grid-cols-1 gap-16 lg:grid-cols-12">
@@ -111,7 +108,7 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
                   {links.map(([label, linkHref]) => (
                     <a
                       href={linkHref}
-                      class="block whitespace-nowrap text-sm text-gray-600 transition-all duration-200 hover:translate-x-1 hover:text-gray-900"
+                      class="block whitespace-nowrap text-sm text-gray-600 transition-all duration-200 hover:translate-x-1 hover:text-blue-600"
                       target={
                         linkHref.startsWith("http") || linkHref.startsWith("mailto:")
                           ? "_blank"
@@ -141,17 +138,17 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
         >
           <a
             href="/privacy-policy"
-            class="whitespace-nowrap transition-colors duration-200 hover:text-gray-900"
+            class="whitespace-nowrap transition-colors duration-200 hover:text-blue-600"
             >Privacy Policy</a
           >
           <a
             href="/terms"
-            class="whitespace-nowrap transition-colors duration-200 hover:text-gray-900"
+            class="whitespace-nowrap transition-colors duration-200 hover:text-blue-600"
             >Terms of Service</a
           >
           <a
             href="/legal"
-            class="whitespace-nowrap transition-colors duration-200 hover:text-gray-900"
+            class="whitespace-nowrap transition-colors duration-200 hover:text-blue-600"
             >Legal & Financial</a
           >
         </div>
