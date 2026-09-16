@@ -1,0 +1,20 @@
+---
+// The canonical shareable event URL: /events/<title-slug>-<id>. Renders the
+// same events page as /events, but with this specific event's OG tags — the
+// React island independently opens the matching modal on mount by reading
+// window.location.pathname (see Events.tsx), so no prop needs to carry the
+// matched event down to it.
+import { fetchEvents } from "../../store/eventsClient";
+import { eventMetaTags } from "../../utils/eventMeta";
+import { findEventBySlug } from "../../utils/eventSlug";
+import EventsPage from "../../components/events/EventsPage.astro";
+
+const events = await fetchEvents(Astro.locals).catch(() => []);
+const match = findEventBySlug(events, Astro.params.slug ?? "");
+
+if (!match) {
+  return Astro.redirect("/events", 302);
+}
+---
+
+<EventsPage meta={eventMetaTags(match)} />

@@ -14,29 +14,14 @@ export async function copyAnchorLink(slug: string): Promise<boolean> {
   }
 }
 
-// Same pattern, but for a single event rather than a whole category: encodes
-// the event's (ICS UID) id as a `?event=` query param so the URL round-trips
-// through EventItem.id lookups elsewhere (see isEventPast/groupIntoSections
-// callers reading this param back out on mount).
-export async function copyEventLink(id: string): Promise<boolean> {
-  const search = `?event=${encodeURIComponent(id)}`;
-  const url = `${window.location.origin}${window.location.pathname}${search}`;
-  history.replaceState(null, "", `${window.location.pathname}${search}`);
-
+// Opening an event modal always pushes its real /events/<slug> URL first
+// (see eventSlug.ts + Events.tsx), so by the time the Share button is
+// visible the address bar already is the shareable link.
+export async function copyEventLink(): Promise<boolean> {
   try {
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(window.location.href);
     return true;
   } catch {
     return false;
   }
-}
-
-// Strips a `?event=` param left by copyEventLink (or a pasted deep link) once
-// its modal is closed, so the URL doesn't keep pointing at an event that's no
-// longer on screen.
-export function clearEventLinkParam(): void {
-  const url = new URL(window.location.href);
-  if (!url.searchParams.has("event")) return;
-  url.searchParams.delete("event");
-  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
 }
