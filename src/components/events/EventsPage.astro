@@ -1,0 +1,36 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EventsComponent from "../Events.tsx";
+import "../../styles/base.css";
+import type { EventMeta } from "../../utils/eventMeta";
+
+interface Props {
+  meta: EventMeta | null;
+}
+
+const { meta } = Astro.props;
+---
+
+<Layout
+  title={meta?.title ?? "Events - Tech for Palestine"}
+  description={meta?.description ??
+    "Tech for Palestine events bring together builders, organizers, and allies to collaborate, share ideas, and take action in support of Palestinian liberation. Join our community webinars, workshops, and networking sessions."}
+  image={meta?.image}
+>
+  <div class="mx-auto max-w-6xl px-4 pt-10">
+    <header class="grid gap-[18px] border-b border-gray-200 pb-10">
+      <div class="text-xs font-semibold uppercase tracking-[0.14em] text-[#EA4335]">
+        Tech for Palestine
+      </div>
+      <h1 class="max-w-[14ch] text-[44px] font-bold leading-[0.98] tracking-[-0.03em] text-gray-900 sm:text-[64px] lg:text-[76px]">
+        Events
+      </h1>
+      <p class="max-w-[46ch] text-[17px] leading-[1.55] text-gray-600">
+        Tech for Palestine events bring together builders, organizers, and allies to collaborate,
+        share ideas, and take action.
+      </p>
+    </header>
+  </div>
+
+  <EventsComponent events={[]} loading={true} client:only="react" />
+</Layout>
