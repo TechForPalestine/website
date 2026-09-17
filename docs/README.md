@@ -11,7 +11,6 @@
 | [PROJECTS.md](PROJECTS.md)         | ProjectHub integration for `/projects` and `/projects-new`, and how it differs from the unrelated `project-proxy` form endpoint |
 | [DONATIONS.md](DONATIONS.md)       | QGIV → EmailOctopus/Hub → Plausible conversion pipeline, the KV dropped-event fallback, and the admin dashboard                 |
 | [E4P.md](E4P.md)                   | Entrepreneurs for Palestine pledge/signatory flow                                                                               |
-| [GROWTHBOOK.md](GROWTHBOOK.md)     | Research doc on GrowthBook (feature flags/experimentation) — not yet integrated; SDK options, CSP/SSR implications, secrets     |
 
 Also relevant, at the repo root:
 
