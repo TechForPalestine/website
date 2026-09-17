@@ -14,16 +14,6 @@ export const growthbook = new GrowthBook({
   apiHost: "https://cdn.growthbook.io",
   clientKey,
   enableDevMode: true,
-  // Demo-only: a fresh id per page load so an experiment can be seen
-  // splitting traffic. A real experiment needs a stable per-visitor id
-  // (e.g. persisted in a cookie), or the same visitor counts as multiple
-  // different "users" across sessions.
-  attributes: {
-    id: crypto.randomUUID(),
-  },
-  trackingCallback: (experiment, result) => {
-    console.log("growthbook experiment viewed", experiment.key, result.variationId);
-  },
 });
 
 // streaming: false — fetch the payload once on load. Flag changes then land on the
