@@ -63,6 +63,9 @@ importers:
       '@fontsource/outfit':
         specifier: ^5.2.8
         version: 5.2.8
+      '@growthbook/growthbook-react':
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.0)
       '@iconify-json/simple-icons':
         specifier: ^1.2.54
         version: 1.2.54
@@ -974,6 +977,16 @@ packages:
 
   '@fontsource/outfit@5.2.8':
     resolution: {integrity: sha512-rXC6g0MqD7cOBjht0bMqc43qM6lRqDLML9KXsmg9uykz0wLQhy8Z/ajrMG6iyoT3NJR+MYgU+OEHp7uHoTb+Yw==}
+
+  '@growthbook/growthbook-react@1.7.0':
+    resolution: {integrity: sha512-7TU0Yjmkl2Me8LKpG5cjqIsLSK+sz9T/1vocJAm49KsBeTvse6QwR9544KB9sU7eJF9qYVGr4GekW/r9bqmaWg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0 || ^19.0.0-0
+
+  '@growthbook/growthbook@1.7.0':
+    resolution: {integrity: sha512-Vmad3fWRh1XaFH4q+AS62ofX6Q3IxSTD7sBGuhEHCaad8VyZerxrVdojucjzlnJDUocfrnZFUSpEkR6R/wCV+A==}
+    engines: {node: '>=10'}
 
   '@iconify-json/bi@1.2.6':
     resolution: {integrity: sha512-fWfLr1/+DJDe8+rIUXxMwvmWBZFlxRtM59sYnrezJ2xX87QKyXVw3QuforJ4kF2Orrz85J+JTRG6305vaJ7flA==}
@@ -2334,6 +2347,10 @@ packages:
 
   dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
+
+  dom-mutator@0.6.0:
+    resolution: {integrity: sha512-iCt9o0aYfXMUkz/43ZOAUFQYotjGB+GNbYJiJdz4TgXkyToXbbRy5S6FbTp72lRBtfpUMwEc1KmpFEU4CZeoNg==}
+    engines: {node: '>=10'}
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
@@ -4956,6 +4973,15 @@ snapshots:
 
   '@fontsource/outfit@5.2.8': {}
 
+  '@growthbook/growthbook-react@1.7.0(react@19.2.0)':
+    dependencies:
+      '@growthbook/growthbook': 1.7.0
+      react: 19.2.0
+
+  '@growthbook/growthbook@1.7.0':
+    dependencies:
+      dom-mutator: 0.6.0
+
   '@iconify-json/bi@1.2.6':
     dependencies:
       '@iconify/types': 2.0.0
@@ -6493,6 +6519,8 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.4
       csstype: 3.1.3
+
+  dom-mutator@0.6.0: {}
 
   dom-serializer@2.0.0:
     dependencies:

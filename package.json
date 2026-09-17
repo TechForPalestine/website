@@ -29,6 +29,7 @@
     "@emotion/styled": "^11.14.1",
     "@fontsource/fraunces": "^5.2.9",
     "@fontsource/outfit": "^5.2.8",
+    "@growthbook/growthbook-react": "^1.7.0",
     "@iconify-json/simple-icons": "^1.2.54",
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
