@@ -241,12 +241,9 @@ const cx = designSystem
                     +
                   </span>
                 </summary>
-                <div
-                  data-accordion-panel
-                  class={`grid overflow-hidden transition-[grid-template-rows] duration-[250ms] ease-in-out motion-reduce:transition-none ${item.open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-                >
-                  <p class={`min-h-0 px-5 pb-4 ${cx.answer}`}>{item.answer}</p>
-                </div>
+                <p data-accordion-content class={`px-5 pb-4 ${cx.answer}`}>
+                  {item.answer}
+                </p>
               </details>
             ))
           }
@@ -330,22 +327,17 @@ const cx = designSystem
                 +
               </span>
             </summary>
-            <div
-              data-accordion-panel
-              class="grid grid-rows-[1fr] overflow-hidden transition-[grid-template-rows] duration-[250ms] ease-in-out motion-reduce:transition-none"
-            >
-              <div class="min-h-0 px-6 pb-5">
-                <p class={`mb-4 ${cx.dueCardBody}`}>
-                  Our independence comes from our members. By paying dues based on what you can
-                  afford, you sustain our operations so we stay accountable to our community and
-                  not external funders.
-                </p>
-                <p class={`font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-[17px] leading-relaxed"}`}>
-                  Dues sustain T4P projects:<br />
-                  Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship for
-                  projects via T4P staff support, software access, partnerships and grants.
-                </p>
-              </div>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-4 ${cx.dueCardBody}`}>
+                Our independence comes from our members. By paying dues based on what you can
+                afford, you sustain our operations so we stay accountable to our community and not
+                external funders.
+              </p>
+              <p class={`font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-[17px] leading-relaxed"}`}>
+                Dues sustain T4P projects:<br />
+                Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship for
+                projects via T4P staff support, software access, partnerships and grants.
+              </p>
             </div>
           </details>
           <details
@@ -362,34 +354,29 @@ const cx = designSystem
                 +
               </span>
             </summary>
-            <div
-              data-accordion-panel
-              class="grid grid-rows-[0fr] overflow-hidden transition-[grid-template-rows] duration-[250ms] ease-in-out motion-reduce:transition-none"
-            >
-              <div class="min-h-0 px-6 pb-5">
-                <p class={`mb-3.5 ${cx.dueCardBody}`}>
-                  T4P aims for inclusivity. Email us for a waiver if you are located in, or a
-                  refugee from Gaza or West Bank, or if personal circumstances make dues
-                  unaffordable.
-                </p>
-                <span class="relative inline-flex">
-                  <a
-                    href="mailto:membership@techforpalestine.org"
-                    data-copy-email="membership@techforpalestine.org"
-                    class={cx.dueCardLink}
-                  >
-                    Request a waiver →
-                  </a>
-                  <span
-                    role="status"
-                    data-copy-confirm
-                    hidden
-                    class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
-                  >
-                    membership@techforpalestine.org copied to clipboard
-                  </span>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-3.5 ${cx.dueCardBody}`}>
+                T4P aims for inclusivity. Email us for a waiver if you are located in, or a
+                refugee from Gaza or West Bank, or if personal circumstances make dues
+                unaffordable.
+              </p>
+              <span class="relative inline-flex">
+                <a
+                  href="mailto:membership@techforpalestine.org"
+                  data-copy-email="membership@techforpalestine.org"
+                  class={cx.dueCardLink}
+                >
+                  Request a waiver →
+                </a>
+                <span
+                  role="status"
+                  data-copy-confirm
+                  hidden
+                  class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+                >
+                  membership@techforpalestine.org copied to clipboard
                 </span>
-              </div>
+              </span>
             </div>
           </details>
           <details
@@ -406,22 +393,17 @@ const cx = designSystem
                 +
               </span>
             </summary>
-            <div
-              data-accordion-panel
-              class="grid grid-rows-[0fr] overflow-hidden transition-[grid-template-rows] duration-[250ms] ease-in-out motion-reduce:transition-none"
-            >
-              <div class="min-h-0 px-6 pb-5">
-                <p class={`mb-3.5 ${cx.dueCardBody}`}>
-                  You can become a Supporting Member if you would like to support T4P financially
-                  and receive updates.
-                </p>
-                <a
-                  href={designSystem ? "/supporting-member-new" : "/supporting-member"}
-                  class={cx.dueCardLink}
-                >
-                  Become a Supporting Member →
-                </a>
-              </div>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-3.5 ${cx.dueCardBody}`}>
+                You can become a Supporting Member if you would like to support T4P financially
+                and receive updates.
+              </p>
+              <a
+                href={designSystem ? "/supporting-member-new" : "/supporting-member"}
+                class={cx.dueCardLink}
+              >
+                Become a Supporting Member →
+              </a>
             </div>
           </details>
           <details
@@ -438,42 +420,37 @@ const cx = designSystem
                 +
               </span>
             </summary>
-            <div
-              data-accordion-panel
-              class="grid grid-rows-[0fr] overflow-hidden transition-[grid-template-rows] duration-[250ms] ease-in-out motion-reduce:transition-none"
-            >
-              <div class="min-h-0 px-6 pb-5">
-                <p class={`mb-3.5 ${cx.dueCardBody}`}>
-                  Book an intro call with membership or send us an email. We'd love to hear from
-                  you!
-                </p>
-                <div class="flex flex-wrap items-center gap-5">
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-3.5 ${cx.dueCardBody}`}>
+                Book an intro call with membership or send us an email. We'd love to hear from
+                you!
+              </p>
+              <div class="flex flex-wrap items-center gap-5">
+                <a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={cx.dueCardLink}
+                >
+                  Book an intro call →
+                </a>
+                <span class="relative inline-flex">
                   <a
-                    href={CALENDLY_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="mailto:membership@techforpalestine.org"
+                    data-copy-email="membership@techforpalestine.org"
                     class={cx.dueCardLink}
                   >
-                    Book an intro call →
+                    Email us →
                   </a>
-                  <span class="relative inline-flex">
-                    <a
-                      href="mailto:membership@techforpalestine.org"
-                      data-copy-email="membership@techforpalestine.org"
-                      class={cx.dueCardLink}
-                    >
-                      Email us →
-                    </a>
-                    <span
-                      role="status"
-                      data-copy-confirm
-                      hidden
-                      class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
-                    >
-                      membership@techforpalestine.org copied to clipboard
-                    </span>
+                  <span
+                    role="status"
+                    data-copy-confirm
+                    hidden
+                    class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+                  >
+                    membership@techforpalestine.org copied to clipboard
                   </span>
-                </div>
+                </span>
               </div>
             </div>
           </details>
@@ -591,76 +568,107 @@ const cx = designSystem
     observer.observe(heroJoinCard);
   }
 
-  // Native <details> snaps open/closed instantly. Animate it with a CSS
-  // `grid-template-rows: 0fr -> 1fr` transition on the panel wrapper
-  // (`[data-accordion-panel]`) instead of driving `height` from JS: that
-  // earlier approach forced a synchronous layout read (`scrollHeight`) on
-  // every open/close, and doing that for two accordions at once — the one
-  // opening and the sibling it displaces — was what made the animation
-  // stutter. The grid-rows transition needs no measurement, so the browser's
-  // compositor can drive both elements smoothly in the same frame.
+  // Native <details> snaps open/closed instantly. Animate it by driving the
+  // answer's height with the Web Animations API — the same family of
+  // technique as MUI's Collapse (which FAQAccordion uses): measure the
+  // natural height, then animate to/from it.
+  //
+  // The earlier version of this script (and a later CSS
+  // `grid-template-rows` rewrite of it) both stuttered on close. The actual
+  // cause was layout thrashing: closing the previously-open sibling and
+  // opening the clicked one each read `scrollHeight` — which forces a
+  // synchronous layout — interleaved with the style writes that kick off
+  // their own animations. Reading a forced-layout value, writing a style,
+  // then reading another forced-layout value repeats the browser's
+  // layout pass multiple times in one frame instead of once.
+  //
+  // The fix is the standard "batch reads, then batch writes" pattern: every
+  // `scrollHeight` this click needs (the opening target's, and any open
+  // sibling's) is measured up front, before any animation starts.
   //
   // Accordions that share a `data-accordion-group` are mutually exclusive:
   // opening one closes whichever sibling in that group was already open.
-  function accordionPanel(details: HTMLDetailsElement): HTMLElement | null {
-    return details.querySelector<HTMLElement>("[data-accordion-panel]");
+  const ACCORDION_ANIMATION_MS = 250;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const accordionAnimations = new WeakMap<HTMLDetailsElement, Animation>();
+
+  function accordionContent(details: HTMLDetailsElement): HTMLElement | null {
+    return details.querySelector<HTMLElement>("[data-accordion-content]");
   }
 
-  function closeAccordion(details: HTMLDetailsElement): void {
-    const panel = accordionPanel(details);
-    if (!panel || !details.open) return;
-
-    panel.classList.remove("grid-rows-[1fr]");
-    panel.classList.add("grid-rows-[0fr]");
-
-    panel.addEventListener(
-      "transitionend",
-      (event) => {
-        if (event.target === panel) details.open = false;
-      },
-      { once: true },
+  function animateAccordion(
+    details: HTMLDetailsElement,
+    content: HTMLElement,
+    fromHeight: number,
+    toHeight: number,
+    onDone: () => void,
+  ): void {
+    accordionAnimations.get(details)?.cancel();
+    content.style.overflow = "hidden";
+    const animation = content.animate(
+      [{ height: `${fromHeight}px` }, { height: `${toHeight}px` }],
+      { duration: ACCORDION_ANIMATION_MS, easing: "ease" },
     );
-  }
-
-  function openAccordion(details: HTMLDetailsElement): void {
-    const panel = accordionPanel(details);
-    if (!panel) return;
-
-    details.open = true;
-
-    // The class flip has to land on a later frame than `details.open = true`
-    // above — flipping both in the same tick gives the browser no "still
-    // collapsed" frame to transition from, so it would just snap open.
-    requestAnimationFrame(() => {
-      panel.classList.remove("grid-rows-[0fr]");
-      panel.classList.add("grid-rows-[1fr]");
-    });
+    accordionAnimations.set(details, animation);
+    animation.onfinish = () => {
+      content.style.overflow = "";
+      content.style.height = "";
+      onDone();
+    };
   }
 
   document.querySelectorAll<HTMLDetailsElement>("[data-accordion]").forEach((details) => {
     const summary = details.querySelector("summary");
-    if (!summary || !accordionPanel(details)) return;
+    if (!summary || !accordionContent(details)) return;
 
     summary.addEventListener("click", (event) => {
       event.preventDefault();
 
-      if (details.open) {
-        closeAccordion(details);
+      const isClosingSelf = details.open;
+      const group = details.dataset.accordionGroup;
+      const openSiblings = !isClosingSelf && group
+        ? Array.from(
+            document.querySelectorAll<HTMLDetailsElement>(
+              `[data-accordion][data-accordion-group="${group}"]`,
+            ),
+          ).filter((sibling) => sibling !== details && sibling.open)
+        : [];
+
+      // Read phase: force every layout read this click needs up front.
+      const selfContent = accordionContent(details);
+      if (!selfContent) return;
+      if (!isClosingSelf) details.open = true; // must be open to measure its natural height
+      const selfHeight = selfContent.scrollHeight;
+
+      const siblingMeasurements = openSiblings
+        .map((sibling) => {
+          const content = accordionContent(sibling);
+          return content ? { sibling, content, height: content.scrollHeight } : null;
+        })
+        .filter((m): m is { sibling: HTMLDetailsElement; content: HTMLElement; height: number } => m !== null);
+
+      if (prefersReducedMotion) {
+        if (isClosingSelf) details.open = false;
+        siblingMeasurements.forEach(({ sibling }) => {
+          sibling.open = false;
+        });
         return;
       }
 
-      const group = details.dataset.accordionGroup;
-      if (group) {
-        document
-          .querySelectorAll<HTMLDetailsElement>(
-            `[data-accordion][data-accordion-group="${group}"]`,
-          )
-          .forEach((sibling) => {
-            if (sibling !== details && sibling.open) closeAccordion(sibling);
-          });
+      // Write phase: start every animation this click needs together.
+      if (isClosingSelf) {
+        animateAccordion(details, selfContent, selfHeight, 0, () => {
+          details.open = false;
+        });
+      } else {
+        animateAccordion(details, selfContent, 0, selfHeight, () => {});
       }
 
-      openAccordion(details);
+      siblingMeasurements.forEach(({ sibling, content, height }) => {
+        animateAccordion(sibling, content, height, 0, () => {
+          sibling.open = false;
+        });
+      });
     });
   });
 </script>
