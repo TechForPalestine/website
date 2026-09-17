@@ -2,7 +2,6 @@ import { useState, type FormEvent } from "react";
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
-import { membershipBenefits } from "../../data/membershipBenefits";
 import type { MembershipTier, QgivPrefill } from "./qgiv";
 
 const CALENDLY_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
@@ -21,8 +20,22 @@ const STEPS: { id: StepId; label: string }[] = [
  * MIN_LOADING_DISPLAY_MS floor. */
 const NEXT_BUTTON_LOADING_MS = 400;
 
-const MEMBER_BENEFITS = membershipBenefits.map((b) => b.label);
-const SUPPORTING_BENEFITS = membershipBenefits.filter((b) => b.supporting).map((b) => b.label);
+/** Tier-card bullets for the join flow's tier-selection step — distinct from
+ * the shared `membershipBenefits` table used on the supporting-member pages,
+ * since these are written specifically for the compact card layout here. */
+const MEMBER_BENEFITS = [
+  "Dues fund Palestinian liberation initiatives",
+  "Volunteer or mentor on projects",
+  "Attend community events",
+  "Get exclusive project updates",
+  "Join the private member chat",
+];
+const SUPPORTING_BENEFITS = [
+  "Dues fund Palestinian liberation initiatives",
+  "Attend community events",
+  "Get exclusive project updates",
+  "(Optionally) Mentor projects",
+];
 
 interface JoinFlowProps {
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
@@ -170,7 +183,7 @@ function AboutYouForm({ initialValues, submitting, styles, onContinue }: AboutYo
         Dues are pay-what-you-can &middot; Waivers available &middot; Tax deductible in the US
       </p>
       <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className={`mt-3 inline-block ${styles.link}`}>
-        Talk to membership first →
+        Book an intro call →
       </a>
     </form>
   );
@@ -306,7 +319,7 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
             <TierCard
               tier="member"
               title="Member (Pay-what-you-can, waivers available*)"
-              description="Collaborate directly on projects and support teams. Ideal for those wanting hands-on involvement."
+              description="If you would like to volunteer on projects & teams."
               benefits={MEMBER_BENEFITS}
               selected={tier === "member"}
               styles={styles}
@@ -315,7 +328,7 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
             <TierCard
               tier="supporting"
               title="Supporting Member"
-              description="Your contribution sustains our project services. Ideal for those who would like to support financially without committing to volunteer hours."
+              description="If you do not have time to volunteer but would like to support financially."
               benefits={SUPPORTING_BENEFITS}
               selected={tier === "supporting"}
               styles={styles}
@@ -344,9 +357,6 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
 
       {step === "payment" && tier && (
         <div>
-          <button type="button" onClick={() => setStep("tier")} className={`mb-4 ${styles.backLink}`}>
-            &larr; Change tier
-          </button>
           <div className="mb-4">
             <MembershipCalculator theme="green" designSystem={designSystem} />
           </div>
