@@ -335,6 +335,9 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
               onSelect={() => setTier("supporting")}
             />
           </div>
+          <div className="mt-5">
+            <MembershipCalculator theme="green" designSystem={designSystem} />
+          </div>
           <button
             type="button"
             onClick={handleTierContinue}
@@ -357,9 +360,6 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
 
       {step === "payment" && tier && (
         <div>
-          <div className="mb-4">
-            <MembershipCalculator theme="green" designSystem={designSystem} />
-          </div>
           {mountedTiers.map((mountedTier) => (
             <div key={mountedTier} className={tier === mountedTier ? "block" : "hidden"}>
               <QgivJoin tier={mountedTier} prefill={prefill} />
