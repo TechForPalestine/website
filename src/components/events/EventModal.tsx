@@ -4,7 +4,7 @@ import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 import { copyEventLink } from "../../utils/copyAnchorLink";
-import { ArrowRight, CloseIcon, CopyIcon, useEventDate, type SelectedEvent } from "./eventsShared";
+import { ArrowRight, CloseIcon, LinkIcon, useEventDate, type SelectedEvent } from "./eventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
 const COPIED_FEEDBACK_MS = 2500;
@@ -59,7 +59,7 @@ export function EventModal({ selected, onClose }: EventModalProps) {
   useBodyScrollLock(true);
 
   const handleCopyLink = async () => {
-    const ok = await copyEventLink(event.id);
+    const ok = await copyEventLink();
     if (!ok) return;
     setCopied(true);
     window.setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
@@ -102,24 +102,6 @@ export function EventModal({ selected, onClose }: EventModalProps) {
               alt={title}
               className="max-h-[70vh] w-auto max-w-full object-contain"
             />
-            <span className="absolute right-16 top-4 inline-flex">
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                aria-label="Copy link to this event"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-page text-ink transition-colors duration-150 hover:bg-brand hover:text-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                <CopyIcon />
-              </button>
-              {copied && (
-                <span
-                  role="status"
-                  className="ts-caption absolute right-0 top-full mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-page"
-                >
-                  Event URL copied to clipboard successfully
-                </span>
-              )}
-            </span>
             <button
               type="button"
               onClick={onClose}
@@ -140,13 +122,34 @@ export function EventModal({ selected, onClose }: EventModalProps) {
 
             <h2 className="ts-subheading text-ink">{title}</h2>
 
-            {/* Day/month/year is already shown above in the date badge —
-                this line adds the info the badge doesn't carry (weekday,
-                time) instead of repeating the same date. */}
-            <p className="ts-body-small text-ink-secondary">
-              {weekday}
-              {time && <span> · {time}</span>}
-            </p>
+            <div className="flex items-center justify-between gap-4">
+              {/* Day/month/year is already shown above in the date badge —
+                  this line adds the info the badge doesn't carry (weekday,
+                  time) instead of repeating the same date. */}
+              <p className="ts-body-small text-ink-secondary">
+                {weekday}
+                {time && <span> · {time}</span>}
+              </p>
+
+              <span className="relative inline-flex shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="ts-label inline-flex items-center gap-1.5 text-brand underline underline-offset-4 transition-colors duration-150 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  <LinkIcon size={16} />
+                  Share
+                </button>
+                {copied && (
+                  <span
+                    role="status"
+                    className="ts-caption absolute right-0 top-full mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-page"
+                  >
+                    Event URL copied to clipboard successfully
+                  </span>
+                )}
+              </span>
+            </div>
 
             {event.description && <EventDescription text={event.description} />}
           </div>

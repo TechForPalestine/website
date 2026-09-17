@@ -9,7 +9,8 @@ import {
   type EventSection,
   type UpcomingEvent,
 } from "../utils/eventSections";
-import { copyAnchorLink, copyEventLink, clearEventLinkParam } from "../utils/copyAnchorLink";
+import { copyAnchorLink, copyEventLink } from "../utils/copyAnchorLink";
+import { eventPath, findEventBySlug } from "../utils/eventSlug";
 import {
   formatSpeakerList,
   getDescriptionExcerpt,
@@ -22,7 +23,7 @@ import {
   ArrowRight,
   ChevronDown,
   CloseIcon,
-  CopyIcon,
+  LinkIcon,
   EventModalContext,
   useCarouselScroll,
   useEventDate,
@@ -88,7 +89,7 @@ function CategoryAnchorButton({ slug }: { slug: string }) {
         type="button"
         onClick={handleClick}
         aria-label="Copy link to this section"
-        className={`inline-flex h-11 w-11 items-center justify-center font-bold text-gray-400 transition-colors duration-150 hover:text-[#EA4335] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_EDITORIAL_SIZE}`}
+        className="inline-flex h-11 w-11 items-center justify-center text-[28px] leading-none text-gray-400 transition-colors duration-150 hover:text-[#EA4335] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
       >
         #
       </button>
@@ -115,7 +116,7 @@ function EventDescription({ text }: { text: string }) {
         }
         if (block.type === "heading") {
           return (
-            <p key={i} className={`font-bold text-gray-900 ${TS_EYEBROW_SIZE}`}>
+            <p key={i} className={`font-medium text-gray-900 ${TS_EYEBROW_SIZE}`}>
               {renderInlineText(block.text, `h-${i}`)}
             </p>
           );
@@ -177,7 +178,7 @@ function EventDetailsDialogBody({
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = async () => {
-    const ok = await copyEventLink(event.id);
+    const ok = await copyEventLink();
     if (!ok) return;
     setCopied(true);
     window.setTimeout(() => setCopied(false), EVENT_COPY_FEEDBACK_MS);
@@ -205,24 +206,6 @@ function EventDetailsDialogBody({
           alt={title}
           className="max-h-[70vh] w-auto max-w-full object-contain"
         />
-        <span className="absolute right-16 top-3 inline-flex">
-          <button
-            type="button"
-            onClick={handleCopyLink}
-            aria-label="Copy link to this event"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-700 shadow-sm transition-colors duration-150 hover:bg-[#EA4335] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
-          >
-            <CopyIcon />
-          </button>
-          {copied && (
-            <span
-              role="status"
-              className={`absolute right-0 top-full mt-2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1.5 text-white ${TS_CAPTION_SIZE}`}
-            >
-              Event URL copied to clipboard successfully
-            </span>
-          )}
-        </span>
         <button
           type="button"
           onClick={onClose}
@@ -235,7 +218,7 @@ function EventDetailsDialogBody({
       <DialogContent className="flex flex-col gap-4">
         <time dateTime={isoDate}>
           <span
-            className={`block font-bold leading-none tracking-tight text-[#EA4335] ${TS_HEADING_SIZE}`}
+            className={`block font-medium leading-none tracking-tight text-[#EA4335] ${TS_HEADING_SIZE}`}
           >
             {day}
           </span>
@@ -250,18 +233,40 @@ function EventDetailsDialogBody({
           {title}
         </h2>
 
-        {/* Day/month/year is already shown above in the date badge — this
-            line adds the info the badge doesn't carry (weekday, time)
-            instead of repeating the same date. */}
-        <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>
-          {weekday}
-          {time && <span> · {time}</span>}
-        </p>
+        <div className="flex items-center justify-between gap-4">
+          {/* Day/month/year is already shown above in the date badge — this
+              line adds the info the badge doesn't carry (weekday, time)
+              instead of repeating the same date. */}
+          <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>
+            {weekday}
+            {time && <span> · {time}</span>}
+            {event.location && <span> · {event.location}</span>}
+          </p>
+
+          <span className="relative inline-flex shrink-0">
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className={`inline-flex items-center gap-1.5 text-[#EA4335] underline underline-offset-4 transition-colors duration-150 hover:text-[#C5341F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_LABEL_SIZE}`}
+            >
+              <LinkIcon size={16} />
+              Share
+            </button>
+            {copied && (
+              <span
+                role="status"
+                className={`absolute right-0 top-full mt-2 whitespace-nowrap rounded-full bg-gray-900 px-3 py-1.5 text-white ${TS_CAPTION_SIZE}`}
+              >
+                Event URL copied to clipboard successfully
+              </span>
+            )}
+          </span>
+        </div>
 
         {event.description && <EventDescription text={event.description} />}
       </DialogContent>
       {(infoLink || event.locationLink) && (
-        <DialogActions className="flex-wrap gap-4 border-t border-gray-200 px-6 py-4">
+        <DialogActions className="flex-wrap items-center gap-4 border-t border-gray-200 px-6 py-4">
           {infoLink && (
             <a
               href={infoLink}
@@ -309,75 +314,81 @@ function UpcomingEventCard({ item }: { item: UpcomingEvent }) {
     : event.description
       ? getDescriptionExcerpt(event.description)
       : "";
+  // Whether there's anywhere to send someone yet — a placeholder like a
+  // not-yet-detailed community call gets a neutral "Soon" instead of red.
+  const isConfirmed = showPopup || Boolean(infoLink);
 
-  return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-l-4 border-gray-200 border-l-[#EA4335] p-5 sm:flex-row sm:items-center sm:gap-6">
-      {/* Mobile-only lead image: on the stacked mobile layout this reads as
-          a proper card banner. At sm (row layout) there's no good place for
-          it alongside a centered date badge and a single text column, so it
-          drops entirely rather than being squeezed in as a small thumbnail. */}
-      <EventPreviewImage
-        event={event}
-        alt=""
-        className="aspect-video w-full rounded-xl bg-gray-100 object-cover sm:hidden"
-      />
+  const dateColumn = (
+    <time dateTime={isoDate} className="grid gap-0.5 leading-none">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+        {weekday}
+      </span>
+      <span
+        className={`text-[32px] font-semibold tracking-[-0.02em] ${isConfirmed ? "text-[#EA4335]" : "text-gray-900"}`}
+      >
+        {day}
+      </span>
+      <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+        {month}
+      </span>
+    </time>
+  );
 
-      {/* Fixed width (not shrink-to-fit) at the row breakpoint: without it,
-          this box sizes itself to whichever child is widest — a 2-digit day
-          number is wider than the weekday text, a 1-digit day number is
-          narrower — so every card's box ends up a different width and the
-          centered content lands at a different x per card. A shared fixed
-          width makes every card's date column line up like a table column. */}
-      <time dateTime={isoDate} className="flex shrink-0 flex-col items-center sm:w-16">
-        <span className={`font-medium uppercase tracking-wide text-gray-500 ${TS_OVERLINE_SIZE}`}>
-          {weekday}
-        </span>
-        <span
-          className={`font-bold leading-none tracking-tight text-[#EA4335] ${TS_HEADING_SIZE}`}
-        >
-          {day}
-        </span>
-        <span className={`font-medium uppercase tracking-wide text-gray-500 ${TS_OVERLINE_SIZE}`}>
-          {month}
-        </span>
-      </time>
-
-      <div className="min-w-0 flex-1">
-        <span
-          className={`mb-1.5 inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 font-semibold text-gray-700 ${TS_CAPTION_SIZE}`}
-        >
-          {sectionDef.title}
-        </span>
-        <h3 className={`truncate font-bold text-gray-900 ${TS_SUBHEADING_SIZE}`}>{title}</h3>
-        {time && <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>{time}</p>}
-        {teaser && <p className={`mt-1 line-clamp-2 text-gray-500 ${TS_BODY_SMALL_SIZE}`}>{teaser}</p>}
-      </div>
-
-      <div className="flex shrink-0 flex-wrap items-center gap-4">
-        {showPopup ? (
-          <button
-            type="button"
-            onClick={() => openModal({ event, isPast: false })}
-            className={PRIMARY_BUTTON_CLASSES}
-          >
-            More info
-            <ArrowRight size={16} />
-          </button>
-        ) : infoLink ? (
-          <a
-            href={infoLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={PRIMARY_BUTTON_CLASSES}
-          >
-            {infoLabel}
-            <ArrowRight size={16} />
-          </a>
-        ) : (
-          <span className={`text-gray-400 ${TS_LABEL_SIZE}`}>—</span>
+  const body = (
+    <div className="grid min-w-0 gap-2">
+      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.1em] text-[#EA4335]">
+        <span>{sectionDef.title}</span>
+        {time && (
+          <>
+            <span className="text-gray-300">/</span>
+            <span className="text-gray-400">{time}</span>
+          </>
         )}
       </div>
-    </article>
+      <h3 className="text-2xl font-semibold leading-[1.2] tracking-[-0.02em] text-gray-900">
+        {title}
+      </h3>
+      {teaser && <p className="max-w-[62ch] text-[15px] leading-[1.5] text-gray-600">{teaser}</p>}
+    </div>
+  );
+
+  const cta = isConfirmed ? (
+    <span className="whitespace-nowrap pt-1 text-sm font-semibold text-[#EA4335]">
+      {showPopup ? "More info" : infoLabel} →
+    </span>
+  ) : (
+    <span className="whitespace-nowrap pt-1 text-sm font-semibold text-gray-400">Soon</span>
+  );
+
+  const rowClasses =
+    "grid grid-cols-[76px_minmax(0,1fr)_auto] items-start gap-7 rounded-[18px] border border-gray-200 px-6 py-6 text-left transition-colors duration-150 hover:border-gray-300";
+
+  if (showPopup) {
+    return (
+      <button type="button" onClick={() => openModal({ event, isPast: false })} className={rowClasses}>
+        {dateColumn}
+        {body}
+        {cta}
+      </button>
+    );
+  }
+
+  if (infoLink) {
+    return (
+      <a href={infoLink} target="_blank" rel="noopener noreferrer" className={rowClasses}>
+        {dateColumn}
+        {body}
+        {cta}
+      </a>
+    );
+  }
+
+  return (
+    <div className={rowClasses}>
+      {dateColumn}
+      {body}
+      {cta}
+    </div>
   );
 }
 
@@ -403,9 +414,12 @@ function UpcomingEventsSection({ events }: { events: EventItem[] }) {
 
   return (
     <section aria-label="Upcoming Events">
-      <h2 className={`mb-8 font-bold tracking-tight text-gray-900 ${TS_EDITORIAL_SIZE}`}>
-        Upcoming Events
-      </h2>
+      <div className="mb-2 flex items-baseline gap-3.5">
+        <h2 className="text-[15px] font-semibold tracking-[0.02em] text-gray-900">Upcoming</h2>
+        <span className="text-xs font-semibold text-gray-400">
+          {String(items.length).padStart(2, "0")}
+        </span>
+      </div>
 
       {items.length === 0 ? (
         <NoUpcomingEvents />
@@ -438,35 +452,37 @@ function PastEventCard({ event }: { event: EventItem }) {
   const title = displayTitle(event);
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-[border-color,box-shadow] duration-150 hover:border-gray-300 hover:shadow-sm">
-      <div className="flex aspect-video items-center justify-center overflow-hidden bg-gray-100">
-        <EventPreviewImage event={event} alt={title} className="h-full w-full object-contain" />
+    <article className="grid h-full content-start gap-3.5">
+      <div className="aspect-[16/10] overflow-hidden rounded-[14px] border border-gray-200 bg-gray-100">
+        <EventPreviewImage event={event} alt={title} className="h-full w-full object-cover" />
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <p className={`text-gray-500 ${TS_BODY_SMALL_SIZE}`}>{full}</p>
-        <h3 className={`line-clamp-2 font-bold text-gray-900 ${TS_LABEL_SIZE}`}>{title}</h3>
-        <div className="mt-auto pt-2">
-          {showPopup ? (
-            <button
-              type="button"
-              onClick={() => openModal({ event, isPast: true })}
-              className={`font-medium text-[#168039] underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_LABEL_SIZE}`}
-            >
-              More info
-            </button>
-          ) : infoLink ? (
-            <a
-              href={infoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`font-medium text-[#168039] underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335] ${TS_LABEL_SIZE}`}
-            >
-              {infoLabel}
-            </a>
-          ) : (
-            <span className={`text-gray-400 ${TS_LABEL_SIZE}`}>—</span>
-          )}
-        </div>
+      <div className="grid gap-1.5">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-400">
+          {full}
+        </span>
+        <h4 className="line-clamp-2 text-[17px] font-semibold leading-[1.28] tracking-[-0.01em] text-gray-900">
+          {title}
+        </h4>
+        {showPopup ? (
+          <button
+            type="button"
+            onClick={() => openModal({ event, isPast: true })}
+            className="w-fit text-sm font-semibold text-[#168039] transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
+          >
+            More info →
+          </button>
+        ) : infoLink ? (
+          <a
+            href={infoLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-fit text-sm font-semibold text-[#168039] transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EA4335]"
+          >
+            {infoLabel} →
+          </a>
+        ) : (
+          <span className="text-sm font-semibold text-gray-400">—</span>
+        )}
       </div>
     </article>
   );
@@ -550,14 +566,12 @@ function PastEventsCategorySection({ section }: { section: EventSection }) {
       className="scroll-mt-24 border-t border-gray-200 pt-12"
     >
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <h3
-            className={`mb-1 flex items-center gap-2 font-bold tracking-tight text-gray-900 ${TS_EDITORIAL_SIZE}`}
-          >
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1.5">
+          <h3 className="flex items-center gap-2 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-gray-900">
             <CategoryAnchorButton slug={def.key} />
             {def.title}
           </h3>
-          <p className={`text-gray-500 ${TS_BODY_SIZE}`}>{def.subtitle}</p>
+          <p className="text-sm text-gray-600">{def.subtitle}</p>
         </div>
         <button
           type="button"
@@ -628,7 +642,7 @@ function LoadingSkeleton() {
 function EmptyState() {
   return (
     <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
-      <p className={`mb-2 font-bold text-gray-900 ${TS_BODY_LARGE_SIZE}`}>No events found</p>
+      <p className={`mb-2 text-gray-900 ${TS_BODY_LARGE_SIZE}`}>No events found</p>
       <p className={`text-gray-500 ${TS_BODY_SIZE}`}>
         There are no events available at the moment. Check back later!
       </p>
@@ -690,24 +704,52 @@ export default function Events({
     document.getElementById(hash)?.scrollIntoView({ block: "start" });
   }, [loading, events.length]);
 
-  // A "Copy link" button in the event modal encodes the event's id as
-  // ?event=<id> (see copyEventLink) — re-open that event's modal on load so
-  // the link is actually shareable, not just a URL that looks specific.
+  // A direct load of /events/<slug> (see eventPath/findEventBySlug) is this
+  // same page — the modal for that specific event just needs opening once
+  // the real event list is in.
   useEffect(() => {
     if (loading || events.length === 0 || deepLinkHandled.current) return;
     deepLinkHandled.current = true;
-    const id = new URLSearchParams(window.location.search).get("event");
-    if (!id) return;
-    const event = events.find((e) => e.id === id);
+    const slug = window.location.pathname.replace(/^\/events\//, "");
+    if (slug === window.location.pathname) return; // no /events/<slug> segment
+    const event = findEventBySlug(events, slug);
     if (!event) return;
     setSelectedEvent({ event, isPast: isEventPast(event) });
   }, [loading, events.length]);
+
+  // Keeps the address bar and the modal in sync with browser back/forward.
+  // Only ever reads the URL here — never pushes a new one — so this can't
+  // stack extra history entries on top of what pushEvent/closeModal already
+  // pushed.
+  useEffect(() => {
+    const onPopState = () => {
+      const slug = window.location.pathname.replace(/^\/events\//, "");
+      if (slug === window.location.pathname) {
+        setSelectedEvent(null);
+        return;
+      }
+      const event = findEventBySlug(events, slug);
+      setSelectedEvent(event ? { event, isPast: isEventPast(event) } : null);
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [events]);
+
+  const openEvent = (selected: SelectedEvent) => {
+    history.pushState(null, "", eventPath(selected.event));
+    setSelectedEvent(selected);
+  };
+
+  const closeModal = () => {
+    history.pushState(null, "", "/events");
+    setSelectedEvent(null);
+  };
 
   const sections = groupIntoSections(events);
   const hasPastEvents = sections.some((section) => section.past.length > 0);
 
   return (
-    <EventModalContext.Provider value={setSelectedEvent}>
+    <EventModalContext.Provider value={openEvent}>
       <div className="mx-auto max-w-6xl px-4 py-10">
         {loading && events.length === 0 && <LoadingSkeleton />}
 
@@ -722,13 +764,13 @@ export default function Events({
                 id="past-events"
                 className="mt-14 scroll-mt-24 border-t border-gray-200 pt-14"
               >
-                <h2 className={`font-bold tracking-tight text-gray-900 ${TS_EDITORIAL_SIZE}`}>
-                  Past Events
+                <h2 className="text-[15px] font-semibold tracking-[0.02em] text-gray-900">
+                  Past events
                 </h2>
               </section>
             )}
 
-            <div className="mt-12 space-y-12">
+            <div className="mt-2 space-y-12">
               {sections.map((section) => (
                 <PastEventsCategorySection key={section.def.key} section={section} />
               ))}
@@ -736,13 +778,7 @@ export default function Events({
           </div>
         )}
       </div>
-      <EventDetailsDialog
-        selected={selectedEvent}
-        onClose={() => {
-          setSelectedEvent(null);
-          clearEventLinkParam();
-        }}
-      />
+      <EventDetailsDialog selected={selectedEvent} onClose={closeModal} />
     </EventModalContext.Provider>
   );
 }

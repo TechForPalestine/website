@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { EventItem } from "../../store/eventsClient";
-import { groupIntoSections, isEventPast } from "../../utils/eventSections";
-import { clearEventLinkParam } from "../../utils/copyAnchorLink";
+import { groupIntoSections } from "../../utils/eventSections";
 import {
   EventModalContext,
   useVisitorZoneReady,
@@ -47,7 +46,6 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
   const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const [loading, setLoading] = useState(initialEvents.length === 0);
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
-  const deepLinkHandled = useRef(false);
   // This island is mounted `client:load`, so it server-renders first. Event
   // times only become the visitor's own after mount — see VisitorZoneContext.
   const visitorZoneReady = useVisitorZoneReady();
@@ -74,19 +72,6 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
 
     target.scrollIntoView({ block: "start" });
   }, [loading]);
-
-  // A "Copy link" button in the event modal encodes the event's id as
-  // ?event=<id> (see copyEventLink) — re-open that event's modal on load so
-  // the link is actually shareable, not just a URL that looks specific.
-  useEffect(() => {
-    if (loading || events.length === 0 || deepLinkHandled.current) return;
-    deepLinkHandled.current = true;
-    const id = new URLSearchParams(window.location.search).get("event");
-    if (!id) return;
-    const event = events.find((e) => e.id === id);
-    if (!event) return;
-    setSelectedEvent({ event, isPast: isEventPast(event) });
-  }, [loading, events.length]);
 
   const sections = groupIntoSections(events);
   const hasPastEvents = sections.some((section) => section.past.length > 0);
@@ -120,13 +105,7 @@ export default function EventsNew({ initialEvents = [] }: EventsNewProps) {
           )}
         </div>
         {selectedEvent && (
-          <EventModal
-            selected={selectedEvent}
-            onClose={() => {
-              setSelectedEvent(null);
-              clearEventLinkParam();
-            }}
-          />
+          <EventModal selected={selectedEvent} onClose={() => setSelectedEvent(null)} />
         )}
       </EventModalContext.Provider>
     </VisitorZoneContext.Provider>

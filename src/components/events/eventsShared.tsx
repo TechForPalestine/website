@@ -147,7 +147,10 @@ export function ChevronDown({ size = 18, expanded }: { size?: number; expanded: 
   );
 }
 
-export function CopyIcon({ size = 18 }: { size?: number }) {
+// A chain-link glyph, not the three-node "share sheet" icon — the action
+// this labels just copies a link to the clipboard, it doesn't open a native
+// share sheet, so the icon shouldn't promise one.
+export function LinkIcon({ size = 18 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -160,8 +163,9 @@ export function CopyIcon({ size = 18 }: { size?: number }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <rect x="9" y="9" width="12" height="12" rx="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+      <path d="M9 15L15 9" />
+      <path d="M11 6l1.5-1.5a4 4 0 0 1 5.5 5.5L16.5 11.5" />
+      <path d="M13 18l-1.5 1.5a4 4 0 0 1-5.5-5.5L7.5 12.5" />
     </svg>
   );
 }
