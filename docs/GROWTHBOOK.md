@@ -210,3 +210,65 @@ webhook-auth convention in `CLAUDE.md`.
   `@growthbook/edge-utils` in `growthbook/growthbook-proxy`) are worth a deeper look for
   redirect/rewrite-style experiments, given they weren't designed as a drop-in library for an
   existing Astro/Cloudflare-adapter SSR handler — this was only skimmed per task scope.
+
+## Client vs. server flag evaluation: what's recommended
+
+**1. GrowthBook's own framework guidance.** GrowthBook's Next.js guides
+([App Router](https://docs.growthbook.io/guide/nextjs-app-router),
+[Pages Router](https://docs.growthbook.io/guide/nextjs-and-growthbook)) show the SSR-bootstrap
+pattern as the documented default for that framework: fetch the feature payload server-side and
+hand it to the client SDK via `initSync`/`setPayload` so "the markup is already correct before
+React touches it" — the stated principle is to "decide the variant before the HTML leaves the
+server." This is framework-specific guidance, not a blanket rule; GrowthBook has no published
+Astro guide, and the React SDK docs
+([docs.growthbook.io/lib/react](https://docs.growthbook.io/lib/react)) present the plain
+client-fetch flow as the base case, with SSR bootstrapping layered on top only where a framework
+guide exists. There's no single "always do X" statement — GrowthBook's docs consistently frame it
+per use case (does this flag affect what's visible on first paint?).
+
+**2. Tradeoffs GrowthBook itself draws out.** The clearest explicit tradeoff statement in
+GrowthBook's docs is on the Cloudflare edge page
+([docs.growthbook.io/lib/edge/cloudflare](https://docs.growthbook.io/lib/edge/cloudflare)), which
+frames edge evaluation as existing specifically to "cut flicker before HTML ships" — i.e., it's
+positioned as the fix when both plain client-fetch (flicker) and full app-server SSR bootstrap
+(a fetch added to every origin request) are unattractive. The Cloudflare/Fastly/Lambda@Edge
+edge-app packages intercept the request *before* it reaches your origin, so their sweet spot is
+edge-native use cases — URL redirect/rewrite experiments and personalization baked into the very
+first response — not general app SSR. GrowthBook doesn't publish a quantified latency comparison
+between the three approaches; the qualitative shape is: client-only fetch = zero server cost, risk
+of flicker; SSR bootstrap = no flicker, but every server-rendered request now waits on a feature
+fetch (mitigated by the SDK's own caching/CDN payload, not eliminated); edge evaluation = no
+flicker without touching the origin server, at the cost of standing up and maintaining a separate
+edge worker outside the existing Astro/Cloudflare adapter request path (per this repo's own
+research in §2, it's not a drop-in library call — it's its own Worker).
+
+**3. Industry consensus.** Other vendors converge on the same shape GrowthBook implies. Vercel's
+Flags SDK docs are the most direct: client-side flag evaluation causes users to see "a loader, a
+flicker, or a layout shift because the browser can't render the correct view until the flag value
+comes back," and their fix is evaluating server-side (in RSC, `await`ed during render) so "the
+browser renders it directly, with no separate flag request"
+([Using the Flags SDK](https://vercel.com/docs/flags/vercel-flags/sdks/flags-sdk),
+[Vercel Flags](https://vercel.com/docs/flags/vercel-flags)) — going further with a "Precompute"
+pattern for fully static pages. LaunchDarkly's bootstrapping docs
+([Bootstrapping](https://launchdarkly.com/docs/sdk/features/bootstrapping),
+[Eliminating flicker when using default flag values](https://launchdarkly.com/docs/sdk/client-side/javascript/default-values))
+frame server-computed bootstrap values as the answer to flicker specifically "while running
+experiments" so users aren't exposed to a wrong variant momentarily — but LaunchDarkly does not
+say every client app must bootstrap; the plain client SDK with sensible default values is treated
+as an acceptable baseline for flags that don't gate visible UI. The rough industry consensus is:
+**bootstrap/evaluate server-side when you're already doing SSR and the flag controls
+above-the-fold or layout-affecting content; a plain client fetch is fine otherwise, and nobody
+recommends solving flicker before it's an observed, visible problem.**
+
+**4. Recommendation for this site.** Ship the already-installed client-only
+`@growthbook/growthbook-react` approach and revisit if a specific flag later causes a visible
+flicker. Reasoning: this is a low-traffic nonprofit site with **zero flags live**, so there is no
+concrete above-the-fold flag yet to justify server cost; Astro's own SSR handler doing an extra
+network round-trip to GrowthBook on every page request is a real latency cost applied to 100% of
+traffic today, in exchange for fixing a flicker problem that doesn't exist yet. Once real flags
+are built and one of them visibly gates layout/above-the-fold content (the same test GrowthBook
+and Vercel both use), that specific page is the right place to add SSR bootstrapping (§4 above),
+not the whole site up front. The edge-worker approach is unlikely to be worth it for this project
+at all — it's built for redirect/rewrite-at-the-edge use cases and would add a second piece of
+infrastructure to maintain, which doesn't match a small-nonprofit low-traffic profile with no
+edge-specific experiment need.
