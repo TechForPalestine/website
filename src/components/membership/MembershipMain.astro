@@ -1,6 +1,5 @@
 ---
 import JoinFlow from "./JoinFlow";
-import FlagStripe from "../FlagStripe.astro";
 import { getTestimonials } from "../../data/testimonials";
 
 interface Props {
@@ -75,12 +74,10 @@ const cx = designSystem
   ? {
       shellPad: "px-6 py-14 min-[810px]:px-10 min-[810px]:py-20",
       container: "mx-auto max-w-[1480px]",
-      eyebrow: "ts-overline text-[#157A3E]",
       h1: "ts-editorial text-ink",
       lede: "ts-body-large text-ink",
       heroRadius: "rounded-[20px]",
       h2: "ts-heading text-ink",
-      body: "ts-body text-ink-secondary",
       bandBg: "bg-positive-tint",
       bandBorder: "border-butter",
       navEyebrow: "ts-overline text-[#157A3E]",
@@ -112,12 +109,10 @@ const cx = designSystem
   : {
       shellPad: "px-6 py-16 min-[810px]:py-20",
       container: "mx-auto max-w-[1280px]",
-      eyebrow: "text-xs font-bold uppercase tracking-[0.14em] text-[#157A3E]",
       h1: "text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]",
       lede: "text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]",
       heroRadius: "rounded-md",
       h2: "text-[28px] font-extrabold leading-tight text-ink min-[810px]:text-[38px]",
-      body: "text-[17px] leading-relaxed text-ink-secondary",
       bandBg: "bg-[#E7F2E9]",
       bandBorder: "border-[#D2E4D6]",
       navEyebrow: "text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]",
@@ -152,7 +147,6 @@ const cx = designSystem
   <section class={`${cx.shellPad} ${designSystem ? "bg-page" : ""}`}>
     <div class={`${cx.container} grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14`}>
       <div class="min-w-0">
-        <div class={`mb-4 ${cx.eyebrow}`}>Tech for Palestine Membership</div>
         <h1 class={`mb-6 ${cx.h1}`}>Join the community building for Palestinian liberation.</h1>
         <p class={`mb-3.5 ${cx.lede}`}>
           Members contribute to <strong class="font-bold text-[#157A3E]">advocacy projects</strong
@@ -170,6 +164,13 @@ const cx = designSystem
       </div>
       <div id="join" class="min-w-0 scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
         <JoinFlow client:only="react" designSystem={designSystem} />
+        <div class={`mt-6 p-6 ${cx.suggestedShell}`}>
+          <div class={`mb-3 ${cx.suggestedLabel}`}>Suggested amount</div>
+          <p class={cx.suggestedBody}>
+            Dues are pay-what-you-can. We suggest dues equal to one hour of income (or 1/2000th of
+            your annual income), which can be calculated at checkout.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -207,51 +208,46 @@ const cx = designSystem
         </a>
       </div>
     </div>
-    <FlagStripe />
   </section>
 
   <section id="inside" class={`${cx.shellPad} ${designSystem ? "bg-page" : ""}`}>
-    <div
-      class={`${cx.container} grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] min-[810px]:gap-14`}
-    >
-      <div class="min-w-0">
-        <h2 class={`mb-5 ${cx.h2}`}>What being a member looks like</h2>
-        <p class={cx.body}>
-          This is a vetted coalition for anyone who wants to change the narrative on Palestine or
-          ethics in the tech industry. There's a place for you, whether you're a thinker, builder,
-          leader, developer, marketer or activist.
-        </p>
-        <img
-          src="/images/membership/member-panel.webp"
-          alt="A Tech for Palestine member speaking on a panel at a community event"
-          width="1600"
-          height="1068"
-          class={`mt-7 block h-auto w-full ${cx.heroRadius}`}
-        />
-      </div>
-      <div class="flex min-w-0 flex-col justify-start gap-4">
-        {
-          accordionItems.map((item) => (
-            <details
-              data-accordion
-              class={`group overflow-hidden ${cx.cardRadius} ${cx.cardBorder} border-t-[3px] border-t-[#157A3E] ${cx.cardBg} shadow-sm`}
-              open={item.open}
-            >
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4">
-                <span class={cx.question}>{item.question}</span>
-                <span
-                  aria-hidden="true"
-                  class="shrink-0 text-lg font-bold text-[#157A3E] transition-transform group-open:rotate-180"
-                >
-                  +
-                </span>
-              </summary>
-              <p data-accordion-content class={`px-5 pb-4 ${cx.answer}`}>
-                {item.answer}
-              </p>
-            </details>
-          ))
-        }
+    <div class={cx.container}>
+      <h2 class={`mb-8 ${cx.h2}`}>What being a member looks like</h2>
+      <div class="grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] min-[810px]:gap-14">
+        <div class="min-w-0">
+          <img
+            src="/images/membership/member-panel.webp"
+            alt="A Tech for Palestine member speaking on a panel at a community event"
+            width="1600"
+            height="1068"
+            class={`block h-auto w-full ${cx.heroRadius}`}
+          />
+        </div>
+        <div class="flex min-w-0 flex-col justify-start gap-4">
+          {
+            accordionItems.map((item) => (
+              <details
+                data-accordion
+                data-accordion-group="looks-like"
+                class={`group overflow-hidden ${cx.cardRadius} ${cx.cardBorder} border-t-[3px] border-t-[#157A3E] ${cx.cardBg} shadow-sm`}
+                open={item.open}
+              >
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4">
+                  <span class={cx.question}>{item.question}</span>
+                  <span
+                    aria-hidden="true"
+                    class="shrink-0 text-lg font-bold text-[#157A3E] transition-transform group-open:rotate-180"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p data-accordion-content class={`px-5 pb-4 ${cx.answer}`}>
+                  {item.answer}
+                </p>
+              </details>
+            ))
+          }
+        </div>
       </div>
     </div>
   </section>
@@ -276,7 +272,7 @@ const cx = designSystem
             rel="noopener noreferrer"
             class={`${cx.barLink} underline underline-offset-[3px]`}
           >
-            Still deciding? Chat with membership
+            Still deciding? Chat with our team
           </a>
         </div>
       </div>
@@ -309,96 +305,165 @@ const cx = designSystem
         }
       </div>
     </div>
-    <FlagStripe />
   </section>
 
   <section id="dues" class={`${cx.shellPad} ${designSystem ? "bg-page" : ""}`}>
-    <div class={`${cx.container} grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-14`}>
-      <div class="min-w-0">
-        <h2 class={`mb-5 ${cx.h2}`}>Dues, time, and waivers</h2>
-        <p class={`mb-4 ${cx.body}`}>
-          Our independence comes from our members. By paying dues based on what you can afford,
-          you sustain our operations so we stay accountable to our community and not external
-          funders.
-        </p>
-        <p class={`mt-5 font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-[17px] leading-relaxed"}`}>
-          Dues sustain T4P projects:<br />
-          Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship for projects via
-          T4P staff support, software access, partnerships and grants.
-        </p>
-        <div class={`mt-6 p-6 ${cx.suggestedShell}`}>
-          <div class={`mb-3 ${cx.suggestedLabel}`}>Suggested amount</div>
-          <p class={cx.suggestedBody}>
-            Dues are pay-what-you-can. We suggest dues equal to one hour of income (or 1/2000th of
-            your annual income), which can be calculated at checkout.
-          </p>
-        </div>
-      </div>
-      <div class="flex min-w-0 flex-col gap-4">
-        <div class={`p-6 ${cx.dueCardShell}`}>
-          <h3 class={`mb-2.5 ${cx.dueCardTitle}`}>I can't afford dues</h3>
-          <p class={`mb-3.5 ${cx.dueCardBody}`}>
-            T4P aims for inclusivity. Email us for a waiver if you are located in, or a refugee
-            from Gaza or West Bank, or if personal circumstances make dues unaffordable.
-          </p>
-          <span class="relative inline-flex">
-            <a
-              href="mailto:membership@techforpalestine.org"
-              data-copy-email="membership@techforpalestine.org"
-              class={cx.dueCardLink}
-            >
-              Request a waiver →
-            </a>
-            <span
-              role="status"
-              data-copy-confirm
-              hidden
-              class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
-            >
-              membership@techforpalestine.org copied to clipboard
-            </span>
-          </span>
-        </div>
-        <div class={`p-6 ${cx.dueCardShell}`}>
-          <h3 class={`mb-2.5 ${cx.dueCardTitle}`}>I don't have time to contribute</h3>
-          <p class={`mb-3.5 ${cx.dueCardBody}`}>
-            You can become a Supporting Member if you would like to support T4P financially and
-            receive updates.
-          </p>
-          <a
-            href={designSystem ? "/supporting-member-new" : "/supporting-member"}
-            class={cx.dueCardLink}
+    <div class={cx.container}>
+      <h2 class={`mb-8 ${cx.h2}`}>Dues, time, and waivers</h2>
+      <div class="grid grid-cols-1 items-start gap-10 min-[810px]:grid-cols-2 min-[810px]:gap-14">
+        <div class="flex min-w-0 flex-col gap-4">
+          <details
+            data-accordion
+            data-accordion-group="dues"
+            class={`group overflow-hidden ${cx.cardRadius} ${cx.dueCardShell} shadow-sm`}
+            open
           >
-            Become a Supporting Member →
-          </a>
-        </div>
-        <div class={`p-6 ${cx.dueCardShell}`}>
-          <h3 class={`mb-2.5 ${cx.dueCardTitle}`}>I still have questions</h3>
-          <p class={`mb-3.5 ${cx.dueCardBody}`}>
-            Book an intro call with membership or send us an email. We'd love to hear from you!
-          </p>
-          <div class="flex flex-wrap items-center gap-5">
-            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" class={cx.dueCardLink}>
-              Book an intro call →
-            </a>
-            <span class="relative inline-flex">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5">
+              <span class={cx.dueCardTitle}>How does T4P use dues?</span>
+              <span
+                aria-hidden="true"
+                class="shrink-0 text-lg font-bold text-[#157A3E] transition-transform group-open:rotate-180"
+              >
+                +
+              </span>
+            </summary>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-4 ${cx.dueCardBody}`}>
+                Our independence comes from our members. By paying dues based on what you can
+                afford, you sustain our operations so we stay accountable to our community and not
+                external funders.
+              </p>
+              <p class={`font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-[17px] leading-relaxed"}`}>
+                Dues sustain T4P projects:<br />
+                Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship for
+                projects via T4P staff support, software access, partnerships and grants.
+              </p>
+            </div>
+          </details>
+          <details
+            id="cant-afford-dues"
+            data-accordion
+            data-accordion-group="dues"
+            class={`group overflow-hidden ${cx.cardRadius} ${cx.dueCardShell} shadow-sm`}
+          >
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5">
+              <span class={cx.dueCardTitle}>I can't afford dues</span>
+              <span
+                aria-hidden="true"
+                class="shrink-0 text-lg font-bold text-[#157A3E] transition-transform group-open:rotate-180"
+              >
+                +
+              </span>
+            </summary>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-3.5 ${cx.dueCardBody}`}>
+                T4P aims for inclusivity. Email us for a waiver if you are located in, or a
+                refugee from Gaza or West Bank, or if personal circumstances make dues
+                unaffordable.
+              </p>
+              <span class="relative inline-flex">
+                <a
+                  href="mailto:membership@techforpalestine.org"
+                  data-copy-email="membership@techforpalestine.org"
+                  class={cx.dueCardLink}
+                >
+                  Request a waiver →
+                </a>
+                <span
+                  role="status"
+                  data-copy-confirm
+                  hidden
+                  class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+                >
+                  membership@techforpalestine.org copied to clipboard
+                </span>
+              </span>
+            </div>
+          </details>
+          <details
+            data-accordion
+            data-accordion-group="dues"
+            class={`group overflow-hidden ${cx.cardRadius} ${cx.dueCardShell} shadow-sm`}
+          >
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5">
+              <span class={cx.dueCardTitle}>I don't have time to contribute</span>
+              <span
+                aria-hidden="true"
+                class="shrink-0 text-lg font-bold text-[#157A3E] transition-transform group-open:rotate-180"
+              >
+                +
+              </span>
+            </summary>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-3.5 ${cx.dueCardBody}`}>
+                You can become a Supporting Member if you would like to support T4P financially
+                and receive updates.
+              </p>
               <a
-                href="mailto:membership@techforpalestine.org"
-                data-copy-email="membership@techforpalestine.org"
+                href={designSystem ? "/supporting-member-new" : "/supporting-member"}
                 class={cx.dueCardLink}
               >
-                Email us →
+                Become a Supporting Member →
               </a>
+            </div>
+          </details>
+          <details
+            data-accordion
+            data-accordion-group="dues"
+            class={`group overflow-hidden ${cx.cardRadius} ${cx.dueCardShell} shadow-sm`}
+          >
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5">
+              <span class={cx.dueCardTitle}>I still have questions</span>
               <span
-                role="status"
-                data-copy-confirm
-                hidden
-                class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+                aria-hidden="true"
+                class="shrink-0 text-lg font-bold text-[#157A3E] transition-transform group-open:rotate-180"
               >
-                membership@techforpalestine.org copied to clipboard
+                +
               </span>
-            </span>
-          </div>
+            </summary>
+            <div data-accordion-content class="px-6 pb-5">
+              <p class={`mb-3.5 ${cx.dueCardBody}`}>
+                Book an intro call with membership or send us an email. We'd love to hear from
+                you!
+              </p>
+              <div class="flex flex-wrap items-center gap-5">
+                <a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={cx.dueCardLink}
+                >
+                  Book an intro call →
+                </a>
+                <span class="relative inline-flex">
+                  <a
+                    href="mailto:membership@techforpalestine.org"
+                    data-copy-email="membership@techforpalestine.org"
+                    class={cx.dueCardLink}
+                  >
+                    Email us →
+                  </a>
+                  <span
+                    role="status"
+                    data-copy-confirm
+                    hidden
+                    class="absolute left-0 top-full z-10 mt-2 whitespace-nowrap rounded-pill bg-ink px-3 py-1.5 text-xs text-white"
+                  >
+                    membership@techforpalestine.org copied to clipboard
+                  </span>
+                </span>
+              </div>
+            </div>
+          </details>
+        </div>
+        <div class="min-w-0">
+          <img
+            src="/images/membership-hero.jpg"
+            alt="Tech for Palestine members applauding at a community event"
+            width="2048"
+            height="1365"
+            class={`block h-auto w-full ${cx.heroRadius}`}
+          />
         </div>
       </div>
     </div>
@@ -407,7 +472,7 @@ const cx = designSystem
   <section class={designSystem ? "bg-page px-6 pb-14 min-[810px]:pb-20" : "px-6 pb-16 min-[810px]:pb-20"}>
     <div class={cx.container}>
       <div class={`flex flex-wrap items-center justify-between gap-6 px-7 py-6 ${cx.ctaShell}`}>
-        <span class={cx.ctaText}>We're working on projects for Palestine.</span>
+        <span class={cx.ctaText}>We're working on projects for Palestine. Want to help us?</span>
         <a
           href="#join"
           data-track-join-click="bottom_cta"
@@ -504,55 +569,107 @@ const cx = designSystem
     observer.observe(heroJoinCard);
   }
 
-  // Native <details> snaps open/closed instantly. Animate it by intercepting
-  // the summary click, driving the answer's height with the Web Animations
-  // API, and only flipping `open` ourselves once the animation settles —
-  // `open` still reflects real state throughout for assistive tech and the
-  // group-open: icon rotation, it's just delayed to match what's on screen.
+  // Native <details> snaps open/closed instantly. Animate it by driving the
+  // answer's height with the Web Animations API — the same family of
+  // technique as MUI's Collapse (which FAQAccordion uses): measure the
+  // natural height, then animate to/from it.
+  //
+  // The earlier version of this script (and a later CSS
+  // `grid-template-rows` rewrite of it) both stuttered on close. The actual
+  // cause was layout thrashing: closing the previously-open sibling and
+  // opening the clicked one each read `scrollHeight` — which forces a
+  // synchronous layout — interleaved with the style writes that kick off
+  // their own animations. Reading a forced-layout value, writing a style,
+  // then reading another forced-layout value repeats the browser's
+  // layout pass multiple times in one frame instead of once.
+  //
+  // The fix is the standard "batch reads, then batch writes" pattern: every
+  // `scrollHeight` this click needs (the opening target's, and any open
+  // sibling's) is measured up front, before any animation starts.
+  //
+  // Accordions that share a `data-accordion-group` are mutually exclusive:
+  // opening one closes whichever sibling in that group was already open.
   const ACCORDION_ANIMATION_MS = 250;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const accordionAnimations = new WeakMap<HTMLDetailsElement, Animation>();
+
+  function accordionContent(details: HTMLDetailsElement): HTMLElement | null {
+    return details.querySelector<HTMLElement>("[data-accordion-content]");
+  }
+
+  function animateAccordion(
+    details: HTMLDetailsElement,
+    content: HTMLElement,
+    fromHeight: number,
+    toHeight: number,
+    onDone: () => void,
+  ): void {
+    accordionAnimations.get(details)?.cancel();
+    content.style.overflow = "hidden";
+    const animation = content.animate(
+      [{ height: `${fromHeight}px` }, { height: `${toHeight}px` }],
+      { duration: ACCORDION_ANIMATION_MS, easing: "ease" },
+    );
+    accordionAnimations.set(details, animation);
+    animation.onfinish = () => {
+      content.style.overflow = "";
+      content.style.height = "";
+      onDone();
+    };
+  }
 
   document.querySelectorAll<HTMLDetailsElement>("[data-accordion]").forEach((details) => {
     const summary = details.querySelector("summary");
-    const content = details.querySelector<HTMLElement>("[data-accordion-content]");
-    if (!summary || !content) return;
-
-    let animation: Animation | undefined;
+    if (!summary || !accordionContent(details)) return;
 
     summary.addEventListener("click", (event) => {
       event.preventDefault();
 
+      const isClosingSelf = details.open;
+      const group = details.dataset.accordionGroup;
+      const openSiblings = !isClosingSelf && group
+        ? Array.from(
+            document.querySelectorAll<HTMLDetailsElement>(
+              `[data-accordion][data-accordion-group="${group}"]`,
+            ),
+          ).filter((sibling) => sibling !== details && sibling.open)
+        : [];
+
+      // Read phase: force every layout read this click needs up front.
+      const selfContent = accordionContent(details);
+      if (!selfContent) return;
+      if (!isClosingSelf) details.open = true; // must be open to measure its natural height
+      const selfHeight = selfContent.scrollHeight;
+
+      const siblingMeasurements = openSiblings
+        .map((sibling) => {
+          const content = accordionContent(sibling);
+          return content ? { sibling, content, height: content.scrollHeight } : null;
+        })
+        .filter((m): m is { sibling: HTMLDetailsElement; content: HTMLElement; height: number } => m !== null);
+
       if (prefersReducedMotion) {
-        details.open = !details.open;
+        if (isClosingSelf) details.open = false;
+        siblingMeasurements.forEach(({ sibling }) => {
+          sibling.open = false;
+        });
         return;
       }
 
-      animation?.cancel();
-      content.style.overflow = "hidden";
-
-      if (details.open) {
-        const startHeight = content.scrollHeight;
-        animation = content.animate([{ height: `${startHeight}px` }, { height: "0px" }], {
-          duration: ACCORDION_ANIMATION_MS,
-          easing: "ease",
-        });
-        animation.onfinish = () => {
+      // Write phase: start every animation this click needs together.
+      if (isClosingSelf) {
+        animateAccordion(details, selfContent, selfHeight, 0, () => {
           details.open = false;
-          content.style.overflow = "";
-          content.style.height = "";
-        };
-      } else {
-        details.open = true;
-        const targetHeight = content.scrollHeight;
-        animation = content.animate([{ height: "0px" }, { height: `${targetHeight}px` }], {
-          duration: ACCORDION_ANIMATION_MS,
-          easing: "ease",
         });
-        animation.onfinish = () => {
-          content.style.overflow = "";
-          content.style.height = "";
-        };
+      } else {
+        animateAccordion(details, selfContent, 0, selfHeight, () => {});
       }
+
+      siblingMeasurements.forEach(({ sibling, content, height }) => {
+        animateAccordion(sibling, content, height, 0, () => {
+          sibling.open = false;
+        });
+      });
     });
   });
 </script>

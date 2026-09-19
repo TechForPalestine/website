@@ -30,6 +30,17 @@ export default defineConfig({
       // "hidden" generates source maps but doesn't serve them publicly
       sourcemap: "hidden",
     },
+    optimizeDeps: {
+      include: [
+        "@mui/material",
+        "@mui/icons-material",
+        "@mui/system",
+        "leaflet",
+        "react-leaflet",
+        "chart.js",
+        "react-slick",
+      ],
+    },
   },
   integrations: [
     sentry({
