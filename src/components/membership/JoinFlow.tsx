@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
@@ -191,12 +191,25 @@ function AboutYouForm({ initialValues, submitting, styles, onContinue }: AboutYo
 
 interface TierCardProps {
   tier: MembershipTier;
-  title: string;
+  title: ReactNode;
   description: string;
   benefits: string[];
   selected: boolean;
   styles: StyleSet;
   onSelect: () => void;
+}
+
+const WAIVER_CARD_ID = "cant-afford-dues";
+
+/** Opens the page's "I can't afford dues" accordion and scrolls to it, without
+ * selecting the tier card the link sits inside. */
+function openWaiverCard(event: MouseEvent<HTMLAnchorElement>) {
+  event.preventDefault();
+  event.stopPropagation();
+  const card = document.getElementById(WAIVER_CARD_ID) as HTMLDetailsElement | null;
+  if (!card) return;
+  if (!card.open) card.querySelector("summary")?.click();
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function TierCard({ tier, title, description, benefits, selected, styles, onSelect }: TierCardProps) {
@@ -239,21 +252,7 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
         <p className={`mt-3 ${styles.tierNote}`}>
           Note: Our member community is fully vetted. To keep everyone safe and make sure we
           share the same values, we do a quick identity and alignment check during onboarding.
-          <br />
-          *Tech for Palestine aims for inclusivity. Please contact{" "}
-          <a href="mailto:membership@techforpalestine.org" className="font-semibold text-[#157A3E]">
-            membership@techforpalestine.org
-          </a>{" "}
-          to request a waiver of dues in the following circumstances:
         </p>
-      )}
-      {tier === "member" && (
-        <ul className={`mt-1.5 space-y-1 pl-4 ${styles.tierNote}`}>
-          <li className="list-disc">Being located in, or a refugee from Gaza or the West Bank</li>
-          <li className="list-disc">
-            Not being able to afford membership due to personal circumstances
-          </li>
-        </ul>
       )}
     </button>
   );
@@ -318,7 +317,19 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
           <div role="radiogroup" aria-label="Membership tier" className="space-y-3">
             <TierCard
               tier="member"
-              title="Member (Pay-what-you-can, waivers available*)"
+              title={
+                <>
+                  Member (Pay-what-you-can,{" "}
+                  <a
+                    href={`#${WAIVER_CARD_ID}`}
+                    onClick={openWaiverCard}
+                    className="underline underline-offset-2"
+                  >
+                    waivers available
+                  </a>
+                  )
+                </>
+              }
               description="If you would like to volunteer on projects & teams."
               benefits={MEMBER_BENEFITS}
               selected={tier === "member"}
@@ -334,9 +345,6 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
               styles={styles}
               onSelect={() => setTier("supporting")}
             />
-          </div>
-          <div className="mt-5">
-            <MembershipCalculator theme="green" designSystem={designSystem} />
           </div>
           <button
             type="button"
@@ -360,6 +368,9 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
 
       {step === "payment" && tier && (
         <div>
+          <div className="mb-5">
+            <MembershipCalculator theme="green" designSystem={designSystem} />
+          </div>
           {mountedTiers.map((mountedTier) => (
             <div key={mountedTier} className={tier === mountedTier ? "block" : "hidden"}>
               <QgivJoin tier={mountedTier} prefill={prefill} />
