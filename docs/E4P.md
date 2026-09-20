@@ -7,7 +7,7 @@ E4P is a pledge/signatory campaign for entrepreneurs, separate from the main mem
 - **`e4p.astro`** — landing page, renders `E4PPage.jsx` (`client:only="react"`).
 - **`e4p/sign-up.astro`** — Calendly scheduling embeds (region-specific: Americas / other), for booking an intro call.
 - **`e4p/pledge.astro`** — the pledge form: name, email, company, position, LinkedIn URL, agreement checkbox. Submits client-side to `POST /api/e4p-pledge-sign`.
-- **`e4p-new.astro`** — redesign variant, excluded from the sitemap (see [ARCHITECTURE.md](ARCHITECTURE.md#the--new-duplicate-page-pattern)).
+- **`e4p-new.astro`** / **`e4p/pledge-new.astro`** — unreachable remnants of the abandoned redesign; both 301 to their live counterparts. Do not build on them (see [ARCHITECTURE.md](ARCHITECTURE.md#the-abandoned--new-redesign)).
 
 ## API routes
 

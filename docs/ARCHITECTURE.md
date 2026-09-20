@@ -26,7 +26,7 @@ export const onRequest = sequence(cacheControl, csp);
 | Source                                                             | Client / integration point                                                                                                  | Used for                                                                                                                                           |
 | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Notion**                                                         | `src/store/notionClient.ts` (axios) + a few routes use `@notionhq/client` directly                                          | Events, FAQ, ideas, agenda/speakers, E4P pledge signatories, endorsement requests, community calls — 8 databases total, see [NOTION.md](NOTION.md) |
-| **ProjectHub** (`projecthub.techforpalestine.org`)                 | `src/pages/api/projects.ts` calls the public API directly                                                                   | `/projects`, `/projects-new` incubator directory — see [PROJECTS.md](PROJECTS.md)                                                                  |
+| **ProjectHub** (`projecthub.techforpalestine.org`)                 | `src/pages/api/projects.ts` calls the public API directly                                                                   | `/projects` incubator directory — see [PROJECTS.md](PROJECTS.md)                                                                                   |
 | **Generic authenticated upstream** (`PUBLIC_API_URL`)              | `src/store/api.ts` (axios) → `src/pages/api/project-proxy.ts`                                                               | Volunteer/incubator application forms (`volunteerForm.tsx`, `inputs-mapping.tsx`)                                                                  |
 | **Cloudflare KV** (`DROPPED_CONVERSIONS` binding, `wrangler.toml`) | `src/pages/api/pipe.ts` (write), `src/pages/api/admin/conversion-stats.ts` (read)                                           | Fallback log of ad-blocked/dropped Plausible conversion events — see [DONATIONS.md](DONATIONS.md)                                                  |
 | **Plausible Analytics**                                            | `api/pipe.ts` (event proxy), `api/admin/conversion-stats.ts` (stats query API)                                              | Donation/membership conversion tracking                                                                                                            |
@@ -42,11 +42,26 @@ export const onRequest = sequence(cacheControl, csp);
 
 Always resolve env vars through `getEnv(name, locals)` (`src/utils/getEnv.ts`), which checks, in order: Cloudflare runtime env (`locals.runtime.env`) → `import.meta.env` (build-time) → `process.env` (Node/dev). Never read `process.env` directly in code that runs on the Cloudflare Pages runtime — the runtime env is only reachable through `locals`.
 
-## The "-new" duplicate-page pattern
+## The abandoned "-new" redesign
 
-Many routes exist in pairs, e.g. `about.astro`/`about-new.astro`, `events.astro`/`events-new.astro`, `donate.astro`/`donate-2.astro`/`donate-new.astro`. The `-new` variants are redesign/A/B-test pages, not linked from site navigation (see `docs/superpowers/specs/2026-06-30-homepage-ab-test-design.md` for the design rationale behind the current redesign wave). They are deliberately excluded from the sitemap via the `filter` callback passed to `sitemap()` in `astro.config.mjs`.
+**Do not build on `-new` pages, and do not create new ones.** All design work targets the live pages. The live design system is documented in [DESIGN.md](../DESIGN.md), derived from `/membership` as the canonical page.
 
-**Any new experimental, staging, or orphan page must be added to that same exclude list** — Google should only index pages reachable through real navigation.
+A redesign wave once duplicated most routes as `about-new.astro`, `events-new.astro`, `donate-new.astro` and so on, excluded from the sitemap and unlinked from navigation. The homepage A/B test between `/` and `/home-new` decided it: the control won, and the wave was shelved in #524 (`915eb5a`). `docs/superpowers/specs/2026-06-30-homepage-ab-test-design.md` records that test and is kept as history, not as guidance.
+
+What remains:
+
+- ~26 `-new.astro` files in `src/pages/`, every one of them 301'd to its live counterpart in `public/_redirects` and therefore unreachable
+- `HomeLayout.astro`, imported only by those pages
+- `src/styles/design-system.css`, the Fraunces/parchment `ts-*` typography scale, imported only by `HomeLayout` and `AdminLayout`
+
+These are kept only to avoid a large deletion diff. Treat them as deleted. Roughly half of `src/` is unreachable from the live page entrypoints, so a file's existence is not evidence that it ships.
+
+Two traps worth knowing:
+
+- **`ProjectsNew.tsx` is live.** Despite the name, it is the directory rendered by `/projects`. `EventsNew.tsx`, `IdeasWithTabsNew.tsx` and `SignatoriesNew.tsx` are not.
+- **`ts-*` classes and `font-serif` silently degrade.** `Layout.astro` never imports `design-system.css`, so those classes are no-ops on every public page and render at browser default sizing.
+
+**Any new experimental, staging, or orphan page must still be added to the sitemap `filter` exclude list** — Google should only index pages reachable through real navigation.
 
 ## Directory layout
 

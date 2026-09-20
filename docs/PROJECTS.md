@@ -1,6 +1,6 @@
 # Projects (ProjectHub Integration)
 
-The `/projects` and `/projects-new` pages show the T4P incubator's project directory. Data comes live from **ProjectHub**, an external T4P-run service (`projecthub.techforpalestine.org`) — not from a local content collection. (An earlier plan considered migrating from markdown-based content collections to ProjectHub; that migration has already shipped as described below.)
+The `/projects` page shows the T4P incubator's project directory. Data comes live from **ProjectHub**, an external T4P-run service (`projecthub.techforpalestine.org`) — not from a local content collection. (An earlier plan considered migrating from markdown-based content collections to ProjectHub; that migration has already shipped as described below.)
 
 ## Architecture
 
@@ -11,7 +11,7 @@ projecthub.techforpalestine.org/api/public/projects
    src/pages/api/projects.ts  (GET, public, sanitizes + retries)
         │
         ├──▶ ProjectsDirectory.tsx  (projects.astro — current directory UI)
-        └──▶ ProjectsNew.tsx        (projects-new.astro, incubator sections — redesign variant)
+        └──▶ ProjectsNew.tsx        (projects.astro — the live directory, despite the name)
 ```
 
 ## `/api/projects.ts`
@@ -25,7 +25,7 @@ projecthub.techforpalestine.org/api/public/projects
 ## Frontend components
 
 - **`src/components/projects/ProjectsDirectory.tsx`** — current `/projects` page: search (debounced), tag filtering, `ProjectCard`/`ProjectDrawer` detail view. Fetches client-side via `fetch("/api/projects")`.
-- **`src/components/ProjectsNew.tsx`** — used by both `projects-new.astro` (standalone, sitemap-excluded — see [ARCHITECTURE.md](ARCHITECTURE.md#the--new-duplicate-page-pattern)) and `home-new.astro`'s incubator section. Same `/api/projects` fetch pattern.
+- **`src/components/ProjectsNew.tsx`** — the live `/projects` directory. The name is a leftover from the abandoned redesign (see [ARCHITECTURE.md](ARCHITECTURE.md#the-abandoned--new-redesign)); the component itself is reachable and shipping. Same `/api/projects` fetch pattern.
 - **`src/components/ProjectLogo.tsx`** — shared logo rendering with fallback.
 
 ## Not to confuse with `/api/project-proxy`

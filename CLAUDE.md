@@ -43,15 +43,23 @@ Astro runs in `output: "server"` mode on the Cloudflare adapter — nearly every
 
 Because `csp` can replace the response object, `cache-control` must run first so its header survives the rewrite. There must only ever be one middleware entry point (`src/middleware/index.ts`) — a parallel `src/middleware.ts` would silently shadow it.
 
-### The "-new" duplicate-page pattern
+### The abandoned "-new" redesign
 
-Many routes exist in pairs, e.g. `about.astro` / `about-new.astro`, `events.astro` / `events-new.astro`, `donate.astro` / `donate-2.astro` / `donate-new.astro`. The `-new` variants are redesign/test pages not linked from site navigation. They are deliberately excluded from the sitemap via the `filter` list in `sitemap()` in `astro.config.mjs` — any new experimental/orphan page must be added to that same exclude list so Google doesn't index unreachable pages.
+**Do not build on `-new` pages, and do not create new ones.** All design work targets the live pages.
+
+A redesign wave once duplicated most routes as `about-new.astro`, `events-new.astro` and so on. It was shelved in #524 when the homepage A/B test closed in favour of the control. Every `-new` URL now 301s to its live counterpart in `public/_redirects`, so the ~26 page files still in `src/pages/` are unreachable dead code, as are `HomeLayout.astro` and the `design-system.css` typography scale it loads. They are kept only to avoid a large deletion diff; treat them as deleted.
+
+The one exception is `ProjectsNew.tsx`, which despite its name is imported by the live `/projects` page.
+
+The live design system is documented in [DESIGN.md](DESIGN.md), derived from `/membership` as the canonical page. Note that `design-system.css` is imported only by `HomeLayout` and `AdminLayout`, never by `Layout.astro` — so `ts-*` classes and `font-serif` on a public page silently render unstyled.
+
+Experimental or orphan pages must still be added to the sitemap `filter` exclude list in `sitemap()` in `astro.config.mjs` so Google does not index unreachable pages.
 
 ### Data sources
 
-- **Events ICS feed** (`src/store/eventsClient.ts`) — `fetchEvents()` fetches and hand-parses a public ICS calendar feed (`EVENTS_ICS_URL`, Mattermost Events Calendar plugin), server-side only since the URL carries an auth token. Consumed by `/api/events` and grouped into category sections (`src/utils/eventSections.ts`) by both `events.astro`/`Events.tsx` and `events-new.astro`/`EventsNew.tsx`. See `docs/EVENTS.md`.
+- **Events ICS feed** (`src/store/eventsClient.ts`) — `fetchEvents()` fetches and hand-parses a public ICS calendar feed (`EVENTS_ICS_URL`, Mattermost Events Calendar plugin), server-side only since the URL carries an auth token. Consumed by `/api/events` and grouped into category sections (`src/utils/eventSections.ts`) by `events.astro`/`Events.tsx`. See `docs/EVENTS.md`.
 - **Notion API** (`src/store/notionClient.ts`) — FAQ, ideas, agenda/speakers, E4P signatories, endorsements, and community calls (events no longer come from Notion). Images are direct Notion-hosted URLs (no proxy/cache — that worker was removed), expire after ~1hr, client falls back to `/images/default.jpg` on load error. See `docs/NOTION.md`.
-- **ProjectHub** (external service) — `src/pages/api/projects.ts` calls `projecthub.techforpalestine.org/api/public/projects` directly and is fetched client-side via `/api/projects` by both `ProjectsDirectory.tsx` and `ProjectsNew.tsx`. `src/pages/api/project-proxy.ts` is unrelated — it's a generic authenticated proxy used only by the volunteer/incubator application forms. See `docs/PROJECTS.md`.
+- **ProjectHub** (external service) — `src/pages/api/projects.ts` calls `projecthub.techforpalestine.org/api/public/projects` directly and is fetched client-side via `/api/projects` by `ProjectsNew.tsx` (the live `/projects` directory, despite the name). `src/pages/api/project-proxy.ts` is unrelated — it's a generic authenticated proxy used only by the volunteer/incubator application forms. See `docs/PROJECTS.md`.
 - **Cloudflare KV** — `DROPPED_CONVERSIONS` namespace (bound in `wrangler.toml`) is used for conversion tracking, surfaced at `src/pages/admin/conversions.astro` and `src/pages/api/admin/conversion-stats.ts`.
 - **Content collections** (`src/content/config.ts`) — currently empty (`collections = {}`); older docs referencing `content/ideas` and `content/projects` markdown collections are stale — check `src/content/` before relying on this.
 
@@ -76,7 +84,7 @@ This project has undergone multiple rounds of security auditing (see `security_a
 
 - When removing or renaming a page, add a 301 redirect in `public/_redirects` pointing to the closest equivalent page.
 - Custom 404 lives at `src/pages/404.astro`, using the standard `Layout.astro` (keep site nav visible).
-- Any test/staging/orphan page must be added to the sitemap `filter` exclude list in `astro.config.mjs` (see the `-new` pattern above).
+- Any test/staging/orphan page must be added to the sitemap `filter` exclude list in `astro.config.mjs`.
 
 ## Directory Structure
 
@@ -104,7 +112,7 @@ src/
 
 ## Documentation
 
-Full index: [docs/README.md](docs/README.md). Highlights: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (middleware chain, data sources, the `-new` page pattern), [docs/API.md](docs/API.md) (every route's auth/upstream), [docs/SECURITY.md](docs/SECURITY.md) (audit-derived rules with the incident behind each), [DEPLOYMENT.md](DEPLOYMENT.md) (full env var list).
+Full index: [docs/README.md](docs/README.md). Highlights: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (middleware chain, data sources, the abandoned `-new` redesign), [docs/API.md](docs/API.md) (every route's auth/upstream), [docs/SECURITY.md](docs/SECURITY.md) (audit-derived rules with the incident behind each), [DEPLOYMENT.md](DEPLOYMENT.md) (full env var list).
 
 ## Branch Management
 
