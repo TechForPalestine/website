@@ -12,7 +12,9 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { Add, Settings, Delete } from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
+import Settings from "@mui/icons-material/Settings";
+import Delete from "@mui/icons-material/Delete";
 import { RenderFormFields } from "../inputs-mapping";
 
 type RHFTableSectionProps = {

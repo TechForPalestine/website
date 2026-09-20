@@ -25,7 +25,7 @@ interface Props {
   // Extra JSON-LD properties to merge into the sitewide NonprofitOrganization
   // node (e.g. a page-specific contactPoint or potentialAction). Pages must
   // not emit their own NonprofitOrganization script sharing the same @id —
-  // separate <script> tags aren't reliably merged by structured-data parsers.
+  // separate JSON-LD blocks are not reliably merged by structured-data parsers.
   organizationSchemaExtra?: Record<string, unknown>;
 }
 
