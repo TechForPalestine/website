@@ -148,7 +148,6 @@ const press = [
   },
 ];
 
-const overline = "text-[12px] font-bold uppercase tracking-[0.14em] text-grove-deep";
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
@@ -165,9 +164,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
   <main>
     <!-- Hero -->
     <section
-      class="flex min-h-[calc(100vh-5rem)] flex-col-reverse bg-paper lg:grid lg:grid-cols-[1.05fr_1fr] lg:items-center"
+      class="flex flex-col-reverse bg-paper lg:grid lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[1.05fr_1fr] lg:items-center"
     >
-      <div class="px-6 py-16 md:px-12 lg:px-16 lg:pr-12 2xl:px-28">
+      <div class="px-6 py-12 md:px-12 lg:px-16 lg:py-10 lg:pr-12 2xl:px-28">
         <!-- Flag bars -->
         <div class="flex items-center gap-1.5" aria-hidden="true">
           <div class="h-2 w-24 rounded-pill bg-[#268024]"></div>
@@ -176,32 +175,32 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
         </div>
 
         <h1
-          class="mt-7 max-w-[15ch] text-[38px] font-extrabold leading-[1.05] tracking-[-0.015em] text-ink min-[810px]:text-[clamp(44px,4.6vw,56px)] min-[810px]:leading-[1.02]"
+          class="mt-6 max-w-[20ch] text-[38px] font-extrabold leading-[1.05] tracking-[-0.015em] text-ink min-[810px]:text-[clamp(42px,4.2vw,54px)] min-[810px]:leading-[1.02]"
         >
           Join the tech movement behind <span class="text-grove"
             >90+ projects for Palestine</span
           >
         </h1>
 
-        <p class="mt-7 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
+        <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
           Tech for Palestine is a 501(c)(3) nonprofit starting and scaling initiatives for
           Palestinian liberation.
         </p>
-        <p class="mt-4 max-w-[58ch] text-[17px] leading-[1.7] text-ink-secondary min-[810px]:text-[18px]">
+        <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
           We support anyone with a meaningful idea, whether it is working against media censorship,
           using tech to aid protests, scaling boycotts, pushing for tech divestment, supporting
           Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
         </p>
 
-        <div class="mt-10">
+        <div class="mt-8">
           <a href="/incubator" class={pillPrimary}>Apply to the Incubator</a>
         </div>
       </div>
 
-      <figure class="relative h-[26rem] bg-stone sm:h-[32rem] lg:h-full">
+      <figure class="relative h-[min(26rem,45vh)] bg-stone lg:h-auto lg:self-stretch">
         <img
           src="/happy-kids.jpg"
-          class="h-full w-full object-cover"
+          class="h-full w-full object-cover lg:absolute lg:inset-0"
           alt="Children in Gaza smiling for the camera"
           width="1600"
           height="1200"
@@ -363,9 +362,8 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
     <section class="border-y border-first-light-edge bg-first-light py-[clamp(4rem,7vw,6rem)]">
       <div class="mx-auto max-w-[1400px] px-6 md:px-8">
         <header class="max-w-[50ch]">
-          <p class={overline}>Included with every project we take on</p>
           <h2
-            class="mt-3 text-[28px] font-extrabold leading-[1.1] tracking-[-0.015em] text-ink min-[810px]:text-[38px]"
+            class="text-[28px] font-extrabold leading-[1.1] tracking-[-0.015em] text-ink min-[810px]:text-[38px]"
           >
             How we help projects succeed
           </h2>

@@ -8,9 +8,19 @@ export default {
           "0%": { opacity: 0, transform: "translateY(20px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
+        // No `to` keyframe: it resolves to the tab's own resting (tucked) transform.
+        donateIn: {
+          "0%": { opacity: 0, transform: "translateX(100%)" },
+          "40%": { opacity: 1, transform: "translateX(0)" },
+          "75%": { opacity: 1, transform: "translateX(0)" },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.5s ease-out forwards",
+        // The floating donate tab's single entrance: slides out fully open, holds,
+        // then tucks to its icon. `backwards` so the finished animation releases
+        // `transform` back to the hover/focus states.
+        donateIn: "donateIn 2.6s cubic-bezier(0.22, 1, 0.36, 1) 1.2s backwards",
       },
       colors: {
         page: "#FFFBF5",
