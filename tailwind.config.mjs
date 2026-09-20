@@ -17,6 +17,18 @@ export default {
         cream: "#FBF2ED",
         butter: "#F7EAD4",
         sand: "#F7F2E8",
+        // "The Organizing Table" palette — see DESIGN.md §2. These replace the
+        // hex literals that were scattered across page templates.
+        paper: "#FFFFFF",
+        stone: "#F2F3EE",
+        nightfall: "#101010",
+        grove: {
+          DEFAULT: "#157A3E",
+          hover: "#0E5A2F",
+          deep: "#2F5C3F",
+        },
+        "first-light": "#E7F2E9",
+        "first-light-edge": "#D2E4D6",
         ink: {
           DEFAULT: "#2A2428",
           dark: "#201D1E",
