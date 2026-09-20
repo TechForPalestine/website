@@ -71,8 +71,7 @@ export default function ProjectDetailsDialog({
     selectedProject.logoUrl !== "/images/default.jpg" &&
     !dialogLogoFailed;
   const logoSrc = hasLogo ? resolveLogoSrc(selectedProject.logoUrl) : "";
-  const hasLeaderPhotoInDialog =
-    !!selectedProject.leaderPhoto && !dialogLeaderPhotoFailed;
+  const hasLeaderPhotoInDialog = !!selectedProject.leaderPhoto && !dialogLeaderPhotoFailed;
   const leaderPhotoSrcDialog = hasLeaderPhotoInDialog
     ? resolveLogoSrc(selectedProject.leaderPhoto)
     : "";
@@ -90,7 +89,6 @@ export default function ProjectDetailsDialog({
   const activeSocials = getActiveSocialFields(selectedProject);
   const joinedDate = formatMonthYear(selectedProject.createdAt);
   const updatedDate = formatDate(selectedProject.updatedAt);
-
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -227,13 +225,7 @@ export default function ProjectDetailsDialog({
               </Button>
             )}
             {sanitizeEmail(selectedProject.publicEmail) && (
-              <Tooltip
-                open={emailCopied}
-                title="Email copied"
-                placement="top"
-                arrow
-                describeChild
-              >
+              <Tooltip open={emailCopied} title="Email copied" placement="top" arrow describeChild>
                 <Button
                   variant="outlined"
                   href={`mailto:${sanitizeEmail(selectedProject.publicEmail)}`}
@@ -401,9 +393,7 @@ export default function ProjectDetailsDialog({
         )}
       </DialogContent>
 
-      <DialogActions
-        sx={{ px: 4, py: 2, bgcolor: "#F2F3EE", justifyContent: "space-between" }}
-      >
+      <DialogActions sx={{ px: 4, py: 2, bgcolor: "#F2F3EE", justifyContent: "space-between" }}>
         <Typography variant="caption" sx={{ color: "text.disabled" }}>
           Last updated {updatedDate}
         </Typography>

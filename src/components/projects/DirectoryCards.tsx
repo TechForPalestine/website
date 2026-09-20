@@ -157,7 +157,10 @@ export const FeaturedProjectCard = memo(function FeaturedProjectCard({
           />
         )}
         <Box sx={{ minWidth: 0 }}>
-          <Typography component="h3" sx={{ fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.25 }}>
+          <Typography
+            component="h3"
+            sx={{ fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.25 }}
+          >
             {project.name}
           </Typography>
           {project.leadName && (
@@ -273,7 +276,9 @@ export const ProjectGridCard = memo(function ProjectGridCard({
         {getProjectText(project)}
       </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: "auto" }}>
+      <Box
+        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: "auto" }}
+      >
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
           {visibleSocials.map((field) => {
             const icon = (
@@ -311,7 +316,10 @@ export const ProjectGridCard = memo(function ProjectGridCard({
             );
           })}
           {overflowCount > 0 && (
-            <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.7rem", ml: 0.25 }}>
+            <Typography
+              variant="caption"
+              sx={{ color: "text.secondary", fontSize: "0.7rem", ml: 0.25 }}
+            >
               +{overflowCount}
             </Typography>
           )}

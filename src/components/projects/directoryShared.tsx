@@ -179,7 +179,6 @@ export function getActiveSocialFields(project: ProjectItem): SocialField[] {
   });
 }
 
-
 const COPIED_FEEDBACK_MS = 1500;
 
 // A failed mailto: is silent: the browser fires no event, so the page cannot

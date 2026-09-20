@@ -34,10 +34,7 @@ export function parseProjectId(slug: string): number | null {
   return Number.isSafeInteger(id) ? id : null;
 }
 
-export function findProjectBySlug<T extends Sluggable>(
-  projects: T[],
-  slug: string
-): T | undefined {
+export function findProjectBySlug<T extends Sluggable>(projects: T[], slug: string): T | undefined {
   const id = parseProjectId(slug);
   if (id === null) return undefined;
   return projects.find((project) => project.id === id);
