@@ -14,6 +14,8 @@ interface Props {
 }
 
 const { meta } = Astro.props;
+
+const APPLY_URL = "https://techforpalestine.org/project-application-form";
 ---
 
 <Layout
@@ -30,7 +32,19 @@ const { meta } = Astro.props;
       title="Incubator Projects"
       subtitle="What is the incubator?"
       subtitleLink="/incubator"
-    />
+    >
+      {/* The directory is ~90 projects long, so the apply action cannot live
+          only at the foot of the page. A green pill, not a second dark block:
+          DESIGN.md allows exactly one Nightfall block per page. */}
+      <a
+        href={APPLY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex min-h-[44px] items-center justify-center rounded-pill bg-[#157A3E] px-5 py-3.5 text-[13px] font-bold text-white transition-colors duration-150 hover:bg-[#2F5C3F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#157A3E]"
+      >
+        Apply to the incubator
+      </a>
+    </PageHeader>
 
     {/* Data is fetched client-side by the island, matching the /events pattern. */}
     <ProjectsNewComponent projects={[]} loading={true} client:only="react" />
@@ -43,7 +57,7 @@ const { meta } = Astro.props;
           Building something for Palestine? The incubator helps you grow it.
         </p>
         <a
-          href="https://techforpalestine.org/project-application-form"
+          href={APPLY_URL}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-pill bg-white px-5 py-3.5 text-[13px] font-bold text-[#101010] transition-colors duration-150 hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

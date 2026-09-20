@@ -54,7 +54,7 @@ Every project has a URL: `/projects/<name-slug>-<id>`, for example `/projects/ha
 
 ## Frontend components
 
-- **`src/components/ProjectsNew.tsx`** — the live `/projects` directory: state, search and tag filtering, deep-link handling. The name is a leftover from the abandoned redesign (see [ARCHITECTURE.md](ARCHITECTURE.md#the-abandoned--new-redesign)); the component itself is reachable and shipping. Fetches client-side via `/api/projects`.
+- **`src/components/ProjectsNew.tsx`** — the live `/projects` directory: state, search and tag filtering, deep-link handling, and "Show more" paging (24 at a time; an active search or tag filter shows every match). The name is a leftover from the abandoned redesign (see [ARCHITECTURE.md](ARCHITECTURE.md#the-abandoned--new-redesign)); the component itself is reachable and shipping. Fetches client-side via `/api/projects`.
 - **`src/components/projects/DirectoryCards.tsx`** — the memoized featured and grid cards. Transient state (a failed image, a copied email) is local to each card so it re-renders one card, not the directory.
 - **`src/components/projects/ProjectDetailsDialog.tsx`** — the detail dialog, loaded on demand and preloaded when the browser is idle.
 - **`src/components/projects/directoryShared.tsx`** — types, helpers and the `useCopyText` hook shared by the three above.

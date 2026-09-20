@@ -43,6 +43,10 @@ const loadDialog = () => import("./projects/ProjectDetailsDialog");
 const ProjectDetailsDialog = lazy(loadDialog);
 
 const DIALOG_CLOSE_MS = 200;
+// The directory is ~90 projects, which put the page's apply CTA thousands of
+// pixels down. Show a page of them and let people ask for more; a search or tag
+// filter always shows every match, since those lists are short.
+const PAGE_SIZE = 24;
 const PROJECTS_PATH = "/projects";
 
 // The slug of a /projects/<slug> URL, or "" on the plain directory.
@@ -125,6 +129,7 @@ function ProjectsDirectory({
   const [activeTags, setActiveTags] = useState<Tag[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [announcement, setAnnouncement] = useState("");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const closeTimer = useRef<number | undefined>(undefined);
   const deepLinkHandled = useRef(false);
 
@@ -263,6 +268,19 @@ function ProjectsDirectory({
       return matchesSearch && matchesTags;
     });
   }, [projects, searchIndex, deferredQuery, activeTags, isFiltering]);
+
+  const visibleProjects = useMemo(
+    () => (isFiltering ? filteredProjects : filteredProjects.slice(0, visibleCount)),
+    [filteredProjects, isFiltering, visibleCount]
+  );
+  const remainingCount = isFiltering ? 0 : filteredProjects.length - visibleProjects.length;
+
+  const showMore = useCallback(() => {
+    const total = filteredProjects.length;
+    const next = Math.min(visibleCount + PAGE_SIZE, total);
+    setVisibleCount(next);
+    announce(`Showing ${next} of ${total} projects`);
+  }, [filteredProjects.length, visibleCount, announce]);
 
   if (loading && projects.length === 0) {
     return (
@@ -456,7 +474,7 @@ function ProjectsDirectory({
         )}
 
         <Box sx={projectGridSx}>
-          {filteredProjects.map((project) => (
+          {visibleProjects.map((project) => (
             <ProjectGridCard
               key={project.id}
               project={project}
@@ -466,6 +484,33 @@ function ProjectsDirectory({
             />
           ))}
         </Box>
+
+        {remainingCount > 0 && (
+          <Box sx={{ mt: 4, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 2 }}>
+            <Button
+              onClick={showMore}
+              variant="outlined"
+              disableElevation
+              sx={{
+                minHeight: 44,
+                px: 2.5,
+                py: 1.75,
+                borderRadius: "999px",
+                borderColor: "#2A2428",
+                color: "#2A2428",
+                fontSize: "13px",
+                fontWeight: 700,
+                textTransform: "none",
+                "&:hover": { borderColor: "#2A2428", bgcolor: "rgba(42, 36, 40, 0.05)" },
+              }}
+            >
+              Show {Math.min(PAGE_SIZE, remainingCount)} more
+            </Button>
+            <Typography sx={{ fontSize: "16px", color: "text.secondary" }}>
+              Showing {visibleProjects.length} of {filteredProjects.length}
+            </Typography>
+          </Box>
+        )}
 
         {selectedProject && (
           <Suspense fallback={null}>
