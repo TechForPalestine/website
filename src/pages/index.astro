@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
-import FlagStripe from "../components/FlagStripe.astro";
 import "../styles/base.css";
 ---
 
@@ -82,7 +81,6 @@ import "../styles/base.css";
         </div>
       </div>
     </section>
-    <FlagStripe />
 
     <!-- Featured Projects Section -->
     <section class="bg-white py-20">
@@ -259,6 +257,8 @@ import "../styles/base.css";
           <!-- Newscord -->
           <a
             href="https://newscord.org/"
+            target="_blank"
+            rel="noopener noreferrer"
             class="group flex flex-col rounded-lg border border-[#D2E4D6] border-t-[3px] border-t-[#157A3E] bg-white p-6 transition-colors duration-150 hover:border-[#157A3E]"
           >
             <div class="mb-4 flex items-center gap-3">
@@ -591,7 +591,6 @@ import "../styles/base.css";
       </div>
     </section>
 
-    <FlagStripe />
     <!-- CTA Section -->
     <section class="bg-[#157A3E] py-24">
       <div class="mx-auto max-w-4xl px-6 text-center md:px-8">

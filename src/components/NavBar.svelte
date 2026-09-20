@@ -3,6 +3,10 @@
 
   export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
   export let currentRoute: string;
+  // Unused: only declared so @astrojs/svelte's generated types allow the named
+  // slots (socials, close, burger-icon) passed from Navigation.astro — without
+  // it "children" types as `undefined` and `astro check` rejects any slot content.
+  export let children: unknown = undefined;
 
   let toggleFlag = false;
   let activeDropdown: string | null = null;
