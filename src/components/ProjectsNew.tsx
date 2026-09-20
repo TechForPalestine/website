@@ -70,10 +70,17 @@ const projectsTheme = createTheme({
   typography: { fontFamily: "Outfit, system-ui, sans-serif" },
 });
 
+// Pixel strings, not numbers: in MUI's sx a bare `width: 1` means 100%, not
+// 1px. This live region is absolutely positioned against <body>, so a
+// 100%-tall box starting mid-page overflowed the bottom of the document and
+// left blank scroll space under the footer.
 const visuallyHidden = {
   position: "absolute",
-  width: 1,
-  height: 1,
+  width: "1px",
+  height: "1px",
+  margin: "-1px",
+  padding: 0,
+  border: 0,
   overflow: "hidden",
   clip: "rect(0 0 0 0)",
   whiteSpace: "nowrap",
