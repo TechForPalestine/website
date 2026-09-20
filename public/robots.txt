@@ -26,4 +26,3 @@ User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://techforpalestine.org/sitemap-index.xml
-Sitemap: https://techforpalestine.org/sitemap-projects.xml

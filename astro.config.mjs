@@ -65,9 +65,6 @@ export default defineConfig({
       },
     }),
     sitemap({
-      // The /projects/<slug> pages are SSR, which this integration cannot see.
-      // They are listed by src/pages/sitemap-projects.xml.ts from live data.
-      customSitemaps: ["https://techforpalestine.org/sitemap-projects.xml"],
       filter: (page) => {
         const exclude = [
           "/coming-soon/",

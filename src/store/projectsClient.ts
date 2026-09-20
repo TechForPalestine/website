@@ -163,7 +163,7 @@ function isCachedProjects(value: unknown): value is CachedEntry<ProjectsData> {
  * The ProjectHub list, cached. See utils/projectsCachePolicy.ts for the policy:
  * fresh for 5 minutes, and if ProjectHub is down the last good copy is served
  * for up to 24 hours. Throws only when there is neither. Used by /api/projects,
- * the /projects/<slug> preview and the project sitemap.
+ * and the /projects/<slug> preview.
  */
 export async function fetchProjectsData(locals: App.Locals): Promise<ProjectsResult> {
   const cache = getCache(locals);

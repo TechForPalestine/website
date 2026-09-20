@@ -38,6 +38,7 @@ Every project has a URL: `/projects/<name-slug>-<id>`, for example `/projects/ha
 - **A ProjectHub failure does not redirect.** Only a genuine "no such project" redirects (302 to `/projects`). If the fetch itself fails, the page renders generically and the island resolves the project client-side, so an outage does not discard the visitor's link.
 - **Client** (`ProjectsNew.tsx`): opens the matching dialog once data loads, `pushState`s on open and close, and follows `popstate` for back and forward. The dialog has a "Copy link" button that always copies the canonical URL.
 - **Every project link makes the server resolve the full list**, which is why the list is cached (next section): without it, a slow ProjectHub would delay link previews.
+- **Not in the sitemap.** `@astrojs/sitemap` only knows static routes, so the ~90 project URLs are not listed and Google has to discover them by other means. A dynamic sitemap endpoint was built and then removed on purpose; see the git history (`71979e1`) if it is wanted again.
 
 ## Caching
 
@@ -50,17 +51,6 @@ Every project has a URL: `/projects/<name-slug>-<id>`, for example `/projects/ha
 - **A broken cache never breaks the page.** A failed read is a miss; a failed write is ignored.
 - **Only works on a custom domain.** The Cache API is absent in `astro dev`, Node, and on `*.pages.dev` previews; there it falls back to fetching every time. It is also per-datacenter, so each datacenter pays one uncached fetch after expiry.
 - Not done on purpose: sharing an in-flight promise between requests in one isolate. Workers forbid awaiting I/O started by a different request.
-
-## Sitemap
-
-`src/pages/sitemap-projects.xml.ts` lists every `/projects/<slug>` URL from the same cached data, so a new project appears without a deploy. It is referenced from `sitemap-index.xml` (`customSitemaps` in `astro.config.mjs`) and from `public/robots.txt`.
-
-- URLs are `projectPath()` with **no trailing slash**, matching the canonical the slug route redirects to. (The static sitemap lists `/projects/` with a slash while its canonical has none; that mismatch pre-dates this and is not fixed.)
-- `<lastmod>` comes from `updatedAt`, omitted when it is not a valid date. The builder is `src/utils/projectsSitemap.ts`.
-- **A failure or an empty list returns 503 with `Retry-After`, never an empty sitemap.** A 200 with an empty `<urlset>` tells Google the projects are gone.
-- There is no visibility field on a project, so the sitemap lists exactly what the API returns.
-- It must not live under `/api/`, where the middleware forces `no-store`.
-- Google may still report many of these pages as "crawled, not indexed": each has a unique title, description and preview but an identical body, because the directory is a client-only island. Measure in Search Console before investing further; a per-project `<h1>` and JSON-LD are the cheap next step.
 
 ## Frontend components
 
