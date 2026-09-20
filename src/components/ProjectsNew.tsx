@@ -16,6 +16,7 @@ import {
   TextField,
   Autocomplete,
   ThemeProvider,
+  Tooltip,
   createTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -33,6 +34,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { sanitizeUrl, sanitizeEmail } from "./projects/projectData";
+import { copyToClipboard } from "../utils/copyAnchorLink";
 
 interface Tag {
   id: number;
@@ -101,6 +103,15 @@ const getProjectText = (project: ProjectItem): string =>
 // the detector nor a grep for "blue" could see it. Mapping the palette once
 // here is what stops the default leaking back in through the next MUI
 // component someone adds. Values from DESIGN.md.
+const visuallyHidden = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  overflow: "hidden",
+  clip: "rect(0 0 0 0)",
+  whiteSpace: "nowrap",
+} as const;
+
 const projectsTheme = createTheme({
   palette: {
     primary: { main: "#157A3E", dark: "#2F5C3F", contrastText: "#FFFFFF" },
@@ -243,6 +254,9 @@ function ProjectsDirectory({
   const [availableTags, setAvailableTags] = useState<Tag[]>(initialTags);
   const [loading, setLoading] = useState(initialLoading);
   const [loadError, setLoadError] = useState(false);
+  // Which email control was just copied ("card-<id>" or "dialog"), so its
+  // confirmation shows on that control only.
+  const [copiedEmailKey, setCopiedEmailKey] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
@@ -265,6 +279,15 @@ function ProjectsDirectory({
       setDialogLogoFailed(false);
       setDialogLeaderPhotoFailed(false);
     }, 200);
+  };
+
+  // A failed mailto: is silent: the browser fires no event, so the page cannot
+  // detect a missing mail handler. Copying the address on every click, while
+  // still letting the mailto: proceed, works whether or not one exists.
+  const copyEmail = async (key: string, email: string) => {
+    if (!(await copyToClipboard(email))) return;
+    setCopiedEmailKey(key);
+    window.setTimeout(() => setCopiedEmailKey((cur) => (cur === key ? null : cur)), 1500);
   };
 
   const fetchProjects = async () => {
@@ -787,21 +810,46 @@ function ProjectsDirectory({
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                  {visibleSocials.map((field) => (
-                    <IconButton
-                      key={field.key}
-                      component="a"
-                      href={getSocialHref(field, project)}
-                      target={field.isEmail ? undefined : "_blank"}
-                      rel={field.isEmail ? undefined : "noopener noreferrer"}
-                      onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                      size="small"
-                      aria-label={`${project.name} on ${field.label}`}
-                      sx={{ color: "text.secondary", p: 0.5, "&:hover": { color: "primary.main" } }}
-                    >
-                      {field.icon}
-                    </IconButton>
-                  ))}
+                  {visibleSocials.map((field) => {
+                    const emailKey = `card-${project.id}`;
+                    const button = (
+                      <IconButton
+                        component="a"
+                        href={getSocialHref(field, project)}
+                        target={field.isEmail ? undefined : "_blank"}
+                        rel={field.isEmail ? undefined : "noopener noreferrer"}
+                        onClick={(e: React.MouseEvent) => {
+                          e.stopPropagation();
+                          if (field.isEmail) {
+                            copyEmail(emailKey, sanitizeEmail(project.publicEmail));
+                          }
+                        }}
+                        size="small"
+                        aria-label={
+                          field.isEmail
+                            ? `Email ${project.name} (also copies the address)`
+                            : `${project.name} on ${field.label}`
+                        }
+                        sx={{ color: "text.secondary", p: 0.5, "&:hover": { color: "primary.main" } }}
+                      >
+                        {field.icon}
+                      </IconButton>
+                    );
+                    return field.isEmail ? (
+                      <Tooltip
+                        key={field.key}
+                        open={copiedEmailKey === emailKey}
+                        title="Email copied"
+                        placement="top"
+                        arrow
+                        describeChild
+                      >
+                        {button}
+                      </Tooltip>
+                    ) : (
+                      React.cloneElement(button, { key: field.key })
+                    );
+                  })}
                   {overflowCount > 0 && (
                     <Typography
                       variant="caption"
@@ -985,14 +1033,32 @@ function ProjectsDirectory({
                         </Button>
                       )}
                       {sanitizeEmail(selectedProject.publicEmail) && (
-                        <Button
-                          variant="outlined"
-                          href={`mailto:${sanitizeEmail(selectedProject.publicEmail)}`}
-                          startIcon={<EmailIcon />}
-                          sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
-                        >
-                          Contact
-                        </Button>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
+                          <Button
+                            variant="outlined"
+                            href={`mailto:${sanitizeEmail(selectedProject.publicEmail)}`}
+                            onClick={() =>
+                              copyEmail("dialog", sanitizeEmail(selectedProject.publicEmail))
+                            }
+                            startIcon={<EmailIcon />}
+                            sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
+                          >
+                            {copiedEmailKey === "dialog" ? "Address copied" : "Contact"}
+                          </Button>
+                          {/* Shown as selectable text: with no mail handler installed
+                              the mailto: does nothing, and an address you cannot see
+                              is an address you cannot copy. */}
+                          <Typography
+                            sx={{
+                              fontSize: "16px",
+                              color: "text.secondary",
+                              userSelect: "all",
+                              wordBreak: "break-all",
+                            }}
+                          >
+                            {sanitizeEmail(selectedProject.publicEmail)}
+                          </Typography>
+                        </Box>
                       )}
                     </Box>
                   )}
@@ -1169,6 +1235,9 @@ function ProjectsDirectory({
             );
           })()}
       </Dialog>
+      </Box>
+      <Box component="span" role="status" aria-live="polite" sx={visuallyHidden}>
+        {copiedEmailKey ? "Email address copied to clipboard" : ""}
       </Box>
     </>
   );
