@@ -15,6 +15,8 @@ import {
   InputAdornment,
   TextField,
   Autocomplete,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -91,6 +93,24 @@ const getInitials = (name: string): string => {
 
 const getProjectText = (project: ProjectItem): string =>
   project.description || project.elevatorPitch || project.impactStatement || "";
+
+// This island ran on MUI's default theme, so every unstyled component
+// resolved `primary.main` to Material blue #1976d2 — card borders, input
+// focus rings, icon hovers. Blue is a named PRODUCT.md anti-reference, and
+// because `primary.main` is an indirection rather than a literal hex, neither
+// the detector nor a grep for "blue" could see it. Mapping the palette once
+// here is what stops the default leaking back in through the next MUI
+// component someone adds. Values from DESIGN.md.
+const projectsTheme = createTheme({
+  palette: {
+    primary: { main: "#157A3E", dark: "#2F5C3F", contrastText: "#FFFFFF" },
+    text: { primary: "#2A2428", secondary: "#73656E" },
+    divider: "#D6D6D6",
+    background: { paper: "#FFFFFF" },
+  },
+  shape: { borderRadius: 8 },
+  typography: { fontFamily: "Outfit, system-ui, sans-serif" },
+});
 
 // Tags previously drew from a 12-colour Material palette keyed on `id % 12`,
 // so a tag's colour was arbitrary and carried no meaning. DESIGN.md allows one
@@ -206,7 +226,15 @@ function getActiveSocialFields(project: ProjectItem): SocialField[] {
   });
 }
 
-export default function ProjectsNew({
+export default function ProjectsNew(props: ProjectsNewProps) {
+  return (
+    <ThemeProvider theme={projectsTheme}>
+      <ProjectsDirectory {...props} />
+    </ThemeProvider>
+  );
+}
+
+function ProjectsDirectory({
   projects: initialProjects,
   loading: initialLoading = false,
   availableTags: initialTags = [],
@@ -365,8 +393,9 @@ export default function ProjectsNew({
   });
 
   return (
-    <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2, py: 5 }}>
-      {/* Search and tag filters */}
+    <>
+      {/* Filter bar — held to the content width. */}
+      <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2, pt: 5 }}>
       <Box sx={{ mb: 4, display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
         <TextField
           placeholder="Search projects…"
@@ -435,11 +464,34 @@ export default function ProjectsNew({
       </Box>
 
       {/* Featured hero section — layout unchanged per spec */}
+      </Box>
+
+      {/* Featured sits in a full-bleed First Light band (DESIGN.md). The band
+          is what marks these projects as featured; the cards themselves are
+          identical to every other card, so the accent is never spent on
+          decoration. */}
       {!isFiltering && featuredProjects.length > 0 && (
-        <Box sx={{ mb: 6 }}>
+        <Box
+          sx={{
+            bgcolor: "#E7F2E9",
+            borderTop: "1px solid #D2E4D6",
+            borderBottom: "1px solid #D2E4D6",
+            py: 5,
+            mb: 6,
+          }}
+        >
+          <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2 }}>
           <Typography
-            component="h2"
-            sx={{ fontWeight: 800, fontSize: "28px", lineHeight: 1.15, color: "#2A2428", mb: 0.5 }}
+            component="p"
+            sx={{
+              fontWeight: 700,
+              fontSize: "12px",
+              lineHeight: 1,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "#2F5C3F",
+              mb: 2.5,
+            }}
           >
             Featured Projects
           </Typography>
@@ -448,7 +500,6 @@ export default function ProjectsNew({
               display: "grid",
               gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
               gap: 3,
-              mt: 1,
             }}
           >
             {featuredProjects.map((project) => {
@@ -462,11 +513,15 @@ export default function ProjectsNew({
                   onClick={() => handleCardClick(project)}
                   sx={{
                     p: 3,
-                    border: "2px solid",
-                    borderColor: "primary.main",
-                    boxShadow: 3,
-                    "&:hover": { boxShadow: 6 },
-                    transition: "box-shadow 0.2s",
+                    border: "1px solid #D2E4D6",
+                    borderRadius: "24px",
+                    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+                    transition: "border-color 150ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    "&:hover": { borderColor: "#157A3E" },
+                    "&:focus-visible": {
+                      outline: "2px solid #157A3E",
+                      outlineOffset: "2px",
+                    },
                     cursor: "pointer",
                     display: "flex",
                     flexDirection: "column",
@@ -479,14 +534,14 @@ export default function ProjectsNew({
                           width: 52,
                           height: 52,
                           borderRadius: "50%",
-                          bgcolor: "#E3F9ED",
+                          bgcolor: "#E7F2E9",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           flexShrink: 0,
                           fontSize: "1.1rem",
                           fontWeight: 500,
-                          color: "#666",
+                          color: "#2F5C3F",
                         }}
                       >
                         {getInitials(project.name)}
@@ -546,12 +601,14 @@ export default function ProjectsNew({
               );
             })}
           </Box>
+          </Box>
         </Box>
       )}
 
+      <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2, pb: 5 }}>
       {filteredProjects.length === 0 && (
-        <Box sx={{ textAlign: "center", py: 6 }}>
-          <Typography variant="body1" sx={{ color: "text.secondary" }}>
+        <Box sx={{ maxWidth: "65ch", py: 6 }}>
+          <Typography sx={{ fontSize: "19px", lineHeight: 1.625, color: "text.secondary" }}>
             No projects match your filters.
           </Typography>
         </Box>
@@ -591,9 +648,11 @@ export default function ProjectsNew({
                 position: "relative",
                 border: "1px solid",
                 borderColor: "divider",
-                boxShadow: 1,
-                "&:hover": { boxShadow: 3 },
-                transition: "box-shadow 0.2s",
+                borderRadius: "24px",
+                boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+                transition: "border-color 150ms cubic-bezier(0.22, 1, 0.36, 1)",
+                "&:hover": { borderColor: "#157A3E" },
+                "&:focus-visible": { outline: "2px solid #157A3E", outlineOffset: "2px" },
                 cursor: "pointer",
                 height: "100%",
                 display: "flex",
@@ -608,14 +667,14 @@ export default function ProjectsNew({
                       width: 40,
                       height: 40,
                       borderRadius: "50%",
-                      bgcolor: "#E3F9ED",
+                      bgcolor: "#E7F2E9",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
                       fontSize: "0.9rem",
                       fontWeight: 500,
-                      color: "#666",
+                      color: "#2F5C3F",
                     }}
                   >
                     {getInitials(project.name)}
@@ -630,7 +689,7 @@ export default function ProjectsNew({
                       height: 40,
                       borderRadius: "50%",
                       objectFit: "cover",
-                      bgcolor: "#f5f5f5",
+                      bgcolor: "#F2F3EE",
                       flexShrink: 0,
                     }}
                     onError={() => setFailedImages((prev) => new Set(prev).add(project.id))}
@@ -670,7 +729,7 @@ export default function ProjectsNew({
                       label={project.categoryName}
                       size="small"
                       sx={{
-                        bgcolor: "#f0f0f0",
+                        bgcolor: "#F2F3EE",
                         color: "text.secondary",
                         fontSize: "0.7rem",
                         fontWeight: 500,
@@ -694,7 +753,7 @@ export default function ProjectsNew({
                     <Chip
                       label={`+${project.tags.length - 3}`}
                       size="small"
-                      sx={{ bgcolor: "#f0f0f0", color: "text.secondary", fontSize: "0.7rem" }}
+                      sx={{ bgcolor: "#F2F3EE", color: "text.secondary", fontSize: "0.7rem" }}
                     />
                   )}
                 </Box>
@@ -815,14 +874,14 @@ export default function ProjectsNew({
                           width: 64,
                           height: 64,
                           borderRadius: "50%",
-                          bgcolor: "#E3F9ED",
+                          bgcolor: "#E7F2E9",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           flexShrink: 0,
                           fontSize: "1.4rem",
                           fontWeight: 500,
-                          color: "#666",
+                          color: "#2F5C3F",
                         }}
                       >
                         {getInitials(selectedProject.name)}
@@ -837,7 +896,7 @@ export default function ProjectsNew({
                           height: 64,
                           borderRadius: "50%",
                           objectFit: "cover",
-                          bgcolor: "#f5f5f5",
+                          bgcolor: "#F2F3EE",
                           flexShrink: 0,
                         }}
                         onError={() => {
@@ -1094,7 +1153,7 @@ export default function ProjectsNew({
                 </DialogContent>
 
                 <DialogActions
-                  sx={{ px: 4, py: 2, bgcolor: "#fafafa", justifyContent: "space-between" }}
+                  sx={{ px: 4, py: 2, bgcolor: "#F2F3EE", justifyContent: "space-between" }}
                 >
                   <Typography variant="caption" sx={{ color: "text.disabled" }}>
                     Last updated {updatedDate}
@@ -1110,6 +1169,7 @@ export default function ProjectsNew({
             );
           })()}
       </Dialog>
-    </Box>
+      </Box>
+    </>
   );
 }
