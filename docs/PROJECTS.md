@@ -26,7 +26,8 @@ projecthub.techforpalestine.org/api/public/projects
 - Retries up to twice on 5xx responses (exponential backoff, 500ms/1000ms) to absorb ProjectHub cold starts.
 - Accepts either a bare array, `{ data: [...] }`, or `{ projects: [...] }` response shape from upstream.
 - Runs `sanitizeProjectUrls()` on every project: any of ~16 known URL fields (`websiteUrl`, `logoUrl`, social links, `donationUrl`, etc.) that don't parse as `http:`/`https:` are stripped — guards against `javascript:`/`data:` URI XSS if ProjectHub ever returned attacker-controlled data.
-- Response is explicitly `Cache-Control: no-cache, no-store, must-revalidate` with several Cloudflare-specific anti-caching headers, and CORS `Access-Control-Allow-Origin: *` (read-only public data, allowed per [SECURITY.md](SECURITY.md)).
+- The response is `Cache-Control: no-store` (the middleware forces this on all of `/api/*`) with CORS `Access-Control-Allow-Origin: *` (read-only public data, allowed per [SECURITY.md](SECURITY.md)). The server-side cache below is what avoids ProjectHub calls, not browser caching.
+- An `X-Projects-Source: hit|miss|stale` header says where the list came from, which is how to check the cache is working.
 
 ## Shareable project URLs
 
@@ -36,8 +37,30 @@ Every project has a URL: `/projects/<name-slug>-<id>`, for example `/projects/ha
 - **Server** (`src/pages/projects/[...slug].astro`): fetches the list via `fetchProjectsData`, finds the project, and passes `projectMetaTags()` (`src/utils/projectMeta.ts`) to the page so a pasted link previews the project: its name, its pitch plus "Led by ...", and its logo. A logo is a small square, so those links use the `summary` Twitter card rather than `summary_large_image`; a project with no logo falls back to the T4P social image.
 - **A ProjectHub failure does not redirect.** Only a genuine "no such project" redirects (302 to `/projects`). If the fetch itself fails, the page renders generically and the island resolves the project client-side, so an outage does not discard the visitor's link.
 - **Client** (`ProjectsNew.tsx`): opens the matching dialog once data loads, `pushState`s on open and close, and follows `popstate` for back and forward. The dialog has a "Copy link" button that always copies the canonical URL.
-- **Every project link makes the server fetch the full list**, and that endpoint is uncached, so a slow ProjectHub delays link previews. Caching `fetchProjectsData` is the obvious follow-up.
-- **Not in the sitemap yet.** `@astrojs/sitemap` only knows static routes, so the ~90 project URLs need a dynamic sitemap endpoint. Tracked as a separate task.
+- **Every project link makes the server resolve the full list**, which is why the list is cached (next section): without it, a slow ProjectHub would delay link previews.
+
+## Caching
+
+`fetchProjectsData` (`src/store/projectsClient.ts`) caches the parsed, sanitized list in the Workers Cache API. The decision logic is in `src/utils/projectsCachePolicy.ts`, free of any Cloudflare dependency.
+
+- **Fresh for 5 minutes.** A ProjectHub edit shows on the site within about that long.
+- **Stale-if-error for 24 hours.** If ProjectHub is down or fails, the last good copy is served (`X-Projects-Source: stale`). It throws only when there is no usable copy.
+- **The key is a synthetic request, never the outbound one**, so the `X-API-Key` header cannot end up in a cache entry. The key carries a version (`?v=1`): entries hold already-sanitized data, so **bump it whenever `sanitizeProjectUrls` changes**.
+- **An empty list is never cached** and never replaces a good entry: the unexpected-shape branch returns `[]`, and that is not evidence that every project vanished.
+- **A broken cache never breaks the page.** A failed read is a miss; a failed write is ignored.
+- **Only works on a custom domain.** The Cache API is absent in `astro dev`, Node, and on `*.pages.dev` previews; there it falls back to fetching every time. It is also per-datacenter, so each datacenter pays one uncached fetch after expiry.
+- Not done on purpose: sharing an in-flight promise between requests in one isolate. Workers forbid awaiting I/O started by a different request.
+
+## Sitemap
+
+`src/pages/sitemap-projects.xml.ts` lists every `/projects/<slug>` URL from the same cached data, so a new project appears without a deploy. It is referenced from `sitemap-index.xml` (`customSitemaps` in `astro.config.mjs`) and from `public/robots.txt`.
+
+- URLs are `projectPath()` with **no trailing slash**, matching the canonical the slug route redirects to. (The static sitemap lists `/projects/` with a slash while its canonical has none; that mismatch pre-dates this and is not fixed.)
+- `<lastmod>` comes from `updatedAt`, omitted when it is not a valid date. The builder is `src/utils/projectsSitemap.ts`.
+- **A failure or an empty list returns 503 with `Retry-After`, never an empty sitemap.** A 200 with an empty `<urlset>` tells Google the projects are gone.
+- There is no visibility field on a project, so the sitemap lists exactly what the API returns.
+- It must not live under `/api/`, where the middleware forces `no-store`.
+- Google may still report many of these pages as "crawled, not indexed": each has a unique title, description and preview but an identical body, because the directory is a client-only island. Measure in Search Console before investing further; a per-project `<h1>` and JSON-LD are the cheap next step.
 
 ## Frontend components
 
