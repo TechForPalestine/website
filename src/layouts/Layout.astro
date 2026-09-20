@@ -14,6 +14,11 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  /** Describes the share image for people who cannot see it. */
+  imageAlt?: string;
+  /** `summary` shows a small square thumbnail; use it for logos, which the
+   * large card crops badly. */
+  twitterCard?: "summary" | "summary_large_image";
   noindex?: boolean;
   hideDonatePopout?: boolean;
 }
@@ -22,6 +27,8 @@ const {
   title,
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
+  imageAlt,
+  twitterCard = "summary_large_image",
   noindex = false,
   hideDonatePopout = false,
 } = Astro.props;
@@ -130,14 +137,16 @@ const canonicalUrl = new URL(
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Tech for Palestine" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content={twitterCard} />
     <meta name="twitter:site" content="@tech4palestine" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
+    {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
     <meta name="twitter:creator" content="@tech4palestine" />
 
     <slot name="head" />
@@ -164,13 +173,23 @@ const canonicalUrl = new URL(
   <body class="relative flex min-h-screen flex-col bg-white text-gray-900">
     <Navigation />
 
-    <!-- Floating Donate Button -->
+    <!-- Floating Donate tab. Kept on the right edge, mid-height: the pal-chat widget owns
+         the bottom corners. Rests tucked so only the heart shows; hover or keyboard focus
+         slides the label out. Hidden below md; the nav carries Donate on small screens. -->
     {
       !hideDonatePopout && (
         <a
           href="/donate"
-          class="donate-link fixed right-0 top-1/2 z-50 hidden origin-center -translate-y-1/2 rotate-180 rounded-bl-none rounded-br-lg rounded-tl-none rounded-tr-lg bg-green-800 px-3 py-5 text-white shadow-lg transition [writing-mode:vertical-rl] hover:bg-green-900 md:block"
+          class="donate-link fixed right-0 top-1/2 z-50 -mt-6 hidden items-center gap-3 rounded-l-pill bg-grove py-3.5 pl-3.5 pr-4 text-[15px] font-bold text-white shadow-sm ring-2 ring-white translate-x-[calc(100%-2.5rem)] transition duration-200 ease-out hover:translate-x-0 hover:bg-grove-hover focus-visible:translate-x-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-grove motion-safe:animate-donateIn md:flex"
         >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
           Donate
         </a>
       )

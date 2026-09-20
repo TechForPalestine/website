@@ -1,0 +1,48 @@
+---
+// The canonical shareable project URL: /projects/<name-slug>-<id>. Renders the
+// same directory as /projects, with this project's preview tags so a pasted
+// link shows the project rather than the generic page. The React island opens
+// the matching dialog itself on mount (see ProjectsNew.tsx).
+import { fetchProjectsData } from "../../store/projectsClient";
+import { findProjectBySlug, parseProjectId, projectPath } from "../../utils/projectSlug";
+import { projectMetaTags, type ProjectMeta } from "../../utils/projectMeta";
+import ProjectsPage from "../../components/projects/ProjectsPage.astro";
+
+const slug = Astro.params.slug ?? "";
+
+// Not shaped like a project URL at all.
+if (parseProjectId(slug) === null) {
+  return Astro.redirect("/projects", 302);
+}
+
+let meta: ProjectMeta | null = null;
+try {
+  const { projects } = await fetchProjectsData(Astro.locals);
+  const match = findProjectBySlug(projects, slug);
+
+  // Only a real "no such project" redirects.
+  if (!match) {
+    return Astro.redirect("/projects", 302);
+  }
+
+  // The id is what identifies a project, so an old or hand-edited name part
+  // still lands here; send it to the current canonical URL.
+  const canonical = projectPath(match);
+  if (Astro.url.pathname.replace(/\/$/, "") !== canonical) {
+    return Astro.redirect(canonical, 301);
+  }
+
+  meta = projectMetaTags(match);
+} catch (error) {
+  // ProjectHub being unreachable says nothing about whether this project
+  // exists, so do not throw the visitor's link away: render the generic page
+  // and let the island resolve the project client-side.
+  console.error("[projects/[...slug]] Could not resolve project for preview", error);
+  // The generic fallback must not be cached: the middleware would otherwise
+  // mark it public for 10 minutes, so an outage-time page would outlive the
+  // outage and serve a link with no preview.
+  Astro.response.headers.set("Cache-Control", "no-store");
+}
+---
+
+<ProjectsPage meta={meta} />

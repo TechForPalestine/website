@@ -41,6 +41,6 @@ Set the following in the Cloudflare Pages dashboard (Production and Preview are 
 
 **Feature flags**
 
-- `MEMBERSHIP_LIVE` — `"true"`/anything else; gates membership-related UI on every `-new` page
+- `MEMBERSHIP_LIVE` — **dead, safe to remove.** Read only by `HomeLayout` and the `-new` pages, which are unreachable since the redesign was shelved in #524. No live page reads it.
 
 For local development, copy `.env.example` to `.env`, and see [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) for why most secrets should actually go in `.dev.vars` instead.

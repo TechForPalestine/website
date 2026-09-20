@@ -54,6 +54,8 @@ declare global {
         ctx?: {
           waitUntil: (p: Promise<unknown>) => void;
         };
+        /** Cloudflare's CacheStorage; `default` is the Workers-only shared cache. */
+        caches?: CacheStorage;
       };
     }
   }

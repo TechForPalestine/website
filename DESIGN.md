@@ -2,259 +2,274 @@
 name: Tech for Palestine
 description: A community of professionals incubating tech and advocacy projects for Palestinian liberation.
 colors:
-  page: "#FFFBF5"
-  cream: "#FBF2ED"
-  butter: "#F7EAD4"
-  sand: "#F7F2E8"
+  paper: "#FFFFFF"
+  stone: "#F2F3EE"
+  first-light: "#E7F2E9"
+  first-light-edge: "#D2E4D6"
+  grove-green: "#157A3E"
+  grove-green-deep: "#2F5C3F"
+  nightfall: "#101010"
   ink: "#2A2428"
-  ink-dark: "#201D1E"
   ink-secondary: "#73656E"
   ink-muted: "#B5B5B5"
   ink-divider: "#D6D6D6"
-  logo-frame: "#EFE3D4"
-  brand: "#AB4956"
-  brand-hover: "#D35464"
-  brand-light: "#E8727F"
 typography:
   display:
-    fontFamily: "Fraunces, serif"
-    fontSize: "clamp(42px, 5vw, 60px)"
-    fontWeight: 400
-    lineHeight: 1.22
+    fontFamily: "Outfit, system-ui, sans-serif"
+    fontSize: "clamp(38px, 5vw, 54px)"
+    fontWeight: 800
+    lineHeight: 1.02
     letterSpacing: "normal"
   headline:
-    fontFamily: "Fraunces, serif"
-    fontSize: "clamp(36px, 4vw, 48px)"
-    fontWeight: 400
-    lineHeight: 1.18
-    letterSpacing: "-0.01em"
+    fontFamily: "Outfit, system-ui, sans-serif"
+    fontSize: "clamp(28px, 4vw, 38px)"
+    fontWeight: 800
+    lineHeight: 1.15
   title:
-    fontFamily: "Fraunces, serif"
-    fontSize: "clamp(32px, 3vw, 38px)"
-    fontWeight: 400
-    lineHeight: 1.22
+    fontFamily: "Outfit, system-ui, sans-serif"
+    fontSize: "17px"
+    fontWeight: 700
+    lineHeight: 1.35
   body:
     fontFamily: "Outfit, system-ui, sans-serif"
-    fontSize: "clamp(16px, 1.5vw, 20px)"
+    fontSize: "clamp(19px, 1.5vw, 21px)"
     fontWeight: 400
-    lineHeight: 1.48
+    lineHeight: 1.625
   label:
     fontFamily: "Outfit, system-ui, sans-serif"
+    fontSize: "13px"
+    fontWeight: 700
+    lineHeight: 1.2
+  overline:
+    fontFamily: "Outfit, system-ui, sans-serif"
     fontSize: "12px"
-    fontWeight: 500
+    fontWeight: 700
     lineHeight: 1
-    letterSpacing: "0.12em"
+    letterSpacing: "0.14em"
 rounded:
   sm: "8px"
   md: "16px"
   lg: "24px"
   pill: "999px"
 spacing:
-  section-y: "96px"
-  section-y-lg: "128px"
+  section-y: "64px"
+  section-y-lg: "80px"
   container-x: "24px"
-  container-x-md: "40px"
   card: "24px"
-  card-md: "40px"
-  card-lg: "56px"
+  stack: "20px"
+  stack-lg: "40px"
 components:
   button-primary:
-    backgroundColor: "{colors.brand}"
-    textColor: "#FFFFFF"
+    backgroundColor: "{colors.grove-green}"
+    textColor: "{colors.paper}"
     rounded: "{rounded.pill}"
     padding: "14px 20px"
     typography: "{typography.label}"
   button-primary-hover:
-    backgroundColor: "{colors.brand-hover}"
-  button-ghost:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.grove-green-deep}"
+  button-inverse:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.nightfall}"
     rounded: "{rounded.pill}"
     padding: "14px 20px"
     typography: "{typography.label}"
-  button-text:
-    backgroundColor: "transparent"
-    textColor: "{colors.brand}"
-    rounded: "0"
-    padding: "0"
-    typography: "{typography.label}"
-  portfolio-card:
-    backgroundColor: "{colors.sand}"
-    rounded: "20px"
-    padding: "{spacing.card}"
-  stats-cell:
-    backgroundColor: "{colors.sand}"
+  card:
+    backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.card}"
+  band:
+    backgroundColor: "{colors.first-light}"
+    textColor: "{colors.ink}"
+    padding: "32px 24px"
+  recess:
+    backgroundColor: "{colors.stone}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.card}"
+  terminal-cta:
+    backgroundColor: "{colors.nightfall}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.stack-lg}"
 ---
 
 # Design System: Tech for Palestine
 
 ## 1. Overview
 
-**Creative North Star: "The Steadfast Press"**
+**Creative North Star: "The Organizing Table"**
 
-This system is built like a publication produced by people who care deeply: warm paper stock, purposeful type, nothing decorative that doesn't earn its place. The Fraunces serif carries editorial authority; Outfit brings it back down to earth. The palette reads like late-afternoon light on linen, not a tech product, not a protest poster.
+This system is a room where work gets planned, not a page that pitches you. Warm ink sits on white the way paper sits on a table. Green is the material at hand, the thing being cultivated and argued over. Sections advance like items on an agenda, each one banded off from the last, and exactly one dark block at the foot of the page is where the ask finally lands.
 
-The design is warm without being sentimental, serious without being cold, and direct without being aggressive. It reflects a community of skilled professionals who know what they're doing and aren't apologetic about why. Complexity is prohibited not because the cause is simple, but because clarity is respect for the visitor's time and attention.
+The register is brand: this is a movement's front door, and design carries the argument. But it carries it by being legible and unhurried rather than loud. Nothing here performs. A visitor who is already convinced should be able to find the next step in seconds, and a visitor who is not should be able to read the evidence without being sold to.
 
-This system explicitly rejects: SaaS gradient aesthetics, corporate nonprofit polish, excessive motion or interactivity, vague social-good language, and anything that hedges on what T4P stands for.
+This system explicitly rejects the things PRODUCT.md names: cold or corporate visual language, SaaS-style tech branding with gradient blobs and glassmorphism cards, generic nonprofit design with stock photo heroes and blue-and-white palettes, vague "social good" copy that hedges on what T4P stands for, and advocacy design that leads with despair.
 
 **Key Characteristics:**
 
-- Editorial serif (Fraunces) paired with a clean humanist sans (Outfit)
-- Warm parchment neutrals with a single pomegranate accent, used sparingly
-- Flat-by-default surfaces with tonal depth through background steps (page → cream → sand → butter)
-- Motion is restrained: entrances only, no looping decorative animation, always `prefers-reduced-motion` safe
-- CTAs appear where they are contextually earned, not mandated at the end of every section
+- A single sans (Outfit) doing every job, from 12px overline to 54px display
+- Warm near-black text on white, with one saturated green accent
+- Alternating tinted section bands instead of an unbroken scroll
+- Exactly one dark block per page, at the end, carrying the primary ask
+- Grounded rather than flat: a single ambient shadow, never a stack of elevations
+- Motion is restrained to state changes; nothing loops, nothing announces itself
 
-## 2. Colors: The Parchment and Pomegranate Palette
+**Provenance.** This spec documents the live site as shipped, with `/membership` as the canonical page. It replaces an earlier `DESIGN.md` that described a Fraunces-and-parchment system built for the `-new` redesign wave; that redesign was shelved in #524 and its pages are unreachable behind 301 redirects. Those tokens (`page`, `cream`, `butter`, `sand`, `brand.*`, `font-serif`) remain defined in `tailwind.config.mjs` but are **deprecated**: `bg-butter` has zero live uses, `bg-cream` has one, and Fraunces has one, all inside dead code branches. Do not reach for them.
 
-A warm neutral stack grounded in off-white parchment, with a single saturated accent used only where it signals action or emphasis. The palette reads as editorial, human, and grounded — not tech-blue, not activist-red, not nonprofit-green.
+**Known gaps.** `/membership` is a conversion flow. It models bands, cards, buttons and a terminal CTA, and nothing else. Directory and list layouts, long-form article typography, data display, dark mode, and empty and error states are **unspecified** in this system. They will be derived as pages reach them rather than invented here. `/projects` supplies the directory vocabulary first.
+
+## 2. Colors: The Organizing Table Palette
+
+A warm-neutral text stack on a plain white surface, with one saturated green carrying every accent and a single near-black reserved for the close.
 
 ### Primary
 
-- **Pomegranate** (`#AB4956`): The sole accent. Used on CTAs, active states, brand emphasis, and the `text-brand` utility class. Forbidden as a background for large surface areas. Its rarity is its power.
-- **Pomegranate Light** (`#D35464`): Hover state only. Never appears at rest. Lighter than base for a lift feel.
+- **Grove Green** (`#157A3E`): The sole accent. Links, emphasized words in body copy, the primary button, card link affordances, and active states. It appears on `/membership` and on the homepage alike, which is what makes it the system's accent rather than one page's choice.
+- **Grove Green Deep** (`#2F5C3F`): Overlines and eyebrows only, where the brighter green would vibrate against small uppercase letterforms at 12px.
+
+### Secondary
+
+- **First Light** (`#E7F2E9`): The section band. A pale green wash that separates an agenda item from the one above it without a rule or a card.
+- **First Light Edge** (`#D2E4D6`): The hairline that closes a band top and bottom, and the resting border on cards inside one.
+
+### Tertiary
+
+- **Nightfall** (`#101010`): The terminal call to action. One block, at the foot of the page, white text on near-black with an inverse pill button. Not a text color and not a section background anywhere else.
 
 ### Neutral
 
-- **Warm Parchment** (`#FFFBF5`): The page background. The surface everything rests on. Never pure white.
-- **Cream** (`#FBF2ED`): Slightly elevated surface — light card backgrounds, hover fills.
-- **Butter** (`#F7EAD4`): Card borders, warm dividers, the rotated accent behind logo frames.
-- **Sand** (`#F7F2E8`): Recessed surfaces — stats grids, input backgrounds.
-- **Ink** (`#2A2428`): All primary text. Warm near-black, never pure black.
-- **Ink Dark** (`#201D1E`): The one dark surface. Backs the closing CTA block (`CtaSection`) so the final call to action inverts against the parchment page. Not a text color; a full-bleed dark panel. Text on it is parchment (`page`) and `brand-light`.
+- **Paper** (`#FFFFFF`): The page and card surface.
+- **Stone** (`#F2F3EE`): The recessed surface. Suggested-amount panels, quiet inset notes, anything that should sit below the page rather than on it.
+- **Ink** (`#2A2428`): All primary text. A warm near-black, never pure.
 - **Ink Secondary** (`#73656E`): Body copy, descriptions, supporting text.
 - **Ink Muted** (`#B5B5B5`): Placeholders, disabled states, metadata.
-- **Ink Divider** (`#D6D6D6`): Horizontal rules, section separators.
-- **Logo Frame** (`#EFE3D4`): The warm rotated accent panel behind portfolio logo frames. A shade deeper than Butter so the frame reads against Sand card surfaces.
-
-### Brand on Dark
-
-- **Pomegranate Light** (`#E8727F`): The accent on the dark CTA surface only. Pomegranate at rest is too dark to carry emphasis against `ink-dark`; this lifted tint is the on-dark counterpart (distinct from `brand-hover` `#D35464`, which is a light-surface hover state).
+- **Ink Divider** (`#D6D6D6`): Rules and separators outside bands.
 
 ### Named Rules
 
-**The One Accent Rule.** Pomegranate appears on less than 10% of any screen. It marks action and emphasis only. A second accent would dilute it to decoration.
+**The One Green Rule.** Grove Green is the only accent. The live codebase currently contradicts this in three places and each is drift, not license: the join flow's pomegranate buttons (`#AB4956` in `QgivJoin.tsx` and `AboutYouStep.tsx`), the events page's `#EA4335`, and assorted `green-800` and `green-100` utilities that are a different green again. Converge them on `#157A3E`.
 
-**The Single Dark Surface Rule.** Exactly one dark panel exists: the closing CTA (`ink-dark` `#201D1E`). It earns its inversion by being the terminal call to action. Do not introduce dark sections elsewhere; the system is parchment-light by default and the dark block's rarity is what makes it land.
+**The Single Dark Block Rule.** Exactly one Nightfall panel exists per page, and it is the last thing before the footer. Its rarity is the whole effect. A second dark section anywhere on the page destroys it.
 
-**The Tonal Depth Rule.** Depth is created by stepping through the neutral stack (Parchment → Cream → Sand → Butter), not by drop shadows on every surface. Shadows are reserved for interactive elements that need structural lift.
+**The Warm Ink Rule.** Text is never `#000`. Every text value carries a warm tint toward the brand hue. This holds throughout and must not regress.
 
-**The No Pure Values Rule.** Never use `#000000` or `#ffffff`. Every neutral carries a warm tint toward the brand hue. Pure values feel clinical; tinted neutrals feel inhabited.
+**The White Surface Exception.** The page surface is pure `#FFFFFF`, which is the one place this system knowingly breaks the no-pure-values principle. It is recorded here as fact rather than defended as intent. If the surface is ever warmed, it moves site-wide in one change, not page by page.
 
 ## 3. Typography
 
-**Display Font:** Fraunces (with Fraunces Placeholder, serif fallback)
+**Display Font:** Outfit (with system-ui, sans-serif fallback)
 **Body Font:** Outfit (with system-ui, sans-serif fallback)
 
-**Character:** Fraunces carries optical weight and editorial warmth — it reads like a serious publication, not a startup homepage. Outfit is clean and humanist, grounding the editorial tone in clarity. Neither font performs. Together they communicate: "people who know what they're doing built this."
+**Character:** One humanist sans does every job. Hierarchy comes from a hard weight split rather than from a second family: headings are extrabold (800) and body is regular (400), with nothing in between at display sizes. The effect is plainspoken and a little blunt, which suits copy that refuses to hedge. Outfit is loaded at 400/500/600/700/800 in `Layout.astro` via `@fontsource`, so no weight is ever synthesized.
 
-The scale is **fixed-step, not fluid.** Sizes snap at three breakpoints (390 base / 810 / 1200) rather than using `clamp()`; the clamp values in the frontmatter are min→max endpoint approximations of that stepped scale. Every role is a `.ts-*` utility class defined in `src/styles/design-system.css`.
+### Hierarchy
 
-#### Fraunces (editorial roles)
-
-- **Display** (`.ts-display`, 400, 42→52→60px, line-height 1.22): Hero headline. Used once per page. The largest typographic statement.
-- **Editorial** (`.ts-editorial`, 400, 36→42→48px, line-height 1.18, tracking –0.01em): Section-opening statements. Manifesto headline, portfolio section header. Slightly tighter tracking for editorial character. (Frontmatter `headline`.)
-- **Stat / Stat Large** (`.ts-stat` 36→42→48px, `.ts-stat-large` 42→52→60px, line-height 1.22/1): The proof-point numbers (80+, 10,000+). Fraunces, so stats read as editorial evidence, not a SaaS metric grid.
-- **Heading** (`.ts-heading`, 400, 32→36→38px, line-height 1.22): Project names in portfolio cards, sub-section headings. (Frontmatter `title`.)
-- **Subheading** (`.ts-subheading`, 400, 28→30→32px): Tertiary headings within sections.
-- **Quote** (`.ts-quote`, 400, 22→24→26px, line-height 1.32): Pull quotes, testimonials.
-- **Eyebrow** (`.ts-eyebrow`, 400, 18→19→24px, line-height 1.32): A Fraunces editorial annotation above a headline. This is a serif eyebrow, NOT the uppercase-tracked label — for that, see Overline below.
-
-#### Outfit (interface roles)
-
-- **Body Large** (`.ts-body-large`, 400, 18→20px, line-height 1.48): Primary body copy. Section and project descriptions. Line length capped at 65–75ch. (Frontmatter `body`.)
-- **Body** (`.ts-body`, 400, 16→18px, line-height 1.22): Secondary body copy, card support text. Prefer Body Large where possible.
-- **Body Small / Caption** (`.ts-body-small` 14→16px, `.ts-caption` 14px): Metadata, fine print.
-- **Label** (`.ts-label`, 500, 16→18px, line-height 1): Button text and interactive labels. Used by `Button.astro`.
-- **Overline** (`.ts-overline`, 500, 12px, tracking 0.12em, uppercase): Section eyebrows, `— OUR PORTFOLIO` style annotations. All uppercase, generous tracking. (Frontmatter `label`.)
+- **Display** (800, 38px → 54px, line-height 1.02): The page headline. Once per page. The tight leading is deliberate and is what gives the type its density.
+- **Headline** (800, 28px → 38px, line-height 1.15): Section openers.
+- **Title** (700, 17px, line-height 1.35): Card headings and sub-section labels.
+- **Body** (400, 19px → 21px, line-height 1.625): Primary body copy. Capped at 65–75ch.
+- **Body Small** (400, 16px, line-height 1.6): Secondary copy, card support text, metadata.
+- **Label** (700, 13px): Button text and interactive labels.
+- **Overline** (700, 12px, tracking 0.14em, uppercase): Section eyebrows in Grove Green Deep.
 
 ### Named Rules
 
-**The Fraunces Hierarchy Rule.** Fraunces owns display, editorial, stat, heading, subheading, quote, and the serif eyebrow. Outfit owns all interface text: body, label, overline, caption. The serif never appears in a button, an overline, or interface chrome; the sans never appears in a headline or a stat. This editorial/UI split is the system's spine.
+**The Weight Gap Rule.** Headings are 800 and body is 400. The gap is the hierarchy. Reaching for 600 at a display size flattens the page and is the fastest way to make this system look generic.
 
-**The Line Length Rule.** Body copy never exceeds 75 characters per line. On wide viewports, constrain with `max-w-[75ch]` or equivalent, not just container padding.
+**The One Family Rule.** Outfit does everything. Fraunces is deprecated and `font-serif` must not be used: `design-system.css` is loaded only by `AdminLayout`, so a serif class on a public page silently renders as the fallback.
+
+**The Dead Class Rule.** `ts-*` utility classes are defined in `design-system.css`, which `Layout.astro` does not import. Any `ts-*` class on a public page is a no-op that renders at browser default size. Three exist today and are bugs: `eventsShared.tsx:252` and `:259`, and `AboutYouStep.tsx:101`. Never add another.
+
+**The Line Length Rule.** Body copy never exceeds 75 characters per line. Constrain with `max-w-[65ch]` or similar, not with container padding alone.
 
 ## 4. Elevation
 
-This system is flat by default. Surfaces rest without shadow; the tonal neutral stack (parchment → cream → sand → butter) creates perceived depth through background steps, not drop shadows.
-
-Shadows appear in two specific contexts only: (1) interactive elements that need structural lift to signal they are "above" the page (logo frames in portfolio cards), and (2) the hero glass card overlay, which uses a semi-transparent white backdrop rather than a traditional shadow.
+This system is grounded, not flat and not layered. Surfaces rest on the page with a single ambient shadow that signals "this is a distinct object" without pretending to float. Real separation comes from the tinted section bands, which do the work that a shadow stack would otherwise be asked to do.
 
 ### Shadow Vocabulary
 
-- **Logo Frame Ambient** (`0 6px 20px rgba(0,0,0,0.06)`): The rotated Butter accent behind logo frames. Provides depth without weight. Never used on text containers.
-- **Logo Frame Lift** (`0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05)`): The logo card itself. Layered shadow creates subtle three-dimensional presence.
-- **Ink Ring** (`--color-ink-ring`, `rgba(42,36,40,0.12)`): A hairline warm ring for resting surface edges (inputs, framed elements) where a full `ink-divider` border would read too hard. Not a drop shadow; a low-contrast boundary. Interactive focus uses the Pomegranate outline (`outline-brand`), not this.
+- **Ambient** (`box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05)`, Tailwind `shadow-sm`): The only sanctioned elevation. Cards, interactive surfaces, and inputs at rest.
+- **Hover lift** (`shadow-sm` applied on hover to a previously flat surface): The sanctioned way for a card to acknowledge the cursor.
 
 ### Named Rules
 
-**The Flat-By-Default Rule.** A surface that doesn't move does not get a shadow. If adding a shadow is the first instinct, ask whether a background step (parchment → sand) solves the same problem without visual noise.
+**The One Elevation Rule.** `shadow-sm` is the vocabulary. `shadow-md`, `shadow-lg` and `shadow-xl` all appear in the live codebase and all are drift; reduce them to `shadow-sm` or to nothing when a page is next touched. A content site does not need four elevation levels.
+
+**The Band Before Shadow Rule.** When a section needs to feel separate, band it in First Light. Reach for a shadow only when a single object needs to read as distinct from the surface directly beneath it.
 
 ## 5. Components
 
 ### Buttons
 
-Clean pill form. The shape is soft but the intent is direct. Two meaningful variants; a third for inline text links.
+Plainspoken and sturdy. Full pill, generous hit target, label in caps-height bold, no icon unless the icon carries meaning.
 
-- **Shape:** Fully rounded pill (999px radius). Softness signals approachability, not weakness.
-- **Primary:** Pomegranate background (`#AB4956`), White text (`#FFFFFF` — max contrast on brand surface), Outfit 500 label weight, 14px 20px padding. Hover lightens to Pomegranate Light (`#D35464`). Active state compresses to 98% scale.
-- **Ghost:** Transparent background, Ink border and text, same pill shape and padding as Primary. Hover fills with `ink/5` (5% ink tint). Used for secondary actions alongside a Primary CTA.
-- **Text:** No border, no background. Pomegranate text, no radius. Underlines on hover. Used inline in body copy or as a tertiary option.
-- **Focus:** `outline-2 outline-offset-2 outline-brand` for all variants. Keyboard navigation must be visually unambiguous.
+- **Shape:** Full pill (`999px`). Minimum 44px tall for touch.
+- **Primary:** Grove Green background, white text, 14px/20px padding, label typography. Hover deepens to Grove Green Deep.
+- **Inverse:** White background, Nightfall text, same geometry. Used only inside the terminal CTA block.
+- **Ghost:** Transparent, Ink text and border, same geometry. Secondary actions beside a primary.
+- **Focus:** `outline-2 outline-offset-2` in Grove Green on every variant. Keyboard focus is never suppressed.
 
-### Cards / Containers
+### Cards
 
-The portfolio card is the signature container of this system. It is not a standard card grid — each card is a full-width editorial strip with intentional layout.
+- **Surface:** Paper, or Paper inside a First Light band.
+- **Border:** 1px First Light Edge inside a band; 1px Ink Divider outside one.
+- **Radius:** `rounded-lg`, which is **24px** in this project. The Tailwind defaults are overridden in `tailwind.config.mjs`; do not assume 8px.
+- **Padding:** 24px.
+- **Link affordance:** A bottom-aligned Grove Green label above a hairline top border, not a button.
 
-- **Portfolio Card:** Sand background, Butter border (1px), 20px radius, internal padding steps (24px mobile / 40px tablet / 56px desktop). Two-column grid on desktop (text left, logo right). Cards stack with a scroll-scale depth effect on desktop.
-- **Stats Cell:** Sand background, no border, no shadow. Stats live on the tonal surface without additional framing.
-- **Logo Frame:** Butter rotated accent (–3deg) behind a white foreground frame. The rotation is the design element. Ambient shadow only.
+**The No Stripe Rule.** Cards carry no colored edge stripe. The live nav cards on `/membership` use `border-t-[3px]` in Grove Green; that is drift and comes off when the page is next touched. Colored stripes on cards, top or side, are prohibited.
 
-**The No Nested Card Rule.** Never place a card inside a card. The logo frame within a portfolio card is a logo display element, not a card — it has no interactive behavior and no content hierarchy of its own.
+**The No Identical Grid Rule.** Three same-sized cards with a heading and an arrow link is the most generic shape on the web. If a set of cards is genuinely uniform, ask whether it should be a list. `/membership`'s three-card nav row is the pattern to move away from, not to copy.
+
+### Inputs
+
+- **Surface:** Paper, 1px Ink Divider border, `rounded-sm` (8px), `shadow-sm` at rest.
+- **Focus:** Grove Green border with a 2px Grove Green ring. The live `focus:ring-red-500` on form fields is a Tailwind default that was never replaced; it is drift and reads as an error state on a valid field.
+- **Placeholder:** Ink Muted.
+- **Error:** Message below the field in a red that is reserved for errors and used nowhere decorative.
+
+### Section Bands
+
+The signature structure. A page advances as a sequence of bands rather than one continuous scroll.
+
+- A band is First Light, closed top and bottom with a 1px First Light Edge hairline, full-bleed, with content held to the container width.
+- Bands alternate with Paper sections. Two bands never touch.
+- Each band opens with a Grove Green Deep overline naming the agenda item.
+
+### Terminal CTA
+
+One per page, at the foot. Nightfall surface, `rounded-md` (16px), generous padding, white bold copy, one inverse pill button. This is where the ask lands, and it is the only dark thing on the page.
 
 ### Navigation
 
-`HomeNavbar.astro` is a fixed-top bar (`fixed top-0 z-50`) over the parchment page. Structure: a horizontal list of top-level items (About, Incubator, Get Involved, Events, Updates), each opening a dropdown mega-menu of children, with a single Pomegranate primary CTA button (`Button.astro`, `variant="primary"`) anchored at the right.
-
-- **Typography:** Outfit label weight (`.ts-label` / `.ts-overline` for menu items). Never Fraunces.
-- **Text:** Ink at rest, Pomegranate for active/hover.
-- **Active state:** an item is active when the current path matches its href or any child href (`isGroupActive`). No underline; color shift only.
-- **CTA:** exactly one Pomegranate button in the bar. All other nav items are text links.
-- **Visibility:** supports an `alwaysVisible` mode; otherwise reveals on scroll (`data-always-visible`).
-
-### Signature Components
-
-**Portfolio Stack:** Six portfolio cards rendered as a sticky-scroll stack. On desktop, each card stacks behind the one above it using `position: sticky` with staggered `top` offsets (40px, 64px, 88px...) and a scroll-driven scale reduction (minimum 0.88). Cards enter with a `translateY(32px) → 0` fade. This is the design centerpiece of the homepage — do not simplify it to a carousel or grid.
-
-**Collage Cluster:** Four photos in a tight cluster with rotations (–8deg, +6deg, –5deg, +7deg), absolutely positioned to overlap a recessed stats grid. The collage is decorative evidence of community and events. Motion: ken-burns scale pulse (1→1.08→1, 14s, ease-in-out). Always `motion-reduce:animate-none`.
-
-**Motif Row:** Overlapping T4P logos with staggered fade-left entrance. Negative margin creates the overlap (`-space-x-[18px→22px→30px]`). Purely decorative; `aria-hidden`.
+`Navigation.astro`, shared by every live page through `Layout.astro`. Ink text at rest, Grove Green on hover and active, Outfit label weight throughout, one primary action at the right. Never serif.
 
 ## 6. Do's and Don'ts
 
 ### Do:
 
-- **Do** use Pomegranate (`#AB4956`) only on CTAs, brand emphasis, and active states. Its scarcity is its meaning.
-- **Do** step through the neutral stack (Parchment → Cream → Sand → Butter) to create depth rather than adding shadows.
-- **Do** use Fraunces exclusively for display, headline, and title roles. Outfit owns all body, label, and interface text.
-- **Do** cap body text at 65–75ch line length on all viewport widths.
-- **Do** guard every animation with `prefers-reduced-motion`. The CSS blanket `* { animation: none !important }` must be replaced with per-element guards.
-- **Do** place CTAs where they are contextually earned — after evidence, after a clear invitation, not mechanically at the end of every section.
-- **Do** use real faces, real event photos, and real project logos. Stock photography is prohibited.
-- **Do** state T4P's mission explicitly and early. The cause is not implied; it is named.
-- **Do** use the portfolio stack component (sticky scroll with depth) for featured projects. It is the homepage's signature interaction.
+- **Do** use Grove Green (`#157A3E`) as the only accent, on links, emphasis, primary buttons and active states.
+- **Do** structure a page as alternating First Light bands and Paper sections, each band opening with a Grove Green Deep overline.
+- **Do** place exactly one Nightfall block per page, at the foot, carrying the primary ask.
+- **Do** keep the 800/400 weight gap. Headings extrabold, body regular, nothing in between at display size.
+- **Do** cap body copy at 65–75 characters per line.
+- **Do** use `shadow-sm` as the only elevation, and prefer a band over a shadow when separating sections.
+- **Do** use real faces, real event photos and real project logos. Stock photography is prohibited.
+- **Do** state T4P's mission explicitly and early. The cause is named, never implied.
+- **Do** remember `rounded-lg` is 24px here, and that Tailwind's radius defaults are overridden.
 
 ### Don't:
 
-- **Don't** use excessive interactivity or motion. Clarity of communication takes priority over visual spectacle. If an animation doesn't aid comprehension, remove it.
-- **Don't** hedge or use vague "social good" language. T4P is explicitly pro-Palestine. Every headline must say so.
-- **Don't** use cold or corporate visual language: blues, grays, geometric icons, or corporate-sans typography. This is a community, not a product.
-- **Don't** use gradient text (`background-clip: text`). Use a single solid Pomegranate. Emphasis through weight or scale.
-- **Don't** use side-stripe borders (`border-left > 1px` as a colored accent). Use full borders, background tints, or nothing.
-- **Don't** repeat the hero metric pattern (big number, small label, supporting stats, gradient accent). The stats exist as proof points, not as a SaaS feature grid.
-- **Don't** use glassmorphism as a decorative default. The hero glass card is purposeful (it must be legible over a full-bleed image). Everywhere else: solid tonal surfaces only.
-- **Don't** use `#000000` or `#ffffff`. Every neutral is warm-tinted.
-- **Don't** add a shadow to a surface that does not move or need structural lift. Flat surfaces stay flat.
-- **Don't** use generic nonprofit design: blue-and-white palettes, stock photo heroes, "we believe in a better world" copy.
+- **Don't** use gradient buttons or gradient backgrounds. Ten live `bg-gradient-to-r` buttons exist, including the blue CTA on `/projects`; they are drift and come off on contact. PRODUCT.md names "SaaS-style tech branding: metric dashboards, gradient blobs, glassmorphism cards" as an anti-reference.
+- **Don't** use blue. PRODUCT.md names "cold or corporate" and "generic nonprofit sites: stock photo heroes, blue-and-white palettes" as anti-references. The `/about` gradient blob and the `/projects` blue CTA are both live violations.
+- **Don't** use gradient text (`background-clip: text`). One solid Grove Green, with emphasis through weight or scale.
+- **Don't** put a colored stripe on a card, on any edge, at any width.
+- **Don't** ship three identical cards with a heading and an arrow link.
+- **Don't** use a second accent. Pomegranate `#AB4956`, `#EA4335`, `green-800` and `green-100` are all drift toward `#157A3E`.
+- **Don't** use `ts-*` classes or `font-serif` on a public page. Neither is loaded by `Layout.astro` and both silently degrade.
+- **Don't** use the deprecated parchment tokens (`page`, `cream`, `butter`, `sand`, `brand.*`). They belong to the shelved redesign.
+- **Don't** use `#000000`, and don't introduce a second dark surface.
+- **Don't** reach for a modal. Exhaust inline and progressive alternatives first.
+- **Don't** hedge or use vague "social good" language, and don't lead with despair. T4P is explicitly pro-Palestine and every headline should say so.
+- **Don't** animate for its own sake. PRODUCT.md names "excessive complexity: no over-engineered interactions, no motion for its own sake" as an anti-reference. State changes only, and every animation guarded by `prefers-reduced-motion`.

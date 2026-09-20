@@ -1,145 +1,14 @@
 import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
-import { getEnv } from "../../utils/getEnv.js";
 import { reportError } from "../../lib/report-error";
-import { sanitizeUrl } from "../../components/projects/projectData.js";
+import { fetchProjectsData } from "../../store/projectsClient";
 
 export const prerender = false;
 
-const URL_FIELDS = [
-  "websiteUrl",
-  "logoUrl",
-  "twitterUrl",
-  "linkedinUrl",
-  "githubUrl",
-  "instagramUrl",
-  "facebookUrl",
-  "youtubeUrl",
-  "telegramUrl",
-  "mastodonUrl",
-  "blueskyUrl",
-  "tiktokUrl",
-  "signalUrl",
-  "upscrolledUrl",
-  "leaderPhoto",
-  "donationUrl",
-  "involvementUrl",
-] as const;
-
-function sanitizeProjectUrls(project: Record<string, unknown>): Record<string, unknown> {
-  for (const field of URL_FIELDS) {
-    const val = project[field];
-    if (typeof val !== "string") continue;
-    project[field] = sanitizeUrl(val) || undefined;
-  }
-  return project;
-}
-
-// Retry helper for handling cold starts
-async function fetchWithRetry(url: string, options: RequestInit & { cf?: any }, maxRetries = 2) {
-  let lastError: Error | null = null;
-
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const attemptStart = Date.now();
-      const response = await fetch(url, options);
-      const fetchTime = Date.now() - attemptStart;
-
-      console.log(
-        `[API /api/projects] Attempt ${attempt + 1}/${maxRetries + 1}: ${response.status} in ${fetchTime}ms`
-      );
-
-      // If successful or client error (4xx), return immediately
-      if (response.ok || (response.status >= 400 && response.status < 500)) {
-        return response;
-      }
-
-      // For server errors (5xx), retry unless it's the last attempt
-      if (response.status >= 500 && attempt < maxRetries) {
-        const errorText = await response.text();
-        console.warn(
-          `[API /api/projects] Server error on attempt ${attempt + 1}, retrying...`,
-          errorText
-        );
-        lastError = new Error(`ProjectHub API returned ${response.status}: ${response.statusText}`);
-
-        // Wait before retrying (exponential backoff: 500ms, 1000ms)
-        const delay = 500 * (attempt + 1);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-        continue;
-      }
-
-      return response;
-    } catch (error) {
-      console.error(`[API /api/projects] Fetch error on attempt ${attempt + 1}:`, error);
-      lastError = error instanceof Error ? error : new Error(String(error));
-
-      if (attempt < maxRetries) {
-        const delay = 500 * (attempt + 1);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-        continue;
-      }
-    }
-  }
-
-  throw lastError || new Error("All retry attempts failed");
-}
-
 export const GET: APIRoute = async ({ locals }) => {
   const ctx = locals.runtime?.ctx;
-  const startTime = Date.now();
   try {
-    const PROJECTHUB_API_KEY = getEnv("PROJECTHUB_API_KEY", locals);
-    console.log(`[API /api/projects] Starting fetch, API key present: ${!!PROJECTHUB_API_KEY}`);
-
-    // Fetch with automatic retry for cold starts
-    const response = await fetchWithRetry(
-      "https://projecthub.techforpalestine.org/api/public/projects",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-          Pragma: "no-cache",
-          "User-Agent": "T4P-Website/1.0",
-          "X-API-Key": PROJECTHUB_API_KEY || "",
-        },
-        // Cloudflare-specific fetch options to bypass all caching
-        cf: {
-          cacheEverything: false,
-        },
-      } as RequestInit & { cf?: any },
-      2 // Max 2 retries (3 total attempts)
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[API /api/projects] Final error response:`, errorText);
-      throw new Error(`ProjectHub API returned ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    // Handle different possible response structures
-    let projects;
-    if (Array.isArray(data)) {
-      projects = data;
-    } else if (data.data && Array.isArray(data.data)) {
-      projects = data.data;
-    } else if (data.projects && Array.isArray(data.projects)) {
-      projects = data.projects;
-    } else {
-      projects = [];
-    }
-
-    const tags = Array.isArray(data.tags) ? data.tags : [];
-
-    projects.forEach(sanitizeProjectUrls);
-
-    const totalTime = Date.now() - startTime;
-    console.log(
-      `[API /api/projects] Returning ${projects.length} projects, ${tags.length} tags (total time: ${totalTime}ms)`
-    );
+    const { projects, tags, source } = await fetchProjectsData(locals);
 
     return new Response(JSON.stringify({ projects, tags }), {
       status: 200,
@@ -148,35 +17,25 @@ export const GET: APIRoute = async ({ locals }) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET",
         "Access-Control-Allow-Headers": "Content-Type",
-        // Comprehensive cache control headers
-        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0",
-        Pragma: "no-cache",
-        Expires: "0",
-        // Cloudflare-specific headers
-        "CF-Cache-Status": "DYNAMIC",
-        Vary: "*",
-        // Custom headers for debugging
+        // The list is cached server-side (see store/projectsClient.ts); browsers
+        // still revalidate. The middleware forces no-store on /api/* regardless.
+        "Cache-Control": "no-store",
+        // hit | miss | stale: how you can tell the server-side cache is working.
+        "X-Projects-Source": source,
         "X-Project-Count": projects.length.toString(),
         "X-Tag-Count": tags.length.toString(),
-        "X-Fetch-Time": new Date().toISOString(),
-        "X-Cache-Bust": Date.now().toString(),
       },
     });
   } catch (error) {
     reportError(error, { context: "projects" });
     ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
-    return new Response(
-      JSON.stringify({
-        error: "Failed to fetch projects",
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Failed to fetch projects" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 };

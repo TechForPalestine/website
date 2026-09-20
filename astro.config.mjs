@@ -7,6 +7,10 @@ import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import sentry from "@sentry/astro";
 
+// Sentry only reports from production builds. Loading it in `astro dev` adds
+// server/client instrumentation and a Vite plugin for no benefit.
+const isDev = process.argv.includes("dev");
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://techforpalestine.org",
@@ -33,7 +37,6 @@ export default defineConfig({
     optimizeDeps: {
       include: [
         "@mui/material",
-        "@mui/icons-material",
         "@mui/system",
         "leaflet",
         "react-leaflet",
@@ -43,14 +46,15 @@ export default defineConfig({
     },
   },
   integrations: [
-    sentry({
-      org: "tech-for-palestine",
-      project: "javascript-astro",
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      sourceMapsUploadOptions: {
-        enabled: !!process.env.SENTRY_AUTH_TOKEN,
-      },
-    }),
+    !isDev &&
+      sentry({
+        org: "tech-for-palestine",
+        project: "javascript-astro",
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        sourceMapsUploadOptions: {
+          enabled: !!process.env.SENTRY_AUTH_TOKEN,
+        },
+      }),
     icon(),
     react(),
     tailwind({

@@ -1,6 +1,6 @@
 # Events Page Documentation
 
-The events pages (`/events` and `/events-new`) display Tech for Palestine events fetched from a
+The events page (`/events`) displays Tech for Palestine events fetched from a
 public **ICS calendar feed** (Mattermost's Events Calendar plugin, hosted at
 `chat.techforpalestine.org`). See [ARCHITECTURE.md](ARCHITECTURE.md) for the SSR/islands model
 these components use. Events used to come from Notion — that integration was removed; Notion is
@@ -43,11 +43,11 @@ category into upcoming (featured) vs. past events. The grouping logic is shared
 
 - **`src/pages/events.astro`** → `src/components/Events.tsx` — Material-UI styled page, one
   section per category, upcoming events shown before past within each section.
-- **`src/pages/events-new.astro`** → `src/components/events/EventsNew.tsx` — new design-system
-  styled page, one section per category with featured cards for upcoming events and a compact
-  "Past events" list alongside.
-- Both fetch initial data server-side (`fetchEvents(Astro.locals)`) and re-fetch client-side
+- It fetches initial data server-side (`fetchEvents(Astro.locals)`) and re-fetches client-side
   from `/api/events` on mount if no SSR data was passed.
+
+`src/components/events/EventsNew.tsx` belonged to the abandoned `-new` redesign and is
+unreachable from any live page. See [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ### 4. API Route (`src/pages/api/events.ts`)
 
@@ -110,12 +110,9 @@ resolved through `getEnv()` and only ever fetched server-side.
 src/
 ├── pages/
 │   ├── events.astro              # Events page entry point (MUI)
-│   ├── events-new.astro          # Events page entry point (new design)
 │   └── api/events.ts             # API endpoint
 ├── components/
-│   ├── Events.tsx                # MUI events component, category sections
-│   └── events/
-│       └── EventsNew.tsx         # New-design events component, category sections
+│   └── Events.tsx                # MUI events component, category sections
 ├── store/
 │   └── eventsClient.ts           # ICS feed fetch + parse
 └── utils/
