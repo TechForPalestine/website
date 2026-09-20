@@ -29,6 +29,7 @@ import {
   type Tag,
 } from "./projects/directoryShared";
 import { FeaturedProjectCard, ProjectGridCard } from "./projects/DirectoryCards";
+import { findProjectBySlug, projectPath } from "../utils/projectSlug";
 
 interface ProjectsNewProps {
   projects: ProjectItem[];
@@ -42,6 +43,13 @@ const loadDialog = () => import("./projects/ProjectDetailsDialog");
 const ProjectDetailsDialog = lazy(loadDialog);
 
 const DIALOG_CLOSE_MS = 200;
+const PROJECTS_PATH = "/projects";
+
+// The slug of a /projects/<slug> URL, or "" on the plain directory.
+function slugFromLocation(): string {
+  const path = window.location.pathname;
+  return path.startsWith(`${PROJECTS_PATH}/`) ? path.slice(PROJECTS_PATH.length + 1) : "";
+}
 const ANNOUNCE_CLEAR_MS = 1500;
 
 // This island ran on MUI's default theme, so every unstyled component
@@ -111,23 +119,38 @@ function ProjectsDirectory({
   const [searchQuery, setSearchQuery] = useState("");
   const [announcement, setAnnouncement] = useState("");
   const closeTimer = useRef<number | undefined>(undefined);
+  const deepLinkHandled = useRef(false);
 
   // Typing stays responsive: the input follows searchQuery immediately, while
   // the (much heavier) grid follows the deferred value and may lag a frame.
   const deferredQuery = useDeferredValue(searchQuery);
 
-  // Callbacks handed to memoized cards must keep a stable identity, or every
-  // card would re-render whenever the parent does.
-  const handleOpen = useCallback((project: ProjectItem) => {
+  const showProject = useCallback((project: ProjectItem) => {
     window.clearTimeout(closeTimer.current);
     setSelectedProject(project);
     setDialogOpen(true);
   }, []);
 
-  const handleClose = useCallback(() => {
+  const hideProject = useCallback(() => {
     setDialogOpen(false);
     closeTimer.current = window.setTimeout(() => setSelectedProject(null), DIALOG_CLOSE_MS);
   }, []);
+
+  // Callbacks handed to memoized cards must keep a stable identity, or every
+  // card would re-render whenever the parent does. Opening and closing also
+  // move the address bar, so every project has a shareable URL.
+  const handleOpen = useCallback(
+    (project: ProjectItem) => {
+      history.pushState(null, "", projectPath(project));
+      showProject(project);
+    },
+    [showProject]
+  );
+
+  const handleClose = useCallback(() => {
+    history.pushState(null, "", PROJECTS_PATH);
+    hideProject();
+  }, [hideProject]);
 
   const announce = useCallback((message: string) => {
     setAnnouncement(message);
@@ -177,6 +200,32 @@ function ProjectsDirectory({
     const id = window.setTimeout(() => void loadDialog(), 2000);
     return () => window.clearTimeout(id);
   }, [projects.length]);
+
+  // A direct load of /projects/<slug> is this same page; the dialog for that
+  // project just needs opening once the real list is in. Never pushes a URL:
+  // the address bar is already right.
+  useEffect(() => {
+    if (projects.length === 0 || deepLinkHandled.current) return;
+    deepLinkHandled.current = true;
+    const slug = slugFromLocation();
+    if (!slug) return;
+    const project = findProjectBySlug(projects, slug);
+    if (project) showProject(project);
+  }, [projects, showProject]);
+
+  // Keeps the dialog in step with browser back and forward. Only ever reads
+  // the URL, so it cannot stack extra history entries on top of the ones
+  // handleOpen and handleClose already pushed.
+  useEffect(() => {
+    const onPopState = () => {
+      const slug = slugFromLocation();
+      const project = slug ? findProjectBySlug(projects, slug) : undefined;
+      if (project) showProject(project);
+      else hideProject();
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [projects, showProject, hideProject]);
 
   // Lowercased once per data load rather than twice per project per keystroke.
   const searchIndex = useMemo(() => {

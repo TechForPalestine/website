@@ -12,11 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import LinkIcon from "@mui/icons-material/Link";
 import EmailIcon from "@mui/icons-material/Email";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LanguageIcon from "@mui/icons-material/Language";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { sanitizeEmail, sanitizeUrl } from "./projectData";
+import { projectPath } from "../../utils/projectSlug";
 import {
   TAG_CHIP,
   formatDate,
@@ -49,6 +51,14 @@ export default function ProjectDetailsDialog({
   const [dialogLogoFailed, setDialogLogoFailed] = useState(false);
   const [dialogLeaderPhotoFailed, setDialogLeaderPhotoFailed] = useState(false);
   const [emailCopied, copyText] = useCopyText();
+  const [linkCopied, copyLinkText] = useCopyText();
+
+  // Always the canonical URL, whatever the address bar currently shows.
+  const handleCopyLink = () => {
+    copyLinkText(`${window.location.origin}${projectPath(selectedProject)}`).then((ok) => {
+      if (ok) onAnnounce("Link copied to clipboard");
+    });
+  };
 
   const handleEmailClick = () => {
     copyText(sanitizeEmail(selectedProject.publicEmail)).then((ok) => {
@@ -154,13 +164,20 @@ export default function ProjectDetailsDialog({
             </Typography>
           </Box>
         </Box>
-        <IconButton
-          onClick={onClose}
-          size="small"
-          sx={{ flexShrink: 0, mt: 0.5 }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <Box sx={{ display: "flex", flexShrink: 0, alignItems: "center", gap: 0.5, mt: 0.5 }}>
+          <Tooltip open={linkCopied} title="Link copied" placement="top" arrow describeChild>
+            <IconButton
+              onClick={handleCopyLink}
+              size="small"
+              aria-label="Copy link to this project"
+            >
+              <LinkIcon />
+            </IconButton>
+          </Tooltip>
+          <IconButton onClick={onClose} size="small" aria-label="Close">
+            <CloseIcon />
+          </IconButton>
+        </Box>
       </DialogTitle>
 
       <DialogContent dividers sx={{ p: 4 }}>

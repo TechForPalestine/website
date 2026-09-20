@@ -1,0 +1,56 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectsNewComponent from "../ProjectsNew.tsx";
+import PageHeader from "../PageHeader.astro";
+import "../../styles/base.css";
+import type { ProjectMeta } from "../../utils/projectMeta";
+
+// Shared by /projects and /projects/<slug>. The slug route renders this same
+// page with that project's preview tags; the island opens the matching dialog
+// on its own by reading window.location.pathname (see ProjectsNew.tsx), so no
+// prop has to carry the matched project down to it.
+interface Props {
+  meta: ProjectMeta | null;
+}
+
+const { meta } = Astro.props;
+---
+
+<Layout
+  title={meta?.title ?? "Incubator Projects - Tech for Palestine"}
+  description={meta?.description ??
+    "Explore the projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."}
+  image={meta?.image}
+  imageAlt={meta?.imageAlt}
+  twitterCard={meta?.twitterCard}
+>
+  <main>
+    <PageHeader
+      overline="Tech for Palestine"
+      title="Incubator Projects"
+      subtitle="What is the incubator?"
+      subtitleLink="/incubator"
+    />
+
+    {/* Data is fetched client-side by the island, matching the /events pattern. */}
+    <ProjectsNewComponent projects={[]} loading={true} client:only="react" />
+
+    <div class="mx-auto max-w-[1200px] px-4 pb-16">
+      <div
+        class="flex flex-col items-start gap-5 rounded-md bg-[#101010] p-8 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between min-[810px]:p-10"
+      >
+        <p class="max-w-[40ch] text-[19px] font-bold leading-[1.4] text-white">
+          Building something for Palestine? The incubator helps you grow it.
+        </p>
+        <a
+          href="https://techforpalestine.org/project-application-form"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-pill bg-white px-5 py-3.5 text-[13px] font-bold text-[#101010] transition-colors duration-150 hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          Apply to the incubator
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

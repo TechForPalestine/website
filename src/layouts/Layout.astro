@@ -14,6 +14,11 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  /** Describes the share image for people who cannot see it. */
+  imageAlt?: string;
+  /** `summary` shows a small square thumbnail; use it for logos, which the
+   * large card crops badly. */
+  twitterCard?: "summary" | "summary_large_image";
   noindex?: boolean;
   hideDonatePopout?: boolean;
 }
@@ -22,6 +27,8 @@ const {
   title,
   description = "T4P is an incubator for Palestine advocacy projects.",
   image = "https://techforpalestine.org/t4p-social-logo.png",
+  imageAlt,
+  twitterCard = "summary_large_image",
   noindex = false,
   hideDonatePopout = false,
 } = Astro.props;
@@ -130,14 +137,16 @@ const canonicalUrl = new URL(
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Tech for Palestine" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content={twitterCard} />
     <meta name="twitter:site" content="@tech4palestine" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
+    {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
     <meta name="twitter:creator" content="@tech4palestine" />
 
     <slot name="head" />
