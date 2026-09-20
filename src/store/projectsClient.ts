@@ -1,5 +1,11 @@
 import { getEnv } from "../utils/getEnv.js";
 import { sanitizeUrl, type ProjectItem, type Tag } from "../components/projects/projectData.js";
+import {
+  MAX_STALE_MS,
+  resolveWithCache,
+  type CacheSource,
+  type CachedEntry,
+} from "../utils/projectsCachePolicy.js";
 
 // Server-side access to ProjectHub. Shared by /api/projects (the client
 // island's data) and /projects/<slug> (which needs the same list to build a
@@ -33,6 +39,19 @@ export interface ProjectsData {
   projects: ProjectItem[];
   tags: Tag[];
 }
+
+export interface ProjectsResult extends ProjectsData {
+  /** Where this answer came from, for the X-Projects-Source header. */
+  source: CacheSource;
+}
+
+// A synthetic URL, never the outbound request. That request carries the
+// X-API-Key header, and keying the cache on a fresh Request means the secret
+// can never be part of a cache entry. Bump the version whenever
+// sanitizeProjectUrls changes: entries store already-sanitized data, so an old
+// entry would otherwise bypass the new rules.
+const CACHE_KEY_URL = "https://projecthub-cache.internal/projects?v=1";
+const CACHE_HARD_TTL_SECONDS = MAX_STALE_MS / 1000;
 
 function sanitizeProjectUrls(project: Record<string, unknown>): Record<string, unknown> {
   for (const field of URL_FIELDS) {
@@ -82,7 +101,7 @@ async function fetchWithRetry(url: string, options: RequestInit & { cf?: unknown
 }
 
 /** Throws when ProjectHub is unreachable or returns an error status. */
-export async function fetchProjectsData(locals: App.Locals): Promise<ProjectsData> {
+async function fetchProjectsUpstream(locals: App.Locals): Promise<ProjectsData> {
   const apiKey = getEnv("PROJECTHUB_API_KEY", locals);
 
   const response = await fetchWithRetry(PROJECTHUB_URL, {
@@ -119,4 +138,66 @@ export async function fetchProjectsData(locals: App.Locals): Promise<ProjectsDat
   projects.forEach(sanitizeProjectUrls);
 
   return { projects: projects as unknown as ProjectItem[], tags };
+}
+
+// Cloudflare's default cache is not on the standard CacheStorage type. Absent
+// in `astro dev`, in Node, and on *.pages.dev previews (it only works on a
+// custom domain), in which case this returns null and callers fall back to
+// fetching every time, exactly as before caching existed.
+function getCache(locals: App.Locals): Cache | null {
+  const storage = locals.runtime?.caches ?? (globalThis as { caches?: CacheStorage }).caches;
+  return (storage as (CacheStorage & { default?: Cache }) | undefined)?.default ?? null;
+}
+
+function isCachedProjects(value: unknown): value is CachedEntry<ProjectsData> {
+  const entry = value as CachedEntry<ProjectsData> | null;
+  return (
+    !!entry &&
+    typeof entry.storedAt === "number" &&
+    Array.isArray(entry.data?.projects) &&
+    Array.isArray(entry.data?.tags)
+  );
+}
+
+/**
+ * The ProjectHub list, cached. See utils/projectsCachePolicy.ts for the policy:
+ * fresh for 5 minutes, and if ProjectHub is down the last good copy is served
+ * for up to 24 hours. Throws only when there is neither. Used by /api/projects,
+ * the /projects/<slug> preview and the project sitemap.
+ */
+export async function fetchProjectsData(locals: App.Locals): Promise<ProjectsResult> {
+  const cache = getCache(locals);
+  const cacheKey = () => new Request(CACHE_KEY_URL);
+
+  const { data, source } = await resolveWithCache<ProjectsData>({
+    now: () => Date.now(),
+    readCache: async () => {
+      if (!cache) return null;
+      const response = await cache.match(cacheKey());
+      const parsed: unknown = response ? await response.json() : null;
+      return isCachedProjects(parsed) ? parsed : null;
+    },
+    fetchFresh: () => fetchProjectsUpstream(locals),
+    writeCache: (entry) => {
+      if (!cache) return;
+      const put = cache.put(
+        cacheKey(),
+        new Response(JSON.stringify(entry), {
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": `max-age=${CACHE_HARD_TTL_SECONDS}`,
+          },
+        })
+      );
+      // Keep the write alive after the response is sent.
+      locals.runtime?.ctx?.waitUntil(put.catch(() => {}));
+    },
+    // An empty list usually means an unexpected upstream shape, not that every
+    // project vanished. Never let it replace a good entry.
+    isCacheable: (result) => result.projects.length > 0,
+    onServeStale: (reason) =>
+      console.warn("[projectsClient] ProjectHub unavailable, serving the cached copy", reason),
+  });
+
+  return { ...data, source };
 }

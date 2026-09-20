@@ -38,6 +38,10 @@ try {
   // exists, so do not throw the visitor's link away: render the generic page
   // and let the island resolve the project client-side.
   console.error("[projects/[...slug]] Could not resolve project for preview", error);
+  // The generic fallback must not be cached: the middleware would otherwise
+  // mark it public for 10 minutes, so an outage-time page would outlive the
+  // outage and serve a link with no preview.
+  Astro.response.headers.set("Cache-Control", "no-store");
 }
 ---
 

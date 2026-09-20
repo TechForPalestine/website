@@ -8,7 +8,7 @@ export const prerender = false;
 export const GET: APIRoute = async ({ locals }) => {
   const ctx = locals.runtime?.ctx;
   try {
-    const { projects, tags } = await fetchProjectsData(locals);
+    const { projects, tags, source } = await fetchProjectsData(locals);
 
     return new Response(JSON.stringify({ projects, tags }), {
       status: 200,
@@ -17,18 +17,13 @@ export const GET: APIRoute = async ({ locals }) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET",
         "Access-Control-Allow-Headers": "Content-Type",
-        // Comprehensive cache control headers
-        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0",
-        Pragma: "no-cache",
-        Expires: "0",
-        // Cloudflare-specific headers
-        "CF-Cache-Status": "DYNAMIC",
-        Vary: "*",
-        // Custom headers for debugging
+        // The list is cached server-side (see store/projectsClient.ts); browsers
+        // still revalidate. The middleware forces no-store on /api/* regardless.
+        "Cache-Control": "no-store",
+        // hit | miss | stale: how you can tell the server-side cache is working.
+        "X-Projects-Source": source,
         "X-Project-Count": projects.length.toString(),
         "X-Tag-Count": tags.length.toString(),
-        "X-Fetch-Time": new Date().toISOString(),
-        "X-Cache-Bust": Date.now().toString(),
       },
     });
   } catch (error) {
