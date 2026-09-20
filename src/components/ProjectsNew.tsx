@@ -1033,7 +1033,13 @@ function ProjectsDirectory({
                         </Button>
                       )}
                       {sanitizeEmail(selectedProject.publicEmail) && (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
+                        <Tooltip
+                          open={copiedEmailKey === "dialog"}
+                          title="Email copied"
+                          placement="top"
+                          arrow
+                          describeChild
+                        >
                           <Button
                             variant="outlined"
                             href={`mailto:${sanitizeEmail(selectedProject.publicEmail)}`}
@@ -1043,22 +1049,9 @@ function ProjectsDirectory({
                             startIcon={<EmailIcon />}
                             sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2 }}
                           >
-                            {copiedEmailKey === "dialog" ? "Address copied" : "Contact"}
+                            Contact
                           </Button>
-                          {/* Shown as selectable text: with no mail handler installed
-                              the mailto: does nothing, and an address you cannot see
-                              is an address you cannot copy. */}
-                          <Typography
-                            sx={{
-                              fontSize: "16px",
-                              color: "text.secondary",
-                              userSelect: "all",
-                              wordBreak: "break-all",
-                            }}
-                          >
-                            {sanitizeEmail(selectedProject.publicEmail)}
-                          </Typography>
-                        </Box>
+                        </Tooltip>
                       )}
                     </Box>
                   )}
