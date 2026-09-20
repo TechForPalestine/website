@@ -5,7 +5,8 @@
  * Follows DESIGN.md ("The Organizing Table"): left-aligned, a 12px Grove Green
  * Deep overline, the Display type role, and warm ink rather than cold zinc.
  * The container is 1200px to line up with the page content beneath it.
- * An optional default slot holds actions (a primary button) under the subtitle.
+ * An optional default slot holds an action group. On wide screens it sits beside
+ * the title, bottom-aligned, so it adds no height; on narrow ones it stacks below.
  */
 interface Props {
   overline?: string; // Small uppercase label above the heading
@@ -20,41 +21,58 @@ const hasActions = Astro.slots.has("default");
 
 <div class="mx-auto max-w-[1200px] px-4 pt-10">
   <header class="border-b border-ink-divider pb-10">
-    {
-      overline && (
-        <p class="mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]">{overline}</p>
-      )
-    }
-
-    <h1
-      class="max-w-[18ch] text-[38px] font-extrabold leading-[1.02] text-ink min-[810px]:text-[54px]"
+    <div
+      class:list={[
+        hasActions && "grid gap-8 min-[810px]:grid-cols-[minmax(0,1fr)_auto] min-[810px]:items-end",
+      ]}
     >
-      {title}
-    </h1>
+      <div>
+        {
+          overline && (
+            <p class="mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]">
+              {overline}
+            </p>
+          )
+        }
 
-    {
-      subtitle && (
-        <p class="mt-6 max-w-[65ch] text-[19px] leading-relaxed text-ink-secondary min-[810px]:text-[21px]">
-          {subtitleLink ? (
-            <a
-              href={subtitleLink}
-              class="font-medium text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#2F5C3F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#157A3E]"
+        <h1
+          class="max-w-[18ch] text-[38px] font-extrabold leading-[1.02] text-ink min-[810px]:text-[54px]"
+        >
+          {title}
+        </h1>
+
+        {
+          subtitle && (
+            <p
+              class:list={[
+                "mt-6 max-w-[65ch] leading-relaxed text-ink-secondary",
+                // With an action beside it the link is secondary, so it must not
+                // out-shout the primary button (it was 21px against a 13px label).
+                hasActions ? "text-[16px]" : "text-[19px] min-[810px]:text-[21px]",
+              ]}
             >
-              {subtitle}
-            </a>
-          ) : (
-            subtitle
-          )}
-        </p>
-      )
-    }
+              {subtitleLink ? (
+                <a
+                  href={subtitleLink}
+                  class="font-medium text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#2F5C3F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#157A3E]"
+                >
+                  {subtitle}
+                </a>
+              ) : (
+                subtitle
+              )}
+            </p>
+          )
+        }
+      </div>
 
-    {
-      hasActions && (
-        <div class="mt-8 flex flex-wrap items-center gap-3">
-          <slot />
-        </div>
-      )
-    }
+      {
+        hasActions && (
+          <div class="flex flex-col items-start gap-4 min-[810px]:max-w-[32ch]">
+            <slot />
+          </div>
+        )
+      }
+    </div>
   </header>
 </div>

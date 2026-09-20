@@ -34,13 +34,17 @@ const APPLY_URL = "https://techforpalestine.org/project-application-form";
       subtitleLink="/incubator"
     >
       {/* The directory is ~90 projects long, so the apply action cannot live
-          only at the foot of the page. A green pill, not a second dark block:
-          DESIGN.md allows exactly one Nightfall block per page. */}
+          only at the foot of the page. It sits beside the title so it adds no
+          height, and is a green pill, not a second dark block: DESIGN.md
+          allows exactly one Nightfall block per page. */}
+      <p class="text-[16px] leading-relaxed text-ink-secondary">
+        Building something for Palestine? We help you build, grow and scale it.
+      </p>
       <a
         href={APPLY_URL}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex min-h-[44px] items-center justify-center rounded-pill bg-[#157A3E] px-5 py-3.5 text-[13px] font-bold text-white transition-colors duration-150 hover:bg-[#2F5C3F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#157A3E]"
+        class="inline-flex min-h-[48px] w-full items-center justify-center rounded-pill bg-[#157A3E] px-6 py-3.5 text-[16px] font-bold text-white transition-colors duration-150 hover:bg-[#2F5C3F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#157A3E] min-[810px]:w-auto"
       >
         Apply to the incubator
       </a>
