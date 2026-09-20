@@ -3,12 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import ProjectsNewComponent from "../components/ProjectsNew.tsx";
 import PageHeader from "../components/PageHeader.astro";
 import "../styles/base.css";
-
-// Start with empty data, let client-side fetch handle it (similar to events pattern)
-let projects: any[] = [];
-let loading: boolean = true;
-
-console.log("SSR: Skipping server-side fetch for new projects, letting client load data");
 ---
 
 <Layout
@@ -22,38 +16,26 @@ console.log("SSR: Skipping server-side fetch for new projects, letting client lo
       subtitle="What is the incubator?"
       subtitleLink="/incubator"
     />
-  </main>
 
-  <ProjectsNewComponent projects={projects} loading={loading} client:only="react" />
+    {/* Data is fetched client-side by the island, matching the /events pattern. */}
+    <ProjectsNewComponent projects={[]} loading={true} client:only="react" />
 
-  <!-- Call to Action -->
-  <div class="relative mb-8 mt-16">
-    <div class="absolute inset-0 flex items-center justify-center">
-      <div class="w-full border-t border-gray-300"></div>
-    </div>
-
-    <div class="relative flex justify-center">
-      <a
-        href="https://techforpalestine.org/project-application-form"
-        target="_blank"
-        class="z-10 inline-flex transform items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-3 text-lg font-semibold text-white shadow-xl transition-colors duration-300 ease-in-out hover:scale-105 hover:from-blue-600 hover:to-blue-800 sm:text-xl md:text-2xl"
+    <div class="mx-auto max-w-[1200px] px-4 pb-16">
+      <div
+        class="flex flex-col items-start gap-5 rounded-md bg-[#101010] p-8 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between min-[810px]:p-10"
       >
-        Apply to the T4P Incubator Today!
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="ml-2 h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
+        <p class="max-w-[40ch] text-[19px] font-bold leading-[1.4] text-white">
+          Building something for Palestine? The incubator helps you grow it.
+        </p>
+        <a
+          href="https://techforpalestine.org/project-application-form"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-pill bg-white px-5 py-3.5 text-[13px] font-bold text-[#101010] transition-colors duration-150 hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
-      </a>
+          Apply to the incubator
+        </a>
+      </div>
     </div>
-  </div>
+  </main>
 </Layout>

@@ -92,22 +92,13 @@ const getInitials = (name: string): string => {
 const getProjectText = (project: ProjectItem): string =>
   project.description || project.elevatorPitch || project.impactStatement || "";
 
-const TAG_COLORS = [
-  { bgcolor: "#1565c0", color: "#fff" }, // dark blue
-  { bgcolor: "#6a1b9a", color: "#fff" }, // dark purple
-  { bgcolor: "#1b5e20", color: "#fff" }, // dark green
-  { bgcolor: "#b71c1c", color: "#fff" }, // dark red
-  { bgcolor: "#004d40", color: "#fff" }, // dark teal
-  { bgcolor: "#880e4f", color: "#fff" }, // dark pink
-  { bgcolor: "#1a237e", color: "#fff" }, // indigo
-  { bgcolor: "#bf360c", color: "#fff" }, // deep orange
-  { bgcolor: "#37474f", color: "#fff" }, // blue-grey
-  { bgcolor: "#4e342e", color: "#fff" }, // brown
-  { bgcolor: "#33691e", color: "#fff" }, // dark lime
-  { bgcolor: "#006064", color: "#fff" }, // dark cyan
-];
+// Tags previously drew from a 12-colour Material palette keyed on `id % 12`,
+// so a tag's colour was arbitrary and carried no meaning. DESIGN.md allows one
+// accent, so every tag now shares the First Light chip. The signature to
+// getTagColor is unchanged so call sites stay put.
+const TAG_CHIP = { bgcolor: "#E7F2E9", color: "#2F5C3F" };
 
-const getTagColor = (id: number) => TAG_COLORS[id % TAG_COLORS.length];
+const getTagColor = (_id: number) => TAG_CHIP;
 
 const resolveLogoSrc = (url: string | undefined): string => {
   if (!url) return "";
@@ -223,6 +214,7 @@ export default function ProjectsNew({
   const [projects, setProjects] = useState<ProjectItem[]>(initialProjects);
   const [availableTags, setAvailableTags] = useState<Tag[]>(initialTags);
   const [loading, setLoading] = useState(initialLoading);
+  const [loadError, setLoadError] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
@@ -249,22 +241,22 @@ export default function ProjectsNew({
 
   const fetchProjects = async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const response = await fetch("/api/projects", { cache: "no-cache" });
       if (response.ok) {
         const data = await response.json();
-        const projects = data.projects ?? data;
-        const tags = data.tags ?? [];
-        console.log(
-          `[ProjectsNew] Successfully fetched ${projects.length} projects, ${tags.length} tags`
-        );
-        setProjects(projects);
-        setAvailableTags(tags);
+        setProjects(data.projects ?? data);
+        setAvailableTags(data.tags ?? []);
       } else {
+        // A failed load must not fall through to the empty state: "no projects"
+        // and "we could not reach ProjectHub" are different things to say.
         console.error(`[ProjectsNew] API returned status ${response.status}:`, response.statusText);
+        setLoadError(true);
       }
     } catch (error) {
       console.error("[ProjectsNew] Fetch error:", error);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -289,12 +281,65 @@ export default function ProjectsNew({
     );
   }
 
+  if (loadError && projects.length === 0) {
+    return (
+      <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2, py: 5 }}>
+        <Box sx={{ maxWidth: "65ch", py: 6 }}>
+          <Typography component="h2" sx={{ fontWeight: 800, fontSize: "28px", color: "#2A2428" }}>
+            We could not load the project directory
+          </Typography>
+          <Typography sx={{ mt: 2, fontSize: "19px", lineHeight: 1.625, color: "#73656E" }}>
+            This is a problem on our end, not a sign that the incubator is empty. There are 90+
+            projects in the directory.
+          </Typography>
+          <Button
+            onClick={fetchProjects}
+            disableElevation
+            sx={{
+              mt: 3,
+              minHeight: 44,
+              px: 2.5,
+              py: 1.75,
+              borderRadius: "999px",
+              bgcolor: "#157A3E",
+              color: "#fff",
+              fontSize: "13px",
+              fontWeight: 700,
+              textTransform: "none",
+              "&:hover": { bgcolor: "#2F5C3F" },
+            }}
+          >
+            Try again
+          </Button>
+          <Typography sx={{ mt: 3, fontSize: "16px", lineHeight: 1.6, color: "#73656E" }}>
+            Still stuck?{" "}
+            <Link href="/incubator" sx={{ color: "#157A3E", fontWeight: 500 }}>
+              Read about the incubator
+            </Link>{" "}
+            or{" "}
+            <Link href="/contact" sx={{ color: "#157A3E", fontWeight: 500 }}>
+              get in touch
+            </Link>
+            .
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   if (projects.length === 0) {
     return (
       <Box sx={{ maxWidth: 1200, margin: "0 auto", px: 2, py: 5 }}>
-        <Box sx={{ textAlign: "center", py: 6 }}>
-          <Typography variant="h6" sx={{ color: "text.secondary" }}>
-            Projects coming soon.
+        <Box sx={{ maxWidth: "65ch", py: 6 }}>
+          <Typography component="h2" sx={{ fontWeight: 800, fontSize: "28px", color: "#2A2428" }}>
+            No projects to show yet
+          </Typography>
+          <Typography sx={{ mt: 2, fontSize: "19px", lineHeight: 1.625, color: "#73656E" }}>
+            The directory is empty right now. Check back soon, or{" "}
+            <Link href="/incubator" sx={{ color: "#157A3E", fontWeight: 500 }}>
+              read about the incubator
+            </Link>
+            .
           </Typography>
         </Box>
       </Box>
@@ -392,7 +437,10 @@ export default function ProjectsNew({
       {/* Featured hero section — layout unchanged per spec */}
       {!isFiltering && featuredProjects.length > 0 && (
         <Box sx={{ mb: 6 }}>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+          <Typography
+            component="h2"
+            sx={{ fontWeight: 800, fontSize: "28px", lineHeight: 1.15, color: "#2A2428", mb: 0.5 }}
+          >
             Featured Projects
           </Typography>
           <Box
@@ -460,7 +508,7 @@ export default function ProjectsNew({
                     )}
                     <Box sx={{ minWidth: 0 }}>
                       <Typography
-                        variant="h6"
+                        component="h3"
                         sx={{ fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.25 }}
                       >
                         {project.name}
@@ -590,7 +638,7 @@ export default function ProjectsNew({
                 )}
                 <Box sx={{ minWidth: 0, flex: 1 }}>
                   <Typography
-                    variant="h6"
+                    component="h3"
                     sx={{
                       fontSize: "1rem",
                       fontWeight: 600,
@@ -803,7 +851,7 @@ export default function ProjectsNew({
                     )}
                     <Box sx={{ minWidth: 0 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
-                        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                        <Typography component="h2" sx={{ fontSize: "1.5rem", fontWeight: 700 }}>
                           {selectedProject.name}
                         </Typography>
                         {selectedProject.featured && (
@@ -902,10 +950,12 @@ export default function ProjectsNew({
                   {selectedProject.impactStatement && (
                     <Box
                       sx={{
-                        bgcolor: "#f0fdf4",
-                        borderLeft: "4px solid #168039",
-                        borderRadius: 1,
-                        p: 2,
+                        // A 4px coloured left border is a banned side-stripe
+                        // (DESIGN.md). Full hairline on the band tint instead.
+                        bgcolor: "#E7F2E9",
+                        border: "1px solid #D2E4D6",
+                        borderRadius: "16px",
+                        p: 2.5,
                         mb: 3,
                       }}
                     >
@@ -914,7 +964,7 @@ export default function ProjectsNew({
                         sx={{
                           mb: 0.5,
                           fontWeight: 600,
-                          color: "#168039",
+                          color: "#2F5C3F",
                           textTransform: "uppercase",
                           fontSize: "0.7rem",
                           letterSpacing: 1,
