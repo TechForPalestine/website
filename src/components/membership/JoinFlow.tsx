@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
@@ -120,6 +120,20 @@ function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  // The "Become a Member" / "Become a Supporting Member" CTAs are all plain
+  // `href="#join"` anchors, so the browser's own hash navigation is the
+  // signal to focus the form — no click handler needed here. Checked on
+  // mount too, for a visitor who lands directly on a #join URL.
+  useEffect(() => {
+    const focusIfJoin = () => {
+      if (window.location.hash === "#join") nameInputRef.current?.focus();
+    };
+    focusIfJoin();
+    window.addEventListener("hashchange", focusIfJoin);
+    return () => window.removeEventListener("hashchange", focusIfJoin);
+  }, []);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -143,6 +157,7 @@ function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }
         Name
       </label>
       <input
+        ref={nameInputRef}
         id="join-name"
         type="text"
         value={name}
