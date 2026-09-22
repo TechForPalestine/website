@@ -1,19 +1,35 @@
-import axios from "axios";
 import { getEnv } from "../utils/getEnv.js";
 import { sanitizeUrl } from "../components/projects/projectData";
 import { resolveDateToUtcIso } from "../utils/icalDate";
 import type { RichTextSegment } from "../types/richText";
 
-// Helper function to create Notion axios instance with runtime environment variables
-function createNotionAxios(secret: string) {
-  return axios.create({
-    baseURL: "https://api.notion.com/v1/",
+// Plain `fetch` instead of axios: axios's fetch adapter unconditionally sets
+// a `cache` field on the Request it builds, and Cloudflare Workers' runtime
+// (workerd) rejects any request with that field present at all ("The 'cache'
+// field on 'RequestInitializerDict' is not implemented."), with no axios
+// config able to suppress it. Throws on a non-2xx response to match axios's
+// default behavior, since callers below rely on that to propagate errors.
+async function notionRequest(secret: string, method: "GET" | "POST", path: string, body?: unknown) {
+  const response = await fetch(`https://api.notion.com/v1/${path}`, {
+    method,
     headers: {
       Authorization: `Bearer ${secret}`,
       "Notion-Version": "2022-06-28",
       "Content-Type": "application/json",
     },
+    body: body !== undefined ? JSON.stringify(body) : undefined,
   });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(
+      `Notion API request failed: ${response.status} ${response.statusText}${
+        text ? ` — ${text.slice(0, 500)}` : ""
+      }`
+    );
+  }
+
+  return response.json();
 }
 
 interface NotionFilesProperty {
@@ -57,7 +73,6 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
     throw new Error("Missing Notion credentials: NOTION_SECRET and NOTION_FAQ_DB_ID are required");
   }
 
-  const notionAxios = createNotionAxios(secret);
   const queryBody = {
     ...(showAll
       ? {}
@@ -71,9 +86,9 @@ export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => 
         }),
   };
 
-  const response = await notionAxios.post(`databases/${faqDbId}/query`, queryBody);
+  const data = await notionRequest(secret, "POST", `databases/${faqDbId}/query`, queryBody);
 
-  const faqs = response.data.results.map((page: any) => {
+  const faqs = data.results.map((page: any) => {
     const props = page.properties;
 
     const question = titleText(props["Question"]);
@@ -102,7 +117,6 @@ export const fetchNotionIdeas = async (locals?: any) => {
     );
   }
 
-  const notionAxios = createNotionAxios(secret);
   const queryBody = {
     sorts: [
       {
@@ -112,9 +126,9 @@ export const fetchNotionIdeas = async (locals?: any) => {
     ],
   };
 
-  const response = await notionAxios.post(`databases/${ideasDbId}/query`, queryBody);
+  const data = await notionRequest(secret, "POST", `databases/${ideasDbId}/query`, queryBody);
 
-  const ideas = response.data.results.map((page: any) => {
+  const ideas = data.results.map((page: any) => {
     const props = page.properties;
 
     const name = titleText(props["Name"]);
@@ -142,12 +156,11 @@ export const fetchNotionAgenda = async (locals?: any) => {
     );
   }
 
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.post(`databases/${agendaDbId}/query`, {});
+  const data = await notionRequest(secret, "POST", `databases/${agendaDbId}/query`, {});
 
   // Collect all unique moderator IDs
   const moderatorIds = new Set<string>();
-  response.data.results.forEach((page: any) => {
+  data.results.forEach((page: any) => {
     const moderators = page.properties["Moderator"]?.relation || [];
     moderators.forEach((mod: any) => moderatorIds.add(mod.id));
   });
@@ -156,8 +169,8 @@ export const fetchNotionAgenda = async (locals?: any) => {
   const speakerMap = new Map();
   const speakerPromises = Array.from(moderatorIds).map(async (modId) => {
     try {
-      const speakerResponse = await notionAxios.get(`pages/${modId}`);
-      const props = speakerResponse.data.properties;
+      const speakerData = await notionRequest(secret, "GET", `pages/${modId}`);
+      const props = speakerData.properties;
 
       const name = titleText(props["Name"]);
       const title = richText(props["Title"]);
@@ -192,7 +205,7 @@ export const fetchNotionAgenda = async (locals?: any) => {
   });
 
   // Map agenda items with resolved speaker data
-  const agendaItems = response.data.results.map((page: any) => {
+  const agendaItems = data.results.map((page: any) => {
     const props = page.properties;
 
     const title = titleText(props["Title"]);
@@ -231,8 +244,7 @@ export const fetchE4PSignatories = async (locals?: any) => {
     );
   }
 
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.post(`databases/${databaseId}/query`, {
+  const data = await notionRequest(secret, "POST", `databases/${databaseId}/query`, {
     filter: {
       property: "Approved",
       checkbox: {
@@ -247,7 +259,7 @@ export const fetchE4PSignatories = async (locals?: any) => {
     ],
   });
 
-  return response.data.results.map((page: any) => {
+  return data.results.map((page: any) => {
     const props = page.properties;
 
     return {
@@ -288,8 +300,7 @@ export const fetchCommunityCalls = async (locals?: any): Promise<CommunityCall[]
     );
   }
 
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.post(`databases/${dbId}/query`, {
+  const data = await notionRequest(secret, "POST", `databases/${dbId}/query`, {
     filter: {
       property: "Visibility",
       checkbox: {
@@ -298,7 +309,7 @@ export const fetchCommunityCalls = async (locals?: any): Promise<CommunityCall[]
     },
   });
 
-  const calls: CommunityCall[] = response.data.results
+  const calls: CommunityCall[] = data.results
     .map((page: any) => {
       const props = page.properties;
       const startUtcIso = resolveDateToUtcIso(props["Date"]);

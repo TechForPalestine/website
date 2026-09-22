@@ -43,8 +43,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   }
 
-  const ctx = (locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } })
-    .runtime?.ctx;
+  const ctx = locals.cfContext;
 
   let body: Record<string, unknown>;
   try {

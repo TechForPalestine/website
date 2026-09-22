@@ -4,7 +4,7 @@ import { fetchNotionAgenda } from "../../store/notionClient";
 import { reportError } from "../../lib/report-error";
 
 export const GET: APIRoute = async ({ locals }) => {
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
   try {
     const data = await fetchNotionAgenda(locals);
 

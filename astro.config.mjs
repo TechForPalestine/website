@@ -15,6 +15,13 @@ const isDev = process.argv.includes("dev");
 export default defineConfig({
   site: "https://techforpalestine.org",
   output: "server",
+  // Astro 7's session support is unused here (no Astro.session anywhere in
+  // src/), but @astrojs/cloudflare otherwise auto-wires a "SESSION" KV
+  // binding for it. Cloudflare Pages deploys (unlike plain Workers) don't
+  // support wrangler's automatic-provisioning placeholder for a binding
+  // with no real "id", which fails the deploy outright — see
+  // https://docs.astro.build/en/reference/configuration-reference/#session.
+  session: false,
   prefetch: {
     defaultStrategy: "hover",
   },

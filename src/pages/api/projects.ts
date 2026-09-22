@@ -6,7 +6,7 @@ import { fetchProjectsData } from "../../store/projectsClient";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ locals }) => {
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
   try {
     const { projects, tags, source } = await fetchProjectsData(locals);
 

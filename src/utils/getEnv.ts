@@ -1,8 +1,11 @@
+import { env as workerEnv } from "cloudflare:workers";
+
 // Helper function to get environment variables with proper fallbacks
 export function getEnv(name: string, locals?: any): string | undefined {
-  // Try Cloudflare Pages runtime context first (for production)
-  if (locals?.runtime?.env?.[name]) {
-    return locals.runtime.env[name];
+  // Try the Cloudflare Workers runtime env first (for production/dev via wrangler)
+  const fromWorkerEnv = (workerEnv as Record<string, string | undefined>)[name];
+  if (fromWorkerEnv) {
+    return fromWorkerEnv;
   }
 
   // Try Astro's import.meta.env (for build-time variables)
