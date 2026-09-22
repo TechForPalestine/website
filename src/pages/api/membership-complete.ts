@@ -53,11 +53,18 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const verified = await verifyQgivTransaction(body.transactionId, ALLOWED_FORM_IDS, locals);
 
   if (!verified.ok) {
-    reportError(new Error(`Qgiv verification refused: ${verified.reason}`), {
-      context: "membership-complete verify",
-      reason: verified.reason,
-    });
-    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    // "invalid-id" never reached Qgiv at all — it's malformed client input
+    // (or path-traversal probing), not a real verification failure. Reporting
+    // it to Sentry would let anyone with the right Origin burn Sentry quota
+    // and drown out the genuine "Qgiv propagation lag" signal operators
+    // actually need to watch for.
+    if (verified.reason !== "invalid-id") {
+      reportError(new Error(`Qgiv verification refused: ${verified.reason}`), {
+        context: "membership-complete verify",
+        reason: verified.reason,
+      });
+      ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    }
     return new Response(JSON.stringify({ message: "Could not verify transaction" }), {
       status: 402,
       headers: { "Content-Type": "application/json", ...corsHeaders(origin) },

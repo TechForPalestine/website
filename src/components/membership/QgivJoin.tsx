@@ -196,7 +196,12 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
       // from Qgiv's own record, so nothing else needs to be sent — and nothing
       // else would be trusted if it were.
       const transactionId = transaction.id ?? window.QGIV?.transaction?.id ?? "";
-      if (!transactionId) return;
+      if (!transactionId) {
+        if (typeof window.plausible !== "undefined") {
+          window.plausible("Membership-complete-no-id", { props: { membership_tier: tier } });
+        }
+        return;
+      }
 
       fetch("/api/membership-complete", {
         method: "POST",

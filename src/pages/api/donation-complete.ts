@@ -48,18 +48,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const verified = await verifyQgivTransaction(body.transactionId, ALLOWED_FORM_IDS, locals);
 
   if (!verified.ok) {
-    reportError(new Error(`Qgiv verification refused: ${verified.reason}`), {
-      context: "donation-complete verify",
-      reason: verified.reason,
-    });
-    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    // "invalid-id" never reached Qgiv at all — it's malformed client input
+    // (or path-traversal probing), not a real verification failure. Reporting
+    // it to Sentry would let anyone with the right Origin burn Sentry quota
+    // and drown out the genuine "Qgiv propagation lag" signal operators
+    // actually need to watch for.
+    if (verified.reason !== "invalid-id") {
+      reportError(new Error(`Qgiv verification refused: ${verified.reason}`), {
+        context: "donation-complete verify",
+        reason: verified.reason,
+      });
+      ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    }
     return new Response(JSON.stringify({ message: "Could not verify transaction" }), {
       status: 402,
       headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
     });
   }
 
-  const { id, email, firstName, lastName, optedIn } = verified.transaction;
+  const { id, formId, email, firstName, lastName, optedIn } = verified.transaction;
+  const tag = DONATION_FORMS[formId].tag;
 
   // donate.astro checks this client-side, which a forged request can simply
   // omit. Qgiv's own record is what decides whether the donor consented.
@@ -89,7 +97,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           api_key: eoApiKey,
           email_address: email,
           fields: { FirstName: firstName, LastName: lastName },
-          tags: ["donor"],
+          tags: [tag],
           status: "SUBSCRIBED",
         }),
       });

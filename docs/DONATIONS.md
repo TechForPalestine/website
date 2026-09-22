@@ -58,7 +58,7 @@ Browser ad-blockers and privacy extensions frequently block requests to `plausib
 
 ## Qgiv form allowlist
 
-Transaction verification requires the formId to match an endpoint-specific allowlist. These are loaded from `QGIV_API_TOKEN` configuration and checked by `qgivVerify.ts`:
+Transaction verification requires the formId to match an endpoint-specific allowlist. These are hardcoded in `src/utils/qgivVerify.ts` (`MEMBERSHIP_FORMS`, `DONATION_FORMS`); adding a form requires a code change, not a configuration change:
 
 | Endpoint                 | Allowed Form IDs | Purpose                                    |
 | ------------------------ | ---------------- | ------------------------------------------ |
@@ -80,3 +80,10 @@ Both `/api/donation-complete` and `/api/membership-complete` verify the transact
 ## Env vars
 
 `QGIV_API_TOKEN`, `EO_API_KEY`, `HUB_API_URL`, `HUB_API_KEY`, `PLAUSIBLE_API_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`. Full list in [DEPLOYMENT.md](../DEPLOYMENT.md).
+
+## After deploying Qgiv verification changes
+
+Two manual steps are part of shipping any change to `qgivVerify.ts`, `membership-complete.ts`, or `donation-complete.ts` — do both after every deploy that touches this flow:
+
+1. **Make one real, low-value transaction on each of the three Qgiv forms** (Pilot Membership, Supporting Member, T4P Website Donation) and confirm the invite/tag actually lands — a Hub invite email for the two membership forms, and an EmailOctopus contact tagged `member`/`Supporting Member`/`donor` as appropriate. This is the only way to catch a Qgiv-side field rename or a broken allowlist before a real donor hits it.
+2. **Watch the Sentry "Qgiv verification refused" alert for the first few days after launch.** Qgiv's reporting API can lag behind a transaction that just completed; verification fails closed in that window, so a real member or donor gets no invite/tag even though they paid. A spike in this alert shortly after a purchase is the signal that lag — not a real problem — caused the failure, and the safest recovery is to re-run verification for that transaction id once Qgiv catches up.

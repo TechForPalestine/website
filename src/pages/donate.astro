@@ -312,7 +312,14 @@ const isUK = country === "GB";
         // Opt-in is re-checked server-side against Qgiv's record; the client
         // check here only avoids a pointless request.
         var transactionId = transaction.id || (window.QGIV && window.QGIV.transaction && window.QGIV.transaction.id);
-        if (contact.optedIn === true && transactionId) {
+        if (!transactionId) {
+          if (typeof window.plausible !== "undefined") {
+            window.plausible("Donation-complete-no-id");
+          }
+          return;
+        }
+
+        if (contact.optedIn === true) {
           fetch("/api/donation-complete", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

@@ -7,6 +7,7 @@ vi.mock("../../utils/qgivVerify", async (importOriginal) => {
 vi.mock("../../lib/report-error", () => ({ reportError: vi.fn() }));
 
 const { verifyQgivTransaction } = await import("../../utils/qgivVerify");
+const { reportError } = await import("../../lib/report-error");
 const { POST } = await import("./donation-complete");
 
 const LOCALS = { runtime: { env: { EO_API_KEY: "eo" } } } as unknown as App.Locals;
@@ -51,6 +52,18 @@ describe("POST /api/donation-complete", () => {
     const response = await call({ transactionId: "777001" });
     expect(response.status).toBe(402);
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("does not report an invalid-id failure to Sentry, since it never reached Qgiv", async () => {
+    vi.mocked(verifyQgivTransaction).mockResolvedValue({ ok: false, reason: "invalid-id" });
+    await call({ transactionId: "not-a-real-id" });
+    expect(reportError).not.toHaveBeenCalled();
+  });
+
+  it("reports a genuine verification failure to Sentry", async () => {
+    vi.mocked(verifyQgivTransaction).mockResolvedValue({ ok: false, reason: "lookup-failed" });
+    await call({ transactionId: "777001" });
+    expect(reportError).toHaveBeenCalled();
   });
 
   it("does not subscribe a donor who declined the mailing list", async () => {

@@ -23,6 +23,8 @@ const TRANSACTION_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 /** Qgiv also returns "Declined" and "Error" for real transactions. */
 export const ACCEPTED_STATUS = "Accepted";
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const MEMBERSHIP_FORMS: Record<string, { tag: string; hubInvite: boolean }> = {
   // Pilot Membership Form
   "1116610": { tag: "member", hubInvite: true },
@@ -57,7 +59,8 @@ export type VerifyFailure =
   | "not-configured"
   | "lookup-failed"
   | "not-accepted"
-  | "form-not-allowed";
+  | "form-not-allowed"
+  | "no-email";
 
 export type VerifyResult =
   | { ok: true; transaction: VerifiedTransaction }
@@ -130,12 +133,19 @@ export async function verifyQgivTransaction(
   const formId = asString(record.formId);
   if (!allowedFormIds.includes(formId)) return { ok: false, reason: "form-not-allowed" };
 
+  // Anonymous, offline, or imported transactions can carry no contact email
+  // at all. Acting on an empty string would POST it unconditionally to the
+  // Hub invite API and EmailOctopus, so treat a missing/malformed email as a
+  // verification failure rather than a success with an empty field.
+  const email = asString(record.contactEmail);
+  if (!EMAIL_PATTERN.test(email)) return { ok: false, reason: "no-email" };
+
   return {
     ok: true,
     transaction: {
       id: transactionId,
       formId,
-      email: asString(record.contactEmail),
+      email,
       firstName: asString(record.firstName),
       lastName: asString(record.lastName),
       amount: asString(record.value),

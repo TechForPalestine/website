@@ -176,4 +176,10 @@ describe("verifyQgivTransaction", () => {
     const result = await verifyQgivTransaction("555001", MEMBERSHIP_IDS, LOCALS);
     expect(result).toEqual({ ok: false, reason: "lookup-failed" });
   });
+
+  it("refuses a transaction with no contact email", async () => {
+    vi.stubGlobal("fetch", mockFetchJson(qgivResponse({ contactEmail: "" })));
+    const result = await verifyQgivTransaction("555001", MEMBERSHIP_IDS, LOCALS);
+    expect(result).toEqual({ ok: false, reason: "no-email" });
+  });
 });
