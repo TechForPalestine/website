@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import JoinFlow from "../components/membership/JoinFlow";
-import LegacyWaiverNote from "../components/membership/LegacyWaiverNote";
 import { showcaseProjects } from "../data/membershipBenefits";
 import { getTestimonials } from "../data/testimonials";
 import "../styles/base.css";
@@ -247,7 +246,15 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
 
       <div id="join" class="mx-auto mt-14 max-w-[560px] scroll-mt-24">
         <JoinFlow client:only="react" fixedTier="supporting" />
-        <LegacyWaiverNote className="mt-8" />
+        <div class="mt-6 rounded-lg bg-[#F2F3EE] p-6">
+          <div class="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#157A3E]">
+            Suggested amount
+          </div>
+          <p class="text-[18px] leading-relaxed text-ink">
+            Dues are pay-what-you-can. We suggest dues equal to one hour of income (or 1/2000th of
+            your annual income), which can be calculated at checkout.
+          </p>
+        </div>
       </div>
     </div>
 
