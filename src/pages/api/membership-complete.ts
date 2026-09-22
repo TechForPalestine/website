@@ -8,6 +8,8 @@ import {
   ALLOWED_ORIGIN,
   type OriginPolicy,
 } from "../../utils/origin";
+import { MEMBERSHIP_FORMS, verifyQgivTransaction } from "../../utils/qgivVerify";
+import { claimTransaction } from "../../utils/transactionReplay";
 
 export const prerender = false;
 
@@ -15,26 +17,15 @@ const ORIGIN_POLICY: OriginPolicy = {
   allowedOrigins: [ALLOWED_ORIGIN, ...(import.meta.env.PROD ? [] : ["http://localhost:4321"])],
   allowedSuffixes: [".website-aun.pages.dev"],
 };
+
 const EO_MEMBERS_LIST_URL =
   "https://emailoctopus.com/api/1.6/lists/8adc2ed4-f798-11ef-b60f-115427c25a1c/contacts";
-const MAX_NAME_LENGTH = 200;
 
-/**
- * Membership tiers, keyed by the `tier` field the client may send.
- *
- * The tier is an allowlist lookup, never passed through to EmailOctopus
- * verbatim — this endpoint is unauthenticated (origin-gated only), so an
- * attacker must not be able to choose arbitrary tags or reach the Hub.
- *
- * Supporting Members fund the work but do not join teams or the member chat, so
- * they are deliberately excluded from the Hub invite.
- */
-const TIERS = {
-  member: { tag: "member", hubInvite: true },
-  supporting: { tag: "Supporting Member", hubInvite: false },
-} as const;
+const ALLOWED_FORM_IDS = Object.keys(MEMBERSHIP_FORMS);
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  // Kept as defence in depth against drive-by cross-site calls. It is no
+  // longer the access control: that is the Qgiv lookup below.
   const origin = request.headers.get("Origin");
   if (!isAllowedOrigin(origin, ORIGIN_POLICY)) {
     return new Response(JSON.stringify({ message: "Forbidden" }), {
@@ -56,26 +47,37 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   }
 
-  const { email, firstName, lastName, tier: rawTier } = body as Record<string, unknown>;
+  // `transactionId` is the only thing read from the caller. Email, names and
+  // tier all come from Qgiv, so a forged request cannot name a victim's
+  // address or upgrade itself to the paid tier.
+  const verified = await verifyQgivTransaction(body.transactionId, ALLOWED_FORM_IDS, locals);
 
-  // Anything unrecognised falls back to `member`, preserving the behaviour of
-  // clients deployed before this field existed.
-  const tier = rawTier === "supporting" ? TIERS.supporting : TIERS.member;
-
-  if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return new Response(JSON.stringify({ message: "Invalid or missing email" }), {
-      status: 400,
+  if (!verified.ok) {
+    reportError(new Error(`Qgiv verification refused: ${verified.reason}`), {
+      context: "membership-complete verify",
+      reason: verified.reason,
+    });
+    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    return new Response(JSON.stringify({ message: "Could not verify transaction" }), {
+      status: 402,
       headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
     });
   }
 
-  const safeFirst = typeof firstName === "string" ? firstName.slice(0, MAX_NAME_LENGTH) : "";
-  const safeLast = typeof lastName === "string" ? lastName.slice(0, MAX_NAME_LENGTH) : "";
+  const { id, formId, email, firstName, lastName } = verified.transaction;
+  const tier = MEMBERSHIP_FORMS[formId];
+  const redacted = `[redacted]@${email.split("@")[1]}`;
+
+  if (!(await claimTransaction(locals.runtime?.env?.DROPPED_CONVERSIONS, id))) {
+    return new Response(JSON.stringify({ success: true, message: "Already processed" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
+    });
+  }
 
   const hubApiUrl = getEnv("HUB_API_URL", locals);
   const hubApiKey = getEnv("HUB_API_KEY", locals);
   const eoApiKey = getEnv("EO_API_KEY", locals);
-  const redacted = `[redacted]@${email.split("@")[1]}`;
 
   try {
     await Promise.allSettled([
@@ -108,7 +110,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             body: JSON.stringify({
               api_key: eoApiKey,
               email_address: email,
-              fields: { FirstName: safeFirst, LastName: safeLast },
+              fields: { FirstName: firstName, LastName: lastName },
               tags: [tier.tag],
               status: "SUBSCRIBED",
             }),
