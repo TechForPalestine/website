@@ -27,11 +27,6 @@ export default defineConfig({
   },
   adapter: cloudflare({
     imageService: "cloudflare",
-    // See wrangler.build.toml for why this exists: it's a build-time-only
-    // duplicate of wrangler.toml with a non-reserved assets binding name,
-    // to work around Cloudflare Pages rejecting the adapter's default
-    // "ASSETS" binding name at deploy time.
-    configPath: "./wrangler.build.toml",
   }),
   vite: {
     resolve: {
