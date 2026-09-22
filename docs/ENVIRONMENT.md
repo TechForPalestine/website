@@ -57,6 +57,7 @@ Ground truth = every `getEnv("X", ...)` call in `src/`, plus the build-time read
 | `HUB_API_URL`                  | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                                          |
 | `HUB_API_KEY`                  | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/membership-complete`                                                          |
 | `EO_API_KEY`                   | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/donation-complete`, `/api/membership-complete`                                |
+| `QGIV_API_TOKEN`               | `getEnv`                     |         ✅         |        ❌        |          ❌           | `/api/membership-complete`, `/api/donation-complete`                                |
 | `PLAUSIBLE_API_KEY`            | `getEnv`                     |         ✅         |        ❌        |          ✅           | `/api/admin/conversion-stats`                                                       |
 | `ADMIN_USERNAME`               | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                                                 |
 | `ADMIN_PASSWORD`               | `getEnv`                     |   ❌ **missing**   |        ✅        |          ✅           | Basic Auth for `/admin/conversions`                                                 |

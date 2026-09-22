@@ -309,15 +309,21 @@ const isUK = country === "GB";
           amount: transaction.total != null ? String(transaction.total) : "",
         });
 
-        if (contact.optedIn === true && contact.email) {
+        // Opt-in is re-checked server-side against Qgiv's record; the client
+        // check here only avoids a pointless request.
+        var transactionId = transaction.id || (window.QGIV && window.QGIV.transaction && window.QGIV.transaction.id);
+        if (!transactionId) {
+          if (typeof window.plausible !== "undefined") {
+            window.plausible("Donation-complete-no-id");
+          }
+          return;
+        }
+
+        if (contact.optedIn === true) {
           fetch("/api/donation-complete", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: contact.email,
-              firstName: contact.firstName || "",
-              lastName: contact.lastName || "",
-            }),
+            body: JSON.stringify({ transactionId: transactionId }),
           }).catch(function () {});
         }
       });

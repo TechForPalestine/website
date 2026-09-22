@@ -28,7 +28,7 @@ interface QgivJoinProps {
 
 interface QgivTransactionDetail {
   QGIV?: {
-    transaction?: { total?: number | string };
+    transaction?: { id?: string; total?: number | string };
     contact?: { email?: string; firstName?: string; lastName?: string };
   };
 }
@@ -182,7 +182,6 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
     function handleDonationComplete(event: Event) {
       const detail = ((event as CustomEvent).detail ?? {}) as QgivTransactionDetail;
       const transaction = detail.QGIV?.transaction ?? {};
-      const contact = detail.QGIV?.contact ?? {};
 
       if (typeof window.plausible !== "undefined") {
         window.plausible("Membership-complete", {
@@ -193,18 +192,21 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
         });
       }
 
-      const email = contact.email ?? "";
-      if (!email) return;
+      // The server verifies this id against Qgiv and reads the contact details
+      // from Qgiv's own record, so nothing else needs to be sent — and nothing
+      // else would be trusted if it were.
+      const transactionId = transaction.id ?? window.QGIV?.transaction?.id ?? "";
+      if (!transactionId) {
+        if (typeof window.plausible !== "undefined") {
+          window.plausible("Membership-complete-no-id", { props: { membership_tier: tier } });
+        }
+        return;
+      }
 
       fetch("/api/membership-complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          firstName: contact.firstName ?? "",
-          lastName: contact.lastName ?? "",
-          tier,
-        }),
+        body: JSON.stringify({ transactionId }),
       }).catch(() => {});
     }
 
