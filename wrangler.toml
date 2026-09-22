@@ -5,6 +5,17 @@ compatibility_date = "2024-09-23"
 # Cloudflare Pages configuration
 pages_build_output_dir = "dist"
 
+# @astrojs/cloudflare 14+ (Astro 7) auto-generates a static-assets binding
+# named "ASSETS" — a name Cloudflare Pages reserves internally, which fails
+# the deploy ("The name 'ASSETS' is reserved in Pages projects"). Declaring
+# our own binding name here makes the adapter use this instead of its
+# default (see cloudflareConfigCustomizer in @astrojs/cloudflare's own
+# source: it only injects its "ASSETS" default when no assets.binding is
+# already present). Unverified against a real Pages deploy — needs a
+# preview build to confirm.
+[assets]
+binding = "STATIC_ASSETS"
+
 # Notion DB IDs are set via Cloudflare Pages dashboard environment variables.
 # For local dev, add them to .env (see .env.example).
 
