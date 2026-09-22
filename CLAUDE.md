@@ -78,6 +78,7 @@ This project has undergone multiple rounds of security auditing (see `security_a
 - **CORS**: never `Access-Control-Allow-Origin: *` on write endpoints (POST/PUT/PATCH/DELETE) — use `https://techforpalestine.org` explicitly. Read-only GET endpoints serving public data may use `*`.
 - **CSP**: managed only in `src/middleware/csp.ts` via per-request nonces (HTMLRewriter). Never add `'unsafe-inline'` to `script-src`/`style-src`, never use `style=""` inline attributes (silently blocked in prod, appears to work in devtools), and don't add new external script origins without review.
 - **Public POST endpoints** must validate required fields, email format, URL format (`try { new URL(value) } catch`), cap free-text at 2000 chars, and reject if `Origin !== "https://techforpalestine.org"` before parsing the body.
+- **Payment-triggered side effects must be verified against the payment processor.** An Origin header is set freely by any HTTP client and is never access control. /api/membership-complete and /api/donation-complete read the transaction back from Qgiv (src/utils/qgivVerify.ts) and derive email, names and tier from that record, never from the request body.
 - **Errors**: never return raw error objects/stack traces to clients — generic message + `console.error` server-side only. Never log full secrets or PII (emails: `[redacted]@${domain}` only).
 
 ## Routing & Redirects

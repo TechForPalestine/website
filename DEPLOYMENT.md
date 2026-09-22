@@ -30,6 +30,7 @@ Set the following in the Cloudflare Pages dashboard (Production and Preview are 
 
 - `HUB_API_URL`, `HUB_API_KEY` — membership invite on completion
 - `EO_API_KEY` — EmailOctopus donor/member sync
+- `QGIV_API_TOKEN` — Qgiv reporting API token used to verify completed transactions server-side. Permanent token, scoped to the membership, supporting-member and donation forms. **Required:** without it both completion endpoints fail closed and no member is invited.
 - `PLAUSIBLE_API_KEY` — Stats API for the admin conversion dashboard
 - `ADMIN_USERNAME`, `ADMIN_PASSWORD` — HTTP Basic Auth for `/admin/conversions`
 
