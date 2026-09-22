@@ -42,7 +42,7 @@ async function fetchOpenRoles(): Promise<Response> {
 }
 
 export const GET: APIRoute = async ({ locals }) => {
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
 
   try {
     const response = await fetchOpenRoles();

@@ -9,7 +9,7 @@ import { featuredCall, callState } from "../utils/communityCall";
 import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";
 
-const ctx = Astro.locals.runtime?.ctx;
+const ctx = Astro.locals.cfContext;
 
 let calls: CommunityCall[] = [];
 try {

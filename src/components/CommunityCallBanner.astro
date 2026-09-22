@@ -21,7 +21,7 @@ const { theme = "new" } = Astro.props;
 const bgClass = theme === "old" ? "bg-green-700" : "bg-ink";
 const pulseClass = theme === "old" ? "bg-white" : "bg-brand-light";
 
-const ctx = Astro.locals.runtime?.ctx;
+const ctx = Astro.locals.cfContext;
 
 let calls: CommunityCall[] = [];
 try {

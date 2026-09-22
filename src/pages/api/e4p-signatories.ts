@@ -7,7 +7,7 @@ import { reportError } from "../../lib/report-error";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ locals }) => {
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
   try {
     const notionSecret = getEnv("NOTION_SECRET", locals);
     const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);

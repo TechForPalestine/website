@@ -70,7 +70,7 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
     });
   } catch (error) {
     reportError(error, { context: "project-proxy", path: normalizedPath });
-    const ctx = (locals as any).runtime?.ctx;
+    const ctx = (locals as App.Locals).cfContext;
     ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
     return new Response(JSON.stringify({ error: "Failed to process request" }), {

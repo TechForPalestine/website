@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
+import { env } from "cloudflare:workers";
 import { reportError } from "../../lib/report-error";
 import { isAllowedOrigin, type OriginPolicy } from "../../utils/origin";
 
@@ -20,7 +21,7 @@ function parseEventName(body: string): string {
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
   const origin = request.headers.get("origin");
   if (!isAllowedOrigin(origin, ORIGIN_POLICY)) {
     return new Response("Forbidden", { status: 403 });
@@ -63,7 +64,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
 
       if (CONVERSION_EVENTS.has(eventName)) {
-        const kv = locals.runtime?.env?.DROPPED_CONVERSIONS;
+        const kv = env.DROPPED_CONVERSIONS;
         if (kv && ctx) {
           const now = new Date();
           const date = now.toISOString().slice(0, 10);

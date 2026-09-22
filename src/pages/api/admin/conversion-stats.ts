@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
+import { env } from "cloudflare:workers";
 import { isAuthorized, unauthorizedResponse } from "../../../utils/basicAuth";
 import { getEnv } from "../../../utils/getEnv";
 import { reportError } from "../../../lib/report-error";
@@ -239,13 +240,13 @@ export const GET: APIRoute = async ({ request, locals }) => {
   const url = new URL(request.url);
 
   const apiKey = getEnv("PLAUSIBLE_API_KEY", locals);
-  const kv = locals.runtime?.env?.DROPPED_CONVERSIONS;
+  const kv = env.DROPPED_CONVERSIONS;
 
   const [defaultFrom, defaultTo] = defaultDateRange();
   const dateFrom = url.searchParams.get("date_from") || defaultFrom;
   const dateTo = url.searchParams.get("date_to") || defaultTo;
 
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
   try {
     const [plausible, dropped, details] = await Promise.all([
       apiKey ? fetchPlausibleStats(apiKey, dateFrom, dateTo) : Promise.resolve([]),

@@ -8,7 +8,7 @@ import { isAllowedOrigin, corsHeaders } from "../../utils/origin";
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const ctx = locals.runtime?.ctx;
+  const ctx = locals.cfContext;
   const origin = request.headers.get("Origin");
   if (!isAllowedOrigin(origin)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {

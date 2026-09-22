@@ -44,18 +44,23 @@ declare global {
     }>;
   }
 
+  namespace Cloudflare {
+    // Merged into the ambient `Env` type of `import { env } from "cloudflare:workers"`
+    // (@astrojs/cloudflare 14 / Astro 7 — `locals.runtime.env` was removed in favor
+    // of this import, see https://docs.astro.build/en/guides/upgrade-to/v6/).
+    interface Env {
+      DROPPED_CONVERSIONS?: KVNamespace;
+      [key: string]: string | KVNamespace | undefined;
+    }
+  }
+
   namespace App {
     interface Locals {
       cspNonce: string;
-      runtime?: {
-        env?: Record<string, string> & {
-          DROPPED_CONVERSIONS?: KVNamespace;
-        };
-        ctx?: {
-          waitUntil: (p: Promise<unknown>) => void;
-        };
-        /** Cloudflare's CacheStorage; `default` is the Workers-only shared cache. */
-        caches?: CacheStorage;
+      // The Workers ExecutionContext, for locals.cfContext.waitUntil(...).
+      // Replaces the removed `locals.runtime.ctx` (Astro 6+).
+      cfContext?: {
+        waitUntil: (p: Promise<unknown>) => void;
       };
     }
   }
