@@ -38,6 +38,11 @@ const SUPPORTING_BENEFITS = [
 ];
 
 interface JoinFlowProps {
+  /** Locks the flow to one membership tier and skips the tier-selection step
+   * — used on tier-specific pages (e.g. /supporting-member) where offering a
+   * choice would just relitigate a decision the visitor already made by
+   * being there. Omitted on /membership, which serves both tiers. */
+  fixedTier?: MembershipTier;
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
    * of plain Tailwind sizes — only correct where `design-system.css` is
    * loaded (HomeLayout, i.e. /membership-new). The legacy /membership page
@@ -103,13 +108,14 @@ function splitName(name: string): { firstName: string; lastName: string } {
 }
 
 interface AboutYouFormProps {
+  heading: string;
   initialValues: AboutYouData | null;
   submitting: boolean;
   styles: StyleSet;
   onContinue: (data: AboutYouData) => void;
 }
 
-function AboutYouForm({ initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
+function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
@@ -131,7 +137,7 @@ function AboutYouForm({ initialValues, submitting, styles, onContinue }: AboutYo
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2 className={`mb-5 ${styles.heading}`}>Become a Member</h2>
+      <h2 className={`mb-5 ${styles.heading}`}>{heading}</h2>
 
       <label htmlFor="join-name" className={`mb-1.5 block ${styles.fieldLabel}`}>
         Name
@@ -258,21 +264,22 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
   );
 }
 
-export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
+export default function JoinFlow({ designSystem = false, fixedTier }: JoinFlowProps) {
   const styles = getStyles(designSystem);
+  const steps = fixedTier ? STEPS.filter((s) => s.id !== "tier") : STEPS;
   const [step, setStep] = useState<StepId>("about-you");
   const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
-  const [tier, setTier] = useState<MembershipTier | null>(null);
-  const [mountedTiers, setMountedTiers] = useState<MembershipTier[]>([]);
+  const [tier, setTier] = useState<MembershipTier | null>(fixedTier ?? null);
+  const [mountedTiers, setMountedTiers] = useState<MembershipTier[]>(fixedTier ? [fixedTier] : []);
   const [advancing, setAdvancing] = useState(false);
 
-  const stepIndex = STEPS.findIndex((s) => s.id === step);
+  const stepIndex = steps.findIndex((s) => s.id === step);
 
   function handleAboutYouContinue(data: AboutYouData) {
     setAboutYou(data);
     setAdvancing(true);
     window.setTimeout(() => {
-      setStep("tier");
+      setStep(fixedTier ? "payment" : "tier");
       setAdvancing(false);
     }, NEXT_BUTTON_LOADING_MS);
   }
@@ -294,11 +301,12 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
   return (
     <div className="rounded-[10px] border border-ink-divider bg-white p-7 shadow-sm">
       <p className={`mb-4 ${styles.stepLabel}`}>
-        Step {stepIndex + 1} of {STEPS.length}: {STEPS[stepIndex]?.label}
+        Step {stepIndex + 1} of {steps.length}: {steps[stepIndex]?.label}
       </p>
 
       {step === "about-you" && (
         <AboutYouForm
+          heading={fixedTier === "supporting" ? "Become a Supporting Member" : "Become a Member"}
           initialValues={aboutYou}
           submitting={advancing}
           styles={styles}
@@ -306,7 +314,7 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
         />
       )}
 
-      {step === "tier" && (
+      {!fixedTier && step === "tier" && (
         <div>
           <button type="button" onClick={() => setStep("about-you")} className={`mb-4 ${styles.backLink}`}>
             &larr; Back

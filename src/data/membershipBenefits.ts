@@ -52,13 +52,34 @@ export const memberBenefits: string[] = [
 export interface ShowcaseProject {
   name: string;
   logo: string;
+  url: string;
 }
 
 /** Projects shown in the logo wall next to the "10M+ users" reach stat. */
 export const showcaseProjects: ShowcaseProject[] = [
-  { name: "UpScrolled", logo: "/images/new-homepage/portfolio/proj-logo-5.webp" },
-  { name: "Boycat", logo: "/images/new-homepage/portfolio/proj-logo-3.webp" },
-  { name: "Find a Protest", logo: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp" },
-  { name: "Thaura", logo: "/images/new-homepage/portfolio/proj-logo-4.webp" },
-  { name: "Apricot", logo: "/images/new-homepage/portfolio/proj-logo-2.webp" },
+  {
+    name: "NewsCord",
+    logo: "/newscord.svg",
+    url: "https://newscord.org/",
+  },
+  {
+    name: "GazaBridge Logistics",
+    logo: "https://projecthub.techforpalestine.org/public-objects/logos/logo-db18e5f5-d7b5-40-1776669252410.png",
+    url: "https://gazabridge.org/",
+  },
+  {
+    name: "Ethicly",
+    logo: "https://projecthub.techforpalestine.org/public-objects/logos/logo-6837635b-2912-4b-1788770868333.png",
+    url: "https://www.ethicly.ch/",
+  },
+  {
+    name: "A Ween Rayeh",
+    logo: "https://projecthub.techforpalestine.org/public-objects/logos/logo-ebc2f68f-6f71-4a-1761304170508.webp",
+    url: "https://aweenrayeh.com/",
+  },
+  {
+    name: "JayWalk",
+    logo: "/jaywalk.png",
+    url: "https://jaywalkapp.org/",
+  },
 ];
