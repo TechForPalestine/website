@@ -29,6 +29,11 @@ declare global {
       Embed?: {
         initializeEmbeds?: () => void;
       };
+      /** Qgiv also exposes the completed transaction as a global, which is the
+       * fallback when the `donationComplete` CustomEvent carries no detail. */
+      transaction?: {
+        id?: string;
+      };
     };
   }
 }
