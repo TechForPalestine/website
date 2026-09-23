@@ -77,26 +77,39 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
               >90+</span
             > Projects
           </p>
-          <ul class="mt-[22px] flex flex-1 flex-col gap-3" aria-label={logoWallLabel}>
+          <ul
+            class="mt-[22px] grid flex-1 auto-rows-fr grid-cols-2 content-center gap-1.5"
+            aria-label={logoWallLabel}
+          >
             {
               showcaseProjects.map((project) => (
-                <li class="flex-1">
+                <li>
                   <a
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Visit ${project.name}`}
-                    class="flex h-full min-h-[60px] items-center justify-center rounded-lg border border-ink-divider bg-stone transition-colors hover:border-[#157A3E] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2"
+                    class="flex h-24 items-center justify-center gap-2 rounded-xl border border-ink-divider bg-white px-2 transition-colors hover:border-[#157A3E] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2"
                   >
                     <img
                       src={project.logo}
                       alt=""
-                      width="220"
-                      height="64"
+                      width="180"
+                      height="56"
                       loading="lazy"
                       decoding="async"
-                      class="max-h-[44px] w-auto max-w-[70%] object-contain"
+                      class:list={[
+                        "h-auto w-auto object-contain",
+                        project.hasWordmark ? "max-h-14 max-w-[94%]" : "max-h-16 max-w-16",
+                      ]}
                     />
+                    {
+                      !project.hasWordmark && (
+                        <span class="text-[16px] font-extrabold leading-tight text-ink min-[810px]:text-[19px]">
+                          {project.name}
+                        </span>
+                      )
+                    }
                   </a>
                 </li>
               ))

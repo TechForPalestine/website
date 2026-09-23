@@ -53,24 +53,59 @@ export interface ShowcaseProject {
   name: string;
   logo: string;
   url: string;
+  /** True when `logo` is a wordmark (name baked into the image) rather than a
+   * bare icon mark — the logo wall only prints a text label next to icon
+   * marks, since a wordmark already names itself. */
+  hasWordmark?: boolean;
 }
 
 /** Projects shown in the logo wall next to the "10M+ users" reach stat. */
 export const showcaseProjects: ShowcaseProject[] = [
+  {
+    name: "UpScrolled",
+    logo: "/images/new-homepage/portfolio/proj-logo-5.webp",
+    url: "https://upscrolled.com/en/",
+    hasWordmark: true,
+  },
+  {
+    name: "Boycat",
+    logo: "/images/new-homepage/portfolio/proj-logo-3.webp",
+    url: "https://www.boycat.io/",
+    hasWordmark: true,
+  },
+  {
+    name: "Find a Protest",
+    logo: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp",
+    url: "https://www.findaprotest.info/",
+    hasWordmark: true,
+  },
+  {
+    name: "Thaura",
+    logo: "/images/new-homepage/portfolio/proj-logo-4.webp",
+    url: "https://thaura.ai/home",
+    hasWordmark: true,
+  },
+  {
+    name: "Apricot",
+    logo: "/images/new-homepage/portfolio/proj-logo-2.webp",
+    url: "https://apricotinternational.org/",
+    hasWordmark: true,
+  },
   {
     name: "NewsCord",
     logo: "/newscord.svg",
     url: "https://newscord.org/",
   },
   {
-    name: "GazaBridge Logistics",
-    logo: "https://projecthub.techforpalestine.org/public-objects/logos/logo-db18e5f5-d7b5-40-1776669252410.png",
+    name: "GazaBridge",
+    logo: "/gazabridge.png",
     url: "https://gazabridge.org/",
   },
   {
     name: "Ethicly",
-    logo: "https://projecthub.techforpalestine.org/public-objects/logos/logo-6837635b-2912-4b-1788770868333.png",
+    logo: "https://www.ethicly.ch/ethicly_logo.svg",
     url: "https://www.ethicly.ch/",
+    hasWordmark: true,
   },
   {
     name: "A Ween Rayeh",
@@ -79,7 +114,8 @@ export const showcaseProjects: ShowcaseProject[] = [
   },
   {
     name: "JayWalk",
-    logo: "/jaywalk.png",
+    logo: "https://jaywalkapp.org/assets/jaywalk-hero-6843ef1f.png",
     url: "https://jaywalkapp.org/",
+    hasWordmark: true,
   },
 ];
