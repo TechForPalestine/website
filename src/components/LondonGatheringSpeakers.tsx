@@ -10,9 +10,9 @@ import {
   Avatar,
   IconButton,
   Button,
-  Grid,
   CircularProgress,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface Speaker {
@@ -87,7 +87,7 @@ export default function LondonGatheringSpeakers({
 
       <Grid container spacing={4} justifyContent="center">
         {speakers.map((speaker) => (
-          <Grid item xs={6} sm={4} md={2.4} key={speaker.id}>
+          <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={speaker.id}>
             <Box
               className="cursor-pointer text-center transition-transform duration-300 hover:scale-105"
               onClick={() => handleClickOpen(speaker)}

@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Container, Typography, Grid, Button } from "@mui/material";
+import { Box, Container, Typography, Button } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import Map from "./Map";
 import FoundersCarousel from "./FoundersSection";
 import { BenefitsSection } from "./BenefitsSection";
@@ -94,7 +95,7 @@ export function E4PPage() {
           </Box>
 
           <Grid container spacing={4} justifyContent="center" mb={4}>
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid size={{ xs: 12, sm: 6, md: 6 }}>
               <Typography
                 variant="subtitle1"
                 gutterBottom
@@ -123,7 +124,7 @@ export function E4PPage() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid size={{ xs: 12, sm: 6, md: 6 }}>
               <Typography
                 variant="subtitle1"
                 gutterBottom
