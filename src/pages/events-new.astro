@@ -3,7 +3,6 @@ import { getEnv } from "../utils/getEnv";
 import { fetchEvents, type EventItem } from "../store/eventsClient";
 import HomeLayout from "../layouts/HomeLayout.astro";
 import HomeNavbar from "../components/home/HomeNavbar.astro";
-import Button from "../components/ui/Button.astro";
 import EventsNewComponent from "../components/events/EventsNew";
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
@@ -47,7 +46,7 @@ const eventSchema = nextEvent && {
   noindex={true}
 >
   <Fragment slot="head">
-    {eventSchema && <script type="application/ld+json" set:html={JSON.stringify(eventSchema)} />}
+    {eventSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(eventSchema)} />}
   </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 

@@ -86,7 +86,7 @@ const peopleSchema = [...board, ...staff].map((member) => ({
   <Fragment slot="head">
     {
       peopleSchema.map((schema) => (
-        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
       ))
     }
   </Fragment>

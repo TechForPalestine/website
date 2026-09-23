@@ -37,8 +37,6 @@ const EVENT_COPY_FEEDBACK_MS = 2500;
 // Font sizes only (not family/weight/color) matched to /events-new's type
 // scale in src/styles/design-system.css, stepped at the same 390/810/1200
 // breakpoints. Each constant is named after the .ts-* role it mirrors.
-const TS_EDITORIAL_SIZE =
-  "text-[36px] leading-[1.18] min-[810px]:text-[42px] min-[1200px]:text-[48px]"; // section headings
 const TS_HEADING_SIZE =
   "text-[32px] leading-[1.22] min-[810px]:text-[36px] min-[1200px]:text-[38px]"; // day-of-month numerals
 const TS_SUBHEADING_SIZE =

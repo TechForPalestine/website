@@ -59,7 +59,7 @@ const ideasListSchema = allIdeas.length > 0 && {
   <Fragment slot="head">
     {
       ideasListSchema && (
-        <script type="application/ld+json" set:html={JSON.stringify(ideasListSchema)} />
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(ideasListSchema)} />
       )
     }
   </Fragment>

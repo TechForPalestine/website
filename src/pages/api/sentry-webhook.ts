@@ -26,7 +26,6 @@ function formatMessage(body: Record<string, any>): string {
   if (issue) {
     const title: string = issue.title ?? issue.metadata?.value ?? "Unknown error";
     const url: string = issue.permalink ?? "";
-    const level: string = issue.level ?? "error";
     const project: string = issue.project?.name ?? "";
     const env: string = issue.tags?.find((t: any) => t.key === "environment")?.value ?? "";
 

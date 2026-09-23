@@ -95,7 +95,7 @@ const structuredData = {
     <meta property="og:type" content="article" />
     <meta name="twitter:title" content={pageTitle} />
     <link rel="canonical" href={pageUrl} />
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   </Fragment>
   <main>
     <div class="relative isolate">

@@ -79,7 +79,7 @@ const projectListSchema = projects.length > 0 && {
   <Fragment slot="head">
     {
       projectListSchema && (
-        <script type="application/ld+json" set:html={JSON.stringify(projectListSchema)} />
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(projectListSchema)} />
       )
     }
   </Fragment>
