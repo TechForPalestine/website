@@ -49,7 +49,7 @@ const faqSchema = {
   noindex={true}
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
   </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
 

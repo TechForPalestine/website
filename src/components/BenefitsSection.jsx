@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Grid, Typography, Paper, useTheme, Container } from "@mui/material";
+import { Box, Typography, Paper, useTheme, Container } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import GroupIcon from "@mui/icons-material/Group";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import EventIcon from "@mui/icons-material/Event";
@@ -76,7 +77,7 @@ export function BenefitsSection() {
             const iconColor = "#d97706";
 
             return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                 <Paper
                   elevation={3}
                   sx={{

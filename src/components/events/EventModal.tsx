@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { primaryEventLink } from "../../store/eventsClient";
 import { displayTitle } from "../../utils/eventSections";
-import { parseEventDescription, renderInlineText } from "../../utils/eventDescription";
+import { parseEventDescription, renderInlineTokens } from "../../utils/eventDescription";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 import { copyEventLink } from "../../utils/copyAnchorLink";
 import { ArrowRight, CloseIcon, LinkIcon, useEventDate, type SelectedEvent } from "./eventsShared";
@@ -19,7 +19,7 @@ function EventDescription({ text }: { text: string }) {
         if (block.type === "heading") {
           return (
             <h4 key={i} className="ts-eyebrow text-ink">
-              {renderInlineText(block.text, `h-${i}`)}
+              {renderInlineTokens(block.tokens, `h-${i}`)}
             </h4>
           );
         }
@@ -28,12 +28,12 @@ function EventDescription({ text }: { text: string }) {
           return (
             <ListTag key={i} className={block.ordered ? "list-decimal pl-5" : "list-disc pl-5"}>
               {block.items.map((item, j) => (
-                <li key={j}>{renderInlineText(item, `l-${i}-${j}`)}</li>
+                <li key={j}>{renderInlineTokens(item.tokens, `l-${i}-${j}`)}</li>
               ))}
             </ListTag>
           );
         }
-        return <p key={i}>{renderInlineText(block.text, `p-${i}`)}</p>;
+        return <p key={i}>{"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}</p>;
       })}
     </div>
   );

@@ -60,7 +60,7 @@ const openRolesSchema = openRoles.length > 0 && {
 >
   {
     openRolesSchema && (
-      <script type="application/ld+json" set:html={JSON.stringify(openRolesSchema)} slot="head" />
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(openRolesSchema)} slot="head" />
     )
   }
   <link

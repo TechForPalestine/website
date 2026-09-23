@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, CardContent, Typography, Button, Grid, Box } from "@mui/material";
+import { Card, CardContent, Typography, Button, Box } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import LaunchIcon from "@mui/icons-material/Launch";
 
 type Resource = {
@@ -25,7 +26,7 @@ export default function ResourceList({ sections }: { sections: Section[] }) {
             </Typography>
             <Grid container spacing={3}>
               {section.resources.map((res: Resource) => (
-                <Grid item xs={12} sm={6} md={4} key={res.name}>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={res.name}>
                   <Card
                     elevation={2}
                     sx={{

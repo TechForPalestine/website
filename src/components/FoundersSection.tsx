@@ -1,4 +1,5 @@
-import { Box, Typography, Avatar, Grid, Paper, Stack } from "@mui/material";
+import { Box, Typography, Avatar, Paper, Stack } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 type Founder = {
   name: string;
@@ -48,7 +49,7 @@ export default function FoundersTestimonials() {
       </Typography>
       <Grid container spacing={6} justifyContent="center">
         {founders.map((f, i) => (
-          <Grid item xs={12} sm={6} md={4} key={i}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={i}>
             <Paper
               elevation={4}
               sx={{

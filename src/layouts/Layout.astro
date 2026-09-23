@@ -49,7 +49,7 @@ const canonicalUrl = new URL(
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="me" href="https://infosec.exchange/@tech4palestine" />
-    <script type="speculationrules">
+    <script type="speculationrules" is:inline>
       {
         "prerender": [{ "urls": ["/", "/about", "/incubator", "/tools", "/help/hire"] }]
       }
@@ -151,9 +151,9 @@ const canonicalUrl = new URL(
 
     <slot name="head" />
 
-    <script defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
+    <script is:inline defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
     <!-- Privacy-friendly analytics -->
-    <script async src="/js/web.js"></script>
+    <script is:inline async src="/js/web.js"></script>
     <script>
       (window as any).plausible =
         (window as any).plausible ||

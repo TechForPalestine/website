@@ -140,7 +140,7 @@ export default function MembershipCalculator() {
               "&.Mui-focused fieldset": { borderColor: "#168039" },
             },
           }}
-          InputProps={{ inputProps: { min: 0, step: "any" } }}
+          slotProps={{ htmlInput: { min: 0, step: "any" } }}
         />
       </Box>
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Backdrop,
   CircularProgress,
-  Grid,
   Typography,
   Button,
   Box,
@@ -12,6 +11,7 @@ import {
   Divider,
   Paper,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import { RenderFormFields } from "./inputs-mapping";
 import FormProvider from "./hook-form/index";
 import { transformObject } from "../utils/helpers";
@@ -162,7 +162,7 @@ const VolunteerForm = () => {
           <FormProvider methods={methods} onSubmit={onSubmit}>
             <Grid container spacing={3}>
               {structuredSections.map((section, sectionIdx) => (
-                <Grid key={`section-${sectionIdx}`} item xs={12}>
+                <Grid key={`section-${sectionIdx}`} size={12}>
                   {section.title && (
                     <>
                       <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>
@@ -174,9 +174,7 @@ const VolunteerForm = () => {
                   <Grid container spacing={2}>
                     {section.columns.map((column: any[], columnIdx: number) => (
                       <Grid
-                        item
-                        xs={12}
-                        sm={section.columns.length === 1 ? 12 : 6}
+                        size={{ xs: 12, sm: section.columns.length === 1 ? 12 : 6 }}
                         key={`column-${sectionIdx}-${columnIdx}`}
                       >
                         {column.map((field: any) => (

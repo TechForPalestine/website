@@ -36,12 +36,14 @@ export default function SummitPopup() {
       open={open}
       onClose={handleClose}
       maxWidth="md"
-      PaperProps={{
-        sx: {
-          backgroundColor: "transparent",
-          boxShadow: "none",
-          overflow: "visible",
-          maxHeight: "90vh",
+      slotProps={{
+        paper: {
+          sx: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+            overflow: "visible",
+            maxHeight: "90vh",
+          },
         },
       }}
     >

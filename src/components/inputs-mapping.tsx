@@ -1,5 +1,6 @@
 import { useEffect, useState, memo, useRef } from "react";
-import { MenuItem, Divider, Grid, Checkbox, FormControlLabel } from "@mui/material";
+import { MenuItem, Divider, Checkbox, FormControlLabel } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import {
   RHFSelect,
   RHFTextField,
@@ -245,7 +246,7 @@ export const RenderInput = ({ field, options, loading, parentName }: RenderInput
       );
     case "Section Break":
       return (
-        <Grid key={field.fieldname} item xs={12}>
+        <Grid key={field.fieldname} size={12}>
           <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
             {field.label || ""}
           </Typography>

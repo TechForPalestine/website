@@ -16,7 +16,7 @@ import {
   getDescriptionExcerpt,
   getEventSpeakers,
   parseEventDescription,
-  renderInlineText,
+  renderInlineTokens,
 } from "../utils/eventDescription";
 import { EventPreviewImage } from "./events/EventPreviewImage";
 import {
@@ -37,8 +37,6 @@ const EVENT_COPY_FEEDBACK_MS = 2500;
 // Font sizes only (not family/weight/color) matched to /events-new's type
 // scale in src/styles/design-system.css, stepped at the same 390/810/1200
 // breakpoints. Each constant is named after the .ts-* role it mirrors.
-const TS_EDITORIAL_SIZE =
-  "text-[36px] leading-[1.18] min-[810px]:text-[42px] min-[1200px]:text-[48px]"; // section headings
 const TS_HEADING_SIZE =
   "text-[32px] leading-[1.22] min-[810px]:text-[36px] min-[1200px]:text-[38px]"; // day-of-month numerals
 const TS_SUBHEADING_SIZE =
@@ -117,7 +115,7 @@ function EventDescription({ text }: { text: string }) {
         if (block.type === "heading") {
           return (
             <p key={i} className={`font-medium text-gray-900 ${TS_EYEBROW_SIZE}`}>
-              {renderInlineText(block.text, `h-${i}`)}
+              {renderInlineTokens(block.tokens, `h-${i}`)}
             </p>
           );
         }
@@ -130,7 +128,7 @@ function EventDescription({ text }: { text: string }) {
             >
               {block.items.map((item, j) => (
                 <li key={j} className="text-gray-600">
-                  {renderInlineText(item, `l-${i}-${j}`)}
+                  {renderInlineTokens(item.tokens, `l-${i}-${j}`)}
                 </li>
               ))}
             </ListTag>
@@ -138,7 +136,7 @@ function EventDescription({ text }: { text: string }) {
         }
         return (
           <p key={i} className={`text-gray-600 ${TS_BODY_SIZE}`}>
-            {renderInlineText(block.text, `p-${i}`)}
+            {"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}
           </p>
         );
       })}
@@ -192,7 +190,7 @@ function EventDetailsDialogBody({
       onClose={onClose}
       maxWidth="sm"
       fullWidth
-      PaperProps={{ sx: { borderRadius: "16px" } }}
+      slotProps={{ paper: { sx: { borderRadius: "16px" } } }}
     >
       {/* No fixed aspect ratio or box height here: YouTube thumbnails are
           16:9, but flyer-style previews are often taller. Forcing w-full

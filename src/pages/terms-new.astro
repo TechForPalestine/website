@@ -29,7 +29,7 @@ const webPageSchema = {
   noindex={true}
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(webPageSchema)} />
   </Fragment>
   <HomeNavbar membershipLive={membershipLive} alwaysVisible />
   <main class="pt-20">

@@ -1,105 +1,117 @@
 import React from "react";
+import { Marked, type MarkedToken, type Token, type Tokens } from "marked";
 
-// The Mattermost calendar plugin's event descriptions use a small, consistent
-// subset of Markdown: "## " headings, "---" rules, "- "/"1. " lists, blank-line
-// paragraphs, **bold**, *italic* (sometimes wrapping a link), [label](url)
-// links, and bare URLs. This isn't full CommonMark support — just what's
-// actually observed in the feed.
-export type DescriptionBlock =
-  | { type: "heading"; text: string }
-  | { type: "hr" }
-  | { type: "list"; ordered: boolean; items: string[] }
-  | { type: "paragraph"; text: string };
+// The Mattermost calendar plugin's event descriptions are free-form Markdown
+// written by event organizers. This module used to hand-roll a block/inline
+// parser for the small subset of syntax we'd actually observed in the feed,
+// but real descriptions kept hitting cases it didn't cover — e.g. a "---"
+// rule glued to the very next line with no blank line between them, or a
+// bullet list immediately followed by a numbered list in the same paragraph.
+// Both silently collapsed into a wall of plain text with the raw "-"/"##"/
+// "---" markers still visible, instead of being rendered.
+//
+// `marked` (already a project dependency, previously unused) is a real
+// CommonMark/GFM parser and handles both of those correctly. We only use its
+// *lexer* — block and inline tokens — never its HTML renderer: building React
+// elements straight from tokens keeps this free of any dangerouslySetInnerHTML
+// / sanitization surface, same as the parser it replaces.
+const markdown = new Marked({ gfm: true, breaks: true });
 
-const isBulletLine = (l: string) => /^-\s+/.test(l);
-const isNumberedLine = (l: string) => /^\d+\.\s+/.test(l);
-
-export function parseEventDescription(description: string): DescriptionBlock[] {
-  const rawBlocks = description
-    .split(/\n{2,}/)
-    .map((b) => b.trim())
-    .filter(Boolean);
-
-  const blocks: DescriptionBlock[] = [];
-
-  for (const raw of rawBlocks) {
-    if (raw === "---") {
-      blocks.push({ type: "hr" });
-      continue;
-    }
-    if (raw.startsWith("## ")) {
-      blocks.push({ type: "heading", text: raw.slice(3).trim() });
-      continue;
-    }
-
-    const lines = raw
-      .split("\n")
-      .map((l) => l.trim())
-      .filter(Boolean);
-
-    if (lines.length > 0 && lines.every(isBulletLine)) {
-      blocks.push({ type: "list", ordered: false, items: lines.map((l) => l.replace(/^-\s+/, "")) });
-      continue;
-    }
-    if (lines.length > 0 && lines.every(isNumberedLine)) {
-      blocks.push({ type: "list", ordered: true, items: lines.map((l) => l.replace(/^\d+\.\s+/, "")) });
-      continue;
-    }
-
-    // A label line ("Agenda:") followed entirely by list items is a common
-    // pattern in the feed — split it into a short paragraph plus a real
-    // list, rather than losing the list structure as one plain paragraph.
-    const listStart = lines.findIndex((l) => isBulletLine(l) || isNumberedLine(l));
-    if (listStart > 0) {
-      const ordered = isNumberedLine(lines[listStart]);
-      const rest = lines.slice(listStart);
-      const restIsList = ordered ? rest.every(isNumberedLine) : rest.every(isBulletLine);
-      if (restIsList) {
-        blocks.push({ type: "paragraph", text: lines.slice(0, listStart).join("\n") });
-        const prefixRe = ordered ? /^\d+\.\s+/ : /^-\s+/;
-        blocks.push({ type: "list", ordered, items: rest.map((l) => l.replace(prefixRe, "")) });
-        continue;
-      }
-    }
-
-    blocks.push({ type: "paragraph", text: raw });
-  }
-
-  return blocks;
+// Organizers sometimes leave a stray space just inside a "**bold**" span
+// (e.g. "**NAME **- Title"), invisible in a plain-text editor but fatal to a
+// spec-compliant parser: CommonMark requires a closing "**" to NOT be
+// preceded by whitespace, so "**NAME **" never closes and renders as literal
+// asterisks. Trim whitespace just inside "**...**" before parsing so this
+// common typo still bolds as intended. Only touches spans that already have
+// both markers on the same line, so "**Name**, author of **Title**" — two
+// separate, already-valid spans — passes through unchanged.
+function normalizeBoldSpacing(text: string): string {
+  return text.replace(/\*\*([^*\n]*?)\*\*/g, (match, inner: string) => {
+    const trimmed = inner.trim();
+    return trimmed ? `**${trimmed}**` : match;
+  });
 }
 
-const EMPHASIS_PATTERN = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;
-const BOLD_RE = /^\*\*([^*]+)\*\*$/;
-const ITALIC_RE = /^\*([^*]+)\*$/;
+export type DescriptionBlock = MarkedToken;
 
-const LINK_OR_URL_PATTERN = /(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|https?:\/\/[^\s)]+)/g;
-const LINK_RE = /^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/;
+export function parseEventDescription(description: string): DescriptionBlock[] {
+  const tokens = markdown.lexer(normalizeBoldSpacing(description)) as MarkedToken[];
+  // "space" is just the blank-line gap between blocks; "def" is a link
+  // reference definition ([label]: url) — neither has anything to render.
+  return tokens.filter((token) => token.type !== "space" && token.type !== "def");
+}
 
-// Auto-links [label](url) markdown links and bare URLs within a span of text
-// that's already been stripped of ** / * emphasis markers.
-function renderLinksAndUrls(text: string, keyPrefix: string): React.ReactNode[] {
-  return text
-    .split(LINK_OR_URL_PATTERN)
-    .filter(Boolean)
-    .map((part, i) => {
-      const key = `${keyPrefix}-l${i}`;
-      const linkMatch = part.match(LINK_RE);
-      if (linkMatch) {
+function hasTokens(token: Token): token is Token & { tokens: Token[] } {
+  return "tokens" in token && Array.isArray((token as { tokens?: unknown }).tokens);
+}
+
+// Renders a span of inline tokens (bold, italic, links, line breaks, plain
+// text) as React nodes. Falls back to a token's raw source for anything not
+// explicitly handled below (e.g. code spans, strikethrough) so unfamiliar
+// syntax degrades to visible text instead of vanishing or requiring raw HTML.
+export function renderInlineTokens(tokens: Token[] | undefined, keyPrefix: string): React.ReactNode {
+  if (!tokens) return null;
+
+  return tokens.map((token, i) => {
+    const key = `${keyPrefix}-${i}`;
+
+    switch (token.type) {
+      case "text":
+        return hasTokens(token) ? (
+          <React.Fragment key={key}>{renderInlineTokens(token.tokens, key)}</React.Fragment>
+        ) : (
+          <React.Fragment key={key}>{(token as Tokens.Text).text}</React.Fragment>
+        );
+      case "strong":
+        return <strong key={key}>{renderInlineTokens((token as Tokens.Strong).tokens, key)}</strong>;
+      case "em":
+        return <em key={key}>{renderInlineTokens((token as Tokens.Em).tokens, key)}</em>;
+      case "link": {
+        const link = token as Tokens.Link;
         return (
-          <a key={key} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="underline">
-            {linkMatch[1]}
+          <a
+            key={key}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            {renderInlineTokens(link.tokens, key)}
           </a>
         );
       }
-      if (/^https?:\/\//.test(part)) {
-        return (
-          <a key={key} href={part} target="_blank" rel="noopener noreferrer" className="break-all underline">
-            {part}
-          </a>
-        );
+      case "br":
+        return <br key={key} />;
+      default:
+        return <React.Fragment key={key}>{token.raw}</React.Fragment>;
+    }
+  });
+}
+
+// Plain-text equivalent of renderInlineTokens: strips markdown syntax down to
+// its label text (a link keeps its label, not its URL) and turns line breaks
+// into spaces. Used where markup can't be rendered, e.g. the excerpt teaser.
+function inlineTokensToPlainText(tokens: Token[] | undefined): string {
+  if (!tokens) return "";
+
+  return tokens
+    .map((token) => {
+      switch (token.type) {
+        case "text":
+          return hasTokens(token)
+            ? inlineTokensToPlainText(token.tokens)
+            : (token as Tokens.Text).text;
+        case "strong":
+        case "em":
+        case "link":
+          return inlineTokensToPlainText(hasTokens(token) ? token.tokens : undefined);
+        case "br":
+          return " ";
+        default:
+          return "text" in token ? String((token as { text: string }).text) : "";
       }
-      return <React.Fragment key={key}>{part}</React.Fragment>;
-    });
+    })
+    .join("");
 }
 
 // The caller clamps this to 2 lines with CSS (`line-clamp-2`), which doesn't
@@ -109,20 +121,6 @@ function renderLinksAndUrls(text: string, keyPrefix: string): React.ReactNode[] 
 // card so line-clamp only ever acts as a safety net, not the real truncator.
 const EXCERPT_MAX_LENGTH = 85;
 
-// Strips this feed's markdown subset down to plain text: emphasis markers,
-// link syntax (keeping the label), and line breaks collapsed to spaces.
-function toPlainText(text: string): string {
-  return text
-    .replace(LINK_OR_URL_PATTERN, (match) => {
-      const linkMatch = match.match(LINK_RE);
-      return linkMatch ? linkMatch[1] : match;
-    })
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/\*([^*]+)\*/g, "$1")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 // A short plain-text teaser for the upcoming-events list, so a visitor gets a
 // sense of what an event is about without opening its "More info" modal.
 // Pulled from the first real paragraph — headings ("## Agenda"), rules, and
@@ -130,11 +128,11 @@ function toPlainText(text: string): string {
 // (rare) yields no excerpt rather than a confusing fragment.
 export function getDescriptionExcerpt(description: string): string {
   const firstParagraph = parseEventDescription(description).find(
-    (block) => block.type === "paragraph"
+    (block): block is Tokens.Paragraph => block.type === "paragraph"
   );
   if (!firstParagraph) return "";
 
-  const plain = toPlainText(firstParagraph.text);
+  const plain = inlineTokensToPlainText(firstParagraph.tokens).replace(/\s+/g, " ").trim();
   if (plain.length <= EXCERPT_MAX_LENGTH) return plain;
 
   const truncated = plain.slice(0, EXCERPT_MAX_LENGTH);
@@ -166,14 +164,8 @@ function toDisplayName(raw: string): string {
 // use this format, so callers should fall back to a plain excerpt.
 export function getEventSpeakers(description: string): string[] {
   const blocks = parseEventDescription(description);
-  // The label often shares a block with a preceding "---" rule (joined by a
-  // single newline rather than the blank line that would split them into
-  // separate blocks), so check each line of a paragraph block rather than
-  // requiring the whole block to be just the label.
   const sectionStart = blocks.findIndex(
-    (block) =>
-      block.type === "paragraph" &&
-      block.text.split("\n").some((line) => SPEAKER_SECTION_LABEL_RE.test(line.trim()))
+    (block) => block.type === "paragraph" && SPEAKER_SECTION_LABEL_RE.test(block.raw.trim())
   );
   if (sectionStart === -1) return [];
 
@@ -182,7 +174,7 @@ export function getEventSpeakers(description: string): string[] {
     const block = blocks[i];
     if (block.type !== "paragraph") break;
 
-    const nameLine = block.text.split("\n")[0].trim();
+    const nameLine = block.raw.split("\n")[0].trim();
     const match = nameLine.match(SPEAKER_NAME_LINE_RE);
     if (!match) break;
 
@@ -202,39 +194,4 @@ export function formatSpeakerList(names: string[]): string {
   }
   const shown = names.slice(0, MAX_LISTED_SPEAKERS).join(", ");
   return `${shown} and ${names.length - MAX_LISTED_SPEAKERS} more`;
-}
-
-// Renders **bold**/*italic* spans (a link can appear nested inside either,
-// e.g. "*Summary taken from ... [Just World Books](url)*"), auto-links bare
-// URLs and [label](url) links, and turns single newlines into <br/>. No raw
-// HTML is ever injected, so there's no sanitization surface to worry about.
-export function renderInlineText(text: string, keyPrefix: string): React.ReactNode[] {
-  const nodes: React.ReactNode[] = [];
-
-  text.split("\n").forEach((line, lineIndex) => {
-    if (lineIndex > 0) nodes.push(<br key={`${keyPrefix}-br-${lineIndex}`} />);
-
-    line
-      .split(EMPHASIS_PATTERN)
-      .filter(Boolean)
-      .forEach((part, partIndex) => {
-        const key = `${keyPrefix}-${lineIndex}-${partIndex}`;
-
-        const boldMatch = part.match(BOLD_RE);
-        if (boldMatch) {
-          nodes.push(<strong key={key}>{renderLinksAndUrls(boldMatch[1], key)}</strong>);
-          return;
-        }
-
-        const italicMatch = part.match(ITALIC_RE);
-        if (italicMatch) {
-          nodes.push(<em key={key}>{renderLinksAndUrls(italicMatch[1], key)}</em>);
-          return;
-        }
-
-        nodes.push(...renderLinksAndUrls(part, key));
-      });
-  });
-
-  return nodes;
 }
