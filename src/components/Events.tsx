@@ -16,7 +16,7 @@ import {
   getDescriptionExcerpt,
   getEventSpeakers,
   parseEventDescription,
-  renderInlineText,
+  renderInlineTokens,
 } from "../utils/eventDescription";
 import { EventPreviewImage } from "./events/EventPreviewImage";
 import {
@@ -115,7 +115,7 @@ function EventDescription({ text }: { text: string }) {
         if (block.type === "heading") {
           return (
             <p key={i} className={`font-medium text-gray-900 ${TS_EYEBROW_SIZE}`}>
-              {renderInlineText(block.text, `h-${i}`)}
+              {renderInlineTokens(block.tokens, `h-${i}`)}
             </p>
           );
         }
@@ -128,7 +128,7 @@ function EventDescription({ text }: { text: string }) {
             >
               {block.items.map((item, j) => (
                 <li key={j} className="text-gray-600">
-                  {renderInlineText(item, `l-${i}-${j}`)}
+                  {renderInlineTokens(item.tokens, `l-${i}-${j}`)}
                 </li>
               ))}
             </ListTag>
@@ -136,7 +136,7 @@ function EventDescription({ text }: { text: string }) {
         }
         return (
           <p key={i} className={`text-gray-600 ${TS_BODY_SIZE}`}>
-            {renderInlineText(block.text, `p-${i}`)}
+            {"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}
           </p>
         );
       })}
