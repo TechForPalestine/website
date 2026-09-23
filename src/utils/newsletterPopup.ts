@@ -7,6 +7,10 @@ export const POPUP_FLAG = "homepage-newsletter-popup";
 export const POPUP_STORAGE_KEY = "t4p-newsletter-popup";
 export const SHOW_DELAY_MS = 10_000;
 export const SCROLL_TRIGGER_RATIO = 0.35;
+// How long the open card/bar can sit untouched before it collapses itself
+// back down to a small button. Any hover, focus, or activity signal from the
+// embedded form (see EMBED_MESSAGE_SOURCE) resets this.
+export const COLLAPSE_IDLE_MS = 30_000;
 export const DISMISS_SUPPRESS_MS = 30 * 24 * 60 * 60 * 1000;
 export const EMBED_PATH = "/newsletter-embed";
 export const EMBED_MESSAGE_SOURCE = "t4p-newsletter-embed";
@@ -19,7 +23,13 @@ export const DESKTOP_QUERY = "(min-width: 768px)";
 export const POPUP_SUBSCRIBED_EVENT = "t4p:newsletter-subscribed";
 
 export type PopupState = { dismissedAt: number } | { subscribed: true } | null;
-export type EmbedMessage = { type: "resize"; height: number } | { type: "success" };
+export type EmbedMessage =
+  | { type: "resize"; height: number }
+  | { type: "success" }
+  // Any keystroke/click inside the embedded form — the parent can't see
+  // activity inside the iframe any other way, and needs it to keep the
+  // idle-collapse timer from firing while someone's mid-typing.
+  | { type: "interaction" };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -91,6 +101,7 @@ export function hasReachedScrollTrigger(
 export function parseEmbedMessage(data: unknown): EmbedMessage | null {
   if (!isRecord(data) || data.source !== EMBED_MESSAGE_SOURCE) return null;
   if (data.type === "success") return { type: "success" };
+  if (data.type === "interaction") return { type: "interaction" };
   if (data.type === "resize" && typeof data.height === "number" && Number.isFinite(data.height)) {
     if (data.height <= 0) return null;
     return { type: "resize", height: Math.min(Math.ceil(data.height), MAX_EMBED_HEIGHT) };

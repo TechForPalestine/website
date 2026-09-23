@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
 import GrowthBookProvider from "../GrowthBookProvider";
 import {
+  COLLAPSE_IDLE_MS,
   DESKTOP_QUERY,
   EMBED_PATH,
   FOOTER_SECTION_ID,
@@ -86,10 +87,14 @@ function Popup() {
   const bottomFormInView = useInView(FOOTER_SECTION_ID);
   const isDesktop = useIsDesktop();
   const [closed, setClosed] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  // Desktop opens straight to the card; mobile starts collapsed to a slim bar
+  // (see the render branch below — the same collapsed/expanded split now also
+  // drives the 30s idle auto-collapse on both).
+  const [expanded, setExpanded] = useState(isDesktop);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const subscribedRef = useRef(false);
   const shownRef = useRef(false);
+  const resetIdleTimerRef = useRef(() => {});
 
   const mounted = enabled && eligible && triggered && !closed;
   const visible = mounted && !bottomFormInView;
@@ -100,6 +105,28 @@ function Popup() {
     window.plausible("Newsletter Popup Shown");
   }, [visible]);
 
+  // Auto-collapse the open card/bar after COLLAPSE_IDLE_MS of no activity.
+  // Only runs while it's actually open and on screen; reset() is called from
+  // the message handler below (for activity inside the iframe) and from
+  // onMouseMove/onFocus on the rendered card/bar (for activity outside it).
+  useEffect(() => {
+    if (!visible || !expanded) {
+      resetIdleTimerRef.current = () => {};
+      return;
+    }
+    let timer: number;
+    const reset = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setExpanded(false), COLLAPSE_IDLE_MS);
+    };
+    resetIdleTimerRef.current = reset;
+    reset();
+    return () => {
+      window.clearTimeout(timer);
+      resetIdleTimerRef.current = () => {};
+    };
+  }, [visible, expanded]);
+
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       const frame = iframeRef.current;
@@ -109,8 +136,14 @@ function Popup() {
       if (message.type === "resize") {
         // CSSOM, not a style="" attribute: the CSP blocks the latter.
         frame.style.height = `${message.height}px`;
+        resetIdleTimerRef.current();
         return;
       }
+      if (message.type === "interaction") {
+        resetIdleTimerRef.current();
+        return;
+      }
+      resetIdleTimerRef.current();
       if (subscribedRef.current) return;
       subscribedRef.current = true;
       writePopupState(safeLocalStorage(), { subscribed: true });
@@ -153,11 +186,15 @@ function Popup() {
   if (!mounted) return null;
   const hiddenClass = visible ? "" : "hidden";
 
-  // Mobile, collapsed: a slim bar. Google treats small, dismissible banners as non-intrusive.
-  if (!isDesktop && !expanded) {
+  // Collapsed: a small pill button. Full-width bar on mobile; anchored to the
+  // corner on desktop. A fresh element each time (this branch swaps with the
+  // card branch below, never both), so animate-fadeIn plays on every
+  // collapse, not just the first.  Google treats small, dismissible banners
+  // as non-intrusive, so this also covers the mobile "not yet opened" state.
+  if (!expanded) {
     return (
       <div
-        className={`fixed inset-x-4 bottom-4 z-40 flex items-center gap-2 rounded-pill bg-grove py-1 pl-5 pr-1 shadow-lg ${hiddenClass}`}
+        className={`fixed inset-x-4 bottom-4 z-40 flex animate-fadeIn items-center gap-2 rounded-pill bg-grove py-1 pl-5 pr-1 shadow-lg md:inset-x-auto md:right-4 md:w-auto md:pl-6 ${hiddenClass}`}
       >
         <button
           type="button"
@@ -174,7 +211,9 @@ function Popup() {
   return (
     <aside
       aria-label="Join our mailing list"
-      className={`fixed bottom-4 right-4 z-40 w-[calc(100vw-2rem)] max-w-[380px] rounded-md border border-ink-divider bg-paper p-4 pt-10 shadow-lg md:right-6 ${hiddenClass}`}
+      className={`fixed bottom-4 right-4 z-40 w-[calc(100vw-2rem)] max-w-[380px] animate-fadeIn rounded-md border border-ink-divider bg-paper p-4 pt-10 shadow-lg md:right-6 ${hiddenClass}`}
+      onMouseMove={() => resetIdleTimerRef.current()}
+      onFocus={() => resetIdleTimerRef.current()}
     >
       <CloseButton onClick={close} />
       <iframe

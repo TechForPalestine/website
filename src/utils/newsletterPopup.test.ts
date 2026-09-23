@@ -125,6 +125,12 @@ describe("parseEmbedMessage", () => {
     expect(parseEmbedMessage({ source: EMBED_MESSAGE_SOURCE, type: "success" })).toEqual({ type: "success" });
   });
 
+  it("accepts an interaction from the embed", () => {
+    expect(parseEmbedMessage({ source: EMBED_MESSAGE_SOURCE, type: "interaction" })).toEqual({
+      type: "interaction",
+    });
+  });
+
   it.each([
     null,
     "success",
@@ -140,5 +146,9 @@ describe("parseEmbedMessage", () => {
 
   it("round-trips what the embed sends", () => {
     expect(parseEmbedMessage(toEmbedPayload({ type: "success" }))).toEqual({ type: "success" });
+  });
+
+  it("round-trips an interaction", () => {
+    expect(parseEmbedMessage(toEmbedPayload({ type: "interaction" }))).toEqual({ type: "interaction" });
   });
 });
