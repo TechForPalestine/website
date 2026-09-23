@@ -117,7 +117,7 @@ export function E4PPage() {
                   src="https://calendly.com/hsyed-hsyedlegal/entrepreneurs-for-palestine?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
                   width="100%"
                   height="100%"
-                  frameBorder="0"
+                  style={{ border: 0 }}
                   allow="fullscreen"
                 />
               </Box>
@@ -146,7 +146,7 @@ export function E4PPage() {
                   src="https://calendly.com/megan-techforpalestine/30min?background_color=ffffff&text_color=1a1a1a&primary_color=cf1026"
                   width="100%"
                   height="100%"
-                  frameBorder="0"
+                  style={{ border: 0 }}
                   allow="fullscreen"
                 />
               </Box>
