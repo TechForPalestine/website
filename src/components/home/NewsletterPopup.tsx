@@ -157,7 +157,7 @@ function Popup() {
   if (!isDesktop && !expanded) {
     return (
       <div
-        className={`fixed inset-x-4 bottom-20 z-40 flex items-center gap-2 rounded-pill bg-grove py-1 pl-5 pr-1 shadow-lg ${hiddenClass}`}
+        className={`fixed inset-x-4 bottom-4 z-40 flex items-center gap-2 rounded-pill bg-grove py-1 pl-5 pr-1 shadow-lg ${hiddenClass}`}
       >
         <button
           type="button"
@@ -171,11 +171,10 @@ function Popup() {
     );
   }
 
-  // bottom-20 / md:bottom-24 keeps clear of the pal-chat launcher, which owns the bottom corners.
   return (
     <aside
       aria-label="Join our mailing list"
-      className={`fixed bottom-20 right-4 z-40 w-[calc(100vw-2rem)] max-w-[380px] rounded-md border border-ink-divider bg-paper p-4 pt-10 shadow-lg md:bottom-24 md:right-6 ${hiddenClass}`}
+      className={`fixed bottom-4 right-4 z-40 w-[calc(100vw-2rem)] max-w-[380px] rounded-md border border-ink-divider bg-paper p-4 pt-10 shadow-lg md:right-6 ${hiddenClass}`}
     >
       <CloseButton onClick={close} />
       <iframe
