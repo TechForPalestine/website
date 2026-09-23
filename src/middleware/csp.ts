@@ -1,4 +1,5 @@
 import { defineMiddleware } from "astro:middleware";
+import { buildCspHeader, frameOptionsFor } from "./cspHeader";
 
 // HTMLRewriter is a Cloudflare Workers global — not available in Node types
 declare const HTMLRewriter: new () => {
@@ -20,18 +21,7 @@ export const csp = defineMiddleware(async (context, next) => {
     return response;
   }
 
-  const cspHeader = [
-    "default-src 'self'",
-    // 'strict-dynamic' trusts scripts loaded by nonced scripts; removes need for 'unsafe-inline'
-    `script-src 'nonce-${nonce}' 'strict-dynamic' https://secure.qgiv.com https://pal-chat.net https://techforpalestine.org/cdn-cgi/ https://eomail4.com https://www.google.com https://www.gstatic.com https://cdn.jsdelivr.net https://prod-donation-elements-b-donationelementsjsfilesb-1m4f4dl6p6b21.s3.us-east-2.amazonaws.com`,
-    `style-src 'nonce-${nonce}' 'self' https://fonts.googleapis.com https://secure.qgiv.com`,
-    "font-src 'self' https://fonts.gstatic.com https://gallery.eo.page",
-    "img-src 'self' data: https:",
-    "connect-src 'self' https://plausible.io https://pal-chat.net https://eomail4.com https://www.google.com https://1k0gztb8b2.execute-api.us-east-2.amazonaws.com https://www.charitystack.com https://www.donation.charitystack.com https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io",
-    "frame-src https://secure.qgiv.com https://calendly.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://validaid.org https://www.charitystack.com",
-    "object-src 'none'",
-    "base-uri 'self'",
-  ].join("; ");
+  const cspHeader = buildCspHeader(nonce, context.url.pathname);
 
   // HTMLRewriter is only available in Cloudflare Workers (not Node/dev).
   // Without it we can't inject nonces into scripts, so enforcing a nonce-based
@@ -56,5 +46,8 @@ export const csp = defineMiddleware(async (context, next) => {
 
   const transformed = rewriter.transform(response);
   transformed.headers.set("Content-Security-Policy", cspHeader);
+  // Set here, not in public/_headers: Cloudflare doesn't apply _headers to
+  // Pages Functions responses, and every HTML page on this site is SSR.
+  transformed.headers.set("X-Frame-Options", frameOptionsFor(context.url.pathname));
   return transformed;
 });
