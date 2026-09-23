@@ -43,6 +43,8 @@ interface JoinFlowProps {
    * choice would just relitigate a decision the visitor already made by
    * being there. Omitted on /membership, which serves both tiers. */
   fixedTier?: MembershipTier;
+  /** Hides the dues calculator on the payment step — used on /supporting-member. */
+  hideCalculator?: boolean;
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
    * of plain Tailwind sizes — only correct where `design-system.css` is
    * loaded (HomeLayout, i.e. /membership-new). The legacy /membership page
@@ -279,7 +281,7 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
   );
 }
 
-export default function JoinFlow({ designSystem = false, fixedTier }: JoinFlowProps) {
+export default function JoinFlow({ designSystem = false, fixedTier, hideCalculator }: JoinFlowProps) {
   const styles = getStyles(designSystem);
   const steps = fixedTier ? STEPS.filter((s) => s.id !== "tier") : STEPS;
   const [step, setStep] = useState<StepId>("about-you");
@@ -391,9 +393,11 @@ export default function JoinFlow({ designSystem = false, fixedTier }: JoinFlowPr
 
       {step === "payment" && tier && (
         <div>
-          <div className="mb-5">
-            <MembershipCalculator theme="green" designSystem={designSystem} />
-          </div>
+          {!hideCalculator && (
+            <div className="mb-5">
+              <MembershipCalculator theme="green" designSystem={designSystem} />
+            </div>
+          )}
           {mountedTiers.map((mountedTier) => (
             <div key={mountedTier} className={tier === mountedTier ? "block" : "hidden"}>
               <QgivJoin tier={mountedTier} prefill={prefill} />
