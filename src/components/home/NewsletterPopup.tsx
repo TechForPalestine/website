@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
 import GrowthBookProvider from "../GrowthBookProvider";
 import {
+  AUTO_CLOSE_AFTER_SUCCESS_MS,
   COLLAPSE_IDLE_MS,
   DESKTOP_QUERY,
   EMBED_PATH,
@@ -148,6 +149,10 @@ function Popup() {
       subscribedRef.current = true;
       writePopupState(safeLocalStorage(), { subscribed: true });
       window.plausible("Newsletter Signup", { props: { source: "popup" } });
+      // Give the visitor a moment to see EmailOctopus's "Thanks for
+      // subscribing!" message, then close on our own — setClosed directly,
+      // not close(), so this never counts as a dismissal.
+      window.setTimeout(() => setClosed(true), AUTO_CLOSE_AFTER_SUCCESS_MS);
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);

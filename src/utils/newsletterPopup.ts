@@ -11,6 +11,9 @@ export const SCROLL_TRIGGER_RATIO = 0.35;
 // back down to a small button. Any hover, focus, or activity signal from the
 // embedded form (see EMBED_MESSAGE_SOURCE) resets this.
 export const COLLAPSE_IDLE_MS = 30_000;
+// How long to leave EmailOctopus's "Thanks for subscribing!" message on
+// screen before the popup closes itself.
+export const AUTO_CLOSE_AFTER_SUCCESS_MS = 3_000;
 export const DISMISS_SUPPRESS_MS = 30 * 24 * 60 * 60 * 1000;
 export const EMBED_PATH = "/newsletter-embed";
 export const EMBED_MESSAGE_SOURCE = "t4p-newsletter-embed";
