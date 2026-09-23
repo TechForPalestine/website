@@ -190,7 +190,7 @@ function EventDetailsDialogBody({
       onClose={onClose}
       maxWidth="sm"
       fullWidth
-      PaperProps={{ sx: { borderRadius: "16px" } }}
+      slotProps={{ paper: { sx: { borderRadius: "16px" } } }}
     >
       {/* No fixed aspect ratio or box height here: YouTube thumbnails are
           16:9, but flyer-style previews are often taller. Forcing w-full

@@ -56,19 +56,23 @@ export function RHFSelect({
               label
             )
           }
-          SelectProps={{
-            native,
-            MenuProps: {
-              PaperProps: {
-                sx: {
-                  ...(!native && {
-                    maxHeight: typeof maxHeight === "number" ? maxHeight : "unset",
-                  }),
-                  ...PaperPropsSx,
+          slotProps={{
+            select: {
+              native,
+              MenuProps: {
+                slotProps: {
+                  paper: {
+                    sx: {
+                      ...(!native && {
+                        maxHeight: typeof maxHeight === "number" ? maxHeight : "unset",
+                      }),
+                      ...PaperPropsSx,
+                    },
+                  },
                 },
               },
+              sx: { textTransform: "capitalize" },
             },
-            sx: { textTransform: "capitalize" },
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}

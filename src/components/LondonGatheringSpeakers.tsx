@@ -123,9 +123,11 @@ export default function LondonGatheringSpeakers({
         onClose={handleClose}
         maxWidth="sm"
         fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: "16px",
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: "16px",
+            },
           },
         }}
       >
