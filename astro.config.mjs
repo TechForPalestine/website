@@ -108,6 +108,7 @@ export default defineConfig({
           "/endorsements-new/",
           "/e4p/pledge-new/",
           "/growthbook-test/",
+          "/newsletter-embed/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
