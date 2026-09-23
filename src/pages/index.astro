@@ -481,14 +481,24 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
   </main>
   <NewsletterPopup client:only="react" />
   <script>
-    import { FOOTER_SECTION_ID } from "../utils/newsletterPopup";
+    import {
+      FOOTER_SECTION_ID,
+      POPUP_SUBSCRIBED_EVENT,
+      safeLocalStorage,
+      writePopupState,
+    } from "../utils/newsletterPopup";
     import { watchSignupSuccess } from "../utils/watchSignupSuccess";
 
     const bottomForm = document.getElementById(FOOTER_SECTION_ID);
     if (bottomForm) {
-      watchSignupSuccess(bottomForm, () =>
-        window.plausible("Newsletter Signup", { props: { source: "footer" } })
-      );
+      watchSignupSuccess(bottomForm, () => {
+        // Record the subscription for the popup's own suppression logic, and
+        // tell any already-mounted popup instance to stand down on this page
+        // load too — it read storage once at mount and won't see this write.
+        writePopupState(safeLocalStorage(), { subscribed: true });
+        window.dispatchEvent(new CustomEvent(POPUP_SUBSCRIBED_EVENT));
+        window.plausible("Newsletter Signup", { props: { source: "footer" } });
+      });
     }
   </script>
 </Layout>

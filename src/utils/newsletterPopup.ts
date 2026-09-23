@@ -13,6 +13,10 @@ export const EMBED_MESSAGE_SOURCE = "t4p-newsletter-embed";
 export const MAX_EMBED_HEIGHT = 1200;
 export const FOOTER_SECTION_ID = "mailing-list";
 export const DESKTOP_QUERY = "(min-width: 768px)";
+// Fired on window when the bottom-of-page ("footer") mailing-list form
+// completes a signup, so a mounted popup (already read storage once at
+// mount) can stand itself down on the current page load too.
+export const POPUP_SUBSCRIBED_EVENT = "t4p:newsletter-subscribed";
 
 export type PopupState = { dismissedAt: number } | { subscribed: true } | null;
 export type EmbedMessage = { type: "resize"; height: number } | { type: "success" };

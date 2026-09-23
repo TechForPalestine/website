@@ -6,6 +6,7 @@ import {
   EMBED_PATH,
   FOOTER_SECTION_ID,
   POPUP_FLAG,
+  POPUP_SUBSCRIBED_EVENT,
   SHOW_DELAY_MS,
   hasReachedScrollTrigger,
   isSuppressed,
@@ -117,6 +118,20 @@ function Popup() {
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
+  }, []);
+
+  // The bottom-of-page form is a second way to subscribe. When it succeeds,
+  // index.astro's watcher persists { subscribed: true } to storage AND fires
+  // this event, so a popup that's already mounted (it read storage once, at
+  // mount) stands down on this page load too — without counting as a
+  // dismissal, since the visitor did subscribe.
+  useEffect(() => {
+    const onSubscribedElsewhere = () => {
+      subscribedRef.current = true;
+      setClosed(true);
+    };
+    window.addEventListener(POPUP_SUBSCRIBED_EVENT, onSubscribedElsewhere);
+    return () => window.removeEventListener(POPUP_SUBSCRIBED_EVENT, onSubscribedElsewhere);
   }, []);
 
   const close = () => {
