@@ -151,7 +151,6 @@ const canonicalUrl = new URL(
 
     <slot name="head" />
 
-    <script is:inline defer src="https://pal-chat.net/pal-chat-lite/latest/ChatBox.js"></script>
     <!-- Privacy-friendly analytics -->
     <script is:inline async src="/js/web.js"></script>
     <script>
@@ -173,8 +172,8 @@ const canonicalUrl = new URL(
   <body class="relative flex min-h-screen flex-col bg-white text-gray-900">
     <Navigation />
 
-    <!-- Floating Donate tab. Kept on the right edge, mid-height: the pal-chat widget owns
-         the bottom corners. Rests tucked so only the heart shows; hover or keyboard focus
+    <!-- Floating Donate tab. Kept on the right edge, mid-height. Rests tucked so only the
+         heart shows; hover or keyboard focus
          slides the label out. Hidden below md; the nav carries Donate on small screens. -->
     {
       !hideDonatePopout && (
