@@ -1,0 +1,33 @@
+---
+interface Props {
+  quote: string;
+  name: string;
+  role: string;
+  image?: string;
+}
+
+const { quote, name, role, image } = Astro.props;
+---
+
+<figure class="flex flex-col rounded-lg border border-[#D2E4D6] bg-white p-7">
+  <blockquote class="text-[19px] leading-relaxed tracking-tight text-ink">"{quote}"</blockquote>
+  <figcaption class="mt-auto flex items-center gap-3 pt-6">
+    {
+      image && (
+        <img
+          src={image}
+          alt=""
+          width="34"
+          height="34"
+          loading="lazy"
+          decoding="async"
+          class="block h-[34px] w-[34px] shrink-0 rounded-full object-cover"
+        />
+      )
+    }
+    <span class="block leading-snug">
+      <strong class="block text-[13px] font-bold text-ink">{name}</strong>
+      <span class="text-[13px] text-ink-secondary">{role}</span>
+    </span>
+  </figcaption>
+</figure>

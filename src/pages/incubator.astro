@@ -10,6 +10,7 @@ import {
   supportIntro,
 } from "../data/incubator";
 import { getTestimonials } from "../data/testimonials";
+import TestimonialCard from "../components/membership/TestimonialCard.astro";
 import "../styles/base.css";
 
 const container = "mx-auto max-w-[1280px] px-6 sm:px-8";
@@ -21,12 +22,17 @@ const bandShell = "border-y border-[#D2E4D6] bg-[#E7F2E9]";
 const primaryButton =
   "inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#157A3E] px-7 py-3.5 font-bold text-white shadow-sm transition-colors duration-150 hover:bg-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
 
-// Founders only: this page recruits project leads. Hani & Said are held back
+// Project leaders only: this page recruits them. Hani & Said are held back
 // on /supporting-member pending approval, so they stay off this page too.
+// "Founder" is shown as "Project Leader" on this page.
 const HIDDEN_FOR_NOW = ["Hani & Said Chihabi"];
-const founderVoices = getTestimonials()
+const projectLeaderVoices = getTestimonials()
   .filter((t) => t.kind === "founder" && !HIDDEN_FOR_NOW.includes(t.name))
-  .map((t) => ({ ...t, image: t.headshot ?? t.headshots?.[0] }));
+  .map((t) => ({
+    ...t,
+    role: t.role.replace("Founder", "Project Leader"),
+    image: t.headshot ?? t.headshots?.[0],
+  }));
 ---
 
 <Layout
@@ -205,37 +211,16 @@ const founderVoices = getTestimonials()
       </div>
     </section>
 
-    <!-- Band: founder voices -->
+    <!-- Band: project leader voices -->
     {
-      founderVoices.length > 0 && (
+      projectLeaderVoices.length > 0 && (
         <section class={bandShell}>
           <div class={`${container} py-14 min-[810px]:py-16`}>
             <p class={overline}>From project leaders</p>
-            <h2 class={`max-w-[28ch] ${h2}`}>What incubated founders say.</h2>
+            <h2 class={`max-w-[28ch] ${h2}`}>What incubated project leaders say.</h2>
             <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
-              {founderVoices.map((t) => (
-                <figure class="flex flex-col rounded-lg border border-[#D2E4D6] bg-white p-7">
-                  <blockquote class="text-[19px] leading-relaxed tracking-tight text-ink">
-                    "{t.quote}"
-                  </blockquote>
-                  <figcaption class="mt-auto flex items-center gap-3 pt-6">
-                    {t.image && (
-                      <img
-                        src={t.image}
-                        alt=""
-                        width="40"
-                        height="40"
-                        loading="lazy"
-                        decoding="async"
-                        class="block h-10 w-10 rounded-full object-cover"
-                      />
-                    )}
-                    <span class="block leading-snug">
-                      <strong class="block text-[15px] font-bold text-ink">{t.name}</strong>
-                      <span class="text-[15px] text-ink-secondary">{t.role}</span>
-                    </span>
-                  </figcaption>
-                </figure>
+              {projectLeaderVoices.map((t) => (
+                <TestimonialCard quote={t.quote} name={t.name} role={t.role} image={t.image} />
               ))}
             </div>
           </div>
