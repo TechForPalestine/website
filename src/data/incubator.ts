@@ -103,27 +103,37 @@ export const notRequired: IncubatorItem[] = [
   },
 ];
 
-export const applicationSteps: IncubatorItem[] = [
+/** `when` is what the applicant sees first: how long a step takes or when it happens. */
+export interface ApplicationStep extends IncubatorItem {
+  when: string;
+}
+
+export const applicationSteps: ApplicationStep[] = [
   {
+    when: "10 to 30 minutes",
     title: "Apply",
     description: "Fill out the application form. It takes 10 to 30 minutes.",
   },
   {
+    when: "After you apply",
     title: "Review",
     description:
       "We review your application and invite selected projects to interview. Sometimes we reach out for more information first.",
   },
   {
+    when: "A 30-minute call",
     title: "Interview",
     description:
       "A 30-minute call about the impact you intend to have and how you'll get there. Please don't prepare slides. Interviews are direct and push on your understanding of the problem.",
   },
   {
+    when: "Within 10 days",
     title: "Decision",
     description:
       "We decide whether to admit you and tell you as soon as possible. Sometimes we follow up with more questions first.",
   },
   {
+    when: "If admitted",
     title: "Next steps",
     description:
       "If admitted, you'll get an email with next steps and access to Tech for Palestine's resources.",
