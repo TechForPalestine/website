@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
@@ -38,6 +38,13 @@ const SUPPORTING_BENEFITS = [
 ];
 
 interface JoinFlowProps {
+  /** Locks the flow to one membership tier and skips the tier-selection step
+   * — used on tier-specific pages (e.g. /supporting-member) where offering a
+   * choice would just relitigate a decision the visitor already made by
+   * being there. Omitted on /membership, which serves both tiers. */
+  fixedTier?: MembershipTier;
+  /** Hides the dues calculator on the payment step — used on /supporting-member. */
+  hideCalculator?: boolean;
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
    * of plain Tailwind sizes — only correct where `design-system.css` is
    * loaded (HomeLayout, i.e. /membership-new). The legacy /membership page
@@ -103,17 +110,32 @@ function splitName(name: string): { firstName: string; lastName: string } {
 }
 
 interface AboutYouFormProps {
+  heading: string;
   initialValues: AboutYouData | null;
   submitting: boolean;
   styles: StyleSet;
   onContinue: (data: AboutYouData) => void;
 }
 
-function AboutYouForm({ initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
+function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  // The "Become a Member" / "Become a Supporting Member" CTAs are all plain
+  // `href="#join"` anchors, so the browser's own hash navigation is the
+  // signal to focus the form — no click handler needed here. Checked on
+  // mount too, for a visitor who lands directly on a #join URL.
+  useEffect(() => {
+    const focusIfJoin = () => {
+      if (window.location.hash === "#join") nameInputRef.current?.focus();
+    };
+    focusIfJoin();
+    window.addEventListener("hashchange", focusIfJoin);
+    return () => window.removeEventListener("hashchange", focusIfJoin);
+  }, []);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -131,12 +153,13 @@ function AboutYouForm({ initialValues, submitting, styles, onContinue }: AboutYo
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2 className={`mb-5 ${styles.heading}`}>Become a Member</h2>
+      <h2 className={`mb-5 ${styles.heading}`}>{heading}</h2>
 
       <label htmlFor="join-name" className={`mb-1.5 block ${styles.fieldLabel}`}>
         Name
       </label>
       <input
+        ref={nameInputRef}
         id="join-name"
         type="text"
         value={name}
@@ -258,21 +281,22 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
   );
 }
 
-export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
+export default function JoinFlow({ designSystem = false, fixedTier, hideCalculator }: JoinFlowProps) {
   const styles = getStyles(designSystem);
+  const steps = fixedTier ? STEPS.filter((s) => s.id !== "tier") : STEPS;
   const [step, setStep] = useState<StepId>("about-you");
   const [aboutYou, setAboutYou] = useState<AboutYouData | null>(null);
-  const [tier, setTier] = useState<MembershipTier | null>(null);
-  const [mountedTiers, setMountedTiers] = useState<MembershipTier[]>([]);
+  const [tier, setTier] = useState<MembershipTier | null>(fixedTier ?? null);
+  const [mountedTiers, setMountedTiers] = useState<MembershipTier[]>(fixedTier ? [fixedTier] : []);
   const [advancing, setAdvancing] = useState(false);
 
-  const stepIndex = STEPS.findIndex((s) => s.id === step);
+  const stepIndex = steps.findIndex((s) => s.id === step);
 
   function handleAboutYouContinue(data: AboutYouData) {
     setAboutYou(data);
     setAdvancing(true);
     window.setTimeout(() => {
-      setStep("tier");
+      setStep(fixedTier ? "payment" : "tier");
       setAdvancing(false);
     }, NEXT_BUTTON_LOADING_MS);
   }
@@ -294,11 +318,12 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
   return (
     <div className="rounded-[10px] border border-ink-divider bg-white p-7 shadow-sm">
       <p className={`mb-4 ${styles.stepLabel}`}>
-        Step {stepIndex + 1} of {STEPS.length}: {STEPS[stepIndex]?.label}
+        Step {stepIndex + 1} of {steps.length}: {steps[stepIndex]?.label}
       </p>
 
       {step === "about-you" && (
         <AboutYouForm
+          heading={fixedTier === "supporting" ? "Become a Supporting Member" : "Become a Member"}
           initialValues={aboutYou}
           submitting={advancing}
           styles={styles}
@@ -306,7 +331,7 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
         />
       )}
 
-      {step === "tier" && (
+      {!fixedTier && step === "tier" && (
         <div>
           <button type="button" onClick={() => setStep("about-you")} className={`mb-4 ${styles.backLink}`}>
             &larr; Back
@@ -368,9 +393,11 @@ export default function JoinFlow({ designSystem = false }: JoinFlowProps) {
 
       {step === "payment" && tier && (
         <div>
-          <div className="mb-5">
-            <MembershipCalculator theme="green" designSystem={designSystem} />
-          </div>
+          {!hideCalculator && (
+            <div className="mb-5">
+              <MembershipCalculator theme="green" designSystem={designSystem} />
+            </div>
+          )}
           {mountedTiers.map((mountedTier) => (
             <div key={mountedTier} className={tier === mountedTier ? "block" : "hidden"}>
               <QgivJoin tier={mountedTier} prefill={prefill} />

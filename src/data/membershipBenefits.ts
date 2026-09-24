@@ -52,13 +52,70 @@ export const memberBenefits: string[] = [
 export interface ShowcaseProject {
   name: string;
   logo: string;
+  url: string;
+  /** True when `logo` is a wordmark (name baked into the image) rather than a
+   * bare icon mark — the logo wall only prints a text label next to icon
+   * marks, since a wordmark already names itself. */
+  hasWordmark?: boolean;
 }
 
 /** Projects shown in the logo wall next to the "10M+ users" reach stat. */
 export const showcaseProjects: ShowcaseProject[] = [
-  { name: "UpScrolled", logo: "/images/new-homepage/portfolio/proj-logo-5.webp" },
-  { name: "Boycat", logo: "/images/new-homepage/portfolio/proj-logo-3.webp" },
-  { name: "Find a Protest", logo: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp" },
-  { name: "Thaura", logo: "/images/new-homepage/portfolio/proj-logo-4.webp" },
-  { name: "Apricot", logo: "/images/new-homepage/portfolio/proj-logo-2.webp" },
+  {
+    name: "UpScrolled",
+    logo: "/images/new-homepage/portfolio/proj-logo-5.webp",
+    url: "https://upscrolled.com/en/",
+    hasWordmark: true,
+  },
+  {
+    name: "Boycat",
+    logo: "/images/new-homepage/portfolio/proj-logo-3.webp",
+    url: "https://www.boycat.io/",
+    hasWordmark: true,
+  },
+  {
+    name: "Find a Protest",
+    logo: "/images/new-homepage/portfolio/proj-logo-findaprotest.webp",
+    url: "https://www.findaprotest.info/",
+    hasWordmark: true,
+  },
+  {
+    name: "Thaura",
+    logo: "/images/new-homepage/portfolio/proj-logo-4.webp",
+    url: "https://thaura.ai/home",
+    hasWordmark: true,
+  },
+  {
+    name: "Apricot",
+    logo: "/images/new-homepage/portfolio/proj-logo-2.webp",
+    url: "https://apricotinternational.org/",
+    hasWordmark: true,
+  },
+  {
+    name: "NewsCord",
+    logo: "/newscord.svg",
+    url: "https://newscord.org/",
+  },
+  {
+    name: "GazaBridge",
+    logo: "/gazabridge.png",
+    url: "https://gazabridge.org/",
+  },
+  {
+    name: "Ethicly",
+    logo: "https://www.ethicly.ch/ethicly_logo.svg",
+    url: "https://www.ethicly.ch/",
+    hasWordmark: true,
+  },
+  {
+    name: "A Ween Rayeh",
+    logo: "https://projecthub.techforpalestine.org/public-objects/logos/logo-ebc2f68f-6f71-4a-1761304170508.webp",
+    url: "https://aweenrayeh.com/",
+  },
+  {
+    name: "JayWalk",
+    logo: "https://jaywalkapp.org/assets/jaywalk-hero-6843ef1f.png",
+    url: "https://jaywalkapp.org/",
+    hasWordmark: true,
+  },
 ];

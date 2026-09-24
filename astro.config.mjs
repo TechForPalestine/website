@@ -49,7 +49,7 @@ export default defineConfig({
     !isDev &&
       sentry({
         org: "tech-for-palestine",
-        project: "javascript-astro",
+        project: "website",
         authToken: process.env.SENTRY_AUTH_TOKEN,
         sourceMapsUploadOptions: {
           enabled: !!process.env.SENTRY_AUTH_TOKEN,
