@@ -242,5 +242,75 @@ const founderVoices = getTestimonials()
         </section>
       )
     }
+
+    <!-- Other ways in, for people who want to help but not lead a project yet -->
+    <section class={`${container} py-16 min-[810px]:py-20`}>
+      <h2 class={h2}>Not ready to apply?</h2>
+      <ul class="mt-8 max-w-[860px] border-b border-ink-divider">
+        <li class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+          <div>
+            <p class="text-[19px] font-bold text-ink">You want to lead, but don't have an idea yet</p>
+            <p class="mt-1 text-[17px] text-ink-secondary">
+              Pick one from our list of project ideas.
+            </p>
+          </div>
+          <a
+            href="/ideas"
+            class="shrink-0 rounded-sm text-[17px] font-bold text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none"
+          >
+            Browse project ideas <span aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+          <div>
+            <p class="text-[19px] font-bold text-ink">You'd rather contribute than lead</p>
+            <p class="mt-1 text-[17px] text-ink-secondary">
+              Bring your skills to projects already underway.
+            </p>
+          </div>
+          <a
+            href="/volunteer"
+            class="shrink-0 rounded-sm text-[17px] font-bold text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none"
+          >
+            Register as a volunteer <span aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+      <p class="mt-6 text-[16px] text-ink-secondary">
+        Already applied? We'll reach out to you soon.
+      </p>
+    </section>
+
+    <!-- Terminal CTA: the one dark block on the page, carrying the primary ask -->
+    <section class="bg-[#101010] px-6 py-20 sm:px-8">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+        <h2 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-[32px]">
+          Have a project for Palestine? Let's get it off the ground.
+        </h2>
+        <a
+          href={APPLY_URL}
+          data-track-incubator-click="terminal"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-8 py-3.5 font-bold text-ink shadow-sm transition-colors duration-150 hover:bg-[#F2F3EE] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#101010] motion-reduce:transition-none"
+        >
+          Apply to the incubator
+        </a>
+      </div>
+    </section>
   </main>
+
+  <script>
+    document
+      .querySelectorAll<HTMLAnchorElement>("[data-track-incubator-click]")
+      .forEach((link) => {
+        link.addEventListener("click", () => {
+          if (typeof window.plausible === "undefined") return;
+          window.plausible("Incubator Apply Click", {
+            props: {
+              cta_location: link.dataset.trackIncubatorClick ?? "unknown",
+              destination: link.getAttribute("href") ?? "",
+            },
+          });
+        });
+      });
+  </script>
 </Layout>
