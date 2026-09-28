@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type Reac
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
+import { MEMBER_BENEFITS, SUPPORTING_BENEFITS, TIER_DESCRIPTIONS, type TierBenefit } from "./joinFlowContent";
 import type { MembershipTier, QgivPrefill } from "./qgiv";
 
 const CALENDLY_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
@@ -19,23 +20,6 @@ const STEPS: { id: StepId; label: string }[] = [
  * loading state never becomes visible. Mirrors QgivJoin's own
  * MIN_LOADING_DISPLAY_MS floor. */
 const NEXT_BUTTON_LOADING_MS = 400;
-
-/** Tier-card bullets for the join flow's tier-selection step — distinct from
- * the shared `membershipBenefits` table used on the supporting-member pages,
- * since these are written specifically for the compact card layout here. */
-const MEMBER_BENEFITS = [
-  "Dues fund Palestinian liberation initiatives",
-  "Volunteer or mentor on projects",
-  "Attend community events",
-  "Get exclusive project updates",
-  "Join the private member chat",
-];
-const SUPPORTING_BENEFITS = [
-  "Dues fund Palestinian liberation initiatives",
-  "Attend community events",
-  "Get exclusive project updates",
-  "(Optionally) Mentor projects",
-];
 
 interface JoinFlowProps {
   /** Locks the flow to one membership tier and skips the tier-selection step
@@ -81,7 +65,7 @@ function getStyles(designSystem: boolean): StyleSet {
       link: "ts-body-small font-semibold text-[#157A3E]",
       tierIntro: "ts-body text-ink-secondary",
       tierTitle: "ts-body-large font-semibold text-ink",
-      tierDescription: "ts-body-small text-ink-secondary",
+      tierDescription: "ts-body-small font-semibold text-[#157A3E]",
       tierBenefit: "ts-body-small text-ink-secondary",
       tierNote: "ts-caption text-ink-secondary",
       backLink: "ts-body-small font-semibold text-ink-secondary hover:text-ink",
@@ -97,7 +81,7 @@ function getStyles(designSystem: boolean): StyleSet {
     link: "text-[13px] font-bold text-[#157A3E]",
     tierIntro: "text-[15px] leading-relaxed text-ink-secondary",
     tierTitle: "text-base font-bold text-ink",
-    tierDescription: "text-[15px] leading-relaxed text-ink-secondary",
+    tierDescription: "text-[15px] font-semibold leading-relaxed text-[#157A3E]",
     tierBenefit: "text-[15px] text-ink-secondary",
     tierNote: "text-[13px] leading-relaxed text-ink-secondary",
     backLink: "text-sm font-semibold text-ink-secondary hover:text-ink",
@@ -216,7 +200,7 @@ interface TierCardProps {
   tier: MembershipTier;
   title: ReactNode;
   description: string;
-  benefits: string[];
+  benefits: readonly TierBenefit[];
   selected: boolean;
   styles: StyleSet;
   onSelect: () => void;
@@ -262,19 +246,25 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
       <p className={`mb-3 ${styles.tierDescription}`}>{description}</p>
       <ul className="space-y-1.5">
         {benefits.map((benefit) => (
-          <li key={benefit} className={`flex items-baseline gap-2 ${styles.tierBenefit}`}>
-            <span
-              aria-hidden="true"
-              className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-[#157A3E]"
-            />
-            {benefit}
+          <li key={benefit.text} className={`flex items-baseline gap-2 ${styles.tierBenefit}`}>
+            {benefit.marker === "arrow" ? (
+              <span aria-hidden="true" className="shrink-0 font-semibold text-[#157A3E]">
+                ➜
+              </span>
+            ) : (
+              <span
+                aria-hidden="true"
+                className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-[#157A3E]"
+              />
+            )}
+            {benefit.text}
           </li>
         ))}
       </ul>
       {tier === "member" && (
         <p className={`mt-3 ${styles.tierNote}`}>
           Note: Our member community is fully vetted. To keep everyone safe and make sure we
-          share the same values, we do a quick identity and alignment check during onboarding.
+          share the same values, we do an identity and alignment check during onboarding.
         </p>
       )}
     </button>
@@ -355,7 +345,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
                   )
                 </>
               }
-              description="If you would like to volunteer on projects & teams."
+              description={TIER_DESCRIPTIONS.member}
               benefits={MEMBER_BENEFITS}
               selected={tier === "member"}
               styles={styles}
@@ -364,7 +354,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
             <TierCard
               tier="supporting"
               title="Supporting Member"
-              description="If you do not have time to volunteer but would like to support financially."
+              description={TIER_DESCRIPTIONS.supporting}
               benefits={SUPPORTING_BENEFITS}
               selected={tier === "supporting"}
               styles={styles}
