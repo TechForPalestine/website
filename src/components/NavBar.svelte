@@ -185,14 +185,14 @@
       </div>
       <a
         href={HUB_URL}
-        class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-[10px] px-5 text-base 2xl:py-[14px] 2xl:px-8 2xl:text-lg rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
+        class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-2 px-4 text-sm 2xl:py-2.5 2xl:px-6 2xl:text-base rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
       >
         Log into Hub
       </a>
       <div>
         <a
           href="/donate"
-          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 text-base 2xl:py-4 2xl:px-10 2xl:text-lg 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-2.5 px-5 text-sm 2xl:py-3 2xl:px-7 2xl:text-base 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
         >
           Donate
         </a>
