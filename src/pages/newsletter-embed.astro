@@ -1,0 +1,54 @@
+---
+// Iframe-only page holding the popup's copy of the EmailOctopus form.
+// EmailOctopus's script finds its form with document.querySelector, so a
+// second copy on the homepage itself would bind to the bottom form; an iframe
+// gives this copy its own document. Framed only by our own origin
+// (src/middleware/cspHeader.ts). No Layout, nav or Plausible on purpose.
+import CspStylePatch from "../components/CspStylePatch.astro";
+import SignUpForm from "../structures/SignUpForm.astro";
+import "../styles/base.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Join our Mailing List</title>
+    <CspStylePatch />
+  </head>
+  <body class="m-0 bg-paper">
+    <SignUpForm />
+    <script>
+      import { toEmbedPayload, type EmbedMessage } from "../utils/newsletterPopup";
+      import { watchSignupSuccess } from "../utils/watchSignupSuccess";
+
+      if (window.parent !== window) {
+        const post = (message: EmbedMessage) =>
+          window.parent.postMessage(toEmbedPayload(message), window.location.origin);
+
+        new ResizeObserver(() => {
+          post({ type: "resize", height: document.body.offsetHeight });
+        }).observe(document.body);
+
+        watchSignupSuccess(document.body, () => post({ type: "success" }));
+
+        // The parent can't see activity inside this iframe any other way, and
+        // uses this to keep its idle-collapse timer from firing while someone's
+        // mid-typing here. Throttled — the timer only needs to know "still
+        // active", not every keystroke.
+        let lastInteraction = 0;
+        const INTERACTION_THROTTLE_MS = 1000;
+        const onInteraction = () => {
+          const now = Date.now();
+          if (now - lastInteraction < INTERACTION_THROTTLE_MS) return;
+          lastInteraction = now;
+          post({ type: "interaction" });
+        };
+        document.addEventListener("keydown", onInteraction);
+        document.addEventListener("pointerdown", onInteraction);
+      }
+    </script>
+  </body>
+</html>

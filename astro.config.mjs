@@ -151,6 +151,7 @@ export default defineConfig({
           "/home-new/",
           "/endorsements-new/",
           "/e4p/pledge-new/",
+          "/newsletter-embed/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

@@ -3,5 +3,6 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  # Content-Security-Policy is set dynamically per-request by src/middleware.ts
-  # using a per-request nonce to avoid 'unsafe-inline' on script-src.
+  # Applies to static assets only: Cloudflare does not apply _headers to SSR
+  # (Pages Functions) responses. For HTML pages, Content-Security-Policy and
+  # X-Frame-Options are set per request in src/middleware/csp.ts.
