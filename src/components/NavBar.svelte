@@ -8,6 +8,8 @@
   // it "children" types as `undefined` and `astro check` rejects any slot content.
   export let children: unknown = undefined;
 
+  const HUB_URL = "https://hub.techforpalestine.org/";
+
   let toggleFlag = false;
   let activeDropdown: string | null = null;
 
@@ -176,6 +178,12 @@
     <!-- Right side: Socials and Donate -->
     <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
       <slot name="socials" />
+      <a
+        href={HUB_URL}
+        class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-[10px] px-5 text-base 2xl:py-[14px] 2xl:px-8 2xl:text-lg rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
+      >
+        Log into Hub
+      </a>
       <div>
         <a
           href="/donate"
@@ -280,6 +288,12 @@
           </div>
         {/each}
       </div>
+      <a
+        href={HUB_URL}
+        class="mt-6 block w-full text-center border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-lg transition-colors duration-200"
+      >
+        Log into Hub
+      </a>
       <div class="mt-6 flex justify-center">
         <slot name="socials" />
       </div>
