@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import JoinFlow from "../components/membership/JoinFlow";
+import DuesUsage from "../components/membership/DuesUsage.astro";
 import { showcaseProjects } from "../data/membershipBenefits";
 import { getTestimonials } from "../data/testimonials";
 import "../styles/base.css";
@@ -250,6 +251,15 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
     <div class="mx-auto max-w-[1280px] px-6 pb-12 pt-16 sm:px-8">
       <div id="join" class="mx-auto max-w-[560px] scroll-mt-24">
         <JoinFlow client:only="react" fixedTier="supporting" hideCalculator />
+        <section
+          aria-labelledby="dues-usage-heading"
+          class="mt-6 rounded-lg border border-ink-divider bg-white px-6 py-5 shadow-sm"
+        >
+          <h2 id="dues-usage-heading" class="mb-3 text-[17px] font-bold text-ink">
+            How does T4P use dues?
+          </h2>
+          <DuesUsage />
+        </section>
       </div>
     </div>
 
