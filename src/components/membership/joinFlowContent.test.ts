@@ -1,5 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { MEMBER_BENEFITS, SUPPORTING_BENEFITS, TIER_DESCRIPTIONS } from "./joinFlowContent";
+import {
+  aboutYouHelper,
+  MEMBER_BENEFITS,
+  showCalculator,
+  SUPPORTING_BENEFITS,
+  TIER_DESCRIPTIONS,
+} from "./joinFlowContent";
 
 describe("tier card content", () => {
   test("descriptions use the client's short taglines", () => {
@@ -37,5 +43,32 @@ describe("tier card content", () => {
       "(Optionally) Mentor projects",
     ]);
     expect(SUPPORTING_BENEFITS.every((b) => b.marker === "dot")).toBe(true);
+  });
+});
+
+describe("showCalculator", () => {
+  test("shows the calculator for members", () => {
+    expect(showCalculator("member", false)).toBe(true);
+  });
+
+  test("hides the calculator for supporting members on /membership", () => {
+    expect(showCalculator("supporting", false)).toBe(false);
+  });
+
+  test("hideCalculator always wins (the /supporting-member page)", () => {
+    expect(showCalculator("supporting", true)).toBe(false);
+    expect(showCalculator("member", true)).toBe(false);
+  });
+});
+
+describe("aboutYouHelper", () => {
+  test("/membership keeps the full dues line", () => {
+    expect(aboutYouHelper(undefined)).toBe(
+      "Dues are pay-what-you-can · Waivers available · Tax deductible in the US",
+    );
+  });
+
+  test("/supporting-member drops pay-what-you-can and waivers", () => {
+    expect(aboutYouHelper("supporting")).toBe("Tax deductible in the US");
   });
 });

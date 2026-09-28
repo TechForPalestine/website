@@ -2,7 +2,14 @@ import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type Reac
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
-import { MEMBER_BENEFITS, SUPPORTING_BENEFITS, TIER_DESCRIPTIONS, type TierBenefit } from "./joinFlowContent";
+import {
+  aboutYouHelper,
+  MEMBER_BENEFITS,
+  showCalculator,
+  SUPPORTING_BENEFITS,
+  TIER_DESCRIPTIONS,
+  type TierBenefit,
+} from "./joinFlowContent";
 import type { MembershipTier, QgivPrefill } from "./qgiv";
 
 const CALENDLY_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
@@ -27,7 +34,9 @@ interface JoinFlowProps {
    * choice would just relitigate a decision the visitor already made by
    * being there. Omitted on /membership, which serves both tiers. */
   fixedTier?: MembershipTier;
-  /** Hides the dues calculator on the payment step — used on /supporting-member. */
+  /** Hides the dues calculator on the payment step for every tier. Used on
+   * /supporting-member. Without it the calculator still only shows for the
+   * Member tier. */
   hideCalculator?: boolean;
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
    * of plain Tailwind sizes — only correct where `design-system.css` is
@@ -95,13 +104,14 @@ function splitName(name: string): { firstName: string; lastName: string } {
 
 interface AboutYouFormProps {
   heading: string;
+  helper: string;
   initialValues: AboutYouData | null;
   submitting: boolean;
   styles: StyleSet;
   onContinue: (data: AboutYouData) => void;
 }
 
-function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
+function AboutYouForm({ heading, helper, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
@@ -186,9 +196,7 @@ function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }
         {submitting ? "Loading…" : "Continue"}
       </button>
 
-      <p className={`mt-3.5 ${styles.helper}`}>
-        Dues are pay-what-you-can &middot; Waivers available &middot; Tax deductible in the US
-      </p>
+      <p className={`mt-3.5 ${styles.helper}`}>{helper}</p>
       <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className={`mt-3 inline-block ${styles.link}`}>
         Book an intro call →
       </a>
@@ -314,6 +322,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
       {step === "about-you" && (
         <AboutYouForm
           heading={fixedTier === "supporting" ? "Become a Supporting Member" : "Become a Member"}
+          helper={aboutYouHelper(fixedTier)}
           initialValues={aboutYou}
           submitting={advancing}
           styles={styles}
@@ -383,7 +392,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
 
       {step === "payment" && tier && (
         <div>
-          {!hideCalculator && (
+          {showCalculator(tier, hideCalculator ?? false) && (
             <div className="mb-5">
               <MembershipCalculator theme="green" designSystem={designSystem} />
             </div>

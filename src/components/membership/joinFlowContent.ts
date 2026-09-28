@@ -31,3 +31,17 @@ export const TIER_DESCRIPTIONS: Readonly<Record<MembershipTier, string>> = {
   member: "Build the movement",
   supporting: "Fund the movement",
 };
+
+/** The dues calculator only helps someone picking a pay-what-you-can amount
+ * for full membership; Supporting Members go straight to payment. */
+export function showCalculator(tier: MembershipTier, hideCalculator: boolean): boolean {
+  return !hideCalculator && tier === "member";
+}
+
+/** Step 1 fine print. Pay-what-you-can and waivers only apply to full
+ * membership, so a flow locked to Supporting Member leaves them out. */
+export function aboutYouHelper(fixedTier: MembershipTier | undefined): string {
+  return fixedTier === "supporting"
+    ? "Tax deductible in the US"
+    : "Dues are pay-what-you-can · Waivers available · Tax deductible in the US";
+}
