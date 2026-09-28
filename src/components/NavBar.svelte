@@ -175,9 +175,14 @@
       </nav>
     </div>
 
-    <!-- Right side: Socials and Donate -->
+    <!-- Right side: Socials, Hub and Donate. Socials only appear from xl up —
+         below that, the row has no room left for both the icon list and the
+         two CTA buttons (see the 1024px-1279px overflow finding in code
+         review). -->
     <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
-      <slot name="socials" />
+      <div class="hidden xl:flex items-center gap-4 2xl:gap-6">
+        <slot name="socials" />
+      </div>
       <a
         href={HUB_URL}
         class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-[10px] px-5 text-base 2xl:py-[14px] 2xl:px-8 2xl:text-lg rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
