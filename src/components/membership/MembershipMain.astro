@@ -1,5 +1,6 @@
 ---
 import JoinFlow from "./JoinFlow";
+import DuesUsage from "./DuesUsage.astro";
 import { getTestimonials } from "../../data/testimonials";
 
 interface Props {
@@ -324,16 +325,7 @@ const cx = designSystem
               </span>
             </summary>
             <div data-accordion-content class="px-6 pb-5">
-              <p class={`mb-4 ${cx.dueCardBody}`}>
-                Our independence comes from our members. By paying dues based on what you can
-                afford, you sustain our operations so we stay accountable to our community and not
-                external funders.
-              </p>
-              <p class={`font-bold text-[#157A3E] ${designSystem ? "ts-body" : "text-[17px] leading-relaxed"}`}>
-                Dues sustain T4P projects:<br />
-                Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship for
-                projects via T4P staff support, software access, partnerships and grants.
-              </p>
+              <DuesUsage designSystem={designSystem} />
             </div>
           </details>
           <details

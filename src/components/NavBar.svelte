@@ -8,6 +8,8 @@
   // it "children" types as `undefined` and `astro check` rejects any slot content.
   export let children: unknown = undefined;
 
+  const HUB_URL = "https://hub.techforpalestine.org/";
+
   let toggleFlag = false;
   let activeDropdown: string | null = null;
 
@@ -173,13 +175,24 @@
       </nav>
     </div>
 
-    <!-- Right side: Socials and Donate -->
+    <!-- Right side: Socials, Hub and Donate. Socials only appear from xl up —
+         below that, the row has no room left for both the icon list and the
+         two CTA buttons (see the 1024px-1279px overflow finding in code
+         review). -->
     <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
-      <slot name="socials" />
+      <div class="hidden xl:flex items-center gap-4 2xl:gap-6">
+        <slot name="socials" />
+      </div>
+      <a
+        href={HUB_URL}
+        class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-2 px-4 text-sm 2xl:py-2.5 2xl:px-6 2xl:text-base rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
+      >
+        Log into Hub
+      </a>
       <div>
         <a
           href="/donate"
-          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 text-base 2xl:py-4 2xl:px-10 2xl:text-lg 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-2.5 px-5 text-sm 2xl:py-3 2xl:px-7 2xl:text-base 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
         >
           Donate
         </a>
@@ -280,6 +293,12 @@
           </div>
         {/each}
       </div>
+      <a
+        href={HUB_URL}
+        class="mt-6 block w-full text-center border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-lg transition-colors duration-200"
+      >
+        Log into Hub
+      </a>
       <div class="mt-6 flex justify-center">
         <slot name="socials" />
       </div>

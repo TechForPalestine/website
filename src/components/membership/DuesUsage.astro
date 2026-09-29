@@ -1,0 +1,21 @@
+---
+// Body copy for "How does T4P use dues?", shared by /membership (inside its
+// dues accordion) and /supporting-member (as a static card) so the wording
+// can't drift between the two. Card chrome belongs to the caller.
+interface Props {
+  designSystem?: boolean;
+}
+const { designSystem = false } = Astro.props;
+const body = designSystem ? "ts-body text-ink-secondary" : "text-[16px] leading-relaxed text-ink-secondary";
+const highlight = designSystem ? "ts-body" : "text-[17px] leading-relaxed";
+---
+
+<p class={`mb-4 ${body}`}>
+  Our independence comes from our members. By paying dues, you sustain our operations so we
+  stay accountable to our community and not external funders.
+</p>
+<div class={`space-y-2 font-bold text-[#157A3E] ${highlight}`}>
+  <p>Dues sustain T4P projects:</p>
+  <p>Marketing &middot; Engineering &middot; Volunteers &middot; Mentorship</p>
+  <p>Via T4P staff support, software access, partnerships and grants.</p>
+</div>

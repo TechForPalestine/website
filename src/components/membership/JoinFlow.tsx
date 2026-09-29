@@ -2,6 +2,14 @@ import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type Reac
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
+import {
+  aboutYouHelper,
+  MEMBER_BENEFITS,
+  showCalculator,
+  SUPPORTING_BENEFITS,
+  TIER_DESCRIPTIONS,
+  type TierBenefit,
+} from "./joinFlowContent";
 import type { MembershipTier, QgivPrefill } from "./qgiv";
 
 const CALENDLY_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
@@ -20,30 +28,15 @@ const STEPS: { id: StepId; label: string }[] = [
  * MIN_LOADING_DISPLAY_MS floor. */
 const NEXT_BUTTON_LOADING_MS = 400;
 
-/** Tier-card bullets for the join flow's tier-selection step — distinct from
- * the shared `membershipBenefits` table used on the supporting-member pages,
- * since these are written specifically for the compact card layout here. */
-const MEMBER_BENEFITS = [
-  "Dues fund Palestinian liberation initiatives",
-  "Volunteer or mentor on projects",
-  "Attend community events",
-  "Get exclusive project updates",
-  "Join the private member chat",
-];
-const SUPPORTING_BENEFITS = [
-  "Dues fund Palestinian liberation initiatives",
-  "Attend community events",
-  "Get exclusive project updates",
-  "(Optionally) Mentor projects",
-];
-
 interface JoinFlowProps {
   /** Locks the flow to one membership tier and skips the tier-selection step
    * — used on tier-specific pages (e.g. /supporting-member) where offering a
    * choice would just relitigate a decision the visitor already made by
    * being there. Omitted on /membership, which serves both tiers. */
   fixedTier?: MembershipTier;
-  /** Hides the dues calculator on the payment step — used on /supporting-member. */
+  /** Hides the dues calculator on the payment step for every tier. Used on
+   * /supporting-member. Without it the calculator still only shows for the
+   * Member tier. */
   hideCalculator?: boolean;
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
    * of plain Tailwind sizes — only correct where `design-system.css` is
@@ -81,7 +74,7 @@ function getStyles(designSystem: boolean): StyleSet {
       link: "ts-body-small font-semibold text-[#157A3E]",
       tierIntro: "ts-body text-ink-secondary",
       tierTitle: "ts-body-large font-semibold text-ink",
-      tierDescription: "ts-body-small text-ink-secondary",
+      tierDescription: "ts-body-small font-semibold text-[#157A3E]",
       tierBenefit: "ts-body-small text-ink-secondary",
       tierNote: "ts-caption text-ink-secondary",
       backLink: "ts-body-small font-semibold text-ink-secondary hover:text-ink",
@@ -97,7 +90,7 @@ function getStyles(designSystem: boolean): StyleSet {
     link: "text-[13px] font-bold text-[#157A3E]",
     tierIntro: "text-[15px] leading-relaxed text-ink-secondary",
     tierTitle: "text-base font-bold text-ink",
-    tierDescription: "text-[15px] leading-relaxed text-ink-secondary",
+    tierDescription: "text-[15px] font-semibold leading-relaxed text-[#157A3E]",
     tierBenefit: "text-[15px] text-ink-secondary",
     tierNote: "text-[13px] leading-relaxed text-ink-secondary",
     backLink: "text-sm font-semibold text-ink-secondary hover:text-ink",
@@ -111,13 +104,14 @@ function splitName(name: string): { firstName: string; lastName: string } {
 
 interface AboutYouFormProps {
   heading: string;
+  helper: string;
   initialValues: AboutYouData | null;
   submitting: boolean;
   styles: StyleSet;
   onContinue: (data: AboutYouData) => void;
 }
 
-function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
+function AboutYouForm({ heading, helper, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
@@ -202,9 +196,7 @@ function AboutYouForm({ heading, initialValues, submitting, styles, onContinue }
         {submitting ? "Loading…" : "Continue"}
       </button>
 
-      <p className={`mt-3.5 ${styles.helper}`}>
-        Dues are pay-what-you-can &middot; Waivers available &middot; Tax deductible in the US
-      </p>
+      <p className={`mt-3.5 ${styles.helper}`}>{helper}</p>
       <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className={`mt-3 inline-block ${styles.link}`}>
         Book an intro call →
       </a>
@@ -216,7 +208,7 @@ interface TierCardProps {
   tier: MembershipTier;
   title: ReactNode;
   description: string;
-  benefits: string[];
+  benefits: readonly TierBenefit[];
   selected: boolean;
   styles: StyleSet;
   onSelect: () => void;
@@ -262,19 +254,25 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
       <p className={`mb-3 ${styles.tierDescription}`}>{description}</p>
       <ul className="space-y-1.5">
         {benefits.map((benefit) => (
-          <li key={benefit} className={`flex items-baseline gap-2 ${styles.tierBenefit}`}>
-            <span
-              aria-hidden="true"
-              className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-[#157A3E]"
-            />
-            {benefit}
+          <li key={benefit.text} className={`flex items-baseline gap-2 ${styles.tierBenefit}`}>
+            {benefit.marker === "arrow" ? (
+              <span aria-hidden="true" className="shrink-0 font-semibold text-[#157A3E]">
+                ➜
+              </span>
+            ) : (
+              <span
+                aria-hidden="true"
+                className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-[#157A3E]"
+              />
+            )}
+            {benefit.text}
           </li>
         ))}
       </ul>
       {tier === "member" && (
         <p className={`mt-3 ${styles.tierNote}`}>
           Note: Our member community is fully vetted. To keep everyone safe and make sure we
-          share the same values, we do a quick identity and alignment check during onboarding.
+          share the same values, we do an identity and alignment check during onboarding.
         </p>
       )}
     </button>
@@ -324,6 +322,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
       {step === "about-you" && (
         <AboutYouForm
           heading={fixedTier === "supporting" ? "Become a Supporting Member" : "Become a Member"}
+          helper={aboutYouHelper(fixedTier)}
           initialValues={aboutYou}
           submitting={advancing}
           styles={styles}
@@ -355,7 +354,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
                   )
                 </>
               }
-              description="If you would like to volunteer on projects & teams."
+              description={TIER_DESCRIPTIONS.member}
               benefits={MEMBER_BENEFITS}
               selected={tier === "member"}
               styles={styles}
@@ -364,7 +363,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
             <TierCard
               tier="supporting"
               title="Supporting Member"
-              description="If you do not have time to volunteer but would like to support financially."
+              description={TIER_DESCRIPTIONS.supporting}
               benefits={SUPPORTING_BENEFITS}
               selected={tier === "supporting"}
               styles={styles}
@@ -393,7 +392,7 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
 
       {step === "payment" && tier && (
         <div>
-          {!hideCalculator && (
+          {showCalculator(tier, hideCalculator ?? false) && (
             <div className="mb-5">
               <MembershipCalculator theme="green" designSystem={designSystem} />
             </div>
