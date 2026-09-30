@@ -45,7 +45,7 @@
     "astro": "^5.18.2",
     "astro-heroicons": "^2.1.5",
     "astro-icon": "^1.2.0",
-    "axios": "^1.20.0",
+    "axios": "^1.18.0",
     "chart.js": "^4.5.1",
     "leaflet": "^1.9.4",
     "marked": "^15.0.12",
