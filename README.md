@@ -50,4 +50,4 @@ This project follows the Tech for Palestine Code of Conduct. Please read it befo
 
 ## Contributions
 
-Contributions of all kind are welcome. Fork this repo, clone, create branch and make the first commit for change. Open a PR with appropriate title.
+Contributions of all kind are welcome. Fork this repo, clone, create branch and make the first commit for change. Open a PR with appropriate title. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup and the pre-PR checklist.

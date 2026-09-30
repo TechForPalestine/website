@@ -149,7 +149,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({
     contentOverride?: string
   ): React.ReactNode => {
     const { text, annotations, href } = segment;
-    let content = contentOverride || text.content;
+    const content = contentOverride || text.content;
 
     // Build style object based on annotations
     const style: React.CSSProperties = {};

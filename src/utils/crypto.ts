@@ -1,7 +1,11 @@
 import { timingSafeEqual } from "node:crypto";
 
 export function constantTimeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
   const enc = new TextEncoder();
-  return timingSafeEqual(enc.encode(a), enc.encode(b));
+  const aBytes = enc.encode(a);
+  const bBytes = enc.encode(b);
+  // Compare byte lengths, not string lengths: "é" and "ee" have the same
+  // .length but different UTF-8 sizes, and timingSafeEqual throws on a mismatch.
+  if (aBytes.length !== bBytes.length) return false;
+  return timingSafeEqual(aBytes, bBytes);
 }

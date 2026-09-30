@@ -33,8 +33,14 @@ jobs:
         continue-on-error: true
         run: pnpm audit --prod --audit-level=high
 
+      - name: Lint
+        run: pnpm run lint
+
       - name: Type check
         run: pnpm run check
+
+      - name: Unit tests
+        run: pnpm run test
 
       - name: Build
         run: pnpm run build
