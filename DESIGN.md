@@ -179,7 +179,7 @@ A warm-neutral text stack on a plain white surface, with one saturated green car
 
 **The One Family Rule.** Outfit does everything. Fraunces is deprecated and `font-serif` must not be used: `design-system.css` is loaded only by `AdminLayout`, so a serif class on a public page silently renders as the fallback.
 
-**The Dead Class Rule.** `ts-*` utility classes are defined in `design-system.css`, which `Layout.astro` does not import. Any `ts-*` class on a public page is a no-op that renders at browser default size. Three exist today and are bugs: `eventsShared.tsx:252` and `:259`, and `AboutYouStep.tsx:101`. Never add another.
+**The Dead Class Rule.** `ts-*` utility classes are defined in `design-system.css`, which `Layout.astro` does not import. Any `ts-*` class on a public page is a no-op that renders at browser default size. Three exist today and are bugs: `EventsShared.tsx:252` and `:259`, and `AboutYouStep.tsx:101`. Never add another.
 
 **The Line Length Rule.** Body copy never exceeds 75 characters per line. Constrain with `max-w-[65ch]` or similar, not with container padding alone.
 

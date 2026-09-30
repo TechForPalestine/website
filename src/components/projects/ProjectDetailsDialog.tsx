@@ -29,7 +29,7 @@ import {
   resolveLogoSrc,
   useCopyText,
   type ProjectItem,
-} from "./directoryShared";
+} from "./DirectoryShared";
 
 // Loaded on demand: most visitors never open a project, so the dialog and its
 // content stay out of the initial chunk. The parent keys this by project id,

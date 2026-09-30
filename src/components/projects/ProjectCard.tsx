@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { type ProjectItem, getInitials, resolveLogoSrc, getProjectText } from "./projectData";
-import { getActiveSocialFields } from "./socialIcons";
+import { getActiveSocialFields } from "./SocialIcons";
 
 interface ProjectCardProps {
   project: ProjectItem;

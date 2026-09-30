@@ -4,7 +4,7 @@ import { displayTitle } from "../../utils/eventSections";
 import { parseEventDescription, renderInlineTokens } from "../../utils/eventDescription";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 import { copyEventLink } from "../../utils/copyAnchorLink";
-import { ArrowRight, CloseIcon, LinkIcon, useEventDate, type SelectedEvent } from "./eventsShared";
+import { ArrowRight, CloseIcon, LinkIcon, useEventDate, type SelectedEvent } from "./EventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
 const COPIED_FEEDBACK_MS = 2500;
@@ -33,7 +33,11 @@ function EventDescription({ text }: { text: string }) {
             </ListTag>
           );
         }
-        return <p key={i}>{"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}</p>;
+        return (
+          <p key={i}>
+            {"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}
+          </p>
+        );
       })}
     </div>
   );

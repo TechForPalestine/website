@@ -15,7 +15,7 @@ import {
 import Add from "@mui/icons-material/Add";
 import Settings from "@mui/icons-material/Settings";
 import Delete from "@mui/icons-material/Delete";
-import { RenderFormFields } from "../inputs-mapping";
+import { RenderFormFields } from "../InputsMapping";
 
 type RHFTableSectionProps = {
   name: string;

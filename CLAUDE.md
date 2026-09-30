@@ -109,7 +109,7 @@ src/
 ## File Naming
 
 - Pages: `kebab-case.astro`
-- Components: `PascalCase.tsx/jsx/astro/svelte`
+- Components: `PascalCase.tsx/jsx/astro/svelte` (exception: files inside `src/components/hook-form/` use kebab-case `rhf-*.tsx`, mirroring react-hook-form naming)
 - Utilities: `camelCase.ts`
 - Content: `kebab-case.md`
 

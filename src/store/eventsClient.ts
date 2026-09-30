@@ -8,7 +8,7 @@ export interface EventItem {
   // `date` and `time` are wall clock in the *organizer's* zone (the DTSTART
   // TZID), not the visitor's — only safe to display for all-day events, which
   // have no instant. Everything else should render from `dateUtcIso`; see
-  // useEventDate() in components/events/eventsShared.tsx.
+  // useEventDate() in components/events/EventsShared.tsx.
   date: string; // "YYYY-MM-DD" in the organizer's zone
   status: string;
   location: string;
