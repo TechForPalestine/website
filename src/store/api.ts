@@ -38,7 +38,7 @@ export const fetchFieldData = async (url: any) => {
 
 export const convertToFormData = (data: any, form = new FormData(), parentKey = "") => {
   for (const key in data) {
-    if (data.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
       const value = data[key];
       const newKey = parentKey ? `${parentKey}[${key}]` : key;
       if (value instanceof File) {

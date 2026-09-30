@@ -51,7 +51,10 @@ describe("sectionForEvent", () => {
 
 describe("displayTitle", () => {
   it("strips the section prefix", () => {
-    const event = makeEvent({ title: "Roundtable: Hiring Palestinian Talent", tags: ["roundtable"] });
+    const event = makeEvent({
+      title: "Roundtable: Hiring Palestinian Talent",
+      tags: ["roundtable"],
+    });
     expect(displayTitle(event)).toBe("Hiring Palestinian Talent");
   });
 
@@ -133,7 +136,9 @@ describe("groupIntoSections", () => {
 describe("isEventPast", () => {
   it("is true before now, false after", () => {
     expect(isEventPast(makeEvent({ dateUtcIso: new Date(NOW - 1).toISOString() }), NOW)).toBe(true);
-    expect(isEventPast(makeEvent({ dateUtcIso: new Date(NOW + 1).toISOString() }), NOW)).toBe(false);
+    expect(isEventPast(makeEvent({ dateUtcIso: new Date(NOW + 1).toISOString() }), NOW)).toBe(
+      false
+    );
   });
 
   it("treats an unresolvable date as past", () => {

@@ -50,7 +50,7 @@ const useAllLinkOptions = (fields: any[]) => {
         // }
         else if (field.fieldtype === "Table MultiSelect") {
           newOptions[field.fieldname] = {};
-          let key = field.table_fields[0].endpoint;
+          const key = field.table_fields[0].endpoint;
 
           console.log(key, "key");
           try {
@@ -84,7 +84,7 @@ const getRules = (field: any) => {
           }
         : field.options === "URL"
           ? {
-              value: /^(https?:\/\/)?([\w\d\-]+\.)+[\w]{2,}\/?.*$/,
+              value: /^(https?:\/\/)?([\w\d-]+\.)+[\w]{2,}\/?.*$/,
               message: "Invalid URL format",
             }
           : undefined,
@@ -191,8 +191,8 @@ export const RenderInput = ({ field, options, loading, parentName }: RenderInput
           <FormControlLabel control={<Checkbox name={fieldName} />} label={field.label} />
         </Block>
       );
-    case "Table MultiSelect":
-      let key = field.table_fields[0].fieldname;
+    case "Table MultiSelect": {
+      const key = field.table_fields[0].fieldname;
 
       return (
         <Block label={field.label} description={field.description}>
@@ -207,6 +207,7 @@ export const RenderInput = ({ field, options, loading, parentName }: RenderInput
           />
         </Block>
       );
+    }
 
     case "Attach":
       return (

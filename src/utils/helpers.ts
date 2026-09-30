@@ -12,7 +12,7 @@ type TransformableObject = { [key: string]: TransformableValue };
 export const transformObject = (data: TransformableObject): TransformableObject => {
   // Loop through each key in the object
   for (const key in data) {
-    if (data.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
       const value = data[key];
 
       // If the value is an object and contains an array, transform it
