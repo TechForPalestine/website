@@ -10,7 +10,7 @@ import {
   resolveLogoSrc,
   useCopyText,
   type ProjectItem,
-} from "./directoryShared";
+} from "./DirectoryShared";
 
 // The two card types are memoized and keep their own transient state (a failed
 // image, a copied email). Both used to live in the parent, so any of them

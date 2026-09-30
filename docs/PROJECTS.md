@@ -57,13 +57,13 @@ Every project has a URL: `/projects/<name-slug>-<id>`, for example `/projects/ha
 - **`src/components/ProjectsNew.tsx`** — the live `/projects` directory: state, search and tag filtering, deep-link handling, and "Show more" paging (24 at a time; an active search or tag filter shows every match). The name is a leftover from the abandoned redesign (see [ARCHITECTURE.md](ARCHITECTURE.md#the-abandoned--new-redesign)); the component itself is reachable and shipping. Fetches client-side via `/api/projects`.
 - **`src/components/projects/DirectoryCards.tsx`** — the memoized featured and grid cards. Transient state (a failed image, a copied email) is local to each card so it re-renders one card, not the directory.
 - **`src/components/projects/ProjectDetailsDialog.tsx`** — the detail dialog, loaded on demand and preloaded when the browser is idle.
-- **`src/components/projects/directoryShared.tsx`** — types, helpers and the `useCopyText` hook shared by the three above.
+- **`src/components/projects/DirectoryShared.tsx`** — types, helpers and the `useCopyText` hook shared by the three above.
 - **`ProjectsDirectory.tsx`, `ProjectDrawer.tsx`, `ProjectCard.tsx`** in the same folder are **not reachable from any live page**; the older directory implementation. Do not edit them expecting a change on the site.
 - **`src/components/ProjectLogo.tsx`** — shared logo rendering with fallback.
 
 ## Not to confuse with `/api/project-proxy`
 
-`src/pages/api/project-proxy.ts` is a **separate, generic authenticated proxy** (`PUBLIC_API_URL`/`PUBLIC_SECRET_KEY`) used only by the volunteer/incubator **application forms** (`src/store/api.ts` → `volunteerForm.tsx`, `inputs-mapping.tsx`). It has nothing to do with fetching the public project directory — see [API.md](API.md) for its security pattern (path normalization + header allowlist).
+`src/pages/api/project-proxy.ts` is a **separate, generic authenticated proxy** (`PUBLIC_API_URL`/`PUBLIC_SECRET_KEY`) used only by the volunteer/incubator **application forms** (`src/store/api.ts` → `VolunteerForm.tsx`, `InputsMapping.tsx`). It has nothing to do with fetching the public project directory — see [API.md](API.md) for its security pattern (path normalization + header allowlist).
 
 ## Env vars
 

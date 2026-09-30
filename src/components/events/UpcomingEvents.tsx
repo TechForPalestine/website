@@ -6,7 +6,7 @@ import {
 } from "../../store/eventsClient";
 import { displayTitle, getUpcomingEvents, type UpcomingEvent } from "../../utils/eventSections";
 import { formatSpeakerList, getDescriptionExcerpt, getEventSpeakers } from "../../utils/eventDescription";
-import { ArrowRight, EventModalContext, useEventDate } from "./eventsShared";
+import { ArrowRight, EventModalContext, useEventDate } from "./EventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
 const UPCOMING_WINDOW_DAYS = 60;

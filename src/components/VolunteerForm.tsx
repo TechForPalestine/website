@@ -12,7 +12,7 @@ import {
   Paper,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { RenderFormFields } from "./inputs-mapping";
+import { RenderFormFields } from "./InputsMapping";
 import FormProvider from "./hook-form/index";
 import { transformObject } from "../utils/helpers";
 import { fetchFormFields, submitForm } from "../store/api";
