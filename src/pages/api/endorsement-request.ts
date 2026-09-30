@@ -3,38 +3,36 @@ import * as Sentry from "@sentry/astro";
 import { Client } from "@notionhq/client";
 import { getEnv } from "../../utils/getEnv.js";
 import { reportError } from "../../lib/report-error";
-import { isAllowedOrigin, corsHeaders } from "../../utils/origin";
+import { corsHeaders, withOriginGuard } from "../../utils/origin";
+import { jsonError, jsonResponse } from "../../utils/apiResponse";
+import { firstTooLong, isEmail, isParsableUrl, readString } from "../../utils/validate";
+import { emailProp, richTextProp, titleProp, urlProp } from "../../utils/notionProps";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = withOriginGuard({}, async ({ request, locals }, origin) => {
   const ctx = locals.runtime?.ctx;
-  const origin = request.headers.get("Origin");
-  if (!isAllowedOrigin(origin)) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  const acao = { "Access-Control-Allow-Origin": origin };
+  const badRequest = (message: string) => jsonError(400, message, { headers: acao });
 
   try {
     const body = await request.json();
 
+    // Non-string JSON values are treated as missing (400) instead of being
+    // forwarded to Notion, which used to answer 500 for them.
     const endorsementData = {
-      contactName: body.contactName as string,
-      contactEmail: body.contactEmail as string,
-      organizationName: body.organizationName as string,
-      organizationWebsite: body.organizationWebsite as string,
-      campaignName: body.campaignName as string,
-      request: body.request as string,
-      campaignPurpose: body.campaignPurpose as string,
-      campaignLink: body.campaignLink as string,
-      notableSupporters: (body.notableSupporters as string) || "",
+      contactName: readString(body.contactName),
+      contactEmail: readString(body.contactEmail),
+      organizationName: readString(body.organizationName),
+      organizationWebsite: readString(body.organizationWebsite),
+      campaignName: readString(body.campaignName),
+      request: readString(body.request),
+      campaignPurpose: readString(body.campaignPurpose),
+      campaignLink: readString(body.campaignLink),
+      notableSupporters: readString(body.notableSupporters),
       isT4PProject: body.isT4PProject as boolean,
-      submittedAt: new Date().toISOString(),
     };
 
-    // Validation — presence
     if (
       !endorsementData.contactName ||
       !endorsementData.contactEmail ||
@@ -45,62 +43,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
       !endorsementData.campaignPurpose ||
       !endorsementData.campaignLink
     ) {
-      return new Response(JSON.stringify({ error: "All required fields must be filled" }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": origin,
-        },
-      });
+      return badRequest("All required fields must be filled");
     }
 
-    // Validation — format and length
-    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRx.test(endorsementData.contactEmail)) {
-      return new Response(JSON.stringify({ error: "Invalid email address" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-      });
+    if (!isEmail(endorsementData.contactEmail)) return badRequest("Invalid email address");
+    if (!isParsableUrl(endorsementData.organizationWebsite)) {
+      return badRequest("Invalid organization website URL");
+    }
+    if (!isParsableUrl(endorsementData.campaignLink)) {
+      return badRequest("Invalid campaign link URL");
     }
 
-    try {
-      new URL(endorsementData.organizationWebsite);
-    } catch {
-      return new Response(JSON.stringify({ error: "Invalid organization website URL" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-      });
-    }
-
-    try {
-      new URL(endorsementData.campaignLink);
-    } catch {
-      return new Response(JSON.stringify({ error: "Invalid campaign link URL" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-      });
-    }
-
-    const MAX = 2000;
-    const textFields: [string, string][] = [
-      ["contactName", endorsementData.contactName],
-      ["organizationName", endorsementData.organizationName],
-      ["campaignName", endorsementData.campaignName],
-      ["request", endorsementData.request],
-      ["campaignPurpose", endorsementData.campaignPurpose],
-      ["notableSupporters", endorsementData.notableSupporters],
-    ];
-    for (const [field, value] of textFields) {
-      if (value.length > MAX) {
-        return new Response(
-          JSON.stringify({ error: `Field '${field}' exceeds maximum length of ${MAX} characters` }),
-          {
-            status: 400,
-            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-          }
-        );
-      }
-    }
+    const tooLong = firstTooLong({
+      contactName: endorsementData.contactName,
+      organizationName: endorsementData.organizationName,
+      campaignName: endorsementData.campaignName,
+      request: endorsementData.request,
+      campaignPurpose: endorsementData.campaignPurpose,
+      notableSupporters: endorsementData.notableSupporters,
+    });
+    if (tooLong) return badRequest(tooLong);
 
     const notionSecret = getEnv("NOTION_SECRET", locals);
     const databaseId = getEnv("NOTION_ENDORSEMENTS_DB_ID", locals);
@@ -118,69 +80,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
         database_id: databaseId,
       },
       properties: {
-        "Contact Name": {
-          title: [
-            {
-              text: {
-                content: endorsementData.contactName,
-              },
-            },
-          ],
-        },
-        "Contact Email": {
-          email: endorsementData.contactEmail,
-        },
-        "Org Name": {
-          rich_text: [
-            {
-              text: {
-                content: endorsementData.organizationName,
-              },
-            },
-          ],
-        },
-        "Org Website": {
-          url: endorsementData.organizationWebsite,
-        },
-        "Campaign Name": {
-          rich_text: [
-            {
-              text: {
-                content: endorsementData.campaignName,
-              },
-            },
-          ],
-        },
-        Request: {
-          rich_text: [
-            {
-              text: {
-                content: endorsementData.request,
-              },
-            },
-          ],
-        },
-        "Campaign Purpose": {
-          rich_text: [
-            {
-              text: {
-                content: endorsementData.campaignPurpose,
-              },
-            },
-          ],
-        },
-        "Campaign Link": {
-          url: endorsementData.campaignLink,
-        },
-        "Notable Supporters": {
-          rich_text: [
-            {
-              text: {
-                content: endorsementData.notableSupporters,
-              },
-            },
-          ],
-        },
+        "Contact Name": titleProp(endorsementData.contactName),
+        "Contact Email": emailProp(endorsementData.contactEmail),
+        "Org Name": richTextProp(endorsementData.organizationName),
+        "Org Website": urlProp(endorsementData.organizationWebsite),
+        "Campaign Name": richTextProp(endorsementData.campaignName),
+        Request: richTextProp(endorsementData.request),
+        "Campaign Purpose": richTextProp(endorsementData.campaignPurpose),
+        "Campaign Link": urlProp(endorsementData.campaignLink),
+        "Notable Supporters": richTextProp(endorsementData.notableSupporters),
         "Is T4P Project": {
           checkbox: endorsementData.isT4PProject,
         },
@@ -192,26 +100,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
       },
     });
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Endorsement request submitted successfully",
-      }),
-      {
-        status: 201,
-        headers: { "Content-Type": "application/json", ...corsHeaders(origin, "POST") },
-      }
+    return jsonResponse(
+      { success: true, message: "Endorsement request submitted successfully" },
+      201,
+      corsHeaders(origin, "POST")
     );
   } catch (error) {
     reportError(error, { context: "endorsement-request" });
     ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
-    return new Response(JSON.stringify({ error: "Failed to process endorsement request" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": origin,
-      },
-    });
+    return jsonError(500, "Failed to process endorsement request", { headers: acao });
   }
-};
+});
