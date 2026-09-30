@@ -1,8 +1,34 @@
 import axios from "axios";
 import { getEnv } from "../utils/getEnv.js";
-import { sanitizeUrl } from "../components/projects/projectData";
+import { sanitizeUrl } from "../utils/sanitizeUrl";
 import { resolveDateToUtcIso } from "../utils/icalDate";
 import type { RichTextSegment } from "../types/richText";
+import type {
+  AgendaProperties,
+  CommunityCallProperties,
+  FaqProperties,
+  IdeaProperties,
+  NotionFilesProperty,
+  NotionPage,
+  NotionQueryResponse,
+  NotionRichTextProperty,
+  NotionTitleProperty,
+  NotionUrlProperty,
+  SignatoryProperties,
+  SpeakerProperties,
+} from "../types/notion";
+
+// Server-side Notion client (FAQ, ideas, agenda/speakers, E4P signatories,
+// community calls). Cache policy: none here, every call queries Notion.
+// Timeout: none set (axios default, i.e. none). Failure: missing credentials
+// throw a "Missing Notion credentials" Error; an API failure propagates the
+// axios error to the caller (the API routes turn it into a generic response).
+// Only a failed speaker lookup in fetchNotionAgenda is swallowed (logged, and
+// that speaker is dropped).
+//
+// Pagination: a Notion query returns at most 100 rows and none of these
+// fetchers follow `next_cursor`, so databases are capped at 100 rows. This is
+// a known limitation, deliberately left as is.
 
 // Helper function to create Notion axios instance with runtime environment variables
 function createNotionAxios(secret: string) {
@@ -16,18 +42,25 @@ function createNotionAxios(secret: string) {
   });
 }
 
-interface NotionFilesProperty {
-  files?: Array<
-    { type: "external"; external: { url: string } } | { type: "file"; file: { url: string } }
-  >;
-}
+type NotionAxios = ReturnType<typeof createNotionAxios>;
 
-interface NotionTitleProperty {
-  title?: Array<{ plain_text: string }>;
-}
+// Resolves credentials, then queries one database. `dbEnvName` is the env var
+// holding the database id and is named in the missing-credentials error.
+async function queryDatabase<P>(
+  locals: App.Locals | undefined,
+  dbEnvName: string,
+  body: Record<string, unknown>
+): Promise<{ notionAxios: NotionAxios; results: NotionQueryResponse<P>["results"] }> {
+  const secret = getEnv("NOTION_SECRET", locals);
+  const dbId = getEnv(dbEnvName, locals);
 
-interface NotionRichTextProperty {
-  rich_text?: Array<{ plain_text: string }>;
+  if (!secret || !dbId) {
+    throw new Error(`Missing Notion credentials: NOTION_SECRET and ${dbEnvName} are required`);
+  }
+
+  const notionAxios = createNotionAxios(secret);
+  const response = await notionAxios.post<NotionQueryResponse<P>>(`databases/${dbId}/query`, body);
+  return { notionAxios, results: response.data.results };
 }
 
 function fileUrl(prop: NotionFilesProperty | undefined, fallback: string): string {
@@ -45,139 +78,130 @@ function richText(prop: NotionRichTextProperty | undefined, fallback = ""): stri
   return prop?.rich_text?.[0]?.plain_text || fallback;
 }
 
-interface NotionUrlProperty {
-  url?: string | null;
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: RichTextSegment[];
+  position: number;
 }
 
-export const fetchNotionFAQ = async (showAll: boolean = false, locals?: any) => {
-  const secret = getEnv("NOTION_SECRET", locals);
-  const faqDbId = getEnv("NOTION_FAQ_DB_ID", locals);
-
-  if (!secret || !faqDbId) {
-    throw new Error("Missing Notion credentials: NOTION_SECRET and NOTION_FAQ_DB_ID are required");
-  }
-
-  const notionAxios = createNotionAxios(secret);
-  const queryBody = {
-    ...(showAll
-      ? {}
-      : {
-          filter: {
-            property: "Visibility",
-            checkbox: {
-              equals: true,
-            },
+export const fetchNotionFAQ = async (
+  showAll: boolean = false,
+  locals?: App.Locals
+): Promise<FaqItem[]> => {
+  const queryBody = showAll
+    ? {}
+    : {
+        filter: {
+          property: "Visibility",
+          checkbox: {
+            equals: true,
           },
-        }),
-  };
+        },
+      };
 
-  const response = await notionAxios.post(`databases/${faqDbId}/query`, queryBody);
+  const { results } = await queryDatabase<FaqProperties>(locals, "NOTION_FAQ_DB_ID", queryBody);
 
-  const faqs = response.data.results.map((page: any) => {
+  const faqs = results.map((page) => {
     const props = page.properties;
-
-    const question = titleText(props["Question"]);
-    const answer = props["Answer"]?.rich_text || [];
-    const position = props["Position"]?.number ?? 999999; // Default to high number if no position
 
     return {
       id: page.id,
-      question,
-      answer,
-      position,
+      question: titleText(props["Question"]),
+      answer: props["Answer"]?.rich_text || [],
+      position: props["Position"]?.number ?? 999999, // Default to high number if no position
     };
   });
 
   // Sort by position ascending
-  return faqs.sort((a: any, b: any) => a.position - b.position);
+  return faqs.sort((a, b) => a.position - b.position);
 };
 
-export const fetchNotionIdeas = async (locals?: any) => {
-  const secret = getEnv("NOTION_SECRET", locals);
-  const ideasDbId = getEnv("NOTION_IDEAS_DB_ID", locals);
+export interface IdeaItem {
+  id: string;
+  name: string;
+  category: string;
+  description: RichTextSegment[];
+}
 
-  if (!secret || !ideasDbId) {
-    throw new Error(
-      "Missing Notion credentials: NOTION_SECRET and NOTION_IDEAS_DB_ID are required"
-    );
-  }
-
-  const notionAxios = createNotionAxios(secret);
-  const queryBody = {
+export const fetchNotionIdeas = async (locals?: App.Locals): Promise<IdeaItem[]> => {
+  const { results } = await queryDatabase<IdeaProperties>(locals, "NOTION_IDEAS_DB_ID", {
     sorts: [
       {
         property: "Name",
         direction: "ascending",
       },
     ],
-  };
+  });
 
-  const response = await notionAxios.post(`databases/${ideasDbId}/query`, queryBody);
-
-  const ideas = response.data.results.map((page: any) => {
+  return results.map((page) => {
     const props = page.properties;
-
-    const name = titleText(props["Name"]);
-    const category = props["Category"]?.select?.name || "";
-    const description = props["Description"]?.rich_text || [];
 
     return {
       id: page.id,
-      name,
-      category,
-      description,
+      name: titleText(props["Name"]),
+      category: props["Category"]?.select?.name || "",
+      description: props["Description"]?.rich_text || [],
     };
   });
-
-  return ideas;
 };
 
-export const fetchNotionAgenda = async (locals?: any) => {
-  const secret = getEnv("NOTION_SECRET", locals);
-  const agendaDbId = getEnv("NOTION_AGENDA_DB_ID", locals);
+export interface AgendaSpeaker {
+  id: string;
+  name: string;
+  title: string;
+  bio: string;
+  photo: string;
+}
 
-  if (!secret || !agendaDbId) {
-    throw new Error(
-      "Missing Notion credentials: NOTION_SECRET and NOTION_AGENDA_DB_ID are required"
-    );
-  }
+export interface AgendaItem {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  // undefined when the moderator's page failed to load (speaker dropped)
+  moderator: AgendaSpeaker | null | undefined;
+}
 
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.post(`databases/${agendaDbId}/query`, {});
+export interface AgendaResult {
+  agendaItems: AgendaItem[];
+  speakers: AgendaSpeaker[];
+}
+
+export const fetchNotionAgenda = async (locals?: App.Locals): Promise<AgendaResult> => {
+  const { notionAxios, results } = await queryDatabase<AgendaProperties>(
+    locals,
+    "NOTION_AGENDA_DB_ID",
+    {}
+  );
 
   // Collect all unique moderator IDs
   const moderatorIds = new Set<string>();
-  response.data.results.forEach((page: any) => {
+  results.forEach((page) => {
     const moderators = page.properties["Moderator"]?.relation || [];
-    moderators.forEach((mod: any) => moderatorIds.add(mod.id));
+    moderators.forEach((mod) => moderatorIds.add(mod.id));
   });
 
   // Fetch all moderator/speaker pages in parallel for better performance
-  const speakerMap = new Map();
+  const speakerMap = new Map<string, AgendaSpeaker>();
   const speakerPromises = Array.from(moderatorIds).map(async (modId) => {
     try {
-      const speakerResponse = await notionAxios.get(`pages/${modId}`);
+      const speakerResponse = await notionAxios.get<NotionPage<SpeakerProperties>>(
+        `pages/${modId}`
+      );
       const props = speakerResponse.data.properties;
-
-      const name = titleText(props["Name"]);
-      const title = richText(props["Title"]);
 
       // Concatenate all rich_text blocks for bio
       const bioArray = props["Speaker bio"]?.rich_text || [];
-      const bio = bioArray.map((block: any) => block.plain_text).join("");
 
-      const photo = fileUrl(props["Photo"], "/images/default.jpg");
-
-      return {
+      const data: AgendaSpeaker = {
         id: modId,
-        data: {
-          id: modId,
-          name,
-          title,
-          bio,
-          photo,
-        },
+        name: titleText(props["Name"]),
+        title: richText(props["Title"]),
+        bio: bioArray.map((block) => block.plain_text).join(""),
+        photo: fileUrl(props["Photo"], "/images/default.jpg"),
       };
+      return { id: modId, data };
     } catch (error) {
       console.error(`Error fetching speaker ${modId}:`, error);
       return null;
@@ -192,12 +216,8 @@ export const fetchNotionAgenda = async (locals?: any) => {
   });
 
   // Map agenda items with resolved speaker data
-  const agendaItems = response.data.results.map((page: any) => {
+  const agendaItems = results.map((page): AgendaItem => {
     const props = page.properties;
-
-    const title = titleText(props["Title"]);
-    const description = richText(props["Description"]);
-    const time = richText(props["Time"]);
 
     const moderatorRelations = props["Moderator"]?.relation || [];
     const moderator =
@@ -205,9 +225,9 @@ export const fetchNotionAgenda = async (locals?: any) => {
 
     return {
       id: page.id,
-      title,
-      description,
-      time,
+      title: titleText(props["Title"]),
+      description: richText(props["Description"]),
+      time: richText(props["Time"]),
       moderator,
     };
   });
@@ -221,18 +241,18 @@ export const fetchNotionAgenda = async (locals?: any) => {
   };
 };
 
-export const fetchE4PSignatories = async (locals?: any) => {
-  const secret = getEnv("NOTION_SECRET", locals);
-  const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);
+export interface E4PSignatory {
+  id: string;
+  name: string;
+  company: string;
+  position: string;
+  linkedinUrl: string;
+  signedAt: string;
+  approved: boolean;
+}
 
-  if (!secret || !databaseId) {
-    throw new Error(
-      "Missing Notion credentials: NOTION_SECRET and NOTION_SIGNATORIES_DB_ID are required"
-    );
-  }
-
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.post(`databases/${databaseId}/query`, {
+export const fetchE4PSignatories = async (locals?: App.Locals): Promise<E4PSignatory[]> => {
+  const { results } = await queryDatabase<SignatoryProperties>(locals, "NOTION_SIGNATORIES_DB_ID", {
     filter: {
       property: "Approved",
       checkbox: {
@@ -247,7 +267,7 @@ export const fetchE4PSignatories = async (locals?: any) => {
     ],
   });
 
-  return response.data.results.map((page: any) => {
+  return results.map((page) => {
     const props = page.properties;
 
     return {
@@ -278,28 +298,22 @@ function communityCallUrl(prop: NotionUrlProperty | undefined): string {
   return sanitizeUrl(prop?.url || undefined);
 }
 
-export const fetchCommunityCalls = async (locals?: any): Promise<CommunityCall[]> => {
-  const secret = getEnv("NOTION_SECRET", locals);
-  const dbId = getEnv("NOTION_COMMUNITY_CALLS_DB_ID", locals);
-
-  if (!secret || !dbId) {
-    throw new Error(
-      "Missing Notion credentials: NOTION_SECRET and NOTION_COMMUNITY_CALLS_DB_ID are required"
-    );
-  }
-
-  const notionAxios = createNotionAxios(secret);
-  const response = await notionAxios.post(`databases/${dbId}/query`, {
-    filter: {
-      property: "Visibility",
-      checkbox: {
-        equals: true,
+export const fetchCommunityCalls = async (locals?: App.Locals): Promise<CommunityCall[]> => {
+  const { results } = await queryDatabase<CommunityCallProperties>(
+    locals,
+    "NOTION_COMMUNITY_CALLS_DB_ID",
+    {
+      filter: {
+        property: "Visibility",
+        checkbox: {
+          equals: true,
+        },
       },
-    },
-  });
+    }
+  );
 
-  const calls: CommunityCall[] = response.data.results
-    .map((page: any) => {
+  const calls = results
+    .map((page): CommunityCall | null => {
       const props = page.properties;
       const startUtcIso = resolveDateToUtcIso(props["Date"]);
       // A row with no usable start time can't anchor the state machine —
@@ -320,7 +334,7 @@ export const fetchCommunityCalls = async (locals?: any): Promise<CommunityCall[]
         xUrl: communityCallUrl(props["X URL"]),
       };
     })
-    .filter((call: CommunityCall | null): call is CommunityCall => call !== null);
+    .filter((call): call is CommunityCall => call !== null);
 
   return calls.sort(
     (a, b) => new Date(b.startUtcIso).getTime() - new Date(a.startUtcIso).getTime()

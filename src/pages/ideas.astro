@@ -4,7 +4,7 @@ import "../styles/base.css";
 import { fetchNotionIdeas } from "../store/notionClient.js";
 import IdeasWithTabs from "../components/IdeasWithTabs.jsx";
 
-let rawIdeas;
+let rawIdeas: Awaited<ReturnType<typeof fetchNotionIdeas>>;
 try {
   rawIdeas = await fetchNotionIdeas(Astro.locals);
 } catch (error) {
