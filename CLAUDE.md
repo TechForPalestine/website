@@ -24,7 +24,7 @@ pnpm format            # Format with Prettier (writes)
 pnpm format:check      # Format check only (CI)
 ```
 
-For CI/reproducible installs, `npm ci` is also supported (both `package-lock.json` and `pnpm-lock.yaml` are checked in — prefer `pnpm` for local dev).
+CI and reproducible installs use `pnpm install --frozen-lockfile`. `pnpm-lock.yaml` is the only lockfile; `package-lock.json` was removed because it had drifted far out of sync (do not regenerate it).
 
 No test framework is currently configured. If adding tests, prefer Vitest + @testing-library, colocated as `*.test.ts(x)` or under `src/__tests__/`.
 
