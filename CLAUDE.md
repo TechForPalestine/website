@@ -20,14 +20,15 @@ pnpm dev              # Start dev server at http://localhost:4321 (alias: pnpm s
 pnpm build            # Build for production (outputs to dist/)
 pnpm preview           # Preview the production build locally
 pnpm check             # Type-check via `astro check`
+pnpm lint              # ESLint (errors fail CI; warnings such as `any` are tracked, not blocking)
 pnpm test              # Run Vitest suites once (`pnpm test:watch` to watch)
 pnpm format            # Format with Prettier (writes)
-pnpm format:check      # Format check only (CI)
+pnpm format:check      # Format check only (not run in CI: the repo is not fully formatted yet)
 ```
 
 CI and reproducible installs use `pnpm install --frozen-lockfile`. `pnpm-lock.yaml` is the only lockfile; `package-lock.json` was removed because it had drifted far out of sync (do not regenerate it).
 
-Tests use Vitest (`vitest.config.ts`, node environment), colocated as `*.test.ts(x)` next to the code. Before opening a PR run `pnpm check && pnpm test`, and run `pnpm format` only on files you changed (the repo is not fully formatted; do not reformat wholesale). Dependabot (`.github/dependabot.yml`) opens weekly grouped npm and GitHub Actions updates; major versions are ignored and need a manual bump.
+Tests use Vitest (`vitest.config.ts`, node environment), colocated as `*.test.ts(x)` next to the code. CI runs `pnpm lint`, `pnpm check`, `pnpm test` and `pnpm build`; a husky pre-commit hook runs lint-staged (ESLint + Prettier on staged files). Before opening a PR run `pnpm lint && pnpm check && pnpm test`, and run `pnpm format` only on files you changed (the repo is not fully formatted; do not reformat wholesale). Dependabot (`.github/dependabot.yml`) opens weekly grouped npm and GitHub Actions updates; major versions are ignored and need a manual bump.
 
 ## Architecture
 

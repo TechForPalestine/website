@@ -16,6 +16,7 @@ Secrets for local dev go in `.dev.vars` (see `.env.example` and [docs/ENVIRONMEN
 ## Before opening a PR
 
 ```bash
+pnpm lint       # ESLint
 pnpm check      # type-check
 pnpm test       # Vitest
 pnpm build      # production build
