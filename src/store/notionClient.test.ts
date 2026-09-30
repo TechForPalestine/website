@@ -145,7 +145,7 @@ describe("fetchNotionAgenda", () => {
       photo: "https://x.test/p.jpg",
     });
     expect(speakers[0].photo).toBe("/images/default.jpg");
-    expect(agendaItems[0].moderator.name).toBe("Amy");
+    expect(agendaItems[0].moderator?.name).toBe("Amy");
     expect(agendaItems[1]).toEqual({
       id: "i2",
       title: "Solo",

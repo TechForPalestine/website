@@ -1,5 +1,6 @@
 import { getEnv } from "../utils/getEnv.js";
-import { sanitizeUrl, type ProjectItem, type Tag } from "../components/projects/projectData.js";
+import { sanitizeUrl } from "../utils/sanitizeUrl.js";
+import type { ProjectItem, Tag } from "../types/projects.js";
 import {
   MAX_STALE_MS,
   resolveWithCache,
@@ -10,6 +11,12 @@ import {
 // Server-side access to ProjectHub. Shared by /api/projects (the client
 // island's data) and /projects/<slug> (which needs the same list to build a
 // shared link's preview), so the two cannot drift apart. See docs/PROJECTS.md.
+//
+// Cache policy: fresh for 5 minutes, stale copy served for up to 24 hours when
+// ProjectHub is down (see utils/projectsCachePolicy.ts). Timeout: none set
+// (platform default). Failure: up to 3 attempts (5xx and network errors are
+// retried with backoff, 4xx is not); after that fetchProjectsData throws
+// unless a usable stale copy exists.
 
 const PROJECTHUB_URL = "https://projecthub.techforpalestine.org/api/public/projects";
 const MAX_RETRIES = 2; // 3 attempts in total
