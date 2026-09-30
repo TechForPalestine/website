@@ -13,7 +13,7 @@ interface Moderator {
   photo: string;
 }
 
-interface AgendaItem {
+export interface AgendaItem {
   id: string;
   title: string;
   description: string;

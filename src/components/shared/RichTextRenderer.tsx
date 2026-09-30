@@ -1,14 +1,29 @@
-import React from "react";
-import type { RichTextSegment, RichTextRendererProps, NotionRichText } from "../../types/richText";
+import type React from "react";
+import type { RichTextSegment, NotionRichText } from "../../types/richText";
 
-const RichTextRenderer: React.FC<RichTextRendererProps> = ({
+export interface RichTextRendererProps {
+  richText: RichTextSegment[] | NotionRichText;
+  className?: string;
+  // Color classes default to the new design system's tokens (brand/ink),
+  // since that's this component's original caller (FAQSection, on
+  // /faq-new). Legacy callers (FAQAccordion on /faq, IdeasWithTabs on
+  // /ideas) pass their own page's colors instead — without this, Notion's
+  // "red" text and every link would render in the new brand palette
+  // regardless of which page's design language it's embedded in.
+  linkClassName?: string;
+  mutedTextClassName?: string; // Notion "gray" text color
+  accentTextClassName?: string; // Notion "red" text color
+  codeClassName?: string; // inline code background
+}
+
+function RichTextRenderer({
   richText,
   className = "",
   linkClassName = "text-brand",
   mutedTextClassName = "text-ink-secondary",
   accentTextClassName = "text-brand",
   codeClassName = "bg-sand",
-}) => {
+}: RichTextRendererProps) {
   // Handle both direct array and Notion API response format
   const segments: RichTextSegment[] = Array.isArray(richText)
     ? richText
@@ -214,6 +229,6 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({
   };
 
   return <div className={className}>{processContent()}</div>;
-};
+}
 
 export default RichTextRenderer;

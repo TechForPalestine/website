@@ -26,8 +26,8 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import PeopleIcon from "@mui/icons-material/People";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import LondonGatheringSpeakers from "./LondonGatheringSpeakers";
-import LondonGatheringAgenda from "./LondonGatheringAgenda";
+import LondonGatheringSpeakers, { type Speaker } from "./LondonGatheringSpeakers";
+import LondonGatheringAgenda, { type AgendaItem } from "./LondonGatheringAgenda";
 
 const theme = createTheme();
 
@@ -44,8 +44,8 @@ const themes = [
 
 interface LondonGatheringProps {
   initialAgendaData?: {
-    agendaItems: any[];
-    speakers: any[];
+    agendaItems: AgendaItem[];
+    speakers: Speaker[];
   };
 }
 

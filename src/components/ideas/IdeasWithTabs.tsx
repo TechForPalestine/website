@@ -106,7 +106,7 @@ export default function IdeasWithTabs({
                     richTextDescription:
                       richTextDescription && Array.isArray(richTextDescription)
                         ? richTextDescription
-                        : richTextDescription && "rich_text" in (richTextDescription as any)
+                        : richTextDescription && "rich_text" in (richTextDescription as object)
                           ? richTextDescription
                           : [], // fallback
                     tags: data.tags || [],
