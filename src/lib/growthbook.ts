@@ -6,7 +6,7 @@ if (!clientKey) {
   // Fail loudly. A missing key makes every flag return its default instead,
   // which looks like working code that simply never turns anything on.
   throw new Error(
-    "Missing PUBLIC_GROWTHBOOK_CLIENT_KEY — GrowthBook flags will not load without it.",
+    "Missing PUBLIC_GROWTHBOOK_CLIENT_KEY — GrowthBook flags will not load without it."
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
-import RichTextRenderer from "./RichTextRenderer.tsx";
+import RichTextRenderer from "./shared/RichTextRenderer";
 import { useBodyScrollLock } from "../utils/useBodyScrollLock";
 import type { RichTextSegment, NotionRichText } from "../types/richText";
 

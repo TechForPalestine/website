@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import RichTextRenderer from "./RichTextRenderer";
+import RichTextRenderer from "./shared/RichTextRenderer";
 import type { RichTextSegment } from "../types/richText";
 
 interface FAQItem {

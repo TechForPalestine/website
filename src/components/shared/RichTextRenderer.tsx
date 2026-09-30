@@ -1,5 +1,5 @@
 import React from "react";
-import type { RichTextSegment, RichTextRendererProps, NotionRichText } from "../types/richText";
+import type { RichTextSegment, RichTextRendererProps, NotionRichText } from "../../types/richText";
 
 const RichTextRenderer: React.FC<RichTextRendererProps> = ({
   richText,
