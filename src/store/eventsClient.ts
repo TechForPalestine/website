@@ -264,7 +264,7 @@ function parseVEvent(block: string[]): EventItem | null {
   };
 }
 
-function parseIcsCalendar(raw: string): EventItem[] {
+export function parseIcsCalendar(raw: string): EventItem[] {
   const lines = unfoldLines(raw);
   const parsed: { event: EventItem; isOverride: boolean }[] = [];
   let currentBlock: string[] | null = null;
