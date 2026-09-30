@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import GrowthBookProvider from "../GrowthBookProvider";
+import GrowthBookProvider from "../shared/GrowthBookProvider";
 import {
   AUTO_CLOSE_AFTER_SUCCESS_MS,
   COLLAPSE_IDLE_MS,

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { type ReactElement } from "react";
+import type { SvgIconProps } from "@mui/material/SvgIcon";
 import { Box, Typography, Paper, useTheme, Container } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import GroupIcon from "@mui/icons-material/Group";
@@ -11,7 +12,13 @@ import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import MoneyIcon from "@mui/icons-material/Money";
 
-const benefits = [
+interface Benefit {
+  title: string;
+  description: string;
+  icon: ReactElement<SvgIconProps>;
+}
+
+const benefits: Benefit[] = [
   {
     title: "Community",
     description: "A supportive community of peers who share the same values",
@@ -61,7 +68,7 @@ const benefits = [
   },
 ];
 
-export function BenefitsSection() {
+export function BenefitsSection(): ReactElement {
   const theme = useTheme();
 
   return (

@@ -1,6 +1,6 @@
 import { GrowthBookProvider as GBProvider } from "@growthbook/growthbook-react";
 import type { ReactNode } from "react";
-import { growthbook } from "../growthbook";
+import { growthbook } from "../../lib/growthbook";
 
 interface Props {
   children: ReactNode;
