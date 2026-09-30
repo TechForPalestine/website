@@ -33,11 +33,7 @@ function EventDescription({ text }: { text: string }) {
             </ListTag>
           );
         }
-        return (
-          <p key={i}>
-            {"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}
-          </p>
-        );
+        return <p key={i}>{"tokens" in block ? renderInlineTokens(block.tokens, `p-${i}`) : block.raw}</p>;
       })}
     </div>
   );

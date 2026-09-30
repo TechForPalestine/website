@@ -5,11 +5,7 @@ import {
   type EventItem,
 } from "../../store/eventsClient";
 import { displayTitle, getUpcomingEvents, type UpcomingEvent } from "../../utils/eventSections";
-import {
-  formatSpeakerList,
-  getDescriptionExcerpt,
-  getEventSpeakers,
-} from "../../utils/eventDescription";
+import { formatSpeakerList, getDescriptionExcerpt, getEventSpeakers } from "../../utils/eventDescription";
 import { ArrowRight, EventModalContext, useEventDate } from "./EventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
@@ -31,12 +27,11 @@ function UpcomingEventCard({ item }: UpcomingEventCardProps) {
   const showPopup = hasMeaningfulDescription(event);
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, false);
   const speakers = event.description ? getEventSpeakers(event.description) : [];
-  const teaser =
-    speakers.length > 0
-      ? `Featuring ${formatSpeakerList(speakers)}`
-      : event.description
-        ? getDescriptionExcerpt(event.description)
-        : "";
+  const teaser = speakers.length > 0
+    ? `Featuring ${formatSpeakerList(speakers)}`
+    : event.description
+      ? getDescriptionExcerpt(event.description)
+      : "";
 
   return (
     <article className="flex flex-col gap-4 rounded-[16px] border border-l-4 border-ink-divider border-l-brand bg-page p-5 min-[640px]:flex-row min-[640px]:items-center min-[640px]:gap-6">

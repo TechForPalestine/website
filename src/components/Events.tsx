@@ -227,7 +227,9 @@ function EventDetailsDialogBody({
           </span>
         </time>
 
-        <h2 className={`font-bold tracking-tight text-gray-900 ${TS_SUBHEADING_SIZE}`}>{title}</h2>
+        <h2 className={`font-bold tracking-tight text-gray-900 ${TS_SUBHEADING_SIZE}`}>
+          {title}
+        </h2>
 
         <div className="flex items-center justify-between gap-4">
           {/* Day/month/year is already shown above in the date badge — this
@@ -305,12 +307,11 @@ function UpcomingEventCard({ item }: { item: UpcomingEvent }) {
   const { link: infoLink, label: infoLabel } = primaryEventLink(event, false);
   const title = displayTitle(event);
   const speakers = event.description ? getEventSpeakers(event.description) : [];
-  const teaser =
-    speakers.length > 0
-      ? `Featuring ${formatSpeakerList(speakers)}`
-      : event.description
-        ? getDescriptionExcerpt(event.description)
-        : "";
+  const teaser = speakers.length > 0
+    ? `Featuring ${formatSpeakerList(speakers)}`
+    : event.description
+      ? getDescriptionExcerpt(event.description)
+      : "";
   // Whether there's anywhere to send someone yet — a placeholder like a
   // not-yet-detailed community call gets a neutral "Soon" instead of red.
   const isConfirmed = showPopup || Boolean(infoLink);
@@ -362,11 +363,7 @@ function UpcomingEventCard({ item }: { item: UpcomingEvent }) {
 
   if (showPopup) {
     return (
-      <button
-        type="button"
-        onClick={() => openModal({ event, isPast: false })}
-        className={rowClasses}
-      >
+      <button type="button" onClick={() => openModal({ event, isPast: false })} className={rowClasses}>
         {dateColumn}
         {body}
         {cta}
