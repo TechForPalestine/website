@@ -22,9 +22,9 @@ import {
   createTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { TAG_CHIP, getProjectText, type ProjectItem, type Tag } from "./projects/DirectoryShared";
-import { FeaturedProjectCard, ProjectGridCard } from "./projects/DirectoryCards";
-import { findProjectBySlug, projectPath } from "../utils/projectSlug";
+import { TAG_CHIP, getProjectText, type ProjectItem, type Tag } from "./DirectoryShared";
+import { FeaturedProjectCard, ProjectGridCard } from "./DirectoryCards";
+import { findProjectBySlug, projectPath } from "../../utils/projectSlug";
 
 interface ProjectsNewProps {
   projects: ProjectItem[];
@@ -34,7 +34,7 @@ interface ProjectsNewProps {
 
 // The details dialog is only needed once someone opens a project, so it is
 // split out of this chunk and preloaded while the browser is idle.
-const loadDialog = () => import("./projects/ProjectDetailsDialog");
+const loadDialog = () => import("./ProjectDetailsDialog");
 const ProjectDetailsDialog = lazy(loadDialog);
 
 const DIALOG_CLOSE_MS = 200;
