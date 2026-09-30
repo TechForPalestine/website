@@ -93,7 +93,7 @@ I can't read your Cloudflare dashboard from here. To check what's actually confi
 **Via Wrangler CLI** (lists variable _names_ only, not values — safe to run and share output):
 
 ```bash
-npx wrangler pages secret list --project-name=website
+pnpm exec wrangler pages secret list --project-name=website
 ```
 
 (Project name `website` comes from `wrangler.toml`'s `name` field.) Run this against both environments if the CLI prompts for one, and diff the name list against the "Consumers" table above — anything in the table without a matching secret in the dashboard will fail in production the same way it fails locally.

@@ -15,6 +15,9 @@
 Also relevant, at the repo root:
 
 - [`../CLAUDE.md`](../CLAUDE.md) — agent-facing project guidance (commands, conventions, security rules)
-- [`../AGENTS.md`](../AGENTS.md) — repository conventions summary
+- [`../AGENTS.md`](../AGENTS.md) — short pointer to the files above for non-Claude agents
+- [`../CONTRIBUTING.md`](../CONTRIBUTING.md) — setup and the pre-PR checklist
 - [`../DEPLOYMENT.md`](../DEPLOYMENT.md) — Cloudflare Pages deployment and the full environment variable list
-- [`../PRODUCT.md`](../PRODUCT.md) / [`../DESIGN.md`](../DESIGN.md) — brand, product positioning, and design system tokens
+- [`../PRODUCT.md`](../PRODUCT.md) / [`../DESIGN.md`](../DESIGN.md) — brand, product positioning, and the live design system
+- [`superpowers/`](superpowers/) holds historical design specs and implementation plans. They record decisions at the time and are not current guidance; trust the code and the docs above
+- [`adr/`](adr/) holds short architecture decision records

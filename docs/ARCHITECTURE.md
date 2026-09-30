@@ -10,16 +10,20 @@ React and Svelte components are client islands. Most are mounted with `client:on
 
 ## Request pipeline (middleware)
 
-`src/middleware/index.ts` is the **only** middleware entry point, chaining two middlewares via `sequence()`:
+`src/middleware/index.ts` is the **only** middleware entry point, chaining four middlewares via `sequence()`:
 
 ```ts
-export const onRequest = sequence(cacheControl, csp);
+export const onRequest = sequence(sentryInit, securityHeaders, cacheControl, csp);
 ```
 
-1. **`cache-control.ts`** runs first. It sets `Cache-Control: no-store` on all `/api/*` routes and non-GET requests, and `public, max-age=600` on other GET responses (unless already set).
-2. **`csp.ts`** runs second. It generates a per-request nonce, calls `next()`, and if the response is `text/html`, uses Cloudflare's `HTMLRewriter` to inject the nonce onto every `<script>`/`<style>` tag and set a strict `Content-Security-Policy` header (`script-src 'nonce-... strict-dynamic'`, no `'unsafe-inline'`). In local dev, `HTMLRewriter` isn't available, so CSP injection is skipped entirely (not enforced in `pnpm dev`).
+1. **`sentry-init.ts`** configures the Sentry client so every later middleware and every route's `reportError()` call reports correctly (the module-level `sentry.server.config.js` cannot do this on Cloudflare Pages).
+2. **`security-headers.ts`** sets `nosniff`, `Referrer-Policy` and `Permissions-Policy` on every SSR response (`public/_headers` does not reach them).
+3. **`cache-control.ts`** sets `Cache-Control: no-store` on all `/api/*` routes and non-GET requests, and `public, max-age=600` on other GET responses (unless already set).
+4. **`csp.ts`** generates a per-request nonce, calls `next()`, and if the response is `text/html`, uses Cloudflare's `HTMLRewriter` to inject the nonce onto every `<script>`/`<style>` tag and set a strict `Content-Security-Policy` header (`script-src 'nonce-... strict-dynamic'`, no `'unsafe-inline'`).
 
-**Ordering matters**: `csp` can replace the entire `Response` object via `HTMLRewriter.transform()`, so `cache-control` must run first — otherwise its header would be lost on the rewritten response. Do not add a second `src/middleware.ts` file; it would silently shadow `src/middleware/index.ts` and disable both cache headers and CSP.
+**In/out ordering**: a request passes through 1, 2, 3, 4 on the way in and the response passes back through 4, 3, 2, 1 on the way out. `csp` can replace the entire `Response` object via `HTMLRewriter.transform()`, so `securityHeaders` and `cacheControl` run before it; their headers are set on the response that `csp` then transforms and preserves. Do not add a second `src/middleware.ts` file; it would silently shadow `src/middleware/index.ts` and disable every middleware.
+
+**CSP is only verifiable in production.** `HTMLRewriter` is absent in `pnpm dev`, so CSP injection is skipped entirely locally. Check CSP on a Cloudflare deployment.
 
 ## Data sources
 
@@ -50,11 +54,9 @@ A redesign wave once duplicated most routes as `about-new.astro`, `events-new.as
 
 What remains:
 
-- ~26 `-new.astro` files in `src/pages/`, every one of them 301'd to its live counterpart in `public/_redirects` and therefore unreachable
-- `HomeLayout.astro`, imported only by those pages
-- `src/styles/design-system.css`, the Fraunces/parchment `ts-*` typography scale, imported only by `HomeLayout` and `AdminLayout`
-
-These are kept only to avoid a large deletion diff. Treat them as deleted. Roughly half of `src/` is unreachable from the live page entrypoints, so a file's existence is not evidence that it ships.
+- 26 `-new.astro` files in `src/pages/`. 24 are dead: each is 301'd to its live counterpart in `public/_redirects` and therefore unreachable. Treat them as deleted; they are kept only to avoid a large deletion diff.
+- `membership-new` and `supporting-member-new` are the exceptions: they are **live `noindex` pages** (excluded from the sitemap) that use `HomeLayout.astro`, `design-system.css` and the `home/` sections they need.
+- `src/styles/design-system.css`, the Fraunces/parchment `ts-*` typography scale, is imported only by `HomeLayout` and `AdminLayout`.
 
 Two traps worth knowing:
 
@@ -63,21 +65,36 @@ Two traps worth knowing:
 
 **Any new experimental, staging, or orphan page must still be added to the sitemap `filter` exclude list** — Google should only index pages reachable through real navigation.
 
+## Island directives
+
+| Directive             | Use for                                                     |
+| --------------------- | ----------------------------------------------------------- |
+| `client:only="react"` | Islands that touch `window` or are MUI-only (no SSR output) |
+| `client:load`         | Everything else (SSR-rendered, then hydrated)               |
+
+Do not convert one to the other: `client:only` islands render nothing at SSR, so changing the directive changes the HTML and can break MUI or `window` usage.
+
+## Caching and pagination
+
+- **ProjectHub**: `/api/projects` serves the list through the Workers Cache API. Entries younger than 5 minutes are served as-is; older ones trigger a refetch, and if ProjectHub fails a stale copy up to 24 hours old is served (`src/utils/projectsCachePolicy.ts`, `src/store/projectsClient.ts`). The API route itself is `no-store` to browsers.
+- **Notion**: queried live on each request with no server-side cache, and the clients do not follow pagination cursors, so only the first page of results is used.
+- **Events ICS feed**: fetched live on each request (`fetchEvents`) with no cache; the whole feed is parsed every time.
+
 ## Directory layout
 
 ```
 src/
 ├── components/       # React/Astro/Svelte components, grouped by feature (events/, home/, hook-form/, projects/, ui/, membership/, london-gathering/)
-├── content/          # Content collections config — currently empty, see note above
-├── layouts/          # Layout.astro, HomeLayout.astro
-├── lib/              # report-error.ts (Sentry wrapper)
-├── middleware/        # index.ts (sequence entry point), cache-control.ts, csp.ts
+├── content/          # Content collections config, currently empty (see Content collections)
+├── layouts/          # Layout.astro (public pages), AdminLayout.astro, HomeLayout.astro
+├── lib/              # report-error.ts (Sentry wrapper), sentry-scrub.ts
+├── middleware/        # index.ts (sequence entry point), sentry-init.ts, security-headers.ts, cache-control.ts, csp.ts
 ├── pages/             # File-based routes; api/ for endpoints, admin/ for internal tools
-├── store/             # notionClient.ts, api.ts (generic proxy client)
+├── store/             # notionClient.ts, eventsClient.ts (ICS), projectsClient.ts (ProjectHub + Workers cache), api.ts (generic proxy client)
 ├── structures/         # Reusable Astro structural components (forms, buttons)
 ├── styles/            # Tailwind entry (base.css)
 ├── types/             # Shared TypeScript types
-└── utils/             # getEnv.ts, crypto.ts, basicAuth.ts, helpers.ts
+└── utils/             # getEnv.ts, crypto.ts (constantTimeEqual), origin.ts (Origin allowlist + CORS headers), qgivVerify.ts, transactionReplay.ts, basicAuth.ts, helpers.ts, plus event/project helpers
 ```
 
 ## Deployment

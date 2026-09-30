@@ -38,24 +38,44 @@ Astro runs in `output: "server"` mode on the Cloudflare adapter — nearly every
 
 ### Request pipeline (middleware)
 
-`src/middleware/index.ts` chains two middlewares via `sequence()`, in this order:
+`src/middleware/index.ts` chains four middlewares via `sequence()`, in this order:
 
-1. `cache-control.ts` — sets `Cache-Control` headers (API routes get `no-store`)
-2. `csp.ts` — injects a per-request CSP nonce into inline `<script>`/`<style>` tags via Cloudflare `HTMLRewriter`, and may rewrite the response
+```ts
+export const onRequest = sequence(sentryInit, securityHeaders, cacheControl, csp);
+```
 
-Because `csp` can replace the response object, `cache-control` must run first so its header survives the rewrite. There must only ever be one middleware entry point (`src/middleware/index.ts`) — a parallel `src/middleware.ts` would silently shadow it.
+1. `sentry-init.ts`: configures the Sentry client so every later middleware and `reportError()` call reports correctly
+2. `security-headers.ts`: sets `nosniff`, `Referrer-Policy` and `Permissions-Policy` (`public/_headers` does not reach SSR responses)
+3. `cache-control.ts`: sets `Cache-Control` headers (API routes and non-GET requests get `no-store`)
+4. `csp.ts`: injects a per-request CSP nonce into inline `<script>`/`<style>` tags via Cloudflare `HTMLRewriter`, and may rewrite the response
+
+Requests flow in through 1 to 4; responses flow back out 4 to 1. Because `csp` can replace the response object, `cacheControl` and `securityHeaders` must sit before it in the chain so their headers survive the rewrite. There must only ever be one middleware entry point (`src/middleware/index.ts`); a parallel `src/middleware.ts` would silently shadow it.
+
+`HTMLRewriter` does not exist in `pnpm dev`, so nonce injection and the CSP header are skipped locally. CSP can only be verified in a production (or Cloudflare preview) deployment.
 
 ### The abandoned "-new" redesign
 
 **Do not build on `-new` pages, and do not create new ones.** All design work targets the live pages.
 
-A redesign wave once duplicated most routes as `about-new.astro`, `events-new.astro` and so on. It was shelved in #524 when the homepage A/B test closed in favour of the control. Every `-new` URL now 301s to its live counterpart in `public/_redirects`, so the ~26 page files still in `src/pages/` are unreachable dead code, as are `HomeLayout.astro` and the `design-system.css` typography scale it loads. They are kept only to avoid a large deletion diff; treat them as deleted.
+A redesign wave once duplicated most routes as `about-new.astro`, `events-new.astro` and so on. It was shelved in #524 when the homepage A/B test closed in favour of the control. Of the 26 `-new` page files in `src/pages/`, 24 are dead: every one of those URLs 301s to its live counterpart in `public/_redirects`, so they are unreachable. Treat them as deleted; they are kept only to avoid a large deletion diff.
 
-The one exception is `ProjectsNew.tsx`, which despite its name is imported by the live `/projects` page.
+The exceptions:
 
-The live design system is documented in [DESIGN.md](DESIGN.md), derived from `/membership` as the canonical page. Note that `design-system.css` is imported only by `HomeLayout` and `AdminLayout`, never by `Layout.astro` — so `ts-*` classes and `font-serif` on a public page silently render unstyled.
+- `membership-new` and `supporting-member-new` are live `noindex` pages (excluded from the sitemap). They use `HomeLayout`, `design-system.css` and the `home/` sections they need, so do not remove those.
+- `ProjectsNew.tsx`, despite its name, is imported by the live `/projects` page.
+
+The live design system is documented in [DESIGN.md](DESIGN.md), derived from `/membership` as the canonical page. `AdminLayout` and `HomeLayout` are the only consumers of `design-system.css`; `Layout.astro` never imports it, so `ts-*` classes and `font-serif` on a public page silently render unstyled.
 
 Experimental or orphan pages must still be added to the sitemap `filter` exclude list in `sitemap()` in `astro.config.mjs` so Google does not index unreachable pages.
+
+### Island directives
+
+| Directive             | Use for                                                     | Count |
+| --------------------- | ----------------------------------------------------------- | ----- |
+| `client:only="react"` | Islands that touch `window` or are MUI-only (no SSR output) | ~24   |
+| `client:load`         | Everything else (SSR-rendered, then hydrated)               | ~12   |
+
+Do not convert one to the other without testing: `client:only` islands render nothing at SSR, so changing them alters the HTML, and MUI islands can break under SSR.
 
 ### Data sources
 
@@ -94,16 +114,16 @@ This project has undergone multiple rounds of security auditing (see `security_a
 ```
 src/
 ├── components/       # React/Astro/Svelte components (events/, home/, hook-form/, projects/, ui/, membership/, london-gathering/)
-├── content/          # Content collections config (currently empty — see note above)
-├── layouts/          # Layout.astro (shared page layout)
-├── lib/              # report-error.ts
-├── middleware/        # index.ts (sequence entry point), cache-control.ts, csp.ts
+├── content/          # Content collections config (currently empty, see Data sources)
+├── layouts/          # Layout.astro (public pages), AdminLayout.astro, HomeLayout.astro (see -new note above)
+├── lib/              # report-error.ts (Sentry wrapper), sentry-scrub.ts
+├── middleware/        # index.ts (sequence entry point), sentry-init.ts, security-headers.ts, cache-control.ts, csp.ts
 ├── pages/             # File-based routes; api/ for endpoints, admin/ for internal tools
-├── store/             # Notion client and data-fetching utilities
+├── store/             # notionClient.ts, eventsClient.ts (ICS), projectsClient.ts (ProjectHub + Workers cache), api.ts
 ├── structures/         # Reusable Astro structural components (forms, buttons)
 ├── styles/            # Tailwind entry (base.css)
 ├── types/             # Shared TypeScript types
-└── utils/             # getEnv.ts, crypto.ts, basicAuth.ts, helpers.ts
+└── utils/             # getEnv.ts, crypto.ts (constantTimeEqual), origin.ts (Origin allowlist + CORS headers), qgivVerify.ts, transactionReplay.ts, basicAuth.ts, helpers.ts, plus event/project helpers
 ```
 
 ## File Naming
