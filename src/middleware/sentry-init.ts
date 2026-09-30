@@ -1,6 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 import * as Sentry from "@sentry/astro";
 import { getEnv } from "../utils/getEnv";
+import { sentryScrubOptions } from "../lib/sentry-scrub";
 
 /**
  * `sentry.server.config.js`'s top-level `Sentry.init()` runs once at Worker
@@ -34,6 +35,7 @@ export const sentryInit = defineMiddleware(async (context, next) => {
         dsn,
         environment: getEnv("SENTRY_ENVIRONMENT", context.locals) ?? "production",
         tracesSampleRate: 0.1,
+        ...sentryScrubOptions,
       });
       reinitialized = true;
     }

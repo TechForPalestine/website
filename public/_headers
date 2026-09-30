@@ -4,5 +4,6 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   # Applies to static assets only: Cloudflare does not apply _headers to SSR
-  # (Pages Functions) responses. For HTML pages, Content-Security-Policy and
-  # X-Frame-Options are set per request in src/middleware/csp.ts.
+  # (Pages Functions) responses. For SSR responses, nosniff, Referrer-Policy and
+  # Permissions-Policy are set in src/middleware/security-headers.ts, and
+  # Content-Security-Policy and X-Frame-Options in src/middleware/csp.ts.

@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/astro";
+import { sentryScrubOptions } from "./src/lib/sentry-scrub";
 
 // `Sentry.init()` runs once at module load, before any request-scoped
 // `locals` exists, so this can't go through `getEnv()`. On the deployed
@@ -11,4 +12,5 @@ Sentry.init({
   dsn: import.meta.env.SENTRY_DSN ?? process.env.SENTRY_DSN,
   environment: import.meta.env.SENTRY_ENVIRONMENT ?? process.env.SENTRY_ENVIRONMENT ?? "production",
   tracesSampleRate: 0.1,
+  ...sentryScrubOptions,
 });
