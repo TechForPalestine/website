@@ -8,7 +8,7 @@ import {
   formatMonthYear,
   formatDate,
 } from "./projectData";
-import { getActiveSocialFields, getSocialHref } from "./socialIcons";
+import { getActiveSocialFields, getSocialHref } from "./SocialIcons";
 import { useBodyScrollLock } from "../../utils/useBodyScrollLock";
 
 interface ProjectDrawerProps {

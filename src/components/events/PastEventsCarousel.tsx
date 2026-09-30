@@ -12,7 +12,7 @@ import {
   EventModalContext,
   useCarouselScroll,
   useEventDate,
-} from "./eventsShared";
+} from "./EventsShared";
 import { EventPreviewImage } from "./EventPreviewImage";
 
 interface PastEventCardProps {

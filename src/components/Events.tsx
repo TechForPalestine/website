@@ -28,7 +28,7 @@ import {
   useCarouselScroll,
   useEventDate,
   type SelectedEvent,
-} from "./events/eventsShared";
+} from "./events/EventsShared";
 
 const UPCOMING_WINDOW_DAYS = 60;
 const COPIED_FEEDBACK_MS = 1500;

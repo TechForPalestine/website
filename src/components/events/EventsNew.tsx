@@ -6,7 +6,7 @@ import {
   useVisitorZoneReady,
   VisitorZoneContext,
   type SelectedEvent,
-} from "./eventsShared";
+} from "./EventsShared";
 import { EventModal } from "./EventModal";
 import { UpcomingEventsSection } from "./UpcomingEvents";
 import { PastEventsCategorySection } from "./PastEventsCarousel";

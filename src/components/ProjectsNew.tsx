@@ -22,7 +22,7 @@ import {
   createTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { TAG_CHIP, getProjectText, type ProjectItem, type Tag } from "./projects/directoryShared";
+import { TAG_CHIP, getProjectText, type ProjectItem, type Tag } from "./projects/DirectoryShared";
 import { FeaturedProjectCard, ProjectGridCard } from "./projects/DirectoryCards";
 import { findProjectBySlug, projectPath } from "../utils/projectSlug";
 
