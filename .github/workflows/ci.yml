@@ -28,6 +28,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Audit production dependencies
+        # Non-blocking until the open astro/tar/undici advisories (audit S-6) are cleared
+        continue-on-error: true
+        run: pnpm audit --prod --audit-level=high
+
       - name: Type check
         run: pnpm run check
 

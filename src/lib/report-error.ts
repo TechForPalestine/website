@@ -1,9 +1,11 @@
 import * as Sentry from "@sentry/astro";
+import { sanitizeError } from "./sentry-scrub";
 
 export function reportError(error: unknown, context?: Record<string, unknown>): void {
-  console.error(error);
+  const safeError = sanitizeError(error);
+  console.error(safeError);
   Sentry.withScope((scope) => {
     if (context) scope.setContext("extra", context);
-    Sentry.captureException(error);
+    Sentry.captureException(safeError);
   });
 }
