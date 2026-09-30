@@ -14,7 +14,7 @@ interface ImportMetaEnv {
 
 declare global {
   interface Window {
-    plausible: (event: string, options?: any) => void;
+    plausible: (event: string, options?: Record<string, unknown>) => void;
     /** Sticky flag set immediately before dispatching the
      * "membership:reveal-join" CustomEvent, so a click that fires before the
      * React island hydrates (and registers its listener) isn't lost. Checked
@@ -49,19 +49,22 @@ declare global {
     }>;
   }
 
+  /** Cloudflare Workers global; absent in Node/dev, so always guard with `typeof`. */
+  interface HTMLRewriterInstance {
+    on(
+      selector: string,
+      handlers: { element(el: { setAttribute(name: string, value: string): void }): void }
+    ): HTMLRewriterInstance;
+    transform(response: Response): Response;
+  }
+  const HTMLRewriter: new () => HTMLRewriterInstance;
+
   namespace App {
     interface Locals {
+      /** Per-request CSP nonce, set by middleware/csp.ts. */
       cspNonce: string;
-      runtime?: {
-        env?: Record<string, string> & {
-          DROPPED_CONVERSIONS?: KVNamespace;
-        };
-        ctx?: {
-          waitUntil: (p: Promise<unknown>) => void;
-        };
-        /** Cloudflare's CacheStorage; `default` is the Workers-only shared cache. */
-        caches?: CacheStorage;
-      };
+      /** Cloudflare runtime; read only through utils/getEnv.ts helpers. */
+      runtime?: NonNullable<import("./utils/getEnv").RuntimeLocals["runtime"]>;
     }
   }
 }

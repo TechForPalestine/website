@@ -1,15 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { buildCspHeader, frameOptionsFor } from "./cspHeader";
 
-// HTMLRewriter is a Cloudflare Workers global — not available in Node types
-declare const HTMLRewriter: new () => {
-  on(
-    selector: string,
-    handlers: { element(el: { setAttribute(name: string, value: string): void }): void }
-  ): typeof HTMLRewriter.prototype;
-  transform(response: Response): Response;
-};
-
 export const csp = defineMiddleware(async (context, next) => {
   const nonce = crypto.randomUUID().replace(/-/g, "");
   context.locals.cspNonce = nonce;
@@ -25,7 +16,9 @@ export const csp = defineMiddleware(async (context, next) => {
 
   // HTMLRewriter is only available in Cloudflare Workers (not Node/dev).
   // Without it we can't inject nonces into scripts, so enforcing a nonce-based
-  // CSP would block all JS — skip it in dev.
+  // CSP would block all JS — skip it in dev. Consequence: `astro dev` sends NO
+  // CSP, so violations only show up on a Cloudflare preview/production build.
+  // (HTMLRewriter is declared globally in src/env.d.ts.)
   if (typeof HTMLRewriter === "undefined") {
     return response;
   }
@@ -39,7 +32,7 @@ export const csp = defineMiddleware(async (context, next) => {
       },
     })
     .on("style", {
-      element(el: { setAttribute(name: string, value: string): void }) {
+      element(el) {
         el.setAttribute("nonce", nonce);
       },
     });
