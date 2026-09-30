@@ -20,13 +20,14 @@ pnpm dev              # Start dev server at http://localhost:4321 (alias: pnpm s
 pnpm build            # Build for production (outputs to dist/)
 pnpm preview           # Preview the production build locally
 pnpm check             # Type-check via `astro check`
+pnpm test              # Run Vitest suites once (`pnpm test:watch` to watch)
 pnpm format            # Format with Prettier (writes)
 pnpm format:check      # Format check only (CI)
 ```
 
 CI and reproducible installs use `pnpm install --frozen-lockfile`. `pnpm-lock.yaml` is the only lockfile; `package-lock.json` was removed because it had drifted far out of sync (do not regenerate it).
 
-No test framework is currently configured. If adding tests, prefer Vitest + @testing-library, colocated as `*.test.ts(x)` or under `src/__tests__/`.
+Tests use Vitest (`vitest.config.ts`, node environment), colocated as `*.test.ts(x)` next to the code. Before opening a PR run `pnpm check && pnpm test`, and run `pnpm format` only on files you changed (the repo is not fully formatted; do not reformat wholesale). Dependabot (`.github/dependabot.yml`) opens weekly grouped npm and GitHub Actions updates; major versions are ignored and need a manual bump.
 
 ## Architecture
 
