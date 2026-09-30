@@ -112,7 +112,7 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       axios:
-        specifier: ^1.18.0
+        specifier: 1.18.0
         version: 1.18.0
       chart.js:
         specifier: ^4.5.1
