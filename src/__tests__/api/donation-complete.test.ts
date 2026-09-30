@@ -8,7 +8,7 @@ vi.mock("../../lib/report-error", () => ({ reportError: vi.fn() }));
 
 const { verifyQgivTransaction } = await import("../../utils/qgivVerify");
 const { reportError } = await import("../../lib/report-error");
-const { POST } = await import("./donation-complete");
+const { POST } = await import("../../pages/api/donation-complete");
 
 const LOCALS = { runtime: { env: { EO_API_KEY: "eo" } } } as unknown as App.Locals;
 
