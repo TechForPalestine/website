@@ -75,7 +75,7 @@
       "smol-toml": "^1.7.1",
       "devalue": "^5.9.2",
       "ajv": "^8.18.0",
-      "wrangler": "^4.85.0",
+      "wrangler": "^4.141.0",
       "lodash": "^4.18.1",
       "yaml": "^2.8.3",
       "postcss": "^8.5.23",
@@ -92,12 +92,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@iconify-json/bi": "^1.2.6",
+    "@iconify-json/bi": "^1.2.7",
     "@iconify-json/ic": "^1.2.4",
     "@iconify-json/mdi": "^1.2.3",
-    "@iconify-json/solar": "^1.2.4",
-    "@iconify-json/tabler": "^1.2.23",
-    "@types/leaflet": "^1.9.21",
+    "@iconify-json/solar": "^1.2.13",
+    "@iconify-json/tabler": "^1.2.40",
+    "@types/leaflet": "^1.9.22",
     "@types/react-slick": "^0.23.13",
     "eslint": "^10.11.0",
     "eslint-plugin-astro": "^1",
@@ -105,12 +105,12 @@
     "globals": "^17.12.0",
     "husky": "^9.1.7",
     "lint-staged": "^15",
-    "prettier": "^3.6.2",
+    "prettier": "^3.9.9",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript-eslint": "^8.71.0",
     "vitest": "^3",
-    "wrangler": "^4.85.0"
+    "wrangler": "^4.141.0"
   },
   "lint-staged": {
     "*.{ts,tsx,astro,js,mjs}": [
