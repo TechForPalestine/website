@@ -1,5 +1,4 @@
 ---
-import Socials from "./Socials.astro";
 import { Icon } from "astro-icon/components";
 import NavBar from "./NavBar.svelte";
 
@@ -59,6 +58,7 @@ const navigation: Map<string, { href: string; submenu: [string, string][] | null
       href: "/events",
       submenu: [
         ["Past Events", "/events"],
+        ["Hackathon 2026", "https://hackathon2026.techforpalestine.org/"],
         ["Brussels 2026", "https://brussels2026.techforpalestine.org/"],
         ["Barcelona 2026", "https://barcelona2026.techforpalestine.org/"],
         ["Bay Area 2026", "https://summit.techforpalestine.org"],
@@ -79,7 +79,6 @@ const navigation: Map<string, { href: string; submenu: [string, string][] | null
 ---
 
 <NavBar client:load navigation={navigation} currentRoute={currentRoute}>
-  <Socials slot="socials" />
   <Icon name="solar:hamburger-menu-outline" class="h-8 w-8" slot="burger-icon" />
   <Icon name="mdi:close" class="h-8 w-8" slot="close" />
 </NavBar>

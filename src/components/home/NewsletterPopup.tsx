@@ -17,6 +17,10 @@ import {
   safeLocalStorage,
   writePopupState,
 } from "../../utils/newsletterPopup";
+import {
+  SHOWN_ATTRIBUTE as HACKATHON_SHOWN_ATTRIBUTE,
+  SHOWN_EVENT as HACKATHON_SHOWN_EVENT,
+} from "../../utils/hackathonPopup";
 
 // Homepage mailing-list popup. Spec: docs/superpowers/specs/2026-09-23-newsletter-popup-design.md
 
@@ -74,7 +78,14 @@ function CloseButton({ onClick, onDark = false }: { onClick: () => void; onDark?
       aria-label="Close mailing list signup"
       className={`${tone} flex h-9 w-9 shrink-0 items-center justify-center rounded-pill focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove`}
     >
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        aria-hidden="true"
+      >
         <path d="M6 6l12 12M18 6L6 18" />
       </svg>
     </button>
@@ -88,6 +99,17 @@ function Popup() {
   const bottomFormInView = useInView(FOOTER_SECTION_ID);
   const isDesktop = useIsDesktop();
   const [closed, setClosed] = useState(false);
+  // The homepage hackathon modal wins the page load: once it has opened, this
+  // popup stays hidden until the next page load. Not a dismissal, so nothing
+  // is written to storage. See docs/superpowers/specs/2026-10-04-hackathon-popup-design.md.
+  const [hackathonShown, setHackathonShown] = useState(() =>
+    document.documentElement.hasAttribute(HACKATHON_SHOWN_ATTRIBUTE)
+  );
+  useEffect(() => {
+    const onHackathonShown = () => setHackathonShown(true);
+    window.addEventListener(HACKATHON_SHOWN_EVENT, onHackathonShown);
+    return () => window.removeEventListener(HACKATHON_SHOWN_EVENT, onHackathonShown);
+  }, []);
   // Desktop opens straight to the card; mobile starts collapsed to a slim bar
   // (see the render branch below — the same collapsed/expanded split now also
   // drives the 30s idle auto-collapse on both).
@@ -97,7 +119,7 @@ function Popup() {
   const shownRef = useRef(false);
   const resetIdleTimerRef = useRef(() => {});
 
-  const mounted = enabled && eligible && triggered && !closed;
+  const mounted = enabled && eligible && triggered && !closed && !hackathonShown;
   const visible = mounted && !bottomFormInView;
 
   useEffect(() => {
@@ -131,7 +153,8 @@ function Popup() {
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       const frame = iframeRef.current;
-      if (!frame || event.origin !== window.location.origin || event.source !== frame.contentWindow) return;
+      if (!frame || event.origin !== window.location.origin || event.source !== frame.contentWindow)
+        return;
       const message = parseEmbedMessage(event.data);
       if (!message) return;
       if (message.type === "resize") {
