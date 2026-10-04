@@ -580,7 +580,7 @@ const IMG = "/images/hackathon-2026";
     .hk-copy {
       order: 2;
       align-self: stretch;
-      padding: 24px 20px 0;
+      padding: 16px 20px 0;
     }
     .hk-bar {
       order: 3;
@@ -589,46 +589,62 @@ const IMG = "/images/hackathon-2026";
       order: 4;
       align-self: stretch;
     }
+    .hk-label {
+      font-size: 1rem;
+      padding: 0.25rem 0.6rem;
+    }
     .hk-title {
-      font-size: 2rem;
+      margin-top: 0.75rem;
+      font-size: 1.625rem;
     }
     .hk-lead {
-      font-size: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.9375rem;
+      line-height: 1.5;
     }
     .hk-bar {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin: 24px 20px 0;
-      padding: 20px;
+      gap: 12px;
+      margin: 16px 20px 0;
+      padding: 14px 16px;
+    }
+    .hk-term {
+      font-size: 0.6875rem;
     }
     .hk-bar::before {
       clip-path: polygon(0 0, 92% 0, 92% 40%, 100% 40%, 100% 100%, 0 100%);
     }
     .hk-value {
-      font-size: 1.125rem;
+      font-size: 1rem;
+    }
+    .hk-sub {
+      font-size: 0.8125rem;
     }
     .hk-slash {
       display: none;
     }
     .hk-partner {
       grid-column: 1 / -1;
-      padding-left: 3rem;
+      min-height: 2.25rem;
+      padding-left: 2.5rem;
+      margin-right: 0;
     }
     .hk-partner::before {
-      width: 2.25rem;
-      height: 2.75rem;
+      width: 1.75rem;
+      height: 2.25rem;
     }
     .hk-cta {
       position: sticky;
       bottom: 0;
       z-index: 2;
       margin: 0;
-      padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+      padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
       background: #fff;
     }
     .hk-btn {
       width: 100%;
       justify-content: center;
+      padding: 0.75rem 1.25rem;
     }
     /* Sticky rather than absolute so the close button stays reachable while the
        sheet scrolls. The negative bottom margin cancels its 44px + 12px in the
@@ -644,10 +660,7 @@ const IMG = "/images/hackathon-2026";
     }
   }
 
-  @media (max-width: 399px) {
-    .hk-bar {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  @media (max-width: 359px) {
     .hk-nowrap {
       white-space: normal;
     }
