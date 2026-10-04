@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getEnv } from "./getEnv";
+import { getEnv, getKv, getRuntimeCtx } from "./getEnv";
 
 const NAME = "T4P_TEST_ENV_VAR";
 
@@ -31,5 +31,40 @@ describe("getEnv", () => {
   it("treats an empty runtime value as unset and falls through", () => {
     vi.stubEnv(NAME, "from-process");
     expect(getEnv(NAME, { runtime: { env: { [NAME]: "" } } })).toBe("from-process");
+  });
+
+  it("prefers import.meta.env over process.env when the runtime lacks the name", () => {
+    vi.stubEnv(NAME, "from-meta-and-process");
+    expect(getEnv(NAME, undefined)).toBe("from-meta-and-process");
+  });
+
+  it("tolerates null and non-object locals", () => {
+    vi.stubEnv(NAME, "from-process");
+    expect(getEnv(NAME, null)).toBe("from-process");
+    expect(getEnv(NAME, "nope")).toBe("from-process");
+  });
+});
+
+describe("getRuntimeCtx", () => {
+  it("returns the runtime ctx when present", () => {
+    const ctx = { waitUntil: () => {} };
+    expect(getRuntimeCtx({ runtime: { ctx } })).toBe(ctx);
+  });
+
+  it("returns undefined without a runtime or locals", () => {
+    expect(getRuntimeCtx({})).toBeUndefined();
+    expect(getRuntimeCtx(undefined)).toBeUndefined();
+  });
+});
+
+describe("getKv", () => {
+  it("returns the DROPPED_CONVERSIONS binding when present", () => {
+    const kv = { get: async () => null };
+    expect(getKv({ runtime: { env: { DROPPED_CONVERSIONS: kv } } })).toBe(kv);
+  });
+
+  it("returns undefined when unbound", () => {
+    expect(getKv({ runtime: { env: {} } })).toBeUndefined();
+    expect(getKv(undefined)).toBeUndefined();
   });
 });
