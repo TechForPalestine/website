@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
+import HackathonPopup from "../components/home/HackathonPopup.astro";
 import "../styles/base.css";
 
 const stats = [
@@ -178,16 +179,18 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
         <h1
           class="mt-6 max-w-[20ch] text-[38px] font-extrabold leading-[1.05] tracking-[-0.015em] text-ink min-[810px]:text-[clamp(42px,4.2vw,54px)] min-[810px]:leading-[1.02]"
         >
-          Join the tech movement behind <span class="text-grove"
-            >90+ projects for Palestine</span
-          >
+          Join the tech movement behind <span class="text-grove">90+ projects for Palestine</span>
         </h1>
 
-        <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
+        <p
+          class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]"
+        >
           Tech for Palestine is a 501(c)(3) nonprofit starting and scaling initiatives for
           Palestinian liberation.
         </p>
-        <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
+        <p
+          class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]"
+        >
           We support anyone with a meaningful idea, whether it is working against media censorship,
           using tech to aid protests, scaling boycotts, pushing for tech divestment, supporting
           Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
@@ -247,9 +250,7 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
     <!-- Portfolio -->
     <section class="bg-paper py-[clamp(4.5rem,8vw,7rem)]">
       <div class="mx-auto max-w-[1400px] px-6 md:px-8">
-        <header
-          class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-12"
-        >
+        <header class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-12">
           <div>
             <h2
               class="max-w-[18ch] text-[28px] font-extrabold leading-[1.1] tracking-[-0.015em] text-ink min-[810px]:text-[38px]"
@@ -299,7 +300,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
               class="mt-8 flex items-center justify-between gap-6 border-t border-ink-divider pt-4"
             >
               <span class="text-[14px] leading-snug text-ink-secondary">{leadProject.credit}</span>
-              <span class="flex flex-shrink-0 items-center gap-1.5 text-[13px] font-bold text-grove">
+              <span
+                class="flex flex-shrink-0 items-center gap-1.5 text-[13px] font-bold text-grove"
+              >
                 Visit <span aria-hidden="true">&#8599;</span>
               </span>
             </div>
@@ -364,7 +367,6 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           >
             How we help projects succeed
           </h2>
-
         </header>
 
         <ul class="mt-12 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -480,6 +482,7 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
     </section>
   </main>
   <NewsletterPopup client:only="react" />
+  <HackathonPopup />
   <script>
     import {
       FOOTER_SECTION_ID,

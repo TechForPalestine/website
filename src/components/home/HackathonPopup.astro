@@ -1,0 +1,710 @@
+---
+import { TICKET_URL, isCampaignLive } from "../../utils/hackathonPopup";
+
+// Homepage promo for the Oct 31 2026 hackathon, styled after the hackathon
+// site's hero. Spec: docs/superpowers/specs/2026-10-04-hackathon-popup-design.md
+// Renders nothing once the event is over; delete it and
+// public/images/hackathon-2026/ after that.
+const live = isCampaignLive(Date.now());
+const IMG = "/images/hackathon-2026";
+---
+
+{
+  live && (
+    <dialog id="hackathon-popup" class="hk" aria-labelledby="hk-title">
+      <div class="hk-card">
+        <button
+          type="button"
+          class="hk-close"
+          data-hk-close
+          aria-label="Close hackathon announcement"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+
+        <div class="hk-copy">
+          <p class="hk-label">
+            Part of <strong>Mozilla Festival</strong>
+          </p>
+          <h2 id="hk-title" class="hk-title">
+            Tech for Palestine Hackathon @ MozFest
+          </h2>
+          <p class="hk-lead">
+            A practical, one-day event for people who want to build ethical alternatives to
+            complicit tech.
+          </p>
+        </div>
+
+        <div class="hk-cta">
+          <a
+            class="hk-btn"
+            href={TICKET_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-hk-ticket
+          >
+            <span class="hk-btn__label">
+              <span class="hk-btn__text">Get your ticket</span>
+              <span class="hk-btn__text hk-btn__text--copy" aria-hidden="true">
+                Get your ticket
+              </span>
+            </span>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+
+        <div class="hk-stage" data-hk-stage>
+          <div class="hk-photo">
+            <img
+              class="hk-img"
+              data-hk-photo
+              src={`${IMG}/workshop-circle.webp`}
+              srcset={`${IMG}/workshop-circle-small.webp 640w, ${IMG}/workshop-circle.webp 1600w`}
+              sizes="(min-width: 768px) 440px, 100vw"
+              width="1600"
+              height="1067"
+              loading="lazy"
+              decoding="async"
+              alt="Hackathon participants laughing and debating ideas around a long workshop table"
+            />
+          </div>
+          <svg
+            class="hk-sweep"
+            viewBox="0 0 1000 667"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <defs>
+              <filter
+                id="hk-dry"
+                filterUnits="userSpaceOnUse"
+                x="-400"
+                y="-400"
+                width="2400"
+                height="2400"
+                color-interpolation-filters="sRGB"
+              >
+                <feTurbulence
+                  type="fractalNoise"
+                  baseFrequency="0.018"
+                  numOctaves="2"
+                  seed="4"
+                  result="warp"
+                />
+                <feDisplacementMap
+                  in="SourceGraphic"
+                  in2="warp"
+                  scale="14"
+                  xChannelSelector="R"
+                  yChannelSelector="G"
+                  result="rough"
+                />
+                <feTurbulence
+                  type="fractalNoise"
+                  baseFrequency="0.55 0.16"
+                  numOctaves="2"
+                  seed="11"
+                  result="grain"
+                />
+                <feColorMatrix
+                  in="grain"
+                  type="matrix"
+                  values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  10 0 0 0 -2.8"
+                  result="gate"
+                />
+                <feComposite in="rough" in2="gate" operator="in" />
+              </filter>
+            </defs>
+            <g
+              class="hk-sweep__ink"
+              filter="url(#hk-dry)"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M-26 560 C-12 290 84 112 300 84 C435 60 585 107 611 179 C646 275 554 312 526 234 C505 176 546 103 640 81 C748 53 845 50 936 62"
+                stroke-width="17"
+              />
+              <path
+                d="M-26 560 C-12 290 84 112 300 84 C435 60 585 107 611 179 C646 275 554 312 526 234 C505 176 546 103 640 81 C748 53 845 50 936 62"
+                stroke-width="7.14"
+                stroke-dasharray="153 18.7 68 13.6"
+                transform="translate(3.74 -4.42)"
+                opacity=".85"
+              />
+              <path d="M958 64 L892 20 M958 64 L898 114" stroke-width="15" />
+              <path
+                d="M958 64 L892 20 M958 64 L898 114"
+                stroke-width="6.3"
+                stroke-dasharray="135 16.5 60 12"
+                transform="translate(3.3 -3.9)"
+                opacity=".85"
+              />
+              <path d="M-8 470 C10 260 110 150 250 116" stroke-width="6" opacity=".7" />
+            </g>
+          </svg>
+          <div class="hk-cutout hk-cutout--1" aria-hidden="true" />
+          <div class="hk-cutout hk-cutout--2" aria-hidden="true" />
+          <div class="hk-cutout hk-cutout--3" aria-hidden="true" />
+          <div class="hk-cutout hk-cutout--4" aria-hidden="true" />
+        </div>
+
+        <dl class="hk-bar">
+          <div>
+            <dt class="hk-term">When</dt>
+            <dd class="hk-value">
+              Saturday
+              <br />
+              October 31st
+            </dd>
+            <dd class="hk-sub">9:00 - 18:00</dd>
+          </div>
+          <div>
+            <dt class="hk-term">Where</dt>
+            <dd class="hk-value">
+              Canodrom
+              <>
+                <br />
+                <span class="hk-nowrap">Barcelona, Spain</span>
+              </>
+            </dd>
+          </div>
+          <div class="hk-slash" aria-hidden="true">
+            //
+          </div>
+          <div class="hk-partner">
+            <dt class="hk-term">In partnership with</dt>
+            <dd class="hk-value">Thaura.ai</dd>
+          </div>
+        </dl>
+      </div>
+    </dialog>
+  )
+}
+
+<style>
+  .hk {
+    --hk-red: #d92d27;
+    --hk-green: #157a3e;
+    --hk-ink: #141414;
+    width: min(920px, calc(100% - 48px));
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--hk-ink);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .hk::backdrop {
+    background: rgb(20 20 20 / 0.55);
+  }
+  :global(html:has(#hackathon-popup[open])) {
+    overflow: hidden;
+  }
+
+  .hk-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-areas:
+      "copy stage"
+      "cta stage"
+      "bar bar";
+    column-gap: 40px;
+    padding: 56px 48px 48px;
+    background: #fff;
+    font-family: Outfit, system-ui, sans-serif;
+    line-height: 1.65;
+  }
+  .hk[open] .hk-card {
+    animation: hk-rise 280ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  @keyframes hk-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  .hk-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--hk-ink);
+  }
+  .hk-close:hover {
+    background: #f2f2f2;
+  }
+
+  .hk-copy {
+    grid-area: copy;
+    align-self: end;
+  }
+  .hk-label {
+    display: inline-flex;
+    gap: 0.3em;
+    background: var(--hk-red);
+    color: #fff;
+    font-size: 1.125rem;
+    padding: 0.4rem 0.75rem;
+    line-height: 1.4;
+  }
+  .hk-label strong {
+    font-weight: 700;
+  }
+  .hk-title {
+    margin-top: 1.25rem;
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .hk-lead {
+    margin-top: 1rem;
+    max-width: 38ch;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .hk-cta {
+    grid-area: cta;
+    align-self: start;
+    margin-top: 1.75rem;
+  }
+  .hk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.4rem;
+    background: var(--hk-ink);
+    color: #fff;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  .hk-btn:hover {
+    background: #3a3a3a;
+  }
+  .hk-btn:focus-visible,
+  .hk-close:focus-visible {
+    outline: 2px solid var(--hk-green);
+    outline-offset: 3px;
+  }
+  .hk-btn__label {
+    display: grid;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+  .hk-btn__text {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    transition:
+      transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.5s;
+  }
+  .hk-btn__text--copy {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  .hk-btn:is(:hover, :focus-visible) .hk-btn__text:not(.hk-btn__text--copy) {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  .hk-btn:is(:hover, :focus-visible) .hk-btn__text--copy {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hk-stage {
+    grid-area: stage;
+    align-self: center;
+    position: relative;
+  }
+  .hk-photo {
+    clip-path: polygon(9% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .hk-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: 30% 50%;
+    background: #f2f2f2;
+  }
+  .hk-sweep {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    color: var(--hk-red);
+  }
+  .hk-cutout {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--hk-photo-src, none);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .hk-cutout--1 {
+    clip-path: polygon(
+      52.73% 19.77%,
+      53.52% 18.89%,
+      54.69% 18.89%,
+      55.47% 19.77%,
+      56.05% 21.23%,
+      56.25% 22.4%,
+      56.15% 23.28%,
+      56.64% 22.84%,
+      57.03% 23.87%,
+      57.23% 25.92%,
+      58.01% 28.11%,
+      58.11% 30.31%,
+      57.03% 31.48%,
+      56.45% 32.21%,
+      53.52% 38.51%,
+      51.17% 38.51%,
+      51.27% 33.67%,
+      51.07% 29.72%,
+      51.27% 26.5%,
+      51.86% 23.87%,
+      52.64% 22.11%
+    );
+  }
+  .hk-cutout--2 {
+    clip-path: polygon(
+      60.94% 28.99%,
+      61.82% 28.11%,
+      62.99% 28.55%,
+      63.67% 29.72%,
+      63.96% 31.63%,
+      63.96% 33.09%,
+      63.48% 34.7%,
+      65.33% 36.02%,
+      66.31% 38.65%,
+      66.89% 38.8%,
+      67.09% 36.75%,
+      67.58% 35.58%,
+      67.38% 38.07%,
+      66.8% 40.41%,
+      65.92% 41.58%,
+      65.04% 44.22%,
+      61.33% 47%,
+      58.89% 45.39%,
+      58.2% 41%,
+      58.2% 36.75%,
+      59.28% 34.41%,
+      60.84% 33.97%,
+      60.45% 31.63%
+    );
+  }
+  .hk-cutout--3 {
+    clip-path: polygon(
+      53.52% 37.04%,
+      54% 35.14%,
+      55.18% 33.67%,
+      56.45% 32.8%,
+      57.81% 32.65%,
+      59.08% 33.38%,
+      59.57% 35.14%,
+      59.28% 37.63%,
+      58.5% 40.41%,
+      57.23% 43.05%,
+      53.81% 42.61%,
+      52.64% 40.7%
+    );
+  }
+  .hk-cutout--4 {
+    clip-path: polygon(
+      51.37% 42.17%,
+      52.15% 40.26%,
+      53.71% 38.65%,
+      55.66% 37.77%,
+      57.52% 37.77%,
+      59.47% 38.95%,
+      60.84% 40.41%,
+      61.82% 42.75%,
+      62.11% 45.1%,
+      61.72% 47.73%,
+      61.23% 50.51%,
+      61.43% 53.88%,
+      64.06% 57.1%,
+      69.24% 61.49%,
+      71.29% 73.35%,
+      71.19% 87.55%,
+      68.75% 100%,
+      48.34% 100%,
+      47.46% 81.41%,
+      44.24% 71.6%,
+      42.48% 68.08%,
+      41.6% 64.28%,
+      42.97% 60.76%,
+      47.85% 55.64%,
+      50.39% 52.27%,
+      51.27% 48.9%,
+      50.98% 45.83%
+    );
+  }
+  .hk-card--no-photo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "copy" "cta" "bar";
+  }
+  .hk-card--no-photo .hk-stage {
+    display: none;
+  }
+
+  .hk-bar {
+    grid-area: bar;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 40px;
+    padding: 32px 36px;
+    color: #fff;
+  }
+  .hk-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--hk-green);
+    clip-path: polygon(0 0, 96% 0, 96% 60%, 100% 60%, 100% 100%, 0 100%);
+  }
+  .hk-term {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .hk-value {
+    margin-top: 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+  .hk-sub {
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+  }
+  .hk-nowrap {
+    white-space: nowrap;
+  }
+  .hk-slash {
+    align-self: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .hk-partner {
+    position: relative;
+    padding-left: 3.75rem;
+    margin-right: 1.5rem;
+  }
+  /* The Thaura camel mark: a pseudo-element, since a <dl> group may only hold <dt>/<dd>. */
+  .hk-partner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.75rem;
+    height: 3.5rem;
+    background: url("/images/hackathon-2026/thaura-logo.svg") center / contain no-repeat;
+    filter: brightness(0) invert(1);
+  }
+
+  @media (max-width: 767px) {
+    .hk {
+      width: 100%;
+      max-height: 85dvh;
+      margin: auto 0 0;
+    }
+    .hk-card {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "stage" "copy" "bar" "cta";
+      padding: 0;
+    }
+    .hk-img {
+      aspect-ratio: 16 / 9;
+    }
+    .hk-copy {
+      padding: 24px 20px 0;
+    }
+    .hk-title {
+      font-size: 2rem;
+    }
+    .hk-lead {
+      font-size: 1rem;
+    }
+    .hk-bar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 24px 20px 0;
+      padding: 20px;
+    }
+    .hk-bar::before {
+      clip-path: polygon(0 0, 92% 0, 92% 40%, 100% 40%, 100% 100%, 0 100%);
+    }
+    .hk-value {
+      font-size: 1.125rem;
+    }
+    .hk-slash {
+      display: none;
+    }
+    .hk-partner {
+      grid-column: 1 / -1;
+      padding-left: 3rem;
+    }
+    .hk-partner::before {
+      width: 2.25rem;
+      height: 2.75rem;
+    }
+    .hk-cta {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      margin: 0;
+      padding: 16px 20px;
+      background: #fff;
+    }
+    .hk-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hk[open] .hk-card {
+      animation: none;
+    }
+    .hk-btn__text {
+      transition: none;
+    }
+    .hk-btn:is(:hover, :focus-visible) .hk-btn__text:not(.hk-btn__text--copy) {
+      opacity: 1;
+      transform: none;
+    }
+    .hk-btn:is(:hover, :focus-visible) .hk-btn__text--copy {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  import {
+    SHOW_DELAY_MS,
+    SHOWN_ATTRIBUTE,
+    SHOWN_EVENT,
+    readPopupState,
+    shouldShowPopup,
+    writePopupState,
+    type DismissReason,
+  } from "../../utils/hackathonPopup";
+  import { safeLocalStorage } from "../../utils/newsletterPopup";
+
+  const dialog = document.getElementById("hackathon-popup");
+  if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === "function") {
+    if (shouldShowPopup(readPopupState(safeLocalStorage()), Date.now())) schedule(dialog);
+  }
+
+  function schedule(dialog: HTMLDialogElement) {
+    const card = dialog.querySelector<HTMLElement>(".hk-card");
+    const stage = dialog.querySelector<HTMLElement>("[data-hk-stage]");
+    const photo = dialog.querySelector<HTMLImageElement>("[data-hk-photo]");
+
+    // The cutouts must reuse whichever srcset candidate the browser picked,
+    // or they'd download a second copy. CSSOM, not style="": the CSP blocks the latter.
+    const usePhoto = () => {
+      if (photo?.currentSrc)
+        stage?.style.setProperty("--hk-photo-src", `url("${photo.currentSrc}")`);
+    };
+    const dropPhoto = () => card?.classList.add("hk-card--no-photo");
+    if (photo) {
+      photo.addEventListener("load", usePhoto, { once: true });
+      photo.addEventListener("error", dropPhoto, { once: true });
+      // Lazy images inside a closed <dialog> wait until it opens; start the
+      // download now so the photo is there when the modal appears.
+      photo.loading = "eager";
+      if (photo.complete) (photo.naturalWidth > 0 ? usePhoto : dropPhoto)();
+    }
+
+    let reason: DismissReason = "escape";
+    const closeWith = (next: DismissReason) => {
+      reason = next;
+      dialog.close();
+    };
+
+    dialog.querySelector("[data-hk-close]")?.addEventListener("click", () => closeWith("close"));
+    dialog.querySelector("[data-hk-ticket]")?.addEventListener("click", () => {
+      window.plausible("Hackathon Ticket Click");
+      closeWith("ticket");
+    });
+    // A click whose target is the <dialog> itself landed on the backdrop: the
+    // card fills the dialog box, which has no padding.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) closeWith("backdrop");
+    });
+    // Fires for every close path, Esc included (which skips closeWith).
+    dialog.addEventListener(
+      "close",
+      () => {
+        writePopupState(safeLocalStorage(), { dismissedAt: Date.now() });
+        window.plausible("Hackathon Popup Dismissed", { props: { reason } });
+      },
+      { once: true }
+    );
+
+    window.setTimeout(() => {
+      if (!dialog.isConnected || dialog.open) return;
+      dialog.showModal();
+      document.documentElement.setAttribute(SHOWN_ATTRIBUTE, "");
+      window.dispatchEvent(new Event(SHOWN_EVENT));
+      window.plausible("Hackathon Popup Shown");
+    }, SHOW_DELAY_MS);
+  }
+</script>
