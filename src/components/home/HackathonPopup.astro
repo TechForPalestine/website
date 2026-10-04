@@ -573,14 +573,15 @@ const IMG = "/images/hackathon-2026";
       flex-direction: column;
       padding: 0;
     }
+    /* The photo is dropped on phones: at full width it alone is ~250px tall,
+       which made the sheet fill the screen. */
     .hk-stage {
-      order: 1;
-      align-self: stretch;
+      display: none;
     }
     .hk-copy {
       order: 2;
       align-self: stretch;
-      padding: 16px 20px 0;
+      padding: 56px 20px 0;
     }
     .hk-bar {
       order: 3;
@@ -655,9 +656,6 @@ const IMG = "/images/hackathon-2026";
       align-self: flex-end;
       margin: 12px 12px -56px 0;
     }
-    .hk-card--no-photo .hk-copy {
-      padding-top: 64px;
-    }
   }
 
   @media (max-width: 359px) {
@@ -691,20 +689,15 @@ const IMG = "/images/hackathon-2026";
     }
   }
 
-  /* Short viewports (phone landscape): the photo alone would fill the screen
-     and push the copy below the fold, so drop it and show the text first. */
-  @media (max-height: 500px) {
+  /* Short viewports: the photo would make the dialog fill the screen height,
+     so drop it and keep the card sized to its text. */
+  @media (max-height: 700px) {
     .hk-card {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: "copy" "cta" "bar";
     }
     .hk-stage {
       display: none;
-    }
-  }
-  @media (max-height: 500px) and (max-width: 767px) {
-    .hk-card .hk-copy {
-      padding-top: 56px;
     }
   }
 
