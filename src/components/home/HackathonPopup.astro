@@ -564,16 +564,30 @@ const IMG = "/images/hackathon-2026";
       max-height: 85dvh;
       margin: auto 0 0;
     }
+    /* A flex column rather than the desktop grid: position: sticky is limited
+       to its containing block, and a grid item's is its own grid area, so the
+       ticket button could never stick. Here the card is the containing block.
+       The photo keeps its 3:2 ratio so the arrow and head cutouts stay aligned. */
     .hk-card {
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-areas: "stage" "copy" "bar" "cta";
+      display: flex;
+      flex-direction: column;
       padding: 0;
     }
-    .hk-img {
-      aspect-ratio: 16 / 9;
+    .hk-stage {
+      order: 1;
+      align-self: stretch;
     }
     .hk-copy {
+      order: 2;
+      align-self: stretch;
       padding: 24px 20px 0;
+    }
+    .hk-bar {
+      order: 3;
+    }
+    .hk-cta {
+      order: 4;
+      align-self: stretch;
     }
     .hk-title {
       font-size: 2rem;
