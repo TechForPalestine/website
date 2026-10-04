@@ -1,5 +1,5 @@
 ---
-import { TICKET_URL, isCampaignLive } from "../../utils/hackathonPopup";
+import { SITE_URL, TICKET_URL, isCampaignLive } from "../../utils/hackathonPopup";
 
 // Homepage promo for the Oct 31 2026 hackathon, styled after the hackathon
 // site's hero. Spec: docs/superpowers/specs/2026-10-04-hackathon-popup-design.md
@@ -204,6 +204,14 @@ const IMG = "/images/hackathon-2026";
             <dd class="hk-value">Thaura.ai</dd>
           </div>
         </dl>
+
+        <p class="hk-more">
+          <a href={SITE_URL} target="_blank" rel="noopener noreferrer">
+            Visit the hackathon website
+            <span class="sr-only"> (opens in a new tab)</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </p>
       </div>
     </dialog>
   )
@@ -239,7 +247,8 @@ const IMG = "/images/hackathon-2026";
     grid-template-areas:
       "copy stage"
       "cta stage"
-      "bar bar";
+      "bar bar"
+      "more more";
     column-gap: 40px;
     padding: 56px 48px 48px;
     background: #fff;
@@ -488,7 +497,7 @@ const IMG = "/images/hackathon-2026";
   }
   .hk-card--no-photo {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "copy" "cta" "bar";
+    grid-template-areas: "copy" "cta" "bar" "more";
   }
   .hk-card--no-photo .hk-stage {
     display: none;
@@ -541,6 +550,23 @@ const IMG = "/images/hackathon-2026";
     font-weight: 600;
     line-height: 1;
   }
+  .hk-more {
+    grid-area: more;
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .hk-more a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .hk-more a:hover {
+    color: var(--hk-green);
+  }
+  .hk-more a:focus-visible {
+    outline: 2px solid var(--hk-green);
+    outline-offset: 3px;
+  }
   .hk-partner {
     position: relative;
     padding-left: 3.75rem;
@@ -573,62 +599,136 @@ const IMG = "/images/hackathon-2026";
       flex-direction: column;
       padding: 0;
     }
+    /* The photo is dropped on phones: at full width it alone is ~250px tall,
+       which made the sheet fill the screen. */
     .hk-stage {
-      order: 1;
-      align-self: stretch;
+      display: none;
     }
     .hk-copy {
       order: 2;
       align-self: stretch;
-      padding: 24px 20px 0;
+      padding: 56px 20px 0;
     }
     .hk-bar {
       order: 3;
     }
-    .hk-cta {
+    .hk-more {
       order: 4;
+      margin: 12px 20px 16px;
+      font-size: 0.9375rem;
+    }
+    .hk-cta {
+      order: 5;
       align-self: stretch;
     }
+    .hk-label {
+      font-size: 1rem;
+      padding: 0.25rem 0.6rem;
+    }
     .hk-title {
-      font-size: 2rem;
+      margin-top: 0.75rem;
+      font-size: 1.625rem;
     }
     .hk-lead {
-      font-size: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.9375rem;
+      line-height: 1.5;
     }
     .hk-bar {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin: 24px 20px 0;
-      padding: 20px;
+      gap: 12px;
+      margin: 16px 20px 0;
+      padding: 14px 16px;
+    }
+    .hk-term {
+      font-size: 0.6875rem;
     }
     .hk-bar::before {
       clip-path: polygon(0 0, 92% 0, 92% 40%, 100% 40%, 100% 100%, 0 100%);
     }
     .hk-value {
-      font-size: 1.125rem;
+      font-size: 1rem;
+    }
+    .hk-sub {
+      font-size: 0.8125rem;
     }
     .hk-slash {
       display: none;
     }
     .hk-partner {
       grid-column: 1 / -1;
-      padding-left: 3rem;
+      min-height: 2.25rem;
+      padding-left: 2.5rem;
+      margin-right: 0;
     }
     .hk-partner::before {
-      width: 2.25rem;
-      height: 2.75rem;
+      width: 1.75rem;
+      height: 2.25rem;
     }
     .hk-cta {
       position: sticky;
       bottom: 0;
       z-index: 2;
       margin: 0;
-      padding: 16px 20px;
+      padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
       background: #fff;
     }
     .hk-btn {
       width: 100%;
       justify-content: center;
+      padding: 0.75rem 1.25rem;
+    }
+    /* Sticky rather than absolute so the close button stays reachable while the
+       sheet scrolls. The negative bottom margin cancels its 44px + 12px in the
+       flow, so it overlays the photo instead of pushing content down. */
+    .hk-close {
+      position: sticky;
+      top: 12px;
+      align-self: flex-end;
+      margin: 12px 12px -56px 0;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .hk-nowrap {
+      white-space: normal;
+    }
+  }
+
+  /* Tablets / small laptops: the two-column card is only ~620px wide here, too
+     narrow for the four-across info bar, so tighten the card and wrap the bar. */
+  @media (min-width: 768px) and (max-width: 959px) {
+    .hk-card {
+      column-gap: 24px;
+      padding: 56px 28px 32px;
+    }
+    .hk-title {
+      font-size: 2rem;
+    }
+    .hk-bar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px 24px;
+      margin-top: 32px;
+      padding: 28px;
+    }
+    .hk-slash {
+      display: none;
+    }
+    .hk-partner {
+      grid-column: 1 / -1;
+      margin-right: 0;
+    }
+  }
+
+  /* Short viewports: the photo would make the dialog fill the screen height,
+     so drop it and keep the card sized to its text. */
+  @media (max-height: 700px) {
+    .hk-card {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "copy" "cta" "bar" "more";
+    }
+    .hk-stage {
+      display: none;
     }
   }
 

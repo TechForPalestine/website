@@ -3,6 +3,7 @@
 // Vitest's node environment. See docs/superpowers/specs/2026-10-04-hackathon-popup-design.md.
 
 export const TICKET_URL = "https://secure.qgiv.com/for/eventstest/event/hackathon2026/";
+export const SITE_URL = "https://hackathon2026.techforpalestine.org/";
 export const STORAGE_KEY = "t4p-hackathon-2026-popup";
 export const SHOW_DELAY_MS = 4_000;
 // Midnight after the event, Barcelona time (CET: DST ends on Oct 25).
