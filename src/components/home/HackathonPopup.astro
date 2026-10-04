@@ -623,12 +623,75 @@ const IMG = "/images/hackathon-2026";
       bottom: 0;
       z-index: 2;
       margin: 0;
-      padding: 16px 20px;
+      padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
       background: #fff;
     }
     .hk-btn {
       width: 100%;
       justify-content: center;
+    }
+    /* Sticky rather than absolute so the close button stays reachable while the
+       sheet scrolls. The negative bottom margin cancels its 44px + 12px in the
+       flow, so it overlays the photo instead of pushing content down. */
+    .hk-close {
+      position: sticky;
+      top: 12px;
+      align-self: flex-end;
+      margin: 12px 12px -56px 0;
+    }
+    .hk-card--no-photo .hk-copy {
+      padding-top: 64px;
+    }
+  }
+
+  @media (max-width: 399px) {
+    .hk-bar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hk-nowrap {
+      white-space: normal;
+    }
+  }
+
+  /* Tablets / small laptops: the two-column card is only ~620px wide here, too
+     narrow for the four-across info bar, so tighten the card and wrap the bar. */
+  @media (min-width: 768px) and (max-width: 959px) {
+    .hk-card {
+      column-gap: 24px;
+      padding: 56px 28px 32px;
+    }
+    .hk-title {
+      font-size: 2rem;
+    }
+    .hk-bar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px 24px;
+      margin-top: 32px;
+      padding: 28px;
+    }
+    .hk-slash {
+      display: none;
+    }
+    .hk-partner {
+      grid-column: 1 / -1;
+      margin-right: 0;
+    }
+  }
+
+  /* Short viewports (phone landscape): the photo alone would fill the screen
+     and push the copy below the fold, so drop it and show the text first. */
+  @media (max-height: 500px) {
+    .hk-card {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "copy" "cta" "bar";
+    }
+    .hk-stage {
+      display: none;
+    }
+  }
+  @media (max-height: 500px) and (max-width: 767px) {
+    .hk-card .hk-copy {
+      padding-top: 56px;
     }
   }
 
