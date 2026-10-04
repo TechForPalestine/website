@@ -207,8 +207,8 @@ const IMG = "/images/hackathon-2026";
 
         <p class="hk-more">
           <a href={SITE_URL} target="_blank" rel="noopener noreferrer">
-            Visit the hackathon website
-            <span class="sr-only"> (opens in a new tab)</span>
+            More info
+            <span class="sr-only"> about the hackathon (opens in a new tab)</span>
             <span aria-hidden="true">&rarr;</span>
           </a>
         </p>
@@ -553,15 +553,23 @@ const IMG = "/images/hackathon-2026";
   .hk-more {
     grid-area: more;
     margin-top: 1.25rem;
-    font-size: 1rem;
-    font-weight: 600;
   }
   .hk-more a {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: calc(0.7rem - 2px) 1.25rem;
+    border: 2px solid var(--hk-ink);
+    color: var(--hk-ink);
+    font-size: 1rem;
+    font-weight: 600;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
   }
   .hk-more a:hover {
-    color: var(--hk-green);
+    background: var(--hk-ink);
+    color: #fff;
   }
   .hk-more a:focus-visible {
     outline: 2px solid var(--hk-green);
@@ -615,6 +623,11 @@ const IMG = "/images/hackathon-2026";
     .hk-more {
       order: 4;
       margin: 12px 20px 16px;
+    }
+    .hk-more a {
+      width: 100%;
+      justify-content: center;
+      padding-block: calc(0.6rem - 2px);
       font-size: 0.9375rem;
     }
     .hk-cta {
