@@ -1,5 +1,9 @@
 import { useContext, useState } from "react";
-import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../../store/eventsClient";
+import {
+  hasMeaningfulDescription,
+  primaryEventLink,
+  type EventItem,
+} from "../../store/eventsClient";
 import { displayTitle, type EventSection } from "../../utils/eventSections";
 import { copyAnchorLink } from "../../utils/copyAnchorLink";
 import { EventPreviewImage } from "./EventPreviewImage";

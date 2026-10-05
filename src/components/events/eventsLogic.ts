@@ -20,7 +20,7 @@ export function eventSlugFromPathname(pathname: string): string | null {
 export function resolveSelectedEvent(
   events: EventItem[],
   pathname: string,
-  nowMs: number = Date.now(),
+  nowMs: number = Date.now()
 ): SelectedEvent | null {
   const slug = eventSlugFromPathname(pathname);
   if (slug === null) return null;

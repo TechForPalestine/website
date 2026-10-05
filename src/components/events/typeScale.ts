@@ -1,4 +1,3 @@
-
 // Font sizes only (not family/weight/color) matched to /events-new's type
 // scale in src/styles/design-system.css, stepped at the same 390/810/1200
 // breakpoints. Each constant is named after the .ts-* role it mirrors.

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import RichTextRenderer from "./RichTextRenderer.tsx";
-import type { RichTextSegment, NotionRichText } from "../types/richText";
+import RichTextRenderer from "../shared/RichTextRenderer";
+import type { RichTextSegment, NotionRichText } from "../../types/richText";
 
 type Idea = {
   id?: string;
@@ -106,7 +106,7 @@ export default function IdeasWithTabs({
                     richTextDescription:
                       richTextDescription && Array.isArray(richTextDescription)
                         ? richTextDescription
-                        : richTextDescription && "rich_text" in (richTextDescription as any)
+                        : richTextDescription && "rich_text" in (richTextDescription as object)
                           ? richTextDescription
                           : [], // fallback
                     tags: data.tags || [],

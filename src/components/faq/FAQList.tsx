@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FAQAccordion from "./FAQAccordion";
 import { CircularProgress, Typography, Box } from "@mui/material";
-import type { RichTextSegment } from "../types/richText";
+import type { RichTextSegment } from "../../types/richText";
 
 interface FAQItem {
   id: string;

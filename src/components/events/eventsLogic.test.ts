@@ -83,7 +83,8 @@ describe("upcomingTeaser", () => {
   });
 
   it("features speakers when the description lists them", () => {
-    const description = "Intro.\n\n**OUR SPEAKERS**\n\n**MO HAMZEH - Creator**\n\n**JANE DOE - Dev**";
+    const description =
+      "Intro.\n\n**OUR SPEAKERS**\n\n**MO HAMZEH - Creator**\n\n**JANE DOE - Dev**";
     expect(upcomingTeaser(description)).toBe("Featuring Mo Hamzeh and Jane Doe");
   });
 });

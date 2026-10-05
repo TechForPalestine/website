@@ -1,14 +1,15 @@
-import React from "react";
-import type { RichTextSegment, RichTextRendererProps, NotionRichText } from "../types/richText";
+import type React from "react";
+import type { NotionRichText, RichTextSegment } from "../../types/richText";
+import type { RichTextRendererProps } from "../../types/richTextRenderer";
 
-const RichTextRenderer: React.FC<RichTextRendererProps> = ({
+function RichTextRenderer({
   richText,
   className = "",
   linkClassName = "text-brand",
   mutedTextClassName = "text-ink-secondary",
   accentTextClassName = "text-brand",
   codeClassName = "bg-sand",
-}) => {
+}: RichTextRendererProps) {
   // Handle both direct array and Notion API response format
   const segments: RichTextSegment[] = Array.isArray(richText)
     ? richText
@@ -214,6 +215,6 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({
   };
 
   return <div className={className}>{processContent()}</div>;
-};
+}
 
 export default RichTextRenderer;

@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import "../styles/base.css";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
-import RichTextRenderer from "../components/RichTextRenderer";
+import RichTextRenderer from "../components/shared/RichTextRenderer";
 import { featuredCall, callState } from "../utils/communityCall";
 import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";

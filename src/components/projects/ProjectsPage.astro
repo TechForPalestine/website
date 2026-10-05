@@ -1,13 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ProjectsNewComponent from "../ProjectsNew.tsx";
+import ProjectsNewComponent from "./ProjectsDirectoryPage.tsx";
 import PageHeader from "../PageHeader.astro";
 import "../../styles/base.css";
 import type { ProjectMeta } from "../../utils/projectMeta";
 
 // Shared by /projects and /projects/<slug>. The slug route renders this same
 // page with that project's preview tags; the island opens the matching dialog
-// on its own by reading window.location.pathname (see ProjectsNew.tsx), so no
+// on its own by reading window.location.pathname (see ProjectsDirectoryPage.tsx), so no
 // prop has to carry the matched project down to it.
 interface Props {
   meta: ProjectMeta | null;

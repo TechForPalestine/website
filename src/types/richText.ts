@@ -27,6 +27,3 @@ export interface RichTextSegment {
 export interface NotionRichText {
   rich_text: RichTextSegment[];
 }
-
-// Compat: the renderer props moved to richTextRenderer.ts.
-export type { RichTextRendererProps } from "./richTextRenderer";

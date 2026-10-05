@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import RichTextRenderer from "./RichTextRenderer";
-import type { RichTextSegment } from "../types/richText";
+import RichTextRenderer from "../shared/RichTextRenderer";
+import type { RichTextSegment } from "../../types/richText";
 
 type FAQAccordionProps = {
   question: string;

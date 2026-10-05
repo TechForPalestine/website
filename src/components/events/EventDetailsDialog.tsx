@@ -153,9 +153,7 @@ function EventDetailsDialogBody({
           </span>
         </time>
 
-        <h2 className={`font-bold tracking-tight text-gray-900 ${TS_SUBHEADING_SIZE}`}>
-          {title}
-        </h2>
+        <h2 className={`font-bold tracking-tight text-gray-900 ${TS_SUBHEADING_SIZE}`}>{title}</h2>
 
         <div className="flex items-center justify-between gap-4">
           {/* Day/month/year is already shown above in the date badge — this

@@ -32,20 +32,30 @@ describe("parsePopupState", () => {
   });
 
   it("reads a stored dismissal", () => {
-    expect(parsePopupState('{"dismissedAt":1700000000000}')).toEqual({ dismissedAt: 1700000000000 });
+    expect(parsePopupState('{"dismissedAt":1700000000000}')).toEqual({
+      dismissedAt: 1700000000000,
+    });
   });
 
-  it.each(["not json", "null", "5", "[]", '"x"', "{}", '{"dismissedAt":"x"}', '{"dismissedAt":null}'])(
-    "treats %s as never dismissed",
-    (raw) => {
-      expect(parsePopupState(raw)).toBeNull();
-    }
-  );
+  it.each([
+    "not json",
+    "null",
+    "5",
+    "[]",
+    '"x"',
+    "{}",
+    '{"dismissedAt":"x"}',
+    '{"dismissedAt":null}',
+  ])("treats %s as never dismissed", (raw) => {
+    expect(parsePopupState(raw)).toBeNull();
+  });
 });
 
 describe("readPopupState", () => {
   it("reads from storage under the hackathon key", () => {
-    const storage = { getItem: (key: string) => (key === STORAGE_KEY ? '{"dismissedAt":1}' : null) };
+    const storage = {
+      getItem: (key: string) => (key === STORAGE_KEY ? '{"dismissedAt":1}' : null),
+    };
     expect(readPopupState(storage)).toEqual({ dismissedAt: 1 });
   });
 

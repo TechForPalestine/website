@@ -1,5 +1,9 @@
 import { useContext } from "react";
-import { hasMeaningfulDescription, primaryEventLink, type EventItem } from "../../store/eventsClient";
+import {
+  hasMeaningfulDescription,
+  primaryEventLink,
+  type EventItem,
+} from "../../store/eventsClient";
 import { displayTitle, getUpcomingEvents, type UpcomingEvent } from "../../utils/eventSections";
 import { EventModalContext, useEventDate } from "./EventsShared";
 import { formatUpcomingCount, upcomingTeaser } from "./eventsLogic";
@@ -71,7 +75,11 @@ function UpcomingEventCard({ item }: { item: UpcomingEvent }) {
 
   if (showPopup) {
     return (
-      <button type="button" onClick={() => openModal({ event, isPast: false })} className={rowClasses}>
+      <button
+        type="button"
+        onClick={() => openModal({ event, isPast: false })}
+        className={rowClasses}
+      >
         {dateColumn}
         {body}
         {cta}
