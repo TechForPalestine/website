@@ -1,33 +1,43 @@
 import type { APIRoute } from "astro";
 import { getEnv } from "../../utils/getEnv";
-import { constantTimeEqual } from "../../utils/crypto";
+import { verifyHmacSha256Hex } from "../../utils/crypto";
 
-async function verifySignature(secret: string, body: string, signature: string): Promise<boolean> {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"]
-  );
-  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(body));
-  const expected = Array.from(new Uint8Array(mac))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return constantTimeEqual(expected, signature);
+/** The subset of Sentry's webhook payload we read. Everything is optional. */
+export interface SentryWebhookPayload {
+  action?: string;
+  data?: {
+    triggered_rule?: string;
+    issue?: {
+      title?: string;
+      permalink?: string;
+      project?: { name?: string };
+      tags?: Array<{ key?: string; value?: string }>;
+      metadata?: { value?: string };
+    };
+    event?: {
+      title?: string;
+      web_url?: string;
+      issue_url?: string;
+      environment?: string;
+    };
+  };
 }
 
-function formatMessage(body: Record<string, any>): string {
-  const action: string = body.action ?? "unknown";
+function isPayload(value: unknown): value is SentryWebhookPayload {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+export function formatMessage(body: SentryWebhookPayload): string {
+  const action = body.action ?? "unknown";
   const issue = body.data?.issue;
   const event = body.data?.event;
-  const rule: string = body.data?.triggered_rule ?? "";
+  const rule = body.data?.triggered_rule ?? "";
 
   if (issue) {
-    const title: string = issue.title ?? issue.metadata?.value ?? "Unknown error";
-    const url: string = issue.permalink ?? "";
-    const project: string = issue.project?.name ?? "";
-    const env: string = issue.tags?.find((t: any) => t.key === "environment")?.value ?? "";
+    const title = issue.title ?? issue.metadata?.value ?? "Unknown error";
+    const url = issue.permalink ?? "";
+    const project = issue.project?.name ?? "";
+    const env = issue.tags?.find((t) => t.key === "environment")?.value ?? "";
 
     const envTag = env ? ` \`${env}\`` : "";
     const actionLabel: Record<string, string> = {
@@ -49,9 +59,9 @@ function formatMessage(body: Record<string, any>): string {
   }
 
   if (event) {
-    const title: string = event.title ?? "Error";
-    const url: string = event.web_url ?? event.issue_url ?? "";
-    const env: string = event.environment ?? "";
+    const title = event.title ?? "Error";
+    const url = event.web_url ?? event.issue_url ?? "";
+    const env = event.environment ?? "";
     const envTag = env ? ` \`${env}\`` : "";
 
     return [
@@ -66,6 +76,8 @@ function formatMessage(body: Record<string, any>): string {
   return `**Sentry event**: \`${action}\``;
 }
 
+// Failures here use console.error only, not reportAndFlush: reporting a Sentry
+// webhook failure back to Sentry could loop.
 export const POST: APIRoute = async ({ request, locals }) => {
   const origin = request.headers.get("Origin");
   if (origin) {
@@ -87,13 +99,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const rawBody = await request.text();
   const signature = request.headers.get("sentry-hook-signature") ?? "";
 
-  if (!signature || !(await verifySignature(secret, rawBody, signature))) {
+  if (!signature || !(await verifyHmacSha256Hex(secret, rawBody, signature))) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
-  let body: Record<string, any>;
+  let body: SentryWebhookPayload;
   try {
-    body = JSON.parse(rawBody);
+    const parsed: unknown = JSON.parse(rawBody);
+    if (!isPayload(parsed)) throw new Error("payload is not an object");
+    body = parsed;
   } catch {
     return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
   }

@@ -1,32 +1,29 @@
 import { getEnv } from "../utils/getEnv";
 import { resolveIcsDateTimeToUtcIso } from "../utils/icalDate";
 import { reportError } from "../lib/report-error";
+import { DEFAULT_EVENT_IMAGE, type EventItem } from "../types/events";
 
-export interface EventItem {
-  id: string;
-  title: string;
-  // `date` and `time` are wall clock in the *organizer's* zone (the DTSTART
-  // TZID), not the visitor's — only safe to display for all-day events, which
-  // have no instant. Everything else should render from `dateUtcIso`; see
-  // useEventDate() in components/events/EventsShared.tsx.
-  date: string; // "YYYY-MM-DD" in the organizer's zone
-  status: string;
-  location: string;
-  locationLink: string; // map link for in-person events, "" otherwise
-  watchLink: string; // online join/stream link (e.g. a YouTube channel), "" otherwise
-  image: string;
-  link: string;
-  time?: string; // e.g. "7:30 PM" in the organizer's zone; absent for all-day events
-  description?: string;
-  registerLink?: string;
-  recordingLink?: string;
-  tags: string[];
-  dateUtcIso: string | null; // instant used for upcoming/past comparisons; null if unresolvable
-  endUtcIso: string | null; // event end instant; falls back to start + 1hr if DTEND is missing
-}
+// Server-side ICS events client. The feed URL carries an auth token, so this
+// module is server-only. Cache policy: none here (fetched per request).
+// Timeout: none set (platform default). Failure: fetchEvents logs via
+// reportError and throws a generic "Failed to fetch events"; a missing
+// EVENTS_ICS_URL throws a configuration error.
+//
+// Compat: the shared event types and link helpers live in src/types/events.ts
+// (safe to import from client components); they are re-exported here so
+// existing imports keep working.
+export {
+  DEFAULT_EVENT_IMAGE,
+  hasMeaningfulDescription,
+  primaryEventLink,
+  type EventItem,
+} from "../types/events";
 
 const REGISTRATION_HOSTS = ["zoom.us", "docs.google.com", "streamyard.com"];
 const MAP_HOSTS = ["openstreetmap.org", "maps.google.com", "goo.gl"];
+
+// Assumed length of an event whose feed entry has no DTEND.
+const DEFAULT_EVENT_DURATION_MS = 60 * 60 * 1000;
 
 const DROPPED_TAGS = new Set(["testing"]);
 
@@ -135,8 +132,6 @@ function stripInlineRegistrationLines(description: string): string {
   return kept.join("\n");
 }
 
-export const DEFAULT_EVENT_IMAGE = "/images/default.jpg";
-
 function extractImage(properties: RawProperty[]): string {
   const image = properties.find((p) => p.name === "IMAGE");
   if (image?.value) return image.value;
@@ -222,7 +217,7 @@ function parseVEvent(block: string[]): EventItem | null {
   const endUtcIso = dtend
     ? resolveIcsDateTimeToUtcIso(dtend.value, dtend.params["TZID"])
     : dateUtcIso
-      ? new Date(new Date(dateUtcIso).getTime() + 60 * 60 * 1000).toISOString()
+      ? new Date(new Date(dateUtcIso).getTime() + DEFAULT_EVENT_DURATION_MS).toISOString()
       : null;
 
   const rawLocation = get("LOCATION")?.value || "";
@@ -264,7 +259,7 @@ function parseVEvent(block: string[]): EventItem | null {
   };
 }
 
-function parseIcsCalendar(raw: string): EventItem[] {
+export function parseIcsCalendar(raw: string): EventItem[] {
   const lines = unfoldLines(raw);
   const parsed: { event: EventItem; isOverride: boolean }[] = [];
   let currentBlock: string[] | null = null;
@@ -317,7 +312,7 @@ function eventRichness(event: EventItem): number {
   if (event.tags.length > 0) score++;
   if (event.recordingLink) score++;
   if (event.description) score++;
-  if (event.image !== "/images/default.jpg") score++;
+  if (event.image !== DEFAULT_EVENT_IMAGE) score++;
   return score;
 }
 
@@ -343,33 +338,7 @@ function dedupeCommunityCallDuplicates(events: EventItem[]): EventItem[] {
   return [...rest, ...byDay.values()];
 }
 
-// The best single call-to-action link + label for an event, in priority
-// order. Shared by both event pages' detail popups.
-// Below this length a description is basically just a placeholder (e.g.
-// "In this call we discuss T4P updates!") — not worth a popup of its own.
-const MEANINGFUL_DESCRIPTION_MIN_LENGTH = 80;
-
-export function hasMeaningfulDescription(event: EventItem): boolean {
-  return (event.description?.trim().length ?? 0) >= MEANINGFUL_DESCRIPTION_MIN_LENGTH;
-}
-
-export function primaryEventLink(
-  event: EventItem,
-  isPast: boolean
-): { link: string; label: string } {
-  if (isPast) {
-    // Registration is closed once an event is over — never offer it here,
-    // even if the feed still has a registerLink set.
-    if (event.recordingLink) return { link: event.recordingLink, label: "Watch recording" };
-    if (event.watchLink) return { link: event.watchLink, label: "Watch online" };
-    return { link: "", label: "" };
-  }
-  if (event.registerLink) return { link: event.registerLink, label: "Register" };
-  if (event.watchLink) return { link: event.watchLink, label: "Watch online" };
-  return { link: "", label: "" };
-}
-
-export async function fetchEvents(locals?: any): Promise<EventItem[]> {
+export async function fetchEvents(locals?: App.Locals): Promise<EventItem[]> {
   const icsUrl = getEnv("EVENTS_ICS_URL", locals);
 
   if (!icsUrl) {

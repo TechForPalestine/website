@@ -4,7 +4,7 @@
   export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
   export let currentRoute: string;
   // Unused: only declared so @astrojs/svelte's generated types allow the named
-  // slots (socials, close, burger-icon) passed from Navigation.astro — without
+  // slots (close, burger-icon) passed from Navigation.astro — without
   // it "children" types as `undefined` and `astro check` rejects any slot content.
   export let children: unknown = undefined;
 
@@ -175,14 +175,8 @@
       </nav>
     </div>
 
-    <!-- Right side: Socials, Hub and Donate. Socials only appear from xl up —
-         below that, the row has no room left for both the icon list and the
-         two CTA buttons (see the 1024px-1279px overflow finding in code
-         review). -->
+    <!-- Right side: Hub and Donate -->
     <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
-      <div class="hidden xl:flex items-center gap-4 2xl:gap-6">
-        <slot name="socials" />
-      </div>
       <a
         href={HUB_URL}
         class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-2 px-4 text-sm 2xl:py-2.5 2xl:px-6 2xl:text-base rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
@@ -299,9 +293,6 @@
       >
         Log into Hub
       </a>
-      <div class="mt-6 flex justify-center">
-        <slot name="socials" />
-      </div>
     </nav>
   {/if}
 </header>

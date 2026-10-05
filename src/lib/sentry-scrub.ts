@@ -1,3 +1,5 @@
+import type { Breadcrumb, ErrorEvent, Event } from "@sentry/astro";
+
 /**
  * Strips URL query strings (which can carry auth tokens, e.g. EVENTS_ICS_URL)
  * from anything headed to Sentry or the console.
@@ -8,6 +10,8 @@ export function scrubString(value: string): string {
   return value.replace(URL_WITH_QUERY, "$1?[redacted]");
 }
 
+function scrubUrlField(value: string | undefined): string | undefined;
+function scrubUrlField(value: unknown): unknown;
 function scrubUrlField(value: unknown): unknown {
   if (typeof value !== "string") return value;
   const scrubbed = scrubString(value);
@@ -17,14 +21,14 @@ function scrubUrlField(value: unknown): unknown {
   return q === -1 ? value : `${value.slice(0, q)}?[redacted]`;
 }
 
-function scrubData(data: any): void {
+function scrubData(data: Record<string, unknown> | undefined): void {
   if (!data || typeof data !== "object") return;
   for (const key of ["url", "http.url", "http.query", "http.target", "from", "to"]) {
     if (key in data) data[key] = scrubUrlField(data[key]);
   }
 }
 
-export function beforeBreadcrumb(breadcrumb: any): any {
+export function beforeBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb {
   if (typeof breadcrumb.message === "string") {
     breadcrumb.message = scrubString(breadcrumb.message);
   }
@@ -32,7 +36,7 @@ export function beforeBreadcrumb(breadcrumb: any): any {
   return breadcrumb;
 }
 
-export function beforeSend(event: any): any {
+export function beforeSend(event: ErrorEvent): ErrorEvent {
   if (typeof event.message === "string") event.message = scrubString(event.message);
   for (const ex of event.exception?.values ?? []) {
     if (typeof ex.value === "string") ex.value = scrubString(ex.value);
@@ -45,7 +49,7 @@ export function beforeSend(event: any): any {
   return event;
 }
 
-export function beforeSendTransaction(event: any): any {
+export function beforeSendTransaction<T extends Event>(event: T): T {
   if (event.request) {
     event.request.url = scrubUrlField(event.request.url);
     delete event.request.query_string;

@@ -11,7 +11,7 @@ still used for FAQ, ideas, agenda, signatories, and community calls (see [NOTION
 ```
 ICS Feed → eventsClient.ts → API Route → Frontend Component
                                  ↓              ↓
-                          /api/events    Events.tsx / EventsNew.tsx
+                          /api/events    Events.tsx
 ```
 
 Both pages group events into categories (by the feed's `CATEGORIES` tags) and split each

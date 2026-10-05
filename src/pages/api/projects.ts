@@ -1,12 +1,17 @@
 import type { APIRoute } from "astro";
-import * as Sentry from "@sentry/astro";
-import { reportError } from "../../lib/report-error";
+import { reportAndFlush } from "../../lib/report-error";
 import { fetchProjectsData } from "../../store/projectsClient";
 
 export const prerender = false;
 
+// Public read-only data: CORS may be open (write endpoints must never do this).
+const PUBLIC_READ_CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET",
+  "Access-Control-Allow-Headers": "Content-Type",
+} as const;
+
 export const GET: APIRoute = async ({ locals }) => {
-  const ctx = locals.runtime?.ctx;
   try {
     const { projects, tags, source } = await fetchProjectsData(locals);
 
@@ -14,12 +19,8 @@ export const GET: APIRoute = async ({ locals }) => {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Headers": "Content-Type",
-        // The list is cached server-side (see store/projectsClient.ts); browsers
-        // still revalidate. The middleware forces no-store on /api/* regardless.
-        "Cache-Control": "no-store",
+        ...PUBLIC_READ_CORS,
+        // Cache-Control is forced to no-store on /api/* by middleware/cache-control.ts.
         // hit | miss | stale: how you can tell the server-side cache is working.
         "X-Projects-Source": source,
         "X-Project-Count": projects.length.toString(),
@@ -27,8 +28,7 @@ export const GET: APIRoute = async ({ locals }) => {
       },
     });
   } catch (error) {
-    reportError(error, { context: "projects" });
-    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    reportAndFlush(error, { context: "projects" }, locals);
 
     return new Response(JSON.stringify({ error: "Failed to fetch projects" }), {
       status: 500,

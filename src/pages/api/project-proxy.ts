@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
-import * as Sentry from "@sentry/astro";
 import { getEnv } from "../../utils/getEnv.js";
-import { reportError } from "../../lib/report-error";
+import { reportAndFlush } from "../../lib/report-error";
+import { buildForwardHeaders, normalizeProxyPath } from "../../utils/safeProxy";
 
 export const prerender = false;
 
@@ -14,6 +14,8 @@ export const prerender = false;
  * GET  /api/project-proxy?path=/api/method/foo  → GET  {API_URL}/api/method/foo
  * POST /api/project-proxy?path=/api/method/foo  → POST {API_URL}/api/method/foo
  */
+const ALLOWED_PREFIX = "/api/method/";
+
 async function proxy(request: Request, locals: unknown): Promise<Response> {
   const apiUrl = getEnv("PUBLIC_API_URL", locals);
   const secretKey = getEnv("PUBLIC_SECRET_KEY", locals);
@@ -26,13 +28,9 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
   }
 
   const url = new URL(request.url);
-  const path = url.searchParams.get("path");
+  const normalizedPath = normalizeProxyPath(url.searchParams.get("path"), ALLOWED_PREFIX);
 
-  // Normalise dot-segments (../, ./) before the prefix check so a crafted
-  // path like /api/method/../../api/auth/admin cannot bypass the guard.
-  const normalizedPath = path ? new URL(path, "http://localhost").pathname : null;
-
-  if (!normalizedPath || !normalizedPath.startsWith("/api/method/")) {
+  if (!normalizedPath) {
     return new Response(JSON.stringify({ error: "Path not allowed" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },
@@ -41,24 +39,17 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
 
   const upstream = `${apiUrl.replace(/\/$/, "")}${normalizedPath}`;
 
-  // Explicit allowlist — never forward cookies, IP headers, or other
-  // browser-supplied headers that could influence upstream access controls.
-  const FORWARD_HEADERS = ["content-type", "accept", "accept-language", "accept-encoding"];
-  const headers = new Headers();
-  for (const name of FORWARD_HEADERS) {
-    const val = request.headers.get(name);
-    if (val) headers.set(name, val);
-  }
-  headers.set("Authorization", secretKey);
+  const headers = buildForwardHeaders(request.headers, secretKey);
 
   try {
-    const upstreamResponse = await fetch(upstream, {
+    const init: RequestInit & { duplex: "half" } = {
       method: request.method,
       headers,
       body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
-      // @ts-ignore — Cloudflare Workers require this for streaming POST bodies
+      // Cloudflare Workers require this for streaming POST bodies
       duplex: "half",
-    });
+    };
+    const upstreamResponse = await fetch(upstream, init);
 
     const responseHeaders = new Headers(upstreamResponse.headers);
     responseHeaders.delete("transfer-encoding");
@@ -69,9 +60,7 @@ async function proxy(request: Request, locals: unknown): Promise<Response> {
       headers: responseHeaders,
     });
   } catch (error) {
-    reportError(error, { context: "project-proxy", path: normalizedPath });
-    const ctx = (locals as any).runtime?.ctx;
-    ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
+    reportAndFlush(error, { context: "project-proxy", path: normalizedPath }, locals);
 
     return new Response(JSON.stringify({ error: "Failed to process request" }), {
       status: 502,
