@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 .superpowers/
 .env.local
+
+# IDE
+.idea/

@@ -6,10 +6,10 @@ Help normalize Palestinian humanity in different ways.
 
 ## Getting started
 
-To run this project on your local machine, first install dependencies:
+To run this project on your local machine you need Node 22 (see `.nvmrc`) and pnpm 9+ (via Corepack). Install dependencies:
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 Next, run the development server:
@@ -20,17 +20,11 @@ pnpm dev
 
 Finally, open [http://localhost:4321](http://localhost:4321) in your browser to view the website.
 
-For CI environments, prefer a clean, reproducible install:
-
-```bash
-npm ci
-```
-
 ## Features
 
 ### Events System
 
-The `/events` page displays events from a Notion database. See [docs/EVENTS.md](docs/EVENTS.md) for detailed documentation.
+The `/events` page displays events from a public ICS calendar feed (Mattermost Events Calendar plugin). See [docs/EVENTS.md](docs/EVENTS.md) for detailed documentation.
 
 Key features:
 

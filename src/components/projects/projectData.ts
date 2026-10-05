@@ -1,55 +1,9 @@
-export interface Tag {
-  id: number;
-  name: string;
-  type: string;
-}
+import type { ProjectItem } from "../../types/projects";
 
-export interface ProjectItem {
-  id: number;
-  name: string;
-  description: string;
-  impactStatement?: string;
-  elevatorPitch?: string;
-  websiteUrl?: string;
-  logoUrl?: string;
-  createdAt: string;
-  updatedAt: string;
-  leadName?: string;
-  leaderPhoto?: string;
-  leaderBio?: string;
-  publicEmail?: string;
-  donationUrl?: string;
-  involvementUrl?: string;
-  categoryName?: string;
-  discordUsername?: string;
-  mentor?: string;
-  twitterUrl?: string;
-  linkedinUrl?: string;
-  githubUrl?: string;
-  instagramUrl?: string;
-  facebookUrl?: string;
-  youtubeUrl?: string;
-  telegramUrl?: string;
-  mastodonUrl?: string;
-  blueskyUrl?: string;
-  tiktokUrl?: string;
-  signalUrl?: string;
-  upscrolledUrl?: string;
-  tags?: Tag[];
-  featured?: boolean;
-}
-
-/** Only allow http: and https: URLs to prevent javascript: / data: XSS vectors. */
-export function sanitizeUrl(url: string | undefined): string {
-  if (!url) return "";
-  try {
-    const parsed = new URL(url, "https://placeholder.invalid");
-    if (parsed.protocol === "http:" || parsed.protocol === "https:") return url;
-  } catch {
-    // malformed URL
-  }
-  return "";
-}
+// Compat: these moved to types/projects.ts and utils/sanitizeUrl.ts (so the
+// server-side store can use them without importing from a component folder).
+export type { ProjectItem, Tag } from "../../types/projects";
+export { sanitizeUrl } from "../../utils/sanitizeUrl";
 
 export function sanitizeEmail(email: string | undefined): string {
   if (!email) return "";

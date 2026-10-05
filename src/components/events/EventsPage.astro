@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import EventsComponent from "../Events.tsx";
+import EventsComponent from "./EventsRoot.tsx";
 import "../../styles/base.css";
 import type { EventMeta } from "../../utils/eventMeta";
 
@@ -22,7 +22,9 @@ const { meta } = Astro.props;
       <div class="text-xs font-semibold uppercase tracking-[0.14em] text-[#EA4335]">
         Tech for Palestine
       </div>
-      <h1 class="max-w-[14ch] text-[44px] font-bold leading-[0.98] tracking-[-0.03em] text-gray-900 sm:text-[64px] lg:text-[76px]">
+      <h1
+        class="max-w-[14ch] text-[44px] font-bold leading-[0.98] tracking-[-0.03em] text-gray-900 sm:text-[64px] lg:text-[76px]"
+      >
         Events
       </h1>
       <p class="max-w-[46ch] text-[17px] leading-[1.55] text-gray-600">
