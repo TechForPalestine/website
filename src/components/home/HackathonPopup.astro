@@ -1,8 +1,8 @@
 ---
-import { SITE_URL, TICKET_URL, isCampaignLive } from "../../utils/hackathonPopup";
+import { CHALLENGE_URL, SITE_URL, isCampaignLive } from "../../utils/hackathonPopup";
 
-// Homepage promo for the Oct 31 2026 hackathon, styled after the hackathon
-// site's hero. Spec: docs/superpowers/specs/2026-10-04-hackathon-popup-design.md
+// Homepage promo for the October 2026 Incubator challenge and its Oct 31
+// hackathon, styled after the hackathon site's hero. Spec: docs/superpowers/specs/2026-10-04-hackathon-popup-design.md
 // Renders nothing once the event is over; delete it and
 // public/images/hackathon-2026/ after that.
 const live = isCampaignLive(Date.now());
@@ -17,7 +17,7 @@ const IMG = "/images/hackathon-2026";
           type="button"
           class="hk-close"
           data-hk-close
-          aria-label="Close hackathon announcement"
+          aria-label="Close challenge announcement"
         >
           <svg
             width="22"
@@ -35,31 +35,16 @@ const IMG = "/images/hackathon-2026";
 
         <div class="hk-copy">
           <p class="hk-label">
-            Part of <strong>Mozilla Festival</strong>
+            <strong>October 2026 Challenge:</strong>
           </p>
           <h2 id="hk-title" class="hk-title">
-            Tech for Palestine Hackathon @ MozFest
+            How do we make it easier for users to migrate to ethical alternatives to complicit tech?
           </h2>
-          <p class="hk-lead">
-            A practical, one-day event for people who want to build ethical alternatives to
-            complicit tech.
-          </p>
         </div>
 
         <div class="hk-cta">
-          <a
-            class="hk-btn"
-            href={TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-hk-ticket
-          >
-            <span class="hk-btn__label">
-              <span class="hk-btn__text">Get your ticket</span>
-              <span class="hk-btn__text hk-btn__text--copy" aria-hidden="true">
-                Get your ticket
-              </span>
-            </span>
+          <a class="hk-btn" href={CHALLENGE_URL} data-hk-cta="challenge">
+            <span>Learn more about the challenge and apply to the Incubator</span>
             <svg
               width="20"
               height="20"
@@ -74,7 +59,30 @@ const IMG = "/images/hackathon-2026";
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>
+          </a>
+          <a
+            class="hk-btn hk-btn--outline"
+            href={SITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-hk-cta="hackathon"
+          >
+            <span>Join our in-person hackathon on October 31st in Barcelona, Spain</span>
             <span class="sr-only"> (opens in a new tab)</span>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M7 17 17 7" />
+              <path d="M8 7h9v9" />
+            </svg>
           </a>
         </div>
 
@@ -204,14 +212,6 @@ const IMG = "/images/hackathon-2026";
             <dd class="hk-value">Thaura.ai</dd>
           </div>
         </dl>
-
-        <p class="hk-more">
-          <a href={SITE_URL} target="_blank" rel="noopener noreferrer">
-            More info
-            <span class="sr-only"> about the hackathon (opens in a new tab)</span>
-            <span aria-hidden="true">&rarr;</span>
-          </a>
-        </p>
       </div>
     </dialog>
   )
@@ -247,8 +247,7 @@ const IMG = "/images/hackathon-2026";
     grid-template-areas:
       "copy stage"
       "cta stage"
-      "bar bar"
-      "more more";
+      "bar bar";
     column-gap: 40px;
     padding: 56px 48px 48px;
     background: #fff;
@@ -300,66 +299,58 @@ const IMG = "/images/hackathon-2026";
   }
   .hk-title {
     margin-top: 1.25rem;
-    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-size: clamp(1.75rem, 2.8vw, 2.375rem);
     font-weight: 800;
     line-height: 1.05;
     letter-spacing: -0.015em;
     text-wrap: balance;
   }
-  .hk-lead {
-    margin-top: 1rem;
-    max-width: 38ch;
-    font-size: 1.125rem;
-    line-height: 1.6;
-  }
 
   .hk-cta {
     grid-area: cta;
     align-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
     margin-top: 1.75rem;
   }
   .hk-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
     padding: 0.9rem 1.4rem;
+    border: 2px solid var(--hk-ink);
     background: var(--hk-ink);
     color: #fff;
     font-size: 1.0625rem;
     font-weight: 600;
-    transition: background-color 0.2s;
+    line-height: 1.35;
+    text-align: left;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .hk-btn svg {
+    flex-shrink: 0;
   }
   .hk-btn:hover {
     background: #3a3a3a;
+  }
+  .hk-btn--outline {
+    background: #fff;
+    color: var(--hk-ink);
+  }
+  .hk-btn--outline:hover {
+    background: var(--hk-ink);
+    color: #fff;
   }
   .hk-btn:focus-visible,
   .hk-close:focus-visible {
     outline: 2px solid var(--hk-green);
     outline-offset: 3px;
-  }
-  .hk-btn__label {
-    display: grid;
-    overflow: hidden;
-    line-height: 1.4;
-  }
-  .hk-btn__text {
-    grid-area: 1 / 1;
-    white-space: nowrap;
-    transition:
-      transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-      opacity 0.5s;
-  }
-  .hk-btn__text--copy {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  .hk-btn:is(:hover, :focus-visible) .hk-btn__text:not(.hk-btn__text--copy) {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-  .hk-btn:is(:hover, :focus-visible) .hk-btn__text--copy {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .hk-stage {
@@ -497,7 +488,7 @@ const IMG = "/images/hackathon-2026";
   }
   .hk-card--no-photo {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "copy" "cta" "bar" "more";
+    grid-template-areas: "copy" "cta" "bar";
   }
   .hk-card--no-photo .hk-stage {
     display: none;
@@ -550,31 +541,6 @@ const IMG = "/images/hackathon-2026";
     font-weight: 600;
     line-height: 1;
   }
-  .hk-more {
-    grid-area: more;
-    margin-top: 1.25rem;
-  }
-  .hk-more a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: calc(0.7rem - 2px) 1.25rem;
-    border: 2px solid var(--hk-ink);
-    color: var(--hk-ink);
-    font-size: 1rem;
-    font-weight: 600;
-    transition:
-      background-color 0.2s,
-      color 0.2s;
-  }
-  .hk-more a:hover {
-    background: var(--hk-ink);
-    color: #fff;
-  }
-  .hk-more a:focus-visible {
-    outline: 2px solid var(--hk-green);
-    outline-offset: 3px;
-  }
   .hk-partner {
     position: relative;
     padding-left: 3.75rem;
@@ -600,7 +566,7 @@ const IMG = "/images/hackathon-2026";
     }
     /* A flex column rather than the desktop grid: position: sticky is limited
        to its containing block, and a grid item's is its own grid area, so the
-       ticket button could never stick. Here the card is the containing block.
+       buttons could never stick. Here the card is the containing block.
        The photo keeps its 3:2 ratio so the arrow and head cutouts stay aligned. */
     .hk-card {
       display: flex;
@@ -620,18 +586,8 @@ const IMG = "/images/hackathon-2026";
     .hk-bar {
       order: 3;
     }
-    .hk-more {
-      order: 4;
-      margin: 12px 20px 16px;
-    }
-    .hk-more a {
-      width: 100%;
-      justify-content: center;
-      padding-block: calc(0.6rem - 2px);
-      font-size: 0.9375rem;
-    }
     .hk-cta {
-      order: 5;
+      order: 4;
       align-self: stretch;
     }
     .hk-label {
@@ -640,12 +596,7 @@ const IMG = "/images/hackathon-2026";
     }
     .hk-title {
       margin-top: 0.75rem;
-      font-size: 1.625rem;
-    }
-    .hk-lead {
-      margin-top: 0.5rem;
-      font-size: 0.9375rem;
-      line-height: 1.5;
+      font-size: 1.375rem;
     }
     .hk-bar {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -686,10 +637,12 @@ const IMG = "/images/hackathon-2026";
       padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
       background: #fff;
     }
+    .hk-cta {
+      gap: 0.5rem;
+    }
     .hk-btn {
-      width: 100%;
-      justify-content: center;
-      padding: 0.75rem 1.25rem;
+      padding: 0.65rem 1rem;
+      font-size: 0.9375rem;
     }
     /* Sticky rather than absolute so the close button stays reachable while the
        sheet scrolls. The negative bottom margin cancels its 44px + 12px in the
@@ -716,7 +669,7 @@ const IMG = "/images/hackathon-2026";
       padding: 56px 28px 32px;
     }
     .hk-title {
-      font-size: 2rem;
+      font-size: 1.625rem;
     }
     .hk-bar {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -738,7 +691,7 @@ const IMG = "/images/hackathon-2026";
   @media (max-height: 700px) {
     .hk-card {
       grid-template-columns: minmax(0, 1fr);
-      grid-template-areas: "copy" "cta" "bar" "more";
+      grid-template-areas: "copy" "cta" "bar";
     }
     .hk-stage {
       display: none;
@@ -748,16 +701,6 @@ const IMG = "/images/hackathon-2026";
   @media (prefers-reduced-motion: reduce) {
     .hk[open] .hk-card {
       animation: none;
-    }
-    .hk-btn__text {
-      transition: none;
-    }
-    .hk-btn:is(:hover, :focus-visible) .hk-btn__text:not(.hk-btn__text--copy) {
-      opacity: 1;
-      transform: none;
-    }
-    .hk-btn:is(:hover, :focus-visible) .hk-btn__text--copy {
-      opacity: 0;
     }
   }
 </style>
@@ -771,6 +714,7 @@ const IMG = "/images/hackathon-2026";
     shouldShowPopup,
     writePopupState,
     type DismissReason,
+    type PopupCta,
   } from "../../utils/hackathonPopup";
   import { safeLocalStorage } from "../../utils/newsletterPopup";
 
@@ -807,9 +751,12 @@ const IMG = "/images/hackathon-2026";
     };
 
     dialog.querySelector("[data-hk-close]")?.addEventListener("click", () => closeWith("close"));
-    dialog.querySelector("[data-hk-ticket]")?.addEventListener("click", () => {
-      window.plausible("Hackathon Ticket Click");
-      closeWith("ticket");
+    dialog.querySelectorAll<HTMLAnchorElement>("[data-hk-cta]").forEach((link) => {
+      link.addEventListener("click", () => {
+        const cta = link.dataset.hkCta as PopupCta;
+        window.plausible("Hackathon Popup CTA Click", { props: { cta } });
+        closeWith(cta);
+      });
     });
     // A click whose target is the <dialog> itself landed on the backdrop: the
     // card fills the dialog box, which has no padding.

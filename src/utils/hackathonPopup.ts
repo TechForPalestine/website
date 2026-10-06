@@ -2,7 +2,7 @@
 // (src/components/home/HackathonPopup.astro). Kept DOM-free so it runs under
 // Vitest's node environment. See docs/superpowers/specs/2026-10-04-hackathon-popup-design.md.
 
-export const TICKET_URL = "https://secure.qgiv.com/for/eventstest/event/hackathon2026/";
+export const CHALLENGE_URL = "/monthly-challenge";
 export const SITE_URL = "https://hackathon2026.techforpalestine.org/";
 export const STORAGE_KEY = "t4p-hackathon-2026-popup";
 export const SHOW_DELAY_MS = 4_000;
@@ -14,7 +14,8 @@ export const SHOWN_ATTRIBUTE = "data-hackathon-popup-shown";
 export const SHOWN_EVENT = "t4p:hackathon-popup-shown";
 
 export type PopupState = { dismissedAt: number } | null;
-export type DismissReason = "close" | "escape" | "backdrop" | "ticket";
+export type PopupCta = "challenge" | "hackathon";
+export type DismissReason = "close" | "escape" | "backdrop" | PopupCta;
 
 export function isCampaignLive(now: number): boolean {
   return now < CAMPAIGN_ENDS_AT;
