@@ -1,0 +1,361 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { APPLY_URL } from "../data/incubator";
+import {
+  about,
+  approach,
+  migrations,
+  challenge,
+  exampleTargets,
+  hackathon,
+  otherTargets,
+  supportedProjects,
+  whatAreChallenges,
+} from "../data/challenge";
+import { fetchProjectsData } from "../store/projectsClient";
+import type { ProjectItem } from "../types/projects";
+import { pickChallengeProjects } from "../utils/challengeProjects";
+import { projectPath } from "../utils/projectSlug";
+import { getInitials, getProjectText, resolveLogoSrc } from "../components/projects/projectData";
+import { isCampaignLive } from "../utils/hackathonPopup";
+import "../styles/base.css";
+
+const container = "mx-auto max-w-[1280px] px-6 sm:px-8";
+const h2 =
+  "text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]";
+const lede = "text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]";
+const body = "max-w-[65ch] text-[17px] leading-relaxed text-ink-secondary";
+const overline = "mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]";
+const bandShell = "border-y border-[#D2E4D6] bg-[#E7F2E9]";
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2";
+const primaryButton = `inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#157A3E] px-7 py-3.5 font-bold text-white shadow-sm transition-colors duration-150 hover:bg-[#0e5a2f] motion-reduce:transition-none ${focusRing}`;
+const textLink = `inline-flex items-center gap-1.5 rounded-sm text-[17px] font-bold text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] motion-reduce:transition-none ${focusRing}`;
+
+// Live from ProjectHub so names, logos and pitches stay current. On failure
+// the section falls back to a link to the directory rather than vanishing.
+let projects: ProjectItem[] | null = null;
+try {
+  const data = await fetchProjectsData(Astro.locals);
+  projects = pickChallengeProjects(data.projects, supportedProjects);
+} catch (error) {
+  console.error("[challenge] Could not load projects from ProjectHub", error);
+  // Don't let the middleware cache the degraded page past the outage.
+  Astro.response.headers.set("Cache-Control", "no-store");
+}
+
+const showHackathon = isCampaignLive(Date.now());
+---
+
+<Layout
+  title={`Incubator Challenge ${challenge.month} - Tech for Palestine`}
+  description={`${challenge.question} Apply to the Tech for Palestine Incubator challenge for ${challenge.month}.`}
+>
+  <main>
+    <!-- Hero: the challenge question carries the page -->
+    <section class={`${container} py-16 min-[810px]:py-20`}>
+      <div
+        class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-16"
+      >
+        <div>
+          <p class={overline}>Incubator Challenge · {challenge.month}</p>
+          <h1
+            class="max-w-[22ch] text-balance text-[36px] font-extrabold leading-[1.06] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+          >
+            {challenge.question}
+          </h1>
+          <p class={`mt-6 max-w-[52ch] ${lede}`}>{challenge.summary}</p>
+          <div class="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <a
+              href={APPLY_URL}
+              data-track-challenge="apply"
+              data-cta-location="hero"
+              class={primaryButton}
+            >
+              Apply for this challenge
+            </a>
+            {
+              showHackathon && (
+                <a href="#hackathon" class={textLink}>
+                  Or join the hackathon, Oct 31 <span aria-hidden="true">↓</span>
+                </a>
+              )
+            }
+          </div>
+        </div>
+
+        <!-- Recess panel: the challenge made concrete by switches the cohort already offers -->
+        <figure class="rounded-lg bg-[#F2F3EE] p-6 sm:p-8">
+          <figcaption class="text-[17px] font-bold text-ink">
+            Switches our projects already offer
+          </figcaption>
+          <ul class="mt-4">
+            {
+              migrations.map((m) => (
+                <li class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1.2fr)] items-center gap-3 border-t border-ink-divider py-3.5 first:border-t-0">
+                  <span class="text-[17px] text-ink-secondary">{m.from}</span>
+                  <span class="text-[#157A3E]" aria-hidden="true">
+                    →
+                  </span>
+                  <span class="sr-only">to</span>
+                  <span class="text-[17px] font-bold text-ink">{m.to}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <a href="#projects-heading" class={`mt-4 ${textLink} text-[16px]`}>
+            See the projects <span aria-hidden="true">↓</span>
+          </a>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Band: what the challenge is and who it could target -->
+    <section class={bandShell} aria-labelledby="about-heading">
+      <div class={`${container} py-14 min-[810px]:py-16`}>
+        <div
+          class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16"
+        >
+          <div>
+            <p class={overline}>About the challenge</p>
+            <h2 id="about-heading" class={`max-w-[18ch] text-balance ${h2}`}>
+              Make leaving complicit tech the easy choice.
+            </h2>
+          </div>
+          <div class="space-y-4">
+            {
+              about.map((paragraph) => (
+                <p class="max-w-[65ch] text-[17px] leading-relaxed text-ink">{paragraph}</p>
+              ))
+            }
+          </div>
+        </div>
+        <h3 class="mt-12 text-[17px] font-bold text-ink">Targets projects could take on</h3>
+        <ul class="mt-4 flex flex-wrap gap-2.5" aria-label="Example target companies">
+          {
+            exampleTargets.map((target) => (
+              <li class="rounded-full border border-[#D2E4D6] bg-white px-4 py-2 text-[16px] font-bold text-ink">
+                {target}
+              </li>
+            ))
+          }
+        </ul>
+        <p class={`mt-5 ${body}`}>{otherTargets}</p>
+      </div>
+    </section>
+
+    <!-- Recommended approach: numbered steps, same rail as /incubator's process -->
+    <section class={`${container} py-16 min-[810px]:py-20`} aria-labelledby="approach-heading">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+        <div class="lg:sticky lg:top-24 lg:self-start">
+          <h2 id="approach-heading" class={h2}>Our recommended approach</h2>
+          <p class={`mt-5 max-w-[40ch] ${lede}`}>
+            Four steps from a boycott list to users who have actually switched.
+          </p>
+          <a
+            href={APPLY_URL}
+            data-track-challenge="apply"
+            data-cta-location="approach"
+            class={`mt-6 ${textLink}`}
+          >
+            Apply for this challenge <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <ol>
+          {
+            approach.map((step, i) => (
+              <li class="relative pb-9 pl-12 before:absolute before:bottom-0 before:left-[15px] before:top-[38px] before:w-px before:bg-ink-divider last:pb-0 last:before:hidden">
+                <span
+                  class="absolute left-0 top-0 flex h-[31px] w-[31px] items-center justify-center rounded-full border-2 border-[#157A3E] text-[15px] font-extrabold text-[#157A3E]"
+                  aria-hidden="true"
+                >
+                  {i + 1}
+                </span>
+                <h3 class="pt-0.5 text-[19px] font-bold leading-snug text-ink">{step.title}</h3>
+                <p class="mt-1.5 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+                  {step.description}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Band: incubator projects already working on this -->
+    <section class={bandShell} aria-labelledby="projects-heading">
+      <div class={`${container} py-14 min-[810px]:py-16`}>
+        <p class={overline}>Already in the Incubator</p>
+        <h2 id="projects-heading" class={`max-w-[26ch] scroll-mt-28 text-balance ${h2}`}>
+          Projects we already support on this challenge.
+        </h2>
+        {
+          projects && projects.length > 0 ? (
+            <ul class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => {
+                const logo = resolveLogoSrc(project.logoUrl);
+                // Their own site when ProjectHub has one, else our profile page.
+                const website = project.websiteUrl;
+                return (
+                  <li class="flex">
+                    <a
+                      href={website ?? projectPath(project)}
+                      target={website ? "_blank" : undefined}
+                      rel={website ? "noopener" : undefined}
+                      class={`group flex w-full flex-col rounded-lg border border-[#D2E4D6] bg-white p-6 transition-colors duration-150 hover:border-[#157A3E] hover:shadow-sm motion-reduce:transition-none ${focusRing}`}
+                    >
+                      <div class="flex items-center gap-4">
+                        <span class="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-[#E7F2E9] text-[15px] font-extrabold text-[#2F5C3F]">
+                          <span aria-hidden="true">{getInitials(project.name)}</span>
+                          {logo && (
+                            <img
+                              src={logo}
+                              alt=""
+                              width="48"
+                              height="48"
+                              decoding="async"
+                              data-project-logo
+                              class="absolute inset-0 h-full w-full bg-white object-contain"
+                            />
+                          )}
+                        </span>
+                        <h3 class="text-[19px] font-extrabold leading-snug tracking-tight text-ink">
+                          {project.name}
+                        </h3>
+                      </div>
+                      <p class="mt-4 line-clamp-4 text-[16px] leading-relaxed text-ink-secondary">
+                        {project.elevatorPitch || getProjectText(project)}
+                      </p>
+                      <span class="mt-auto pt-5">
+                        <span class="block border-t border-ink-divider pt-4 text-[16px] font-bold text-[#157A3E] group-hover:text-[#0e5a2f]">
+                          <span class="underline decoration-1 underline-offset-4">
+                            {website ? "Visit website" : "View project"}
+                          </span>{" "}
+                          <span aria-hidden="true">{website ? "↗" : "→"}</span>
+                          {website && <span class="sr-only"> (opens in a new tab)</span>}
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p class={`mt-6 ${body}`}>
+              Browse them in our{" "}
+              <a href="/projects" class={textLink}>
+                project directory
+              </a>
+              .
+            </p>
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Hackathon: same challenge, in person. Hidden once the event is over. -->
+    {
+      showHackathon && (
+        <section
+          id="hackathon"
+          class={`${container} scroll-mt-24 py-16 min-[810px]:py-20`}
+          aria-labelledby="hackathon-heading"
+        >
+          <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+            <img
+              src="/images/hackathon-2026/workshop-circle.webp"
+              srcset="/images/hackathon-2026/workshop-circle-small.webp 640w, /images/hackathon-2026/workshop-circle.webp 1600w"
+              sizes="(min-width: 1024px) 560px, 100vw"
+              alt="Hackathon participants laughing and debating ideas around a long workshop table"
+              width="1600"
+              height="1067"
+              loading="lazy"
+              decoding="async"
+              class="block h-auto w-full rounded-lg shadow-sm"
+            />
+            <div>
+              <p class={overline}>Mozilla Festival · Barcelona · October 31</p>
+              <h2 id="hackathon-heading" class={h2}>
+                {hackathon.title}
+              </h2>
+              <p class={`mt-5 max-w-[56ch] ${lede}`}>{hackathon.description}</p>
+              <a
+                href={hackathon.url}
+                target="_blank"
+                rel="noopener"
+                data-track-challenge="hackathon"
+                class={`mt-8 ${primaryButton}`}
+              >
+                Join the hackathon
+                <span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- What the monthly challenges are, for visitors who arrive cold -->
+    <section class={showHackathon ? bandShell : ""} aria-labelledby="challenges-heading">
+      <div class={`${container} py-14 min-[810px]:py-16`}>
+        <div
+          class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16"
+        >
+          <h2 id="challenges-heading" class={`max-w-[20ch] text-balance ${h2}`}>
+            What are the Tech for Palestine Challenges?
+          </h2>
+          <div class="space-y-4">
+            {whatAreChallenges.map((paragraph) => <p class={body}>{paragraph}</p>)}
+            <a href="/incubator" class={`!mt-6 ${textLink}`}>
+              More about the Incubator <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terminal CTA: the one dark block on the page, carrying the primary ask -->
+    <section class="bg-[#101010] px-6 py-20 sm:px-8">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+        <h2 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-[32px]">
+          Building a way off complicit tech? Bring it to the Incubator.
+        </h2>
+        <a
+          href={APPLY_URL}
+          data-track-challenge="apply"
+          data-cta-location="terminal"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-8 py-3.5 font-bold text-ink shadow-sm transition-colors duration-150 hover:bg-[#F2F3EE] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#101010] motion-reduce:transition-none"
+        >
+          Apply for this challenge
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Logos are remote; a broken one falls back to the initials underneath.
+    document.querySelectorAll<HTMLImageElement>("img[data-project-logo]").forEach((img) => {
+      const drop = () => img.remove();
+      if (img.complete && img.naturalWidth === 0) drop();
+      else img.addEventListener("error", drop, { once: true });
+    });
+
+    const EVENTS = {
+      apply: "Challenge Apply Click",
+      hackathon: "Challenge Hackathon Click",
+    } as const;
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-track-challenge]").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (typeof window.plausible === "undefined") return;
+        const kind = link.dataset.trackChallenge as keyof typeof EVENTS;
+        window.plausible(EVENTS[kind], {
+          props: {
+            cta_location: link.dataset.ctaLocation ?? kind,
+            destination: link.getAttribute("href") ?? "",
+          },
+        });
+      });
+    });
+  </script>
+</Layout>
