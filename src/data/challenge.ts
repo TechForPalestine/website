@@ -11,13 +11,13 @@ export const challenge = {
     "Boycott lists name thousands of complicit products. This month we're forming a cohort of projects that make leaving them easy.",
 };
 
-/** Hero panel: switches incubated projects already offer. Each pairing comes
- * from the project's own ProjectHub pitch; keep it that way. */
+/** Hero panel: switches incubated projects already offer or help people make. */
 export const migrations: { from: string; to: string }[] = [
   { from: "Instagram", to: "UpScrolled" },
   { from: "ChatGPT", to: "Thaura" },
-  { from: "Elementor", to: "WordPress Gutenberg" },
-  { from: "Vercel", to: "Migrate Off Vercel" },
+  { from: "Elementor", to: "Gutenberg" },
+  { from: "Wix", to: "WordPress" },
+  { from: "Vercel", to: "Netlify" },
 ];
 
 export const about: string[] = [
