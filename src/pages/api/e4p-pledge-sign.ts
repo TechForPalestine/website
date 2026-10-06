@@ -3,31 +3,29 @@ import * as Sentry from "@sentry/astro";
 import { Client } from "@notionhq/client";
 import { getEnv } from "../../utils/getEnv.js";
 import { reportError } from "../../lib/report-error";
-import { isAllowedOrigin, corsHeaders } from "../../utils/origin";
+import { corsHeaders, withOriginGuard } from "../../utils/origin";
+import { jsonError, jsonResponse } from "../../utils/apiResponse";
+import { firstTooLong, isEmail, isParsableUrl, readString } from "../../utils/validate";
+import { emailProp, richTextProp, titleProp, urlProp } from "../../utils/notionProps";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = withOriginGuard({}, async ({ request, locals }, origin) => {
   const ctx = locals.runtime?.ctx;
-  const origin = request.headers.get("Origin");
-  if (!isAllowedOrigin(origin)) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  const acao = { "Access-Control-Allow-Origin": origin };
+  const badRequest = (message: string) => jsonError(400, message, { headers: acao });
 
   try {
     const formData = await request.formData();
 
+    // File uploads and other non-string entries count as missing.
     const pledgeData = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      company: formData.get("company") as string,
-      position: formData.get("position") as string,
-      linkedin: formData.get("linkedin") as string,
+      name: readString(formData.get("name")),
+      email: readString(formData.get("email")),
+      company: readString(formData.get("company")),
+      position: readString(formData.get("position")),
+      linkedin: readString(formData.get("linkedin")),
       agreement: formData.get("agreement") === "on",
-      submittedAt: new Date().toISOString(),
     };
 
     if (
@@ -38,53 +36,18 @@ export const POST: APIRoute = async ({ request, locals }) => {
       !pledgeData.linkedin ||
       !pledgeData.agreement
     ) {
-      return new Response(
-        JSON.stringify({ error: "All fields are required and agreement must be checked" }),
-        {
-          status: 400,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": origin,
-          },
-        }
-      );
+      return badRequest("All fields are required and agreement must be checked");
     }
 
-    // Validation — format and length
-    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRx.test(pledgeData.email)) {
-      return new Response(JSON.stringify({ error: "Invalid email address" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-      });
-    }
+    if (!isEmail(pledgeData.email)) return badRequest("Invalid email address");
+    if (!isParsableUrl(pledgeData.linkedin)) return badRequest("Invalid LinkedIn URL");
 
-    try {
-      new URL(pledgeData.linkedin);
-    } catch {
-      return new Response(JSON.stringify({ error: "Invalid LinkedIn URL" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-      });
-    }
-
-    const MAX = 2000;
-    const textFields: [string, string][] = [
-      ["name", pledgeData.name],
-      ["company", pledgeData.company],
-      ["position", pledgeData.position],
-    ];
-    for (const [field, value] of textFields) {
-      if (value.length > MAX) {
-        return new Response(
-          JSON.stringify({ error: `Field '${field}' exceeds maximum length of ${MAX} characters` }),
-          {
-            status: 400,
-            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin },
-          }
-        );
-      }
-    }
+    const tooLong = firstTooLong({
+      name: pledgeData.name,
+      company: pledgeData.company,
+      position: pledgeData.position,
+    });
+    if (tooLong) return badRequest(tooLong);
 
     const notionSecret = getEnv("NOTION_SECRET", locals);
     const databaseId = getEnv("NOTION_SIGNATORIES_DB_ID", locals);
@@ -102,39 +65,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
         database_id: databaseId,
       },
       properties: {
-        Name: {
-          title: [
-            {
-              text: {
-                content: pledgeData.name,
-              },
-            },
-          ],
-        },
-        Email: {
-          email: pledgeData.email,
-        },
-        Company: {
-          rich_text: [
-            {
-              text: {
-                content: pledgeData.company,
-              },
-            },
-          ],
-        },
-        Position: {
-          rich_text: [
-            {
-              text: {
-                content: pledgeData.position,
-              },
-            },
-          ],
-        },
-        "LinkedIn URL": {
-          url: pledgeData.linkedin,
-        },
+        Name: titleProp(pledgeData.name),
+        Email: emailProp(pledgeData.email),
+        Company: richTextProp(pledgeData.company),
+        Position: richTextProp(pledgeData.position),
+        "LinkedIn URL": urlProp(pledgeData.linkedin),
         Approved: {
           checkbox: false,
         },
@@ -154,27 +89,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
       position: pledgeData.position,
     };
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Pledge signed successfully",
-        signatory,
-      }),
-      {
-        status: 201,
-        headers: { "Content-Type": "application/json", ...corsHeaders(origin, "POST") },
-      }
+    return jsonResponse(
+      { success: true, message: "Pledge signed successfully", signatory },
+      201,
+      corsHeaders(origin, "POST")
     );
   } catch (error) {
     reportError(error, { context: "e4p-pledge-sign" });
     ctx?.waitUntil(Promise.resolve(Sentry.flush(2000)));
 
-    return new Response(JSON.stringify({ error: "Failed to process pledge" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": origin,
-      },
-    });
+    return jsonError(500, "Failed to process pledge", { headers: acao });
   }
-};
+});

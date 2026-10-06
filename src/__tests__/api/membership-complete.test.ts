@@ -8,7 +8,7 @@ vi.mock("../../lib/report-error", () => ({ reportError: vi.fn() }));
 
 const { verifyQgivTransaction } = await import("../../utils/qgivVerify");
 const { reportError } = await import("../../lib/report-error");
-const { POST } = await import("./membership-complete");
+const { POST } = await import("../../pages/api/membership-complete");
 
 const LOCALS = {
   runtime: { env: { HUB_API_URL: "https://hub.test", HUB_API_KEY: "k", EO_API_KEY: "eo" } },
@@ -84,7 +84,9 @@ describe("POST /api/membership-complete", () => {
     const response = await call({ transactionId: "555001", email: "victim@example.org" });
 
     expect(response.status).toBe(200);
-    const bodies = vi.mocked(fetch).mock.calls.map(([, init]) => String((init as RequestInit).body));
+    const bodies = vi
+      .mocked(fetch)
+      .mock.calls.map(([, init]) => String((init as RequestInit).body));
     expect(bodies.join(" ")).toContain("payer@example.org");
     expect(bodies.join(" ")).not.toContain("victim@example.org");
   });
@@ -107,7 +109,9 @@ describe("POST /api/membership-complete", () => {
 
     const urls = vi.mocked(fetch).mock.calls.map(([url]) => String(url));
     expect(urls.some((url) => url.includes("/api/auth/invite"))).toBe(false);
-    const bodies = vi.mocked(fetch).mock.calls.map(([, init]) => String((init as RequestInit).body));
+    const bodies = vi
+      .mocked(fetch)
+      .mock.calls.map(([, init]) => String((init as RequestInit).body));
     expect(bodies.join(" ")).toContain("Supporting Member");
   });
 });
