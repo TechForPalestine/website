@@ -43,7 +43,7 @@
     "@sentry/cloudflare": "^10.50.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
-    "astro": "^5.18.2",
+    "astro": "^7.2.8",
     "astro-icon": "^1.2.0",
     "axios": "1.18.0",
     "chart.js": "^4.5.1",
