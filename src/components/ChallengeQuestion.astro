@@ -1,0 +1,48 @@
+---
+import { questionParts } from "../data/challenge";
+
+// Inline content for the challenge heading: the parent supplies the h1/h2.
+// The marks are decoration only, so screen readers hear the plain question.
+---
+
+{
+  questionParts.map((part) =>
+    part.mark ? <span class={`cq-${part.mark}`}>{part.text}</span> : part.text
+  )
+}
+
+<style>
+  /* A hand-drawn red line through what people are leaving. nowrap keeps the
+     pseudo-element on one line box; the phrase is short enough to fit. */
+  .cq-strike {
+    position: relative;
+    white-space: nowrap;
+  }
+  .cq-strike::after {
+    content: "";
+    position: absolute;
+    left: -0.06em;
+    right: -0.06em;
+    top: 54%;
+    height: max(3px, 0.085em);
+    border-radius: 999px;
+    background: #ce1126;
+    transform: rotate(-3deg);
+    pointer-events: none;
+  }
+
+  /* A green highlighter stroke under where they're going. Cloned per line
+     fragment so it still looks right when the phrase wraps. */
+  .cq-highlight {
+    color: #157a3e;
+    background-image: linear-gradient(
+      transparent 60%,
+      rgb(21 122 62 / 0.18) 60%,
+      rgb(21 122 62 / 0.18) 92%,
+      transparent 92%
+    );
+    padding: 0 0.06em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+</style>
