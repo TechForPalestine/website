@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ChallengeQuestion from "../components/ChallengeQuestion.astro";
 import { APPLY_URL } from "../data/incubator";
 import {
   about,
@@ -62,7 +63,7 @@ const showHackathon = isCampaignLive(Date.now());
           <h1
             class="max-w-[22ch] text-balance text-[36px] font-extrabold leading-[1.06] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
           >
-            {challenge.question}
+            <ChallengeQuestion />
           </h1>
           <p class={`mt-6 max-w-[52ch] ${lede}`}>{challenge.summary}</p>
           <div class="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">

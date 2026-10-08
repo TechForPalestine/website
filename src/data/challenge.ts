@@ -3,10 +3,19 @@
 
 import type { WantedProject } from "../utils/challengeProjects";
 
+/** The question, split so the hero and homepage popup can strike through what
+ * people leave and highlight where they go. */
+export const questionParts: { text: string; mark?: "strike" | "highlight" }[] = [
+  { text: "How do we make it easier for users to migrate from " },
+  { text: "complicit tech", mark: "strike" },
+  { text: " to " },
+  { text: "ethical alternatives", mark: "highlight" },
+  { text: "?" },
+];
+
 export const challenge = {
   month: "October 2026",
-  question:
-    "How do we make it easier for users to migrate from complicit tech to ethical alternatives?",
+  question: questionParts.map((part) => part.text).join(""),
   summary:
     "Boycott lists name thousands of complicit products. This month we're forming a cohort of projects that make leaving them easy.",
 };
