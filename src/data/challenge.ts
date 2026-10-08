@@ -6,7 +6,7 @@ import type { WantedProject } from "../utils/challengeProjects";
 export const challenge = {
   month: "October 2026",
   question:
-    "How do we make it easier for users to migrate to ethical alternatives to complicit tech?",
+    "How do we make it easier for users to migrate from complicit tech to ethical alternatives?",
   summary:
     "Boycott lists name thousands of complicit products. This month we're forming a cohort of projects that make leaving them easy.",
 };
