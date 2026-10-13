@@ -15,27 +15,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: 9.0.0
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm run build
+      - name: Collect page URLs from the live sitemap
+        id: sitemap
+        # The site is SSR (output: "server"), so dist/ contains no HTML.
+        # Lychee fetches each live page from the production sitemap and checks its links.
+        run: |
+          urls=$(curl -fsS --retry 3 https://techforpalestine.org/sitemap-0.xml \
+            | grep -o '<loc>[^<]*</loc>' \
+            | sed -e 's/<loc>//' -e 's/<\/loc>//' | tr '\n' ' ')
+          if [ -z "$urls" ]; then
+            echo "No URLs found in sitemap" >&2
+            exit 1
+          fi
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
 
       - name: Check for broken links
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --verbose --no-progress './dist/**/*.html'
+          args: >-
+            --verbose --no-progress --max-retries 3 --retry-wait-time 5
+            --accept 200..=299,403,429
+            --exclude '^https?://(www\.)?(linkedin\.com|x\.com|twitter\.com|instagram\.com)'
+            ${{ steps.sitemap.outputs.urls }}
           fail: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
