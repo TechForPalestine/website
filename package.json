@@ -23,7 +23,7 @@
     "pnpm": ">=9.0.0"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.10",
     "@astrojs/cloudflare": "^12.6.13",
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.4",
