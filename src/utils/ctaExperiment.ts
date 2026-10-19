@@ -1,5 +1,7 @@
 export const CTA_FEATURE_KEY = "homepage-cta-text";
 export const CTA_DEFAULT_TEXT = "Apply to the Incubator";
+// Longest we hide the CTA waiting for the flag payload before showing the control.
+export const CTA_READY_TIMEOUT_MS = 1500;
 export const EXPOSURE_EVENT = "Experiment Exposure";
 export const CTA_CLICK_EVENT = "CTA Click";
 

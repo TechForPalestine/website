@@ -199,7 +199,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 
         <div class="mt-8">
           <HeroCta client:only="react" className={pillPrimary}>
-            <a slot="fallback" href="/incubator" class={pillPrimary}>Apply to the Incubator</a>
+            <a slot="fallback" href="/incubator" class={`${pillPrimary} invisible`}
+              >Apply to the Incubator</a
+            >
           </HeroCta>
         </div>
       </div>
