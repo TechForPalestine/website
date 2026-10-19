@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
+import HeroCta from "../components/home/HeroCta";
 import HackathonPopup from "../components/home/HackathonPopup.astro";
 import "../styles/base.css";
 
@@ -197,7 +198,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
         </p>
 
         <div class="mt-8">
-          <a href="/incubator" class={pillPrimary}>Apply to the Incubator</a>
+          <HeroCta client:only="react" className={pillPrimary}>
+            <a slot="fallback" href="/incubator" class={pillPrimary}>Apply to the Incubator</a>
+          </HeroCta>
         </div>
       </div>
 
