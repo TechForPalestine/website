@@ -1,4 +1,4 @@
-import { GrowthBook } from "@growthbook/growthbook-react";
+import { GrowthBook, configureCache } from "@growthbook/growthbook-react";
 
 const clientKey = import.meta.env.PUBLIC_GROWTHBOOK_CLIENT_KEY;
 
@@ -9,6 +9,10 @@ if (!clientKey) {
     "Missing PUBLIC_GROWTHBOOK_CLIENT_KEY — GrowthBook flags will not load without it."
   );
 }
+
+// Keep the homepage free of browser storage: by default the SDK caches the flag payload
+// in localStorage. Disabling that costs one refetch per page load.
+configureCache({ disableCache: true });
 
 export const growthbook = new GrowthBook({
   apiHost: "https://cdn.growthbook.io",
