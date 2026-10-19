@@ -1,9 +1,19 @@
-export const CTA_FEATURE_KEY = "homepage-cta-text";
-export const CTA_DEFAULT_TEXT = "Apply to the Incubator";
-// Longest we hide the CTA waiting for the flag payload before showing the control.
-export const CTA_READY_TIMEOUT_MS = 1500;
+export const CTA_EXPERIMENT = "homepage-cta-text";
 export const EXPOSURE_EVENT = "Experiment Exposure";
 export const CTA_CLICK_EVENT = "CTA Click";
+
+export type CtaVariant = "control" | "treatment";
+
+export const CTA_TEXT: Record<CtaVariant, string> = {
+  control: "Apply to the Incubator",
+  treatment: "Join the Incubator",
+};
+
+// Assigned per request on the server: nothing is stored, so a visitor can see a
+// different variant on each page view. That is the price of needing no consent banner.
+export function pickCtaVariant(random: () => number = Math.random): CtaVariant {
+  return random() < 0.5 ? "control" : "treatment";
+}
 
 interface PlausibleWindow {
   plausible?: (name: string, options?: { props: Record<string, string> }) => void;
@@ -11,4 +21,17 @@ interface PlausibleWindow {
 
 export function trackExperimentEvent(name: string, experiment: string, variant: string): void {
   (window as PlausibleWindow).plausible?.(name, { props: { experiment, variant } });
+}
+
+// Fires one exposure per page view, and at most one click per page view, for the link
+// carrying data-experiment / data-variant.
+export function trackCtaLink(link: HTMLElement): void {
+  const experiment = link.dataset.experiment;
+  const variant = link.dataset.variant;
+  if (!experiment || !variant) return;
+
+  trackExperimentEvent(EXPOSURE_EVENT, experiment, variant);
+  link.addEventListener("click", () => trackExperimentEvent(CTA_CLICK_EVENT, experiment, variant), {
+    once: true,
+  });
 }

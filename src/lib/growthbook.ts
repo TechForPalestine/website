@@ -1,4 +1,4 @@
-import { GrowthBook, configureCache } from "@growthbook/growthbook-react";
+import { GrowthBook } from "@growthbook/growthbook-react";
 
 const clientKey = import.meta.env.PUBLIC_GROWTHBOOK_CLIENT_KEY;
 
@@ -10,17 +10,10 @@ if (!clientKey) {
   );
 }
 
-// Consent-free by design: nothing is written to cookies or storage. The SDK would
-// otherwise cache the feature payload in localStorage, so switch that off.
-configureCache({ disableCache: true });
-
 export const growthbook = new GrowthBook({
   apiHost: "https://cdn.growthbook.io",
   clientKey,
-  enableDevMode: import.meta.env.DEV,
-  // A fresh random id per page load, held in memory only. Visitors are re-bucketed on
-  // every page view, so an experiment can only measure same-page-view outcomes.
-  attributes: { id: crypto.randomUUID() },
+  enableDevMode: true,
 });
 
 // streaming: false — fetch the payload once on load. Flag changes then land on the
