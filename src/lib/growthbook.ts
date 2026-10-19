@@ -1,4 +1,4 @@
-import { GrowthBook, configureCache } from "@growthbook/growthbook-react";
+import { GrowthBook, setPolyfills } from "@growthbook/growthbook-react";
 
 const clientKey = import.meta.env.PUBLIC_GROWTHBOOK_CLIENT_KEY;
 
@@ -10,9 +10,10 @@ if (!clientKey) {
   );
 }
 
-// Keep the homepage free of browser storage: by default the SDK caches the flag payload
-// in localStorage. Disabling that costs one refetch per page load.
-configureCache({ disableCache: true });
+// Keep the homepage free of browser storage. The SDK persists its flag payload to
+// localStorage on every fetch, and configureCache({ disableCache }) does not stop that
+// write, so swap in a no-op storage. The payload is then refetched on every page load.
+setPolyfills({ localStorage: { getItem: () => null, setItem: () => {} } });
 
 export const growthbook = new GrowthBook({
   apiHost: "https://cdn.growthbook.io",
