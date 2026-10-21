@@ -171,3 +171,40 @@ export function getSkillFilters(roles: OpenRole[]): SkillFilter[] {
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 }
+
+/** Number of pages needed for `total` items; always at least 1. */
+export function getPageCount(total: number, pageSize: number): number {
+  return Math.max(1, Math.ceil(total / pageSize));
+}
+
+/** Clamps a 1-based page into range, so a shrinking list never strands the reader. */
+export function clampPage(page: number, pageCount: number): number {
+  return Math.min(Math.max(1, Math.floor(page)), pageCount);
+}
+
+export type PageMarker = number | "gap";
+
+/** Up to this many pages fit in the control without hiding any. */
+const MAX_PAGES_WITHOUT_GAPS = 7;
+
+/**
+ * Page numbers to show around `current`: always the first and last page, the
+ * current page and its neighbours, and a "gap" for each skipped run. A gap is
+ * only used when it hides two or more pages; hiding one would save nothing.
+ */
+export function getPageMarkers(current: number, pageCount: number): PageMarker[] {
+  if (pageCount <= MAX_PAGES_WITHOUT_GAPS) {
+    return Array.from({ length: pageCount }, (_, index) => index + 1);
+  }
+  const shown = new Set([1, pageCount, current - 1, current, current + 1]);
+  const pages = [...shown].filter((page) => page >= 1 && page <= pageCount).sort((a, b) => a - b);
+
+  const markers: PageMarker[] = [];
+  for (const page of pages) {
+    const previous = markers[markers.length - 1];
+    if (typeof previous === "number" && page - previous === 2) markers.push(previous + 1);
+    else if (typeof previous === "number" && page - previous > 2) markers.push("gap");
+    markers.push(page);
+  }
+  return markers;
+}

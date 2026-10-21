@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   attachProjectLinks,
+  clampPage,
   getApplyTarget,
+  getPageCount,
+  getPageMarkers,
   getRoleApplicationUrl,
   MEMBERSHIP_URL,
   normalizeOpenRoles,
@@ -112,5 +115,35 @@ describe("attachProjectLinks", () => {
     ]);
 
     expect(role.projectPath).toBe("");
+  });
+});
+
+describe("pagination helpers", () => {
+  it("counts pages, with at least one for an empty list", () => {
+    expect(getPageCount(33, 8)).toBe(5);
+    expect(getPageCount(32, 8)).toBe(4);
+    expect(getPageCount(0, 8)).toBe(1);
+  });
+
+  it("clamps a page into range", () => {
+    expect(clampPage(0, 5)).toBe(1);
+    expect(clampPage(9, 5)).toBe(5);
+    expect(clampPage(3, 5)).toBe(3);
+  });
+
+  it("lists every page when there are few", () => {
+    expect(getPageMarkers(1, 5)).toEqual([1, 2, 3, 4, 5]);
+    expect(getPageMarkers(4, 7)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(getPageMarkers(1, 1)).toEqual([1]);
+  });
+
+  it("collapses long runs into gaps around the current page", () => {
+    expect(getPageMarkers(1, 10)).toEqual([1, 2, "gap", 10]);
+    expect(getPageMarkers(6, 10)).toEqual([1, "gap", 5, 6, 7, "gap", 10]);
+    expect(getPageMarkers(10, 10)).toEqual([1, "gap", 9, 10]);
+  });
+
+  it("shows a single skipped page instead of a gap", () => {
+    expect(getPageMarkers(4, 10)).toEqual([1, 2, 3, 4, 5, "gap", 10]);
   });
 });
