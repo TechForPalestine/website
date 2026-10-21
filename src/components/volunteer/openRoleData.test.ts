@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  attachProjectLinks,
   getApplyTarget,
   getRoleApplicationUrl,
   MEMBERSHIP_URL,
@@ -13,6 +14,7 @@ const projectRole: OpenRole = {
   title: "Data Entry & Research",
   description: "",
   orgName: "Demilitarise Education",
+  projectPath: "",
   type: "project",
   skillCategories: [],
   areasOfInterest: [],
@@ -69,5 +71,45 @@ describe("normalizeOpenRoles", () => {
     const twice = normalizeOpenRoles(JSON.parse(JSON.stringify(once)));
 
     expect(twice[0].orgName).toBe("Social Media Crossposting Team");
+  });
+});
+
+describe("attachProjectLinks", () => {
+  const projects = [
+    { id: 323, name: "Demilitarise Education" },
+    { id: 24, name: "Tribe-X" },
+  ];
+
+  it("links a role to its project page when the names match", () => {
+    const [linked] = attachProjectLinks([projectRole], projects);
+
+    expect(linked.projectPath).toBe("/projects/demilitarise-education-323");
+  });
+
+  it("matches names regardless of case and punctuation", () => {
+    const [linked] = attachProjectLinks([{ ...projectRole, orgName: "tribe x" }], projects);
+
+    expect(linked.projectPath).toBe("/projects/tribe-x-24");
+  });
+
+  it("leaves the link empty when no project matches", () => {
+    const [unlinked] = attachProjectLinks([{ ...projectRole, orgName: "Awdeh" }], projects);
+
+    expect(unlinked.projectPath).toBe("");
+  });
+
+  it("survives the client re-normalizing the API response", () => {
+    const linked = attachProjectLinks([projectRole], projects);
+    const [renormalized] = normalizeOpenRoles(JSON.parse(JSON.stringify(linked)));
+
+    expect(renormalized.projectPath).toBe("/projects/demilitarise-education-323");
+  });
+
+  it("drops a projectPath that is not a directory link", () => {
+    const [role] = normalizeOpenRoles([
+      { ...projectRole, projectPath: "https://evil.example/projects/x-1" },
+    ]);
+
+    expect(role.projectPath).toBe("");
   });
 });

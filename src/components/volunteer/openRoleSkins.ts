@@ -18,6 +18,8 @@ export interface SkinTokens {
   chipIdle: string;
   card: string;
   org: string;
+  /** The org name when it links to the project's page in the directory. */
+  orgLink: string;
   orgMarker: string;
   title: string;
   pill: string;
@@ -43,6 +45,8 @@ const CLASSIC: SkinTokens = {
   chipIdle: "border-[#D2E4D6] bg-white text-ink hover:border-[#157A3E] hover:text-[#157A3E]",
   card: "rounded-lg border border-[#D2E4D6] bg-white p-6 transition-shadow duration-150 hover:shadow-sm motion-reduce:transition-none sm:p-7",
   org: "text-[15px] font-bold text-[#2F5C3F]",
+  orgLink:
+    "rounded-sm text-[15px] font-bold text-[#2F5C3F] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#157A3E] motion-reduce:transition-none",
   orgMarker: "rounded-full border border-[#157A3E] px-2.5 py-0.5 text-xs font-bold text-[#157A3E]",
   title: "text-xl font-extrabold tracking-tight text-ink",
   pill: "inline-flex items-center gap-1.5 rounded-full bg-[#F2F3EE] px-3 py-1 text-[13px] font-bold text-ink-secondary",
@@ -72,6 +76,8 @@ const BRAND: SkinTokens = {
     "border-ink-divider bg-transparent text-ink-secondary hover:border-brand/40 hover:text-ink",
   card: "rounded-[20px] border border-butter bg-sand p-6 transition-colors hover:border-brand/30 hover:bg-cream min-[810px]:p-8",
   org: "ts-body-small font-medium text-brand",
+  orgLink:
+    "ts-body-small font-medium text-brand underline underline-offset-4 hover:text-brand-hover",
   orgMarker: "ts-caption rounded-pill border border-ink-divider px-2 py-0.5 text-ink-secondary",
   title: "ts-quote text-ink",
   pill: "ts-caption inline-flex items-center gap-1.5 rounded-pill border border-ink-divider px-3 py-1 text-ink-secondary",

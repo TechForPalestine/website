@@ -8,6 +8,8 @@
  * one place.
  */
 
+import { projectPath } from "../../utils/projectSlug";
+
 /** How a role is staffed, which decides where its apply button points. */
 export type OpenRoleType = "project" | "team";
 
@@ -17,6 +19,12 @@ export interface OpenRole {
   description: string;
   /** Name of the coalition project or T4P team the role sits in. */
   orgName: string;
+  /**
+   * `/projects/<slug>-<id>` page for the role's project, or "" when its name
+   * matches no project in the directory. Attached server-side by
+   * `attachProjectLinks`; the Hub's own `project.id` is always null.
+   */
+  projectPath: string;
   type: OpenRoleType;
   skillCategories: string[];
   areasOfInterest: string[];
@@ -47,6 +55,14 @@ const MAX_DESCRIPTION_LENGTH = 4000;
 
 function toTrimmedString(value: unknown, maxLength = 500): string {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
+}
+
+/** Only a path `projectPath()` could have produced is trusted as a link. */
+const PROJECT_PATH_PATTERN = /^\/projects\/[a-z0-9-]+-\d+$/;
+
+function toProjectPath(value: unknown): string {
+  const path = toTrimmedString(value, 200);
+  return PROJECT_PATH_PATTERN.test(path) ? path : "";
 }
 
 function toStringArray(value: unknown): string[] {
@@ -82,6 +98,7 @@ export function normalizeOpenRole(raw: unknown): OpenRole | null {
     title,
     description: toTrimmedString(row.description, MAX_DESCRIPTION_LENGTH),
     orgName: toOrgName(row),
+    projectPath: toProjectPath(row.projectPath),
     type: row.type === "team" ? "team" : "project",
     skillCategories: toStringArray(row.skillCategories),
     areasOfInterest: toStringArray(row.areasOfInterest),
@@ -96,6 +113,32 @@ export function normalizeOpenRoles(raw: unknown): OpenRole[] {
     .map(normalizeOpenRole)
     .filter((role): role is OpenRole => role !== null)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+/** Case- and punctuation-blind, so "Tribe X" matches "Tribe-X" and "namlah" matches "Namlah". */
+function toNameKey(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+/**
+ * Links each role to its project's page in the `/projects` directory. The Hub
+ * and ProjectHub share no id, so the match is on the project name; roles whose
+ * name matches nothing (a typo in the Hub, or a project not listed in the
+ * directory) keep an empty `projectPath` and render as plain text.
+ */
+export function attachProjectLinks(
+  roles: OpenRole[],
+  projects: { id: number; name: string }[]
+): OpenRole[] {
+  const pathsByName = new Map<string, string>();
+  for (const project of projects) {
+    const key = toNameKey(project.name ?? "");
+    if (key && !pathsByName.has(key)) pathsByName.set(key, projectPath(project));
+  }
+  return roles.map((role) => ({
+    ...role,
+    projectPath: pathsByName.get(toNameKey(role.orgName)) ?? "",
+  }));
 }
 
 /** Where a role's apply button points, per how the role is staffed. */
