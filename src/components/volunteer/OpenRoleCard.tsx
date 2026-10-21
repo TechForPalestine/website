@@ -58,7 +58,11 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
         <div className="min-w-0">
           {(role.orgName || isTeamRole) && (
             <p className="mb-1.5 flex flex-wrap items-center gap-2">
-              {role.orgName && <span className={tokens.org}>{role.orgName}</span>}
+              {role.orgName && (
+                <span className={tokens.org}>
+                  {isTeamRole ? "Team" : "Project"}: {role.orgName}
+                </span>
+              )}
               {isTeamRole && <span className={tokens.orgMarker}>T4P team</span>}
             </p>
           )}

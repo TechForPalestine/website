@@ -3,184 +3,219 @@ import Socials from "../components/Socials.astro";
 import OpenRoles from "../components/volunteer/OpenRoles.tsx";
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+
+const MEMBERSHIP_URL = "/membership";
+const INTRO_CALL_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
+const DISCORD_URL = "https://techforpalestine.org/discord-invite";
+
+const container = "mx-auto max-w-[1280px] px-6 sm:px-8";
+const h2 =
+  "text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]";
+const lede = "text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]";
+const overline = "mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]";
+const bandShell = "border-y border-[#D2E4D6] bg-[#E7F2E9]";
+const primaryButton =
+  "inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#157A3E] px-7 py-3.5 font-bold text-white shadow-sm transition-colors duration-150 hover:bg-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
+const textLink =
+  "shrink-0 rounded-sm text-[17px] font-bold text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+const reasons = [
+  {
+    title: "Make a direct impact",
+    description:
+      "Apply your skills to projects that amplify Palestinian voices and uplift the cause.",
+  },
+  {
+    title: "Join a global network",
+    description:
+      "Technologists, creatives, entrepreneurs, professionals, and activists united by a commitment to justice and human dignity for Palestinians.",
+  },
+  {
+    title: "Grow professionally",
+    description: "Work on meaningful initiatives that create lasting positive change.",
+  },
+  {
+    title: "Find your people",
+    description:
+      "Connect with like-minded individuals through community spaces, events, and collaborative projects.",
+  },
+  {
+    title: "Turn concern into action",
+    description: "Measurable outcomes for Palestinian communities.",
+  },
+];
+
+const expectations = [
+  "A commitment of your time and expertise.",
+  "Active collaboration and clear communication.",
+  "Timely notification of any changes to your availability.",
+];
+
+const notExpected = [
+  "Daily or rigid meeting attendance, unless essential for your role.",
+  "Exclusive commitment. You are welcome to engage in other initiatives.",
+];
 ---
 
 <Layout title="Get Involved">
-  <main class="space-y-16">
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-indigo-100 to-white">
-      <div class="mx-auto max-w-4xl px-6 py-12 text-center">
-        <h1 class="text-5xl font-extrabold tracking-tight text-gray-900">
-          Join our Volunteer Community!
-        </h1>
-        <p class="mt-6 text-xl text-gray-700">
-          Join us in volunteering to make a meaningful impact for Palestine.
+  <main>
+    <!-- Hero: the ask, beside a real photo of people working together at a T4P gathering -->
+    <section class={`${container} py-16 min-[810px]:py-20`}>
+      <div
+        class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14"
+      >
+        <div class="max-w-[700px]">
+          <h1
+            class="mb-6 text-[38px] font-extrabold leading-[1.05] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+          >
+            Join our Volunteer Community!
+          </h1>
+          <p class={lede}>Become a member to make a meaningful impact for Palestine.</p>
+          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <a href={MEMBERSHIP_URL} class={primaryButton}>Become a Member</a>
+            <a href="#open-roles" class={textLink}>
+              See open roles <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </div>
+        <img
+          src="/images/hackathon-2026/workshop-circle.webp"
+          srcset="/images/hackathon-2026/workshop-circle-small.webp 640w, /images/hackathon-2026/workshop-circle.webp 1600w"
+          sizes="(min-width: 1024px) 520px, 100vw"
+          alt="Tech for Palestine volunteers laughing and debating ideas around a long workshop table"
+          width="1600"
+          height="1067"
+          class="block h-auto w-full rounded-lg shadow-sm"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    </section>
+
+    <!-- Band: live open roles from the Hub -->
+    <section id="open-roles" class={`${bandShell} scroll-mt-24`}>
+      <div class={`${container} py-14 min-[810px]:py-16`}>
+        <p class={overline}>Open roles</p>
+        <h2 class={`max-w-[24ch] ${h2}`}>Current volunteer needs</h2>
+        <p class={`mt-4 max-w-[65ch] ${lede}`}>
+          Roles open right now across coalition projects and Tech for Palestine teams. Project roles
+          go through our volunteer application; T4P team roles are filled through membership.
         </p>
+        <div class="mt-10">
+          <OpenRoles client:only="react" />
+        </div>
       </div>
     </section>
 
-    <!-- New Buttons Section -->
-    <section class="mx-auto max-w-4xl px-6">
-      <div class="flex justify-center">
-        <a
-          href="https://techforpalestine.org/volunteer-form"
-          class="inline-flex items-center rounded-full bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-indigo-700"
-        >
-          Apply to Volunteer Now
-        </a>
+    <!-- Why volunteer: heading on the left, ruled list of reasons on the right -->
+    <section class={`${container} py-16 min-[810px]:py-20`}>
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+        <div class="lg:sticky lg:top-24 lg:self-start">
+          <h2 class={h2}>Why Volunteer with Us?</h2>
+        </div>
+        <dl class="border-b border-ink-divider">
+          {
+            reasons.map((item) => (
+              <div class="grid grid-cols-1 gap-1 border-t border-ink-divider py-5 sm:grid-cols-[12rem_minmax(0,1fr)] sm:gap-6">
+                <dt class="text-[17px] font-bold leading-snug text-ink">{item.title}</dt>
+                <dd class="max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+                  {item.description}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
       </div>
     </section>
 
-    <!-- Open Roles -->
-    <section id="open-roles" class="mx-auto max-w-5xl scroll-mt-24 px-6">
-      <h2 class="text-3xl font-bold text-gray-800">Current volunteer needs</h2>
-      <p class="mt-3 max-w-[70ch] text-lg text-gray-600">
-        Roles open right now across coalition projects and Tech for Palestine teams. Project roles
-        go through our volunteer application; T4P team roles are filled through membership.
-      </p>
-      <div class="mt-8">
-        <OpenRoles client:only="react" />
-      </div>
-    </section>
-
-    <!-- Volunteer Information Section -->
-    <section class="mx-auto max-w-5xl px-6">
-      <div class="rounded-3xl bg-white p-10 shadow-xl">
-        <div class="space-y-10">
-          <!-- Why Volunteer Section -->
-          <div>
-            <h2 class="mb-4 text-3xl font-bold text-gray-800">Why Volunteer with Us?</h2>
-            <ul class="list-inside list-disc space-y-3 text-lg text-gray-600">
-              <li>
-                Make a direct impact by applying your skills to projects that amplify Palestinian
-                voices and uplift the cause.
-              </li>
-              <li>
-                Join a global network of technologists, creatives, entrepreneurs, professionals, and
-                activists united by a commitment to justice and human dignity for Palestinians.
-              </li>
-              <li>
-                Develop professionally while working on meaningful initiatives that create lasting
-                positive change.
-              </li>
-              <li>
-                Connect with like-minded individuals through community spaces, events, and
-                collaborative projects.
-              </li>
-              <li>
-                Transform concern into concrete action with measurable outcomes for Palestinian
-                communities.
-              </li>
+    <!-- Band: expectations, both sides of them -->
+    <section class={bandShell}>
+      <div class={`${container} py-14 min-[810px]:py-16`}>
+        <p class={overline}>Volunteer expectations</p>
+        <h2 class={`max-w-[28ch] ${h2}`}>What we expect, and what we don't.</h2>
+        <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 md:items-start">
+          <div class="rounded-lg border border-[#D2E4D6] bg-white p-7">
+            <h3 class="text-xl font-extrabold tracking-tight text-ink">What we expect</h3>
+            <ul class="mt-4">
+              {
+                expectations.map((item) => (
+                  <li class="border-t border-ink-divider py-4 text-[17px] leading-relaxed text-ink-secondary first:border-t-0 first:pt-2">
+                    {item}
+                  </li>
+                ))
+              }
             </ul>
           </div>
-
-          <!-- Volunteer Roles -->
-          <div>
-            <h3 class="mb-4 text-2xl font-semibold text-gray-800">Volunteer Roles</h3>
-            <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div class="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
-                <h4 class="text-xl font-bold text-indigo-600">Ongoing Volunteers</h4>
-                <ul class="list-inside list-disc space-y-3 text-lg text-gray-600">
-                  <li>
-                    Regularly contribute your skills and collaborate with our project and/or T4P
-                    teams.
+          <div class="rounded-lg border border-[#D2E4D6] bg-white p-7">
+            <h3 class="text-xl font-extrabold tracking-tight text-ink">What we don't expect</h3>
+            <ul class="mt-4">
+              {
+                notExpected.map((item) => (
+                  <li class="border-t border-ink-divider py-4 text-[17px] leading-relaxed text-ink-secondary first:border-t-0 first:pt-2">
+                    {item}
                   </li>
-                  <li>Assignments are typically a min of 3months+</li>
-                </ul>
-              </div>
-              <div class="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
-                <h4 class="text-xl font-bold text-green-600">
-                  Subject Matter Expert & One-Off Limited Engagements
-                </h4>
-                <ul class="list-inside list-disc space-y-3 text-lg text-gray-600">
-                  <li>
-                    Offer short-term expertise and consultation to support specific projects and/or
-                    internal T4P teams.
-                  </li>
-                  <li>
-                    One-off short projects (eg. user-testing, website redesign/updates, data-entry)
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- How to Join -->
-          <div>
-            <h2 class="mb-4 text-3xl font-bold text-gray-800">How to Join?</h2>
-            <p class="text-lg text-gray-600">
-              Complete our <a
-                href="https://techforpalestine.org/volunteer-form"
-                class="font-medium text-indigo-600 hover:underline">volunteer application form</a
-              > to get matched with the right project or team—even if you're not sure how you want to
-              contribute! <a href="#open-roles" class="text-indigo-600 hover:underline">
-                (Check out specific roles we're looking for right now!)</a
-              >
-            </p>
-          </div>
-
-          <!-- Volunteer Expectations -->
-          <div>
-            <h2 class="mb-4 text-3xl font-bold text-gray-800">Volunteer Expectations</h2>
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div>
-                <h4 class="mb-2 text-xl font-semibold text-gray-700">What We Expect</h4>
-                <ul class="list-inside list-disc space-y-2 text-gray-600">
-                  <li>A commitment of your time and expertise.</li>
-                  <li>Active collaboration and clear communication.</li>
-                  <li>Timely notification of any changes to your availability.</li>
-                </ul>
-              </div>
-              <div>
-                <h4 class="mb-2 text-xl font-semibold text-gray-700">What We Don't Expect</h4>
-                <ul class="list-inside list-disc space-y-2 text-gray-600">
-                  <li>Daily or rigid meeting attendance, unless essential for your role.</li>
-                  <li>Exclusive commitment—you are welcome to engage in other initiatives.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Next Steps -->
-          <div>
-            <h2 class="mb-4 text-3xl font-bold text-gray-800">Next Steps</h2>
-            <ul class="list-inside list-disc space-y-2 text-lg text-gray-600">
-              <li>
-                Submit your <a
-                  href="https://techforpalestine.org/volunteer-form"
-                  class="text-indigo-600 hover:underline">application form.</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://techforpalestine.org/discord-invite"
-                  class="text-indigo-600 hover:underline">Join our Discord server</a
-                > and community calls.
-              </li>
-              <li>
-                <span class="inline-flex items-center gap-2">
-                  Follow us on social media: <Socials />
-                </span>
-              </li>
+                ))
+              }
             </ul>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Final Call-to-Action -->
-      <div class="mt-12 text-center">
-        <p class="text-xl font-medium text-indigo-600">
-          Your time and skills can truly make a difference. Thank you for considering to volunteer
-          with us!
-        </p>
-      </div>
-
-      <div class="mt-8 flex justify-center">
-        <a
-          href="https://techforpalestine.org/volunteer-form"
-          class="inline-flex items-center rounded-full bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-indigo-700"
+    <!-- Next steps: one row per action, link on the right -->
+    <section class={`${container} py-16 min-[810px]:py-20`}>
+      <h2 class={h2}>Next Steps</h2>
+      <ul class="mt-8 max-w-[860px] border-b border-ink-divider">
+        <li
+          class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
         >
-          Apply to Volunteer Now
+          <div>
+            <p class="text-[19px] font-bold text-ink">Become a Tech for Palestine member</p>
+            <p class="mt-1 text-[17px] text-ink-secondary">
+              Or <a
+                href={INTRO_CALL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-bold text-[#157A3E] underline decoration-1 underline-offset-4 hover:text-[#0e5a2f]"
+                >schedule an intro call</a
+              > to learn more!
+            </p>
+          </div>
+          <a href={MEMBERSHIP_URL} class={textLink}>
+            Become a member <span aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li
+          class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+        >
+          <div>
+            <p class="text-[19px] font-bold text-ink">Join our Discord server</p>
+            <p class="mt-1 text-[17px] text-ink-secondary">And come along to community calls.</p>
+          </div>
+          <a href={DISCORD_URL} class={textLink}>
+            Join Discord <span aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li
+          class="flex flex-col gap-4 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+        >
+          <p class="text-[19px] font-bold text-ink">Follow us on social media</p>
+          <Socials />
+        </li>
+      </ul>
+    </section>
+
+    <!-- Terminal CTA: the one dark block on the page, carrying the primary ask -->
+    <section class="bg-[#101010] px-6 py-20 sm:px-8">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+        <h2 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-[32px]">
+          Your time and skills can truly make a difference.
+        </h2>
+        <a
+          href={MEMBERSHIP_URL}
+          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-8 py-3.5 font-bold text-ink shadow-sm transition-colors duration-150 hover:bg-[#F2F3EE] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#101010] motion-reduce:transition-none"
+        >
+          Become a Member
         </a>
       </div>
     </section>
