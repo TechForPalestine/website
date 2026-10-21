@@ -60,7 +60,9 @@ function toOrgName(raw: Record<string, unknown>): string {
     if (!container || typeof container !== "object") return "";
     return toTrimmedString((container as Record<string, unknown>).name, 200);
   };
-  return nested("project") || nested("team");
+  // `orgName` covers rows that were already normalized: `/api/open-roles`
+  // normalizes server-side and the client normalizes the response again.
+  return nested("project") || nested("team") || toTrimmedString(raw.orgName, 200);
 }
 
 /**

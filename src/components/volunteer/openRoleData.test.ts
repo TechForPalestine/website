@@ -3,6 +3,7 @@ import {
   getApplyTarget,
   getRoleApplicationUrl,
   MEMBERSHIP_URL,
+  normalizeOpenRoles,
   VOLUNTEER_SURVEY_URL,
   type OpenRole,
 } from "./openRoleData";
@@ -46,5 +47,27 @@ describe("getApplyTarget", () => {
 
   it("sends team roles to membership", () => {
     expect(getApplyTarget({ ...projectRole, type: "team" }).href).toBe(MEMBERSHIP_URL);
+  });
+});
+
+describe("normalizeOpenRoles", () => {
+  const hubRow = {
+    id: "14a4bd4a-a8ab-4dec-9c05-730f062a56dc",
+    title: "Tester",
+    type: "team",
+    team: { id: "585dfb99", name: "Social Media Crossposting Team" },
+    project: null,
+    createdAt: "2026-09-11T08:49:46.227Z",
+  };
+
+  it("reads the team or project name from the Hub's nested shape", () => {
+    expect(normalizeOpenRoles([hubRow])[0].orgName).toBe("Social Media Crossposting Team");
+  });
+
+  it("keeps the name when normalizing an already-normalized role, as the client does", () => {
+    const once = normalizeOpenRoles([hubRow]);
+    const twice = normalizeOpenRoles(JSON.parse(JSON.stringify(once)));
+
+    expect(twice[0].orgName).toBe("Social Media Crossposting Team");
   });
 });
