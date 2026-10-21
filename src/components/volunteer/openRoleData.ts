@@ -16,7 +16,10 @@ export type OpenRoleType = "project" | "team";
 export interface OpenRole {
   id: string;
   title: string;
+  /** Plain text: the collapsed preview, and the fallback when there is no HTML. */
   description: string;
+  /** Rich-text editor HTML; rendered through `parseDescriptionHtml`, never as markup. */
+  descriptionHtml: string;
   /** Name of the coalition project or T4P team the role sits in. */
   orgName: string;
   /**
@@ -52,6 +55,8 @@ export function getRoleApplicationUrl(role: OpenRole): string {
 
 /** Upstream descriptions are free text; cap them so one bad row can't bloat the page. */
 const MAX_DESCRIPTION_LENGTH = 4000;
+/** Markup roughly doubles a description's length, so its cap is looser. */
+const MAX_DESCRIPTION_HTML_LENGTH = 12000;
 
 function toTrimmedString(value: unknown, maxLength = 500): string {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
@@ -97,6 +102,7 @@ export function normalizeOpenRole(raw: unknown): OpenRole | null {
     id,
     title,
     description: toTrimmedString(row.description, MAX_DESCRIPTION_LENGTH),
+    descriptionHtml: toTrimmedString(row.descriptionHtml, MAX_DESCRIPTION_HTML_LENGTH),
     orgName: toOrgName(row),
     projectPath: toProjectPath(row.projectPath),
     type: row.type === "team" ? "team" : "project",

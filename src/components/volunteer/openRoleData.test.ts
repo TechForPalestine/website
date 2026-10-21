@@ -13,6 +13,7 @@ const projectRole: OpenRole = {
   id: "e5b542b4-fba2-43e9-be60-36dcc6e9ae89",
   title: "Data Entry & Research",
   description: "",
+  descriptionHtml: "",
   orgName: "Demilitarise Education",
   projectPath: "",
   type: "project",
