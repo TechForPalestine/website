@@ -4,6 +4,7 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
 import HackathonPopup from "../components/home/HackathonPopup.astro";
+import { CTA_EXPERIMENT, CTA_TEXT, pickCtaVariant } from "../utils/ctaExperiment";
 import "../styles/base.css";
 
 const stats = [
@@ -153,6 +154,12 @@ const press = [
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
+
+// Homepage CTA text test. The variant is chosen per request and rendered into the HTML, so
+// there is no flicker and nothing is stored. The page must not be cached or every visitor
+// in the cache window would get the same variant.
+const ctaVariant = pickCtaVariant();
+Astro.response.headers.set("Cache-Control", "no-store");
 const pillGhost = `inline-flex items-center justify-center rounded-pill border border-ink-divider px-7 py-3.5 text-[15px] font-bold text-ink transition-colors duration-150 hover:border-grove hover:text-grove ${focusRing}`;
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
 ---
@@ -197,7 +204,13 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
         </p>
 
         <div class="mt-8">
-          <a href="/incubator" class={pillPrimary}>Apply to the Incubator</a>
+          <a
+            href="/incubator"
+            class={pillPrimary}
+            id="hero-cta"
+            data-experiment={CTA_EXPERIMENT}
+            data-variant={ctaVariant}>{CTA_TEXT[ctaVariant]}</a
+          >
         </div>
       </div>
 
@@ -491,6 +504,10 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
       writePopupState,
     } from "../utils/newsletterPopup";
     import { watchSignupSuccess } from "../utils/watchSignupSuccess";
+    import { trackCtaLink } from "../utils/ctaExperiment";
+
+    const heroCta = document.getElementById("hero-cta");
+    if (heroCta) trackCtaLink(heroCta);
 
     const bottomForm = document.getElementById(FOOTER_SECTION_ID);
     if (bottomForm) {
