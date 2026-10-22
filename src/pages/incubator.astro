@@ -21,6 +21,13 @@ const overline = "mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C
 const bandShell = "border-y border-[#D2E4D6] bg-[#E7F2E9]";
 const primaryButton =
   "inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#157A3E] px-7 py-3.5 font-bold text-white shadow-sm transition-colors duration-150 hover:bg-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
+// The hero pair leads with a plain-weight question and bolds only the action,
+// so it drops the base bold rather than overriding it (Tailwind's CSS order,
+// not class order, decides which weight wins).
+const heroButton = "flex-wrap gap-x-1.5 text-center";
+const heroPrimaryButton = primaryButton.replace("font-bold ", "");
+const secondaryButton =
+  "inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-[#157A3E] bg-white px-7 py-3 text-[#157A3E] transition-colors duration-150 hover:bg-[#E7F2E9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
 
 // Project leaders only: this page recruits them. Hani & Said are held back
 // on /supporting-member pending approval, so they stay off this page too.
@@ -52,21 +59,31 @@ const projectLeaderVoices = getTestimonials()
             Build a project for Palestine. We'll help it scale.
           </h1>
           <p class={lede}>
-            The Tech for Palestine incubator gets initiatives for Palestine off the ground and
-            helps them grow, so they can educate the world about Palestine and counter Hasbara and
-            Zionism wherever it takes hold.
+            The Tech for Palestine incubator gets initiatives for Palestine off the ground and helps
+            them grow, so they can educate the world about Palestine and counter Hasbara and Zionism
+            wherever it takes hold.
           </p>
           <p class={`mt-3.5 ${lede}`}>
-            We take on a limited number of projects and back them with our expertise and
-            resources.
+            We take on a limited number of projects and back them with our expertise and resources.
           </p>
-          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <a href={APPLY_URL} data-track-incubator-click="hero" class={primaryButton}>
-              Apply to the incubator
+          <div class="mt-8 flex flex-col items-start gap-5">
+            <div class="flex flex-col items-start gap-2">
+              <a
+                href={APPLY_URL}
+                data-track-incubator-click="hero"
+                class:list={[heroPrimaryButton, heroButton]}
+              >
+                <span>Own your own project?</span>
+                <strong class="font-bold">Apply to the Incubator</strong>
+              </a>
+              <p class="text-[16px] text-ink-secondary">
+                Takes 10 to 30 minutes. Decision within 10 days.
+              </p>
+            </div>
+            <a href="/membership" class:list={[secondaryButton, heroButton]}>
+              <span>Want to build a project within T4P?</span>
+              <strong class="font-bold">Become a Member</strong>
             </a>
-            <p class="text-[16px] text-ink-secondary">
-              Takes 10 to 30 minutes. Decision within 10 days.
-            </p>
           </div>
         </div>
         <img
@@ -85,9 +102,7 @@ const projectLeaderVoices = getTestimonials()
     <section class={bandShell}>
       <div class={`${container} py-14 min-[810px]:py-16`}>
         <p class={overline}>Who it's for</p>
-        <h2 class={`max-w-[24ch] ${h2}`}>
-          Early-stage projects for Palestine that can scale.
-        </h2>
+        <h2 class={`max-w-[24ch] ${h2}`}>Early-stage projects for Palestine that can scale.</h2>
         <p class={`mt-4 max-w-[65ch] ${lede}`}>
           Any project that directly or indirectly advocates for Palestine, where we believe it can
           have impact and grow. Our projects are often, but not always, in these areas:
@@ -177,8 +192,8 @@ const projectLeaderVoices = getTestimonials()
         <div class="lg:sticky lg:top-24 lg:self-start">
           <h2 class={h2}>How applying works</h2>
           <p class={`mt-5 max-w-[40ch] ${lede}`}>
-            Interviews and decisions happen twice a week. We aim to give every applicant a
-            decision within <strong class="font-bold text-[#157A3E]">10 days</strong>.
+            Interviews and decisions happen twice a week. We aim to give every applicant a decision
+            within <strong class="font-bold text-[#157A3E]">10 days</strong>.
           </p>
           <a
             href={APPLY_URL}
@@ -236,9 +251,13 @@ const projectLeaderVoices = getTestimonials()
     <section class={`${container} py-16 min-[810px]:py-20`}>
       <h2 class={h2}>Not ready to apply?</h2>
       <ul class="mt-8 max-w-[860px] border-b border-ink-divider">
-        <li class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+        <li
+          class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+        >
           <div>
-            <p class="text-[19px] font-bold text-ink">You want to lead, but don't have an idea yet</p>
+            <p class="text-[19px] font-bold text-ink">
+              You want to lead, but don't have an idea yet
+            </p>
             <p class="mt-1 text-[17px] text-ink-secondary">
               Pick one from our list of project ideas.
             </p>
@@ -250,7 +269,9 @@ const projectLeaderVoices = getTestimonials()
             Browse project ideas <span aria-hidden="true">→</span>
           </a>
         </li>
-        <li class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+        <li
+          class="flex flex-col gap-3 border-t border-ink-divider py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+        >
           <div>
             <p class="text-[19px] font-bold text-ink">You'd rather contribute than lead</p>
             <p class="mt-1 text-[17px] text-ink-secondary">
@@ -258,10 +279,10 @@ const projectLeaderVoices = getTestimonials()
             </p>
           </div>
           <a
-            href="/volunteer"
+            href="/membership"
             class="shrink-0 rounded-sm text-[17px] font-bold text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none"
           >
-            Register as a volunteer <span aria-hidden="true">→</span>
+            Become a member <span aria-hidden="true">→</span>
           </a>
         </li>
       </ul>
@@ -288,18 +309,16 @@ const projectLeaderVoices = getTestimonials()
   </main>
 
   <script>
-    document
-      .querySelectorAll<HTMLAnchorElement>("[data-track-incubator-click]")
-      .forEach((link) => {
-        link.addEventListener("click", () => {
-          if (typeof window.plausible === "undefined") return;
-          window.plausible("Incubator Apply Click", {
-            props: {
-              cta_location: link.dataset.trackIncubatorClick ?? "unknown",
-              destination: link.getAttribute("href") ?? "",
-            },
-          });
+    document.querySelectorAll<HTMLAnchorElement>("[data-track-incubator-click]").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (typeof window.plausible === "undefined") return;
+        window.plausible("Incubator Apply Click", {
+          props: {
+            cta_location: link.dataset.trackIncubatorClick ?? "unknown",
+            destination: link.getAttribute("href") ?? "",
+          },
         });
       });
+    });
   </script>
 </Layout>
