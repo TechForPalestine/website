@@ -87,102 +87,19 @@ const IMG = "/images/hackathon-2026";
           </a>
         </div>
 
-        <div class="hk-stage" data-hk-stage>
-          <div class="hk-photo">
-            <img
-              class="hk-img"
-              data-hk-photo
-              src={`${IMG}/workshop-circle.webp`}
-              srcset={`${IMG}/workshop-circle-small.webp 640w, ${IMG}/workshop-circle.webp 1600w`}
-              sizes="(min-width: 768px) 440px, 100vw"
-              width="1600"
-              height="1067"
-              loading="lazy"
-              decoding="async"
-              alt="Hackathon participants laughing and debating ideas around a long workshop table"
-            />
-          </div>
-          <svg
-            class="hk-sweep"
-            viewBox="0 0 1000 667"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <defs>
-              <filter
-                id="hk-dry"
-                filterUnits="userSpaceOnUse"
-                x="-400"
-                y="-400"
-                width="2400"
-                height="2400"
-                color-interpolation-filters="sRGB"
-              >
-                <feTurbulence
-                  type="fractalNoise"
-                  baseFrequency="0.018"
-                  numOctaves="2"
-                  seed="4"
-                  result="warp"
-                />
-                <feDisplacementMap
-                  in="SourceGraphic"
-                  in2="warp"
-                  scale="14"
-                  xChannelSelector="R"
-                  yChannelSelector="G"
-                  result="rough"
-                />
-                <feTurbulence
-                  type="fractalNoise"
-                  baseFrequency="0.55 0.16"
-                  numOctaves="2"
-                  seed="11"
-                  result="grain"
-                />
-                <feColorMatrix
-                  in="grain"
-                  type="matrix"
-                  values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  10 0 0 0 -2.8"
-                  result="gate"
-                />
-                <feComposite in="rough" in2="gate" operator="in" />
-              </filter>
-            </defs>
-            <g
-              class="hk-sweep__ink"
-              filter="url(#hk-dry)"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M-26 560 C-12 290 84 112 300 84 C435 60 585 107 611 179 C646 275 554 312 526 234 C505 176 546 103 640 81 C748 53 845 50 936 62"
-                stroke-width="17"
-              />
-              <path
-                d="M-26 560 C-12 290 84 112 300 84 C435 60 585 107 611 179 C646 275 554 312 526 234 C505 176 546 103 640 81 C748 53 845 50 936 62"
-                stroke-width="7.14"
-                stroke-dasharray="153 18.7 68 13.6"
-                transform="translate(3.74 -4.42)"
-                opacity=".85"
-              />
-              <path d="M958 64 L892 20 M958 64 L898 114" stroke-width="15" />
-              <path
-                d="M958 64 L892 20 M958 64 L898 114"
-                stroke-width="6.3"
-                stroke-dasharray="135 16.5 60 12"
-                transform="translate(3.3 -3.9)"
-                opacity=".85"
-              />
-              <path d="M-8 470 C10 260 110 150 250 116" stroke-width="6" opacity=".7" />
-            </g>
-          </svg>
-          <div class="hk-cutout hk-cutout--1" aria-hidden="true" />
-          <div class="hk-cutout hk-cutout--2" aria-hidden="true" />
-          <div class="hk-cutout hk-cutout--3" aria-hidden="true" />
-          <div class="hk-cutout hk-cutout--4" aria-hidden="true" />
+        <div class="hk-stage">
+          <img
+            class="hk-img"
+            data-hk-photo
+            src={`${IMG}/hackathon-hero.webp`}
+            srcset={`${IMG}/hackathon-hero-small.webp 640w, ${IMG}/hackathon-hero.webp 1077w`}
+            sizes="(min-width: 768px) 440px, 100vw"
+            width="1077"
+            height="791"
+            loading="lazy"
+            decoding="async"
+            alt="Hackathon participants laughing and debating ideas around a long workshop table"
+          />
         </div>
 
         <dl class="hk-bar">
@@ -359,133 +276,10 @@ const IMG = "/images/hackathon-2026";
     align-self: center;
     position: relative;
   }
-  .hk-photo {
-    clip-path: polygon(9% 0, 100% 0, 100% 100%, 0 100%);
-  }
   .hk-img {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    object-position: 30% 50%;
-    background: #f2f2f2;
-  }
-  .hk-sweep {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    pointer-events: none;
-    color: var(--hk-red);
-  }
-  .hk-cutout {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: var(--hk-photo-src, none);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-  }
-  .hk-cutout--1 {
-    clip-path: polygon(
-      52.73% 19.77%,
-      53.52% 18.89%,
-      54.69% 18.89%,
-      55.47% 19.77%,
-      56.05% 21.23%,
-      56.25% 22.4%,
-      56.15% 23.28%,
-      56.64% 22.84%,
-      57.03% 23.87%,
-      57.23% 25.92%,
-      58.01% 28.11%,
-      58.11% 30.31%,
-      57.03% 31.48%,
-      56.45% 32.21%,
-      53.52% 38.51%,
-      51.17% 38.51%,
-      51.27% 33.67%,
-      51.07% 29.72%,
-      51.27% 26.5%,
-      51.86% 23.87%,
-      52.64% 22.11%
-    );
-  }
-  .hk-cutout--2 {
-    clip-path: polygon(
-      60.94% 28.99%,
-      61.82% 28.11%,
-      62.99% 28.55%,
-      63.67% 29.72%,
-      63.96% 31.63%,
-      63.96% 33.09%,
-      63.48% 34.7%,
-      65.33% 36.02%,
-      66.31% 38.65%,
-      66.89% 38.8%,
-      67.09% 36.75%,
-      67.58% 35.58%,
-      67.38% 38.07%,
-      66.8% 40.41%,
-      65.92% 41.58%,
-      65.04% 44.22%,
-      61.33% 47%,
-      58.89% 45.39%,
-      58.2% 41%,
-      58.2% 36.75%,
-      59.28% 34.41%,
-      60.84% 33.97%,
-      60.45% 31.63%
-    );
-  }
-  .hk-cutout--3 {
-    clip-path: polygon(
-      53.52% 37.04%,
-      54% 35.14%,
-      55.18% 33.67%,
-      56.45% 32.8%,
-      57.81% 32.65%,
-      59.08% 33.38%,
-      59.57% 35.14%,
-      59.28% 37.63%,
-      58.5% 40.41%,
-      57.23% 43.05%,
-      53.81% 42.61%,
-      52.64% 40.7%
-    );
-  }
-  .hk-cutout--4 {
-    clip-path: polygon(
-      51.37% 42.17%,
-      52.15% 40.26%,
-      53.71% 38.65%,
-      55.66% 37.77%,
-      57.52% 37.77%,
-      59.47% 38.95%,
-      60.84% 40.41%,
-      61.82% 42.75%,
-      62.11% 45.1%,
-      61.72% 47.73%,
-      61.23% 50.51%,
-      61.43% 53.88%,
-      64.06% 57.1%,
-      69.24% 61.49%,
-      71.29% 73.35%,
-      71.19% 87.55%,
-      68.75% 100%,
-      48.34% 100%,
-      47.46% 81.41%,
-      44.24% 71.6%,
-      42.48% 68.08%,
-      41.6% 64.28%,
-      42.97% 60.76%,
-      47.85% 55.64%,
-      50.39% 52.27%,
-      51.27% 48.9%,
-      50.98% 45.83%
-    );
   }
   .hk-card--no-photo {
     grid-template-columns: minmax(0, 1fr);
@@ -567,8 +361,7 @@ const IMG = "/images/hackathon-2026";
     }
     /* A flex column rather than the desktop grid: position: sticky is limited
        to its containing block, and a grid item's is its own grid area, so the
-       buttons could never stick. Here the card is the containing block.
-       The photo keeps its 3:2 ratio so the arrow and head cutouts stay aligned. */
+       buttons could never stick. Here the card is the containing block. */
     .hk-card {
       display: flex;
       flex-direction: column;
@@ -726,23 +519,15 @@ const IMG = "/images/hackathon-2026";
 
   function schedule(dialog: HTMLDialogElement) {
     const card = dialog.querySelector<HTMLElement>(".hk-card");
-    const stage = dialog.querySelector<HTMLElement>("[data-hk-stage]");
     const photo = dialog.querySelector<HTMLImageElement>("[data-hk-photo]");
 
-    // The cutouts must reuse whichever srcset candidate the browser picked,
-    // or they'd download a second copy. CSSOM, not style="": the CSP blocks the latter.
-    const usePhoto = () => {
-      if (photo?.currentSrc)
-        stage?.style.setProperty("--hk-photo-src", `url("${photo.currentSrc}")`);
-    };
     const dropPhoto = () => card?.classList.add("hk-card--no-photo");
     if (photo) {
-      photo.addEventListener("load", usePhoto, { once: true });
       photo.addEventListener("error", dropPhoto, { once: true });
       // Lazy images inside a closed <dialog> wait until it opens; start the
       // download now so the photo is there when the modal appears.
       photo.loading = "eager";
-      if (photo.complete) (photo.naturalWidth > 0 ? usePhoto : dropPhoto)();
+      if (photo.complete && photo.naturalWidth === 0) dropPhoto();
     }
 
     let reason: DismissReason = "escape";
