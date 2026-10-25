@@ -1,4 +1,5 @@
-import React, { useId, useState } from "react";
+import React, { useId, useMemo, useState } from "react";
+import { parseDescriptionHtml, type DescriptionNode, type DescriptionTag } from "./descriptionHtml";
 import { getApplyTarget, type OpenRole } from "./openRoleData";
 import type { SkinTokens } from "./openRoleSkins";
 
@@ -39,6 +40,47 @@ function Chevron({ expanded }: { expanded: boolean }) {
   );
 }
 
+const BLOCK_CLASSES: Partial<Record<DescriptionTag, string>> = {
+  ul: "list-disc space-y-1 pl-5",
+  ol: "list-decimal space-y-1 pl-5",
+};
+
+/** Renders the parsed description tree. Only allowlisted tags can reach here. */
+function renderDescription(
+  nodes: DescriptionNode[],
+  linkClassName: string,
+  keyPrefix = "d"
+): React.ReactNode {
+  return nodes.map((node, index) => {
+    const key = `${keyPrefix}-${index}`;
+    if (node.type === "text") return <React.Fragment key={key}>{node.text}</React.Fragment>;
+
+    const children = renderDescription(node.children, linkClassName, key);
+    if (node.tag === "br") return <br key={key} />;
+    if (node.tag === "a") {
+      return node.href ? (
+        <a
+          key={key}
+          href={node.href}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className={linkClassName}
+        >
+          {children}
+        </a>
+      ) : (
+        <React.Fragment key={key}>{children}</React.Fragment>
+      );
+    }
+    const Tag = node.tag;
+    return (
+      <Tag key={key} className={BLOCK_CLASSES[node.tag]}>
+        {children}
+      </Tag>
+    );
+  });
+}
+
 interface OpenRoleCardProps {
   role: OpenRole;
   tokens: SkinTokens;
@@ -51,6 +93,10 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
   const isTeamRole = role.type === "team";
   const canCollapse = role.description.length > CLAMP_THRESHOLD;
   const isCollapsed = canCollapse && !expanded;
+  const richDescription = useMemo(
+    () => (role.descriptionHtml ? parseDescriptionHtml(role.descriptionHtml) : []),
+    [role.descriptionHtml]
+  );
 
   return (
     <article className={tokens.card}>
@@ -58,7 +104,14 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
         <div className="min-w-0">
           {(role.orgName || isTeamRole) && (
             <p className="mb-1.5 flex flex-wrap items-center gap-2">
-              {role.orgName && <span className={tokens.org}>{role.orgName}</span>}
+              {role.orgName &&
+                (role.projectPath ? (
+                  <a href={role.projectPath} className={`${tokens.orgLink} ${tokens.focus}`}>
+                    {role.orgName}
+                  </a>
+                ) : (
+                  <span className={tokens.org}>{role.orgName}</span>
+                ))}
               {isTeamRole && <span className={tokens.orgMarker}>T4P team</span>}
             </p>
           )}
@@ -92,17 +145,23 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
 
       {role.description && (
         <>
-          <p
-            id={descriptionId}
-            className={`mt-4 max-w-[75ch] ${tokens.body} ${
-              isCollapsed ? "line-clamp-3" : "whitespace-pre-line"
-            }`}
-          >
-            {/* Several descriptions open with a short heading line, which would
-                spend the three-line clamp on almost no content. Flattening the
-                whitespace while collapsed gives three full lines of preview. */}
-            {isCollapsed ? role.description.replace(/\s+/g, " ") : role.description}
-          </p>
+          {isCollapsed || richDescription.length === 0 ? (
+            <p
+              id={descriptionId}
+              className={`mt-4 max-w-[75ch] ${tokens.body} ${
+                isCollapsed ? "line-clamp-3" : "whitespace-pre-line"
+              }`}
+            >
+              {/* Several descriptions open with a short heading line, which would
+                  spend the three-line clamp on almost no content. Flattening the
+                  whitespace while collapsed gives three full lines of preview. */}
+              {isCollapsed ? role.description.replace(/\s+/g, " ") : role.description}
+            </p>
+          ) : (
+            <div id={descriptionId} className={`mt-4 max-w-[75ch] space-y-3 ${tokens.body}`}>
+              {renderDescription(richDescription, `${tokens.link} ${tokens.focus}`)}
+            </div>
+          )}
 
           {canCollapse && (
             <button

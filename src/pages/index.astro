@@ -80,19 +80,19 @@ const projects = [
 const support = [
   {
     title: "Volunteer network",
-    body: "Access to 3,000+ skilled volunteers: engineers, marketers, designers and more, with a dedicated recruitment team to match you.",
+    body: "Access to skilled volunteers: engineers, marketers, designers and more, with a dedicated recruitment team to match you.",
   },
   {
-    title: "Funding",
-    body: "Small grants for most accepted projects. Simple process, no strings attached. We fund what works.",
+    title: "Launch support",
+    body: "Engineering, security and marketing expertise, coordinated launches, and a network of 10k+ early testers.",
   },
   {
     title: "Mentorship",
     body: "Strategy sessions and optional weekly dedicated mentors. Real guidance from people who have built before.",
   },
   {
-    title: "Launch support",
-    body: "Engineering, security and marketing expertise, coordinated launches, and a network of 10k+ early testers.",
+    title: "Funding",
+    body: "Small grants for Incubator projects. Simple process, no strings attached. We fund what works.",
   },
 ];
 
@@ -153,7 +153,22 @@ const press = [
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
-const pillGhost = `inline-flex items-center justify-center rounded-pill border border-ink-divider px-7 py-3.5 text-[15px] font-bold text-ink transition-colors duration-150 hover:border-grove hover:text-grove ${focusRing}`;
+// The hero's two paths: each card is one link, a sentence then the action.
+const heroPaths = [
+  {
+    href: "/membership",
+    body: "Join the community, build projects, and start your own through T4P:",
+    action: "Become a Member",
+    tone: "border-grove bg-grove text-white hover:border-grove-hover hover:bg-grove-hover",
+  },
+  {
+    href: "/incubator",
+    body: "If you run your own pro-Palestine project, and want help scaling:",
+    action: "Apply to the Incubator",
+    tone: "border-ink-divider bg-paper text-ink hover:border-grove hover:shadow-sm",
+  },
+];
+const heroCard = `flex flex-col rounded-lg border p-6 transition-[background-color,border-color,box-shadow] duration-150 ${focusRing}`;
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
 ---
 
@@ -196,8 +211,19 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
         </p>
 
-        <div class="mt-8">
-          <a href="/incubator" class={pillPrimary}>Apply to the Incubator</a>
+        <div class="mt-8 grid max-w-[44rem] grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-3">
+          {
+            heroPaths.map((path) => (
+              <a href={path.href} class:list={[heroCard, path.tone]}>
+                <span class="text-[16px] leading-[1.55] opacity-90 min-[810px]:text-[17px]">
+                  {path.body}
+                </span>
+                <span class="mt-auto pt-4 text-[19px] font-extrabold leading-[1.2]">
+                  {path.action}
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
 
@@ -353,7 +379,6 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 
         <div class="mt-12 flex flex-wrap gap-3">
           <a href="/projects" class={pillPrimary}>Browse all projects</a>
-          <a href="/incubator" class={pillGhost}>Apply to the Incubator</a>
         </div>
       </div>
     </section>
@@ -441,24 +466,26 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 
           <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-0">
             <div class="lg:pr-14">
-              <h3 class="text-[19px] font-extrabold tracking-[-0.01em] text-white">Support us</h3>
+              <h3 class="text-[19px] font-extrabold tracking-[-0.01em] text-white">
+                Join the community
+              </h3>
               <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-white/70">
-                Your donation helps us hire professionals, strengthen existing projects, and launch
-                new initiatives for a free Palestine.
+                Use your skills to support or start projects, join member events &amp; the vetted
+                member chat, and sustain T4P with grassroots funding.
               </p>
               <a
-                href="/donate"
+                href="/membership"
                 class="mt-7 inline-flex items-center justify-center rounded-pill bg-white px-7 py-3.5 text-[15px] font-bold text-nightfall transition-colors duration-150 hover:bg-first-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
-                Donate
+                Become a member
               </a>
             </div>
 
             <div class="border-t border-white/15 pt-10 lg:border-l lg:border-t-0 lg:pl-14 lg:pt-0">
               <h3 class="text-[19px] font-extrabold tracking-[-0.01em] text-white">Get involved</h3>
               <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-white/70">
-                Join a working community of engineers, designers, marketers and organizers. There
-                are many ways to contribute your skills.
+                Join the Incubator (for external projects), our Discord, Entrepreneurs for Palestine
+                community, and more.
               </p>
               <a
                 href="/get-involved"
