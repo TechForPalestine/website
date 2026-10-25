@@ -154,30 +154,13 @@ const press = [
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
+const pillGhost = `inline-flex items-center justify-center rounded-pill border border-ink-divider px-7 py-3.5 text-[15px] font-bold text-ink transition-colors duration-150 hover:border-grove hover:text-grove ${focusRing}`;
 
 // Homepage description test. The variant is chosen per request and rendered into the HTML,
 // so there is no flicker and nothing is stored. The page must not be cached or every visitor
 // in the cache window would get the same variant.
 const variant = pickHomepageVariant();
 Astro.response.headers.set("Cache-Control", "no-store");
-// The hero's two paths: each card is one link, a sentence then the action.
-const heroPaths = [
-  {
-    href: "/membership",
-    cta: "membership",
-    body: "Join the community, build projects, and start your own through T4P:",
-    action: "Become a Member",
-    tone: "border-grove bg-grove text-white hover:border-grove-hover hover:bg-grove-hover",
-  },
-  {
-    href: "/incubator",
-    cta: "incubator",
-    body: "If you run your own pro-Palestine project, and want help scaling:",
-    action: "Apply to the Incubator",
-    tone: "border-ink-divider bg-paper text-ink hover:border-grove hover:shadow-sm",
-  },
-];
-const heroCard = `flex flex-col rounded-lg border p-6 transition-[background-color,border-color,box-shadow] duration-150 ${focusRing}`;
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
 ---
 
@@ -250,20 +233,10 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           id="hero-ctas"
           data-experiment={HOMEPAGE_EXPERIMENT}
           data-variant={variant}
-          class="mt-8 grid max-w-[44rem] grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-3"
+          class="mt-8 flex flex-wrap gap-3"
         >
-          {
-            heroPaths.map((path) => (
-              <a href={path.href} data-cta={path.cta} class:list={[heroCard, path.tone]}>
-                <span class="text-[16px] leading-[1.55] opacity-90 min-[810px]:text-[17px]">
-                  {path.body}
-                </span>
-                <span class="mt-auto pt-4 text-[19px] font-extrabold leading-[1.2]">
-                  {path.action}
-                </span>
-              </a>
-            ))
-          }
+          <a href="/membership" data-cta="membership" class={pillPrimary}>Become a Member</a>
+          <a href="/incubator" data-cta="incubator" class={pillGhost}>Apply to the Incubator</a>
         </div>
       </div>
 
