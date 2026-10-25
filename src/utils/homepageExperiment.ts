@@ -1,17 +1,12 @@
-export const CTA_EXPERIMENT = "homepage-cta-text";
+export const HOMEPAGE_EXPERIMENT = "homepage-description";
 export const EXPOSURE_EVENT = "Experiment Exposure";
 export const CTA_CLICK_EVENT = "CTA Click";
 
-export type CtaVariant = "control" | "treatment";
-
-export const CTA_TEXT: Record<CtaVariant, string> = {
-  control: "Apply to the Incubator",
-  treatment: "Join the Incubator",
-};
+export type HomepageVariant = "control" | "treatment";
 
 // Assigned per request on the server: nothing is stored, so a visitor can see a
 // different variant on each page view. That is the price of needing no consent banner.
-export function pickCtaVariant(random: () => number = Math.random): CtaVariant {
+export function pickHomepageVariant(random: () => number = Math.random): HomepageVariant {
   return random() < 0.5 ? "control" : "treatment";
 }
 

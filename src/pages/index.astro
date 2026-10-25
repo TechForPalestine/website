@@ -4,7 +4,7 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
 import HackathonPopup from "../components/home/HackathonPopup.astro";
-import { CTA_EXPERIMENT, CTA_TEXT, pickCtaVariant } from "../utils/ctaExperiment";
+import { HOMEPAGE_EXPERIMENT, pickHomepageVariant } from "../utils/homepageExperiment";
 import "../styles/base.css";
 
 const stats = [
@@ -155,10 +155,10 @@ const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
 
-// Homepage CTA text test. The variant is chosen per request and rendered into the HTML, so
-// there is no flicker and nothing is stored. The page must not be cached or every visitor
+// Homepage description test. The variant is chosen per request and rendered into the HTML,
+// so there is no flicker and nothing is stored. The page must not be cached or every visitor
 // in the cache window would get the same variant.
-const ctaVariant = pickCtaVariant();
+const variant = pickHomepageVariant();
 Astro.response.headers.set("Cache-Control", "no-store");
 const pillGhost = `inline-flex items-center justify-center rounded-pill border border-ink-divider px-7 py-3.5 text-[15px] font-bold text-ink transition-colors duration-150 hover:border-grove hover:text-grove ${focusRing}`;
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
@@ -189,27 +189,53 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           Join the tech movement behind <span class="text-grove">90+ projects for Palestine</span>
         </h1>
 
-        <p
-          class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]"
-        >
-          Tech for Palestine is a 501(c)(3) nonprofit starting and scaling initiatives for
-          Palestinian liberation.
-        </p>
-        <p
-          class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]"
-        >
-          We support anyone with a meaningful idea, whether it is working against media censorship,
-          using tech to aid protests, scaling boycotts, pushing for tech divestment, supporting
-          Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
-        </p>
+        {
+          variant === "control" ? (
+            <>
+              <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
+                Tech for Palestine is a 501(c)(3) nonprofit starting and scaling initiatives for
+                Palestinian liberation.
+              </p>
+              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
+                We support anyone with a meaningful idea, whether it is working against media
+                censorship, using tech to aid protests, scaling boycotts, pushing for tech
+                divestment, supporting Palestinian entrepreneurs, or anything else that contributes
+                to a free Palestine.
+              </p>
+            </>
+          ) : (
+            <>
+              <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
+                Tech for Palestine is a member-driven organization that brings together people,
+                skills and resources. Through technology and collective action, our members build
+                tools and solutions that support the movement for Palestine and help people take
+                action against Israel's occupation, apartheid and genocide.
+              </p>
+              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
+                These projects include: apps to organize protests, tools that make boycotting
+                companies easier, support for Palestinian students and businesses, alternatives to
+                mainstream tech platforms, and many more.
+              </p>
+              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
+                Whether you're a tech worker, founder, marketer, activist - there's a place for you
+                to contribute at T4P.
+              </p>
+              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
+                <strong class="font-bold text-ink">Our Vision:</strong> A free Palestine, a tech
+                industry that actively participates in liberation, and a world where all people
+                enjoy equal dignity, justice, and human rights.
+              </p>
+            </>
+          )
+        }
 
         <div class="mt-8">
           <a
             href="/incubator"
             class={pillPrimary}
             id="hero-cta"
-            data-experiment={CTA_EXPERIMENT}
-            data-variant={ctaVariant}>{CTA_TEXT[ctaVariant]}</a
+            data-experiment={HOMEPAGE_EXPERIMENT}
+            data-variant={variant}>Apply to the Incubator</a
           >
         </div>
       </div>
@@ -504,7 +530,7 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
       writePopupState,
     } from "../utils/newsletterPopup";
     import { watchSignupSuccess } from "../utils/watchSignupSuccess";
-    import { trackCtaLink } from "../utils/ctaExperiment";
+    import { trackCtaLink } from "../utils/homepageExperiment";
 
     const heroCta = document.getElementById("hero-cta");
     if (heroCta) trackCtaLink(heroCta);
