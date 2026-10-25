@@ -1,13 +1,13 @@
 export const HOMEPAGE_EXPERIMENT = "homepage-description";
-export const EXPOSURE_EVENT = "Experiment Exposure";
-export const CTA_CLICK_EVENT = "CTA Click";
+export const EXPOSURE_EVENT = "Homepage Description Shown";
+export const CTA_CLICK_EVENT = "Homepage Description CTA Click";
 
-export type HomepageVariant = "control" | "treatment";
+export type HomepageVariant = "A" | "B";
 
 // Assigned per request on the server: nothing is stored, so a visitor can see a
 // different variant on each page view. That is the price of needing no consent banner.
 export function pickHomepageVariant(random: () => number = Math.random): HomepageVariant {
-  return random() < 0.5 ? "control" : "treatment";
+  return random() < 0.5 ? "A" : "B";
 }
 
 interface PlausibleWindow {
