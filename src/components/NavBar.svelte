@@ -195,12 +195,6 @@
 
     <!-- Mobile Header -->
     <div class="flex lg:hidden items-center space-x-3">
-      <a
-        href="/membership"
-        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-4 text-sm sm:px-8 sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all duration-200 whitespace-nowrap"
-      >
-        Become a Member
-      </a>
       <button
         type="button"
         on:click={toggle}
@@ -288,8 +282,14 @@
         {/each}
       </div>
       <a
+        href="/membership"
+        class="mt-6 block w-full text-center bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+      >
+        Become a Member
+      </a>
+      <a
         href={HUB_URL}
-        class="mt-6 block w-full text-center border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-lg transition-colors duration-200"
+        class="mt-3 block w-full text-center border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-lg transition-colors duration-200"
       >
         Log into Hub
       </a>
