@@ -175,7 +175,7 @@
       </nav>
     </div>
 
-    <!-- Right side: Hub and Donate -->
+    <!-- Right side: Hub and Become a Member -->
     <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
       <a
         href={HUB_URL}
@@ -185,10 +185,10 @@
       </a>
       <div>
         <a
-          href="/donate"
-          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-2.5 px-5 text-sm 2xl:py-3 2xl:px-7 2xl:text-base 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+          href="/membership"
+          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-2.5 px-5 text-sm 2xl:py-3 2xl:px-7 2xl:text-base 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 whitespace-nowrap"
         >
-          Donate
+          Become a Member
         </a>
       </div>
     </div>
@@ -196,10 +196,10 @@
     <!-- Mobile Header -->
     <div class="flex lg:hidden items-center space-x-3">
       <a
-        href="/donate"
-        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+        href="/membership"
+        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-4 text-sm sm:px-8 sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all duration-200 whitespace-nowrap"
       >
-        Donate
+        Become a Member
       </a>
       <button
         type="button"

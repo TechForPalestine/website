@@ -1,7 +1,12 @@
 import type { APIRoute } from "astro";
 import * as Sentry from "@sentry/astro";
 import { reportError } from "../../lib/report-error";
-import { normalizeOpenRoles } from "../../components/volunteer/openRoleData";
+import {
+  attachProjectLinks,
+  normalizeOpenRoles,
+  type OpenRole,
+} from "../../components/volunteer/openRoleData";
+import { fetchProjectsData } from "../../store/projectsClient";
 
 export const prerender = false;
 
@@ -41,6 +46,20 @@ async function fetchOpenRoles(): Promise<Response> {
   throw lastError ?? new Error("Failed to reach Hub API");
 }
 
+/**
+ * Project links are an extra, so a ProjectHub failure must not take the roles
+ * down with it: the roles are returned unlinked instead.
+ */
+async function withProjectLinks(roles: OpenRole[], locals: App.Locals): Promise<OpenRole[]> {
+  try {
+    const { projects } = await fetchProjectsData(locals);
+    return attachProjectLinks(roles, projects);
+  } catch (error) {
+    console.error("[open-roles] Could not load projects for role links", error);
+    return roles;
+  }
+}
+
 export const GET: APIRoute = async ({ locals }) => {
   const ctx = locals.runtime?.ctx;
 
@@ -60,7 +79,7 @@ export const GET: APIRoute = async ({ locals }) => {
           ? payload.roles
           : [];
 
-    const roles = normalizeOpenRoles(rows);
+    const roles = await withProjectLinks(normalizeOpenRoles(rows), locals);
 
     return new Response(JSON.stringify({ roles }), {
       status: 200,
