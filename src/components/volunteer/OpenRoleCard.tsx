@@ -1,6 +1,6 @@
 import React, { useId, useMemo, useState } from "react";
 import { parseDescriptionHtml, type DescriptionNode, type DescriptionTag } from "./descriptionHtml";
-import { getApplyTarget, type OpenRole } from "./openRoleData";
+import { MEMBERSHIP_URL, type OpenRole } from "./openRoleData";
 import type { SkinTokens } from "./openRoleSkins";
 
 /** Descriptions shorter than this read fine in full, so they get no toggle. */
@@ -89,7 +89,6 @@ interface OpenRoleCardProps {
 export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
   const [expanded, setExpanded] = useState(false);
   const descriptionId = useId();
-  const apply = getApplyTarget(role);
   const isTeamRole = role.type === "team";
   const canCollapse = role.description.length > CLAMP_THRESHOLD;
   const isCollapsed = canCollapse && !expanded;
@@ -118,12 +117,9 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
           <h3 className={`${tokens.title} break-words`}>{role.title}</h3>
         </div>
 
-        <a
-          href={apply.href}
-          className={`${isTeamRole ? tokens.applyTeam : tokens.applyProject} ${tokens.focus} shrink-0`}
-        >
-          {apply.label}
-          <span className="sr-only"> as {role.title}</span>
+        <a href={MEMBERSHIP_URL} className={`${tokens.applyTeam} ${tokens.focus} shrink-0`}>
+          Become a member
+          <span className="sr-only"> to apply as {role.title}</span>
         </a>
       </div>
 
