@@ -153,10 +153,22 @@ const press = [
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
-// Membership is the hero's one button; the incubator is a text link for the
-// smaller audience of founders. Both arrows nudge on hover.
-const heroArrow =
-  "inline-block transition-transform duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] motion-safe:group-hover:translate-x-0.5";
+// The hero's two paths: each card is one link, a sentence then the action.
+const heroPaths = [
+  {
+    href: "/membership",
+    body: "Join the community, build projects, and start your own through T4P:",
+    action: "Become a Member",
+    tone: "border-grove bg-grove text-white hover:border-grove-hover hover:bg-grove-hover",
+  },
+  {
+    href: "/incubator",
+    body: "If you run your own pro-Palestine project, and want help scaling:",
+    action: "Apply to the Incubator",
+    tone: "border-ink-divider bg-paper text-ink hover:border-grove hover:shadow-sm",
+  },
+];
+const heroCard = `flex flex-col rounded-lg border p-6 transition-[background-color,border-color,box-shadow] duration-150 ${focusRing}`;
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
 ---
 
@@ -199,30 +211,19 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           Palestinian entrepreneurs, or anything else that contributes to a free Palestine.
         </p>
 
-        <div class="mt-8">
-          <a
-            href="/membership"
-            aria-describedby="hero-member-note"
-            class={`group gap-2 ${pillPrimary}`}
-          >
-            Become a Member
-            <span aria-hidden="true" class={heroArrow}>&rarr;</span>
-          </a>
-          <p
-            id="hero-member-note"
-            class="mt-3 max-w-[40ch] text-[15px] leading-[1.5] text-ink-secondary"
-          >
-            Join the community, build projects, and start your own through T4P.
-          </p>
-          <p class="mt-6 max-w-[48ch] text-[15px] leading-[1.5] text-ink-secondary">
-            Run your own pro-Palestine project and want help scaling?
-            <a
-              href="/incubator"
-              class={`group whitespace-nowrap font-bold text-grove underline decoration-grove/30 underline-offset-4 transition-colors duration-150 hover:decoration-grove ${focusRing}`}
-            >
-              Apply to the Incubator <span aria-hidden="true" class={heroArrow}>&rarr;</span>
-            </a>
-          </p>
+        <div class="mt-8 grid max-w-[44rem] grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-3">
+          {
+            heroPaths.map((path) => (
+              <a href={path.href} class:list={[heroCard, path.tone]}>
+                <span class="text-[16px] leading-[1.55] opacity-90 min-[810px]:text-[17px]">
+                  {path.body}
+                </span>
+                <span class="mt-auto pt-4 text-[19px] font-extrabold leading-[1.2]">
+                  {path.action}
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
 
