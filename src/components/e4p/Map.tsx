@@ -102,8 +102,9 @@ export default function MyLeafletMap() {
   return (
     <MapContainer center={[20, 0]} zoom={2} style={{ height: "600px", width: "100%" }}>
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+        attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
+        maxZoom={16}
       />
       {locations.map((loc, idx) => (
         <Marker key={idx} position={loc.coords as [number, number]} icon={greenCircleMarker}>
