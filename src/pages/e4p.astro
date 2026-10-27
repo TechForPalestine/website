@@ -1,9 +1,329 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import CommunityMap from "../components/e4p/Map.tsx";
 import "../styles/base.css";
-import { E4PPage } from "../components/e4p/E4PPage.tsx";
+
+interface Benefit {
+  title: string;
+  description: string;
+}
+
+interface BenefitGroup {
+  heading: string;
+  benefits: Benefit[];
+}
+
+interface Founder {
+  name: string;
+  role: string;
+  country: string;
+  image: string;
+  quote: string;
+}
+
+const benefitGroups: BenefitGroup[] = [
+  {
+    heading: "Grow your business",
+    benefits: [
+      {
+        title: "New business and networking",
+        description: "Win clients and build your network among peers who share your values.",
+      },
+      {
+        title: "Funding introductions",
+        description: "Meet values-aligned VCs, angel investors and other sources of funding.",
+      },
+      {
+        title: "Hiring support",
+        description: "Enrich your hiring pipeline with Palestinian and pro-Palestine talent.",
+      },
+      {
+        title: "PR assistance",
+        description: "We amplify your posts and showcase your business.",
+      },
+    ],
+  },
+  {
+    heading: "Get backup",
+    benefits: [
+      {
+        title: "Mentorship and coaching",
+        description: "One-to-one guidance from other E4P members.",
+      },
+      {
+        title: "Legal assistance",
+        description: "Pro bono or discounted help if you face legal issues.",
+      },
+      {
+        title: "Boycott alternatives",
+        description: "Lists of companies and tech products to boycott, and what to use instead.",
+      },
+    ],
+  },
+  {
+    heading: "Find your people",
+    benefits: [
+      {
+        title: "A community of peers",
+        description: "Founders and CEOs who will not stay silent about Palestine.",
+      },
+      {
+        title: "In-person meetups",
+        description: "Invitations to gatherings with local E4P members around the world.",
+      },
+    ],
+  },
+];
+
+const founders: Founder[] = [
+  {
+    name: "Ariana Alexander-Sefre",
+    role: "Founder, SPOKE",
+    country: "UK",
+    image: "/images/ariana-linkedin.jpg",
+    quote:
+      "I joined E4P because I started to ask myself who I can truly trust. I don’t want to work with, or take investment from, people who aren’t on the right side of history. From now on, I believe it’s essential to align with people and brands who will stand up to injustice when they see it. That’s why E4P is a great community; because everyone here shares those values.",
+  },
+  {
+    name: "Sami Abu Heiba",
+    role: "Founder, GIL",
+    country: "Palestine",
+    image: "/images/sami-linkedin.jpg",
+    quote:
+      "Joining E4P has been an incredibly rich and inspiring experience. It connected me with a diverse community of purpose-driven entrepreneurs and gave me access to valuable tools, insights, and opportunities for growth. Being part of this network reminds me daily of the power of collaboration and shared impact.",
+  },
+  {
+    name: "Chris Musei-Sequeira",
+    role: "Founder, CJSC",
+    country: "USA",
+    image: "/images/chris-linkedin.jpg",
+    quote:
+      "I'm so glad to be a member of Entrepreneurs for Palestine, where I know everyone stands for basic human decency. We are so many different people from so many parts of the world, but we all agree on this most fundamental value.",
+  },
+];
+
+const calendars = [
+  {
+    region: "Americas",
+    src: "https://calendly.com/hsyed-hsyedlegal/entrepreneurs-for-palestine",
+  },
+  {
+    region: "Europe, Africa and Asia",
+    src: "https://calendly.com/megan-techforpalestine/30min",
+  },
+];
+
+// Match the embedded booking widget to the page: Ink text, Grove Green accent.
+const CALENDLY_THEME = "background_color=ffffff&text_color=2a2428&primary_color=157a3e";
+
+const container = "mx-auto max-w-[1280px]";
+const h2 = "text-[28px] font-extrabold leading-tight text-ink min-[810px]:text-[38px]";
+const overline = "text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]";
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#157A3E]";
+const [featured, ...others] = founders;
 ---
 
-<Layout title="Entrepreneurs for Palestine">
-  <E4PPage client:only="react" />
+<Layout
+  title="Entrepreneurs for Palestine - Tech for Palestine"
+  description="A global community of founders and CEOs using how they hire, who they work with and where they raise money to stand with Palestine."
+  image="https://techforpalestine.org/images/e4p-pledge-hero.jpg"
+  imageAlt="A Palestinian flag flying in front of an office building"
+>
+  <main>
+    <section class="px-6 py-16 min-[810px]:py-20">
+      <div
+        class={`${container} grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14`}
+      >
+        <div class="min-w-0">
+          <p class={`mb-5 ${overline}`}>Entrepreneurs for Palestine</p>
+          <h1
+            class="mb-6 text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+          >
+            Founders and CEOs putting their companies behind Palestine.
+          </h1>
+          <p class="mb-8 max-w-[60ch] text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]">
+            As entrepreneurs we hold real power. E4P members use it deliberately: in <strong
+              class="font-bold text-[#157A3E]">who we hire</strong
+            >, in <strong class="font-bold text-[#157A3E]">which clients and suppliers</strong> we work
+            with, and in <strong class="font-bold text-[#157A3E]">where we raise money</strong>.
+          </p>
+          <div class="flex flex-wrap items-center gap-4">
+            <a
+              href="#join"
+              class={`rounded-pill bg-[#157A3E] px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#2F5C3F] ${focusRing}`}
+            >
+              Join the community
+            </a>
+            <a
+              href="/e4p/pledge"
+              class={`rounded-pill border border-ink px-6 py-3.5 text-sm font-bold text-ink transition-colors hover:bg-[#F2F3EE] ${focusRing}`}
+            >
+              Sign the E4P pledge
+            </a>
+          </div>
+        </div>
+        <img
+          src="/images/e4p-pledge-hero.jpg"
+          alt="A Palestinian flag flying in front of an office building"
+          width="1024"
+          height="681"
+          class="block h-auto w-full min-w-0 rounded-md"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <section class="border-y border-[#D2E4D6] bg-[#E7F2E9]">
+      <div class={`${container} px-6 py-12 min-[810px]:py-16`}>
+        <p class={`mb-4 ${overline}`}>What members get</p>
+        <h2 class={`mb-10 max-w-[22ch] ${h2}`}>A network that has your back.</h2>
+        <div class="grid grid-cols-1 gap-10 min-[810px]:grid-cols-3 min-[810px]:gap-8">
+          {
+            benefitGroups.map((group) => (
+              <div class="min-w-0 border-t border-[#D2E4D6] pt-5">
+                <h3 class="mb-5 text-[17px] font-bold leading-snug text-[#157A3E]">
+                  {group.heading}
+                </h3>
+                <dl class="flex flex-col gap-5">
+                  {group.benefits.map((benefit) => (
+                    <div>
+                      <dt class="text-[17px] font-bold leading-snug text-ink">{benefit.title}</dt>
+                      <dd class="mt-1 text-[16px] leading-relaxed text-ink-secondary">
+                        {benefit.description}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 py-16 min-[810px]:py-20">
+      <div
+        class={`${container} grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-14`}
+      >
+        <div class="min-w-0">
+          <h2 class={`mb-5 ${h2}`}>44 countries. 6 continents.</h2>
+          <p class="max-w-[45ch] text-[19px] leading-relaxed text-ink-secondary">
+            More than 270 CEOs and founders have joined, from Ramallah to Vancouver and from
+            Stockholm to Sydney.
+          </p>
+        </div>
+        <div class="min-w-0 overflow-hidden rounded-lg border border-ink-divider">
+          <CommunityMap client:only="react" />
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-[#D2E4D6] bg-[#E7F2E9]">
+      <div class={`${container} px-6 py-12 min-[810px]:py-16`}>
+        <p class={`mb-4 ${overline}`}>In their words</p>
+        <h2 class={`mb-10 ${h2}`}>Why founders joined</h2>
+        <div class="grid grid-cols-1 gap-5 min-[810px]:grid-cols-2">
+          <figure
+            class="rounded-lg border border-[#D2E4D6] bg-white p-7 min-[810px]:col-span-2 min-[810px]:p-10"
+          >
+            <blockquote
+              class="max-w-[62ch] text-[21px] leading-relaxed tracking-tight text-ink min-[810px]:text-[24px]"
+            >
+              “{featured.quote}”
+            </blockquote>
+            <figcaption class="mt-8 flex items-center gap-4">
+              <img
+                src={featured.image}
+                alt=""
+                width="56"
+                height="56"
+                loading="lazy"
+                class="block h-14 w-14 rounded-full"
+              />
+              <span class="block leading-snug">
+                <strong class="block text-[15px] font-bold text-ink">{featured.name}</strong>
+                <span class="text-[14px] text-ink-secondary">
+                  {featured.role}, {featured.country}
+                </span>
+              </span>
+            </figcaption>
+          </figure>
+          {
+            others.map((founder) => (
+              <figure class="flex flex-col rounded-lg border border-[#D2E4D6] bg-white p-7">
+                <blockquote class="text-[19px] leading-relaxed tracking-tight text-ink">
+                  “{founder.quote}”
+                </blockquote>
+                <figcaption class="mt-auto flex items-center gap-3 pt-6">
+                  <img
+                    src={founder.image}
+                    alt=""
+                    width="40"
+                    height="40"
+                    loading="lazy"
+                    class="block h-10 w-10 rounded-full"
+                  />
+                  <span class="block leading-snug">
+                    <strong class="block text-[13px] font-bold text-ink">{founder.name}</strong>
+                    <span class="text-[13px] text-ink-secondary">
+                      {founder.role}, {founder.country}
+                    </span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="join" class="scroll-mt-24 px-6 py-16 min-[810px]:py-20">
+      <div class={container}>
+        <h2 class={`mb-4 ${h2}`}>Book an intro call</h2>
+        <p class="mb-10 max-w-[65ch] text-[19px] leading-relaxed text-ink-secondary">
+          Every member is verified. Pick the calendar for your region, and include your company,
+          position and LinkedIn URL when you book.
+        </p>
+        <div class="grid grid-cols-1 gap-8 min-[810px]:grid-cols-2">
+          {
+            calendars.map((calendar) => (
+              <div class="min-w-0">
+                <h3 class="mb-4 text-[17px] font-bold leading-snug text-ink">{calendar.region}</h3>
+                <div class="h-[640px] overflow-hidden rounded-lg border border-ink-divider">
+                  <iframe
+                    title={`Book an E4P intro call: ${calendar.region}`}
+                    src={`${calendar.src}?${CALENDLY_THEME}`}
+                    width="100%"
+                    height="100%"
+                    loading="lazy"
+                    class="block border-0"
+                    allow="fullscreen"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 pb-16 min-[810px]:pb-20">
+      <div class={container}>
+        <div
+          class="flex flex-wrap items-center justify-between gap-6 rounded-md bg-[#101010] px-7 py-8 min-[810px]:px-10"
+        >
+          <p class="max-w-[48ch] text-lg font-bold leading-snug text-white">
+            Stand with Palestine in public. Add your name and your company to the E4P pledge.
+          </p>
+          <a
+            href="/e4p/pledge"
+            class="rounded-pill bg-white px-7 py-3.5 text-sm font-bold text-[#101010] transition-colors hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            Sign the pledge
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 </Layout>
