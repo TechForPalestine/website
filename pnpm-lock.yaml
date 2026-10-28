@@ -68,6 +68,9 @@ importers:
       '@fontsource/outfit':
         specifier: ^5.2.8
         version: 5.2.8
+      '@growthbook/growthbook':
+        specifier: 1.7.0
+        version: 1.7.0
       '@growthbook/growthbook-react':
         specifier: ^1.7.0
         version: 1.7.0(react@19.2.0)

@@ -4,7 +4,9 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
 import HackathonPopup from "../components/home/HackathonPopup.astro";
-import { HOMEPAGE_EXPERIMENT, pickHomepageVariant } from "../utils/homepageExperiment";
+import { evalServerFeature, loadFeaturePayload } from "../lib/growthbookServer";
+import { getEnv } from "../utils/getEnv";
+import { HOMEPAGE_EXPERIMENT, variantFromFeature } from "../utils/homepageExperiment";
 import "../styles/base.css";
 
 const stats = [
@@ -159,10 +161,18 @@ const heroButton = `inline-block rounded-pill px-7 py-3.5 text-left text-[15px] 
 const heroPrimary = `${heroButton} bg-grove text-white hover:bg-grove-hover`;
 const heroGhost = `${heroButton} border border-ink-divider text-ink hover:border-grove hover:text-grove`;
 
-// Homepage description test. The variant is chosen per request and rendered into the HTML,
-// so there is no flicker and nothing is stored. The page must not be cached or every visitor
-// in the cache window would get the same variant.
-const variant = pickHomepageVariant();
+// Homepage description test. GrowthBook picks the variant on the server for a throwaway
+// per-request id and it is rendered into the HTML, so there is no flicker and nothing is
+// stored. Without an assignment (flag off, CDN down) everyone sees A and nothing is tracked.
+// The page must not be cached or every visitor in the cache window would get the same variant.
+const growthbookKey = getEnv("PUBLIC_GROWTHBOOK_CLIENT_KEY", Astro.locals);
+const growthbookPayload = growthbookKey ? await loadFeaturePayload(growthbookKey) : undefined;
+const assignedVariant = growthbookPayload
+  ? variantFromFeature(
+      evalServerFeature(growthbookPayload, HOMEPAGE_EXPERIMENT, crypto.randomUUID())
+    )
+  : null;
+const variant = assignedVariant ?? "A";
 Astro.response.headers.set("Cache-Control", "no-store");
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
 ---
@@ -234,8 +244,8 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 
         <div
           id="hero-ctas"
-          data-experiment={HOMEPAGE_EXPERIMENT}
-          data-variant={variant}
+          data-experiment={assignedVariant ? HOMEPAGE_EXPERIMENT : undefined}
+          data-variant={assignedVariant ?? undefined}
           class="mt-8 flex flex-col items-start gap-3"
         >
           <a href="/membership" data-cta="membership" class={heroPrimary}>
