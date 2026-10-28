@@ -1,445 +1,208 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+
+const container = "mx-auto max-w-[1280px] px-6 sm:px-8";
+const h2 =
+  "text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]";
+const lede = "text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]";
+const overline = "mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#2F5C3F]";
+const bandShell = "border-y border-[#D2E4D6] bg-[#E7F2E9]";
+const primaryButton =
+  "inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#157A3E] px-7 py-3.5 font-bold text-white shadow-sm transition-colors duration-150 hover:bg-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
+const textLink =
+  "rounded-sm text-[17px] font-bold text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
+// Quieter follow-up link that sits under a path's main action
+const subLink =
+  "rounded-sm text-[15px] text-[#157A3E] underline decoration-1 underline-offset-4 transition-colors duration-150 hover:text-[#0e5a2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+interface Path {
+  title: string;
+  description: string;
+  action: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const paths: Path[] = [
+  {
+    title: "Join our Discord community",
+    description:
+      "Connect with thousands of pro-Palestine advocates, volunteers, and project leaders.",
+    action: { label: "Join Discord", href: "https://techforpalestine.org/discord-invite" },
+  },
+  {
+    title: "Join the Incubator",
+    description:
+      "Do you own or operate your own pro-Palestine project? Get mentorship, volunteers, funding, and support to bring it to life.",
+    action: {
+      label: "Apply to the Incubator",
+      href: "https://techforpalestine.org/project-application-form",
+    },
+    secondary: { label: "Learn more about the Incubator", href: "/incubator" },
+  },
+  {
+    title: "Entrepreneurs for Palestine",
+    description:
+      "Connect with other founders and CEOs who support the Palestinian cause. Share resources and build partnerships.",
+    action: { label: "Join E4P", href: "/e4p" },
+  },
+  {
+    title: "Hire Palestinians",
+    description:
+      "Looking for talented Palestinian professionals? Connect with our network of skilled people across many fields.",
+    action: { label: "Find talent", href: "/help/hire" },
+  },
+  {
+    title: "Browse project ideas",
+    description: "Explore our curated list of project ideas that could use your skills.",
+    action: { label: "View ideas", href: "/ideas" },
+  },
+];
 ---
 
 <style is:global>
-  /* Style the external form submit button to match our color scheme */
+  /* The email form is injected by a third-party script; match it to the primary button */
   .eomail-form button[type="submit"],
   .eomail-form input[type="submit"] {
-    background-color: #166534 !important; /* green-800 */
+    background-color: #157a3e !important;
     color: white !important;
     border: none !important;
-    padding: 0.75rem 2rem !important;
-    border-radius: 0.375rem !important;
-    font-weight: 500 !important;
+    min-height: 44px !important;
+    padding: 0.875rem 1.75rem !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
     cursor: pointer !important;
-    transition: background-color 0.2s !important;
+    transition: background-color 0.15s !important;
   }
 
   .eomail-form button[type="submit"]:hover,
   .eomail-form input[type="submit"]:hover {
-    background-color: #15803d !important; /* green-700 */
+    background-color: #0e5a2f !important;
   }
 </style>
 
 <Layout title="Get Involved">
-  <main class="bg-white">
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-blue-50 to-green-50 py-12 sm:py-16 lg:py-20">
-      <div class="mx-auto max-w-4xl px-4 text-center">
+  <main>
+    <!-- Hero, then the primary path: membership beside a real working session -->
+    <section class={`${container} pb-16 pt-16 min-[810px]:pb-20 min-[810px]:pt-20`}>
+      <div class="max-w-[760px]">
         <h1
-          class="text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-4xl lg:text-5xl"
+          class="mb-6 text-[38px] font-extrabold leading-[1.05] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
         >
-          <span class="text-green-700">Get Involved</span> with Tech for Palestine
+          Get involved with Tech for Palestine
         </h1>
-        <p class="mx-auto mt-6 max-w-2xl text-base leading-8 text-gray-700">
-          Join our mission-driven community to volunteer, collaborate, and innovate for Palestinian
-          liberation. There are many ways to contribute your skills and passion.
+        <p class={`max-w-[65ch] ${lede}`}>
+          Volunteer, collaborate, and build for Palestinian liberation alongside a community that
+          puts your skills to work.
         </p>
-        <p class="mx-auto mt-4 max-w-2xl text-base leading-8 text-gray-700">
-          Please read our <a
+        <p class="mt-4 max-w-[65ch] text-[17px] leading-relaxed text-ink-secondary">
+          Before you join, please read our <a
             href="https://github.com/techForPalestine/code-of-conduct"
-            class="text-green-700 underline hover:text-green-900">Code of Conduct</a
-          > here.
+            class={textLink}>Code of Conduct</a
+          >.
         </p>
       </div>
-    </section>
 
-    <!-- Main Ways to Get Involved -->
-    <section class="bg-white px-4 py-16 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-6xl">
-        <h2 class="mb-12 text-center text-3xl font-bold text-gray-900">Ways to Get Involved</h2>
-
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <!-- Membership -->
-          <div
-            class="rounded-xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-8"
-          >
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-blue-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Become a Member</h3>
-            <p class="mb-6 text-gray-700">
-              Contribute your expertise to pro-Palestine projects, start new projects within T4P,
-              join member events &amp; the vetted member chat, and sustain our work with grassroots
-              funding to keep us independent.
-            </p>
-            <div class="mb-6">
-              <a
-                href="/membership"
-                class="inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-blue-700"
-              >
-                Become a Member
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  class="ml-2 h-4 w-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- Discord Community -->
-          <div
-            class="rounded-xl border border-green-100 bg-gradient-to-r from-green-50 to-emerald-50 p-8"
-          >
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-green-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Join our Discord Community</h3>
-            <p class="mb-6 text-gray-700">
-              Connect with thousands of pro-Palestine advocates, volunteers, and project leaders in
-              our vibrant Discord server.
-            </p>
-            <a
-              href="https://techforpalestine.org/discord-invite"
-              class="inline-flex items-center rounded-lg bg-green-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-green-700"
-            >
-              Join Discord
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="ml-2 h-4 w-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-              </svg>
-            </a>
-          </div>
-
-          <!-- Incubator -->
-          <div
-            class="rounded-xl border border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50 p-8"
-          >
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-amber-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 6.042A8.967 8.967 0 006 3.75c-1.079 0-2.157.17-3.206.519m15.792 3.355A8.967 8.967 0 0118 3.75c1.079 0 2.157.17 3.206.519M12 6.042V3m0 3.042a3 3 0 110 5.916m0-5.916V21m0-10.958h.008v.008H12v-.008zm0 0H12.017a7.25 7.25 0 01-1.565 4.352m-1.424 4.244L9 18.75c-1.079 0-2.157.17-3.206.519m15.792 3.355L15 18.75m-4.244-1.424L12 12m-2.828 2.828L7.5 21.75c-1.079 0-2.157.17-3.206.519M12 12L12.017 12m-2.828 2.828L12 12m-2.828 2.828L7.5 21.75c-1.079 0-2.157.17-3.206.519M12 12L12.017 12m-2.828 2.828L12 12m-2.828 2.828L7.5 21.75c-1.079 0-2.157.17-3.206.519"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Join the Incubator</h3>
-            <p class="mb-6 text-gray-700">
-              Do you own or operate your own pro-Palestine project? Get mentorship, volunteers,
-              funding, and support to bring it to life.
-            </p>
-            <div class="mb-6 space-y-3">
-              <a
-                href="https://techforpalestine.org/project-application-form"
-                class="inline-flex items-center rounded-lg bg-amber-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-amber-700"
-              >
-                Apply to Incubator
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  class="ml-2 h-4 w-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-                </svg>
-              </a>
-              <div class="text-sm">
-                <a href="/incubator" class="text-amber-600 hover:underline">
-                  Learn more about the Incubator
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Entrepreneurs for Palestine -->
-          <div
-            class="rounded-xl border border-purple-100 bg-gradient-to-r from-purple-50 to-violet-50 p-8"
-          >
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-purple-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m1.5-13.5a3 3 0 00-3 3v.75m6 3.75v6m-3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Entrepreneurs for Palestine</h3>
-            <p class="mb-6 text-gray-700">
-              Connect with other founders and CEOs who support the Palestinian cause. Share
-              resources and build partnerships.
-            </p>
-            <a
-              href="/e4p"
-              class="inline-flex items-center rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-purple-700"
-            >
-              Join E4P
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="ml-2 h-4 w-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-              </svg>
-            </a>
-          </div>
-
-          <!-- Mentorship -->
-          <div class="rounded-xl border border-red-100 bg-gradient-to-r from-red-50 to-pink-50 p-8">
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-red-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a14.995 14.995 0 00-3.493 2.017 48.57 48.57 0 00-1.804 2.27A60.436 60.436 0 004.26 10.147zM14.5 4.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Be a Mentor</h3>
-            <p class="mb-6 text-gray-700">
-              Share your expertise and experience with emerging project leaders. Help shape the next
-              generation of Palestinian advocates.
-            </p>
-            <a
-              href="/mentorship"
-              class="inline-flex items-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-red-700"
-            >
-              Apply to Mentor
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="ml-2 h-4 w-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-              </svg>
-            </a>
-          </div>
-
-          <!-- Hire Palestinians -->
-          <div
-            class="rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50 to-slate-50 p-8"
-          >
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-gray-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18C15.36 20.75 12.375 21 9 21c-3.375 0-6.36-.25-9.378-.67C1.787 18.186 1 17.244 1 16.15v-4.25A16.5 16.5 0 019 3c3.375 0 6.36.25 9.378.67C20.213 3.814 21 4.756 21 5.85z"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Hire Palestinians</h3>
-            <p class="mb-6 text-gray-700">
-              Looking for talented Palestinian professionals? Connect with our network of skilled
-              individuals across various fields.
-            </p>
-            <a
-              href="/help/hire"
-              class="inline-flex items-center rounded-lg bg-gray-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-gray-700"
-            >
-              Find Talent
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="ml-2 h-4 w-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-              </svg>
-            </a>
-          </div>
-
-          <!-- Browse Project Ideas -->
-          <div
-            class="rounded-xl border border-indigo-100 bg-gradient-to-r from-indigo-50 to-blue-50 p-8"
-          >
-            <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-8 w-8 text-indigo-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"
-                ></path>
-              </svg>
-            </div>
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Browse Project Ideas</h3>
-            <p class="mb-6 text-gray-700">
-              Explore our curated list of project ideas that could use your skills and passion.
-            </p>
-            <a
-              href="/ideas"
-              class="inline-flex items-center rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-indigo-700"
-            >
-              View Ideas
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="ml-2 h-4 w-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Stay Connected -->
-    <section class="bg-gray-50 px-4 py-16 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-4xl">
-        <h2 class="mb-12 text-center text-3xl font-bold text-gray-900">Stay Connected</h2>
-
-        <div class="flex justify-center">
-          <!-- Email Updates -->
-          <div class="w-full max-w-lg rounded-lg border border-gray-200 bg-white p-8 shadow-lg">
-            <h3 class="mb-4 text-2xl font-bold text-gray-900">Get Project Updates</h3>
-            <p class="mb-6 text-gray-700">
-              Stay informed about new project opportunities and T4P initiatives.
-            </p>
-            <div class="mb-4">
-              <script
-                is:inline
-                async
-                src="https://eomail4.com/form/19239af2-f79d-11ef-b1dc-d39ed3d42a2b.js"
-                data-form="19239af2-f79d-11ef-b1dc-d39ed3d42a2b"></script>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact & Questions -->
-    <section class="bg-white px-4 py-16 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl text-center">
-        <div
-          class="rounded-xl border border-green-100 bg-gradient-to-r from-green-50 to-emerald-50 p-8"
-        >
-          <h2 class="mb-4 text-3xl font-bold text-gray-900">Have Questions?</h2>
-          <p class="mb-8 text-gray-700">
-            Not sure which option is right for you? Want to learn more about our mission? We'd love
-            to hear from you!
+      <div
+        class="mt-14 grid grid-cols-1 items-center gap-10 rounded-lg border border-ink-divider p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14 lg:p-10"
+      >
+        <div>
+          <p class={overline}>Start here</p>
+          <h2 class={h2}>Become a Member</h2>
+          <p class="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+            Volunteer your expertise to pro-Palestine projects, start new projects within T4P, join
+            member events &amp; the vetted member chat, and sustain our work with grassroots funding
+            to keep us independent.
           </p>
-          <a
-            href="/contact"
-            class="inline-flex items-center rounded-lg bg-green-600 px-8 py-4 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-green-700"
-          >
-            Contact Us
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="ml-2 h-4 w-4"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.907l-7.195 3.597a2.25 2.25 0 01-2.108 0L2.25 8.407A2.25 2.25 0 011.23 6.993m19.5 0h-.15"
-              ></path>
-            </svg>
-          </a>
+          <div class="mt-8 flex flex-col items-start gap-3">
+            <a href="/membership" class={primaryButton}>Become a Member</a>
+            <a href="/volunteer" class={subLink}>Explore open roles</a>
+          </div>
         </div>
+        <img
+          src="/images/new-homepage/press/team-2.webp"
+          alt="Tech for Palestine members around a table at a working session, planning projects together"
+          width="1600"
+          height="1067"
+          class="block h-auto w-full rounded-md"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    </section>
+
+    <!-- Band: every other way in, one ruled row per path -->
+    <section class={bandShell}>
+      <div class={`${container} py-14 min-[810px]:py-16`}>
+        <div
+          class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-16"
+        >
+          <div class="lg:sticky lg:top-24 lg:self-start">
+            <p class={overline}>More ways in</p>
+            <h2 class={`max-w-[18ch] ${h2}`}>Find the path that fits your skills</h2>
+          </div>
+          <ul class="border-b border-[#D2E4D6]">
+            {
+              paths.map((path) => (
+                <li class="flex flex-col gap-4 border-t border-[#D2E4D6] py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+                  <div class="max-w-[52ch]">
+                    <h3 class="text-[19px] font-bold leading-snug text-ink">{path.title}</h3>
+                    <p class="mt-1 text-[17px] leading-relaxed text-ink-secondary">
+                      {path.description}
+                    </p>
+                  </div>
+                  <div class="flex shrink-0 flex-col items-start gap-2 sm:items-end sm:pt-0.5">
+                    <a href={path.action.href} class={textLink}>
+                      {path.action.label} <span aria-hidden="true">→</span>
+                    </a>
+                    {path.secondary && (
+                      <a href={path.secondary.href} class={subLink}>
+                        {path.secondary.label}
+                      </a>
+                    )}
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stay connected: heading on the left, the email form on the right -->
+    <section class={`${container} py-16 min-[810px]:py-20`}>
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <h2 class={h2}>Get project updates</h2>
+          <p class={`mt-4 max-w-[45ch] ${lede}`}>
+            New project opportunities and T4P initiatives, straight to your inbox.
+          </p>
+        </div>
+        <div class="rounded-lg border border-ink-divider bg-white p-6 shadow-sm sm:p-8">
+          <script
+            is:inline
+            async
+            src="https://eomail4.com/form/19239af2-f79d-11ef-b1dc-d39ed3d42a2b.js"
+            data-form="19239af2-f79d-11ef-b1dc-d39ed3d42a2b"></script>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terminal CTA: the one dark block on the page -->
+    <section class="bg-[#101010] px-6 py-20 sm:px-8">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+        <h2 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-[32px]">
+          Not sure which path is right for you?
+        </h2>
+        <p class="max-w-[50ch] text-[17px] leading-relaxed text-[#D6D6D6]">
+          Tell us what you do and we'll point you to where it's needed most.
+        </p>
+        <a
+          href="/contact"
+          class="mt-2 inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-8 py-3.5 font-bold text-ink shadow-sm transition-colors duration-150 hover:bg-[#F2F3EE] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#101010] motion-reduce:transition-none"
+        >
+          Contact us
+        </a>
       </div>
     </section>
   </main>

@@ -4,8 +4,8 @@ import {
   getPageCount,
   getPageMarkers,
   getSkillFilters,
+  MEMBERSHIP_URL,
   normalizeOpenRoles,
-  VOLUNTEER_FORM_URL,
   type OpenRole,
 } from "./openRoleData";
 import { getSkinTokens, type OpenRolesSkin } from "./openRoleSkins";
@@ -106,8 +106,8 @@ export default function OpenRoles({ skin = "classic" }: OpenRolesProps) {
       <div className={tokens.notice}>
         <p>
           We couldn&rsquo;t load open roles just now. Try again, or{" "}
-          <a href={VOLUNTEER_FORM_URL} className={`${tokens.link} ${tokens.focus}`}>
-            apply to volunteer
+          <a href={MEMBERSHIP_URL} className={`${tokens.link} ${tokens.focus}`}>
+            become a member
           </a>{" "}
           and we&rsquo;ll match you to a role.
         </p>
@@ -126,8 +126,8 @@ export default function OpenRoles({ skin = "classic" }: OpenRolesProps) {
     return (
       <p className={tokens.notice}>
         No roles are open right now.{" "}
-        <a href={VOLUNTEER_FORM_URL} className={`${tokens.link} ${tokens.focus}`}>
-          Apply anyway
+        <a href={MEMBERSHIP_URL} className={`${tokens.link} ${tokens.focus}`}>
+          Become a member
         </a>{" "}
         and we&rsquo;ll get in touch when one opens up.
       </p>

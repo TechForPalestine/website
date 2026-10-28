@@ -36,22 +36,8 @@ export interface OpenRole {
   createdAt: string;
 }
 
-export const VOLUNTEER_FORM_URL = "https://techforpalestine.org/volunteer-form";
+/** Every role, project or team, is applied for by becoming a member. */
 export const MEMBERSHIP_URL = "/membership";
-
-/**
- * The Formbricks survey `/volunteer-form` redirects to. Role links point here
- * directly because that Cloudflare redirect drops the query string, and the
- * survey reads `role_id`, `role_title` and `org_name` as passed-in hidden fields.
- */
-export const VOLUNTEER_SURVEY_URL = "https://app.formbricks.com/s/clzavvkp80002yqhejhqgoa3a";
-
-/** Volunteer survey link carrying the role, so the response records what was applied for. */
-export function getRoleApplicationUrl(role: OpenRole): string {
-  const params = new URLSearchParams({ role_id: role.id, role_title: role.title });
-  if (role.orgName) params.set("org_name", role.orgName);
-  return `${VOLUNTEER_SURVEY_URL}?${params.toString()}`;
-}
 
 /** Upstream descriptions are free text; cap them so one bad row can't bloat the page. */
 const MAX_DESCRIPTION_LENGTH = 4000;
@@ -145,13 +131,6 @@ export function attachProjectLinks(
     ...role,
     projectPath: pathsByName.get(toNameKey(role.orgName)) ?? "",
   }));
-}
-
-/** Where a role's apply button points, per how the role is staffed. */
-export function getApplyTarget(role: OpenRole): { href: string; label: string } {
-  return role.type === "team"
-    ? { href: MEMBERSHIP_URL, label: "Become a member" }
-    : { href: getRoleApplicationUrl(role), label: "Apply to volunteer" };
 }
 
 export interface SkillFilter {
