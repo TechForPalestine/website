@@ -4,13 +4,25 @@ export const CTA_CLICK_EVENT = "Homepage Description CTA Click";
 
 export type HomepageVariant = "A" | "B";
 
-const VARIANT_A_SHARE = 0.5;
 const MIDDLE_BUTTON = 1;
+const VARIANTS: readonly HomepageVariant[] = ["A", "B"];
 
-// Assigned per request on the server: nothing is stored, so a visitor can see a
-// different variant on each page view. That is the price of needing no consent banner.
-export function pickHomepageVariant(random: () => number = Math.random): HomepageVariant {
-  return random() < VARIANT_A_SHARE ? "A" : "B";
+export interface FeatureOutcome {
+  value: unknown;
+  source: string;
+}
+
+// The variant comes from the "homepage-description" GrowthBook flag, evaluated on the server
+// with a fresh id per request (see src/lib/growthbookServer.ts): nothing is stored, so a
+// visitor can see a different variant on each page view. That is the price of needing no
+// consent banner.
+//
+// The flag is a percentage rollout to "B" followed by a catch-all force to "A", so a bucketed
+// visitor always reports source "force". A disabled flag, a missing flag or an unreachable
+// CDN reports something else, and returns null: show the control and track nothing.
+export function variantFromFeature({ value, source }: FeatureOutcome): HomepageVariant | null {
+  if (source !== "force") return null;
+  return VARIANTS.find((variant) => variant === value) ?? null;
 }
 
 export type TrackEvent = (name: string, props: Record<string, string>) => void;

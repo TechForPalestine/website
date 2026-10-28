@@ -2,20 +2,24 @@ import { describe, expect, it, vi } from "vitest";
 import {
   CTA_CLICK_EVENT,
   EXPOSURE_EVENT,
-  pickHomepageVariant,
   trackHeroCtas,
   type PrerenderAwareDocument,
+  variantFromFeature,
 } from "./homepageExperiment";
 
-describe("pickHomepageVariant", () => {
-  it("returns A for the lower half of the range", () => {
-    expect(pickHomepageVariant(() => 0)).toBe("A");
-    expect(pickHomepageVariant(() => 0.499)).toBe("A");
+describe("variantFromFeature", () => {
+  it("returns the variant a GrowthBook rule assigned", () => {
+    expect(variantFromFeature({ value: "A", source: "force" })).toBe("A");
+    expect(variantFromFeature({ value: "B", source: "force" })).toBe("B");
   });
 
-  it("returns B for the upper half of the range", () => {
-    expect(pickHomepageVariant(() => 0.5)).toBe("B");
-    expect(pickHomepageVariant(() => 0.999)).toBe("B");
+  it("returns null when no rule assigned a variant", () => {
+    expect(variantFromFeature({ value: "A", source: "defaultValue" })).toBeNull();
+    expect(variantFromFeature({ value: null, source: "unknownFeature" })).toBeNull();
+  });
+
+  it("returns null for a value that is not a known variant", () => {
+    expect(variantFromFeature({ value: "C", source: "force" })).toBeNull();
   });
 });
 
