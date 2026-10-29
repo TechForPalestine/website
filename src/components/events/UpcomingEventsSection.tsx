@@ -224,13 +224,20 @@ function UpcomingEventRow({ item }: { item: UpcomingEvent }) {
         )}
       </div>
 
-      {/* Stacked on mobile so the thumbnail doesn't squeeze the title column. */}
+      {/* Stacked on mobile so the thumbnail doesn't squeeze the title column.
+          On wider screens the CTA gets a fixed-width slot: its label varies
+          ("More info", "Register", "Watch online", "Soon"), and a content-sized
+          slot would push each row's thumbnail to a different x position. */}
       <div className="flex flex-col items-end gap-3 sm:flex-row sm:items-start sm:gap-5">
         <RowThumbnail event={event} />
         {isConfirmed ? (
-          <span className="whitespace-nowrap pt-1 text-sm font-bold text-grove">{ctaLabel} →</span>
+          <span className="whitespace-nowrap pt-1 text-sm font-bold text-grove sm:w-[120px] sm:text-right">
+            {ctaLabel} →
+          </span>
         ) : (
-          <span className="whitespace-nowrap pt-1 text-sm font-bold text-ink-secondary">Soon</span>
+          <span className="whitespace-nowrap pt-1 text-sm font-bold text-ink-secondary sm:w-[120px] sm:text-right">
+            Soon
+          </span>
         )}
       </div>
     </ActionSurface>
