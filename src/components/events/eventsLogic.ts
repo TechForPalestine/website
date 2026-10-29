@@ -1,10 +1,20 @@
-import type { EventItem } from "../../store/eventsClient";
+import {
+  DEFAULT_EVENT_IMAGE,
+  hasMeaningfulDescription,
+  primaryEventLink,
+  type EventItem,
+} from "../../store/eventsClient";
 import {
   formatSpeakerList,
   getDescriptionExcerpt,
   getEventSpeakers,
 } from "../../utils/eventDescription";
-import { isEventPast, type EventSection } from "../../utils/eventSections";
+import {
+  isEventPast,
+  previewImageSources,
+  type EventSection,
+  type UpcomingEvent,
+} from "../../utils/eventSections";
 import { findEventBySlug } from "../../utils/eventSlug";
 import type { SelectedEvent } from "./EventsShared";
 
@@ -44,4 +54,28 @@ export function formatUpcomingCount(count: number): string {
 
 export function hasPastEvents(sections: EventSection[]): boolean {
   return sections.some((section) => section.past.length > 0);
+}
+
+/** Whether an event has a real preview (feed image or YouTube thumbnail), not the generic default. */
+export function hasPreviewImage(event: EventItem): boolean {
+  return previewImageSources(event).primary !== DEFAULT_EVENT_IMAGE;
+}
+
+/** Whether an upcoming event has anywhere to send someone yet (a popup or a link). */
+export function isUpcomingConfirmed(event: EventItem): boolean {
+  return hasMeaningfulDescription(event) || Boolean(primaryEventLink(event, false).link);
+}
+
+/**
+ * Pulls the soonest confirmed event out of a soonest-first list for the "Next up"
+ * spotlight. A placeholder never takes the spotlight; with none confirmed there
+ * is no spotlight and every event stays a row.
+ */
+export function splitSpotlight(items: UpcomingEvent[]): {
+  spotlight: UpcomingEvent | null;
+  rest: UpcomingEvent[];
+} {
+  const index = items.findIndex((item) => isUpcomingConfirmed(item.event));
+  if (index === -1) return { spotlight: null, rest: items };
+  return { spotlight: items[index], rest: items.filter((_, i) => i !== index) };
 }

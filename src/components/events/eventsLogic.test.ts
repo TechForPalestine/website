@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 import type { EventItem } from "../../store/eventsClient";
 import { eventPath } from "../../utils/eventSlug";
-import { groupIntoSections } from "../../utils/eventSections";
+import { groupIntoSections, type UpcomingEvent } from "../../utils/eventSections";
 import {
   eventSlugFromPathname,
   formatUpcomingCount,
   hasPastEvents,
+  hasPreviewImage,
+  isUpcomingConfirmed,
   resolveSelectedEvent,
+  splitSpotlight,
   upcomingTeaser,
 } from "./eventsLogic";
 
@@ -108,5 +111,60 @@ describe("hasPastEvents", () => {
       dateUtcIso: new Date(NOW - 3 * DAY_MS).toISOString(),
     });
     expect(hasPastEvents(groupIntoSections([past], NOW))).toBe(true);
+  });
+});
+
+describe("hasPreviewImage", () => {
+  it("is false when the event only has the generic default image", () => {
+    expect(hasPreviewImage(makeEvent())).toBe(false);
+  });
+
+  it("is true for a feed-supplied image", () => {
+    expect(hasPreviewImage(makeEvent({ image: "https://chat.example.org/banner.png" }))).toBe(true);
+  });
+
+  it("is true when a YouTube stream link supplies a thumbnail", () => {
+    expect(
+      hasPreviewImage(makeEvent({ watchLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }))
+    ).toBe(true);
+  });
+});
+
+describe("isUpcomingConfirmed", () => {
+  it("is false for a placeholder with nowhere to send people", () => {
+    expect(isUpcomingConfirmed(makeEvent())).toBe(false);
+  });
+
+  it("is true with a registration link or a meaningful description", () => {
+    expect(isUpcomingConfirmed(makeEvent({ registerLink: "https://example.org/rsvp" }))).toBe(true);
+    expect(isUpcomingConfirmed(makeEvent({ description: "x".repeat(120) }))).toBe(true);
+  });
+});
+
+describe("splitSpotlight", () => {
+  const sectionDef = { key: "s", title: "Section", subtitle: "", matchTags: [] };
+  const item = (overrides: Partial<EventItem>): UpcomingEvent => ({
+    event: makeEvent(overrides),
+    sectionDef,
+  });
+
+  it("spotlights the soonest confirmed event and keeps the rest in order", () => {
+    const placeholder = item({ id: "a" });
+    const confirmed = item({ id: "b", registerLink: "https://example.org/rsvp" });
+    const later = item({ id: "c", registerLink: "https://example.org/rsvp2" });
+
+    expect(splitSpotlight([placeholder, confirmed, later])).toEqual({
+      spotlight: confirmed,
+      rest: [placeholder, later],
+    });
+  });
+
+  it("has no spotlight when nothing is confirmed yet", () => {
+    const items = [item({ id: "a" }), item({ id: "b" })];
+    expect(splitSpotlight(items)).toEqual({ spotlight: null, rest: items });
+  });
+
+  it("handles an empty list", () => {
+    expect(splitSpotlight([])).toEqual({ spotlight: null, rest: [] });
   });
 });
