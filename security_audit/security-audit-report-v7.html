@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Security Audit — Tech for Palestine Website — v7</title>
+<style>
+  @page { size: Letter; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #1f2937;
+    font-size: 10.5px;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  code, pre { font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; }
+
+  .page { width: 8.5in; height: 11in; padding: 0.6in 0.75in 0.5in; position: relative; overflow: hidden; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+
+  /* ---------- cover ---------- */
+  .cover { background: linear-gradient(160deg, #142433 0%, #0e1b26 55%, #0b1620 100%); color: #e5edf3; padding: 1.6in 0.9in; }
+  .cover .badges { margin-bottom: 0.55in; }
+  .pill-outline { display: inline-block; border: 1px solid #2f7d63; color: #4ade80; border-radius: 999px; padding: 4px 12px; font-size: 7.5px; letter-spacing: 1.3px; font-weight: 700; text-transform: uppercase; margin-right: 8px; }
+  .pill-outline.alt { border-color: #3b5a78; color: #93b4d4; }
+  .cover h1 { font-size: 34px; line-height: 1.16; margin: 0 0 14px 0; font-weight: 800; letter-spacing: -0.5px; }
+  .cover h1 .accent { color: #3ddc97; display: block; }
+  .cover .url { color: #8ba2b4; font-size: 11px; margin: 0 0 30px 0; }
+  .cover .lede { background: rgba(28, 74, 58, 0.45); border: 1px solid #2c6650; border-left: 3px solid #3ddc97; border-radius: 6px; padding: 16px 18px; font-size: 10px; line-height: 1.7; color: #d6e6de; }
+  .cover .lede b { color: #ffffff; }
+  .timeline { display: flex; gap: 0; margin-top: 46px; border-top: 1px solid #273a4a; padding-top: 18px; }
+  .timeline div { flex: 1; }
+  .timeline .v { font-size: 7.5px; letter-spacing: 1.2px; text-transform: uppercase; color: #6f889c; font-weight: 700; line-height: 1.5; }
+  .timeline .d { font-size: 9.5px; color: #c7d7e3; margin-top: 6px; }
+  .timeline .cur .v { color: #3ddc97; }
+  .timeline .cur .d { color: #ffffff; font-weight: 700; }
+
+  /* ---------- headings ---------- */
+  h2.page-title { font-size: 20px; font-weight: 800; margin: 0 0 6px 0; color: #10202c; letter-spacing: -0.3px; }
+  p.page-sub { color: #6b7280; margin: 0 0 20px 0; font-size: 10px; }
+  .kicker { font-size: 8px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; color: #0f766e; margin: 26px 0 12px 0; }
+  .kicker:first-child { margin-top: 0; }
+
+  /* ---------- metric tiles ---------- */
+  .tiles { display: flex; gap: 9px; margin-bottom: 20px; }
+  .tile { flex: 1; border-radius: 7px; padding: 12px 6px; text-align: center; border: 1px solid #e5e7eb; background: #fafafa; }
+  .tile .n { font-size: 24px; font-weight: 800; line-height: 1; }
+  .tile .l { font-size: 7px; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; margin-top: 7px; color: #6b7280; }
+  .t-fixed { background: #ecfdf5; border-color: #a7f3d0; } .t-fixed .n { color: #047857; }
+  .t-crit  { background: #fef2f2; border-color: #fecaca; } .t-crit .n { color: #b91c1c; }
+  .t-high  { background: #fff7ed; border-color: #fed7aa; } .t-high .n { color: #c2410c; }
+  .t-med   { background: #fffbeb; border-color: #fde68a; } .t-med .n { color: #b45309; }
+  .t-low   { background: #f0fdfa; border-color: #99f6e4; } .t-low .n { color: #0f766e; }
+  .t-open  { background: #eff6ff; border-color: #bfdbfe; } .t-open .n { color: #1d4ed8; }
+
+  .progress-label { font-size: 9px; color: #6b7280; margin-bottom: 5px; }
+  .bar { height: 13px; background: #e5e7eb; border-radius: 999px; overflow: hidden; position: relative; }
+  .bar .fill { height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 999px; display: flex; align-items: center; justify-content: flex-end; padding-right: 7px; color: #fff; font-size: 7.5px; font-weight: 800; }
+
+  /* ---------- callouts ---------- */
+  .callout { border-radius: 7px; padding: 15px 17px; margin: 18px 0; font-size: 9.5px; line-height: 1.65; }
+  .callout .ct { font-weight: 800; font-size: 11px; margin-bottom: 7px; }
+  .callout-dark { background: #10402f; color: #d3e9dd; } .callout-dark .ct { color: #6ee7b7; }
+  .callout-red  { background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #dc2626; color: #55212a; } .callout-red .ct { color: #b91c1c; }
+  .callout-amber { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #d97706; color: #4b3a15; } .callout-amber .ct { color: #b45309; }
+  .callout b { color: inherit; }
+  .callout-dark b { color: #ffffff; }
+
+  /* ---------- tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 9px; }
+  thead th { background: #10202c; color: #cfe3d9; text-align: left; font-size: 7.5px; letter-spacing: 0.9px; text-transform: uppercase; padding: 8px 9px; font-weight: 700; }
+  tbody td { padding: 7px 9px; border-bottom: 1px solid #edf0f2; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #fafbfc; }
+  td.id { font-weight: 800; color: #10202c; white-space: nowrap; }
+  .sev { display: inline-block; border-radius: 999px; padding: 2px 8px; font-size: 7px; font-weight: 800; letter-spacing: 0.6px; color: #fff; text-transform: uppercase; }
+  .sev-crit { background: #dc2626; } .sev-high { background: #ea580c; } .sev-med { background: #d97706; } .sev-low { background: #0f766e; }
+  .st { font-weight: 700; font-size: 8.5px; }
+  .st-fixed { color: #047857; } .st-open { color: #b91c1c; } .st-reg { color: #b45309; }
+
+  /* ---------- finding cards ---------- */
+  .finding { border: 1px solid #e3e7ea; border-radius: 8px; margin-bottom: 12px; overflow: hidden; page-break-inside: avoid; }
+  .finding > .head { display: flex; align-items: flex-start; gap: 10px; background: #f6f8f9; border-bottom: 1px solid #e3e7ea; padding: 10px 13px; }
+  .finding > .head .fid { font-weight: 800; color: #4b5563; font-size: 9px; padding-top: 2px; white-space: nowrap; }
+  .finding > .head .ft { font-weight: 800; font-size: 11px; color: #10202c; line-height: 1.35; }
+  .finding .body { padding: 10px 13px; }
+  .meta { font-size: 8.5px; color: #4b5563; margin-bottom: 10px; padding-bottom: 9px; border-bottom: 1px dashed #e3e7ea; }
+  .meta b { color: #10202c; }
+  .meta .sep { color: #cbd5e1; padding: 0 7px; }
+  .finding p { margin: 0 0 8px 0; }
+  .finding p:last-child { margin-bottom: 0; }
+  ul.tight { margin: 0 0 9px 0; padding-left: 16px; }
+  ul.tight li { margin-bottom: 4px; }
+  pre { background: #10202c; color: #dbe7ef; border-radius: 6px; padding: 9px 11px; font-size: 7.6px; line-height: 1.5; overflow: hidden; margin: 8px 0; white-space: pre-wrap; word-break: break-word; }
+  pre .c { color: #7f9db5; }
+  pre .g { color: #6ee7b7; }
+  pre .r { color: #fca5a5; }
+  pre .y { color: #fcd34d; }
+  code.inl { background: #eef2f4; border: 1px solid #e0e6ea; border-radius: 3px; padding: 0.5px 4px; font-size: 8.5px; color: #0f3b30; }
+  .fixbar { background: #ecfdf5; border-left: 4px solid #059669; color: #065f46; font-weight: 800; font-size: 8px; letter-spacing: 1.1px; text-transform: uppercase; padding: 6px 11px; margin: 10px 0 0 0; border-radius: 3px; }
+
+  ul.checks { list-style: none; margin: 0; padding: 0; }
+  ul.checks li { position: relative; padding-left: 17px; margin-bottom: 9px; font-size: 9.5px; line-height: 1.6; }
+  ul.checks li:before { content: "▪"; position: absolute; left: 3px; top: -1px; color: #059669; font-size: 11px; }
+  ul.checks li b { color: #10202c; }
+
+  .footer { position: absolute; left: 0.75in; right: 0.75in; bottom: 0.34in; display: flex; justify-content: space-between; font-size: 7.5px; color: #9aa6b2; border-top: 1px solid #edf0f2; padding-top: 7px; }
+</style>
+</head>
+<body>
+
+<!-- ======================= COVER ======================= -->
+<div class="page cover">
+  <div class="badges">
+    <span class="pill-outline">Confidential · Security Audit</span>
+    <span class="pill-outline alt">Version 7 · Re-review</span>
+  </div>
+  <h1>Security Audit<span class="accent">Tech for Palestine</span>Website</h1>
+  <p class="url">techforpalestine.org · Astro 5 SSR on Cloudflare Pages</p>
+  <div class="lede">
+    This is the seventh-round re-review, and the first with a substantial gap behind it. It covers
+    <b>115 commits / 114 merged PRs</b> landed between
+    v6 (2026-04-14) and 2026-09-22 — 296 files, +43,384 / −5,963 lines, five new API routes and two removed.
+    All 25 findings closed in rounds v1–v6 were re-verified and <b>all 25 remain fixed</b>.
+    <b>Ten new findings</b> were identified, including one high-severity issue:
+    the signature-verified QGiv payment webhook was replaced by a client-triggered endpoint, so a
+    privileged Hub membership invite can now be obtained by anyone who can set an HTTP header. Six of the ten
+    are in code added since v6; four are in code that predates it and had not been examined in earlier rounds.
+  </div>
+  <div class="timeline">
+    <div><div class="v">V1<br>Original</div><div class="d">2026-03-31</div></div>
+    <div><div class="v">V2 Re-<br>review</div><div class="d">2026-04-02</div></div>
+    <div><div class="v">V3 Re-<br>review</div><div class="d">2026-04-06</div></div>
+    <div><div class="v">V4 Re-<br>review</div><div class="d">2026-04-09</div></div>
+    <div><div class="v">V5 Re-<br>review</div><div class="d">2026-04-13</div></div>
+    <div><div class="v">V6 Re-<br>review</div><div class="d">2026-04-14</div></div>
+    <div class="cur"><div class="v">V7 Re-<br>review</div><div class="d">2026-09-22</div></div>
+  </div>
+</div>
+
+<!-- ======================= EXEC SUMMARY ======================= -->
+<div class="page">
+  <h2 class="page-title">Executive Summary — v7 Re-review</h2>
+  <p class="page-sub">Five months and 115 commits after v6. Ten new findings; every previously closed finding still holds.</p>
+
+  <div class="tiles">
+    <div class="tile t-fixed"><div class="n">25</div><div class="l">Total<br>fixed</div></div>
+    <div class="tile t-crit"><div class="n">0</div><div class="l">Critical</div></div>
+    <div class="tile t-high"><div class="n">1</div><div class="l">High</div></div>
+    <div class="tile t-med"><div class="n">4</div><div class="l">Medium</div></div>
+    <div class="tile t-low"><div class="n">6</div><div class="l">Low</div></div>
+    <div class="tile t-open"><div class="n">11</div><div class="l">Open</div></div>
+  </div>
+
+  <div class="progress-label">Remediation progress: 25 of 36 findings resolved (69%)</div>
+  <div class="bar"><div class="fill" style="width:69%">69%</div></div>
+
+  <div class="callout callout-red">
+    <div class="ct">⚠ Priority — Payment Verification Was Removed From the Membership Flow</div>
+    In PR #489 the signature-verified QGiv webhook (<code class="inl">qgiv-webhook.ts</code>) and the
+    Bearer-authenticated <code class="inl">membership-invite.ts</code> were deleted and replaced with
+    <code class="inl">/api/membership-complete</code>, which the browser calls from a QGiv
+    <code class="inl">donationComplete</code> DOM event. Its only access control is an
+    <code class="inl">Origin</code> header check. <b>Confirmed live on production:</b> a plain
+    <code class="inl">curl</code> that sets <code class="inl">Origin: https://techforpalestine.org</code>
+    passes the gate and reaches the business logic, so a paid-tier Hub invite and an EmailOctopus
+    subscription can be triggered for any address without a payment ever taking place. This is the same
+    class of issue as C-2/C-3, which were closed in v2. See <b>S-1</b>.
+  </div>
+
+  <div class="callout callout-amber">
+    <div class="ct">◐ Rate Limiting Holds, But The Uncached Endpoints Fail Before It Engages</div>
+    Both WAF rules confirmed live. POST throttles early (429 after roughly ten requests in a 30-request
+    burst). GET throttles far later than the 15 requests / 60 seconds v6 recorded — a 40-request burst on
+    <code class="inl">/api/faq</code> returned 40 × 200, and only a 300-request burst reached the limit, at
+    around the 77th request. In that same run thirteen responses came back <b>500 before or alongside the
+    first 429s</b>: <code class="inl">/api/faq</code> queries Notion once per request with no cache, so
+    sustained load reaches Notion and the endpoint breaks before the edge protects it. Caching those reads
+    matters more here than the threshold does. See <b>S-4</b>.
+  </div>
+
+  <div class="callout callout-dark">
+    <div class="ct">✓ What Held Up</div>
+    The v1–v6 remediations have survived a near-total rewrite of the front end. No secrets are committed
+    anywhere in the tree; the nonce-based CSP still carries no <code class="inl">'unsafe-inline'</code> on
+    either <code class="inl">script-src</code> or <code class="inl">style-src</code>; the
+    <code class="inl">project-proxy</code> path normalisation and header allowlist are intact; all
+    <code class="inl">/api/*</code> responses are <code class="inl">no-store</code>; form endpoints still
+    validate and origin-gate; and the two new secret comparisons added since v6 (HTTP Basic admin auth and
+    the Sentry webhook HMAC) both use <code class="inl">constantTimeEqual()</code> rather than
+    <code class="inl">===</code>.
+  </div>
+
+  <div class="kicker">Scope of this review</div>
+  <table>
+    <thead><tr><th style="width:30%">Area</th><th>What changed since v6, and what was examined</th></tr></thead>
+    <tbody>
+      <tr><td><b>New API routes</b></td><td><code class="inl">membership-complete</code>, <code class="inl">donation-complete</code>, <code class="inl">pipe</code>, <code class="inl">open-roles</code>, <code class="inl">sentry-webhook</code>, <code class="inl">admin/conversion-stats</code></td></tr>
+      <tr><td><b>Removed API routes</b></td><td><code class="inl">qgiv-webhook</code>, <code class="inl">membership-invite</code> (both deleted in #489)</td></tr>
+      <tr><td><b>New auth surface</b></td><td>HTTP Basic admin area (<code class="inl">/admin/conversions</code>), Sentry→Mattermost webhook relay, shared origin policy helper</td></tr>
+      <tr><td><b>New data paths</b></td><td>ICS events feed (token in URL), ProjectHub Workers-cache layer, Hub open-roles, Cloudflare KV conversion log</td></tr>
+      <tr><td><b>New third parties</b></td><td>Sentry (client + server), GrowthBook, first-party-proxied Plausible script, CharityStack, ValidAid</td></tr>
+      <tr><td><b>Re-examined</b></td><td>Areas unchanged since v6 but not previously covered in depth: response headers on SSR routes, the nonce <code class="inl">meta</code> mechanism, dependency advisories</td></tr>
+    </tbody>
+  </table>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= REGISTER 1 ======================= -->
+<div class="page">
+  <div class="kicker">Complete issue register — v7 status (1 of 2)</div>
+  <table>
+    <thead><tr><th style="width:9%">ID</th><th>Finding</th><th style="width:16%">Peak severity</th><th style="width:17%">v7 status</th></tr></thead>
+    <tbody>
+      <tr><td class="id">C-1</td><td>API key &amp; account ID in wrangler configs</td><td><span class="sev sev-crit">Critical</span></td><td class="st st-fixed">Fixed v2 · re-verified</td></tr>
+      <tr><td class="id">C-2</td><td>Unauthenticated membership invite endpoint</td><td><span class="sev sev-crit">Critical</span></td><td class="st st-fixed">Fixed v2 · route deleted</td></tr>
+      <tr><td class="id">C-3</td><td>Unverified webhook triggers privileged invite</td><td><span class="sev sev-crit">Critical</span></td><td class="st st-fixed">Fixed v2 · route deleted</td></tr>
+      <tr><td class="id">N-1</td><td>Webhook secret exposed in URL query param</td><td><span class="sev sev-crit">Critical</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">N-2</td><td>Timing attack on token comparison</td><td><span class="sev sev-high">High</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">H-1</td><td>Secret key logged to browser console</td><td><span class="sev sev-high">High</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">H-2</td><td>Full donor PII payload echoed in HTTP response</td><td><span class="sev sev-high">High</span></td><td class="st st-fixed">Fixed v4 · re-verified</td></tr>
+      <tr><td class="id">H-3</td><td>Middleware caches POST/API responses as public</td><td><span class="sev sev-high">High</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">H-4</td><td>No rate limiting on any endpoint</td><td><span class="sev sev-high">High</span></td><td class="st st-fixed">Fixed v6 · threshold: S-4</td></tr>
+      <tr><td class="id">H-5</td><td>Wildcard CORS on all endpoints</td><td><span class="sev sev-high">High</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">N-3</td><td>membership-invite proxies arbitrary body fields</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v3 · route deleted</td></tr>
+      <tr><td class="id">M-1</td><td>No CSRF / Origin check on form endpoints</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v4 · re-verified</td></tr>
+      <tr><td class="id">M-2</td><td>No input format/length validation on forms</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v4 · re-verified</td></tr>
+      <tr><td class="id">M-3</td><td>getEnv globalThis fallback</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">M-4</td><td>Donor PII (email) in server logs</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v4 · re-verified</td></tr>
+      <tr><td class="id">M-5</td><td>Internal error.message in HTTP responses</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">M-6</td><td>Dual middleware conflict — cache-control dead code</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v6 · re-verified</td></tr>
+      <tr><td class="id">R-1</td><td>PUBLIC_SECRET_KEY in client-side Axios bundle</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v4 · re-verified</td></tr>
+      <tr><td class="id">R-2</td><td>CSP 'unsafe-inline' defeats XSS protection</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v4 · re-verified</td></tr>
+      <tr><td class="id">P-1</td><td>project-proxy: Authorization forwarded to any path</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v5 · re-verified</td></tr>
+      <tr><td class="id">P-2</td><td>project-proxy: dot-segment traversal bypass</td><td><span class="sev sev-med">Medium</span></td><td class="st st-fixed">Fixed v6 · re-verified</td></tr>
+      <tr><td class="id">L-1</td><td>Notion DB IDs in wrangler.toml</td><td><span class="sev sev-low">Low</span></td><td class="st st-fixed">Fixed v3 · re-verified</td></tr>
+      <tr><td class="id">L-3</td><td>Image proxy has no authentication</td><td><span class="sev sev-low">Low</span></td><td class="st st-fixed">Fixed v6 · worker gone</td></tr>
+      <tr><td class="id">L-4</td><td>style-src still uses 'unsafe-inline' in CSP</td><td><span class="sev sev-low">Low</span></td><td class="st st-fixed">Fixed v6 · re-verified</td></tr>
+      <tr><td class="id">L-5</td><td>project-proxy forwards all browser headers upstream</td><td><span class="sev sev-low">Low</span></td><td class="st st-fixed">Fixed v6 · re-verified</td></tr>
+      <tr><td class="id">L-2</td><td>QGiv embed script loaded without Subresource Integrity</td><td><span class="sev sev-low">Low</span></td><td class="st st-open">Open since v1</td></tr>
+    </tbody>
+  </table>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= REGISTER 2 ======================= -->
+<div class="page">
+  <div class="kicker">Complete issue register — new in v7 (2 of 2)</div>
+  <table>
+    <thead><tr><th style="width:9%">ID</th><th>Finding</th><th style="width:16%">Severity</th><th style="width:17%">Status</th></tr></thead>
+    <tbody>
+      <tr><td class="id">S-1</td><td>Membership/donation completion endpoints grant Hub invites and list writes behind a spoofable Origin check</td><td><span class="sev sev-high">High</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-2</td><td>Security response headers absent on every SSR page — <code class="inl">_headers</code> now only reaches static assets</td><td><span class="sev sev-med">Medium</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-3</td><td>Authenticated admin dashboard served with <code class="inl">Cache-Control: public, max-age=600</code></td><td><span class="sev sev-med">Medium</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-4</td><td>Uncached Notion-backed GET routes return 500 under load before the GET rate limit engages</td><td><span class="sev sev-low">Low</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-5</td><td>Token-bearing events feed URL reaches error telemetry unscrubbed</td><td><span class="sev sev-med">Medium</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-6</td><td>Astro runtime two majors behind, with published RCE/SSRF/XSS advisories in the pinned range</td><td><span class="sev sev-med">Medium</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-7</td><td>Per-request CSP nonce republished in a DOM-readable <code class="inl">&lt;meta&gt;</code> tag</td><td><span class="sev sev-low">Low</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-8</td><td>Raw-HTML sink renders upstream error text in the volunteer form</td><td><span class="sev sev-low">Low</span></td><td class="st st-open">Open · latent</td></tr>
+      <tr><td class="id">S-9</td><td><code class="inl">/api/pipe</code> accepts requests with no Origin and from any <code class="inl">*.pages.dev</code> host</td><td><span class="sev sev-low">Low</span></td><td class="st st-open">Open · new v7</td></tr>
+      <tr><td class="id">S-10</td><td>Third-party analytics script re-served first-party without integrity pinning</td><td><span class="sev sev-low">Low</span></td><td class="st st-open">Open · new v7</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kicker">Live verification log — 2026-09-22, against production</div>
+  <table>
+    <thead><tr><th style="width:38%">Probe</th><th style="width:22%">Result</th><th>Interpretation</th></tr></thead>
+    <tbody>
+      <tr><td><code class="inl">GET /</code></td><td>200, CSP present; no XFO / nosniff / Referrer-Policy</td><td>S-2 confirmed</td></tr>
+      <tr><td><code class="inl">GET /favicon.png</code></td><td>All four headers present</td><td><code class="inl">_headers</code> applies to assets only</td></tr>
+      <tr><td><code class="inl">GET /admin/conversions</code></td><td>401 + <code class="inl">Cache-Control: public, max-age=600</code></td><td>S-3 confirmed</td></tr>
+      <tr><td><code class="inl">GET /api/events</code></td><td>200, <code class="inl">no-store</code>, <code class="inl">ACAO: *</code></td><td>H-3 / H-5 still correct</td></tr>
+      <tr><td><code class="inl">POST /api/membership-complete</code> (no Origin)</td><td>403</td><td>Origin gate active</td></tr>
+      <tr><td><code class="inl">POST /api/membership-complete</code> (forged Origin, invalid email)</td><td>400 "Invalid or missing email"</td><td>S-1 confirmed — gate passed</td></tr>
+      <tr><td>40 × concurrent <code class="inl">GET /api/faq</code></td><td>40 × 200, no 429</td><td>Below the GET threshold</td></tr>
+      <tr><td>300 × concurrent <code class="inl">GET /api/faq</code></td><td>~76 × 200, then 13 × 500 mixed with 429s</td><td>S-4 — GET rule active but late; upstream fails first</td></tr>
+      <tr><td>30 × concurrent <code class="inl">POST /api/donation-complete</code></td><td>Mixed 400 / 429</td><td>POST rate limit active</td></tr>
+      <tr><td><code class="inl">GET /api/project-proxy?path=/api/method/../../api/auth/admin</code></td><td>503 "Proxy not configured"</td><td>Proxy unconfigured in prod; guard verified in code</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:8.5px;color:#6b7280;margin-top:10px;">No test wrote data. The two completion-endpoint probes used a deliberately invalid
+  email address so the request was rejected at validation, after the access-control decision but before any Hub or EmailOctopus call.</p>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= S-1 ======================= -->
+<div class="page">
+  <div class="kicker">New findings — detail</div>
+
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-high" style="margin-top:2px">High</span>
+      <span class="fid">S-1</span>
+      <span class="ft">Membership and Donation Completion Endpoints Grant Hub Invites and Mailing-List Writes Behind a Spoofable Origin Check</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> src/pages/api/membership-complete.ts:37 · src/pages/api/donation-complete.ts:22 · src/components/membership/QgivJoin.tsx:181–212
+        <span class="sep">|</span> <b>OWASP:</b> A01:2021 – Broken Access Control
+        <span class="sep">|</span> <b>Introduced:</b> PR #489
+      </div>
+      <p>Until PR #489 the membership pipeline was server-verified: QGiv called
+      <code class="inl">/api/qgiv-webhook</code> with an <code class="inl">X-Webhook-Secret</code> header, the
+      handler compared it with <code class="inl">constantTimeEqual()</code>, and only then called the
+      Bearer-authenticated <code class="inl">/api/membership-invite</code>. Both routes were deleted. The
+      replacement runs in the browser: a QGiv <code class="inl">donationComplete</code> DOM event fires in
+      <code class="inl">QgivJoin.tsx</code> and the island POSTs the contact details to
+      <code class="inl">/api/membership-complete</code>.</p>
+      <p>That endpoint performs two privileged actions — a Hub invite of
+      <code class="inl">type: "paid"</code> and an EmailOctopus subscription tagged
+      <code class="inl">member</code> — and its only access control is an <code class="inl">Origin</code>
+      header comparison. <code class="inl">Origin</code> is a browser-enforced header: it constrains other
+      web pages, and nothing else. Any HTTP client sets it at will.</p>
+      <pre><span class="c"># Confirmed against production, 2026-09-22</span>
+$ curl -X POST https://techforpalestine.org/api/membership-complete \
+    -H 'Content-Type: application/json' \
+    --data '{"email":"not-an-email"}'
+<span class="r">403</span>   <span class="c"># no Origin header — rejected</span>
+
+$ curl -X POST https://techforpalestine.org/api/membership-complete \
+    -H 'Content-Type: application/json' \
+    <span class="y">-H 'Origin: https://techforpalestine.org'</span> \
+    --data '{"email":"not-an-email"}'
+<span class="g">400 {"message":"Invalid or missing email"}</span>   <span class="c"># gate passed; only the email format stopped it</span></pre>
+      <p>The 400 is the validator, not the guard — the request is already inside the handler. Substituting a
+      well-formed address completes the flow. There is no transaction id, no QGiv lookup, and no signature
+      anywhere in the path, so the server has no way to distinguish a real payment from a forged call.</p>
+      <p><b>Impact.</b> Anyone can mint a paid-tier Hub invite for an address they control, which is
+      unpaid access to the member chat and teams. Anyone can also subscribe and tag an arbitrary third-party
+      address to the members or donor list, which is both a mail-bombing primitive aimed at a victim and a
+      way to corrupt the membership data that drives reporting. <code class="inl">/api/donation-complete</code>
+      is the same shape with the EmailOctopus half only. The POST rate limit caps the rate, not the act.</p>
+      <div class="fixbar">Fix — put payment verification back on the server</div>
+      <pre><span class="c">// Preferred: restore the webhook. QGiv posts the transaction server-to-server;</span>
+<span class="c">// the invite decision is then made from data the browser never touched.</span>
+<span class="c">// src/pages/api/qgiv-webhook.ts</span>
+const secret = getEnv("QGIV_WEBHOOK_SECRET", locals);
+const sent = request.headers.get("X-Webhook-Secret") ?? "";
+if (!secret || !constantTimeEqual(sent, secret)) return new Response("Unauthorized", { status: 401 });
+
+<span class="c">// Minimum, if the client-side trigger has to stay: prove the transaction exists</span>
+<span class="c">// before acting on it, and never accept the tier or the email from the caller.</span>
+const txn = await fetch(`${QGIV_API}/transactions/${transactionId}`, { headers: { Authorization: qgivKey } });
+if (!txn.ok) return new Response(JSON.stringify({ message: "Unknown transaction" }), { status: 402 });
+const { email, tier } = await txn.json();   <span class="c">// authoritative values, from QGiv</span></pre>
+      <p style="margin-top:9px">Keep the <code class="inl">Origin</code> check — it is useful defence in
+      depth against drive-by cross-site calls — but it cannot be the only control on an endpoint that grants
+      access or writes to a mailing list.</p>
+    </div>
+  </div>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= S-2 / S-3 ======================= -->
+<div class="page">
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-med" style="margin-top:2px">Medium</span>
+      <span class="fid">S-2</span>
+      <span class="ft">Security Response Headers Are Absent On Every Server-Rendered Page</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> public/_headers · src/middleware/csp.ts:23–34 · astro.config.mjs:18
+        <span class="sep">|</span> <b>OWASP:</b> A05:2021 – Security Misconfiguration
+      </div>
+      <p><code class="inl">public/_headers</code> sets <code class="inl">X-Frame-Options: DENY</code>,
+      <code class="inl">X-Content-Type-Options: nosniff</code>, <code class="inl">Referrer-Policy</code> and
+      <code class="inl">Permissions-Policy</code> on <code class="inl">/*</code>. On Cloudflare Pages that file
+      is applied by the static asset handler. The site runs <code class="inl">output: "server"</code>, so
+      nearly every HTML route is produced by a Pages Function instead, and those responses never pass through
+      the asset handler — the rules reach the favicon and miss the site. This predates v6; it is reported here
+      because earlier rounds examined the CSP without checking the other four headers on a live SSR response.</p>
+      <pre><span class="c"># 2026-09-22</span>
+$ curl -sI https://techforpalestine.org/favicon.png
+<span class="g">x-frame-options: DENY</span>
+<span class="g">x-content-type-options: nosniff</span>
+<span class="g">referrer-policy: strict-origin-when-cross-origin</span>
+<span class="g">permissions-policy: camera=(), microphone=(), geolocation=()</span>
+
+$ curl -sD- -o/dev/null https://techforpalestine.org/
+content-type: text/html
+cache-control: public, max-age=600
+content-security-policy: default-src 'self'; script-src 'nonce-…'; …
+<span class="r"># none of the four headers above</span></pre>
+      <p>The CSP has no <code class="inl">frame-ancestors</code> directive either, so with
+      <code class="inl">X-Frame-Options</code> gone there is nothing stopping any site from framing
+      techforpalestine.org. The donate and membership pages carry live payment widgets, which makes UI-redress
+      the concrete risk rather than a theoretical one.</p>
+      <div class="fixbar">Fix — set them in middleware, where SSR responses actually pass</div>
+      <pre><span class="c">// src/middleware/cache-control.ts (or a new securityHeaders middleware in the sequence)</span>
+response.headers.set("X-Content-Type-Options", "nosniff");
+response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+
+<span class="c">// and in src/middleware/csp.ts — the modern equivalent of X-Frame-Options</span>
+"frame-ancestors 'none'",</pre>
+      <p style="margin-top:9px">Keep <code class="inl">public/_headers</code> as it is: it still covers the
+      static assets, and the two do not conflict.</p>
+    </div>
+  </div>
+
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<div class="page">
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-med" style="margin-top:2px">Medium</span>
+      <span class="fid">S-3</span>
+      <span class="ft">The Authenticated Admin Dashboard Is Served With <code class="inl">Cache-Control: public, max-age=600</code></span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> src/middleware/cache-control.ts:9–11 · src/pages/admin/conversions.astro
+        <span class="sep">|</span> <b>OWASP:</b> A05:2021 – Security Misconfiguration
+      </div>
+      <p>The cache middleware marks any GET response that is not under <code class="inl">/api/</code> and does
+      not already carry a <code class="inl">Cache-Control</code> header as <code class="inl">public,
+      max-age=600</code>. The HTTP Basic-protected conversion dashboard added since v6 matches that rule.</p>
+      <pre>$ curl -sD- -o/dev/null https://techforpalestine.org/admin/conversions
+HTTP/2 <span class="y">401</span>
+www-authenticate: Basic realm="Admin"
+<span class="r">cache-control: public, max-age=600</span></pre>
+      <p>Per RFC 9111 §3.5 a shared cache must not store a response to a request carrying
+      <code class="inl">Authorization</code> — unless the response says <code class="inl">public</code>, which
+      is the one directive that lifts the prohibition. The header is therefore explicit permission for any
+      intermediary to keep the dashboard and hand it to the next person who asks for that URL. Cloudflare's
+      edge does not cache Function HTML by default, which limits this in the current deployment, but the
+      browser disk cache and any corporate proxy in front of an admin both apply today.</p>
+      <div class="fixbar">Fix — never mark an authenticated route public</div>
+      <pre><span class="c">// src/middleware/cache-control.ts</span>
+const isApi = pathname.startsWith("/api/");
+<span class="g">const isPrivate = pathname.startsWith("/admin/");</span>
+if (!response.headers.has("Cache-Control") || isApi || isPrivate || !isGet) {
+  response.headers.set("Cache-Control", (!isGet || isApi || isPrivate) ? "no-store" : "public, max-age=600");
+}</pre>
+      <p style="margin-top:9px">Worth considering separately: <code class="inl">public</code> is a strong
+      default for every other SSR page too. <code class="inl">/donate</code> varies its content on the
+      visitor's country (<code class="inl">isUK</code>), and a ten-minute public entry does not distinguish
+      between them.</p>
+    </div>
+  </div>
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-low" style="margin-top:2px">Low</span>
+      <span class="fid">S-4</span>
+      <span class="ft">Uncached Notion-Backed GET Routes Fail Under Load Before The GET Rate Limit Engages</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> src/pages/api/faq.ts · ideas.ts · speakers.ts · e4p-signatories.ts · events.ts · Cloudflare WAF configuration
+        <span class="sep">|</span> <b>OWASP:</b> A04:2021 – Insecure Design
+      </div>
+      <p>v6 recorded a GET limit of 15 requests / 60 seconds / IP. A 40-request burst on 2026-09-22 returned
+      40 × 200, which on its own reads as the rule having been removed. A 300-request burst shows otherwise:
+      the rule is in place but set far higher, with the first 429 arriving around the 77th request and 429s
+      mixed with 200s for the rest of the run. The more interesting part of that run is what came back in
+      between:</p>
+      <pre><span class="c"># 300 × concurrent GET /api/faq — excerpt around the transition</span>
+… 200 200 200 <span class="r">500</span> 200 200 <span class="r">500</span> <span class="y">429 429</span> <span class="r">500 500 500 500 500 500 500 500 500 500</span> <span class="y">429</span> 200 200 200 <span class="y">429 429</span> …</pre>
+      <p>Thirteen 500s, several of them <i>before</i> the first 429. <code class="inl">/api/faq</code> issues a
+      Notion API query per request with no cache, so sustained load reaches Notion and the endpoint fails
+      before the edge throttles it. <code class="inl">/api/ideas</code>,
+      <code class="inl">/api/speakers</code>, <code class="inl">/api/e4p-signatories</code> and
+      <code class="inl">/api/events</code> have the same shape. <code class="inl">/api/projects</code> is the
+      exception and shows the right pattern — <code class="inl">projectsClient.ts</code> keeps a Workers Cache
+      entry, fresh for five minutes and usable stale for 24 hours.</p>
+      <p>Two things follow. The protection is real, so this is not the regression a smaller probe suggested,
+      and it is rated low. But the threshold sits above the point where the uncached endpoints break, which
+      means a single client can still push those routes into upstream failure — and the ceiling is well above
+      the 15/60 figure recorded at v6, so whatever the rule is today, it is not what the last report
+      documented.</p>
+      <div class="fixbar">Fix — cache the upstreams first, then set the threshold deliberately</div>
+      <ul class="tight" style="margin-top:5px;margin-bottom:0">
+        <li>Wrap the Notion and ICS reads in the same <code class="inl">resolveWithCache()</code> helper
+        <code class="inl">projectsClient.ts</code> already uses. It removes the failure mode entirely and makes
+        the pages faster and outage-tolerant at the same time.</li>
+        <li>Re-derive the intended GET threshold and record it alongside the rule; it should sit below the
+        point at which the upstreams start returning 500, not above it.</li>
+        <li>Check whether those thirteen 500s reached Sentry. If a burst from one IP can fail an endpoint
+        without raising an alert, the monitoring gap is worth more attention than the rate limit.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<div class="page">
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-med" style="margin-top:2px">Medium</span>
+      <span class="fid">S-5</span>
+      <span class="ft">The Token-Bearing Events Feed URL Reaches Error Telemetry Unscrubbed</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> src/store/eventsClient.ts:373–393 · src/lib/report-error.ts · sentry.server.config.js
+        <span class="sep">|</span> <b>OWASP:</b> A09:2021 – Security Logging &amp; Monitoring Failures
+      </div>
+      <p><code class="inl">.env.example</code> documents <code class="inl">EVENTS_ICS_URL</code> as a feed URL
+      that "includes an auth token as a query param". <code class="inl">fetchEvents()</code> passes that URL
+      straight to <code class="inl">fetch()</code>, and every failure goes to
+      <code class="inl">reportError()</code>, which does <code class="inl">console.error(error)</code> and
+      <code class="inl">Sentry.captureException(error)</code>.</p>
+      <pre><span class="c">// src/store/eventsClient.ts</span>
+const response = await fetch(icsUrl);          <span class="c">// URL carries ?token=…</span>
+…
+} catch (error) {
+  reportError(error, { context: "events-ics-fetch" });   <span class="c">// console.error + Sentry</span>
+}</pre>
+      <p>Two paths carry the secret out. A rejected <code class="inl">fetch</code> can put the requested URL
+      into the error text, which lands in the Workers log stream. More reliably, the Sentry Cloudflare SDK
+      instruments outbound <code class="inl">fetch</code> and attaches the request URL as a breadcrumb or span
+      to whatever error is captured next — and neither Sentry config sets
+      <code class="inl">beforeSend</code> or <code class="inl">beforeBreadcrumb</code>, so nothing strips the
+      query string. Anyone with read access to the Sentry project would then hold a working credential for the
+      calendar feed.</p>
+      <div class="fixbar">Fix — scrub the query string, then rotate</div>
+      <pre><span class="c">// sentry.server.config.js</span>
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  <span class="g">beforeBreadcrumb(crumb) {
+    const url = crumb.data?.url;
+    if (typeof url === "string" &amp;&amp; url.includes("?")) crumb.data.url = url.split("?")[0] + "?[redacted]";
+    return crumb;
+  },</span>
+});</pre>
+      <ul class="tight" style="margin-top:9px">
+        <li>Check the existing Sentry issues for the feed host before assuming this has not already happened;
+        if the token appears, rotate it at the calendar source.</li>
+        <li>If the Mattermost calendar plugin can authenticate by header instead of query param, that removes
+        the problem at the root rather than filtering it downstream.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= S-6 / S-7 ======================= -->
+<div class="page">
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-med" style="margin-top:2px">Medium</span>
+      <span class="fid">S-6</span>
+      <span class="ft">The Astro Runtime Is Two Majors Behind, With Published RCE, SSRF And XSS Advisories In The Pinned Range</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> package.json · package-lock.json (astro 5.18.1)
+        <span class="sep">|</span> <b>OWASP:</b> A06:2021 – Vulnerable &amp; Outdated Components
+      </div>
+      <p><code class="inl">npm audit</code> reports 42 advisories across the tree (2 critical, 20 high). Most
+      sit in build-time or Node-only packages — <code class="inl">tar</code>,
+      <code class="inl">browserslist</code>, <code class="inl">postcss</code>,
+      <code class="inl">undici</code>, <code class="inl">vite</code> — which never reach the Workers runtime
+      and are not urgent. The framework itself is the part that does.</p>
+      <table style="margin:10px 0">
+        <thead><tr><th style="width:15%">Package</th><th style="width:12%">Pinned</th><th>Advisory affecting that version</th><th style="width:11%">Fixed in</th></tr></thead>
+        <tbody>
+          <tr><td>astro</td><td>5.18.1</td><td>RCE through AVIF image optimization (GHSA-26w7-cxv4-gfx2, CVSS 9.8)</td><td>7.2.8</td></tr>
+          <tr><td>astro</td><td>5.18.1</td><td>Host-header SSRF in prerendered error page fetch (GHSA-2pvr-wf23-7pc7, 7.5)</td><td>6.4.6</td></tr>
+          <tr><td>astro</td><td>5.18.1</td><td>Reflected XSS via unescaped slot name (GHSA-8hv8-536x-4wqp, 7.1)</td><td>6.3.3</td></tr>
+          <tr><td>astro</td><td>5.18.1</td><td>XSS in <code class="inl">define:vars</code> via incomplete <code class="inl">&lt;/script&gt;</code> sanitization (GHSA-j687-52p2-xcff, 6.1)</td><td>6.1.6</td></tr>
+          <tr><td>svelte</td><td>5.55.5</td><td>SSR XSS via spread attributes; XSS via DOM clobbering (GHSA-pr6f-5x2q-rwfp, GHSA-rcqx-6q8c-2c42)</td><td>5.55.7</td></tr>
+          <tr><td>axios</td><td>1.16.0</td><td>Prototype-pollution gadgets in request construction (GHSA-mmx7-hfxf-jppx and others)</td><td>1.18.0</td></tr>
+        </tbody>
+      </table>
+      <p>Two mitigations apply and should be weighed before this is treated as an emergency. The AVIF RCE is in
+      Astro's sharp-backed image service; this project configures
+      <code class="inl">imageService: "cloudflare"</code>, so that code path is not the one in use. The
+      <code class="inl">define:vars</code> XSS needs attacker-controlled data inside the directive, and the two
+      uses in the tree pass a boolean derived from Cloudflare's geo header. The slot-name and Host-header
+      issues have no such qualifier.</p>
+      <p>Two dependencies are also declared but never imported anywhere in <code class="inl">src/</code>:
+      <code class="inl">react-router-dom@7</code> (which carries its own CSRF and open-redirect advisories) and
+      <code class="inl">install@0.13.0</code>. They add advisory noise and install surface for nothing.</p>
+      <div class="fixbar">Fix — patch the runtime, prune the rest</div>
+      <ul class="tight">
+        <li>Bump <code class="inl">svelte</code> to ≥ 5.55.7 and <code class="inl">axios</code> to ≥ 1.18.0 —
+        both are in-range, low-risk updates.</li>
+        <li>Plan the Astro 5 → 7 upgrade as its own piece of work with a preview deployment; it is two majors
+        and will need the adapter and integrations moved in step.</li>
+        <li><code class="inl">npm uninstall react-router-dom install</code>.</li>
+        <li>Add <code class="inl">npm audit --omit=dev --audit-level=high</code> to CI so the next
+        runtime-reachable advisory shows up at the PR rather than at the next audit.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<div class="page">
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-low" style="margin-top:2px">Low</span>
+      <span class="fid">S-7</span>
+      <span class="ft">The Per-Request CSP Nonce Is Republished In A DOM-Readable <code class="inl">&lt;meta&gt;</code> Tag</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> src/layouts/Layout.astro:58,81 · HomeLayout.astro:97 · AdminLayout.astro:36
+        <span class="sep">|</span> <b>OWASP:</b> A05:2021 – Security Misconfiguration
+      </div>
+      <p>Each layout emits <code class="inl">&lt;meta name="csp-nonce" content={Astro.locals.cspNonce}&gt;</code>
+      so an inline bootstrap can copy the nonce onto <code class="inl">&lt;style&gt;</code> elements that MUI
+      and Emotion create at runtime. CSP deliberately hides the <code class="inl">nonce</code> content
+      attribute from DOM reads for exactly this reason: a nonce that scripts and markup can read is a nonce
+      that can be lifted and reused. Publishing it in a <code class="inl">meta</code> tag puts it back.</p>
+      <p>The practical exposure today is limited — reading the tag needs script execution, and a script that
+      already runs has no use for the nonce. It is a weakening of the guarantee rather than a live hole, which
+      is why it is rated low. It becomes material if a markup-injection sink ever appears above the
+      <code class="inl">meta</code> tag in the document, or if one of the allowed third-party origins is used
+      to read it.</p>
+      <p>The same workaround also patches three globals on every page — <code class="inl">document.createElement</code>,
+      <code class="inl">Element.prototype.setAttribute</code> and <code class="inl">Element.prototype.innerHTML</code>
+      — the last of which rewrites markup with a regex before the parser sees it. That is a lot of
+      load-bearing machinery to keep a strict <code class="inl">style-src</code>, and it is worth revisiting
+      whether Emotion's own nonce option, wired at build time, can replace it.</p>
+      <div class="fixbar">Fix — hand the nonce to Emotion directly instead of publishing it</div>
+      <pre><span class="c">// Emotion accepts a nonce on its cache; no meta tag and no prototype patching needed.</span>
+createCache({ key: "mui", <span class="g">nonce: cspNonce</span> });</pre>
+      <p style="margin-top:9px">If the meta tag has to stay for now, at minimum keep it off pages that render
+      third-party or user-derived HTML, and re-audit after each new embed is added.</p>
+    </div>
+  </div>
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-low" style="margin-top:2px">Low</span>
+      <span class="fid">S-8</span>
+      <span class="ft">Raw-HTML Sink Renders Upstream Error Text In The Volunteer Form</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>File:</b> src/components/volunteerForm.tsx:157 (and :100)
+        <span class="sep">|</span> <b>OWASP:</b> A03:2021 – Injection
+        <span class="sep">|</span> <b>Status:</b> latent — the proxy it depends on is unconfigured in production
+      </div>
+      <pre>&lt;div key={index} <span class="r">dangerouslySetInnerHTML</span>={{ __html: `Error: ${err.message}` }} /&gt;</pre>
+      <p><code class="inl">err.message</code> comes from the ProjectHub/Frappe application API by way of
+      <code class="inl">/api/project-proxy</code>. Frappe validation errors routinely quote the submitted value
+      back, so a crafted field can return as live markup. The nonce CSP blocks script execution and inline
+      event handlers, which leaves markup injection — an overlaid link or a fake input inside a form the user
+      already trusts.</p>
+      <p>It is not currently reachable: <code class="inl">PUBLIC_API_URL</code> and
+      <code class="inl">PUBLIC_SECRET_KEY</code> are not set in production, so the proxy answers 503 "Proxy not
+      configured" and the form never renders an upstream error. That makes it a latent issue to fix before the
+      proxy is switched back on, not an incident. The same component also logs the full set of applicant form
+      values to the browser console at line 100.</p>
+      <div class="fixbar">Fix — render it as text, drop the console log</div>
+      <pre>&lt;div key={index}&gt;{`Error: ${err.message}`}&lt;/div&gt;</pre>
+    </div>
+  </div>
+
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<div class="page">
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-low" style="margin-top:2px">Low</span>
+      <span class="fid">S-9</span>
+      <span class="ft"><code class="inl">/api/pipe</code> Accepts Requests With No Origin And From Any <code class="inl">*.pages.dev</code> Host</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>File:</b> src/pages/api/pipe.ts:8–11, 65–88
+        <span class="sep">|</span> <b>OWASP:</b> A01:2021 – Broken Access Control
+      </div>
+      <pre>const ORIGIN_POLICY: OriginPolicy = {
+  allowedSuffixes: [<span class="r">".pages.dev"</span>],      <span class="c">// any Cloudflare Pages site, not just ours</span>
+  <span class="r">allowMissingOrigin: true</span>,          <span class="c">// any non-browser client</span>
+};</pre>
+      <p>The analytics relay is the one endpoint that accepts a missing <code class="inl">Origin</code>, which
+      means any server-side client can post events. Two consequences: Plausible conversion data can be
+      polluted by anyone who finds the route, and when Plausible drops an event the handler writes a record
+      built from the caller's own body into the <code class="inl">DROPPED_CONVERSIONS</code> KV namespace —
+      attacker-controlled data in the store that backs the admin dashboard. The POST rate limit bounds the
+      volume.</p>
+      <p>The <code class="inl">.pages.dev</code> suffix is also broader than intended: anyone can deploy a
+      Cloudflare Pages project. The other two endpoints get this right by pinning
+      <code class="inl">.website-aun.pages.dev</code>.</p>
+      <div class="fixbar">Fix — match the policy the other endpoints already use</div>
+      <pre>const ORIGIN_POLICY: OriginPolicy = { allowedSuffixes: [<span class="g">".website-aun.pages.dev"</span>] };
+<span class="c">// allowMissingOrigin dropped — the browser always sends Origin on a cross-origin POST,</span>
+<span class="c">// and the beacon this relays is always sent from a page.</span></pre>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-low" style="margin-top:2px">Low</span>
+      <span class="fid">S-10</span>
+      <span class="ft">Third-Party Analytics Script Is Re-Served First-Party Without Integrity Pinning</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>File:</b> src/pages/js/web.js.ts
+        <span class="sep">|</span> <b>OWASP:</b> A08:2021 – Software &amp; Data Integrity Failures
+      </div>
+      <p>The route fetches <code class="inl">plausible.io/js/pa-….js</code> server-side and re-serves the body
+      from the site's own origin with <code class="inl">public, max-age=86400</code>. The script then runs as
+      same-origin code under <code class="inl">script-src 'self'</code> — outside the CSP allowlist that would
+      otherwise scope it, with no integrity check, and cached for a day. A bad response from upstream is
+      therefore first-party JavaScript on every page for up to 24 hours. Same class as L-2, different vendor.</p>
+      <div class="fixbar">Fix — pin the expected hash and fail closed</div>
+      <pre>const body = await response.arrayBuffer();
+const digest = await crypto.subtle.digest("SHA-384", body);
+if (toBase64(digest) !== EXPECTED_SHA384) {
+  reportError(new Error("Plausible script hash mismatch"), { context: "web.js" });
+  return new Response("", { status: 502 });
+}</pre>
+      <p style="margin-top:9px">As with L-2 this pins a version: agree an update path with the vendor, or
+      shorten the cache TTL so a mismatch is caught and alerted on quickly.</p>
+    </div>
+  </div>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= L-2 + progress + plan ======================= -->
+<div class="page">
+  <div class="kicker">Still open from earlier rounds</div>
+  <div class="finding">
+    <div class="head">
+      <span class="sev sev-low" style="margin-top:2px">Low</span>
+      <span class="fid">L-2</span>
+      <span class="ft">QGiv Payment Embed Script Loaded Without Subresource Integrity — Open Since v1</span>
+    </div>
+    <div class="body">
+      <div class="meta">
+        <b>Files:</b> src/components/membership/QgivJoin.tsx:81 · src/pages/donate.astro:263 · src/components/membership/qgiv.ts:40
+        <span class="sep">|</span> <b>OWASP:</b> A08:2021 – Software &amp; Data Integrity Failures
+      </div>
+      <p>Unchanged in substance since v1; the injection point has moved from
+      <code class="inl">MembershipPage.tsx</code> to the rebuilt membership flow and now also appears on the
+      donate page. The QGiv embed script is still injected into the DOM with no
+      <code class="inl">integrity</code> attribute, so a compromise of QGiv's CDN would deliver JavaScript
+      straight into the payment context.</p>
+      <div class="fixbar">Fix — compute the hash and add the integrity attribute</div>
+      <pre><span class="c"># 1. Download the current script and compute its SHA-384 hash</span>
+curl -s https://secure.qgiv.com/resources/core/js/embed.js \
+  | openssl dgst -sha384 -binary | openssl base64 -A
+
+<span class="c"># 2. Add the hash at both injection points</span>
+script.integrity = "sha384-&lt;computed-hash&gt;";
+script.crossOrigin = "anonymous";</pre>
+      <p style="margin-top:9px">The v6 caveat still applies: SRI pins a version, so confirm with QGiv whether
+      <code class="inl">embed.js</code> is versioned or updated in place, and coordinate hash updates with
+      their release schedule if it is the latter.</p>
+    </div>
+  </div>
+
+  <div class="kicker">Security posture progress — all rounds</div>
+  <table>
+    <thead><tr><th>Round</th><th>Date</th><th>Critical</th><th>High</th><th>Medium</th><th>Low</th><th>Total open</th><th>Fixed</th></tr></thead>
+    <tbody>
+      <tr><td><b>v1</b></td><td>2026-03-31</td><td>3</td><td>5</td><td>6</td><td>3</td><td>17</td><td>—</td></tr>
+      <tr><td><b>v2</b></td><td>2026-04-02</td><td>1</td><td>6</td><td>7</td><td>3</td><td>17</td><td>3</td></tr>
+      <tr><td><b>v3</b></td><td>2026-04-06</td><td>0</td><td>2</td><td>5</td><td>3</td><td>10</td><td>10</td></tr>
+      <tr><td><b>v4</b></td><td>2026-04-09</td><td>0</td><td>1</td><td>2</td><td>3</td><td>6</td><td>16</td></tr>
+      <tr><td><b>v5</b></td><td>2026-04-13</td><td>0</td><td>1</td><td>2</td><td>4</td><td>7</td><td>17</td></tr>
+      <tr><td><b>v6</b></td><td>2026-04-14</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>24</td></tr>
+      <tr><td><b>v7</b></td><td>2026-09-22</td><td>0</td><td>1</td><td>4</td><td>6</td><td>11</td><td>25</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:8.5px;color:#6b7280;margin-top:8px"><i>Count note: v6 reported "24 of 25 findings
+  resolved" while its register lists 26 IDs. v7 counts the register — 26 findings from rounds v1–v6, of which
+  25 are fixed and L-2 remains open — plus the 10 new findings, for 36 total. The v1–v6 rows above are
+  reproduced as those reports stated them.</i></p>
+  <p style="font-size:8.5px;color:#6b7280;margin-top:8px">The jump from 1 open to 11 is a scope effect as much
+  as a quality one: v2–v6 were four-day deltas over a stable codebase, while v7 covers five months in which the
+  site was re-platformed onto SSR, six API routes were added and the entire membership and donation flow was
+  rebuilt. Five of the eleven open items are in code added during the window (S-1, S-3, S-5, S-9, S-10); the other six
+  sit in code or infrastructure configuration that predates it — L-2, tracked since v1, plus S-2, S-4, S-6,
+  S-7 and S-8, which are first reported here after widening the review beyond the recently changed files.</p>
+
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= REMEDIATION PLAN ======================= -->
+<div class="page">
+  <div class="kicker">Remediation plan — v7</div>
+  <table>
+    <thead><tr><th style="width:13%">Priority</th><th>Action</th><th style="width:8%">ID</th><th style="width:16%">Effort</th></tr></thead>
+    <tbody>
+      <tr><td><b style="color:#b91c1c">Immediate</b></td><td>Verify the payment server-side before granting a Hub invite or writing to EmailOctopus — restore the signature-verified QGiv webhook, or validate the transaction id against QGiv's API from the endpoint.</td><td>S-1</td><td>0.5–1 day</td></tr>
+      <tr><td><b style="color:#c2410c">This week</b></td><td>Emit <code class="inl">X-Content-Type-Options</code>, <code class="inl">Referrer-Policy</code> and <code class="inl">Permissions-Policy</code> from middleware, and add <code class="inl">frame-ancestors 'none'</code> to the CSP.</td><td>S-2</td><td>1 hour</td></tr>
+      <tr><td><b style="color:#c2410c">This week</b></td><td>Force <code class="inl">no-store</code> on <code class="inl">/admin/*</code> in the cache middleware.</td><td>S-3</td><td>15 min</td></tr>
+      <tr><td><b style="color:#b45309">This month</b></td><td>Confirm the thirteen 500s from the 300-request burst raised a Sentry alert; if not, fix the alerting gap.</td><td>S-4</td><td>1 hour</td></tr>
+      <tr><td><b style="color:#b45309">This month</b></td><td>Add Sentry query-string scrubbing; check existing issues for the feed token and rotate it if it appears.</td><td>S-5</td><td>1–2 hours</td></tr>
+      <tr><td><b style="color:#b45309">This month</b></td><td>Cache the Notion and ICS reads through <code class="inl">resolveWithCache()</code>, as <code class="inl">/api/projects</code> already does — the substantive fix for S-4.</td><td>S-4</td><td>half day</td></tr>
+      <tr><td><b style="color:#b45309">This month</b></td><td>Bump svelte and axios; remove <code class="inl">react-router-dom</code> and <code class="inl">install</code>; add <code class="inl">npm audit</code> to CI.</td><td>S-6</td><td>1–2 hours</td></tr>
+      <tr><td><b style="color:#0f766e">Backlog</b></td><td>Re-derive the GET rate-limit threshold so it sits below the point where the uncached routes 500, and record it with the rule.</td><td>S-4</td><td>30 min</td></tr>
+      <tr><td><b style="color:#0f766e">Backlog</b></td><td>Tighten <code class="inl">/api/pipe</code>'s origin policy to match the other endpoints.</td><td>S-9</td><td>15 min</td></tr>
+      <tr><td><b style="color:#0f766e">Backlog</b></td><td>Replace <code class="inl">dangerouslySetInnerHTML</code> in the volunteer form with text, before the proxy is reconfigured.</td><td>S-8</td><td>15 min</td></tr>
+      <tr><td><b style="color:#0f766e">Backlog</b></td><td>Pin SHA-384 hashes for the QGiv embed and the proxied Plausible script.</td><td>L-2, S-10</td><td>2 hours + vendor</td></tr>
+      <tr><td><b style="color:#0f766e">Backlog</b></td><td>Plan the Astro 5 → 7 upgrade; retire the nonce <code class="inl">meta</code> tag and the prototype patches in favour of an Emotion cache nonce.</td><td>S-6, S-7</td><td>multi-day</td></tr>
+    </tbody>
+  </table>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+<!-- ======================= GOOD PRACTICES / METHOD ======================= -->
+<div class="page">
+  <div class="kicker">Good practices confirmed in the v7 codebase</div>
+  <ul class="checks">
+    <li><b>Zero secrets in committed code.</b> <code class="inl">wrangler.toml</code> holds only a KV namespace
+    binding; a pattern scan of the whole tracked tree for keys, tokens and Notion secrets returns nothing.
+    <code class="inl">.env.example</code> lists 20 variables with empty values and a comment explaining each.</li>
+    <li><b>The nonce-based CSP survived the rewrite intact.</b> The live header carries
+    <code class="inl">'nonce-…' 'strict-dynamic'</code> on <code class="inl">script-src</code> and
+    <code class="inl">'nonce-…' 'self'</code> on <code class="inl">style-src</code>, with no
+    <code class="inl">'unsafe-inline'</code> on either, plus <code class="inl">object-src 'none'</code> and
+    <code class="inl">base-uri 'self'</code>. New third parties added since v6 were scoped to the narrowest
+    directive that works — GrowthBook to <code class="inl">connect-src</code> only, Calendly and YouTube to
+    <code class="inl">frame-src</code> only.</li>
+    <li><b>Both new secret comparisons are constant-time.</b> The admin Basic auth
+    (<code class="inl">basicAuth.ts:27</code>) and the Sentry webhook HMAC
+    (<code class="inl">sentry-webhook.ts:17</code>) both go through
+    <code class="inl">constantTimeEqual()</code>. The webhook verifies a real HMAC-SHA256 over the raw body
+    before parsing it, and rejects any request that carries an <code class="inl">Origin</code> header at all.</li>
+    <li><b>project-proxy is still hardened end to end.</b> Dot-segment normalisation runs before the
+    <code class="inl">/api/method/</code> prefix guard, the normalised path is what builds the upstream URL,
+    the four-entry <code class="inl">FORWARD_HEADERS</code> allowlist is unchanged, and
+    <code class="inl">Authorization</code> is added server-side only.</li>
+    <li><b>Every API response is non-cacheable, and read-only CORS is correctly scoped.</b> Verified live:
+    <code class="inl">/api/events</code> returns <code class="inl">no-store</code> with
+    <code class="inl">Access-Control-Allow-Origin: *</code>, while the write endpoints echo a single explicit
+    origin from <code class="inl">corsHeaders()</code> and 403 anything else.</li>
+    <li><b>Upstream URL fields are sanitised before they reach the page.</b>
+    <code class="inl">sanitizeProjectUrls()</code> runs every ProjectHub URL field through
+    <code class="inl">sanitizeUrl()</code>, which admits only <code class="inl">http:</code> and
+    <code class="inl">https:</code> — and the cache key is versioned (<code class="inl">?v=1</code>) so
+    tightening those rules invalidates entries stored under the old ones. That is a thoughtful detail.</li>
+    <li><b>PII redaction held.</b> Every log and error context in the donation and membership handlers passes
+    <code class="inl">[redacted]@domain</code> rather than the address, including the new
+    <code class="inl">donation-complete</code> route.</li>
+    <li><b>The projects cache is a good model for the rest.</b>
+    <code class="inl">projectsCachePolicy.ts</code> is pure, separately testable, refuses to let an empty
+    upstream response overwrite a good entry, and serves stale for 24 hours during an outage. Extending it to
+    the Notion routes would close most of S-4.</li>
+  </ul>
+
+  <div class="kicker">Method and scope</div>
+  <p style="font-size:9.5px">Static review of the full diff between <code class="inl">917a0ac</code> (v6,
+  2026-04-14) and <code class="inl">7c7a563</code> (2026-09-21) — 115 commits, 296 files, +43,384 / −5,963
+  lines — with line-by-line reading of all 15 API routes, the middleware chain, the layouts, the security
+  utilities (<code class="inl">getEnv</code>, <code class="inl">crypto</code>,
+  <code class="inl">basicAuth</code>, <code class="inl">origin</code>), the data clients, and the client-side
+  components that call privileged endpoints. Supplemented by a dependency advisory review
+  (<code class="inl">npm audit</code> against the committed lockfile) and the non-destructive live probes
+  logged on page 4. Each of the 25 findings closed in v1–v6 was re-checked against current code.</p>
+  <p style="font-size:9.5px">Not covered: the ProjectHub, Hub and Mattermost services themselves; Cloudflare
+  account and dashboard configuration beyond what the live responses reveal; the Notion workspace permission
+  model; and authenticated behaviour of <code class="inl">/admin/conversions</code>, which was reviewed as
+  source only since no credentials were used.</p>
+
+  <div class="callout callout-dark" style="margin-top:22px">
+    <div class="ct">Bottom line</div>
+    The security work from rounds v1–v6 has proved durable: it survived a re-platform and a near-total front-end
+    rewrite with no regressions. What this round shows is a different failure mode — the rules were followed in
+    the code that was reviewed against them, and the gap opened where new architecture moved a decision somewhere
+    the rules did not describe: payment verification moved out of a signed webhook and into the browser. That one
+    finding, S-1, is the whole of the urgent work. Two smaller patterns are worth recording. Controls that live in
+    the Cloudflare dashboard rather than the repository cannot be reviewed alongside the code, and S-4 shows the
+    cost — the GET rate limit is real, but it no longer matches what the last report documented, and nobody would
+    have noticed from the codebase. And S-2, S-6 and S-7 were all reachable at v6 and were not found, because a
+    delta audit only looks at what changed. Both argue for writing down the out-of-repo controls where a code
+    review can see them, and for periodically auditing the whole surface rather than only the diff.
+  </div>
+  <div class="footer"><span>Tech for Palestine — Security Audit Report v7 — 2026-09-22</span><span>Confidential · Internal Use Only</span></div>
+</div>
+
+</body>
+</html>
