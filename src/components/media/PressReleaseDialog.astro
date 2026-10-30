@@ -15,34 +15,25 @@ const PRESS_RELEASE_ID = "member-driven-press-release";
     class="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-gray-200 bg-white px-6 py-3"
   >
     <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">Press release</p>
-    <div class="flex items-center gap-2">
-      <button
-        type="button"
-        data-pr-copy
-        class="rounded-full border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition hover:bg-gray-50"
+    <button
+      type="button"
+      data-pr-close
+      aria-label="Close press release"
+      class="grid h-9 w-9 place-items-center rounded-full text-gray-700 transition hover:bg-gray-100"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.25"
+        stroke-linecap="round"
+        aria-hidden="true"
       >
-        Copy link
-      </button>
-      <button
-        type="button"
-        data-pr-close
-        aria-label="Close press release"
-        class="grid h-9 w-9 place-items-center rounded-full text-gray-700 transition hover:bg-gray-100"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.25"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <path d="M6 6l12 12M18 6L6 18"></path>
-        </svg>
-      </button>
-    </div>
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
   </div>
 
   <article class="px-6 pb-8 pt-6 text-[15px] leading-relaxed sm:px-10">
@@ -182,18 +173,6 @@ const PRESS_RELEASE_ID = "member-driven-press-release";
       if (location.hash === HASH) {
         history.replaceState(null, "", location.pathname + location.search);
       }
-    });
-
-    const copyButton = dialog.querySelector<HTMLButtonElement>("[data-pr-copy]");
-    copyButton?.addEventListener("click", async () => {
-      const url = `${location.origin}${location.pathname}${HASH}`;
-      try {
-        await navigator.clipboard.writeText(url);
-        copyButton.textContent = "Link copied";
-      } catch {
-        copyButton.textContent = "Copy failed";
-      }
-      window.setTimeout(() => (copyButton.textContent = "Copy link"), 2000);
     });
 
     if (location.hash === HASH) open();
