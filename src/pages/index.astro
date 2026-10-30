@@ -156,10 +156,6 @@ const press = [
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
-// Hero buttons carry a sentence then the action, so they wrap as running text, not flex items.
-const heroButton = `inline-block rounded-pill px-7 py-3.5 text-left text-[15px] leading-[1.45] transition-colors duration-150 ${focusRing}`;
-const heroPrimary = `${heroButton} bg-grove text-white hover:bg-grove-hover`;
-const heroGhost = `${heroButton} border border-ink-divider text-ink hover:border-grove hover:text-grove`;
 
 // Homepage description test. GrowthBook picks the variant on the server for a throwaway
 // per-request id and it is rendered into the HTML, so there is no flicker and nothing is
@@ -248,14 +244,10 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           data-variant={assignedVariant ?? undefined}
           class="mt-8 flex flex-col items-start gap-3"
         >
-          <a href="/membership" data-cta="membership" class={heroPrimary}>
-            Join the community, build projects, and start your own through T4P:
-            <strong class="font-bold">Become a Member</strong>
-          </a>
-          <a href="/incubator" data-cta="incubator" class={heroGhost}>
-            If you run your own pro-Palestine project, and want help scaling:
-            <strong class="font-bold">Apply to the Incubator</strong>
-          </a>
+          <p class="text-[17px] leading-[1.5] text-ink min-[810px]:text-[18px]">
+            Join the community, help build projects, and start your own
+          </p>
+          <a href="/membership" data-cta="membership" class={pillPrimary}>Become a Member</a>
         </div>
       </div>
 
