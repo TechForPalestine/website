@@ -1,9 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
+import PressReleaseDialog from "../components/media/PressReleaseDialog.astro";
 import "../styles/base.css";
 
+// Entries with `popup: true` link to an in-page dialog (url is its #hash),
+// rather than to an external site.
 const articles = [
+  {
+    title: "Tech for Palestine Becomes a Member-Driven Organization",
+    source: "Press release",
+    url: "#member-driven-press-release",
+    date: "November 2, 2026",
+    description:
+      "After three years as an incubator, Tech for Palestine opens its membership to the public.",
+    image: "/images/membership/members-group.webp",
+    popup: true,
+  },
   {
     title: "Tech for Palestine Launches Coalition",
     source: "TechCrunch",
@@ -240,14 +253,23 @@ const newsletters = [
                     {item.source} • {item.date}
                   </p>
                   <p class="flex-grow text-sm text-gray-600">{item.description}</p>
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="mt-4 text-sm font-medium text-blue-600 hover:underline"
-                  >
-                    Read More →
-                  </a>
+                  {item.popup ? (
+                    <a
+                      href={item.url}
+                      class="mt-4 text-sm font-medium text-blue-600 hover:underline"
+                    >
+                      Read More →
+                    </a>
+                  ) : (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="mt-4 text-sm font-medium text-blue-600 hover:underline"
+                    >
+                      Read More →
+                    </a>
+                  )}
                 </div>
               </div>
             ))
@@ -310,4 +332,5 @@ const newsletters = [
       </div>
     </section>
   </main>
+  <PressReleaseDialog />
 </Layout>
