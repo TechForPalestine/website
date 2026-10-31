@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
-import HackathonPopup from "../components/home/HackathonPopup.astro";
 import { evalServerFeature, loadFeaturePayload } from "../lib/growthbookServer";
 import { getEnv } from "../utils/getEnv";
 import { HOMEPAGE_EXPERIMENT, variantFromFeature } from "../utils/homepageExperiment";
@@ -541,7 +540,6 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
     </section>
   </main>
   <NewsletterPopup client:only="react" />
-  <HackathonPopup />
   <script>
     import {
       FOOTER_SECTION_ID,
