@@ -10,7 +10,7 @@ import { HOMEPAGE_EXPERIMENT, variantFromFeature } from "../utils/homepageExperi
 import "../styles/base.css";
 
 const stats = [
-  { value: "90+", label: "Projects incubated" },
+  { value: "100+", label: "Projects incubated" },
   { value: "3,000+", label: "Worldwide volunteers" },
   { value: "350+", label: "Entrepreneurs for Palestine" },
   { value: "50+", label: "Investors for Palestine" },
@@ -156,10 +156,6 @@ const press = [
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
-// Hero buttons carry a sentence then the action, so they wrap as running text, not flex items.
-const heroButton = `inline-block rounded-pill px-7 py-3.5 text-left text-[15px] leading-[1.45] transition-colors duration-150 ${focusRing}`;
-const heroPrimary = `${heroButton} bg-grove text-white hover:bg-grove-hover`;
-const heroGhost = `${heroButton} border border-ink-divider text-ink hover:border-grove hover:text-grove`;
 
 // Homepage description test. GrowthBook picks the variant on the server for a throwaway
 // per-request id and it is rendered into the HTML, so there is no flicker and nothing is
@@ -199,7 +195,7 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
         <h1
           class="mt-6 max-w-[20ch] text-[38px] font-extrabold leading-[1.05] tracking-[-0.015em] text-ink min-[810px]:text-[clamp(42px,4.2vw,54px)] min-[810px]:leading-[1.02]"
         >
-          Join the tech movement behind <span class="text-grove">90+ projects for Palestine</span>
+          Join the tech movement behind <span class="text-grove">100+ projects for Palestine</span>
         </h1>
 
         {
@@ -221,22 +217,11 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
               <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
                 Tech for Palestine is a member-driven organization that brings together people,
                 skills and resources. Through technology and collective action, our members build
-                tools and solutions that support the movement for Palestine and help people take
-                action against Israel's occupation, apartheid and genocide.
+                tools and solutions that support the movement for Palestine.
               </p>
               <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
-                These projects include: apps to organize protests, tools that make boycotting
-                companies easier, support for Palestinian students and businesses, alternatives to
-                mainstream tech platforms, and many more.
-              </p>
-              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
-                Whether you're a tech worker, founder, marketer, activist - there's a place for you
-                to contribute at T4P.
-              </p>
-              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
-                <strong class="font-bold text-ink">Our Vision:</strong> A free Palestine, a tech
-                industry that actively participates in liberation, and a world where all people
-                enjoy equal dignity, justice, and human rights.
+                These projects include: protest apps, tools for boycotting, support for Palestinian
+                students &amp; businesses, ethical tech alternatives, and many more.
               </p>
             </>
           )
@@ -248,14 +233,10 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           data-variant={assignedVariant ?? undefined}
           class="mt-8 flex flex-col items-start gap-3"
         >
-          <a href="/membership" data-cta="membership" class={heroPrimary}>
-            Join the community, build projects, and start your own through T4P:
-            <strong class="font-bold">Become a Member</strong>
-          </a>
-          <a href="/incubator" data-cta="incubator" class={heroGhost}>
-            If you run your own pro-Palestine project, and want help scaling:
-            <strong class="font-bold">Apply to the Incubator</strong>
-          </a>
+          <p class="text-[17px] leading-[1.5] text-ink min-[810px]:text-[18px]">
+            Join the community, build projects, and start your own.
+          </p>
+          <a href="/membership" data-cta="membership" class={pillPrimary}>Become a Member</a>
         </div>
       </div>
 
