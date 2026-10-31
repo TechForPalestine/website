@@ -4,9 +4,6 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
 import HackathonPopup from "../components/home/HackathonPopup.astro";
-import { evalServerFeature, loadFeaturePayload } from "../lib/growthbookServer";
-import { getEnv } from "../utils/getEnv";
-import { HOMEPAGE_EXPERIMENT, variantFromFeature } from "../utils/homepageExperiment";
 import "../styles/base.css";
 
 const stats = [
@@ -157,19 +154,6 @@ const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const pillPrimary = `inline-flex items-center justify-center rounded-pill bg-grove px-7 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:bg-grove-hover ${focusRing}`;
 
-// Homepage description test. GrowthBook picks the variant on the server for a throwaway
-// per-request id and it is rendered into the HTML, so there is no flicker and nothing is
-// stored. Without an assignment (flag off, CDN down) everyone sees A and nothing is tracked.
-// The page must not be cached or every visitor in the cache window would get the same variant.
-const growthbookKey = getEnv("PUBLIC_GROWTHBOOK_CLIENT_KEY", Astro.locals);
-const growthbookPayload = growthbookKey ? await loadFeaturePayload(growthbookKey) : undefined;
-const assignedVariant = growthbookPayload
-  ? variantFromFeature(
-      evalServerFeature(growthbookPayload, HOMEPAGE_EXPERIMENT, crypto.randomUUID())
-    )
-  : null;
-const variant = assignedVariant ?? "A";
-Astro.response.headers.set("Cache-Control", "no-store");
 const cardBase = `group relative flex flex-col rounded-lg border border-ink-divider bg-paper transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm ${focusRing}`;
 ---
 
@@ -198,45 +182,25 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
           Join the tech movement behind <span class="text-grove">100+ projects for Palestine</span>
         </h1>
 
-        {
-          variant === "A" ? (
-            <>
-              <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
-                Tech for Palestine is a 501(c)(3) nonprofit starting and scaling initiatives for
-                Palestinian liberation.
-              </p>
-              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
-                We support anyone with a meaningful idea, whether it is working against media
-                censorship, using tech to aid protests, scaling boycotts, pushing for tech
-                divestment, supporting Palestinian entrepreneurs, or anything else that contributes
-                to a free Palestine.
-              </p>
-            </>
-          ) : (
-            <>
-              <p class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]">
-                Tech for Palestine is a member-driven organization that brings together people,
-                skills and resources. Through technology and collective action, our members build
-                tools and solutions that support the movement for Palestine.
-              </p>
-              <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]">
-                These projects include: protest apps, tools for boycotting, support for Palestinian
-                students &amp; businesses, ethical tech alternatives, and many more.
-              </p>
-            </>
-          )
-        }
-
-        <div
-          id="hero-ctas"
-          data-experiment={assignedVariant ? HOMEPAGE_EXPERIMENT : undefined}
-          data-variant={assignedVariant ?? undefined}
-          class="mt-8 flex flex-col items-start gap-3"
+        <p
+          class="mt-5 max-w-[58ch] text-[19px] leading-[1.6] text-ink-secondary min-[810px]:text-[21px]"
         >
+          Tech for Palestine is a member-driven organization that brings together people, skills and
+          resources. Through technology and collective action, our members build tools and solutions
+          that support the movement for Palestine.
+        </p>
+        <p
+          class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-ink-secondary min-[810px]:text-[18px]"
+        >
+          These projects include: protest apps, tools for boycotting, support for Palestinian
+          students &amp; businesses, ethical tech alternatives, and many more.
+        </p>
+
+        <div class="mt-8 flex flex-col items-start gap-3">
           <p class="text-[17px] leading-[1.5] text-ink min-[810px]:text-[18px]">
             Join the community, build projects, and start your own.
           </p>
-          <a href="/membership" data-cta="membership" class={pillPrimary}>Become a Member</a>
+          <a href="/membership" class={pillPrimary}>Become a Member</a>
         </div>
       </div>
 
@@ -531,10 +495,6 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
       writePopupState,
     } from "../utils/newsletterPopup";
     import { watchSignupSuccess } from "../utils/watchSignupSuccess";
-    import { trackHeroCtas } from "../utils/homepageExperiment";
-
-    const heroCtas = document.getElementById("hero-ctas");
-    if (heroCtas) trackHeroCtas(heroCtas);
 
     const bottomForm = document.getElementById(FOOTER_SECTION_ID);
     if (bottomForm) {
