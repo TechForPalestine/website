@@ -44,11 +44,15 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
   hideDonatePopout
 >
   <main>
-    <div class="mx-auto max-w-[1280px] px-6 py-16 min-[810px]:py-20 sm:px-8">
+    <div class="mx-auto max-w-[1280px] px-6 py-16 sm:px-8 min-[810px]:py-20">
       <!-- Hero: opening copy beside a reach stat card, photo tucked under the copy -->
-      <div class="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
+      <div
+        class="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14"
+      >
         <div class="max-w-[700px]">
-          <h1 class="mb-6 text-[38px] font-extrabold leading-[1.05] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]">
+          <h1
+            class="mb-6 text-[38px] font-extrabold leading-[1.05] tracking-tight text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+          >
             Become a Supporting Member
           </h1>
           <p class="text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]">
@@ -74,10 +78,12 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
         </div>
 
         <!-- Reach stat card -->
-        <div class="flex flex-col rounded-[10px] border border-[#e0e1da] border-t-[3px] border-t-[#157A3E] bg-white p-7 shadow-sm">
+        <div
+          class="flex flex-col rounded-[10px] border border-t-[3px] border-[#e0e1da] border-t-[#157A3E] bg-white p-7 shadow-sm"
+        >
           <p class="text-[34px] font-extrabold leading-[1.12] tracking-tight text-ink">
             <span class="text-[#157A3E]">10M+</span> Users Across <span class="text-[#157A3E]"
-              >90+</span
+              >100+</span
             > Projects
           </p>
           <ul
@@ -106,13 +112,11 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
                         project.hasWordmark ? "max-h-14 max-w-[94%]" : "max-h-16 max-w-16",
                       ]}
                     />
-                    {
-                      !project.hasWordmark && (
-                        <span class="text-[16px] font-extrabold leading-tight text-ink min-[810px]:text-[19px]">
-                          {project.name}
-                        </span>
-                      )
-                    }
+                    {!project.hasWordmark && (
+                      <span class="text-[16px] font-extrabold leading-tight text-ink min-[810px]:text-[19px]">
+                        {project.name}
+                      </span>
+                    )}
                   </a>
                 </li>
               ))
@@ -125,7 +129,9 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
     <!-- Value proposition: two-tier comparison -->
     <div class="mt-16 border-y border-[#D2E4D6] bg-[#E7F2E9] py-16">
       <div class="mx-auto max-w-[1280px] px-6 sm:px-8">
-        <h2 class="max-w-[45ch] text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]">
+        <h2
+          class="max-w-[45ch] text-[28px] font-extrabold leading-tight tracking-tight text-ink min-[810px]:text-[38px]"
+        >
           Want to support T4P's work, but don't have time to get involved?
         </h2>
         <p class="mt-4 max-w-[65ch] text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]">
@@ -168,7 +174,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
               <a
                 href="#join"
                 data-track-join-click="primary_cta"
-                class="block rounded-full bg-[#157A3E] px-6 py-3.5 text-center font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#0e5a2f] hover:shadow-md active:bg-[#0e5a2f] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2"
+                class="block rounded-full bg-[#157A3E] px-6 py-3.5 text-center font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#0e5a2f] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#157A3E] focus-visible:ring-offset-2 active:bg-[#0e5a2f] active:shadow-sm"
               >
                 Become a Supporting Member
               </a>
@@ -230,7 +236,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
             <div class="px-7 pb-7 pt-3">
               <a
                 href="/membership"
-                class="block rounded-full bg-[#101010] px-6 py-3.5 text-center font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#2c2d29] hover:shadow-md active:bg-[#2c2d29] active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101010] focus-visible:ring-offset-2"
+                class="block rounded-full bg-[#101010] px-6 py-3.5 text-center font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#2c2d29] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101010] focus-visible:ring-offset-2 active:bg-[#2c2d29] active:shadow-sm"
               >
                 Become a Member
               </a>
@@ -277,7 +283,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
         <div class="mt-9 grid grid-cols-1 gap-5 md:grid-cols-2">
           {
             featuredTestimonials.map((t) => (
-              <figure class="rounded-lg border border-[#D2E4D6] border-t-[3px] border-t-[#157A3E] bg-white p-7">
+              <figure class="rounded-lg border border-t-[3px] border-[#D2E4D6] border-t-[#157A3E] bg-white p-7">
                 <blockquote class="text-[19px] leading-relaxed tracking-tight text-ink">
                   “{t.quote}”
                 </blockquote>
@@ -335,7 +341,7 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
         <a
           href="#join"
           data-track-join-click="secondary_cta"
-          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-8 py-3.5 font-semibold text-ink shadow-sm transition-all duration-150 hover:bg-zinc-100 hover:shadow-md active:bg-zinc-100 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#101010]"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-8 py-3.5 font-semibold text-ink shadow-sm transition-all duration-150 hover:bg-zinc-100 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#101010] active:bg-zinc-100 active:shadow-sm"
         >
           Become a Supporting Member
         </a>
