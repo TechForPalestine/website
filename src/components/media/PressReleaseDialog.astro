@@ -1,0 +1,183 @@
+---
+// The Nov 2026 member-driven press release, shown as a modal on /media.
+// It has no page of its own: the shareable link is /media#<PRESS_RELEASE_ID>,
+// which opens the dialog on load (see the script below). Keep the id in sync
+// with the press release entry in src/pages/media.astro.
+const PRESS_RELEASE_ID = "member-driven-press-release";
+---
+
+<dialog
+  id={PRESS_RELEASE_ID}
+  class="m-auto max-h-[calc(100dvh-32px)] w-[min(760px,calc(100%-32px))] max-w-none overflow-y-auto overscroll-contain rounded-2xl border-0 bg-white p-0 text-gray-800 shadow-xl backdrop:bg-black/60"
+  aria-labelledby="pr-title"
+>
+  <div
+    class="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-gray-200 bg-white px-6 py-3"
+  >
+    <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">Press release</p>
+    <button
+      type="button"
+      data-pr-close
+      aria-label="Close press release"
+      class="grid h-9 w-9 place-items-center rounded-full text-gray-700 transition hover:bg-gray-100"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.25"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+  </div>
+
+  <article class="px-6 pb-8 pt-6 text-[15px] leading-relaxed sm:px-10">
+    <p class="text-sm font-semibold text-gray-900">November 2, 2026</p>
+
+    <h2 id="pr-title" class="mt-4 text-2xl font-bold leading-tight text-gray-900 sm:text-3xl">
+      Tech for Palestine, Behind Apps With More Than 10 Million Users, Becomes a Member-Driven
+      Organization
+    </h2>
+
+    <p class="mt-4 text-lg text-gray-700">
+      After three years as an incubator, Tech for Palestine is ready for more: more projects, built
+      faster, with more impact. That is why it now puts members at the center.
+    </p>
+
+    <p class="mt-4">
+      Tech for Palestine (T4P), whose projects have reached more than 10 million users in less than
+      three years, today opened its membership to the public. From November 2, anyone can become a
+      member and build advocacy projects under the T4P banner. Members get a team to work with and
+      the backing of the organization behind Big Tech alternatives such as UpScrolled and Thaura,
+      and advocacy tools such as Boycat and NewsCord.
+    </p>
+
+    <h3 class="mt-8 text-xl font-semibold text-gray-900">
+      From incubator to member-driven organization
+    </h3>
+    <p class="mt-3">
+      For the past three years, the T4P incubator helped the people behind more than 90 initiatives
+      turn their ideas into advocacy tools. Those teams received mentorship, connections and
+      support, but the building itself happened in their own organizations, outside T4P.
+    </p>
+    <p class="mt-3">
+      T4P is now bringing the building inside. The support it offered external teams is available to
+      every member. New projects carry the T4P name, and members build them together.
+    </p>
+    <blockquote class="mt-4 border-l-4 border-[#cd3b26] pl-4 italic text-gray-700">
+      “Our incubator proved that small teams with the right skills can build tools used by millions.
+      Now we build with many more people, and with far less distance between an idea and the team
+      that ships it.”
+    </blockquote>
+
+    <h3 class="mt-8 text-xl font-semibold text-gray-900">How membership works</h3>
+    <p class="mt-3">
+      Members join with the skills they have: engineering, design, research, writing or organizing.
+      Some join an existing project that needs their expertise. Others bring their own idea and
+      start a new team, which T4P mentors help scope, staff with fellow members and take to a first
+      public version.
+    </p>
+    <p class="mt-3">
+      The model can move fast. When Macklemore was dropped from Ed Sheeran’s US tour after saying
+      “Free Palestine” on stage, he explained that Sheeran could not get past his public stance of
+      “I don’t take sides.” T4P members picked up the moment and built Ed Takes No Sides, a
+      directory where artists who do take a stand for Palestine can create a profile and be found.
+    </p>
+
+    <h3 class="mt-8 text-xl font-semibold text-gray-900">
+      25+ projects from a 200-member private beta
+    </h3>
+    <p class="mt-3">
+      Before the public launch, T4P tested membership for several months with 200 members. In that
+      time, members built more than 25 new advocacy projects, including:
+    </p>
+    <ul class="mt-3 list-disc space-y-1.5 pl-6">
+      <li>Israel Bonds Tracker, a platform that raises awareness about Israeli bonds.</li>
+      <li>
+        Sponsored internships connecting students from Gaza with internships in the UK and Ireland.
+      </li>
+      <li>
+        Profile Pic Maker, revived by members: a tool that adds a Palestinian-flag frame to social
+        media profile pictures.
+      </li>
+      <li>
+        A research team investigating bias against Palestinians in frontier large language models.
+      </li>
+    </ul>
+
+    <h3 class="mt-8 text-xl font-semibold text-gray-900">Two ways to join</h3>
+    <p class="mt-3">
+      <strong>Members</strong> contribute time and skills. They can join an existing team or form a new
+      one with members who complement their skills. Sign-up is at
+      <a href="/membership" class="text-blue-600 hover:underline">techforpalestine.org/membership</a
+      >, and the T4P team helps each new member find a first project.
+    </p>
+    <p class="mt-3">
+      <strong>Supporting members</strong> back the work financially and leave the building to others.
+      Their dues fund the marketing, engineering, mentorship, software access, partnerships and grants
+      that T4P provides to its projects. Details are at
+      <a href="/supporting-member" class="text-blue-600 hover:underline"
+        >techforpalestine.org/supporting-member</a
+      >.
+    </p>
+
+    <h3 class="mt-8 text-xl font-semibold text-gray-900">Media contact</h3>
+    <p class="mt-3">
+      Afzal Mangal -
+      <a href="mailto:afzal@techforpalestine.org" class="text-blue-600 hover:underline"
+        >afzal@techforpalestine.org</a
+      >
+    </p>
+  </article>
+</dialog>
+
+<style>
+  :global(html:has(#member-driven-press-release[open])) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const ID = "member-driven-press-release";
+  const HASH = `#${ID}`;
+  const dialog = document.getElementById(ID);
+
+  if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === "function") {
+    const open = () => {
+      if (dialog.open) return;
+      dialog.showModal();
+      window.plausible?.("Press Release Opened", { props: { id: ID } });
+    };
+
+    // Card links use href="#id": open the modal instead of jumping to it, and
+    // keep the hash in the URL so the address bar holds the shareable link.
+    document.querySelectorAll<HTMLAnchorElement>(`a[href="${HASH}"]`).forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        history.replaceState(null, "", HASH);
+        open();
+      });
+    });
+
+    dialog.querySelector("[data-pr-close]")?.addEventListener("click", () => dialog.close());
+    // A click whose target is the <dialog> itself landed on the backdrop.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      if (location.hash === HASH) {
+        history.replaceState(null, "", location.pathname + location.search);
+      }
+    });
+
+    if (location.hash === HASH) open();
+    window.addEventListener("hashchange", () => {
+      if (location.hash === HASH) open();
+    });
+  }
+</script>
