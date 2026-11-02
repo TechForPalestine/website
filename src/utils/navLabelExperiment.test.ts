@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  CLICK_EVENT,
   EXPOSURE_EVENT,
   trackNavLabel,
   type ExperimentDocument,
@@ -41,9 +42,9 @@ function fakeDocument({
       listeners.set(type, [...(listeners.get(type) ?? []), listener]);
     },
   };
-  const fire = (type: string, onLink: boolean) => {
+  const fire = (type: string, onLink: boolean, button = 0) => {
     const target = { closest: () => (onLink ? link : null) };
-    const event = { type, target } as unknown as MouseEvent;
+    const event = { type, button, target } as unknown as MouseEvent;
     listeners.get(type)?.forEach((listener) => listener(event));
   };
   return { doc, fire };
@@ -71,9 +72,36 @@ describe("trackNavLabel", () => {
 
   it("does nothing when the nav has no experiment link", () => {
     const track = vi.fn();
-    trackNavLabel({ track, doc: fakeDocument({ dataset: null }).doc });
+    const { doc, fire } = fakeDocument({ dataset: null });
+
+    trackNavLabel({ track, doc });
+    fire("click", true);
 
     expect(track).not.toHaveBeenCalled();
+  });
+
+  it("records clicks on the experiment link and ignores other clicks", () => {
+    const track = vi.fn();
+    const { doc, fire } = fakeDocument();
+
+    trackNavLabel({ track, doc });
+    fire("click", false);
+    fire("click", true);
+
+    expect(track).toHaveBeenCalledTimes(2);
+    expect(track).toHaveBeenLastCalledWith(CLICK_EVENT, props);
+  });
+
+  it("counts middle-clicks but not right-clicks", () => {
+    const track = vi.fn();
+    const { doc, fire } = fakeDocument();
+
+    trackNavLabel({ track, doc });
+    fire("auxclick", true, 2);
+    expect(track).toHaveBeenCalledOnce();
+
+    fire("auxclick", true, 1);
+    expect(track).toHaveBeenLastCalledWith(CLICK_EVENT, props);
   });
 });
 

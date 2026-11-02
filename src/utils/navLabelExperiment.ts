@@ -1,5 +1,6 @@
 export const NAV_LABEL_EXPERIMENT = "nav-get-involved-label";
 export const EXPOSURE_EVENT = "Nav Label Shown";
+export const CLICK_EVENT = "Nav Label Click";
 
 export type NavLabelVariant = "A" | "B";
 
@@ -9,6 +10,7 @@ export const NAV_LABELS: Readonly<Record<NavLabelVariant, string>> = {
   B: "Member Opportunities",
 };
 
+const MIDDLE_BUTTON = 1;
 const VARIANTS: readonly NavLabelVariant[] = ["A", "B"];
 
 export interface FeatureOutcome {
@@ -17,9 +19,8 @@ export interface FeatureOutcome {
 }
 
 // The variant comes from the "nav-get-involved-label" GrowthBook flag, evaluated on the server
-// with a fresh id per request (see src/lib/growthbookServer.ts): nothing is stored, so a
-// visitor can see a different label on each page view. That is the price of needing no
-// consent banner.
+// (src/lib/navAssignment.ts) with an id that is a keyed hash of the day, IP and User-Agent:
+// a visitor keeps one label all day and nothing is stored on their device.
 //
 // The flag is a percentage rollout to "B" followed by a catch-all force to "A", so a bucketed
 // visitor always reports source "force". A disabled flag, a missing flag or an unreachable
@@ -36,8 +37,8 @@ export interface ExperimentDocument {
   prerendering?: boolean;
   querySelector(selector: string): Element | null;
   addEventListener(
-    type: "prerenderingchange",
-    listener: () => void,
+    type: "prerenderingchange" | "click" | "auxclick",
+    listener: (event: MouseEvent) => void,
     options?: AddEventListenerOptions
   ): void;
 }
@@ -49,7 +50,8 @@ export interface TrackNavLabelOptions {
 
 const LINK_SELECTOR = "a[data-experiment][data-variant]";
 
-/** The nav label test props for the page's navbar. Empty when the visitor is not in the test.
+/** The nav label test props for the page's navbar, to attach to conversion events
+ * (About You Complete, Membership-complete). Empty when the visitor is not in the test.
  * The navbar is in the DOM on every Layout page, including when it is hidden by CSS. */
 export function navExperimentProps(
   doc: Pick<Document, "querySelector"> = document
@@ -64,20 +66,33 @@ const trackWithPlausible: TrackEvent = (name, props) => {
   window.plausible?.(name, { props });
 };
 
-// Records one exposure per page view when the nav carries an experiment link: the
-// denominator for sign-ups per variant.
+// Records one exposure per page view when the nav carries an experiment link, and every
+// click on that link (desktop or mobile menu). The mobile menu is rendered on demand, so
+// clicks are caught by delegation on the document.
 //
 // Layout prerenders some pages via speculation rules, and prerendered pages run their
-// scripts, so the exposure waits until the page is actually shown.
+// scripts, so the exposure waits until the page is actually shown. Middle-clicks (open in
+// new tab) count too.
 export function trackNavLabel(options: TrackNavLabelOptions = {}): void {
   const { track = trackWithPlausible, doc = document as unknown as ExperimentDocument } = options;
-  const props = navExperimentProps(doc);
-  if (!props.experiment) return;
+  const link = doc.querySelector(LINK_SELECTOR) as HTMLElement | null;
+  const experiment = link?.dataset.experiment;
+  const variant = link?.dataset.variant;
+  if (!experiment || !variant) return;
 
+  const props = { experiment, variant };
   const recordExposure = (): void => track(EXPOSURE_EVENT, props);
   if (doc.prerendering) {
     doc.addEventListener("prerenderingchange", recordExposure, { once: true });
   } else {
     recordExposure();
   }
+
+  const onClick = (event: MouseEvent): void => {
+    if (event.type === "auxclick" && event.button !== MIDDLE_BUTTON) return;
+    const clicked = (event.target as Element | null)?.closest?.(LINK_SELECTOR);
+    if (clicked) track(CLICK_EVENT, props);
+  };
+  doc.addEventListener("click", onClick);
+  doc.addEventListener("auxclick", onClick);
 }
