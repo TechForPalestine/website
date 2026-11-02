@@ -18,7 +18,7 @@ export const onRequest = sequence(sentryInit, securityHeaders, cacheControl, csp
 
 1. **`sentry-init.ts`** configures the Sentry client so every later middleware and every route's `reportError()` call reports correctly (the module-level `sentry.server.config.js` cannot do this on Cloudflare Pages).
 2. **`security-headers.ts`** sets `nosniff`, `Referrer-Policy` and `Permissions-Policy` on every SSR response (`public/_headers` does not reach them).
-3. **`cache-control.ts`** sets `Cache-Control: no-store` on all `/api/*` routes and non-GET requests, and `private, max-age=600` on other GET responses (unless already set). Pages are `private` because the navbar label is an A/B test picked per request, so shared caches must not store it.
+3. **`cache-control.ts`** sets `Cache-Control: no-store` on all `/api/*` routes and non-GET requests, and `public, max-age=600` on other GET responses (unless already set).
 4. **`csp.ts`** generates a per-request nonce, calls `next()`, and if the response is `text/html`, uses Cloudflare's `HTMLRewriter` to inject the nonce onto every `<script>`/`<style>` tag and set a strict `Content-Security-Policy` header (`script-src 'nonce-... strict-dynamic'`, no `'unsafe-inline'`).
 
 **In/out ordering**: a request passes through 1, 2, 3, 4 on the way in and the response passes back through 4, 3, 2, 1 on the way out. `csp` can replace the entire `Response` object via `HTMLRewriter.transform()`, so `securityHeaders` and `cacheControl` run before it; their headers are set on the response that `csp` then transforms and preserves. Do not add a second `src/middleware.ts` file; it would silently shadow `src/middleware/index.ts` and disable every middleware.

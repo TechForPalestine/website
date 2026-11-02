@@ -23,7 +23,7 @@ const now = new Date();
 const call = featuredCall(calls, now);
 const initialState = call ? callState(call, now) : null;
 
-Astro.response.headers.set("Cache-Control", "private, max-age=300");
+Astro.response.headers.set("Cache-Control", "public, max-age=300");
 
 function formatLocalDate(iso: string): string {
   return formatLongCallTime(iso, now);

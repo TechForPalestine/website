@@ -1,18 +1,30 @@
 ---
 import { Icon } from "astro-icon/components";
 import NavBar from "./NavBar.svelte";
-import { assignNavLabelVariant } from "../lib/navAssignment";
-import { NAV_LABEL_EXPERIMENT, NAV_LABEL_HREF, NAV_LABELS } from "../utils/navLabelExperiment";
+import { evalServerFeature, loadFeaturePayload } from "../lib/growthbookServer";
+import { getEnv } from "../utils/getEnv";
+import {
+  NAV_LABEL_EXPERIMENT,
+  NAV_LABEL_HREF,
+  NAV_LABELS,
+  variantFromFeature,
+} from "../utils/navLabelExperiment";
 
 const currentRoute = Astro.url.pathname;
 
 // "Get Involved" vs "Member Opportunities" label test. GrowthBook picks the variant on the
-// server and it is rendered into the HTML, so there is no flicker. The id is a keyed hash of
-// the day, IP and User-Agent (src/lib/navAssignment.ts): a visitor keeps one label all day
-// and nothing is stored on their device. Without an assignment (flag off, CDN down, or
-// NAV_ASSIGNMENT_SECRET unset) everyone sees "Get Involved" and nothing is tracked. Pages are served `private` (see
-// src/middleware/cache-control.ts) so a shared cache never hands one visitor's label to others.
-const assignedVariant = await assignNavLabelVariant(Astro.request, Astro.locals);
+// server for a throwaway per-request id and it is rendered into the HTML, so there is no
+// flicker and nothing is stored: a visitor can see a different label on each page view.
+// Without an assignment (flag off, CDN down) everyone sees "Get Involved" and nothing is
+// tracked. Pages are cacheable (default `public, max-age=600`); if a shared cache sits in
+// front, one visitor's label is reused for that window, so check `cf-cache-status` is DYNAMIC.
+const growthbookKey = getEnv("PUBLIC_GROWTHBOOK_CLIENT_KEY", Astro.locals);
+const growthbookPayload = growthbookKey ? await loadFeaturePayload(growthbookKey) : undefined;
+const assignedVariant = growthbookPayload
+  ? variantFromFeature(
+      evalServerFeature(growthbookPayload, NAV_LABEL_EXPERIMENT, crypto.randomUUID())
+    )
+  : null;
 const navLabel = NAV_LABELS[assignedVariant ?? "A"];
 
 type NavItem = {
