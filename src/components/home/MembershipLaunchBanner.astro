@@ -1,7 +1,9 @@
 ---
 /**
- * Homepage launch banner for membership: a flat Grove Green band with the
- * announcement and two calls to action.
+ * Homepage launch banner for membership: a slim Grove Green strip that slides
+ * down from beneath the sticky navbar and overlays the top of the hero, so the
+ * hero keeps its position. It must be rendered inside a `relative` container
+ * (index.astro's <main>) and scrolls away with the page.
  *
  * Remove this component (and its import in src/pages/index.astro) once the
  * launch period ends.
@@ -9,36 +11,50 @@
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
-const pill = `inline-flex min-h-[44px] items-center justify-center rounded-pill px-7 py-3.5 text-[15px] font-bold transition-colors duration-150 ${focusRing}`;
+const pill = `inline-flex min-h-[40px] items-center justify-center rounded-pill px-5 text-[14px] font-bold transition-colors duration-150 ${focusRing}`;
 ---
 
-<section aria-labelledby="membership-launch-heading" class="bg-grove text-white">
-  <div
-    class="mx-auto flex max-w-[1400px] flex-col gap-6 px-6 py-8 md:flex-row md:items-center md:justify-between md:gap-12 md:px-8 lg:px-16 2xl:px-28"
-  >
-    <div>
-      <h2
-        id="membership-launch-heading"
-        class="text-[clamp(26px,3vw,34px)] font-extrabold leading-[1.1] tracking-[-0.015em]"
-      >
-        Membership is open.
-      </h2>
-      <p class="mt-2 max-w-[58ch] text-[17px] leading-[1.6] text-white/85">
-        Pay what you can. Bring your skills to advocacy projects, join member events, and keep T4P
-        funded by the people who believe in it.
+<!-- The wrapper clips the strip so it emerges from the navbar's bottom edge. -->
+<div class="absolute inset-x-0 top-0 z-20 overflow-hidden">
+  <section aria-labelledby="membership-launch-heading" class="launch-strip bg-grove text-white">
+    <div
+      class="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-2.5 md:px-8 lg:px-16 2xl:px-28"
+    >
+      <p class="text-[15px] leading-snug">
+        <strong id="membership-launch-heading" class="font-extrabold">Membership is open.</strong>
+        <span class="hidden text-white/85 md:inline">
+          Pay what you can, build projects and join member events.
+        </span>
       </p>
-    </div>
 
-    <div class="flex flex-shrink-0 flex-wrap gap-3">
-      <a href="/membership" class={`${pill} bg-white text-grove-deep hover:bg-first-light`}>
-        Become a member
-      </a>
-      <a
-        href="/membership#inside"
-        class={`${pill} border border-white/60 text-white hover:border-white hover:bg-white hover:text-grove-deep`}
-      >
-        What members do
-      </a>
+      <div class="flex flex-shrink-0 gap-2">
+        <a href="/membership" class={`${pill} bg-white text-grove-deep hover:bg-first-light`}>
+          Become a member
+        </a>
+        <a
+          href="/membership#inside"
+          class={`${pill} border border-white/60 text-white hover:border-white hover:bg-white hover:text-grove-deep`}
+        >
+          What members do
+        </a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .launch-strip {
+      animation: strip-slide 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms backwards;
+    }
+  }
+
+  @keyframes strip-slide {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+</style>
