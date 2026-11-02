@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
@@ -111,7 +118,14 @@ interface AboutYouFormProps {
   onContinue: (data: AboutYouData) => void;
 }
 
-function AboutYouForm({ heading, helper, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
+function AboutYouForm({
+  heading,
+  helper,
+  initialValues,
+  submitting,
+  styles,
+  onContinue,
+}: AboutYouFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
@@ -137,11 +151,16 @@ function AboutYouForm({ heading, helper, initialValues, submitting, styles, onCo
     const trimmedEmail = email.trim();
     const { nameError: nextNameError, emailError: nextEmailError } = validateAboutYou(
       trimmedName,
-      trimmedEmail,
+      trimmedEmail
     );
     setNameError(nextNameError);
     setEmailError(nextEmailError);
     if (nextNameError || nextEmailError) return;
+    // Plausible's automatic "Form: Submission" also counts submits this
+    // validation rejects, so this is the reliable About You step signal.
+    // No variant prop: the nav label A/B test links it to "Nav Label Click"
+    // per visit in Plausible (has_done), so nothing is stored client-side.
+    window.plausible?.("About You Complete");
     onContinue({ name: trimmedName, email: trimmedEmail });
   }
 
@@ -197,7 +216,12 @@ function AboutYouForm({ heading, helper, initialValues, submitting, styles, onCo
       </button>
 
       <p className={`mt-3.5 ${styles.helper}`}>{helper}</p>
-      <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className={`mt-3 inline-block ${styles.link}`}>
+      <a
+        href={CALENDLY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`mt-3 inline-block ${styles.link}`}
+      >
         Book an intro call →
       </a>
     </form>
@@ -227,7 +251,15 @@ function openWaiverCard(event: MouseEvent<HTMLAnchorElement>) {
   card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-function TierCard({ tier, title, description, benefits, selected, styles, onSelect }: TierCardProps) {
+function TierCard({
+  tier,
+  title,
+  description,
+  benefits,
+  selected,
+  styles,
+  onSelect,
+}: TierCardProps) {
   return (
     <button
       type="button"
@@ -271,15 +303,19 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
       </ul>
       {tier === "member" && (
         <p className={`mt-3 ${styles.tierNote}`}>
-          Note: Our member community is fully vetted. To keep everyone safe and make sure we
-          share the same values, we do an identity and alignment check during onboarding.
+          Note: Our member community is fully vetted. To keep everyone safe and make sure we share
+          the same values, we do an identity and alignment check during onboarding.
         </p>
       )}
     </button>
   );
 }
 
-export default function JoinFlow({ designSystem = false, fixedTier, hideCalculator }: JoinFlowProps) {
+export default function JoinFlow({
+  designSystem = false,
+  fixedTier,
+  hideCalculator,
+}: JoinFlowProps) {
   const styles = getStyles(designSystem);
   const steps = fixedTier ? STEPS.filter((s) => s.id !== "tier") : STEPS;
   const [step, setStep] = useState<StepId>("about-you");
@@ -332,7 +368,11 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
 
       {!fixedTier && step === "tier" && (
         <div>
-          <button type="button" onClick={() => setStep("about-you")} className={`mb-4 ${styles.backLink}`}>
+          <button
+            type="button"
+            onClick={() => setStep("about-you")}
+            className={`mb-4 ${styles.backLink}`}
+          >
             &larr; Back
           </button>
           <p className={`mb-4 ${styles.tierIntro}`}>
