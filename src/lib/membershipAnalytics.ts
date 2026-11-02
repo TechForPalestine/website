@@ -7,8 +7,11 @@ import { NAV_LABEL_EXPERIMENT } from "../utils/navLabelExperiment";
 // script fails, and it is only sent after verification, so it cannot be forged.
 //
 // The visitor's User-Agent and IP are forwarded the same way /api/pipe does, so Plausible
-// joins the event to that visitor's existing visit. It carries the nav label variant the
-// visitor was shown (recomputed from the same request, see src/lib/navAssignment.ts).
+// joins the event to that visitor's existing visit. It carries the nav label variant,
+// recomputed from this request (src/lib/navAssignment.ts). That matches what the visitor was
+// shown unless their IP or the UTC day changed in between, so the browser's
+// "Membership-complete" (which reads the variant off the page) is the exact record and this
+// event is the ad-blocker-proof cross-check. Without a stable id the variant is left off.
 
 export const MEMBERSHIP_VERIFIED_EVENT = "Membership Verified";
 const PLAUSIBLE_EVENT_API = "https://plausible.io/api/event";
@@ -45,7 +48,7 @@ export async function sendMembershipVerified({
   fetchImpl = fetch,
 }: MembershipVerifiedInput): Promise<void> {
   try {
-    const variant = await assignNavLabelVariant(request, locals);
+    const variant = await assignNavLabelVariant(request, locals, { requireStable: true });
     const props: Record<string, string> = { membership_tier: tier };
     if (variant) {
       props.experiment = NAV_LABEL_EXPERIMENT;

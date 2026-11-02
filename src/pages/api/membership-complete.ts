@@ -69,7 +69,8 @@ export const POST: APIRoute = withOriginGuard(
     // Verified and claimed exactly once, so it is counted once. Runs after the response,
     // and its failures are reported, never surfaced: analytics must not affect the member.
     const analytics = sendMembershipVerified({ request, locals, tier: tier.tag });
-    if (ctx) ctx.waitUntil(analytics);
+    // Flush so a reportError from the analytics call is delivered after the response.
+    if (ctx) ctx.waitUntil(analytics.then(() => Sentry.flush(2000)));
 
     const hubApiUrl = getEnv("HUB_API_URL", locals);
     const hubApiKey = getEnv("HUB_API_KEY", locals);

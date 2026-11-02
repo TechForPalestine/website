@@ -5,7 +5,9 @@ vi.mock("../../utils/qgivVerify", async (importOriginal) => {
   return { ...actual, verifyQgivTransaction: vi.fn() };
 });
 vi.mock("../../lib/report-error", () => ({ reportError: vi.fn() }));
-vi.mock("../../lib/membershipAnalytics", () => ({ sendMembershipVerified: vi.fn() }));
+vi.mock("../../lib/membershipAnalytics", () => ({
+  sendMembershipVerified: vi.fn().mockResolvedValue(undefined),
+}));
 
 const { verifyQgivTransaction } = await import("../../utils/qgivVerify");
 const { reportError } = await import("../../lib/report-error");
@@ -141,5 +143,40 @@ describe("POST /api/membership-complete", () => {
     vi.mocked(verifyQgivTransaction).mockResolvedValue({ ok: false, reason: "not-accepted" });
     await call({ transactionId: "555004" });
     expect(sendMembershipVerified).not.toHaveBeenCalled();
+  });
+
+  it("hands the analytics call to waitUntil and does not resend for a replayed transaction", async () => {
+    const transaction = {
+      id: "555005",
+      formId: "1116610",
+      email: "payer@example.org",
+      firstName: "Ada",
+      lastName: "Lovelace",
+      amount: "25.00",
+      optedIn: true,
+    };
+    vi.mocked(verifyQgivTransaction).mockResolvedValue({ ok: true, transaction });
+    vi.mocked(sendMembershipVerified).mockResolvedValue(undefined);
+    const claimed = new Set<string>();
+    const kv = {
+      get: async (key: string) => (claimed.has(key) ? "1" : null),
+      put: async (key: string) => {
+        claimed.add(key);
+      },
+    };
+    const waitUntil = vi.fn();
+    const locals = {
+      runtime: { env: { ...LOCALS.runtime?.env, DROPPED_CONVERSIONS: kv }, ctx: { waitUntil } },
+    } as unknown as App.Locals;
+    const post = () =>
+      POST({ request: request({ transactionId: "555005" }), locals } as never) as Promise<Response>;
+
+    await post();
+    const second = await post();
+
+    expect(sendMembershipVerified).toHaveBeenCalledOnce();
+    expect(waitUntil).toHaveBeenCalledOnce();
+    expect(waitUntil.mock.calls[0][0]).toBeInstanceOf(Promise);
+    expect(await second.json()).toMatchObject({ message: "Already processed" });
   });
 });

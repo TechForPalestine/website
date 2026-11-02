@@ -1,5 +1,18 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { computeAssignmentId, normalizeIp, requestAssignmentId } from "./navAssignment";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("./growthbookServer", () => ({
+  loadFeaturePayload: vi.fn(),
+  evalServerFeature: vi.fn(),
+}));
+
+const { loadFeaturePayload, evalServerFeature } = await import("./growthbookServer");
+const {
+  assignNavLabelVariant,
+  computeAssignmentId,
+  normalizeIp,
+  requestAssignmentId,
+  resetAssignmentWarning,
+} = await import("./navAssignment");
 
 const base = {
   secret: "test-secret",
@@ -17,6 +30,10 @@ describe("normalizeIp", () => {
     expect(normalizeIp("2001:db8:abcd:12::1")).toBe("2001:db8:abcd:12");
     expect(normalizeIp("2001:DB8:ABCD:0012:aaaa:bbbb:cccc:dddd")).toBe("2001:db8:abcd:12");
     expect(normalizeIp("2001:db8::1")).toBe("2001:db8:0:0");
+  });
+
+  it("treats IPv4-mapped IPv6 as the IPv4 address", () => {
+    expect(normalizeIp("::ffff:203.0.113.7")).toBe("203.0.113.7");
   });
 });
 
@@ -44,13 +61,13 @@ describe("computeAssignmentId", () => {
     expect(a).toBe(b);
   });
 
-  it("does not contain the IP or User-Agent", async () => {
-    const id = await computeAssignmentId(base);
-    expect(id).toMatch(/^[0-9a-f]{64}$/);
+  it("is an opaque 64-char hex digest, so the IP and User-Agent cannot appear in it", async () => {
+    expect(await computeAssignmentId(base)).toMatch(/^[0-9a-f]{64}$/);
   });
 });
 
 describe("requestAssignmentId", () => {
+  beforeEach(() => resetAssignmentWarning());
   afterEach(() => vi.restoreAllMocks());
 
   const locals = { runtime: { env: { NAV_ASSIGNMENT_SECRET: "test-secret" } } };
@@ -60,15 +77,17 @@ describe("requestAssignmentId", () => {
 
   it("uses the keyed hash when the secret and IP are present", async () => {
     const headers = { "cf-connecting-ip": base.ip, "user-agent": base.userAgent };
-    expect(await requestAssignmentId(req(headers), locals, now)).toBe(
-      await computeAssignmentId(base)
-    );
+    expect(await requestAssignmentId(req(headers), locals, now)).toEqual({
+      id: await computeAssignmentId(base),
+      stable: true,
+    });
   });
 
   it("falls back to a per-request id without an IP (pnpm dev)", async () => {
     const a = await requestAssignmentId(req({}), locals, now);
     const b = await requestAssignmentId(req({}), locals, now);
-    expect(a).not.toBe(b);
+    expect(a.stable).toBe(false);
+    expect(a.id).not.toBe(b.id);
   });
 
   it("falls back to a per-request id and warns once without the secret", async () => {
@@ -76,7 +95,56 @@ describe("requestAssignmentId", () => {
     const headers = { "cf-connecting-ip": base.ip };
     const a = await requestAssignmentId(req(headers), {}, now);
     const b = await requestAssignmentId(req(headers), {}, now);
-    expect(a).not.toBe(b);
+    expect(a.stable).toBe(false);
+    expect(a.id).not.toBe(b.id);
     expect(warn).toHaveBeenCalledOnce();
+  });
+});
+
+describe("assignNavLabelVariant", () => {
+  const env = { NAV_ASSIGNMENT_SECRET: "test-secret", PUBLIC_GROWTHBOOK_CLIENT_KEY: "sdk-test" };
+  const locals = { runtime: { env } };
+  const headers = { "cf-connecting-ip": base.ip, "user-agent": base.userAgent };
+  const req = (h: Record<string, string>) =>
+    new Request("https://techforpalestine.org/", { headers: h });
+  const now = () => base.date;
+
+  beforeEach(() => {
+    vi.mocked(loadFeaturePayload).mockResolvedValue({ features: {} });
+    vi.mocked(evalServerFeature).mockReturnValue({ value: "B", source: "force" } as never);
+  });
+  afterEach(() => vi.clearAllMocks());
+
+  it("gives a page view and a later API call from the same visitor the same id", async () => {
+    await assignNavLabelVariant(req(headers), locals, { now });
+    await assignNavLabelVariant(
+      new Request("https://techforpalestine.org/api/membership-complete", {
+        method: "POST",
+        headers,
+      }),
+      locals,
+      { requireStable: true, now }
+    );
+    const [first, second] = vi.mocked(evalServerFeature).mock.calls;
+    expect(first[2]).toBe(await computeAssignmentId(base));
+    expect(second[2]).toBe(first[2]);
+  });
+
+  it("returns the variant GrowthBook assigned", async () => {
+    expect(await assignNavLabelVariant(req(headers), locals, { now })).toBe("B");
+  });
+
+  it("returns null with requireStable when the id is a throwaway", async () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const noSecret = { runtime: { env: { PUBLIC_GROWTHBOOK_CLIENT_KEY: "sdk-test" } } };
+    expect(
+      await assignNavLabelVariant(req(headers), noSecret, { requireStable: true, now })
+    ).toBeNull();
+    expect(await assignNavLabelVariant(req(headers), noSecret, { now })).toBe("B");
+  });
+
+  it("returns null when the GrowthBook payload is unavailable", async () => {
+    vi.mocked(loadFeaturePayload).mockResolvedValue(undefined);
+    expect(await assignNavLabelVariant(req(headers), locals, { now })).toBeNull();
   });
 });

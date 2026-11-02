@@ -8,9 +8,10 @@ import { evalServerFeature, loadFeaturePayload } from "./growthbookServer";
 
 // A/B test id that is stable for one visitor for one UTC day, without storing anything on
 // the visitor's device. Same idea as Plausible's own visitor id: a keyed hash of the date,
-// the IP and the User-Agent. The IP and User-Agent are only read here, in memory, and are
-// never stored or sent anywhere; the hash itself never leaves the server either (GrowthBook
-// evaluates it in-process, see src/lib/growthbookServer.ts).
+// the IP and the User-Agent. The IP and User-Agent are only read here, in memory, and never
+// stored; the hash never leaves the server (GrowthBook evaluates it in-process, see
+// src/lib/growthbookServer.ts). Separately, src/lib/membershipAnalytics.ts forwards the IP
+// and User-Agent to Plausible for a verified membership, as /api/pipe does for every event.
 //
 // The date is part of the hash input, so the id rotates daily with no stored salt. Without
 // the secret, or without an IP (pnpm dev), the caller falls back to a per-request id.
@@ -24,6 +25,9 @@ const IPV6_PREFIX_GROUPS = 4;
 export function normalizeIp(ip: string): string {
   const trimmed = ip.trim().toLowerCase();
   if (!trimmed.includes(":")) return trimmed;
+  // IPv4-mapped IPv6 (::ffff:1.2.3.4) is really an IPv4 address.
+  const mapped = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/.exec(trimmed);
+  if (mapped) return mapped[1];
 
   const [head, tail = ""] = trimmed.split("::");
   const headGroups = head ? head.split(":") : [];
@@ -68,13 +72,25 @@ export async function computeAssignmentId({
 
 let warnedMissingSecret = false;
 
+/** Test hook: allow the missing-secret warning to fire again. */
+export function resetAssignmentWarning(): void {
+  warnedMissingSecret = false;
+}
+
+export interface AssignmentId {
+  id: string;
+  /** False for a throwaway per-request id (no secret, or no IP in pnpm dev). Another
+   * request from the same visitor will then get a different id and maybe variant. */
+  stable: boolean;
+}
+
 /** The visitor's assignment id for this request: stable for the day when possible,
  * otherwise a throwaway per-request id. */
 export async function requestAssignmentId(
   request: Request,
   locals: unknown,
   now: () => Date = () => new Date()
-): Promise<string> {
+): Promise<AssignmentId> {
   const secret = getEnv(ASSIGNMENT_SECRET_ENV, locals);
   const ip = request.headers.get("cf-connecting-ip");
   if (!secret || !ip) {
@@ -84,26 +100,37 @@ export async function requestAssignmentId(
         `${ASSIGNMENT_SECRET_ENV} is not set: A/B test variants are re-picked on every request`
       );
     }
-    return crypto.randomUUID();
+    return { id: crypto.randomUUID(), stable: false };
   }
-  return computeAssignmentId({
+  const id = await computeAssignmentId({
     secret,
     ip,
     userAgent: request.headers.get("user-agent") ?? "",
     date: now(),
   });
+  return { id, stable: true };
+}
+
+export interface AssignOptions {
+  /** Return null unless the id is the stable daily hash. Use when the variant must match
+   * what the visitor was shown on an earlier request (the server-side membership event). */
+  requireStable?: boolean;
+  now?: () => Date;
 }
 
 /** The nav label variant GrowthBook assigns this visitor, or null when they are not in the
  * test (flag off, CDN down). Navigation.astro and /api/membership-complete both call this,
- * so the server-side membership event gets the same variant the visitor was shown. */
+ * so the server-side membership event gets the same variant the visitor was shown, as long
+ * as the day, IP and User-Agent have not changed in between. */
 export async function assignNavLabelVariant(
   request: Request,
-  locals: unknown
+  locals: unknown,
+  { requireStable = false, now }: AssignOptions = {}
 ): Promise<NavLabelVariant | null> {
   const clientKey = getEnv("PUBLIC_GROWTHBOOK_CLIENT_KEY", locals);
   const payload = clientKey ? await loadFeaturePayload(clientKey) : undefined;
   if (!payload) return null;
-  const id = await requestAssignmentId(request, locals);
+  const { id, stable } = await requestAssignmentId(request, locals, now);
+  if (requireStable && !stable) return null;
   return variantFromFeature(evalServerFeature(payload, NAV_LABEL_EXPERIMENT, id));
 }

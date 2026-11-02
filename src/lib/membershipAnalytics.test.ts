@@ -55,6 +55,7 @@ describe("sendMembershipVerified", () => {
     const headers = new Headers((init as RequestInit).headers);
     expect(headers.get("user-agent")).toBe("Mozilla/5.0 Test");
     expect(headers.get("x-forwarded-for")).toBe("203.0.113.7");
+    expect(vi.mocked(assignNavLabelVariant).mock.calls[0][2]).toEqual({ requireStable: true });
     expect(sentBody(fetchImpl)).toEqual({
       name: MEMBERSHIP_VERIFIED_EVENT,
       url: "https://techforpalestine.org/membership",
