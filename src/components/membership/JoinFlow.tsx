@@ -18,7 +18,6 @@ import {
   type TierBenefit,
 } from "./joinFlowContent";
 import type { MembershipTier, QgivPrefill } from "./qgiv";
-import { navExperimentProps } from "../../utils/navLabelExperiment";
 
 const CALENDLY_URL = "https://calendly.com/d/ctpm-sw2-yvc/t4p-intro-call";
 
@@ -157,10 +156,6 @@ function AboutYouForm({
     setNameError(nextNameError);
     setEmailError(nextEmailError);
     if (nextNameError || nextEmailError) return;
-    // Plausible's automatic "Form: Submission" also counts submits this
-    // validation rejects, so this is the reliable About You step signal.
-    // Tagged with the nav label variant this visitor is shown (stable for the day).
-    window.plausible?.("About You Complete", { props: navExperimentProps() });
     onContinue({ name: trimmedName, email: trimmedEmail });
   }
 

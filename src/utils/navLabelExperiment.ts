@@ -1,6 +1,5 @@
 export const NAV_LABEL_EXPERIMENT = "nav-get-involved-label";
 export const EXPOSURE_EVENT = "Nav Label Shown";
-export const CLICK_EVENT = "Nav Label Click";
 
 export type NavLabelVariant = "A" | "B";
 
@@ -10,7 +9,6 @@ export const NAV_LABELS: Readonly<Record<NavLabelVariant, string>> = {
   B: "Member Opportunities",
 };
 
-const MIDDLE_BUTTON = 1;
 const VARIANTS: readonly NavLabelVariant[] = ["A", "B"];
 
 export interface FeatureOutcome {
@@ -37,8 +35,8 @@ export interface ExperimentDocument {
   prerendering?: boolean;
   querySelector(selector: string): Element | null;
   addEventListener(
-    type: "prerenderingchange" | "click" | "auxclick",
-    listener: (event: MouseEvent) => void,
+    type: "prerenderingchange",
+    listener: () => void,
     options?: AddEventListenerOptions
   ): void;
 }
@@ -50,8 +48,8 @@ export interface TrackNavLabelOptions {
 
 const LINK_SELECTOR = "a[data-experiment][data-variant]";
 
-/** The nav label test props for the page's navbar, to attach to conversion events
- * (About You Complete, Membership-complete). Empty when the visitor is not in the test.
+/** The nav label test props for the page's navbar, to attach to the conversion event
+ * (Membership-complete). Empty when the visitor is not in the test.
  * The navbar is in the DOM on every Layout page, including when it is hidden by CSS. */
 export function navExperimentProps(
   doc: Pick<Document, "querySelector"> = document
@@ -66,33 +64,20 @@ const trackWithPlausible: TrackEvent = (name, props) => {
   window.plausible?.(name, { props });
 };
 
-// Records one exposure per page view when the nav carries an experiment link, and every
-// click on that link (desktop or mobile menu). The mobile menu is rendered on demand, so
-// clicks are caught by delegation on the document.
+// Records one exposure per page view when the nav carries an experiment link: the
+// denominator for sign-ups per variant.
 //
 // Layout prerenders some pages via speculation rules, and prerendered pages run their
-// scripts, so the exposure waits until the page is actually shown. Middle-clicks (open in
-// new tab) count too.
+// scripts, so the exposure waits until the page is actually shown.
 export function trackNavLabel(options: TrackNavLabelOptions = {}): void {
   const { track = trackWithPlausible, doc = document as unknown as ExperimentDocument } = options;
-  const link = doc.querySelector(LINK_SELECTOR) as HTMLElement | null;
-  const experiment = link?.dataset.experiment;
-  const variant = link?.dataset.variant;
-  if (!experiment || !variant) return;
+  const props = navExperimentProps(doc);
+  if (!props.experiment) return;
 
-  const props = { experiment, variant };
   const recordExposure = (): void => track(EXPOSURE_EVENT, props);
   if (doc.prerendering) {
     doc.addEventListener("prerenderingchange", recordExposure, { once: true });
   } else {
     recordExposure();
   }
-
-  const onClick = (event: MouseEvent): void => {
-    if (event.type === "auxclick" && event.button !== MIDDLE_BUTTON) return;
-    const clicked = (event.target as Element | null)?.closest?.(LINK_SELECTOR);
-    if (clicked) track(CLICK_EVENT, props);
-  };
-  doc.addEventListener("click", onClick);
-  doc.addEventListener("auxclick", onClick);
 }

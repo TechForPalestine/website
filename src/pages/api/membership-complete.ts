@@ -12,7 +12,6 @@ import { jsonError, jsonResponse } from "../../utils/apiResponse";
 import { redactEmail, subscribeMember } from "../../utils/emailOctopus";
 import { MEMBERSHIP_FORMS, verifyQgivTransaction } from "../../utils/qgivVerify";
 import { claimTransaction } from "../../utils/transactionReplay";
-import { sendMembershipVerified } from "../../lib/membershipAnalytics";
 
 export const prerender = false;
 
@@ -65,12 +64,6 @@ export const POST: APIRoute = withOriginGuard(
     if (!(await claimTransaction(locals.runtime?.env?.DROPPED_CONVERSIONS, id))) {
       return jsonResponse({ success: true, message: "Already processed" }, 200, cors);
     }
-
-    // Verified and claimed exactly once, so it is counted once. Runs after the response,
-    // and its failures are reported, never surfaced: analytics must not affect the member.
-    const analytics = sendMembershipVerified({ request, locals, tier: tier.tag });
-    // Flush so a reportError from the analytics call is delivered after the response.
-    if (ctx) ctx.waitUntil(analytics.then(() => Sentry.flush(2000)));
 
     const hubApiUrl = getEnv("HUB_API_URL", locals);
     const hubApiKey = getEnv("HUB_API_KEY", locals);

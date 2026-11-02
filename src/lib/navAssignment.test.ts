@@ -77,26 +77,20 @@ describe("requestAssignmentId", () => {
 
   it("uses the keyed hash when the secret and IP are present", async () => {
     const headers = { "cf-connecting-ip": base.ip, "user-agent": base.userAgent };
-    expect(await requestAssignmentId(req(headers), locals, now)).toEqual({
-      id: await computeAssignmentId(base),
-      stable: true,
-    });
+    expect(await requestAssignmentId(req(headers), locals, now)).toBe(
+      await computeAssignmentId(base)
+    );
   });
 
-  it("falls back to a per-request id without an IP (pnpm dev)", async () => {
-    const a = await requestAssignmentId(req({}), locals, now);
-    const b = await requestAssignmentId(req({}), locals, now);
-    expect(a.stable).toBe(false);
-    expect(a.id).not.toBe(b.id);
+  it("returns null without an IP (pnpm dev)", async () => {
+    expect(await requestAssignmentId(req({}), locals, now)).toBeNull();
   });
 
-  it("falls back to a per-request id and warns once without the secret", async () => {
+  it("returns null and warns once without the secret", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const headers = { "cf-connecting-ip": base.ip };
-    const a = await requestAssignmentId(req(headers), {}, now);
-    const b = await requestAssignmentId(req(headers), {}, now);
-    expect(a.stable).toBe(false);
-    expect(a.id).not.toBe(b.id);
+    expect(await requestAssignmentId(req(headers), {}, now)).toBeNull();
+    expect(await requestAssignmentId(req(headers), {}, now)).toBeNull();
     expect(warn).toHaveBeenCalledOnce();
   });
 });
@@ -105,46 +99,30 @@ describe("assignNavLabelVariant", () => {
   const env = { NAV_ASSIGNMENT_SECRET: "test-secret", PUBLIC_GROWTHBOOK_CLIENT_KEY: "sdk-test" };
   const locals = { runtime: { env } };
   const headers = { "cf-connecting-ip": base.ip, "user-agent": base.userAgent };
-  const req = (h: Record<string, string>) =>
-    new Request("https://techforpalestine.org/", { headers: h });
+  const req = () => new Request("https://techforpalestine.org/", { headers });
   const now = () => base.date;
 
   beforeEach(() => {
+    resetAssignmentWarning();
     vi.mocked(loadFeaturePayload).mockResolvedValue({ features: {} });
     vi.mocked(evalServerFeature).mockReturnValue({ value: "B", source: "force" } as never);
   });
   afterEach(() => vi.clearAllMocks());
 
-  it("gives a page view and a later API call from the same visitor the same id", async () => {
-    await assignNavLabelVariant(req(headers), locals, { now });
-    await assignNavLabelVariant(
-      new Request("https://techforpalestine.org/api/membership-complete", {
-        method: "POST",
-        headers,
-      }),
-      locals,
-      { requireStable: true, now }
-    );
-    const [first, second] = vi.mocked(evalServerFeature).mock.calls;
-    expect(first[2]).toBe(await computeAssignmentId(base));
-    expect(second[2]).toBe(first[2]);
+  it("returns the variant GrowthBook assigned, evaluated on the daily id", async () => {
+    expect(await assignNavLabelVariant(req(), locals, now)).toBe("B");
+    expect(vi.mocked(evalServerFeature).mock.calls[0][2]).toBe(await computeAssignmentId(base));
   });
 
-  it("returns the variant GrowthBook assigned", async () => {
-    expect(await assignNavLabelVariant(req(headers), locals, { now })).toBe("B");
-  });
-
-  it("returns null with requireStable when the id is a throwaway", async () => {
+  it("is inactive without the secret: no assignment, GrowthBook is never asked", async () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
     const noSecret = { runtime: { env: { PUBLIC_GROWTHBOOK_CLIENT_KEY: "sdk-test" } } };
-    expect(
-      await assignNavLabelVariant(req(headers), noSecret, { requireStable: true, now })
-    ).toBeNull();
-    expect(await assignNavLabelVariant(req(headers), noSecret, { now })).toBe("B");
+    expect(await assignNavLabelVariant(req(), noSecret, now)).toBeNull();
+    expect(evalServerFeature).not.toHaveBeenCalled();
   });
 
   it("returns null when the GrowthBook payload is unavailable", async () => {
     vi.mocked(loadFeaturePayload).mockResolvedValue(undefined);
-    expect(await assignNavLabelVariant(req(headers), locals, { now })).toBeNull();
+    expect(await assignNavLabelVariant(req(), locals, now)).toBeNull();
   });
 });
