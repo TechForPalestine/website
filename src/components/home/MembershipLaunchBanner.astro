@@ -1,132 +1,44 @@
 ---
 /**
- * Homepage launch banner for membership. A Grove Green band with a membership
- * card drawn beside the announcement. The card's "Member since" field shows the
- * current month, so it reads as the visitor's own card rather than a mockup.
+ * Homepage launch banner for membership: a flat Grove Green band with the
+ * announcement and two calls to action.
  *
  * Remove this component (and its import in src/pages/index.astro) once the
  * launch period ends.
  */
 
-// Rendered per request (SSR), cached for at most 10 minutes by cacheControl.
-const memberSince = new Date().toLocaleDateString("en-US", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+const pill = `inline-flex min-h-[44px] items-center justify-center rounded-pill px-7 py-3.5 text-[15px] font-bold transition-colors duration-150 ${focusRing}`;
 ---
 
-<section aria-labelledby="membership-launch-heading" class="launch bg-grove text-white">
+<section aria-labelledby="membership-launch-heading" class="bg-grove text-white">
   <div
-    class="mx-auto grid max-w-[1400px] items-center gap-8 px-6 py-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-12 md:px-8 md:py-10 lg:px-16 2xl:px-28"
+    class="mx-auto flex max-w-[1400px] flex-col gap-6 px-6 py-8 md:flex-row md:items-center md:justify-between md:gap-12 md:px-8 lg:px-16 2xl:px-28"
   >
     <div>
-      <p class="flex items-center gap-2.5 text-[13px] font-bold text-white/85">
-        <span class="h-2 w-2 rounded-pill bg-white" aria-hidden="true"></span>
-        New
-      </p>
-
       <h2
         id="membership-launch-heading"
-        class="mt-3 max-w-[22ch] text-[clamp(28px,3.4vw,40px)] font-extrabold leading-[1.08] tracking-[-0.015em]"
+        class="text-[clamp(26px,3vw,34px)] font-extrabold leading-[1.1] tracking-[-0.015em]"
       >
-        Membership is open. Your card is waiting.
+        Membership is open.
       </h2>
-
-      <p class="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-white/85">
+      <p class="mt-2 max-w-[58ch] text-[17px] leading-[1.6] text-white/85">
         Pay what you can. Bring your skills to advocacy projects, join member events, and keep T4P
         funded by the people who believe in it.
       </p>
-
-      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-        <a
-          href="/membership"
-          class={`inline-flex min-h-[44px] items-center justify-center rounded-pill bg-white px-7 py-3.5 text-[15px] font-bold text-grove-deep transition-colors duration-150 hover:bg-first-light ${focusRing}`}
-        >
-          Become a member
-        </a>
-        <a
-          href="/membership#inside"
-          class={`text-[15px] font-bold text-white underline decoration-white/40 underline-offset-4 transition-colors duration-150 hover:decoration-white ${focusRing}`}
-        >
-          What members do
-        </a>
-      </div>
     </div>
 
-    <!-- The card is decorative: everything it says is said in the copy beside it. -->
-    <div class="hidden justify-center md:flex md:pr-4" aria-hidden="true">
-      <div
-        class="launch-card relative flex aspect-[1.586] w-[300px] flex-col justify-between rounded-md bg-paper p-5 text-ink shadow-sm lg:w-[340px]"
+    <div class="flex flex-shrink-0 flex-wrap gap-3">
+      <a href="/membership" class={`${pill} bg-white text-grove-deep hover:bg-first-light`}>
+        Become a member
+      </a>
+      <a
+        href="/membership#inside"
+        class={`${pill} border border-white/60 text-white hover:border-white hover:bg-white hover:text-grove-deep`}
       >
-        <div class="flex items-center justify-between">
-          <span class="text-[12px] font-bold tracking-[0.14em] text-grove-deep">
-            TECH FOR PALESTINE
-          </span>
-          <span class="flex items-center gap-1">
-            <span class="h-1.5 w-7 rounded-pill bg-[#268024]"></span>
-            <span class="h-1.5 w-2.5 rounded-pill bg-[#e4312b]"></span>
-            <span class="h-1.5 w-1.5 rounded-pill bg-nightfall"></span>
-          </span>
-        </div>
-
-        <span class="text-[clamp(36px,3.4vw,44px)] font-extrabold leading-none tracking-[-0.02em]">
-          Member
-        </span>
-
-        <div class="flex items-end justify-between gap-4">
-          <div class="min-w-0 flex-1">
-            <span class="block text-[11px] font-bold text-ink-secondary">Name</span>
-            <span
-              class="mt-1 block border-b border-dashed border-ink-muted pb-0.5 text-[15px] text-ink-muted"
-            >
-              Yours
-            </span>
-          </div>
-          <div class="text-right">
-            <span class="block text-[11px] font-bold text-ink-secondary">Member since</span>
-            <span class="mt-1 block text-[15px] font-bold text-grove">{memberSince}</span>
-          </div>
-        </div>
-      </div>
+        What members do
+      </a>
     </div>
   </div>
 </section>
-
-<style>
-  .launch-card {
-    transform: rotate(-4deg);
-    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .launch:hover .launch-card,
-  .launch:focus-within .launch-card {
-    transform: rotate(-1deg) translateY(-4px);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .launch-card {
-      animation: card-arrive 900ms cubic-bezier(0.16, 1, 0.3, 1) 150ms backwards;
-    }
-  }
-
-  @keyframes card-arrive {
-    from {
-      opacity: 0;
-      transform: rotate(-12deg) translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: rotate(-4deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .launch-card {
-      transition: none;
-    }
-  }
-</style>
