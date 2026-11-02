@@ -52,7 +52,7 @@ describe("middleware chain", () => {
 
   it("caches ordinary GET pages", async () => {
     const { res } = await run("/about");
-    expect(res.headers.get("Cache-Control")).toBe("public, max-age=600");
+    expect(res.headers.get("Cache-Control")).toBe("private, max-age=600");
   });
 
   it("sets no CSP when HTMLRewriter is undefined (dev/Node)", async () => {
@@ -75,7 +75,7 @@ describe("middleware chain", () => {
     expect(res.headers.get("Content-Security-Policy")).toContain("script-src 'nonce-");
     expect(res.headers.get("X-Frame-Options")).toBe("DENY");
     // cacheControl and securityHeaders ran before csp replaced the response
-    expect(res.headers.get("Cache-Control")).toBe("public, max-age=600");
+    expect(res.headers.get("Cache-Control")).toBe("private, max-age=600");
     expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff");
   });
 

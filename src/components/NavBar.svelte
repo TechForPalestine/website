@@ -1,7 +1,12 @@
 <script lang="ts">
   import { tick } from 'svelte';
 
-  export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
+  export let navigation: Map<string, {
+    href: string,
+    submenu: Array<[string, string]> | null,
+    // Set when the item is under an A/B test; read by trackNavLabel (src/utils/navLabelExperiment.ts).
+    experiment?: {name: string, variant: string},
+  }>;
   export let currentRoute: string;
   // Unused: only declared so @astrojs/svelte's generated types allow the named
   // slots (close, burger-icon) passed from Navigation.astro — without
@@ -102,8 +107,10 @@
         </a>
       </div>
 
-      <!-- Desktop Navigation  -->
-      <nav class="hidden lg:flex lg:items-center lg:space-x-8">
+      <!-- Desktop Navigation: from xl (1280px). Below that the items plus the two
+           buttons don't fit on one line ("Member Opportunities", the nav label A/B
+           variant, is the longest), so narrower screens use the burger menu. -->
+      <nav class="hidden xl:flex xl:items-center xl:space-x-8">
         {#each navigation as [label, item]}
           <div class="relative">
             {#if item.submenu}
@@ -117,7 +124,7 @@
                 <a
                   href={item.href}
                   on:focus={() => activeDropdown = label}
-                  class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
+                  class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
                 >
                   {label}
                 </a>
@@ -165,7 +172,9 @@
               <!-- Regular Menu Item -->
               <a
                 href={item.href}
-                class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
+                data-experiment={item.experiment?.name}
+                data-variant={item.experiment?.variant}
+                class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
               >
                 {label}
               </a>
@@ -176,7 +185,7 @@
     </div>
 
     <!-- Right side: Hub and Become a Member -->
-    <div class="hidden lg:flex gap-4 2xl:gap-6 items-center">
+    <div class="hidden xl:flex gap-4 2xl:gap-6 items-center">
       <a
         href={HUB_URL}
         class="border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-2 px-4 text-sm 2xl:py-2.5 2xl:px-6 2xl:text-base rounded-lg transition-colors duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
@@ -194,7 +203,7 @@
     </div>
 
     <!-- Mobile Header -->
-    <div class="flex lg:hidden items-center space-x-3">
+    <div class="flex xl:hidden items-center space-x-3">
       <button
         type="button"
         on:click={toggle}
@@ -216,7 +225,7 @@
   {#if toggleFlag}
     <nav
       id="mobile-menu"
-      class="lg:hidden bg-white border-t border-gray-200 mx-4 my-2 p-6 rounded-xl shadow-lg animate-fadeIn"
+      class="xl:hidden bg-white border-t border-gray-200 mx-4 my-2 p-6 rounded-xl shadow-lg animate-fadeIn"
       aria-label="Mobile navigation"
     >
       <div class="flex flex-col items-start space-y-4">
@@ -273,6 +282,8 @@
               <!-- Regular Mobile Item -->
               <a
                 href={item.href}
+                data-experiment={item.experiment?.name}
+                data-variant={item.experiment?.variant}
                 class="block w-full text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
               >
                 {label}

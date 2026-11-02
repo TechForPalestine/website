@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { navExperimentProps } from "../../utils/navLabelExperiment";
 import {
   QGIV_EMBED_SCRIPT,
   QGIV_FORMS,
@@ -188,6 +189,7 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
           props: {
             amount: transaction.total != null ? String(transaction.total) : "",
             membership_tier: tier,
+            ...navExperimentProps(),
           },
         });
       }
