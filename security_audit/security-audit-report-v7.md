@@ -15,8 +15,8 @@ now be obtained by anyone who can set an HTTP header. Six of the ten are in code
 are in code that predates it and had not been examined in earlier rounds.
 
 | V1 Original | V2 Re-review | V3 Re-review | V4 Re-review | V5 Re-review | V6 Re-review | **V7 Re-review** |
-|---|---|---|---|---|---|---|
-| 2026-03-31 | 2026-04-02 | 2026-04-06 | 2026-04-09 | 2026-04-13 | 2026-04-14 | **2026-09-22** |
+| ----------- | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- |
+| 2026-03-31  | 2026-04-02   | 2026-04-06   | 2026-04-09   | 2026-04-13   | 2026-04-14   | **2026-09-22**   |
 
 ---
 
@@ -24,9 +24,9 @@ are in code that predates it and had not been examined in earlier rounds.
 
 Five months and 115 commits after v6. Ten new findings; every previously closed finding still holds.
 
-| Total fixed | Critical | High | Medium | Low | Open |
-|---|---|---|---|---|---|
-| **25** | **0** | **1** | **4** | **6** | **11** |
+| Total fixed | Critical | High  | Medium | Low   | Open   |
+| ----------- | -------- | ----- | ------ | ----- | ------ |
+| **25**      | **0**    | **1** | **4**  | **6** | **11** |
 
 **Remediation progress: 25 of 36 findings resolved (69%)**
 
@@ -59,14 +59,14 @@ since v6 (HTTP Basic admin auth and the Sentry webhook HMAC) both use `constantT
 
 ### Scope of this review
 
-| Area | What changed since v6, and what was examined |
-|---|---|
-| **New API routes** | `membership-complete`, `donation-complete`, `pipe`, `open-roles`, `sentry-webhook`, `admin/conversion-stats` |
-| **Removed API routes** | `qgiv-webhook`, `membership-invite` (both deleted in #489) |
-| **New auth surface** | HTTP Basic admin area (`/admin/conversions`), Sentry→Mattermost webhook relay, shared origin policy helper |
-| **New data paths** | ICS events feed (token in URL), ProjectHub Workers-cache layer, Hub open-roles, Cloudflare KV conversion log |
-| **New third parties** | Sentry (client + server), GrowthBook, first-party-proxied Plausible script, CharityStack, ValidAid |
-| **Re-examined** | Areas unchanged since v6 but not previously covered in depth: response headers on SSR routes, the nonce `meta` mechanism, dependency advisories |
+| Area                   | What changed since v6, and what was examined                                                                                                    |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New API routes**     | `membership-complete`, `donation-complete`, `pipe`, `open-roles`, `sentry-webhook`, `admin/conversion-stats`                                    |
+| **Removed API routes** | `qgiv-webhook`, `membership-invite` (both deleted in #489)                                                                                      |
+| **New auth surface**   | HTTP Basic admin area (`/admin/conversions`), Sentry→Mattermost webhook relay, shared origin policy helper                                      |
+| **New data paths**     | ICS events feed (token in URL), ProjectHub Workers-cache layer, Hub open-roles, Cloudflare KV conversion log                                    |
+| **New third parties**  | Sentry (client + server), GrowthBook, first-party-proxied Plausible script, CharityStack, ValidAid                                              |
+| **Re-examined**        | Areas unchanged since v6 but not previously covered in depth: response headers on SSR routes, the nonce `meta` mechanism, dependency advisories |
 
 ---
 
@@ -74,66 +74,66 @@ since v6 (HTTP Basic admin auth and the Sentry webhook HMAC) both use `constantT
 
 ### Findings from rounds v1–v6
 
-| ID | Finding | Peak severity | v7 status |
-|---|---|---|---|
-| C-1 | API key & account ID in wrangler configs | CRITICAL | Fixed v2 · re-verified |
-| C-2 | Unauthenticated membership invite endpoint | CRITICAL | Fixed v2 · route deleted |
-| C-3 | Unverified webhook triggers privileged invite | CRITICAL | Fixed v2 · route deleted |
-| N-1 | Webhook secret exposed in URL query param | CRITICAL | Fixed v3 · re-verified |
-| N-2 | Timing attack on token comparison | HIGH | Fixed v3 · re-verified |
-| H-1 | Secret key logged to browser console | HIGH | Fixed v3 · re-verified |
-| H-2 | Full donor PII payload echoed in HTTP response | HIGH | Fixed v4 · re-verified |
-| H-3 | Middleware caches POST/API responses as public | HIGH | Fixed v3 · re-verified |
-| H-4 | No rate limiting on any endpoint | HIGH | Fixed v6 · re-verified (threshold: S-4) |
-| H-5 | Wildcard CORS on all endpoints | HIGH | Fixed v3 · re-verified |
-| N-3 | membership-invite proxies arbitrary body fields | MEDIUM | Fixed v3 · route deleted |
-| M-1 | No CSRF / Origin check on form endpoints | MEDIUM | Fixed v4 · re-verified |
-| M-2 | No input format/length validation on forms | MEDIUM | Fixed v4 · re-verified |
-| M-3 | getEnv globalThis fallback | MEDIUM | Fixed v3 · re-verified |
-| M-4 | Donor PII (email) in server logs | MEDIUM | Fixed v4 · re-verified |
-| M-5 | Internal error.message in HTTP responses | MEDIUM | Fixed v3 · re-verified |
-| M-6 | Dual middleware conflict — cache-control dead code | MEDIUM | Fixed v6 · re-verified |
-| R-1 | PUBLIC_SECRET_KEY in client-side Axios bundle | MEDIUM | Fixed v4 · re-verified |
-| R-2 | CSP 'unsafe-inline' defeats XSS protection | MEDIUM | Fixed v4 · re-verified |
-| P-1 | project-proxy: Authorization forwarded to any path | MEDIUM | Fixed v5 · re-verified |
-| P-2 | project-proxy: dot-segment traversal bypass | MEDIUM | Fixed v6 · re-verified |
-| L-1 | Notion DB IDs in wrangler.toml | LOW | Fixed v3 · re-verified |
-| L-3 | Image proxy has no authentication | LOW | Fixed v6 · worker gone |
-| L-4 | style-src still uses 'unsafe-inline' in CSP | LOW | Fixed v6 · re-verified |
-| L-5 | project-proxy forwards all browser headers upstream | LOW | Fixed v6 · re-verified |
-| L-2 | QGiv embed script loaded without Subresource Integrity | LOW | **Open since v1** |
+| ID  | Finding                                                | Peak severity | v7 status                               |
+| --- | ------------------------------------------------------ | ------------- | --------------------------------------- |
+| C-1 | API key & account ID in wrangler configs               | CRITICAL      | Fixed v2 · re-verified                  |
+| C-2 | Unauthenticated membership invite endpoint             | CRITICAL      | Fixed v2 · route deleted                |
+| C-3 | Unverified webhook triggers privileged invite          | CRITICAL      | Fixed v2 · route deleted                |
+| N-1 | Webhook secret exposed in URL query param              | CRITICAL      | Fixed v3 · re-verified                  |
+| N-2 | Timing attack on token comparison                      | HIGH          | Fixed v3 · re-verified                  |
+| H-1 | Secret key logged to browser console                   | HIGH          | Fixed v3 · re-verified                  |
+| H-2 | Full donor PII payload echoed in HTTP response         | HIGH          | Fixed v4 · re-verified                  |
+| H-3 | Middleware caches POST/API responses as public         | HIGH          | Fixed v3 · re-verified                  |
+| H-4 | No rate limiting on any endpoint                       | HIGH          | Fixed v6 · re-verified (threshold: S-4) |
+| H-5 | Wildcard CORS on all endpoints                         | HIGH          | Fixed v3 · re-verified                  |
+| N-3 | membership-invite proxies arbitrary body fields        | MEDIUM        | Fixed v3 · route deleted                |
+| M-1 | No CSRF / Origin check on form endpoints               | MEDIUM        | Fixed v4 · re-verified                  |
+| M-2 | No input format/length validation on forms             | MEDIUM        | Fixed v4 · re-verified                  |
+| M-3 | getEnv globalThis fallback                             | MEDIUM        | Fixed v3 · re-verified                  |
+| M-4 | Donor PII (email) in server logs                       | MEDIUM        | Fixed v4 · re-verified                  |
+| M-5 | Internal error.message in HTTP responses               | MEDIUM        | Fixed v3 · re-verified                  |
+| M-6 | Dual middleware conflict — cache-control dead code     | MEDIUM        | Fixed v6 · re-verified                  |
+| R-1 | PUBLIC_SECRET_KEY in client-side Axios bundle          | MEDIUM        | Fixed v4 · re-verified                  |
+| R-2 | CSP 'unsafe-inline' defeats XSS protection             | MEDIUM        | Fixed v4 · re-verified                  |
+| P-1 | project-proxy: Authorization forwarded to any path     | MEDIUM        | Fixed v5 · re-verified                  |
+| P-2 | project-proxy: dot-segment traversal bypass            | MEDIUM        | Fixed v6 · re-verified                  |
+| L-1 | Notion DB IDs in wrangler.toml                         | LOW           | Fixed v3 · re-verified                  |
+| L-3 | Image proxy has no authentication                      | LOW           | Fixed v6 · worker gone                  |
+| L-4 | style-src still uses 'unsafe-inline' in CSP            | LOW           | Fixed v6 · re-verified                  |
+| L-5 | project-proxy forwards all browser headers upstream    | LOW           | Fixed v6 · re-verified                  |
+| L-2 | QGiv embed script loaded without Subresource Integrity | LOW           | **Open since v1**                       |
 
 ### New in v7
 
-| ID | Finding | Severity | Status |
-|---|---|---|---|
-| S-1 | Membership/donation completion endpoints grant Hub invites and list writes behind a spoofable Origin check | HIGH | Open · new v7 |
-| S-2 | Security response headers absent on every SSR page — `_headers` now only reaches static assets | MEDIUM | Open · new v7 |
-| S-3 | Authenticated admin dashboard served with `Cache-Control: public, max-age=600` | MEDIUM | Open · new v7 |
-| S-4 | Uncached Notion-backed GET routes return 500 under load before the GET rate limit engages | LOW | Open · new v7 |
-| S-5 | Token-bearing events feed URL reaches error telemetry unscrubbed | MEDIUM | Open · new v7 |
-| S-6 | Astro runtime two majors behind, with published RCE/SSRF/XSS advisories in the pinned range | MEDIUM | Open · new v7 |
-| S-7 | Per-request CSP nonce republished in a DOM-readable `<meta>` tag | LOW | Open · new v7 |
-| S-8 | Raw-HTML sink renders upstream error text in the volunteer form | LOW | Open · latent |
-| S-9 | `/api/pipe` accepts requests with no Origin and from any `*.pages.dev` host | LOW | Open · new v7 |
-| S-10 | Third-party analytics script re-served first-party without integrity pinning | LOW | Open · new v7 |
+| ID   | Finding                                                                                                    | Severity | Status        |
+| ---- | ---------------------------------------------------------------------------------------------------------- | -------- | ------------- |
+| S-1  | Membership/donation completion endpoints grant Hub invites and list writes behind a spoofable Origin check | HIGH     | Open · new v7 |
+| S-2  | Security response headers absent on every SSR page — `_headers` now only reaches static assets             | MEDIUM   | Open · new v7 |
+| S-3  | Authenticated admin dashboard served with `Cache-Control: public, max-age=600`                             | MEDIUM   | Open · new v7 |
+| S-4  | Uncached Notion-backed GET routes return 500 under load before the GET rate limit engages                  | LOW      | Open · new v7 |
+| S-5  | Token-bearing events feed URL reaches error telemetry unscrubbed                                           | MEDIUM   | Open · new v7 |
+| S-6  | Astro runtime two majors behind, with published RCE/SSRF/XSS advisories in the pinned range                | MEDIUM   | Open · new v7 |
+| S-7  | Per-request CSP nonce republished in a DOM-readable `<meta>` tag                                           | LOW      | Open · new v7 |
+| S-8  | Raw-HTML sink renders upstream error text in the volunteer form                                            | LOW      | Open · latent |
+| S-9  | `/api/pipe` accepts requests with no Origin and from any `*.pages.dev` host                                | LOW      | Open · new v7 |
+| S-10 | Third-party analytics script re-served first-party without integrity pinning                               | LOW      | Open · new v7 |
 
 ---
 
 ## Live verification log — 2026-09-22, against production
 
-| Probe | Result | Interpretation |
-|---|---|---|
-| `GET /` | 200, CSP present; no XFO / nosniff / Referrer-Policy | S-2 confirmed |
-| `GET /favicon.png` | All four headers present | `_headers` applies to assets only |
-| `GET /admin/conversions` | 401 + `Cache-Control: public, max-age=600` | S-3 confirmed |
-| `GET /api/events` | 200, `no-store`, `ACAO: *` | H-3 / H-5 still correct |
-| `POST /api/membership-complete` (no Origin) | 403 | Origin gate active |
-| `POST /api/membership-complete` (forged Origin, invalid email) | 400 "Invalid or missing email" | S-1 confirmed — gate passed |
-| 40 × concurrent `GET /api/faq` | 40 × 200, no 429 | Below the GET threshold |
-| 300 × concurrent `GET /api/faq` | ~76 × 200, then 13 × 500 mixed with 429s for the remainder | S-4 — GET rule active but late; upstream fails first |
-| 30 × concurrent `POST /api/donation-complete` | Mixed 400 / 429 | POST rate limit active |
-| `GET /api/project-proxy?path=/api/method/../../api/auth/admin` | 503 "Proxy not configured" | Proxy unconfigured in prod; guard verified in code |
+| Probe                                                          | Result                                                     | Interpretation                                       |
+| -------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------- |
+| `GET /`                                                        | 200, CSP present; no XFO / nosniff / Referrer-Policy       | S-2 confirmed                                        |
+| `GET /favicon.png`                                             | All four headers present                                   | `_headers` applies to assets only                    |
+| `GET /admin/conversions`                                       | 401 + `Cache-Control: public, max-age=600`                 | S-3 confirmed                                        |
+| `GET /api/events`                                              | 200, `no-store`, `ACAO: *`                                 | H-3 / H-5 still correct                              |
+| `POST /api/membership-complete` (no Origin)                    | 403                                                        | Origin gate active                                   |
+| `POST /api/membership-complete` (forged Origin, invalid email) | 400 "Invalid or missing email"                             | S-1 confirmed — gate passed                          |
+| 40 × concurrent `GET /api/faq`                                 | 40 × 200, no 429                                           | Below the GET threshold                              |
+| 300 × concurrent `GET /api/faq`                                | ~76 × 200, then 13 × 500 mixed with 429s for the remainder | S-4 — GET rule active but late; upstream fails first |
+| 30 × concurrent `POST /api/donation-complete`                  | Mixed 400 / 429                                            | POST rate limit active                               |
+| `GET /api/project-proxy?path=/api/method/../../api/auth/admin` | 503 "Proxy not configured"                                 | Proxy unconfigured in prod; guard verified in code   |
 
 No test wrote data. The two completion-endpoint probes used a deliberately invalid email address so the
 request was rejected at validation, after the access-control decision but before any Hub or EmailOctopus call.
@@ -189,13 +189,17 @@ half only. The POST rate limit caps the rate, not the act.
 // src/pages/api/qgiv-webhook.ts
 const secret = getEnv("QGIV_WEBHOOK_SECRET", locals);
 const sent = request.headers.get("X-Webhook-Secret") ?? "";
-if (!secret || !constantTimeEqual(sent, secret)) return new Response("Unauthorized", { status: 401 });
+if (!secret || !constantTimeEqual(sent, secret))
+  return new Response("Unauthorized", { status: 401 });
 
 // Minimum, if the client-side trigger has to stay: prove the transaction exists
 // before acting on it, and never accept the tier or the email from the caller.
-const txn = await fetch(`${QGIV_API}/transactions/${transactionId}`, { headers: { Authorization: qgivKey } });
-if (!txn.ok) return new Response(JSON.stringify({ message: "Unknown transaction" }), { status: 402 });
-const { email, tier } = await txn.json();   // authoritative values, from QGiv
+const txn = await fetch(`${QGIV_API}/transactions/${transactionId}`, {
+  headers: { Authorization: qgivKey },
+});
+if (!txn.ok)
+  return new Response(JSON.stringify({ message: "Unknown transaction" }), { status: 402 });
+const { email, tier } = await txn.json(); // authoritative values, from QGiv
 ```
 
 Keep the `Origin` check — it is useful defence in depth against drive-by cross-site calls — but it cannot
@@ -279,7 +283,10 @@ deployment, but the browser disk cache and any corporate proxy in front of an ad
 const isApi = pathname.startsWith("/api/");
 const isPrivate = pathname.startsWith("/admin/");
 if (!response.headers.has("Cache-Control") || isApi || isPrivate || !isGet) {
-  response.headers.set("Cache-Control", (!isGet || isApi || isPrivate) ? "no-store" : "public, max-age=600");
+  response.headers.set(
+    "Cache-Control",
+    !isGet || isApi || isPrivate ? "no-store" : "public, max-age=600"
+  );
 }
 ```
 
@@ -305,7 +312,7 @@ The more interesting part of that run is what came back in between:
 … 200 200 200 500 200 200 500 429 429 500 500 500 500 500 500 500 500 500 500 429 200 200 200 429 429 …
 ```
 
-Thirteen 500s, several of them *before* the first 429. `/api/faq` issues a Notion API query per request with
+Thirteen 500s, several of them _before_ the first 429. `/api/faq` issues a Notion API query per request with
 no cache, so sustained load reaches Notion and the endpoint fails before the edge throttles it.
 `/api/ideas`, `/api/speakers`, `/api/e4p-signatories` and `/api/events` have the same shape.
 `/api/projects` is the exception and shows the right pattern — `projectsClient.ts` keeps a Workers Cache
@@ -359,7 +366,8 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   beforeBreadcrumb(crumb) {
     const url = crumb.data?.url;
-    if (typeof url === "string" && url.includes("?")) crumb.data.url = url.split("?")[0] + "?[redacted]";
+    if (typeof url === "string" && url.includes("?"))
+      crumb.data.url = url.split("?")[0] + "?[redacted]";
     return crumb;
   },
 });
@@ -381,14 +389,14 @@ Sentry.init({
 packages — `tar`, `browserslist`, `postcss`, `undici`, `vite` — which never reach the Workers runtime and are
 not urgent. The framework itself is the part that does.
 
-| Package | Pinned | Advisory affecting that version | Fixed in |
-|---|---|---|---|
-| astro | 5.18.1 | RCE through AVIF image optimization (GHSA-26w7-cxv4-gfx2, CVSS 9.8) | 7.2.8 |
-| astro | 5.18.1 | Host-header SSRF in prerendered error page fetch (GHSA-2pvr-wf23-7pc7, 7.5) | 6.4.6 |
-| astro | 5.18.1 | Reflected XSS via unescaped slot name (GHSA-8hv8-536x-4wqp, 7.1) | 6.3.3 |
-| astro | 5.18.1 | XSS in `define:vars` via incomplete `</script>` sanitization (GHSA-j687-52p2-xcff, 6.1) | 6.1.6 |
-| svelte | 5.55.5 | SSR XSS via spread attributes; XSS via DOM clobbering (GHSA-pr6f-5x2q-rwfp, GHSA-rcqx-6q8c-2c42) | 5.55.7 |
-| axios | 1.16.0 | Prototype-pollution gadgets in request construction (GHSA-mmx7-hfxf-jppx and others) | 1.18.0 |
+| Package | Pinned | Advisory affecting that version                                                                  | Fixed in |
+| ------- | ------ | ------------------------------------------------------------------------------------------------ | -------- |
+| astro   | 5.18.1 | RCE through AVIF image optimization (GHSA-26w7-cxv4-gfx2, CVSS 9.8)                              | 7.2.8    |
+| astro   | 5.18.1 | Host-header SSRF in prerendered error page fetch (GHSA-2pvr-wf23-7pc7, 7.5)                      | 6.4.6    |
+| astro   | 5.18.1 | Reflected XSS via unescaped slot name (GHSA-8hv8-536x-4wqp, 7.1)                                 | 6.3.3    |
+| astro   | 5.18.1 | XSS in `define:vars` via incomplete `</script>` sanitization (GHSA-j687-52p2-xcff, 6.1)          | 6.1.6    |
+| svelte  | 5.55.5 | SSR XSS via spread attributes; XSS via DOM clobbering (GHSA-pr6f-5x2q-rwfp, GHSA-rcqx-6q8c-2c42) | 5.55.7   |
+| axios   | 1.16.0 | Prototype-pollution gadgets in request construction (GHSA-mmx7-hfxf-jppx and others)             | 1.18.0   |
 
 Two mitigations apply and should be weighed before this is treated as an emergency. The AVIF RCE is in
 Astro's sharp-backed image service; this project configures `imageService: "cloudflare"`, so that code path
@@ -477,8 +485,8 @@ of applicant form values to the browser console at line 100.
 
 ```ts
 const ORIGIN_POLICY: OriginPolicy = {
-  allowedSuffixes: [".pages.dev"],      // any Cloudflare Pages site, not just ours
-  allowMissingOrigin: true,             // any non-browser client
+  allowedSuffixes: [".pages.dev"], // any Cloudflare Pages site, not just ours
+  allowMissingOrigin: true, // any non-browser client
 };
 ```
 
@@ -558,19 +566,19 @@ updated in place, and coordinate hash updates with their release schedule if it 
 
 ## Security posture progress — all rounds
 
-| Round | Date | Critical | High | Medium | Low | Total open | Fixed |
-|---|---|---|---|---|---|---|---|
-| v1 | 2026-03-31 | 3 | 5 | 6 | 3 | 17 | — |
-| v2 | 2026-04-02 | 1 | 6 | 7 | 3 | 17 | 3 |
-| v3 | 2026-04-06 | 0 | 2 | 5 | 3 | 10 | 10 |
-| v4 | 2026-04-09 | 0 | 1 | 2 | 3 | 6 | 16 |
-| v5 | 2026-04-13 | 0 | 1 | 2 | 4 | 7 | 17 |
-| v6 | 2026-04-14 | 0 | 0 | 0 | 1 | 1 | 24 |
-| **v7** | **2026-09-22** | **0** | **1** | **4** | **6** | **11** | **25** |
+| Round  | Date           | Critical | High  | Medium | Low   | Total open | Fixed  |
+| ------ | -------------- | -------- | ----- | ------ | ----- | ---------- | ------ |
+| v1     | 2026-03-31     | 3        | 5     | 6      | 3     | 17         | —      |
+| v2     | 2026-04-02     | 1        | 6     | 7      | 3     | 17         | 3      |
+| v3     | 2026-04-06     | 0        | 2     | 5      | 3     | 10         | 10     |
+| v4     | 2026-04-09     | 0        | 1     | 2      | 3     | 6          | 16     |
+| v5     | 2026-04-13     | 0        | 1     | 2      | 4     | 7          | 17     |
+| v6     | 2026-04-14     | 0        | 0     | 0      | 1     | 1          | 24     |
+| **v7** | **2026-09-22** | **0**    | **1** | **4**  | **6** | **11**     | **25** |
 
-*Count note: v6 reported "24 of 25 findings resolved" while its register lists 26 IDs. v7 counts the register —
+_Count note: v6 reported "24 of 25 findings resolved" while its register lists 26 IDs. v7 counts the register —
 26 findings from rounds v1–v6, of which 25 are fixed and L-2 remains open — plus the 10 new findings, for 36
-total. The v1–v6 rows above are reproduced as those reports stated them.*
+total. The v1–v6 rows above are reproduced as those reports stated them._
 
 The jump from 1 open to 11 is a scope effect as much as a quality one: v2–v6 were four-day deltas over a
 stable codebase, while v7 covers five months in which the site was re-platformed onto SSR, six API routes were
@@ -583,20 +591,20 @@ widening the review beyond the recently changed files.
 
 ## Remediation plan — v7
 
-| Priority | Action | ID | Effort |
-|---|---|---|---|
-| **Immediate** | Verify the payment server-side before granting a Hub invite or writing to EmailOctopus — restore the signature-verified QGiv webhook, or validate the transaction id against QGiv's API from the endpoint. | S-1 | 0.5–1 day |
-| **This week** | Emit `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy` from middleware, and add `frame-ancestors 'none'` to the CSP. | S-2 | 1 hour |
-| **This week** | Force `no-store` on `/admin/*` in the cache middleware. | S-3 | 15 min |
-| **This month** | Confirm the thirteen 500s from the 300-request burst raised a Sentry alert; if not, fix the alerting gap. | S-4 | 1 hour |
-| **This month** | Add Sentry query-string scrubbing; check existing issues for the feed token and rotate it if it appears. | S-5 | 1–2 hours |
-| **This month** | Cache the Notion and ICS reads through `resolveWithCache()`, as `/api/projects` already does — this is the substantive fix for S-4. | S-4 | half day |
-| **This month** | Bump svelte and axios; remove `react-router-dom` and `install`; add `npm audit` to CI. | S-6 | 1–2 hours |
-| Backlog | Re-derive the GET rate-limit threshold so it sits below the point where the uncached routes 500, and record it with the rule. | S-4 | 30 min |
-| Backlog | Tighten `/api/pipe`'s origin policy to match the other endpoints. | S-9 | 15 min |
-| Backlog | Replace `dangerouslySetInnerHTML` in the volunteer form with text, before the proxy is reconfigured. | S-8 | 15 min |
-| Backlog | Pin SHA-384 hashes for the QGiv embed and the proxied Plausible script. | L-2, S-10 | 2 hours + vendor |
-| Backlog | Plan the Astro 5 → 7 upgrade; retire the nonce `meta` tag and the prototype patches in favour of an Emotion cache nonce. | S-6, S-7 | multi-day |
+| Priority       | Action                                                                                                                                                                                                     | ID        | Effort           |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------- |
+| **Immediate**  | Verify the payment server-side before granting a Hub invite or writing to EmailOctopus — restore the signature-verified QGiv webhook, or validate the transaction id against QGiv's API from the endpoint. | S-1       | 0.5–1 day        |
+| **This week**  | Emit `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy` from middleware, and add `frame-ancestors 'none'` to the CSP.                                                                    | S-2       | 1 hour           |
+| **This week**  | Force `no-store` on `/admin/*` in the cache middleware.                                                                                                                                                    | S-3       | 15 min           |
+| **This month** | Confirm the thirteen 500s from the 300-request burst raised a Sentry alert; if not, fix the alerting gap.                                                                                                  | S-4       | 1 hour           |
+| **This month** | Add Sentry query-string scrubbing; check existing issues for the feed token and rotate it if it appears.                                                                                                   | S-5       | 1–2 hours        |
+| **This month** | Cache the Notion and ICS reads through `resolveWithCache()`, as `/api/projects` already does — this is the substantive fix for S-4.                                                                        | S-4       | half day         |
+| **This month** | Bump svelte and axios; remove `react-router-dom` and `install`; add `npm audit` to CI.                                                                                                                     | S-6       | 1–2 hours        |
+| Backlog        | Re-derive the GET rate-limit threshold so it sits below the point where the uncached routes 500, and record it with the rule.                                                                              | S-4       | 30 min           |
+| Backlog        | Tighten `/api/pipe`'s origin policy to match the other endpoints.                                                                                                                                          | S-9       | 15 min           |
+| Backlog        | Replace `dangerouslySetInnerHTML` in the volunteer form with text, before the proxy is reconfigured.                                                                                                       | S-8       | 15 min           |
+| Backlog        | Pin SHA-384 hashes for the QGiv embed and the proxied Plausible script.                                                                                                                                    | L-2, S-10 | 2 hours + vendor |
+| Backlog        | Plan the Astro 5 → 7 upgrade; retire the nonce `meta` tag and the prototype patches in favour of an Emotion cache nonce.                                                                                   | S-6, S-7  | multi-day        |
 
 ---
 
@@ -662,4 +670,4 @@ auditing the whole surface rather than only the diff.
 
 ---
 
-*Tech for Palestine — Security Audit Report v7 — 2026-09-22 — Confidential · Internal Use Only*
+_Tech for Palestine — Security Audit Report v7 — 2026-09-22 — Confidential · Internal Use Only_

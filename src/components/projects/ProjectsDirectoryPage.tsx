@@ -298,7 +298,7 @@ function ProjectsDirectory({
             We could not load the project directory
           </Typography>
           <Typography sx={{ mt: 2, fontSize: "19px", lineHeight: 1.625, color: "#73656E" }}>
-            This is a problem on our end, not a sign that the incubator is empty. There are 90+
+            This is a problem on our end, not a sign that the incubator is empty. There are 100+
             projects in the directory.
           </Typography>
           <Button
