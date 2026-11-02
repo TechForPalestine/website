@@ -2,252 +2,171 @@
 import SignUpForm from "../structures/SignUpForm.astro";
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+
+// Hero mosaic. The first photo leads full-width; the other four sit beneath it
+// as an even row (2x2 on phones), so the set reads as one composed block
+// rather than the scattered, offset columns of the old layout.
+const heroPhotos = [
+  {
+    src: "/protest-dc.jpg",
+    alt: "Palestine solidarity march in Washington DC with demonstrators carrying Palestinian flags near Capitol building",
+    width: 6000,
+    height: 4000,
+  },
+  {
+    src: "/gaza-sky-geeks.webp",
+    alt: "A woman working on a laptop at Gaza Sky Geeks technology center",
+    width: 2400,
+    height: 1600,
+  },
+  {
+    src: "/jerusalem.jpg",
+    alt: "Dome of the Rock in Jerusalem, Palestine, silhouetted against dramatic sunset sky with orange and purple clouds",
+    width: 3000,
+    height: 2000,
+  },
+  {
+    src: "/olive-branch-thobe.jpg",
+    alt: "Woman in traditional Palestinian embroidered thobe holding an olive branch, wearing ornate gold coin headpiece against olive tree background",
+    width: 612,
+    height: 408,
+  },
+  {
+    src: "/gaza-father-child.avif",
+    alt: "Silhouette of a Palestinian father playfully tossing child in the air against Gaza cityscape at sunset with vibrant orange and purple sky",
+    width: 896,
+    height: 564,
+  },
+];
+const [leadPhoto, ...rowPhotos] = heroPhotos;
+
+// Shared class strings: the live system's type scale (DESIGN.md §3) in plain
+// Tailwind, since Layout.astro does not load design-system.css.
+const container = "mx-auto max-w-[1280px] px-6";
+const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
+const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
+const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
+const pill = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRing}`;
+const primaryButton = `${pill} bg-grove text-white hover:bg-grove-hover`;
+const ghostButton = `${pill} border border-ink text-ink hover:border-grove hover:text-grove`;
+const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
 ---
 
 <Layout title="About">
   <main>
-    <div class="relative isolate">
-      <svg
-        class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
-        aria-hidden="true"
-      >
-        <defs>
-          <pattern
-            id="1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84"
-            width="200"
-            height="200"
-            x="50%"
-            y="-1"
-            patternUnits="userSpaceOnUse"
-          >
-            <path d="M.5 200V.5H200" fill="none"></path>
-          </pattern>
-        </defs>
-        <svg x="50%" y="-1" class="overflow-visible fill-gray-50">
-          <path
-            d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
-            stroke-width="0"></path>
-        </svg>
-        <rect
-          width="100%"
-          height="100%"
-          stroke-width="0"
-          fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)"></rect>
-      </svg>
+    <!-- Hero -->
+    <section class="py-16 min-[810px]:py-20">
       <div
-        class="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
-        aria-hidden="true"
+        class={`${container} grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-14`}
       >
-        <div
-          class="gradient-blob aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
-        >
-        </div>
-      </div>
-      <div class="overflow-hidden">
-        <div class="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
-          <div class="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
-            <div class="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-              <h1 class="mb-8 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Let's make tech a driving force for Palestinian freedom and liberation
-              </h1>
+        <div class="min-w-0">
+          <h1
+            class="text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+          >
+            Let's make tech a driving force for Palestinian freedom and liberation
+          </h1>
 
-              <h2 class="text-xl font-bold tracking-tight text-green-800 sm:text-4xl">
-                Technology should disrupt the status quo — not serve it.
-              </h2>
-              <p class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-                For decades, the narrative about Palestine has been shaped by selective historical
-                accounts and an occupying force that restricts access to the reality of on the
-                ground.
-              </p>
-              <p
-                class="relative mb-6 mt-4 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
+          <p
+            class="mt-8 max-w-[30ch] text-[22px] font-extrabold leading-snug text-grove min-[810px]:text-[28px]"
+          >
+            Technology should disrupt the status quo — not serve it.
+          </p>
+          <p class={`mt-6 max-w-[65ch] text-ink-secondary ${body}`}>
+            For decades, the narrative about Palestine has been shaped by selective historical
+            accounts and an occupying force that restricts access to the reality of on the ground.
+          </p>
+          <p class={`mt-4 max-w-[65ch] text-ink-secondary ${body}`}>
+            The community at Tech for Palestine is shifting the conversation towards equality and
+            justice, by cultivating a garden of projects and services that shut down genocidal
+            speech, enable people to speak up for Palestinian freedom, scale Palestinian activism
+            with technology, and cultivate fierce advocates for Palestine within the Tech community.
+          </p>
+
+          <div class="mt-10 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            <a href="/projects" class={primaryButton}>
+              Explore Projects
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-4 w-4"
+                aria-hidden="true"
               >
-                The community at Tech for Palestine is shifting the conversation towards equality
-                and justice, by cultivating a garden of projects and services that shut down
-                genocidal speech, enable people to speak up for Palestinian freedom, scale
-                Palestinian activism with technology, and cultivate fierce advocates for Palestine
-                within the Tech community.
-              </p>
-              <div>
-                <!-- Button Container -->
-                <div class="mt-8 flex flex-col justify-center gap-4 md:flex-row">
-                  <!-- Projects Button -->
-                  <a
-                    href="/projects"
-                    class="inline-flex w-40 items-center justify-center gap-2 rounded-md bg-green-800 px-4 py-2 font-semibold text-white shadow-sm transition-colors hover:bg-green-900"
-                  >
-                    Explore Projects
-                    <!-- Chevron Icon -->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      class="ml-2 h-5 w-5"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-                    </svg>
-                  </a>
-
-                  <!-- Get Involved Button -->
-                  <a
-                    href="/get-involved"
-                    class="inline-flex w-40 items-center justify-center gap-2 rounded-md bg-red-800 px-4 py-2 font-semibold text-white shadow-sm transition-colors hover:bg-red-900"
-                  >
-                    Get Involved
-                    <!-- Chevron Icon -->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      class="ml-2 h-5 w-5"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-                    </svg>
-                  </a>
-
-                  <!-- Join Discord Button -->
-                  <a
-                    href="/discord-invite"
-                    class="inline-flex w-40 items-center justify-center gap-2 rounded-md bg-blue-800 px-4 py-2 font-semibold text-white shadow-sm transition-colors hover:bg-blue-900"
-                  >
-                    Join Discord
-                    <!-- Chevron Icon -->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      class="ml-2 h-5 w-5"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div
-              class="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0"
-            >
-              <div
-                class="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80"
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                ></path>
+              </svg>
+            </a>
+            <a href="/get-involved" class={ghostButton}>
+              Get Involved
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-4 w-4"
+                aria-hidden="true"
               >
-                <div class="relative">
-                  <img
-                    src="/protest-dc.jpg"
-                    alt="Palestine solidarity march in Washington DC with demonstrators carrying Palestinian flags near Capitol building"
-                    class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                  />
-                  <div
-                    class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                  >
-                  </div>
-                </div>
-              </div>
-              <div class="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
-                <div class="relative">
-                  <img
-                    src="/gaza-sky-geeks.webp"
-                    alt="A woman working on a laptop at Gaza Sky Geeks technology center"
-                    class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                  />
-                  <div
-                    class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                  >
-                  </div>
-                </div>
-                <div class="relative">
-                  <img
-                    src="/jerusalem.jpg"
-                    alt="Dome of the Rock in Jerusalem, Palestine, silhouetted against dramatic sunset sky with orange and purple clouds"
-                    class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                  />
-                  <div
-                    class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                  >
-                  </div>
-                </div>
-              </div>
-              <div class="w-44 flex-none space-y-8 pt-32 sm:pt-0">
-                <div class="relative">
-                  <img
-                    src="/olive-branch-thobe.jpg"
-                    alt="Woman in traditional Palestinian embroidered thobe holding an olive branch, wearing ornate gold coin headpiece against olive tree background"
-                    class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                  />
-                  <div
-                    class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                  >
-                  </div>
-                </div>
-                <div class="relative">
-                  <img
-                    src="/gaza-father-child.avif"
-                    alt="Silhouette of a Palestinian father playfully tossing child in the air against Gaza cityscape at sunset with vibrant orange and purple sky"
-                    class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                  />
-                  <div
-                    class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                  >
-                  </div>
-                </div>
-              </div>
-            </div>
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                ></path>
+              </svg>
+            </a>
+            <a href="/discord-invite" class={ghostButton}>
+              Join Discord
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-4 w-4"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                ></path>
+              </svg>
+            </a>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Content section -->
-    <div class="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
-      <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our Founder</h2>
-        <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
-          <div>
-            <p class="text-l mt-2 leading-snug text-gray-600">
-              Paul Biggar is a tech founder and software engineer. He founded Tech For Palestine, <a
-                href="https://circleci.com">CircleCI</a
-              > and
-              <a href="https://darklang.com">Darklang</a>.
-            </p>
-            <p class="text-l mt-2 leading-snug text-gray-600">
-              Read why <a href="https://blog.paulbiggar.com/i-cant-sleep/">Paul couldn't sleep</a> -
-              the post that started Tech for Palestine.
-            </p>
-          </div>
+        <div class="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          <img
+            src={leadPhoto.src}
+            alt={leadPhoto.alt}
+            width={leadPhoto.width}
+            height={leadPhoto.height}
+            fetchpriority="high"
+            class="col-span-2 aspect-[3/2] h-auto w-full rounded-lg bg-stone object-cover sm:col-span-4"
+          />
+          {
+            rowPhotos.map((photo) => (
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                loading="lazy"
+                decoding="async"
+                class="aspect-square h-auto w-full rounded-md bg-stone object-cover"
+              />
+            ))
+          }
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Vision & Mission -->
     <section
       aria-labelledby="vision-heading"
-      class="mt-16 border-y border-first-light-edge bg-first-light sm:mt-20"
+      class="border-y border-first-light-edge bg-first-light"
     >
-      <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-        <h2
-          id="vision-heading"
-          class="text-xs font-bold uppercase tracking-[0.14em] text-grove-deep"
-        >
-          Vision
-        </h2>
-        <p class="mt-5 max-w-4xl text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
+      <div class={`${container} py-16 min-[810px]:py-20`}>
+        <h2 id="vision-heading" class={overline}>Vision</h2>
+        <p class={`mt-5 max-w-4xl ${headline}`}>
           A free Palestine, a tech industry that actively participates in liberation, and a world
           where all people enjoy equal dignity, justice, and human rights.
         </p>
@@ -255,14 +174,9 @@ import "../styles/base.css";
         <div
           class="mt-12 grid gap-x-12 gap-y-5 border-t border-first-light-edge pt-12 lg:mt-16 lg:grid-cols-[12rem_minmax(0,1fr)] lg:pt-16"
         >
-          <h2
-            id="mission-heading"
-            class="text-xs font-bold uppercase tracking-[0.14em] text-grove-deep lg:pt-2"
-          >
-            Mission
-          </h2>
+          <h2 id="mission-heading" class={`${overline} lg:pt-2`}>Mission</h2>
           <div class="max-w-[65ch]">
-            <p class="text-xl leading-relaxed text-ink">
+            <p class={`text-ink ${body}`}>
               T4P exists to accelerate the liberation of Palestine, transform the tech industry, and
               contribute to movements for justice everywhere by:
             </p>
@@ -285,93 +199,93 @@ import "../styles/base.css";
       </div>
     </section>
 
-    <div class="mx-auto mt-16 max-w-7xl px-6 sm:mt-20 lg:px-8">
-      <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">How we work</h2>
-          <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
-            <div class="lg:w-full lg:max-w-2xl lg:flex-auto">
-              <p class="text-xl leading-8 text-gray-600">
-                <ul class="mt-3 list-disc">
-                  <li class="ml-9 text-gray-600">
-                    <p class="text-xl leading-8 text-gray-600">
-                      We connect project leaders to communities of volunteers
-                    </p>
-                  </li>
-                  <li class="ml-9 text-gray-600">
-                    <p class="text-xl leading-8 text-gray-600">
-                      We mentor, provide office hours, and support start-up projects aimed at ending
-                      apartheid, minimizing media bias, encouraging boycotts, and more
-                    </p>
-                  </li>
-                  <li class="ml-9 text-gray-600">
-                    <p class="text-xl leading-8 text-gray-600">
-                      We create a community of pro-Palestinian techies to get involved in causes
-                      they believe in and help Palestinians get hired
-                    </p>
-                  </li>
-                </ul>
-              </p>
-            </div>
-          </div>
+    <!-- How we work -->
+    <section aria-labelledby="how-heading" class="py-16 min-[810px]:py-20">
+      <div
+        class={`${container} grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14`}
+      >
+        <div class="min-w-0">
+          <h2 id="how-heading" class={headline}>How we work</h2>
         </div>
-        <br />
-        <a
-          href="/projects"
-          class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-green-800 px-3 text-base font-medium text-white transition-colors hover:bg-green-900 focus:outline-none"
-        >
-          Learn more about our Projects
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="h-6 w-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
-          </svg>
-        </a>
+        <div class="min-w-0">
+          <ul class="max-w-[65ch] divide-y divide-ink-divider border-y border-ink-divider">
+            <li class={`py-6 text-ink ${body}`}>
+              We connect project leaders to communities of volunteers
+            </li>
+            <li class={`py-6 text-ink ${body}`}>
+              We mentor, provide office hours, and support start-up projects aimed at ending
+              apartheid, minimizing media bias, encouraging boycotts, and more
+            </li>
+            <li class={`py-6 text-ink ${body}`}>
+              We create a community of pro-Palestinian techies to get involved in causes they
+              believe in and help Palestinians get hired
+            </li>
+          </ul>
+          <a href="/projects" class={`mt-8 ${primaryButton}`}>
+            Learn more about our Projects
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="h-4 w-4"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+            </svg>
+          </a>
+        </div>
       </div>
-      <br />
-      <div class="relative -m-12 mx-auto mt-12 max-w-screen-md px-6 pb-24 sm:mt-20 md:px-8">
+    </section>
+
+    <!-- Our Founder -->
+    <section
+      aria-labelledby="founder-heading"
+      class="border-y border-first-light-edge bg-first-light"
+    >
+      <div
+        class={`${container} grid gap-x-12 gap-y-5 py-16 min-[810px]:py-20 lg:grid-cols-[12rem_minmax(0,1fr)]`}
+      >
+        <h2 id="founder-heading" class={`${overline} lg:pt-2`}>Our Founder</h2>
+        <div class="max-w-[65ch] space-y-4">
+          <p class={`text-ink ${body}`}>
+            Paul Biggar is a tech founder and software engineer. He founded Tech For Palestine, <a
+              href="https://circleci.com"
+              class={inlineLink}>CircleCI</a
+            > and
+            <a href="https://darklang.com" class={inlineLink}>Darklang</a>.
+          </p>
+          <p class={`text-ink-secondary ${body}`}>
+            Read why <a href="https://blog.paulbiggar.com/i-cant-sleep/" class={inlineLink}
+              >Paul couldn't sleep</a
+            > - the post that started Tech for Palestine.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Closing image -->
+    <div class={`${container} pt-16 min-[810px]:pt-20`}>
+      <img
+        src="/gaza-children-playing-ocean.jpg"
+        alt="Palestinian children playing joyfully in ocean waves at sunset on Gaza's Mediterranean coastline"
+        width="900"
+        height="603"
+        loading="lazy"
+        decoding="async"
+        class="aspect-[5/2] h-auto w-full rounded-lg bg-stone object-cover"
+      />
+    </div>
+
+    <!-- Newsletter sign-up -->
+    <section class="py-16 min-[810px]:py-20">
+      <div class="mx-auto max-w-screen-md px-6">
         <SignUpForm />
       </div>
-    </div>
+    </section>
   </main>
-
-  <!-- Image section -->
-  <div class="mt-12 pb-24 sm:mt-20 xl:mx-auto xl:max-w-7xl xl:px-8">
-    <img
-      src="/gaza-children-playing-ocean.jpg"
-      alt="Palestinian children playing joyfully in ocean waves at sunset on Gaza's Mediterranean coastline"
-      class="aspect-[5/2] w-full object-cover xl:rounded-3xl"
-    />
-  </div>
 </Layout>
-
-<style>
-  .gradient-blob {
-    clip-path: polygon(
-      63.1% 29.5%,
-      100% 17.1%,
-      76.6% 3%,
-      48.4% 0%,
-      44.6% 4.7%,
-      54.5% 25.3%,
-      59.8% 49%,
-      55.2% 57.8%,
-      44.4% 57.2%,
-      27.8% 47.9%,
-      35.1% 81.5%,
-      0% 97.7%,
-      39.2% 100%,
-      35.2% 81.4%,
-      97.2% 52.8%,
-      63.1% 29.5%
-    );
-  }
-</style>
