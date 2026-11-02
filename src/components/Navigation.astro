@@ -1,10 +1,38 @@
 ---
 import { Icon } from "astro-icon/components";
 import NavBar from "./NavBar.svelte";
+import { evalServerFeature, loadFeaturePayload } from "../lib/growthbookServer";
+import { getEnv } from "../utils/getEnv";
+import {
+  NAV_LABEL_EXPERIMENT,
+  NAV_LABEL_HREF,
+  NAV_LABELS,
+  variantFromFeature,
+} from "../utils/navLabelExperiment";
 
 const currentRoute = Astro.url.pathname;
 
-const navigation: Map<string, { href: string; submenu: [string, string][] | null }> = new Map([
+// "Get Involved" vs "Member Opportunities" label test. GrowthBook picks the variant on the
+// server for a throwaway per-request id and it is rendered into the HTML, so there is no
+// flicker and nothing is stored. Without an assignment (flag off, CDN down) everyone sees
+// "Get Involved" and nothing is tracked. Pages are served `private` (see
+// src/middleware/cache-control.ts) so a shared cache never hands one visitor's label to others.
+const growthbookKey = getEnv("PUBLIC_GROWTHBOOK_CLIENT_KEY", Astro.locals);
+const growthbookPayload = growthbookKey ? await loadFeaturePayload(growthbookKey) : undefined;
+const assignedVariant = growthbookPayload
+  ? variantFromFeature(
+      evalServerFeature(growthbookPayload, NAV_LABEL_EXPERIMENT, crypto.randomUUID())
+    )
+  : null;
+const navLabel = NAV_LABELS[assignedVariant ?? "A"];
+
+type NavItem = {
+  href: string;
+  submenu: [string, string][] | null;
+  experiment?: { name: string; variant: string };
+};
+
+const navigation: Map<string, NavItem> = new Map([
   [
     "Home",
     {
@@ -39,10 +67,13 @@ const navigation: Map<string, { href: string; submenu: [string, string][] | null
     },
   ],
   [
-    "Get Involved",
+    navLabel,
     {
-      href: "/get-involved",
+      href: NAV_LABEL_HREF,
       submenu: null,
+      experiment: assignedVariant
+        ? { name: NAV_LABEL_EXPERIMENT, variant: assignedVariant }
+        : undefined,
     },
   ],
   [
@@ -71,3 +102,9 @@ const navigation: Map<string, { href: string; submenu: [string, string][] | null
   <Icon name="solar:hamburger-menu-outline" class="h-8 w-8" slot="burger-icon" />
   <Icon name="mdi:close" class="h-8 w-8" slot="close" />
 </NavBar>
+
+<script>
+  import { trackNavLabel } from "../utils/navLabelExperiment";
+
+  trackNavLabel();
+</script>

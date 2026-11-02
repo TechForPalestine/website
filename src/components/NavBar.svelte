@@ -1,7 +1,12 @@
 <script lang="ts">
   import { tick } from 'svelte';
 
-  export let navigation: Map<string, {href: string, submenu: Array<[string, string]> | null}>;
+  export let navigation: Map<string, {
+    href: string,
+    submenu: Array<[string, string]> | null,
+    // Set when the item is under an A/B test; read by trackNavLabel (src/utils/navLabelExperiment.ts).
+    experiment?: {name: string, variant: string},
+  }>;
   export let currentRoute: string;
   // Unused: only declared so @astrojs/svelte's generated types allow the named
   // slots (close, burger-icon) passed from Navigation.astro — without
@@ -165,6 +170,8 @@
               <!-- Regular Menu Item -->
               <a
                 href={item.href}
+                data-experiment={item.experiment?.name}
+                data-variant={item.experiment?.variant}
                 class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
               >
                 {label}
@@ -273,6 +280,8 @@
               <!-- Regular Mobile Item -->
               <a
                 href={item.href}
+                data-experiment={item.experiment?.name}
+                data-variant={item.experiment?.variant}
                 class="block w-full text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
               >
                 {label}
