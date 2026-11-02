@@ -5,9 +5,11 @@ vi.mock("../../utils/qgivVerify", async (importOriginal) => {
   return { ...actual, verifyQgivTransaction: vi.fn() };
 });
 vi.mock("../../lib/report-error", () => ({ reportError: vi.fn() }));
+vi.mock("../../lib/membershipAnalytics", () => ({ sendMembershipVerified: vi.fn() }));
 
 const { verifyQgivTransaction } = await import("../../utils/qgivVerify");
 const { reportError } = await import("../../lib/report-error");
+const { sendMembershipVerified } = await import("../../lib/membershipAnalytics");
 const { POST } = await import("../../pages/api/membership-complete");
 
 const LOCALS = {
@@ -113,5 +115,31 @@ describe("POST /api/membership-complete", () => {
       .mocked(fetch)
       .mock.calls.map(([, init]) => String((init as RequestInit).body));
     expect(bodies.join(" ")).toContain("Supporting Member");
+  });
+
+  it("records a verified membership server-side with the tier from Qgiv", async () => {
+    vi.mocked(verifyQgivTransaction).mockResolvedValue({
+      ok: true,
+      transaction: {
+        id: "555003",
+        formId: "1116610",
+        email: "payer@example.org",
+        firstName: "Ada",
+        lastName: "Lovelace",
+        amount: "25.00",
+        optedIn: true,
+      },
+    });
+
+    await call({ transactionId: "555003", tier: "Supporting Member" });
+
+    expect(sendMembershipVerified).toHaveBeenCalledOnce();
+    expect(vi.mocked(sendMembershipVerified).mock.calls[0][0]).toMatchObject({ tier: "member" });
+  });
+
+  it("does not record a membership whose verification failed", async () => {
+    vi.mocked(verifyQgivTransaction).mockResolvedValue({ ok: false, reason: "not-accepted" });
+    await call({ transactionId: "555004" });
+    expect(sendMembershipVerified).not.toHaveBeenCalled();
   });
 });

@@ -4,6 +4,7 @@ import {
   EXPOSURE_EVENT,
   trackNavLabel,
   type ExperimentDocument,
+  navExperimentProps,
   variantFromFeature,
 } from "./navLabelExperiment";
 
@@ -101,5 +102,15 @@ describe("trackNavLabel", () => {
 
     fire("auxclick", true, 1);
     expect(track).toHaveBeenLastCalledWith(CLICK_EVENT, props);
+  });
+});
+
+describe("navExperimentProps", () => {
+  it("returns the experiment and variant from the navbar link", () => {
+    expect(navExperimentProps(fakeDocument().doc)).toEqual(props);
+  });
+
+  it("returns nothing when the visitor is not in the test", () => {
+    expect(navExperimentProps(fakeDocument({ dataset: null }).doc)).toEqual({});
   });
 });

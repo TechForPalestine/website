@@ -32,6 +32,7 @@ Set the following in the Cloudflare Pages dashboard (Production and Preview are 
 - `EO_API_KEY` — EmailOctopus donor/member sync
 - `QGIV_API_TOKEN` — Qgiv reporting API token used to verify completed transactions server-side. Permanent token, scoped to the membership, supporting-member and donation forms. **Required:** without it both completion endpoints fail closed and no member is invited.
 - `PLAUSIBLE_API_KEY` — Stats API for the admin conversion dashboard
+- `NAV_ASSIGNMENT_SECRET` — random string (e.g. `openssl rand -hex 32`) keying the daily, cookie-free visitor hash for the navbar A/B test (`src/lib/navAssignment.ts`). Without it the variant is re-picked on every request and a warning is logged.
 - `ADMIN_USERNAME`, `ADMIN_PASSWORD` — HTTP Basic Auth for `/admin/conversions`
 
 **Sentry**

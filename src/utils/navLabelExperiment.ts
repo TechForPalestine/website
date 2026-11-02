@@ -19,9 +19,8 @@ export interface FeatureOutcome {
 }
 
 // The variant comes from the "nav-get-involved-label" GrowthBook flag, evaluated on the server
-// with a fresh id per request (see src/lib/growthbookServer.ts): nothing is stored, so a
-// visitor can see a different label on each page view. That is the price of needing no
-// consent banner.
+// (src/lib/navAssignment.ts) with an id that is a keyed hash of the day, IP and User-Agent:
+// a visitor keeps one label all day and nothing is stored on their device.
 //
 // The flag is a percentage rollout to "B" followed by a catch-all force to "A", so a bucketed
 // visitor always reports source "force". A disabled flag, a missing flag or an unreachable
@@ -50,6 +49,18 @@ export interface TrackNavLabelOptions {
 }
 
 const LINK_SELECTOR = "a[data-experiment][data-variant]";
+
+/** The nav label test props for the page's navbar, to attach to conversion events
+ * (About You Complete, Membership-complete). Empty when the visitor is not in the test.
+ * The navbar is in the DOM on every Layout page, including when it is hidden by CSS. */
+export function navExperimentProps(
+  doc: Pick<Document, "querySelector"> = document
+): Record<string, string> {
+  const link = doc.querySelector(LINK_SELECTOR) as HTMLElement | null;
+  const experiment = link?.dataset.experiment;
+  const variant = link?.dataset.variant;
+  return experiment && variant ? { experiment, variant } : {};
+}
 
 const trackWithPlausible: TrackEvent = (name, props) => {
   window.plausible?.(name, { props });

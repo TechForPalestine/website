@@ -7,6 +7,7 @@ vi.mock("../../utils/qgivVerify", async (importOriginal) => {
 });
 vi.mock("@sentry/astro", () => ({ flush: vi.fn().mockResolvedValue(true) }));
 vi.mock("../../lib/report-error", () => ({ reportError: vi.fn() }));
+vi.mock("../../lib/membershipAnalytics", () => ({ sendMembershipVerified: vi.fn() }));
 
 const { verifyQgivTransaction } = await import("../../utils/qgivVerify");
 const { reportError } = await import("../../lib/report-error");
