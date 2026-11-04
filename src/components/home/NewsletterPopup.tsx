@@ -17,6 +17,10 @@ import {
   safeLocalStorage,
   writePopupState,
 } from "../../utils/newsletterPopup";
+import {
+  SHOWN_ATTRIBUTE as REBELLION_SHOWN_ATTRIBUTE,
+  SHOWN_EVENT as REBELLION_SHOWN_EVENT,
+} from "../../utils/rebellionPopup";
 
 // Homepage mailing-list popup. Spec: docs/superpowers/specs/2026-09-23-newsletter-popup-design.md
 
@@ -95,6 +99,17 @@ function Popup() {
   const bottomFormInView = useInView(FOOTER_SECTION_ID);
   const isDesktop = useIsDesktop();
   const [closed, setClosed] = useState(false);
+  // The homepage Tech Rebellion modal wins the page load: once it has opened,
+  // this popup stays hidden until the next page load. Not a dismissal, so
+  // nothing is written to storage.
+  const [rebellionShown, setRebellionShown] = useState(() =>
+    document.documentElement.hasAttribute(REBELLION_SHOWN_ATTRIBUTE)
+  );
+  useEffect(() => {
+    const onRebellionShown = () => setRebellionShown(true);
+    window.addEventListener(REBELLION_SHOWN_EVENT, onRebellionShown);
+    return () => window.removeEventListener(REBELLION_SHOWN_EVENT, onRebellionShown);
+  }, []);
   // Desktop opens straight to the card; mobile starts collapsed to a slim bar
   // (see the render branch below — the same collapsed/expanded split now also
   // drives the 30s idle auto-collapse on both).
@@ -104,7 +119,7 @@ function Popup() {
   const shownRef = useRef(false);
   const resetIdleTimerRef = useRef(() => {});
 
-  const mounted = enabled && eligible && triggered && !closed;
+  const mounted = enabled && eligible && triggered && !closed && !rebellionShown;
   const visible = mounted && !bottomFormInView;
 
   useEffect(() => {

@@ -1,0 +1,497 @@
+---
+import { EVENT_URL, countdownLabel, isCampaignLive } from "../../utils/rebellionPopup";
+
+// Homepage promo for Tech Rebellion (Berlin, 12 December 2026), styled after
+// the event site: the Berlin Wall mural, spray-paint display fonts and its
+// cream / red / green palette. Renders nothing once the event is over; delete
+// it, public/images/tech-rebellion/ and public/fonts/ after that.
+const now = Date.now();
+const live = isCampaignLive(now);
+const IMG = "/images/tech-rebellion";
+---
+
+{
+  live && (
+    <dialog id="rebellion-popup" class="rb" aria-labelledby="rb-title">
+      <div class="rb-card">
+        <img
+          class="rb-img"
+          data-rb-photo
+          src={`${IMG}/rebellion-wall.webp`}
+          srcset={`${IMG}/rebellion-wall-small.webp 720w, ${IMG}/rebellion-wall.webp 1024w`}
+          sizes="(min-width: 768px) 920px, 100vw"
+          width="1024"
+          height="1024"
+          loading="lazy"
+          decoding="async"
+          alt=""
+        />
+        <div class="rb-shade" aria-hidden="true" />
+
+        <button type="button" class="rb-close" data-rb-close aria-label="Close announcement">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+
+        <div class="rb-copy">
+          <p class="rb-tag">Berlin · Saturday 12 December</p>
+          <h2 id="rb-title" class="rb-title">
+            Tech
+            <br />
+            <span class="rb-title-accent">Rebellion</span>
+          </h2>
+          <p class="rb-slogan">From Ideas to Action</p>
+          <p class="rb-text">
+            A one-day gathering for technologists, artists and allies building the future we want
+            for everyone, everywhere.
+          </p>
+
+          <dl class="rb-facts">
+            <div>
+              <dt>When</dt>
+              <dd>
+                Sat 12 Dec
+                <span class="rb-sub">09:00 – 18:30</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Where</dt>
+              <dd>
+                Berlin
+                <span class="rb-sub">Germany</span>
+              </dd>
+            </div>
+            <div class="rb-count">
+              <dt class="sr-only">Countdown</dt>
+              <dd>{countdownLabel(now)}</dd>
+            </div>
+          </dl>
+
+          <div class="rb-cta">
+            <a
+              class="rb-btn"
+              href={EVENT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-rb-cta
+            >
+              <span>Join the Rebellion</span>
+              <span class="sr-only"> (opens in a new tab)</span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+            <button type="button" class="rb-later" data-rb-close>
+              Maybe later
+            </button>
+          </div>
+        </div>
+
+        <div class="rb-stripe" aria-hidden="true" />
+      </div>
+    </dialog>
+  )
+}
+
+<style>
+  @font-face {
+    font-family: "A Dripping Marker";
+    src: url("/fonts/a-dripping-marker.ttf") format("truetype");
+    font-weight: 400;
+    font-display: swap;
+    size-adjust: 200%;
+  }
+  @font-face {
+    font-family: "Sister Spray";
+    src: url("/fonts/sister-spray.ttf") format("truetype");
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  .rb {
+    --rb-ink: #1a1a1a;
+    --rb-cream: #f1ede3;
+    --rb-red: #d32f2f;
+    --rb-green: #2e7d32;
+    width: min(920px, calc(100% - 48px));
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--rb-cream);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .rb::backdrop {
+    background: rgb(12 12 12 / 0.72);
+  }
+  :global(html:has(#rebellion-popup[open])) {
+    overflow: hidden;
+  }
+
+  .rb-card {
+    position: relative;
+    isolation: isolate;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    padding: 56px 48px 64px;
+    background: var(--rb-ink);
+    font-family: Outfit, system-ui, sans-serif;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+  .rb[open] .rb-card {
+    animation: rb-rise 320ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  @keyframes rb-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+    }
+  }
+
+  .rb-img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 60% 55%;
+  }
+  /* Keeps the copy legible over the concrete wall while the mural stays vivid on the right. */
+  .rb-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      90deg,
+      rgb(20 20 20 / 0.78) 0%,
+      rgb(20 20 20 / 0.5) 42%,
+      rgb(20 20 20 / 0) 72%
+    );
+  }
+  .rb-card--no-photo .rb-img,
+  .rb-card--no-photo .rb-shade {
+    display: none;
+  }
+
+  .rb-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--rb-cream);
+    color: var(--rb-ink);
+    transition: transform 0.2s;
+  }
+  .rb-close:hover {
+    transform: rotate(90deg);
+  }
+
+  .rb-copy {
+    width: min(100%, 440px);
+  }
+  .rb-tag {
+    display: inline-block;
+    margin: 0;
+    padding: 0.35rem 0.8rem;
+    background: var(--rb-red);
+    color: var(--rb-cream);
+    font-family: "Sister Spray", Outfit, sans-serif;
+    font-size: 1.0625rem;
+    letter-spacing: 0.04em;
+    transform: rotate(-2deg);
+    transform-origin: left center;
+  }
+  .rb-title {
+    margin: 1.1rem 0 0;
+    font-family: "A Dripping Marker", Impact, sans-serif;
+    font-size: clamp(3.75rem, 9vw, 6.25rem);
+    font-weight: 400;
+    line-height: 0.92;
+    color: var(--rb-cream);
+    text-shadow: 3px 3px 0 rgb(0 0 0 / 0.55);
+  }
+  .rb-title-accent {
+    display: inline-block;
+    padding-bottom: 0.08em;
+    background: linear-gradient(var(--rb-red), var(--rb-red)) left bottom / 100% 0.09em no-repeat;
+  }
+  .rb-slogan {
+    margin: 1.25rem 0 0;
+    font-family: "Sister Spray", Outfit, sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+  .rb-text {
+    margin: 0.5rem 0 0;
+    max-width: 38ch;
+    font-size: 1.0625rem;
+    color: rgb(241 237 227 / 0.92);
+    text-shadow: 0 1px 8px rgb(0 0 0 / 0.5);
+  }
+
+  .rb-facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.75rem 1.5rem;
+    margin: 1.5rem 0 0;
+  }
+  .rb-facts dt {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(241 237 227 / 0.7);
+  }
+  .rb-facts dd {
+    margin: 0.1rem 0 0;
+    font-size: 1.1875rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .rb-sub {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: rgb(241 237 227 / 0.8);
+  }
+  .rb-count {
+    align-self: center;
+  }
+  .rb-count dd {
+    margin: 0;
+    padding: 0.4rem 0.85rem;
+    background: var(--rb-green);
+    font-family: "Sister Spray", Outfit, sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    transform: rotate(2deg);
+  }
+
+  .rb-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    margin-top: 1.75rem;
+  }
+  .rb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.5rem;
+    background: var(--rb-cream);
+    color: var(--rb-ink);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 5px 5px 0 var(--rb-red);
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s;
+  }
+  .rb-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 var(--rb-red);
+  }
+  .rb-btn svg {
+    transition: transform 0.2s;
+  }
+  .rb-btn:hover svg {
+    transform: translateX(3px);
+  }
+  .rb-later {
+    padding: 0.5rem 0.25rem;
+    color: rgb(241 237 227 / 0.85);
+    font-size: 0.9375rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .rb-later:hover {
+    color: var(--rb-cream);
+  }
+  .rb-btn:focus-visible,
+  .rb-close:focus-visible,
+  .rb-later:focus-visible {
+    outline: 2px solid var(--rb-cream);
+    outline-offset: 3px;
+  }
+
+  /* Cream / green / red band along the bottom edge, echoing the mural's colours. */
+  .rb-stripe {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 10px;
+    background: linear-gradient(
+      90deg,
+      var(--rb-cream) 0 34%,
+      var(--rb-green) 34% 67%,
+      var(--rb-red) 67% 100%
+    );
+  }
+
+  @media (max-width: 767px) {
+    .rb {
+      width: 100%;
+      max-height: 90dvh;
+      margin: auto 0 0;
+    }
+    .rb-card {
+      min-height: 0;
+      align-items: flex-start;
+      padding: 64px 20px 32px;
+    }
+    .rb-img {
+      object-position: 72% 50%;
+    }
+    .rb-shade {
+      background: linear-gradient(
+        180deg,
+        rgb(20 20 20 / 0.55) 0%,
+        rgb(20 20 20 / 0.82) 55%,
+        rgb(20 20 20 / 0.92) 100%
+      );
+    }
+    .rb-title {
+      font-size: clamp(3.25rem, 17vw, 4.5rem);
+    }
+    .rb-slogan {
+      font-size: 1.25rem;
+    }
+    .rb-text {
+      font-size: 1rem;
+    }
+    .rb-btn {
+      flex: 1 1 100%;
+      justify-content: center;
+    }
+    .rb-later {
+      margin-inline: auto;
+    }
+  }
+
+  /* Short landscape viewports: drop the tagline paragraph so the card still fits. */
+  @media (min-width: 768px) and (max-height: 700px) {
+    .rb-card {
+      min-height: 0;
+      padding-block: 40px 48px;
+    }
+    .rb-text {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rb[open] .rb-card {
+      animation: none;
+    }
+    .rb-close,
+    .rb-btn,
+    .rb-btn svg {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import {
+    SHOW_DELAY_MS,
+    SHOWN_ATTRIBUTE,
+    SHOWN_EVENT,
+    readPopupState,
+    shouldShowPopup,
+    writePopupState,
+    type DismissReason,
+  } from "../../utils/rebellionPopup";
+  import { safeLocalStorage } from "../../utils/newsletterPopup";
+
+  const dialog = document.getElementById("rebellion-popup");
+  if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === "function") {
+    if (shouldShowPopup(readPopupState(safeLocalStorage()), Date.now())) schedule(dialog);
+  }
+
+  function schedule(dialog: HTMLDialogElement) {
+    const card = dialog.querySelector<HTMLElement>(".rb-card");
+    const photo = dialog.querySelector<HTMLImageElement>("[data-rb-photo]");
+
+    const dropPhoto = () => card?.classList.add("rb-card--no-photo");
+    if (photo) {
+      photo.addEventListener("error", dropPhoto, { once: true });
+      // Lazy images inside a closed <dialog> wait until it opens; start the
+      // download now so the mural is there when the modal appears.
+      photo.loading = "eager";
+      if (photo.complete && photo.naturalWidth === 0) dropPhoto();
+    }
+
+    let reason: DismissReason = "escape";
+    const closeWith = (next: DismissReason) => {
+      reason = next;
+      dialog.close();
+    };
+
+    dialog
+      .querySelectorAll("[data-rb-close]")
+      .forEach((el) => el.addEventListener("click", () => closeWith("close")));
+    dialog.querySelector("[data-rb-cta]")?.addEventListener("click", () => {
+      window.plausible("Rebellion Popup CTA Click");
+      closeWith("cta");
+    });
+    // A click whose target is the <dialog> itself landed on the backdrop: the
+    // card fills the dialog box, which has no padding.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) closeWith("backdrop");
+    });
+    // Fires for every close path, Esc included (which skips closeWith).
+    dialog.addEventListener(
+      "close",
+      () => {
+        writePopupState(safeLocalStorage(), { dismissedAt: Date.now() });
+        window.plausible("Rebellion Popup Dismissed", { props: { reason } });
+      },
+      { once: true }
+    );
+
+    window.setTimeout(() => {
+      if (!dialog.isConnected || dialog.open) return;
+      dialog.showModal();
+      document.documentElement.setAttribute(SHOWN_ATTRIBUTE, "");
+      window.dispatchEvent(new Event(SHOWN_EVENT));
+      window.plausible("Rebellion Popup Shown");
+    }, SHOW_DELAY_MS);
+  }
+</script>
