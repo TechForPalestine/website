@@ -1,0 +1,118 @@
+---
+// Fallback for mailto links that open nothing (no mail app configured,
+// webmail users, locked-down work machines). Add `data-mailto-fallback` to an
+// <a href="mailto:..."> (use `data-mailto-fallback="dark"` on the Nightfall
+// CTA) and render this component once on the page.
+//
+// On click the address is copied to the clipboard (it must happen inside the
+// click gesture or browsers refuse) and the mailto proceeds normally. A page
+// cannot see whether a mail app opened, so we use the standard signal: if the
+// window has not blurred or been hidden shortly afterwards, nothing took over,
+// and a small "Email address copied" tooltip appears above the link. If the
+// clipboard is unavailable, the address is selected instead with a
+// Ctrl+C / Cmd+C hint. Links read their href at click time, so addresses
+// assembled by script (the obfuscated one on /contact) work too.
+---
+
+<script>
+  const SETTLE_MS = 1200; // time for a mail app or webmail tab to take focus
+  const VISIBLE_MS = 2200;
+  const BUBBLE_BASE =
+    "pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-sm px-2 py-1 text-xs font-bold opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none";
+  const BUBBLE_LIGHT = "bg-ink text-white";
+  const BUBBLE_DARK = "bg-paper text-ink";
+
+  let status: HTMLElement | null = null;
+
+  // One shared polite live region so screen readers hear the outcome.
+  function announce(message: string): void {
+    if (!status) {
+      status = document.createElement("span");
+      status.className = "sr-only";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    status.textContent = message;
+  }
+
+  function selectText(el: Element): void {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  }
+
+  // Positioned in document coordinates on <body>, so it never changes the
+  // link's text, accessible name or layout. Coordinates go through the CSSOM
+  // (style.setProperty), which CSP permits; a style="" attribute would not.
+  function showBubble(link: HTMLAnchorElement, text: string): void {
+    link.ownerDocument.querySelectorAll("[data-mailto-bubble]").forEach((el) => el.remove());
+    const rect = link.getBoundingClientRect();
+    const bubble = document.createElement("span");
+    bubble.dataset.mailtoBubble = "";
+    bubble.setAttribute("aria-hidden", "true");
+    bubble.className = `${BUBBLE_BASE} ${
+      link.dataset.mailtoFallback === "dark" ? BUBBLE_DARK : BUBBLE_LIGHT
+    }`;
+    bubble.textContent = text;
+    bubble.style.setProperty("left", `${rect.left + rect.width / 2 + window.scrollX}px`);
+    bubble.style.setProperty("top", `${rect.top + window.scrollY - 6}px`);
+    document.body.append(bubble);
+    requestAnimationFrame(() => bubble.classList.replace("opacity-0", "opacity-100"));
+    window.setTimeout(() => {
+      bubble.classList.replace("opacity-100", "opacity-0");
+      window.setTimeout(() => bubble.remove(), 200);
+    }, VISIBLE_MS);
+  }
+
+  function emailFromHref(href: string): string {
+    return decodeURIComponent(href.replace(/^mailto:/i, "").split("?")[0]);
+  }
+
+  function handleClick(link: HTMLAnchorElement): void {
+    const href = link.getAttribute("href") ?? "";
+    if (!/^mailto:/i.test(href)) return;
+    const email = emailFromHref(href);
+
+    const copied: Promise<boolean> = navigator.clipboard
+      ? navigator.clipboard.writeText(email).then(
+          () => true,
+          () => false
+        )
+      : Promise.resolve(false);
+
+    let handedOff = false;
+    const markHandedOff = () => {
+      handedOff = true;
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") handedOff = true;
+    };
+    window.addEventListener("blur", markHandedOff);
+    window.addEventListener("pagehide", markHandedOff);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    window.setTimeout(async () => {
+      window.removeEventListener("blur", markHandedOff);
+      window.removeEventListener("pagehide", markHandedOff);
+      document.removeEventListener("visibilitychange", onVisibility);
+      if (handedOff) return;
+
+      if (await copied) {
+        showBubble(link, "Email address copied");
+        announce(`No email app opened. ${email} was copied to your clipboard.`);
+      } else {
+        selectText(link);
+        const key = /Mac|iPhone|iPad/.test(navigator.userAgent) ? "Cmd+C" : "Ctrl+C";
+        showBubble(link, `Press ${key} to copy`);
+        announce(`No email app opened. The address is selected; press ${key} to copy it.`);
+      }
+    }, SETTLE_MS);
+  }
+
+  document.querySelectorAll<HTMLAnchorElement>("a[data-mailto-fallback]").forEach((link) => {
+    link.addEventListener("click", () => handleClick(link));
+  });
+</script>

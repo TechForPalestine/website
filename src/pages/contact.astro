@@ -11,7 +11,7 @@ import {
   inlineLink,
 } from "../utils/designClasses";
 import TerminalCta from "../components/TerminalCta.astro";
-import CopyEmailButton from "../components/CopyEmailButton.astro";
+import MailtoFallback from "../components/MailtoFallback.astro";
 
 const routeLink = `inline-flex min-h-[44px] items-center gap-2 font-bold text-grove transition-colors hover:text-grove-hover motion-reduce:transition-none ${focusRing}`;
 
@@ -81,15 +81,13 @@ const routes = [
           <p class="mt-2 max-w-[48ch] text-base leading-relaxed text-ink-secondary">
             For inquiries about Tech for Palestine, our projects, or how to get involved.
           </p>
-          <div class="mt-5 flex items-center gap-1">
-            <a
-              id="contact-email"
-              href="#"
-              class={`inline-block min-w-0 break-words text-[22px] font-extrabold leading-snug text-grove underline decoration-grove/40 underline-offset-[6px] transition-colors hover:decoration-grove motion-reduce:transition-none min-[810px]:text-[26px] ${focusRing}`}
-              >contact [at] techforpalestine [dot] org</a
-            >
-            <CopyEmailButton target="contact-email" />
-          </div>
+          <a
+            id="contact-email"
+            href="#"
+            data-mailto-fallback
+            class={`mt-5 inline-block break-words text-[22px] font-extrabold leading-snug text-grove underline decoration-grove/40 underline-offset-[6px] transition-colors hover:decoration-grove motion-reduce:transition-none min-[810px]:text-[26px] ${focusRing}`}
+            >contact [at] techforpalestine [dot] org</a
+          >
           <script>
             (function () {
               var el = document.getElementById("contact-email") as HTMLAnchorElement | null;
@@ -129,18 +127,15 @@ const routes = [
                     {route.detail}
                   </p>
                   {route.email && (
-                    <p class="mt-2 flex items-center gap-1 text-base leading-relaxed text-ink-secondary">
-                      <span class="min-w-0">
-                        Or email{" "}
-                        <a
-                          id={`route-email-${route.id}`}
-                          href={`mailto:${route.email}`}
-                          class={`break-words ${inlineLink}`}
-                        >
-                          {route.email}
-                        </a>
-                      </span>
-                      <CopyEmailButton target={`route-email-${route.id}`} />
+                    <p class="mt-2 text-base leading-relaxed text-ink-secondary">
+                      Or email{" "}
+                      <a
+                        href={`mailto:${route.email}`}
+                        data-mailto-fallback
+                        class={`break-words ${inlineLink}`}
+                      >
+                        {route.email}
+                      </a>
                     </p>
                   )}
                 </div>
@@ -177,4 +172,5 @@ const routes = [
       </Fragment>
     </TerminalCta>
   </main>
+  <MailtoFallback />
 </Layout>
