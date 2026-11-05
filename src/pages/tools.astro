@@ -1,187 +1,252 @@
 ---
 // src/pages/tools.astro
 import Layout from "../layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
 import "../styles/base.css";
+import {
+  container,
+  display,
+  headline,
+  overline,
+  body,
+  band,
+  primaryButton,
+  inverseButton,
+  ghostOnDarkButton,
+  inlineLinkOnDark,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
+import ToolRow, { type Tool } from "../components/tools/ToolRow.astro";
 
-const topLeft = [
+// Editorial priority carried over from the previous layout: Thaura was the
+// large featured card and these three sat beside it, ahead of everything else.
+const featured: Tool = {
+  name: "Thaura",
+  desc: "A privacy-first AI assistant built by Syrian engineers: ethical AI that never trains on your data and stands with Palestine.",
+  link: "https://thaura.ai/",
+  logo: "/thaura.svg",
+};
+
+const startHere: Tool[] = [
   {
     name: "Newscord",
     desc: "Get comprehensive news coverage with AI-powered insights from multiple sources in one place.",
     link: "https://newscord.org/",
     logo: "/newscord.svg",
-    button: "Newscord",
   },
   {
     name: "Boycat",
     desc: "Search brands, scan products, and make ethical shopping choices with confidence.",
     link: "https://www.boycat.io/",
     logo: "/Boycat.png",
-    button: "Boycat",
   },
   {
     name: "Find A Protest",
-    desc: "Discover protests and actions across the world",
+    desc: "Discover protests and actions across the world.",
     link: "https://www.findaprotest.info/",
     logo: "/findprotest.svg",
-    button: "Find A Protest",
   },
 ];
 
-const rightCard = {
-  name: "Thaura",
-  desc: "A privacy-first AI assistant built by Syrian engineers — ethical AI that never trains on your data and stands with Palestine.",
-  link: "https://thaura.ai/",
-  logo: "/thaura.svg",
-};
-
-const bottomRow = [
+// The rest of the tools, grouped by what they help you do. Bands alternate
+// with Paper sections, so keep the order band, paper, band.
+const categories: { id: string; overline: string; heading: string; tools: Tool[] }[] = [
   {
-    name: "UpScrolled",
-    desc: "Simply, social without limits.",
-    link: "https://upscrolled.com/en/",
-    logo: "/upscrolled-icon.svg",
-    button: "UpScrolled",
+    id: "everyday",
+    overline: "Everyday tech",
+    heading: "Browse, shop and post without complicity",
+    tools: [
+      {
+        name: "Israeli Tech Alternatives",
+        desc: "Find alternatives to Israeli tech.",
+        link: "https://www.israelitechalternatives.com/",
+        logo: "/mark-transparent.png",
+      },
+      {
+        name: "Built with Apartheid",
+        desc: "Discover which products and technologies are built with Israeli apartheid.",
+        link: "https://builtwithapartheid.com/",
+        logo: "/mark-transparent.png",
+      },
+      {
+        name: "The Wall",
+        desc: "A browser plugin that detects and blocks Israel-related websites and their social accounts.",
+        link: "https://thewallproject.github.io/",
+        logo: "/thewall.svg",
+      },
+      {
+        name: "BuycatVPN",
+        desc: "Be safe on public Wi-Fi, block trackers, and browse freely.",
+        link: "https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch",
+        logo: "/Boycat.png",
+      },
+      {
+        name: "UpScrolled",
+        desc: "Simply social, without limits.",
+        link: "https://upscrolled.com/en/",
+        logo: "/upscrolled-icon.svg",
+      },
+    ],
   },
   {
-    name: "T4P Datasets",
-    desc: "Tracking the human toll. Use the data from our APIs to tell-their story.",
-    link: "https://data.techforpalestine.org/",
-    logo: "/mark-transparent.png",
-    button: "T4P Datasets",
+    id: "accountability",
+    overline: "Accountability",
+    heading: "Follow the money, the media and the toll",
+    tools: [
+      {
+        name: "T4P Datasets",
+        desc: "Tracking the human toll. Use the data from our APIs to tell their story.",
+        link: "https://data.techforpalestine.org/",
+        logo: "/mark-transparent.png",
+      },
+      {
+        name: "Anti-Palestinian VC funds",
+        desc: "A database of anti-Palestinian VC funds.",
+        link: "https://github.com/TechForPalestine/antipalestinian-vc-funds/",
+        logo: "/mark-transparent.png",
+      },
+      {
+        name: "Accountable Media",
+        desc: "Track media accountability and bias in coverage of Palestine.",
+        link: "https://accountable-media.com/",
+        logo: "/accountable-media.png",
+      },
+      {
+        name: "UK University Repression League Table 2025",
+        desc: "See how UK universities rank in repressing activism and ties to arms industries.",
+        link: "https://si4j.org/universityrepression",
+        logo: "/mark-transparent.png",
+      },
+    ],
   },
   {
-    name: "The Wall",
-    desc: "A browser plugin to detect and block more than Israel related websites and their social accounts.",
-    link: "https://thewallproject.github.io/",
-    logo: "/thewall.svg",
-    button: "The Wall",
-  },
-  {
-    name: "Profile Pic Maker",
-    desc: "Wrap your profile pic in the colors of Palestine.",
-    link: "https://ppm.techforpalestine.org/",
-    logo: "/profile-maker.png",
-    button: "Profile Pic Maker",
-  },
-  {
-    name: "Anti-Palestinian VC funds",
-    desc: "A database of anti-Palestinian VC funds.",
-    link: "https://github.com/TechForPalestine/antipalestinian-vc-funds/",
-    logo: "/mark-transparent.png",
-    button: "Anti-Palestinian VC funds",
-  },
-  {
-    name: "Israeli Tech Alternatives",
-    desc: "Find alternatives to Israeli tech.",
-    link: "https://www.israelitechalternatives.com/",
-    logo: "/mark-transparent.png",
-    button: "Israeli Tech Alternatives",
-  },
-  {
-    name: "Jaywalk",
-    desc: "Stay safe and informed during protests with an interactive map.",
-    link: "https://jaywalkapp.org",
-    logo: "/jaywalk.png",
-    button: "Jaywalk",
-  },
-  {
-    name: "BuycatVPN",
-    desc: "Be safe on public Wi-Fi, block trackers, and browse freely.",
-    link: "https://www.boycat.io/vpn?utm_source=t4p&utm_medium=blog&utm_campaign=launch",
-    logo: "/Boycat.png",
-    button: "BuycatVPN",
-  },
-  {
-    name: "UK University Repression League Table 2025",
-    desc: "See how UK universities rank in repressing activism and ties to arms industries.",
-    link: "https://si4j.org/universityrepression",
-    logo: "/mark-transparent.png",
-    button: "UK University Repression League Table 2025",
-  },
-  {
-    name: "Built with Apartheid",
-    desc: "Discover which products and technologies are built with Israeli apartheid.",
-    link: "https://builtwithapartheid.com/",
-    logo: "/mark-transparent.png",
-    button: "Built with Apartheid",
-  },
-  {
-    name: "Accountable Media",
-    desc: "Track media accountability and bias in coverage of Palestine.",
-    link: "https://accountable-media.com/",
-    logo: "/accountable-media.png",
-    button: "Accountable Media",
+    id: "show-up",
+    overline: "Show up",
+    heading: "Take it to the streets and your profile",
+    tools: [
+      {
+        name: "Jaywalk",
+        desc: "Stay safe and informed during protests with an interactive map.",
+        link: "https://jaywalkapp.org",
+        logo: "/jaywalk.png",
+      },
+      {
+        name: "Profile Pic Maker",
+        desc: "Wrap your profile pic in the colors of Palestine.",
+        link: "https://ppm.techforpalestine.org/",
+        logo: "/profile-maker.png",
+      },
+    ],
   },
 ];
+
+const featuredDomain = new URL(featured.link).hostname.replace(/^www\./, "");
 ---
 
-<Layout title="Tools">
-  <main class="min-h-screen px-4 py-16">
-    <h2 class="mb-12 text-center text-4xl font-bold text-green-900">Available Tools</h2>
-    <p class="mt-2 text-center text-gray-600">
-      A growing list of tools to support advocacy for Palestinian liberation.
-    </p>
-    <div class="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2">
-      <!-- Right Featured Card -->
-      <div class="flex flex-col justify-center rounded-xl border bg-white p-6 shadow">
-        <img
-          src={rightCard.logo}
-          alt={rightCard.name}
-          class="mb-4 max-h-48 w-full object-contain"
-        />
-        <h3 class="mb-2 text-2xl font-bold text-green-900">{rightCard.name}</h3>
-        <p class="mb-4 text-sm text-gray-700">{rightCard.desc}</p>
-        <a
-          href={rightCard.link}
-          target="_blank"
-          class="inline-block rounded-full bg-green-800 px-4 py-1 text-center text-sm text-white transition hover:bg-green-900"
-        >
-          {rightCard.name}
-        </a>
-      </div>
-      <!-- Left Column -->
-      <div class="flex flex-col gap-6">
-        {
-          topLeft.map((tool) => (
-            <div class="flex items-start gap-4 rounded-xl border bg-white p-6 shadow">
-              <img src={tool.logo} alt={tool.name} class="h-12 w-12 object-contain" />
-              <div>
-                <h3 class="font-bold text-green-900">{tool.name}</h3>
-                <p class="text-sm text-gray-700">{tool.desc}</p>
-                <a
-                  href={tool.link}
-                  target="_blank"
-                  class="mt-2 inline-block rounded-full bg-green-800 px-4 py-1 text-sm text-white transition hover:bg-green-900"
-                >
-                  {tool.button}
-                </a>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
+<Layout
+  title="Tools"
+  description="Tools for Palestinian liberation: ethical AI, boycott and shopping guides, protest maps, open datasets and more."
+>
+  <main>
+    <!-- Hero: the featured tool and three to start with, above the fold -->
+    <section aria-labelledby="tools-heading" class="py-16 min-[810px]:py-20">
+      <div
+        class={`${container} grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-x-14 lg:gap-y-10`}
+      >
+        <div class="min-w-0">
+          <h1 id="tools-heading" class={display}>
+            Put your browser, your phone and your wallet to work for Palestine
+          </h1>
+          <p class={`mt-6 max-w-[52ch] text-ink-secondary ${body}`}>
+            A growing list of tools that support advocacy for Palestinian liberation. Pick one and
+            put it to work today.
+          </p>
+        </div>
 
-    <!-- Bottom Cards -->
-    <div class="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        bottomRow.map((tool) => (
-          <div class="flex items-start gap-4 rounded-xl border bg-white p-6 shadow">
-            <img src={tool.logo} alt={tool.name} class="h-12 w-12 object-contain" />
-            <div>
-              <h3 class="font-bold text-green-900">{tool.name}</h3>
-              <p class="text-sm text-gray-700">{tool.desc}</p>
-              <a
-                href={tool.link}
-                target="_blank"
-                class="mt-2 inline-block rounded-full bg-green-800 px-4 py-1 text-sm text-white transition hover:bg-green-900"
-              >
-                {tool.button}
-              </a>
-            </div>
+        <section
+          aria-labelledby="featured-heading"
+          class="min-w-0 rounded-lg bg-stone p-6 sm:p-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start"
+        >
+          <p class={overline}>Featured tool</p>
+          <div
+            class="mt-6 flex h-32 items-center justify-center rounded-md border border-ink-divider bg-white p-6 sm:h-40"
+          >
+            <img
+              src={featured.logo}
+              alt=""
+              decoding="async"
+              class="max-h-full max-w-full object-contain"
+            />
           </div>
-        ))
-      }
-    </div>
+          <h2 id="featured-heading" class={`mt-8 ${headline}`}>{featured.name}</h2>
+          <p class="mt-3 max-w-[48ch] text-[17px] leading-[1.7] text-ink-secondary">
+            {featured.desc}
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <a href={featured.link} target="_blank" rel="noopener noreferrer" class={primaryButton}>
+              Try {featured.name}
+              <Icon name="mdi:open-in-new" class="h-4 w-4" aria-hidden="true" />
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
+            <span class="text-[15px] text-ink-secondary">{featuredDomain}</span>
+          </div>
+        </section>
+
+        <section aria-labelledby="start-heading" class="min-w-0 lg:col-start-1">
+          <h2 id="start-heading" class={overline}>Start here</h2>
+          <ul class="mt-4 max-w-[60ch] border-b border-ink-divider">
+            {startHere.map((tool) => <ToolRow tool={tool} />)}
+          </ul>
+        </section>
+      </div>
+    </section>
+
+    <!-- The rest, by what each tool helps you do -->
+    {
+      categories.map((category, index) => {
+        const isBand = index % 2 === 0;
+        const headingId = `${category.id}-heading`;
+        return (
+          <section
+            aria-labelledby={headingId}
+            class={`py-16 min-[810px]:py-20 ${isBand ? band : ""}`}
+          >
+            <div
+              class={`${container} grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-14`}
+            >
+              <div class="min-w-0">
+                <p class={overline}>{category.overline}</p>
+                <h2 id={headingId} class={`mt-4 max-w-[18ch] ${headline}`}>
+                  {category.heading}
+                </h2>
+              </div>
+              <ul
+                class={`grid min-w-0 gap-x-10 border-b md:grid-cols-2 ${
+                  isBand ? "border-first-light-edge" : "border-ink-divider"
+                }`}
+              >
+                {category.tools.map((tool) => (
+                  <ToolRow tool={tool} surface={isBand ? "band" : "paper"} />
+                ))}
+              </ul>
+            </div>
+          </section>
+        );
+      })
+    }
+
+    <TerminalCta heading="Have an idea for the next tool?" headingId="tools-cta-heading">
+      Tech for Palestine incubates tech and advocacy projects for Palestinian liberation. Bring your
+      idea to the incubator, or become a member to help fund and build what comes next.
+      <Fragment slot="actions">
+        <a href="/membership" class={inverseButton}>Become a member</a>
+        <a href="/incubator" class={ghostOnDarkButton}>Apply to the incubator</a>
+      </Fragment>
+      <Fragment slot="footnote">
+        Want to build but need a project? <a href="/ideas" class={inlineLinkOnDark}
+          >Browse open ideas</a
+        >.
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>
