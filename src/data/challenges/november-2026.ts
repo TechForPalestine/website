@@ -74,7 +74,7 @@ export const playbook: PlaybookMove[] = [
     questions: [6, 9],
   },
   {
-    name: "Concentrated ownership",
+    name: "Pro-Israel owners",
     detail:
       "With Paramount's takeover of Warner Bros, some of the dominant US news operations are now owned by the Ellison family, known for its support for Israel and its million-dollar donations to Friends of the IDF.",
     questions: [7, 8],
