@@ -29,21 +29,15 @@ export const brainstorm = {
     "Tech for Palestine is hosting an open brainstorming session for anyone who is interested in this challenge and wants to pitch an idea. You will be able to learn more about the T4P Incubator, get feedback on your idea, and find team members.",
 };
 
-/** Hero specimen: one familiar framing, annotated the way a copy editor would.
- * Illustrative of the patterns the brief names, not a quote from an outlet. */
-export const framing = {
-  before: [
-    { text: "Dozens of Palestinians " },
-    { text: "killed", note: 1 },
-    { text: " in Gaza as " },
-    { text: "tensions rise", note: 2 },
-  ],
-  notes: [
-    { n: 1, text: "Passive voice. Killed by whom?" },
-    { n: 2, text: "A bombing campaign recast as something mutual." },
-  ],
-  after: { actor: "Israeli strikes kill", rest: " dozens of Palestinians in Gaza" },
-} as const;
+/** The corrected-headline graphic (CorrectedHeadline.astro) on the page hero
+ * and homepage popup. A fictional outlet and an illustrative headline built
+ * from the patterns the brief names; no real outlet is quoted. These two lines
+ * are what screen readers get in place of the drawn corrections. */
+export const correctedHeadline = {
+  outlet: "The Consent",
+  original: "38 killed in Gaza strike as tensions rise, health ministry says",
+  corrected: "38 Palestinians killed in Gaza strike by Israel, genocide continues",
+};
 
 export const aboutLead =
   "The mainstream media narrative on Palestine and the Gaza genocide is flooded with hasbara propaganda and consistently framed around Israel's talking points. It manufactures consent for, normalizes and downplays the atrocities Israel commits, through a playbook that is easy to spot once named.";

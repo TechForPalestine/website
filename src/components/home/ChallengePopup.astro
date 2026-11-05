@@ -8,6 +8,7 @@
 import { CHALLENGE_PATH } from "../../data/challenges";
 import { APPLY_URL, brainstorm, challenge } from "../../data/challenges/november-2026";
 import { isBrainstormOpen, isCampaignLive } from "../../utils/challengePopup";
+import CorrectedHeadline from "../challenge/CorrectedHeadline.astro";
 
 const now = Date.now();
 const live = isCampaignLive(now);
@@ -45,19 +46,11 @@ const brainstormOpen = isBrainstormOpen(now);
         </div>
 
         <div class="cp-body">
-          {/* The page hero's specimen in miniature: the same copy-editor mark,
-              so the click-through lands somewhere familiar. Illustrative. */}
-          <p class="cp-spec">
-            <span class="cp-spec-line">
-              Dozens of Palestinians <span class="cp-mark">killed</span> in Gaza
-            </span>
-            <span class="cp-spec-note">
-              <span class="cp-num" aria-hidden="true">
-                1
-              </span>
-              Killed by whom?
-            </span>
-          </p>
+          {/* The page hero's corrected headline in miniature, so the
+              click-through lands somewhere familiar. */}
+          <div class="cp-headline">
+            <CorrectedHeadline size="sm" />
+          </div>
           {brainstormOpen ? (
             <p class="cp-lede">
               Build the tools that call out framing like this. Apply to the Incubator, or pitch your
@@ -203,47 +196,11 @@ const brainstormOpen = isBrainstormOpen(now);
   .cp-body {
     padding: 28px 36px 24px;
   }
-  .cp-spec {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 14px;
-    margin-bottom: 18px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #d6d6d6;
-  }
-  .cp-spec-line {
-    font-size: 19px;
-    font-weight: 800;
-    line-height: 1.35;
-    color: #73656e;
-  }
-  /* Same mark as FramingSpecimen.astro: proof red, in its error sense only. */
-  .cp-mark {
-    color: #2a2428;
-    text-decoration: underline wavy #c8102e;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.22em;
-    text-decoration-skip-ink: none;
-  }
-  .cp-spec-note {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #c8102e;
-  }
-  .cp-num {
-    display: inline-grid;
-    place-items: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    background: #c8102e;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
+  .cp-headline {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 20px;
+    background: #f2f3ee;
   }
   .cp-lede {
     max-width: 44ch;

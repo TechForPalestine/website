@@ -1,0 +1,203 @@
+---
+// A news-site article header from a fictional outlet ("The Consent", after
+// manufacturing consent), its headline corrected in red the way readers fix
+// real ones: what was left out written in above a caret, the framing struck
+// through, the truth written in after it. Used on the /monthly-challenge hero
+// and the homepage popup. Everything is sized in em off the root, so `size`
+// scales the whole graphic. The drawing is aria-hidden; screen readers get the
+// original and corrected headlines as text.
+import { correctedHeadline } from "../../data/challenges/november-2026";
+
+interface Props {
+  size?: "lg" | "sm";
+  /** "green" when placed on the Grove Green hero: the caption turns white. */
+  tone?: "paper" | "green";
+}
+
+const { size = "lg", tone = "paper" } = Astro.props;
+const { outlet, original, corrected } = correctedHeadline;
+---
+
+<figure class={`ch ch--${size} ch--${tone}`}>
+  <div class="ch-card" aria-hidden="true">
+    <div class="ch-bar">
+      <span class="ch-menu"><span></span><span></span><span></span></span>
+      <span class="ch-logo">{outlet}</span>
+      <span class="ch-section">World</span>
+      <span class="ch-subscribe">Subscribe</span>
+    </div>
+
+    <p class="ch-head">
+      38<span class="ch-caret"><span class="ch-ins">Palestinians</span></span> killed in Gaza strike<span
+        class="ch-caret"><span class="ch-ins">by Israel</span></span
+      >
+      <span class="ch-strike">as tensions rise,</span>
+      <span class="ch-strike">health ministry says</span>
+      <span class="ch-fix">genocide continues</span>
+    </p>
+
+    <p class="ch-byline">By Staff Reporter, {outlet}</p>
+    <p class="ch-meta">
+      <span class="ch-clock"></span>3 minute read
+    </p>
+  </div>
+  <figcaption class="ch-caption">
+    <span class="sr-only">
+      Illustrative headline from a fictional outlet: “{original}”. Corrected: “{corrected}”.
+    </span>
+    <span aria-hidden="true">Illustrative headline, corrected</span>
+  </figcaption>
+</figure>
+
+<style>
+  .ch {
+    font-family: Outfit, system-ui, sans-serif;
+    color: #2a2428;
+  }
+  .ch--lg {
+    font-size: 16px;
+  }
+  .ch--sm {
+    font-size: 12.5px;
+  }
+
+  .ch-card {
+    padding: 1.1em 1.4em 1.3em;
+    border-radius: 1.4em;
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  /* The outlet's top bar: menu, wordmark, section, subscribe. */
+  .ch-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    padding-bottom: 0.8em;
+    border-bottom: 2px solid #2a2428;
+  }
+  .ch-menu {
+    display: grid;
+    gap: 0.22em;
+    width: 1.15em;
+  }
+  .ch-menu span {
+    height: 2px;
+    border-radius: 1px;
+    background: #2a2428;
+  }
+  .ch-logo {
+    padding: 0.1em 0.45em 0.15em;
+    border-radius: 0.3em;
+    background: #2a2428;
+    color: #fff;
+    font-size: 1.05em;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .ch-section {
+    font-size: 1.05em;
+    font-weight: 700;
+  }
+  .ch-subscribe {
+    margin-left: auto;
+    padding: 0.4em 0.85em;
+    border-radius: 0.35em;
+    background: #c8102e;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+
+  /* Headline: generous leading leaves room for the written-in corrections. */
+  .ch-head {
+    margin-top: 1.5em;
+    font-size: 1.6em;
+    font-weight: 800;
+    line-height: 2;
+    letter-spacing: -0.01em;
+  }
+
+  /* An insertion: red words above a caret arrow pointing at the gap. */
+  .ch-caret {
+    position: relative;
+    display: inline-block;
+    width: 0.3em;
+    height: 1em;
+  }
+  .ch-ins {
+    position: absolute;
+    bottom: 1.05em;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #c8102e;
+    font-size: 0.62em;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .ch-ins::after {
+    content: "↓";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.95em;
+    line-height: 1;
+  }
+
+  /* The framing, struck through by hand: a slightly tilted red line. */
+  .ch-strike {
+    position: relative;
+    white-space: nowrap;
+  }
+  .ch-strike::after {
+    content: "";
+    position: absolute;
+    left: -0.08em;
+    right: -0.08em;
+    top: 52%;
+    height: 0.09em;
+    min-height: 2px;
+    border-radius: 999px;
+    background: #c8102e;
+    transform: rotate(-1.5deg);
+  }
+  .ch-fix {
+    color: #c8102e;
+    font-weight: 500;
+  }
+
+  .ch-byline {
+    margin-top: 0.9em;
+    font-size: 0.95em;
+    color: #73656e;
+  }
+  .ch-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.45em;
+    margin-top: 0.35em;
+    font-size: 0.9em;
+    color: #73656e;
+  }
+  .ch-clock {
+    width: 0.9em;
+    height: 0.9em;
+    border: 1.5px solid currentColor;
+    border-radius: 999px;
+  }
+
+  .ch-caption {
+    margin-top: 0.9em;
+    font-size: 0.75em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #2f5c3f;
+  }
+  .ch--green .ch-caption {
+    color: #fff;
+  }
+</style>
