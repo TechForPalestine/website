@@ -102,8 +102,9 @@ const interviews = [
   },
 ];
 
-// `dark` variants are white artwork and need a dark preview ground. Ink, not
-// Nightfall: Nightfall is reserved for the terminal CTA.
+// Preview grounds use brand surfaces: First Light for the standard artwork,
+// Grove Green Deep for the `dark` (white) variants. Not Nightfall, which is
+// reserved for the terminal CTA.
 const logos = [
   { src: "/logos/Logo.png", label: "Logo", format: "PNG", dark: false },
   { src: "/logos/Logo.svg", label: "Logo", format: "SVG", dark: false },
@@ -170,10 +171,10 @@ const newTab = "(opens in a new tab)";
           <p class="mt-4 text-base leading-relaxed text-ink-secondary">
             For interviews and media requests, email:
           </p>
-          <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-3">
+          <div class="mt-2 flex items-center gap-1">
             <a
               href={`mailto:${PRESS_EMAIL}`}
-              class={`inline-flex items-center gap-2 break-all text-[19px] min-[810px]:text-[21px] ${inlineLink}`}
+              class={`inline-flex min-w-0 items-center gap-2 break-all text-[19px] min-[810px]:text-[21px] ${inlineLink}`}
             >
               <Icon name="mdi:email-outline" class="h-5 w-5 shrink-0" aria-hidden="true" />
               <span id="press-email-hero">{PRESS_EMAIL}</span>
@@ -318,7 +319,10 @@ const newTab = "(opens in a new tab)";
                       class={`group block rounded-md border border-ink-divider bg-paper transition-shadow hover:shadow-sm motion-reduce:transition-none ${focusRing}`}
                     >
                       <span
-                        class:list={["block rounded-t-md p-3", logo.dark ? "bg-ink" : "bg-stone"]}
+                        class:list={[
+                          "block rounded-t-md p-3",
+                          logo.dark ? "bg-grove-deep" : "bg-first-light",
+                        ]}
                       >
                         <img
                           src={logo.src}
@@ -403,11 +407,13 @@ const newTab = "(opens in a new tab)";
     >
       For press inquiries, interviews, or media requests, email our media team.
       <Fragment slot="actions">
-        <a href={`mailto:${PRESS_EMAIL}`} class={inverseButton}>
-          <Icon name="mdi:email-outline" class="h-5 w-5" aria-hidden="true" />
-          <span id="press-email-cta">{PRESS_EMAIL}</span>
-        </a>
-        <CopyEmailButton target="press-email-cta" onDark />
+        <span class="flex items-center gap-1">
+          <a href={`mailto:${PRESS_EMAIL}`} class={inverseButton}>
+            <Icon name="mdi:email-outline" class="h-5 w-5" aria-hidden="true" />
+            <span id="press-email-cta">{PRESS_EMAIL}</span>
+          </a>
+          <CopyEmailButton target="press-email-cta" onDark />
+        </span>
         <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
       </Fragment>
     </TerminalCta>

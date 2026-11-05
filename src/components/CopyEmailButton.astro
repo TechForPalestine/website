@@ -1,5 +1,5 @@
 ---
-// "Copy" button for a displayed email address, for visitors whose mailto
+// Icon-only copy button that sits right beside a displayed email address, for visitors whose mailto
 // link opens nothing (no mail client set up, webmail users, locked-down work
 // machines). It copies the text of the element whose id is `target`, so it
 // works with addresses assembled by script (the obfuscated one on /contact)
@@ -21,35 +21,38 @@ interface Props {
 
 const { target, onDark = false } = Astro.props;
 
+const IDLE_LABEL = "Copy email address";
+
+// Icon-only and borderless so it reads as part of the address, not a second
+// action. 32px square keeps a comfortable hit area (WCAG 2.2 asks for 24px)
+// without pushing the address away; -my-1 stops it inflating the line.
 const base =
-  "group hidden min-h-[44px] shrink-0 items-center gap-1.5 rounded-pill border px-4 text-[13px] font-bold transition-colors motion-reduce:transition-none data-[ready]:inline-flex";
+  "group -my-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-sm transition-colors motion-reduce:transition-none data-[ready]:inline-flex data-[state=copied]:text-grove";
 const variant = onDark
-  ? `border-white/45 text-white hover:border-white ${focusRingOnDark}`
-  : `border-ink-divider bg-paper text-ink hover:border-grove hover:text-grove ${focusRing}`;
+  ? `text-white/60 hover:text-white data-[state=copied]:text-white ${focusRingOnDark}`
+  : `text-ink-secondary hover:text-grove ${focusRing}`;
 ---
 
-<span class="inline-flex items-center">
-  <button
-    type="button"
-    data-copy-email={target}
-    data-state="idle"
-    aria-describedby={target}
-    class={`${base} ${variant}`}
-  >
-    <Icon
-      name="mdi:content-copy"
-      class="h-4 w-4 group-data-[state=copied]:hidden"
-      aria-hidden="true"
-    />
-    <Icon
-      name="mdi:check"
-      class="hidden h-4 w-4 group-data-[state=copied]:inline"
-      aria-hidden="true"
-    />
-    <span data-copy-label>Copy</span>
-  </button>
+<button
+  type="button"
+  data-copy-email={target}
+  data-state="idle"
+  aria-label={IDLE_LABEL}
+  title={IDLE_LABEL}
+  class={`${base} ${variant}`}
+>
+  <Icon
+    name="mdi:content-copy"
+    class="h-4 w-4 group-data-[state=copied]:hidden"
+    aria-hidden="true"
+  />
+  <Icon
+    name="mdi:check"
+    class="hidden h-4 w-4 group-data-[state=copied]:block"
+    aria-hidden="true"
+  />
   <span role="status" aria-live="polite" class="sr-only" data-copy-status></span>
-</span>
+</button>
 
 <script>
   const RESET_MS = 2500;
@@ -62,16 +65,19 @@ const variant = onDark
     selection?.addRange(range);
   }
 
-  function announce(button: HTMLButtonElement, label: string, status: string): void {
-    const labelEl = button.querySelector("[data-copy-label]");
-    const statusEl = button.parentElement?.querySelector("[data-copy-status]");
-    if (labelEl) labelEl.textContent = label;
+  const IDLE_LABEL = "Copy email address";
+
+  // No visible text: the tooltip (title) carries the hint for pointer users
+  // and the live region announces the outcome to screen readers.
+  function announce(button: HTMLButtonElement, hint: string, status: string): void {
+    button.title = hint;
+    const statusEl = button.querySelector("[data-copy-status]");
     if (statusEl) statusEl.textContent = status;
   }
 
   function reset(button: HTMLButtonElement): void {
     button.dataset.state = "idle";
-    announce(button, "Copy", "");
+    announce(button, IDLE_LABEL, "");
   }
 
   async function copy(button: HTMLButtonElement): Promise<void> {
