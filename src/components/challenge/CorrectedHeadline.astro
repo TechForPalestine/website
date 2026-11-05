@@ -119,7 +119,7 @@ const { outlet, original, corrected } = correctedHeadline;
     top: calc(100% + 0.2em);
     left: 50%;
     width: 2px;
-    height: 0.75em;
+    height: 0.6em;
     border-radius: 1px;
     background: currentColor;
     transform: translateX(-50%);
@@ -127,7 +127,7 @@ const { outlet, original, corrected } = correctedHeadline;
   .ch-ins::before {
     content: "";
     position: absolute;
-    top: calc(100% + 0.62em);
+    top: calc(100% + 0.47em);
     left: 50%;
     width: 0.42em;
     height: 0.42em;
@@ -140,6 +140,12 @@ const { outlet, original, corrected } = correctedHeadline;
   .ch-caret--start .ch-ins {
     left: 0;
     transform: translateX(-35%);
+  }
+  /* The label moved, the gap didn't: the caret's left edge sits 35% into the
+     label, and its centre a further ~0.24 label-em (half the 0.3em caret). */
+  .ch-caret--start .ch-ins::before,
+  .ch-caret--start .ch-ins::after {
+    left: calc(35% + 0.24em);
   }
 
   /* The framing, struck through by hand: a slightly tilted red line. */
