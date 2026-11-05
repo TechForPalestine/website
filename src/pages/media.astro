@@ -16,6 +16,7 @@ import {
   ghostOnDarkButton,
 } from "../utils/designClasses";
 import TerminalCta from "../components/TerminalCta.astro";
+import CopyEmailButton from "../components/CopyEmailButton.astro";
 
 // Must match the section id in PressRelease.astro: the hero links to it, and
 // /media#member-driven-press-release is the release's shareable URL.
@@ -169,13 +170,16 @@ const newTab = "(opens in a new tab)";
           <p class="mt-4 text-base leading-relaxed text-ink-secondary">
             For interviews and media requests, email:
           </p>
-          <a
-            href={`mailto:${PRESS_EMAIL}`}
-            class={`mt-2 inline-flex items-center gap-2 break-all text-[19px] min-[810px]:text-[21px] ${inlineLink}`}
-          >
-            <Icon name="mdi:email-outline" class="h-5 w-5 shrink-0" aria-hidden="true" />
-            {PRESS_EMAIL}
-          </a>
+          <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-3">
+            <a
+              href={`mailto:${PRESS_EMAIL}`}
+              class={`inline-flex items-center gap-2 break-all text-[19px] min-[810px]:text-[21px] ${inlineLink}`}
+            >
+              <Icon name="mdi:email-outline" class="h-5 w-5 shrink-0" aria-hidden="true" />
+              <span id="press-email-hero">{PRESS_EMAIL}</span>
+            </a>
+            <CopyEmailButton target="press-email-hero" />
+          </div>
 
           <div
             class="mt-8 flex flex-col gap-3 border-t border-ink-divider pt-6 min-[480px]:flex-row min-[480px]:flex-wrap"
@@ -401,8 +405,9 @@ const newTab = "(opens in a new tab)";
       <Fragment slot="actions">
         <a href={`mailto:${PRESS_EMAIL}`} class={inverseButton}>
           <Icon name="mdi:email-outline" class="h-5 w-5" aria-hidden="true" />
-          {PRESS_EMAIL}
+          <span id="press-email-cta">{PRESS_EMAIL}</span>
         </a>
+        <CopyEmailButton target="press-email-cta" onDark />
         <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
       </Fragment>
     </TerminalCta>

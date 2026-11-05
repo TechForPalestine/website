@@ -1,0 +1,100 @@
+---
+// "Copy" button for a displayed email address, for visitors whose mailto
+// link opens nothing (no mail client set up, webmail users, locked-down work
+// machines). It copies the text of the element whose id is `target`, so it
+// works with addresses assembled by script (the obfuscated one on /contact)
+// as well as static ones.
+//
+// Progressive enhancement: the button renders hidden (display:none) and the
+// script reveals it by setting data-ready, so no dead button appears without
+// JS. If the Clipboard API is unavailable or refused, it selects the address instead and tells the
+// visitor to press Ctrl+C / Cmd+C.
+import { Icon } from "astro-icon/components";
+import { focusRing, focusRingOnDark } from "../utils/designClasses";
+
+interface Props {
+  /** id of the element whose text is the email address. */
+  target: string;
+  /** Use on the Nightfall terminal CTA. */
+  onDark?: boolean;
+}
+
+const { target, onDark = false } = Astro.props;
+
+const base =
+  "group hidden min-h-[44px] shrink-0 items-center gap-1.5 rounded-pill border px-4 text-[13px] font-bold transition-colors motion-reduce:transition-none data-[ready]:inline-flex";
+const variant = onDark
+  ? `border-white/45 text-white hover:border-white ${focusRingOnDark}`
+  : `border-ink-divider bg-paper text-ink hover:border-grove hover:text-grove ${focusRing}`;
+---
+
+<span class="inline-flex items-center">
+  <button
+    type="button"
+    data-copy-email={target}
+    data-state="idle"
+    aria-describedby={target}
+    class={`${base} ${variant}`}
+  >
+    <Icon
+      name="mdi:content-copy"
+      class="h-4 w-4 group-data-[state=copied]:hidden"
+      aria-hidden="true"
+    />
+    <Icon
+      name="mdi:check"
+      class="hidden h-4 w-4 group-data-[state=copied]:inline"
+      aria-hidden="true"
+    />
+    <span data-copy-label>Copy</span>
+  </button>
+  <span role="status" aria-live="polite" class="sr-only" data-copy-status></span>
+</span>
+
+<script>
+  const RESET_MS = 2500;
+
+  function selectText(el: Element): void {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  }
+
+  function announce(button: HTMLButtonElement, label: string, status: string): void {
+    const labelEl = button.querySelector("[data-copy-label]");
+    const statusEl = button.parentElement?.querySelector("[data-copy-status]");
+    if (labelEl) labelEl.textContent = label;
+    if (statusEl) statusEl.textContent = status;
+  }
+
+  function reset(button: HTMLButtonElement): void {
+    button.dataset.state = "idle";
+    announce(button, "Copy", "");
+  }
+
+  async function copy(button: HTMLButtonElement): Promise<void> {
+    const source = document.getElementById(button.dataset.copyEmail ?? "");
+    const email = source?.textContent?.trim();
+    if (!source || !email) return;
+
+    try {
+      await navigator.clipboard.writeText(email);
+      button.dataset.state = "copied";
+      announce(button, "Copied", `Copied ${email} to your clipboard`);
+    } catch {
+      // Clipboard API missing (non-secure context, old browser) or refused:
+      // select the address so a keyboard copy works.
+      selectText(source);
+      const key = /Mac|iPhone|iPad/.test(navigator.userAgent) ? "Cmd+C" : "Ctrl+C";
+      announce(button, `Press ${key}`, `Address selected. Press ${key} to copy it.`);
+    }
+    window.setTimeout(() => reset(button), RESET_MS);
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("button[data-copy-email]").forEach((button) => {
+    button.dataset.ready = "";
+    button.addEventListener("click", () => void copy(button));
+  });
+</script>

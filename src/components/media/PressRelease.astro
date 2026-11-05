@@ -1,5 +1,6 @@
 ---
 import { container, overline, body, focusRing, inlineLink } from "../../utils/designClasses";
+import CopyEmailButton from "../CopyEmailButton.astro";
 // The Nov 2026 member-driven press release, shown inline on /media as a band
 // with progressive disclosure (it replaced the old PressReleaseDialog modal).
 // The shareable link is still /media#member-driven-press-release: the section
@@ -28,10 +29,13 @@ const para = "mt-4 text-lg leading-relaxed text-ink-secondary";
       <dl class="mt-6 text-base leading-relaxed">
         <dt class="font-bold text-ink">Media contact</dt>
         <dd class="text-ink-secondary">Afzal Mangal</dd>
-        <dd>
-          <a href="mailto:afzal@techforpalestine.org" class={`break-all ${inlineLink}`}
-            >afzal@techforpalestine.org</a
+        <dd class="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <a
+            id="press-release-contact-email"
+            href="mailto:afzal@techforpalestine.org"
+            class={`break-all ${inlineLink}`}>afzal@techforpalestine.org</a
           >
+          <CopyEmailButton target="press-release-contact-email" />
         </dd>
       </dl>
     </div>
