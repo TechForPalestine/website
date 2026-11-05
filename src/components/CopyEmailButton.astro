@@ -27,10 +27,15 @@ const IDLE_LABEL = "Copy email address";
 // action. 32px square keeps a comfortable hit area (WCAG 2.2 asks for 24px)
 // without pushing the address away; -my-1 stops it inflating the line.
 const base =
-  "group -my-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-sm transition-colors motion-reduce:transition-none data-[ready]:inline-flex data-[state=copied]:text-grove";
+  "group relative -my-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-sm transition-colors motion-reduce:transition-none data-[ready]:inline-flex data-[state=copied]:text-grove";
 const variant = onDark
   ? `text-white/60 hover:text-white data-[state=copied]:text-white ${focusRingOnDark}`
   : `text-ink-secondary hover:text-grove ${focusRing}`;
+
+// Feedback bubble above the icon, shown only after a click (state "copied" or
+// "selected"). Inverted against its surface: Ink on light pages, Paper on the
+// Nightfall CTA. aria-hidden because the live region speaks the same message.
+const bubble = onDark ? "bg-paper text-ink" : "bg-ink text-white";
 ---
 
 <button
@@ -51,11 +56,17 @@ const variant = onDark
     class="hidden h-4 w-4 group-data-[state=copied]:block"
     aria-hidden="true"
   />
+  <span
+    aria-hidden="true"
+    data-copy-tooltip
+    class={`pointer-events-none absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-sm px-2 py-1 text-xs font-bold opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-data-[state=copied]:opacity-100 group-data-[state=selected]:opacity-100 ${bubble}`}
+    >Copied</span
+  >
   <span role="status" aria-live="polite" class="sr-only" data-copy-status></span>
 </button>
 
 <script>
-  const RESET_MS = 2500;
+  const RESET_MS = 2000;
 
   function selectText(el: Element): void {
     const range = document.createRange();
@@ -66,18 +77,24 @@ const variant = onDark
   }
 
   const IDLE_LABEL = "Copy email address";
+  const timers = new WeakMap<HTMLButtonElement, number>();
 
-  // No visible text: the tooltip (title) carries the hint for pointer users
-  // and the live region announces the outcome to screen readers.
-  function announce(button: HTMLButtonElement, hint: string, status: string): void {
-    button.title = hint;
+  type CopyState = "idle" | "copied" | "selected";
+
+  // The bubble shows the outcome visually, the live region announces it, and
+  // the native title tooltip is cleared meanwhile so the two don't overlap.
+  function setState(
+    button: HTMLButtonElement,
+    state: CopyState,
+    bubbleText = "",
+    status = ""
+  ): void {
+    button.dataset.state = state;
+    button.title = state === "idle" ? IDLE_LABEL : "";
+    const bubble = button.querySelector("[data-copy-tooltip]");
+    if (bubble && bubbleText) bubble.textContent = bubbleText;
     const statusEl = button.querySelector("[data-copy-status]");
     if (statusEl) statusEl.textContent = status;
-  }
-
-  function reset(button: HTMLButtonElement): void {
-    button.dataset.state = "idle";
-    announce(button, IDLE_LABEL, "");
   }
 
   async function copy(button: HTMLButtonElement): Promise<void> {
@@ -87,16 +104,20 @@ const variant = onDark
 
     try {
       await navigator.clipboard.writeText(email);
-      button.dataset.state = "copied";
-      announce(button, "Copied", `Copied ${email} to your clipboard`);
+      setState(button, "copied", "Copied", `Copied ${email} to your clipboard`);
     } catch {
       // Clipboard API missing (non-secure context, old browser) or refused:
       // select the address so a keyboard copy works.
       selectText(source);
       const key = /Mac|iPhone|iPad/.test(navigator.userAgent) ? "Cmd+C" : "Ctrl+C";
-      announce(button, `Press ${key}`, `Address selected. Press ${key} to copy it.`);
+      setState(button, "selected", `Press ${key}`, `Address selected. Press ${key} to copy it.`);
     }
-    window.setTimeout(() => reset(button), RESET_MS);
+
+    window.clearTimeout(timers.get(button));
+    timers.set(
+      button,
+      window.setTimeout(() => setState(button, "idle"), RESET_MS)
+    );
   }
 
   document.querySelectorAll<HTMLButtonElement>("button[data-copy-email]").forEach((button) => {
