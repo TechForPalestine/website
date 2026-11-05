@@ -1,5 +1,6 @@
 import { useState } from "react";
-import IdeaRow, { type Idea } from "./IdeaRow";
+import IdeaCard, { type Idea } from "./IdeaCard";
+import IdeaDialog from "./IdeaDialog";
 import { IDEA_APPLY_URL, IDEA_CATEGORIES, type IdeaCategory } from "./ideaCategories";
 import { ghostButton, inlineLink, pill } from "../../utils/designClasses";
 
@@ -71,7 +72,7 @@ function EmptyCategory({ label }: { label: string }) {
 }
 
 // The /ideas directory: a segmented filter over the three Notion categories
-// and a list of expandable ideas. The filter uses plain toggle buttons with
+// and a card grid; a card opens the full brief in IdeaDialog. The filter uses plain toggle buttons with
 // aria-pressed (it filters one list rather than switching panels).
 export default function IdeasWithTabs({
   newIdeas,
@@ -80,6 +81,7 @@ export default function IdeasWithTabs({
   loadFailed = false,
 }: IdeasWithTabsProps) {
   const [activeTab, setActiveTab] = useState<IdeaCategory>("new");
+  const [openIdea, setOpenIdea] = useState<Idea | null>(null);
 
   if (loadFailed) return <ErrorState />;
 
@@ -135,14 +137,20 @@ export default function IdeasWithTabs({
         {currentList.length === 0 ? (
           <EmptyCategory label={active.label} />
         ) : (
-          // Keyed by category so open rows reset when the filter changes.
-          <ul key={activeTab} className="divide-y divide-ink-divider border-y border-ink-divider">
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {currentList.map((idea, index) => (
-              <IdeaRow key={idea.id || idea.slug || index} idea={idea} action={active.action} />
+              <IdeaCard
+                key={idea.id || idea.slug || index}
+                idea={idea}
+                action={active.action}
+                onOpen={setOpenIdea}
+              />
             ))}
           </ul>
         )}
       </div>
+
+      <IdeaDialog idea={openIdea} onClose={() => setOpenIdea(null)} />
     </div>
   );
 }

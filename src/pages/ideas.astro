@@ -109,11 +109,16 @@ const targets = [
               </div>
               <ul
                 aria-hidden="true"
-                class="mt-8 divide-y divide-ink-divider border-y border-ink-divider"
+                class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
               >
-                <li class="py-7"><div class="h-5 w-3/5 rounded-sm bg-stone"></div></li>
-                <li class="py-7"><div class="h-5 w-4/5 rounded-sm bg-stone"></div></li>
-                <li class="py-7"><div class="h-5 w-1/2 rounded-sm bg-stone"></div></li>
+                {
+                  ["w-3/5", "w-4/5", "w-1/2"].map((width) => (
+                    <li class="min-h-[180px] rounded-lg border border-ink-divider p-6">
+                      <div class={`h-5 rounded-sm bg-stone ${width}`} />
+                      <div class="mt-4 h-4 w-full rounded-sm bg-stone" />
+                    </li>
+                  ))
+                }
               </ul>
             </div>
           </IdeasWithTabs>
