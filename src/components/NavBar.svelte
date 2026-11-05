@@ -123,6 +123,8 @@
               >
                 <a
                   href={item.href}
+                  data-experiment={item.experiment?.name}
+                  data-variant={item.experiment?.variant}
                   on:focus={() => activeDropdown = label}
                   class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
                 >
@@ -158,6 +160,8 @@
                     <a
                       href={subHref}
                       role="menuitem"
+                      data-experiment={item.experiment?.name}
+                      data-variant={item.experiment?.variant}
                       on:keydown={handleMenuKeydown}
                       target={subHref.startsWith('http') ? '_blank' : undefined}
                       rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -236,6 +240,8 @@
               <div class="flex items-center justify-between w-full">
                 <a
                   href={item.href}
+                  data-experiment={item.experiment?.name}
+                  data-variant={item.experiment?.variant}
                   class="flex-1 text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
                 >
                   {label}
@@ -268,6 +274,8 @@
                     <a
                       href={subHref}
                       role="menuitem"
+                      data-experiment={item.experiment?.name}
+                      data-variant={item.experiment?.variant}
                       on:keydown={handleMenuKeydown}
                       target={subHref.startsWith('http') ? '_blank' : undefined}
                       rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}

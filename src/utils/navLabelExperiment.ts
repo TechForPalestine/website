@@ -4,10 +4,33 @@ export const CLICK_EVENT = "Nav Label Click";
 
 export type NavLabelVariant = "A" | "B";
 
-export const NAV_LABEL_HREF = "/volunteer";
-export const NAV_LABELS: Readonly<Record<NavLabelVariant, string>> = {
-  A: "Get Involved",
-  B: "Member Opportunities",
+export interface NavLabelItem {
+  label: string;
+  href: string;
+  submenu: [string, string][] | null;
+}
+
+// A: "Get Involved" with its full submenu (the control). B: "Member Opportunities", a single
+// link straight to /volunteer with no submenu.
+export const NAV_VARIANTS: Readonly<Record<NavLabelVariant, NavLabelItem>> = {
+  A: {
+    label: "Get Involved",
+    href: "/get-involved",
+    submenu: [
+      ["Become a Member", "/membership"],
+      ["Donate", "/donate"],
+      ["Join the Incubator", "https://techforpalestine.org/project-application-form"],
+      ["Volunteer", "/volunteer"],
+      ["Entrepreneurs for Palestine", "/e4p"],
+      ["Hire Palestinians", "/help/hire"],
+      ["Join our Discord", "https://techforpalestine.org/discord-invite"],
+    ],
+  },
+  B: {
+    label: "Member Opportunities",
+    href: "/volunteer",
+    submenu: null,
+  },
 };
 
 const MIDDLE_BUTTON = 1;
@@ -67,7 +90,7 @@ const trackWithPlausible: TrackEvent = (name, props) => {
 };
 
 // Records one exposure per page view when the nav carries an experiment link, and every
-// click on that link (desktop or mobile menu). The mobile menu is rendered on demand, so
+// click on that link or, for variant A, on any of its submenu links (desktop or mobile menu). The mobile menu is rendered on demand, so
 // clicks are caught by delegation on the document.
 //
 // Layout prerenders some pages via speculation rules, and prerendered pages run their

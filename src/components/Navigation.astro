@@ -2,18 +2,19 @@
 import { Icon } from "astro-icon/components";
 import NavBar from "./NavBar.svelte";
 import { assignNavLabelVariant } from "../lib/navAssignment";
-import { NAV_LABEL_EXPERIMENT, NAV_LABEL_HREF, NAV_LABELS } from "../utils/navLabelExperiment";
+import { NAV_LABEL_EXPERIMENT, NAV_VARIANTS } from "../utils/navLabelExperiment";
 
 const currentRoute = Astro.url.pathname;
 
-// "Get Involved" vs "Member Opportunities" label test. GrowthBook picks the variant on the
+// A: "Get Involved" with its submenu vs B: "Member Opportunities" linking straight to
+// /volunteer. GrowthBook picks the variant on the
 // server and it is rendered into the HTML, so there is no flicker. The id is a keyed hash of
 // the day, IP and User-Agent (src/lib/navAssignment.ts): a visitor keeps one label all day
 // and nothing is stored on their device. Without an assignment (flag off, CDN down, or
-// NAV_ASSIGNMENT_SECRET unset) everyone sees "Get Involved" and nothing is tracked. Pages are served `private` (see
+// NAV_ASSIGNMENT_SECRET unset) everyone sees variant A and nothing is tracked. Pages are served `private` (see
 // src/middleware/cache-control.ts) so a shared cache never hands one visitor's label to others.
 const assignedVariant = await assignNavLabelVariant(Astro.request, Astro.locals);
-const navLabel = NAV_LABELS[assignedVariant ?? "A"];
+const navVariant = NAV_VARIANTS[assignedVariant ?? "A"];
 
 type NavItem = {
   href: string;
@@ -56,10 +57,10 @@ const navigation: Map<string, NavItem> = new Map([
     },
   ],
   [
-    navLabel,
+    navVariant.label,
     {
-      href: NAV_LABEL_HREF,
-      submenu: null,
+      href: navVariant.href,
+      submenu: navVariant.submenu,
       experiment: assignedVariant
         ? { name: NAV_LABEL_EXPERIMENT, variant: assignedVariant }
         : undefined,
