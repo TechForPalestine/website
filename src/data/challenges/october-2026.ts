@@ -1,9 +1,9 @@
-/** Copy for /monthly-challenge: the monthly Incubator challenge. Swap this file's
- * contents when the next month's challenge is announced. */
+/** Copy for the archived October 2026 challenge at /monthly-challenge/october-2026.
+ * Kept as published; only the hackathon promo (over on Oct 31) was removed. */
 
-import type { WantedProject } from "../utils/challengeProjects";
+import type { WantedProject } from "../../utils/challengeProjects";
 
-/** The question, split so the hero and homepage popup can strike through what
+/** The question, split so the hero can strike through what
  * people leave and highlight where they go. */
 export const questionParts: { text: string; mark?: "strike" | "highlight" }[] = [
   { text: "How do we make it easier for users to migrate from " },
@@ -94,17 +94,4 @@ export const supportedProjects: WantedProject[] = [
   { name: "Tribe-X" },
   { name: "Boycott Shopify" },
   { name: "Migrate Off Vercel", aliases: ["Migrate from Vercel"] },
-];
-
-export const hackathon = {
-  url: "https://hackathon2026.techforpalestine.org/",
-  title: "Join our upcoming hackathon",
-  description:
-    "As part of Mozilla Festival, Tech for Palestine will hold a hackathon in Barcelona, Spain on October 31st on this same challenge. Join us in-person at Canodrom in Barcelona for a full day of hands-on work and collaboration, powered by Thaura.ai!",
-};
-
-export const whatAreChallenges: string[] = [
-  "To date, the Tech for Palestine Incubator has supported more than 90 projects working on different aspects of Palestinian liberation. These projects span themes like media bias, protest tech, divestment, exposing complicit companies, and much more.",
-  "Applications for the Incubator are open on a rolling basis for any relevant idea which furthers the Palestinian cause. On top of that, each month we pose one open challenge to the community, to direct efforts towards priorities we consider urgent.",
-  "The projects which apply for the challenge and are approved to join the Incubator form a small cohort, with tailored capacity building and opportunities for close collaboration with the other projects in the cohort.",
 ];

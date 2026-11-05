@@ -1,0 +1,95 @@
+---
+// Hero panel for the November 2026 challenge: one familiar news framing,
+// marked up the way a copy editor would, then rewritten with the actor named.
+// Proof red marks the error, Grove Green the fix. Illustrative of the patterns
+// the brief describes, not a quote from a specific outlet.
+// Colours are literal in the <style> block: define:vars would emit an inline
+// style attribute, which the CSP blocks in production.
+import { framing } from "../../data/challenges/november-2026";
+---
+
+<figure class="rounded-lg bg-paper p-6 text-ink shadow-sm sm:p-8">
+  <figcaption class="text-xs font-bold uppercase tracking-[0.14em] text-grove-deep">
+    Illustrative headline, annotated
+  </figcaption>
+
+  <p class="mt-4 text-[22px] font-extrabold leading-[1.3] text-ink-secondary sm:text-[26px]">
+    {
+      framing.before.map((part) =>
+        "note" in part ? (
+          <>
+            <span class="fs-mark">{part.text}</span>
+            <sup class="fs-num" aria-hidden="true">
+              {part.note}
+            </sup>
+            <span class="sr-only"> (note {part.note})</span>
+          </>
+        ) : (
+          part.text
+        )
+      )
+    }
+  </p>
+
+  <ol class="mt-5 space-y-2.5">
+    {
+      framing.notes.map((note) => (
+        <li class="flex gap-3 text-[16px] leading-snug text-ink">
+          <span class="fs-num fs-num--list" aria-hidden="true">
+            {note.n}
+          </span>
+          <span>
+            <span class="sr-only">Note {note.n}: </span>
+            {note.text}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="mt-6 border-t border-ink-divider pt-5">
+    <p class="text-[15px] font-bold text-ink-secondary">With the actor named:</p>
+    <p class="mt-2 text-[22px] font-extrabold leading-[1.3] sm:text-[26px]">
+      <span class="fs-fix">{framing.after.actor}</span>{framing.after.rest}
+    </p>
+  </div>
+</figure>
+
+<style>
+  /* A copy editor's wavy underline under the framing at fault. */
+  .fs-mark {
+    color: #2a2428;
+    text-decoration: underline wavy #c8102e;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+    text-decoration-skip-ink: none;
+  }
+  .fs-num {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35em;
+    height: 1.35em;
+    margin-left: 0.12em;
+    border-radius: 999px;
+    background: #c8102e;
+    color: #fff;
+    font-size: 0.5em;
+    font-weight: 800;
+    line-height: 1;
+    vertical-align: super;
+  }
+  .fs-num--list {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    font-size: 12px;
+    vertical-align: baseline;
+  }
+  /* The fix: the actor, back in the sentence, in Grove Green. */
+  .fs-fix {
+    color: #157a3e;
+    text-decoration: underline 2px #157a3e;
+    text-underline-offset: 0.2em;
+  }
+</style>

@@ -17,6 +17,10 @@ import {
   safeLocalStorage,
   writePopupState,
 } from "../../utils/newsletterPopup";
+import {
+  SHOWN_ATTRIBUTE as CHALLENGE_SHOWN_ATTRIBUTE,
+  SHOWN_EVENT as CHALLENGE_SHOWN_EVENT,
+} from "../../utils/challengePopup";
 
 // Homepage mailing-list popup. Spec: docs/superpowers/specs/2026-09-23-newsletter-popup-design.md
 
@@ -95,6 +99,17 @@ function Popup() {
   const bottomFormInView = useInView(FOOTER_SECTION_ID);
   const isDesktop = useIsDesktop();
   const [closed, setClosed] = useState(false);
+  // The homepage challenge popup wins the page load: once it has opened, this
+  // popup stays hidden until the next page load. Not a dismissal, so nothing
+  // is written to storage.
+  const [challengeShown, setChallengeShown] = useState(() =>
+    document.documentElement.hasAttribute(CHALLENGE_SHOWN_ATTRIBUTE)
+  );
+  useEffect(() => {
+    const onChallengeShown = () => setChallengeShown(true);
+    window.addEventListener(CHALLENGE_SHOWN_EVENT, onChallengeShown);
+    return () => window.removeEventListener(CHALLENGE_SHOWN_EVENT, onChallengeShown);
+  }, []);
   // Desktop opens straight to the card; mobile starts collapsed to a slim bar
   // (see the render branch below — the same collapsed/expanded split now also
   // drives the 30s idle auto-collapse on both).
@@ -104,7 +119,7 @@ function Popup() {
   const shownRef = useRef(false);
   const resetIdleTimerRef = useRef(() => {});
 
-  const mounted = enabled && eligible && triggered && !closed;
+  const mounted = enabled && eligible && triggered && !closed && !challengeShown;
   const visible = mounted && !bottomFormInView;
 
   useEffect(() => {
