@@ -1,58 +1,59 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
-import PressReleaseDialog from "../components/media/PressReleaseDialog.astro";
+import PressRelease from "../components/media/PressRelease.astro";
 import "../styles/base.css";
 
-// Entries with `popup: true` link to an in-page dialog (url is its #hash),
-// rather than to an external site.
+// Must match the section id in PressRelease.astro: the hero links to it, and
+// /media#member-driven-press-release is the release's shareable URL.
+const PRESS_RELEASE_HASH = "#member-driven-press-release";
+const PRESS_EMAIL = "media@techforpalestine.org";
+
+// External coverage, newest first. `datetime` feeds <time>; `date` is what
+// readers see.
 const articles = [
-  {
-    title: "Tech for Palestine Becomes a Member-Driven Organization",
-    source: "Press release",
-    url: "#member-driven-press-release",
-    date: "November 2, 2026",
-    description:
-      "After three years as an incubator, Tech for Palestine opens its membership to the public.",
-    image: "/images/press/t4p-conference-barcelona-2026.webp",
-    popup: true,
-  },
-  {
-    title: "Tech for Palestine Launches Coalition",
-    source: "TechCrunch",
-    url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
-    date: "January 2, 2024",
-    description:
-      "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
-    image: "/images/press/techcrunch-launch.jpg",
-  },
   {
     title: "Tech for Palestine – A Global Call",
     source: "Incarabia",
     url: "https://muslimtechwire.com/tech-for-palestine-launches",
     date: "January 5, 2024",
+    datetime: "2024-01-05",
     description:
       "Coverage of the initiative's mission to support Palestine through open-source tools.",
     image: "/images/press/muslimtechwire-archive-66.jpg",
-  },
-  {
-    title: "‘Tech for Palestine’ Aims to Boost Global Palestinian Advocacy",
-    source: "Palestine Chronicle",
-    url: "https://www.palestinechronicle.com/tech-for-palestine-aims-to-boost-global-palestinian-advocacy/",
-    date: "January 3, 2024",
-    description: "Focus on how the initiative empowers tech workers to speak up for Palestine.",
-    image: "/images/press/palestine-chronicle-social.png",
   },
   {
     title: "'Tech for Palestine' Initiative Launched to Support Palestinians",
     source: "The Daily Star",
     url: "https://www.thedailystar.net/tech-startup/news/tech-palestine-initiative-launched-support-palestinians-3510791",
     date: "January 4, 2024",
+    datetime: "2024-01-04",
     description: "Reporting on the launch and global reach of the Tech for Palestine movement.",
     image: "/images/press/daily-star-palestine.jpg",
   },
+  {
+    title: "‘Tech for Palestine’ Aims to Boost Global Palestinian Advocacy",
+    source: "Palestine Chronicle",
+    url: "https://www.palestinechronicle.com/tech-for-palestine-aims-to-boost-global-palestinian-advocacy/",
+    date: "January 3, 2024",
+    datetime: "2024-01-03",
+    description: "Focus on how the initiative empowers tech workers to speak up for Palestine.",
+    image: "/images/press/palestine-chronicle-social.png",
+  },
+  {
+    title: "Tech for Palestine Launches Coalition",
+    source: "TechCrunch",
+    url: "https://techcrunch.com/2024/01/02/tech-for-palestine-launches-to-provide-tools-and-projects-to-help-advocate-for-palestinians/",
+    date: "January 2, 2024",
+    datetime: "2024-01-02",
+    description:
+      "Highlighting the formation of a global coalition of technologists for Palestinian advocacy.",
+    image: "/images/press/techcrunch-launch.jpg",
+  },
 ];
 
+// `date` values are relative strings carried over verbatim from the old page;
+// replace them with absolute dates when they are known.
 const interviews = [
   {
     title: "Gaza Diaries: Paul Biggar & Dr. Omar Suleiman",
@@ -61,7 +62,6 @@ const interviews = [
     date: "11 months ago",
     description:
       "A profound conversation discussing the misuse of technology in the genocide in Gaza.",
-    embed: true,
   },
   {
     title: "How Big Tech Enables Israel's Crimes",
@@ -70,7 +70,6 @@ const interviews = [
     date: "1.4 years ago",
     description:
       "Paul Biggar explores the role of major tech companies in facilitating actions against Palestinians.",
-    embed: true,
   },
   {
     title: "Voices of Impact: Tech for Palestine's Journey",
@@ -79,7 +78,6 @@ const interviews = [
     date: "6 months ago",
     description:
       "An exploration of the journey and ethical considerations behind Tech for Palestine.",
-    embed: true,
   },
   {
     title: "TRT World Interview",
@@ -87,250 +85,341 @@ const interviews = [
     url: "https://www.youtube-nocookie.com/embed/8mdYIozAgBw",
     date: "Recent",
     description: "Paul Biggar discusses Tech for Palestine and the role of AI in the conflict.",
-    embed: true,
   },
 ];
 
-const newsletters = [
-  {
-    title: "Newsletter Archive",
-    description:
-      "Browse past updates from Tech for Palestine to stay informed on recent campaigns and progress.",
-    url: "https://updates.techforpalestine.org/",
-  },
+// `dark` variants are white artwork and need a dark preview ground. Ink, not
+// Nightfall: Nightfall is reserved for the terminal CTA.
+const logos = [
+  { src: "/logos/Logo.png", label: "Logo", format: "PNG", dark: false },
+  { src: "/logos/Logo.svg", label: "Logo", format: "SVG", dark: false },
+  { src: "/logos/Logo---Transparent.png", label: "Logo, transparent", format: "PNG", dark: false },
+  { src: "/logos/Logo-dark.png", label: "Logo, dark", format: "PNG", dark: true },
+  { src: "/logos/Mark.png", label: "Mark", format: "PNG", dark: false },
+  { src: "/logos/Mark---Transparent.png", label: "Mark, transparent", format: "PNG", dark: false },
+  { src: "/logos/Mark-dark.png", label: "Mark, dark", format: "PNG", dark: true },
+  { src: "/logos/Colors.png", label: "Color palette", format: "PNG", dark: false },
 ];
+
+const sourceFiles = [
+  { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
+  { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
+  { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
+];
+
+const newsletterArchiveUrl = "https://updates.techforpalestine.org/";
+
+// Shared class strings, matching about.astro (the live system's type scale in
+// plain Tailwind, since Layout.astro does not load design-system.css).
+const container = "mx-auto max-w-[1280px] px-6";
+const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
+const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
+const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
+const pill = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRing}`;
+const primaryButton = `${pill} bg-grove text-white hover:bg-grove-hover`;
+const ghostButton = `${pill} border border-ink text-ink hover:border-grove hover:text-grove`;
+const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
+const newTab = "(opens in a new tab)";
 ---
 
 <Layout title="Media">
   <main>
-    <section class="relative isolate bg-white px-6 py-10 sm:py-16 lg:px-8">
-      <div class="mx-auto max-w-4xl text-center">
-        <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Media & Press</h2>
-        <p class="mt-4 text-lg text-gray-600">
-          Interviews, news coverage, and thought leadership about Tech for Palestine
-        </p>
-        <hr class="mx-auto mb-4 mt-6 h-1 w-1/2 border-none bg-gray-700" />
-      </div>
-
-      <!-- Media Contact -->
+    <!-- Hero: who to contact and what to download, before anything else -->
+    <section aria-labelledby="media-heading" class="py-16 min-[810px]:py-20">
       <div
-        class="mx-auto mt-8 max-w-2xl rounded-xl border border-gray-200 bg-gray-50 p-6 text-center shadow-sm"
+        class={`${container} grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end lg:gap-14`}
       >
-        <h4 class="mb-2 text-lg font-semibold text-gray-800">📧 Media Inquiries</h4>
-        <p class="mb-3 text-sm text-gray-700">
-          For press inquiries, interviews, or media requests, please contact:
-        </p>
-        <a
-          href="mailto:media@techforpalestine.org"
-          class="inline-flex items-center gap-2 text-blue-600 hover:underline"
-        >
-          <Icon name="mdi:email-outline" class="h-5 w-5" />
-          <span class="font-medium">media@techforpalestine.org</span>
-        </a>
-      </div>
-
-      <!-- Press Kit Section -->
-      <div class="mx-auto mt-12 max-w-6xl">
-        <h3 class="mb-4 text-2xl font-semibold text-gray-900">🧰 Media Press Kit</h3>
-
-        <!-- About Summary -->
-        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <p class="text-sm text-gray-700">
-            Tech for Palestine (“T4P”) is a coalition of thousands of founders, engineers, product
-            marketers, investors and other professionals who are working in support of Palestinian
-            liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their
-            work towards a Free Palestine. We support projects — whether collections of individuals,
-            registered non-profits, or even companies — whose mission helps Palestine, especially
-            advocacy groups building technical products or in the tech space.
+        <div class="min-w-0">
+          <h1
+            id="media-heading"
+            class="text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+          >
+            Media and press
+          </h1>
+          <p class={`mt-6 max-w-[52ch] text-ink-secondary ${body}`}>
+            Press releases, coverage, interviews and brand assets for anyone reporting on Tech for
+            Palestine.
           </p>
-        </div>
 
-        <!-- Logos Section -->
-        <div class="mb-8">
-          <h4 class="mb-2 text-lg font-semibold text-gray-800">Official Logos</h4>
-          <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {
-              [
-                { src: "/logos/Logo.png", label: "Logo (PNG)", bg: "bg-white" },
-                { src: "/logos/Logo.svg", label: "Logo (SVG)", bg: "bg-white" },
-                {
-                  src: "/logos/Logo---Transparent.png",
-                  label: "Logo Transparent (PNG)",
-                  bg: "bg-white",
-                },
-                { src: "/logos/Logo-dark.png", label: "Logo Dark (PNG)", bg: "bg-black" },
-                { src: "/logos/Mark.png", label: "Mark (PNG)", bg: "bg-white" },
-                {
-                  src: "/logos/Mark---Transparent.png",
-                  label: "Mark Transparent (PNG)",
-                  bg: "bg-white",
-                },
-                { src: "/logos/Mark-dark.png", label: "Mark Dark (PNG)", bg: "bg-black" },
-                { src: "/logos/Colors.png", label: "Color Palette", bg: "bg-white" },
-              ].map(({ src, label, bg }) => (
-                <div class="group relative overflow-hidden rounded-lg border shadow-sm">
-                  <img src={src} alt={label} class={`h-28 w-full object-contain p-2 ${bg}`} />
-                  <div class="px-2 py-1 text-center text-xs text-gray-500">{label}</div>
-                  <a
-                    href={src}
-                    download
-                    class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
-                  >
-                    Download
-                  </a>
-                </div>
-              ))
-            }
-          </div>
-
-          <!-- Non-image downloads -->
-          <div class="mt-4 flex flex-wrap gap-3">
-            {
-              [
-                { href: "/logos/Logo.ai", label: "Logo (Adobe Illustrator)" },
-                { href: "/logos/Logo.pdf", label: "Logo (PDF)" },
-                { href: "/logos/Font-20240919T051150Z-001.zip", label: "Fonts (ZIP)" },
-              ].map(({ href, label }) => (
-                <a
-                  href={href}
-                  download
-                  class="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:bg-gray-50"
-                >
-                  <Icon name="mdi:download" class="h-4 w-4" />
-                  {label}
-                </a>
-              ))
-            }
-          </div>
-        </div>
-
-        <!-- Headshots -->
-        {/*<div class="mb-8">*/}
-        {/*    <h4 class="text-lg font-semibold text-gray-800 mb-2">Team Headshots</h4>*/}
-        {/*    <div class="flex flex-wrap justify-start gap-6">*/}
-        {
-          /*        <img src="/paul-founder.jpg" alt="Team Member 1" class="h-28 w-28 object-cover rounded-full shadow" />*/
-        }
-        {
-          /*        <img src="/press/headshot2.jpg" alt="Team Member 2" class="h-28 w-28 object-cover rounded-full shadow" />*/
-        }
-        {
-          /*        <img src="/press/headshot3.jpg" alt="Team Member 3" class="h-28 w-28 object-cover rounded-full shadow" />*/
-        }
-        {/*    </div>*/}
-        {/*</div>*/}
-
-        <!-- Press Kit PDF -->
-        <div class="mt-6 flex flex-wrap gap-4">
           <a
-            href="/tech_for_palestine_press_kit.pdf"
-            download
-            class="inline-block rounded-full bg-black px-6 py-3 text-white shadow transition hover:bg-zinc-800"
+            href={PRESS_RELEASE_HASH}
+            class={`group mt-10 block max-w-[60ch] border-t border-ink-divider pt-6 ${focusRing}`}
           >
-            Download Full Press Kit (PDF)
-          </a>
-          <a
-            href="/logos.zip"
-            download
-            class="inline-block rounded-full bg-black px-6 py-3 text-white shadow transition hover:bg-zinc-800"
-          >
-            Download All Logos (ZIP)
+            <span class={overline}>
+              Latest · <time datetime="2026-11-02">November 2, 2026</time>
+            </span>
+            <span class="mt-3 block text-lg leading-relaxed text-ink">
+              After three years as an incubator, Tech for Palestine opens its membership to the
+              public.
+            </span>
+            <span
+              class="mt-3 inline-flex items-center gap-1.5 text-[15px] font-bold text-grove underline decoration-grove/40 underline-offset-4 group-hover:decoration-grove"
+            >
+              Read the press release
+              <Icon name="mdi:arrow-down" class="h-4 w-4" aria-hidden="true" />
+            </span>
           </a>
         </div>
+
+        <aside aria-labelledby="contact-heading" class="min-w-0 rounded-lg bg-stone p-6 sm:p-8">
+          <h2 id="contact-heading" class={overline}>Press inquiries</h2>
+          <p class="mt-4 text-base leading-relaxed text-ink-secondary">
+            For interviews and media requests, email:
+          </p>
+          <a
+            href={`mailto:${PRESS_EMAIL}`}
+            class={`mt-2 inline-flex items-center gap-2 break-all text-[19px] min-[810px]:text-[21px] ${inlineLink}`}
+          >
+            <Icon name="mdi:email-outline" class="h-5 w-5 shrink-0" aria-hidden="true" />
+            {PRESS_EMAIL}
+          </a>
+
+          <div
+            class="mt-8 flex flex-col gap-3 border-t border-ink-divider pt-6 min-[480px]:flex-row min-[480px]:flex-wrap"
+          >
+            <a href="/tech_for_palestine_press_kit.pdf" download class={primaryButton}>
+              <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+              Press kit (PDF)
+            </a>
+            <a href="/logos.zip" download class={ghostButton}>
+              <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+              All logos (ZIP)
+            </a>
+          </div>
+        </aside>
       </div>
+    </section>
 
-      <!-- Articles Section -->
-      <div class="mx-auto mt-12 max-w-6xl">
-        <h3 class="mb-4 text-2xl font-semibold text-gray-900">📰 Articles</h3>
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Press release (band) -->
+    <PressRelease />
+
+    <!-- Coverage: a dated list, newest first -->
+    <section aria-labelledby="coverage-heading" class="py-16 min-[810px]:py-20">
+      <div class={container}>
+        <h2 id="coverage-heading" class={headline}>In the news</h2>
+
+        <ol class="mt-10 divide-y divide-ink-divider border-y border-ink-divider">
           {
             articles.map((item) => (
-              <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                <img src={item.image} alt={item.title} class="h-48 w-full object-cover" />
-                <div class="flex flex-1 flex-col p-5">
-                  <h3 class="mb-1 text-lg font-semibold text-gray-900">{item.title}</h3>
-                  <p class="mb-2 text-sm italic text-gray-500">
-                    {item.source} • {item.date}
-                  </p>
-                  <p class="flex-grow text-sm text-gray-600">{item.description}</p>
-                  {item.popup ? (
-                    <a
-                      href={item.url}
-                      class="mt-4 text-sm font-medium text-blue-600 hover:underline"
-                    >
-                      Read More →
-                    </a>
-                  ) : (
+              <li class="grid gap-x-10 gap-y-4 py-8 md:grid-cols-[9rem_minmax(0,1fr)_12rem] md:items-start">
+                <p class="text-base font-bold text-ink md:pt-1">
+                  <time datetime={item.datetime}>{item.date}</time>
+                </p>
+                <div class="min-w-0 max-w-[60ch]">
+                  <p class={overline}>{item.source}</p>
+                  <h3 class="mt-2 text-[21px] font-extrabold leading-snug text-ink min-[810px]:text-[24px]">
                     <a
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="mt-4 text-sm font-medium text-blue-600 hover:underline"
+                      class={`decoration-grove/40 underline-offset-4 transition-colors hover:text-grove hover:underline motion-reduce:transition-none ${focusRing}`}
                     >
-                      Read More →
+                      {item.title}
+                      <Icon
+                        name="mdi:open-in-new"
+                        class="ml-1 inline h-4 w-4 align-baseline text-ink-secondary"
+                        aria-hidden="true"
+                      />
+                      <span class="sr-only">
+                        , {item.source} {newTab}
+                      </span>
                     </a>
-                  )}
+                  </h3>
+                  <p class="mt-2 text-base leading-relaxed text-ink-secondary">
+                    {item.description}
+                  </p>
                 </div>
-              </div>
+                <img
+                  src={item.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  class="order-first aspect-[3/2] h-auto w-full max-w-[16rem] rounded-md bg-stone object-cover md:order-none md:max-w-none"
+                />
+              </li>
             ))
           }
-        </div>
+        </ol>
       </div>
+    </section>
 
-      <!-- Interviews Section -->
-      <div class="mx-auto mt-16 max-w-6xl">
-        <h3 class="mb-4 text-2xl font-semibold text-gray-900">🎙️ Interviews</h3>
-        <div class="flex flex-col gap-10">
+    <!-- Interviews (band) -->
+    <section
+      aria-labelledby="interviews-heading"
+      class="border-y border-first-light-edge bg-first-light"
+    >
+      <div class={`${container} py-16 min-[810px]:py-20`}>
+        <h2 id="interviews-heading" class={overline}>Interviews</h2>
+
+        <ul class="mt-8 grid gap-x-10 gap-y-12 md:grid-cols-2">
           {
             interviews.map((item) => (
-              <div class="relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 shadow-md transition-all hover:shadow-lg md:flex-row">
-                <div class="hidden w-2 bg-[#cd3b26] md:block" />
-
-                <div class="aspect-video w-full bg-black md:w-1/2">
+              <li class="min-w-0">
+                <div class="aspect-video w-full overflow-hidden rounded-md bg-ink">
                   <iframe
                     src={item.url}
-                    title={item.title}
+                    title={`${item.title} (video)`}
+                    loading="lazy"
                     class="h-full w-full border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
                   />
                 </div>
-
-                <div class="flex w-full flex-col justify-center bg-white p-6 md:w-1/2">
-                  <h3 class="mb-1 text-xl font-semibold text-gray-900">{item.title}</h3>
-                  <p class="mb-2 text-sm italic text-gray-500">
-                    {item.source} • {item.date}
-                  </p>
-                  <p class="text-sm text-gray-700">{item.description}</p>
-                </div>
-              </div>
+                <p class="mt-5 text-sm font-bold text-ink-secondary">
+                  {item.source} · {item.date}
+                </p>
+                <h3 class="mt-1 text-[19px] font-extrabold leading-snug text-ink">{item.title}</h3>
+                <p class="mt-2 max-w-[60ch] text-base leading-relaxed text-ink-secondary">
+                  {item.description}
+                </p>
+              </li>
             ))
           }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Press kit: boilerplate and brand assets -->
+    <section aria-labelledby="kit-heading" class="py-16 min-[810px]:py-20">
+      <div class={container}>
+        <h2 id="kit-heading" class={headline}>Press kit</h2>
+
+        <div class="mt-10 grid gap-x-12 gap-y-5 lg:grid-cols-[12rem_minmax(0,1fr)]">
+          <h3 class={`${overline} lg:pt-2`}>About T4P</h3>
+          <p class={`max-w-[65ch] text-ink ${body}`}>
+            Tech for Palestine (“T4P”) is a coalition of thousands of founders, engineers, product
+            marketers, investors and other professionals who are working in support of Palestinian
+            liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their
+            work towards a Free Palestine. We support projects (whether collections of individuals,
+            registered non-profits, or even companies) whose mission helps Palestine, especially
+            advocacy groups building technical products or in the tech space.
+          </p>
+        </div>
+
+        <div
+          class="mt-12 grid gap-x-12 gap-y-6 border-t border-ink-divider pt-12 lg:grid-cols-[12rem_minmax(0,1fr)]"
+        >
+          <h3 class={`${overline} lg:pt-2`}>Official logos</h3>
+          <div class="min-w-0">
+            <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {
+                logos.map((logo) => (
+                  <li>
+                    <a
+                      href={logo.src}
+                      download
+                      class={`group block rounded-md border border-ink-divider bg-paper transition-shadow hover:shadow-sm motion-reduce:transition-none ${focusRing}`}
+                    >
+                      <span
+                        class:list={["block rounded-t-md p-3", logo.dark ? "bg-ink" : "bg-stone"]}
+                      >
+                        <img
+                          src={logo.src}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          class="h-24 w-full object-contain"
+                        />
+                      </span>
+                      <span class="flex items-center justify-between gap-2 px-3 py-2.5 text-sm">
+                        <span class="text-ink">
+                          {logo.label} <span class="text-ink-secondary">({logo.format})</span>
+                        </span>
+                        <Icon
+                          name="mdi:download"
+                          class="h-4 w-4 shrink-0 text-grove"
+                          aria-hidden="true"
+                        />
+                        <span class="sr-only">Download</span>
+                      </span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <ul class="mt-6 flex flex-wrap gap-3">
+              {
+                sourceFiles.map(({ href, label }) => (
+                  <li>
+                    <a href={href} download class={ghostButton}>
+                      <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+                      {label}
+                    </a>
+                  </li>
+                ))
+              }
+              <li>
+                <a href="/logos.zip" download class={ghostButton}>
+                  <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+                  All logos (ZIP)
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Newsletter Section -->
-      <div class="mx-auto mt-16 max-w-6xl">
-        <h3 class="mb-4 text-2xl font-semibold text-gray-900">📬 Newsletter Archive</h3>
+    <!-- Newsletter archive (band) -->
+    <section
+      aria-labelledby="archive-heading"
+      class="border-y border-first-light-edge bg-first-light"
+    >
+      <div
+        class={`${container} grid gap-x-12 gap-y-5 py-16 min-[810px]:py-20 lg:grid-cols-[12rem_minmax(0,1fr)]`}
+      >
+        <h2 id="archive-heading" class={`${overline} lg:pt-2`}>Newsletter archive</h2>
+        <div class="max-w-[65ch]">
+          <p class={`text-ink ${body}`}>
+            Browse past updates from Tech for Palestine to stay informed on recent campaigns and
+            progress.
+          </p>
+          <a
+            href={newsletterArchiveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={`mt-6 ${ghostButton}`}
+          >
+            View newsletters
+            <Icon name="mdi:open-in-new" class="h-4 w-4" aria-hidden="true" />
+            <span class="sr-only">{newTab}</span>
+          </a>
+        </div>
+      </div>
+    </section>
 
-        {
-          newsletters.map((item) => (
-            <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
-              <h4 class="text-lg font-semibold text-gray-800">{item.title}</h4>
-              <p class="mt-1 text-sm text-gray-600">{item.description}</p>
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline"
-              >
-                View Newsletters →
-              </a>
-            </div>
-          ))
-        }
+    <!-- Terminal CTA: the one dark block on the page -->
+    <section class="py-16 min-[810px]:py-20">
+      <div class={container}>
+        <div class="rounded-md bg-nightfall px-6 py-[clamp(3rem,5vw,4.5rem)] sm:px-10 lg:px-16">
+          <h2
+            class="max-w-[20ch] text-[clamp(30px,4vw,46px)] font-extrabold leading-[1.1] text-white"
+          >
+            Working on a story about Tech for Palestine?
+          </h2>
+          <p class="mt-5 max-w-[52ch] text-[17px] leading-[1.7] text-white/70">
+            For press inquiries, interviews, or media requests, email our media team.
+          </p>
+          <div class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            <a
+              href={`mailto:${PRESS_EMAIL}`}
+              class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill bg-white px-6 py-3 text-[15px] font-bold text-nightfall transition-colors hover:bg-first-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+            >
+              <Icon name="mdi:email-outline" class="h-5 w-5" aria-hidden="true" />
+              {PRESS_EMAIL}
+            </a>
+            <a
+              href="/membership"
+              class="inline-flex min-h-[44px] items-center justify-center rounded-pill border border-white/45 px-6 py-3 text-[15px] font-bold text-white transition-colors hover:border-white hover:bg-white hover:text-nightfall focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+            >
+              Become a member
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
-  <PressReleaseDialog />
 </Layout>

@@ -2,6 +2,19 @@
 import Layout from "../layouts/Layout.astro";
 import FAQList from "../components/faq/FAQList.tsx";
 import "../styles/base.css";
+
+// Shared class strings: the live system's type scale (DESIGN.md §3) in plain
+// Tailwind, since Layout.astro does not load design-system.css. Mirrors
+// about.astro so the two pages read as one system.
+const container = "mx-auto max-w-[1280px] px-6";
+const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
+const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
+const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
+const focusRingOnDark =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+const pillOnDark = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRingOnDark}`;
+const inverseButton = `${pillOnDark} bg-white text-nightfall hover:bg-first-light`;
+const ghostOnDarkButton = `${pillOnDark} border border-white/45 text-white hover:border-white hover:bg-white hover:text-nightfall`;
 ---
 
 <Layout
@@ -9,22 +22,61 @@ import "../styles/base.css";
   description="Frequently asked questions about Tech for Palestine. Learn about our mission, how to get involved, the T4P Incubator, volunteer opportunities, and how we support Palestinian liberation through technology."
 >
   <main>
-    <div class="relative isolate">
-      <div class="px-6 py-10 sm:py-16 lg:px-8">
-        <div class="mx-auto max-w-4xl">
-          <!-- Title -->
-          <h1
-            class="mt-2 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
-          >
-            <span class="text-green-800">Frequently Asked Questions</span>
-          </h1>
+    <!-- Hero -->
+    <section class="pb-12 pt-16 min-[810px]:pb-16 min-[810px]:pt-20">
+      <div class={container}>
+        <p class={overline}>Frequently asked questions</p>
+        <h1
+          class="mt-5 max-w-[18ch] text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+        >
+          Straight answers about working for Palestinian liberation
+        </h1>
+        <p class={`mt-6 max-w-[60ch] text-ink-secondary ${body}`}>
+          What Tech for Palestine does, how projects get support, and where your skills fit in. Open
+          any question below; every answer comes from the people who run T4P.
+        </p>
+      </div>
+    </section>
+
+    <!-- Questions -->
+    <section
+      aria-labelledby="questions-heading"
+      class="border-t border-ink-divider pb-16 pt-12 min-[810px]:pb-20 min-[810px]:pt-16"
+    >
+      <div
+        class={`${container} grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-14`}
+      >
+        <div class="min-w-0">
+          <h2 id="questions-heading" class={`${headline} lg:sticky lg:top-28`}>
+            What people ask us
+          </h2>
+        </div>
+        <div class="min-w-0">
+          <FAQList faqs={[]} client:only="react" />
         </div>
       </div>
-    </div>
-  </main>
+    </section>
 
-  <!-- FAQ List Section -->
-  <section class="mx-auto my-8 max-w-[700px] px-4">
-    <FAQList faqs={[]} client:only="react" />
-  </section>
+    <!-- Terminal CTA: the one dark block on the page -->
+    <section aria-labelledby="ask-heading" class="pb-[clamp(3rem,5vw,4rem)]">
+      <div class={container}>
+        <div class="rounded-md bg-nightfall px-6 py-[clamp(3rem,5vw,4.5rem)] sm:px-10 lg:px-16">
+          <h2
+            id="ask-heading"
+            class="max-w-[18ch] text-[clamp(30px,4vw,46px)] font-extrabold leading-[1.1] text-white"
+          >
+            Still have a question? Ask a person.
+          </h2>
+          <p class="mt-5 max-w-[52ch] text-[17px] leading-[1.75] text-white/70">
+            Write to the team and someone will get back to you. Members can also ask in the vetted
+            member chat, where the people building the projects answer directly.
+          </p>
+          <div class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            <a href="/contact" class={inverseButton}>Contact us</a>
+            <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </Layout>
