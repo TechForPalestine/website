@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import FAQAccordion from "./FAQAccordion";
 import type { RichTextSegment } from "../../types/richText";
+import { inlineLink, ghostButton } from "../../utils/designClasses";
 
 interface FAQItem {
   id: string;
@@ -19,10 +20,6 @@ type LoadStatus = "loading" | "ready" | "error";
 // rather than a uniform stack of bars.
 const SKELETON_WIDTHS = ["w-4/5", "w-3/5", "w-11/12", "w-2/3", "w-3/4", "w-1/2"];
 
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
-const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
-const ghostButton = `inline-flex min-h-[44px] items-center justify-center rounded-pill border border-ink px-5 py-3 text-[13px] font-bold text-ink transition-colors hover:border-grove hover:text-grove motion-reduce:transition-none ${focusRing}`;
 const stateText = "max-w-[52ch] text-[17px] leading-[1.7] text-ink-secondary";
 
 // `?showAll=yes` asks the API for hidden (non-Visible) Notion entries too, for

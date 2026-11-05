@@ -1,4 +1,5 @@
 ---
+import { container, overline, body, focusRing, inlineLink } from "../../utils/designClasses";
 // The Nov 2026 member-driven press release, shown inline on /media as a band
 // with progressive disclosure (it replaced the old PressReleaseDialog modal).
 // The shareable link is still /media#member-driven-press-release: the section
@@ -6,14 +7,8 @@
 // the full text. Keep PRESS_RELEASE_ID in sync with the hero link in media.astro.
 const PRESS_RELEASE_ID = "member-driven-press-release";
 
-const container = "mx-auto max-w-[1280px] px-6";
-const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
-const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
 const subhead = "mt-10 text-[22px] font-extrabold leading-snug text-ink min-[810px]:text-[24px]";
 const para = "mt-4 text-lg leading-relaxed text-ink-secondary";
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
-const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
 ---
 
 <section

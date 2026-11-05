@@ -3,6 +3,19 @@ import Layout from "../layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
 import PressRelease from "../components/media/PressRelease.astro";
 import "../styles/base.css";
+import {
+  container,
+  headline,
+  overline,
+  body,
+  focusRing,
+  primaryButton,
+  ghostButton,
+  inlineLink,
+  inverseButton,
+  ghostOnDarkButton,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
 
 // Must match the section id in PressRelease.astro: the hero links to it, and
 // /media#member-driven-press-release is the release's shareable URL.
@@ -109,18 +122,6 @@ const sourceFiles = [
 
 const newsletterArchiveUrl = "https://updates.techforpalestine.org/";
 
-// Shared class strings, matching about.astro (the live system's type scale in
-// plain Tailwind, since Layout.astro does not load design-system.css).
-const container = "mx-auto max-w-[1280px] px-6";
-const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
-const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
-const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
-const pill = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRing}`;
-const primaryButton = `${pill} bg-grove text-white hover:bg-grove-hover`;
-const ghostButton = `${pill} border border-ink text-ink hover:border-grove hover:text-grove`;
-const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
 const newTab = "(opens in a new tab)";
 ---
 
@@ -392,34 +393,18 @@ const newTab = "(opens in a new tab)";
     </section>
 
     <!-- Terminal CTA: the one dark block on the page -->
-    <section class="py-16 min-[810px]:py-20">
-      <div class={container}>
-        <div class="rounded-md bg-nightfall px-6 py-[clamp(3rem,5vw,4.5rem)] sm:px-10 lg:px-16">
-          <h2
-            class="max-w-[20ch] text-[clamp(30px,4vw,46px)] font-extrabold leading-[1.1] text-white"
-          >
-            Working on a story about Tech for Palestine?
-          </h2>
-          <p class="mt-5 max-w-[52ch] text-[17px] leading-[1.7] text-white/70">
-            For press inquiries, interviews, or media requests, email our media team.
-          </p>
-          <div class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
-            <a
-              href={`mailto:${PRESS_EMAIL}`}
-              class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill bg-white px-6 py-3 text-[15px] font-bold text-nightfall transition-colors hover:bg-first-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
-            >
-              <Icon name="mdi:email-outline" class="h-5 w-5" aria-hidden="true" />
-              {PRESS_EMAIL}
-            </a>
-            <a
-              href="/membership"
-              class="inline-flex min-h-[44px] items-center justify-center rounded-pill border border-white/45 px-6 py-3 text-[15px] font-bold text-white transition-colors hover:border-white hover:bg-white hover:text-nightfall focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
-            >
-              Become a member
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <TerminalCta
+      heading="Working on a story about Tech for Palestine?"
+      headingId="press-cta-heading"
+    >
+      For press inquiries, interviews, or media requests, email our media team.
+      <Fragment slot="actions">
+        <a href={`mailto:${PRESS_EMAIL}`} class={inverseButton}>
+          <Icon name="mdi:email-outline" class="h-5 w-5" aria-hidden="true" />
+          {PRESS_EMAIL}
+        </a>
+        <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>

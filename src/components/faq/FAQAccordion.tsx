@@ -1,6 +1,7 @@
 import * as React from "react";
 import RichTextRenderer from "../shared/RichTextRenderer";
 import type { RichTextSegment } from "../../types/richText";
+import { focusRing } from "../../utils/designClasses";
 
 type FAQAccordionProps = {
   question: string;
@@ -14,8 +15,6 @@ export function faqAnchorId(question: string): string {
   return `faq-${question.replaceAll(" ", "-")}`;
 }
 
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
 const answerText = "max-w-[65ch] text-[17px] leading-[1.7] text-ink-secondary min-[810px]:text-lg";
 const answerLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
 

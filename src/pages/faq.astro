@@ -2,19 +2,15 @@
 import Layout from "../layouts/Layout.astro";
 import FAQList from "../components/faq/FAQList.tsx";
 import "../styles/base.css";
-
-// Shared class strings: the live system's type scale (DESIGN.md §3) in plain
-// Tailwind, since Layout.astro does not load design-system.css. Mirrors
-// about.astro so the two pages read as one system.
-const container = "mx-auto max-w-[1280px] px-6";
-const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
-const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
-const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
-const focusRingOnDark =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
-const pillOnDark = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRingOnDark}`;
-const inverseButton = `${pillOnDark} bg-white text-nightfall hover:bg-first-light`;
-const ghostOnDarkButton = `${pillOnDark} border border-white/45 text-white hover:border-white hover:bg-white hover:text-nightfall`;
+import {
+  container,
+  headline,
+  overline,
+  body,
+  inverseButton,
+  ghostOnDarkButton,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
 ---
 
 <Layout
@@ -58,25 +54,17 @@ const ghostOnDarkButton = `${pillOnDark} border border-white/45 text-white hover
     </section>
 
     <!-- Terminal CTA: the one dark block on the page -->
-    <section aria-labelledby="ask-heading" class="pb-[clamp(3rem,5vw,4rem)]">
-      <div class={container}>
-        <div class="rounded-md bg-nightfall px-6 py-[clamp(3rem,5vw,4.5rem)] sm:px-10 lg:px-16">
-          <h2
-            id="ask-heading"
-            class="max-w-[18ch] text-[clamp(30px,4vw,46px)] font-extrabold leading-[1.1] text-white"
-          >
-            Still have a question? Ask a person.
-          </h2>
-          <p class="mt-5 max-w-[52ch] text-[17px] leading-[1.75] text-white/70">
-            Write to the team and someone will get back to you. Members can also ask in the vetted
-            member chat, where the people building the projects answer directly.
-          </p>
-          <div class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
-            <a href="/contact" class={inverseButton}>Contact us</a>
-            <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <TerminalCta
+      padTop={false}
+      heading="Still have a question? Ask a person."
+      headingId="ask-heading"
+    >
+      Write to the team and someone will get back to you. Members can also ask in the vetted member
+      chat, where the people building the projects answer directly.
+      <Fragment slot="actions">
+        <a href="/contact" class={inverseButton}>Contact us</a>
+        <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>

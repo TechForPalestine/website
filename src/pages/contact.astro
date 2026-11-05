@@ -1,19 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+import {
+  container,
+  headline,
+  overline,
+  body,
+  focusRing,
+  inverseButton,
+  inlineLink,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
 
-// Shared class strings: the live system's type scale (DESIGN.md §3) in plain
-// Tailwind, since Layout.astro does not load design-system.css. Mirrors
-// about.astro so the two pages read as one system.
-const container = "mx-auto max-w-[1280px] px-6";
-const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
-const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
-const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
-const pill = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRing}`;
-const inverseButton = `${pill} bg-white text-nightfall hover:bg-first-light`;
-const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
 const routeLink = `inline-flex min-h-[44px] items-center gap-2 font-bold text-grove transition-colors hover:text-grove-hover motion-reduce:transition-none ${focusRing}`;
 
 // The routing table. Each row answers "who are you, and where do you go?"
@@ -160,40 +158,12 @@ const routes = [
       </div>
     </section>
 
-    <!-- Terminal CTA: the one Nightfall block on the page -->
-    <section aria-labelledby="join-heading" class="py-16 min-[810px]:py-20">
-      <div class={container}>
-        <div
-          class="grid gap-8 rounded-md bg-nightfall p-8 min-[810px]:p-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-14"
-        >
-          <div class="min-w-0">
-            <h2
-              id="join-heading"
-              class="text-[28px] font-extrabold leading-[1.2] text-white min-[810px]:text-[38px]"
-            >
-              Want to do more than get in touch?
-            </h2>
-            <p class="mt-4 max-w-[55ch] text-lg leading-[1.7] text-white/80 min-[810px]:text-xl">
-              Members fund the work and join the teams building tech for Palestinian liberation.
-            </p>
-          </div>
-          <a href="/membership" class={inverseButton}>
-            Become a member
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="h-4 w-4"
-              aria-hidden="true"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              ></path>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
+    <!-- Terminal CTA: the one dark block on the page -->
+    <TerminalCta heading="Want to do more than get in touch?" headingId="join-heading">
+      Members fund the work and join the teams building tech for Palestinian liberation.
+      <Fragment slot="actions">
+        <a href="/membership" class={inverseButton}>Become a member</a>
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>

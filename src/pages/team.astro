@@ -1,6 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+import {
+  container,
+  headline,
+  overline,
+  body,
+  inverseButton,
+  ghostOnDarkButton,
+  inlineLink,
+  inlineLinkOnDark,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
 
 // Board members get the editorial treatment: a large portrait beside the full
 // bio. Each bio is an array of paragraphs.
@@ -88,22 +99,6 @@ const staff = [
     position: "object-center",
   },
 ];
-
-// Shared class strings: the live system's type scale (DESIGN.md §3) in plain
-// Tailwind, since Layout.astro does not load design-system.css.
-const container = "mx-auto max-w-[1280px] px-6";
-const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
-const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
-const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
-const focusRingOnDark =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
-const pill = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRingOnDark}`;
-const inverseButton = `${pill} bg-white text-nightfall hover:bg-first-light`;
-const ghostOnDarkButton = `${pill} border border-white/45 text-white hover:border-white hover:bg-white hover:text-nightfall`;
-const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
-const inlineLinkOnDark = `font-bold text-white underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white motion-reduce:transition-none ${focusRingOnDark}`;
 ---
 
 <Layout title="Team & Board">
@@ -202,30 +197,20 @@ const inlineLinkOnDark = `font-bold text-white underline decoration-white/40 und
     </section>
 
     <!-- Terminal CTA: the one dark block on the page -->
-    <section aria-labelledby="join-heading" class="pb-16 min-[810px]:pb-20">
-      <div class={container}>
-        <div class="rounded-md bg-nightfall px-6 py-12 sm:px-10 min-[810px]:py-16 lg:px-16">
-          <h2
-            id="join-heading"
-            class="max-w-[20ch] text-[28px] font-extrabold leading-[1.1] text-white min-[810px]:text-[42px]"
-          >
-            Work alongside this team for a free Palestine.
-          </h2>
-          <p class="mt-5 max-w-[55ch] text-[17px] leading-relaxed text-white/70">
-            Use your skills to support or start projects for Palestinian liberation, and sustain T4P
-            with grassroots funding.
-          </p>
-          <div class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
-            <a href="/membership" class={inverseButton}>Become a member</a>
-            <a href="/volunteer" class={ghostOnDarkButton}>Get involved</a>
-          </div>
-          <p class="mt-8 text-[15px] text-white/70">
-            Want to reach the team directly? <a href="/contact" class={inlineLinkOnDark}
-              >Contact us</a
-            >.
-          </p>
-        </div>
-      </div>
-    </section>
+    <TerminalCta
+      padTop={false}
+      heading="Work alongside this team for a free Palestine."
+      headingId="join-heading"
+    >
+      Use your skills to support or start projects for Palestinian liberation, and sustain T4P with
+      grassroots funding.
+      <Fragment slot="actions">
+        <a href="/membership" class={inverseButton}>Become a member</a>
+        <a href="/volunteer" class={ghostOnDarkButton}>Get involved</a>
+      </Fragment>
+      <Fragment slot="footnote">
+        Want to reach the team directly? <a href="/contact" class={inlineLinkOnDark}>Contact us</a>.
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>
