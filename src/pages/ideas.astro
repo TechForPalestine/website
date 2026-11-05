@@ -3,87 +3,65 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
 import { fetchNotionIdeas } from "../store/notionClient.js";
 import IdeasWithTabs from "../components/ideas/IdeasWithTabs.tsx";
+import TerminalCta from "../components/TerminalCta.astro";
+import { IDEA_APPLY_URL } from "../components/ideas/ideaCategories";
+import {
+  container,
+  display,
+  headline,
+  overline,
+  body,
+  band,
+  inverseButton,
+  ghostOnDarkButton,
+} from "../utils/designClasses";
 
-let rawIdeas: Awaited<ReturnType<typeof fetchNotionIdeas>>;
+type RawIdea = Awaited<ReturnType<typeof fetchNotionIdeas>>[number];
+
+let rawIdeas: RawIdea[];
+let loadFailed = false;
 try {
   rawIdeas = await fetchNotionIdeas(Astro.locals);
 } catch (error) {
   console.error("Failed to fetch ideas from Notion:", error);
   rawIdeas = [];
+  loadFailed = true;
 }
 
-// Filter ideas by category from Notion
-const newIdeas = rawIdeas
-  .filter((idea: any) => idea.category === "new")
-  .map((idea: any) => {
-    // Create excerpt from rich text (first 150 chars)
-    const plainTextExcerpt =
-      idea.description
-        .map((segment: any) => segment.plain_text)
-        .join("")
-        .substring(0, 150) +
-      (idea.description.map((segment: any) => segment.plain_text).join("").length > 150
-        ? "..."
-        : "");
+const EXCERPT_LENGTH = 150;
 
-    return {
-      id: idea.id,
-      data: {
-        title: idea.name,
-        tags: [],
-      },
-      richTextDescription: idea.description,
-      excerpt: plainTextExcerpt,
-    };
-  });
+// Shape one Notion idea for the island: the full rich text for the expanded
+// view, plus a plain-text excerpt for the collapsed row.
+function toIdea(idea: RawIdea) {
+  const plainText = idea.description.map((segment) => segment.plain_text).join("");
+  const excerpt =
+    plainText.length > EXCERPT_LENGTH
+      ? `${plainText.substring(0, EXCERPT_LENGTH).trimEnd()}...`
+      : plainText;
 
-const existingIdeas = rawIdeas
-  .filter((idea: any) => idea.category === "existing")
-  .map((idea: any) => {
-    // Create excerpt from rich text (first 150 chars)
-    const plainTextExcerpt =
-      idea.description
-        .map((segment: any) => segment.plain_text)
-        .join("")
-        .substring(0, 150) +
-      (idea.description.map((segment: any) => segment.plain_text).join("").length > 150
-        ? "..."
-        : "");
+  return {
+    id: idea.id,
+    data: { title: idea.name, tags: [] as string[] },
+    richTextDescription: idea.description,
+    excerpt,
+  };
+}
 
-    return {
-      id: idea.id,
-      data: {
-        title: idea.name,
-        tags: [],
-      },
-      richTextDescription: idea.description,
-      excerpt: plainTextExcerpt,
-    };
-  });
+const ideasIn = (category: string) =>
+  rawIdeas.filter((idea) => idea.category === category).map(toIdea);
 
-const startedIdeas = rawIdeas
-  .filter((idea: any) => idea.category === "started")
-  .map((idea: any) => {
-    // Create excerpt from rich text (first 150 chars)
-    const plainTextExcerpt =
-      idea.description
-        .map((segment: any) => segment.plain_text)
-        .join("")
-        .substring(0, 150) +
-      (idea.description.map((segment: any) => segment.plain_text).join("").length > 150
-        ? "..."
-        : "");
+const newIdeas = ideasIn("new");
+const existingIdeas = ideasIn("existing");
+const startedIdeas = ideasIn("started");
 
-    return {
-      id: idea.id,
-      data: {
-        title: idea.name,
-        tags: [],
-      },
-      richTextDescription: idea.description,
-      excerpt: plainTextExcerpt,
-    };
-  });
+// Starting points for a new initiative, kept from the original page.
+const targets = [
+  "a politician’s complicity or ties to Israel",
+  "someone who committed violence against protestors",
+  "a pro-Israel hasbara organization",
+  "some entity’s investments in Israel",
+  "a US non-profit funding the genocide or apartheid (e.g. Friends of the IDF)",
+];
 ---
 
 <Layout
@@ -91,38 +69,109 @@ const startedIdeas = rawIdeas
   description="Browse and lead project ideas that support Palestinian freedom. Tech for Palestine builds bold projects to support Palestinian advocacy and counter pro-Israel propaganda. Explore new ideas, existing projects, and initiatives that have already started."
 >
   <main>
-    <div class="relative isolate">
-      <div class="px-6 py-4 sm:py-4 lg:px-8">
-        <div class="mx-auto max-w-4xl">
-          <h1
-            class="mt-2 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
+    <!-- Hero -->
+    <section class="pb-12 pt-16 min-[810px]:pb-16 min-[810px]:pt-20">
+      <div class={container}>
+        <p class={overline}>Project ideas</p>
+        <h1 class={`mt-5 max-w-[16ch] ${display}`}>Pick up an idea and build it for Palestine</h1>
+        <p class={`mt-6 max-w-[60ch] text-ink-secondary ${body}`}>
+          Tech for Palestine builds bold projects to support Palestinian freedom and counter
+          pro-Israel propaganda. We turn ideas into high-impact, self-sustaining initiatives, and we
+          need leaders to make them real.
+        </p>
+      </div>
+    </section>
+
+    <!-- The ideas -->
+    <section
+      aria-labelledby="ideas-heading"
+      class="border-t border-ink-divider pb-16 pt-12 min-[810px]:pb-20 min-[810px]:pt-16"
+    >
+      <div class={container}>
+        <h2 id="ideas-heading" class={headline}>Ideas looking for a leader</h2>
+        <p class="mt-4 max-w-[60ch] text-[17px] leading-[1.7] text-ink-secondary">
+          Open any idea to read the full brief, then apply to lead it.
+        </p>
+        <div class="mt-10">
+          <IdeasWithTabs
+            newIdeas={newIdeas}
+            existingIdeas={existingIdeas}
+            startedIdeas={startedIdeas}
+            loadFailed={loadFailed}
+            client:only="react"
           >
-            Welcome to the <br class="hidden sm:block" />
-            <span class="text-green-800">Tech for Palestine Ideas</span>
-          </h1>
-
-          <p class="mt-2 text-center text-lg leading-8 text-gray-600">
-            Tech for Palestine builds bold projects to support Palestinian freedom and counter
-            pro-Israel propaganda.
-          </p>
-
-          <p class="mt-2 text-center text-lg leading-8 text-gray-600">
-            We turn ideas into high-impact, self-sustaining initiatives — and we need leaders to
-            help make them real.
-          </p>
-
-          <p class="mt-2 text-center text-lg leading-8 text-gray-600">
-            Explore the ideas below and get involved.
-          </p>
+            <div slot="fallback" role="status" aria-live="polite">
+              <span class="sr-only">Loading ideas</span>
+              <div aria-hidden="true" class="flex flex-wrap gap-2">
+                <div class="h-11 w-48 rounded-pill bg-stone"></div>
+                <div class="h-11 w-64 rounded-pill bg-stone"></div>
+                <div class="h-11 w-40 rounded-pill bg-stone"></div>
+              </div>
+              <ul
+                aria-hidden="true"
+                class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {
+                  ["w-3/5", "w-4/5", "w-1/2"].map((width) => (
+                    <li class="min-h-[180px] rounded-lg border border-ink-divider p-6">
+                      <div class={`h-5 rounded-sm bg-stone ${width}`} />
+                      <div class="mt-4 h-4 w-full rounded-sm bg-stone" />
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </IdeasWithTabs>
         </div>
       </div>
+    </section>
 
-      <IdeasWithTabs
-        newIdeas={newIdeas}
-        existingIdeas={existingIdeas}
-        startedIdeas={startedIdeas}
-        client:only="react"
-      />
-    </div>
+    <!-- Generating new ideas -->
+    <section aria-labelledby="generate-heading" class={`${band} py-16 min-[810px]:py-20`}>
+      <div
+        class={`${container} grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14`}
+      >
+        <div class="min-w-0">
+          <p class={overline}>Generating new ideas</p>
+          <h2 id="generate-heading" class={`mt-4 max-w-[18ch] ${headline}`}>
+            Don't see your idea? Start from a target.
+          </h2>
+          <p class="mt-5 max-w-[48ch] text-[17px] leading-[1.7] text-ink-secondary">
+            There are endless pro-Israel initiatives that need to be countered. Consider an
+            initiative to fight:
+          </p>
+        </div>
+        <ol class="min-w-0 divide-y divide-first-light-edge border-y border-first-light-edge">
+          {
+            targets.map((target, index) => (
+              <li class="flex gap-5 py-5">
+                <span
+                  aria-hidden="true"
+                  class="w-6 shrink-0 pt-0.5 text-[15px] font-extrabold tabular-nums text-grove-deep"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span class="max-w-[52ch] text-[17px] leading-[1.6] text-ink min-[810px]:text-lg">
+                  {target}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Terminal CTA: the one dark block on the page -->
+    <TerminalCta heading="Have an idea of your own? Bring it to us." headingId="apply-heading">
+      Want to lead an existing project or bring a new idea to life? Tell us what you want to build
+      and the skills you bring. The incubator backs the projects it takes on with mentorship,
+      volunteers and connections.
+      <Fragment slot="actions">
+        <a href={IDEA_APPLY_URL} target="_blank" rel="noopener noreferrer" class={inverseButton}>
+          Submit your own idea<span class="sr-only"> (opens in a new tab)</span>
+        </a>
+        <a href="/incubator" class={ghostOnDarkButton}>How the incubator works</a>
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>

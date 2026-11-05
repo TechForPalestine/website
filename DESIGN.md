@@ -241,6 +241,12 @@ The signature structure. A page advances as a sequence of bands rather than one 
 
 One per page, at the foot. Nightfall surface, `rounded-md` (16px), generous padding, white bold copy, one inverse pill button. This is where the ask lands, and it is the only dark thing on the page.
 
+Implemented as `src/components/TerminalCta.astro` (heading prop, body slot, `actions` and optional `footnote` slots). Use it rather than hand-building the block.
+
+### Implementation
+
+The type scale, bands, buttons, links and focus rings above live as Tailwind class strings in `src/utils/designClasses.ts`. Import them on public pages instead of redefining them per page.
+
 ### Navigation
 
 `Navigation.astro`, shared by every live page through `Layout.astro`. Ink text at rest, Grove Green on hover and active, Outfit label weight throughout, one primary action at the right. Never serif.

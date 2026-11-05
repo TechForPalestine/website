@@ -2,6 +2,15 @@
 import SignUpForm from "../structures/SignUpForm.astro";
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+import {
+  container,
+  headline,
+  overline,
+  body,
+  primaryButton,
+  ghostButton,
+  inlineLink,
+} from "../utils/designClasses";
 
 // Hero mosaic. The first photo leads full-width; the other four sit beneath it
 // as an even row (2x2 on phones), so the set reads as one composed block
@@ -39,19 +48,6 @@ const heroPhotos = [
   },
 ];
 const [leadPhoto, ...rowPhotos] = heroPhotos;
-
-// Shared class strings: the live system's type scale (DESIGN.md §3) in plain
-// Tailwind, since Layout.astro does not load design-system.css.
-const container = "mx-auto max-w-[1280px] px-6";
-const headline = "text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]";
-const overline = "text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
-const body = "text-[19px] leading-relaxed min-[810px]:text-[21px]";
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grove";
-const pill = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill px-5 py-3 text-[13px] font-bold transition-colors motion-reduce:transition-none ${focusRing}`;
-const primaryButton = `${pill} bg-grove text-white hover:bg-grove-hover`;
-const ghostButton = `${pill} border border-ink text-ink hover:border-grove hover:text-grove`;
-const inlineLink = `font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`;
 ---
 
 <Layout title="About">

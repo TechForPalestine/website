@@ -1,0 +1,63 @@
+---
+// One tool in a /tools category list: logo, name, one-line description and the
+// destination domain. The name link is stretched over the whole row so the
+// row is a single, large hit target; the visible domain tells the reader
+// where they are going before they click.
+import { Icon } from "astro-icon/components";
+
+export interface Tool {
+  name: string;
+  desc: string;
+  link: string;
+  logo: string;
+}
+
+interface Props {
+  tool: Tool;
+  /** Surface the row sits on: hairlines and the logo tile adapt to it. */
+  surface?: "paper" | "band";
+}
+
+const { tool, surface = "paper" } = Astro.props;
+const domain = new URL(tool.link).hostname.replace(/^www\./, "");
+
+const rule = surface === "band" ? "border-first-light-edge" : "border-ink-divider";
+const tile = surface === "band" ? "border-first-light-edge" : "border-ink-divider";
+---
+
+<li
+  class={`group relative flex items-start gap-5 border-t py-6 ${rule} has-[a:focus-visible]:outline has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-grove`}
+>
+  <span
+    class={`flex h-14 w-14 shrink-0 items-center justify-center rounded-sm border bg-paper p-2 ${tile}`}
+  >
+    <img
+      src={tool.logo}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      class="max-h-full max-w-full object-contain"
+    />
+  </span>
+  <div class="min-w-0">
+    <h3 class="text-[19px] font-extrabold leading-snug text-ink">
+      <a
+        href={tool.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-grove motion-reduce:transition-none"
+      >
+        {tool.name}
+        <span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    </h3>
+    <p class="mt-1 max-w-[52ch] text-base leading-relaxed text-ink-secondary">{tool.desc}</p>
+    <p
+      class="mt-2 inline-flex items-center gap-1 text-[15px] font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors group-hover:decoration-grove motion-reduce:transition-none"
+      aria-hidden="true"
+    >
+      {domain}
+      <Icon name="mdi:open-in-new" class="h-4 w-4" />
+    </p>
+  </div>
+</li>

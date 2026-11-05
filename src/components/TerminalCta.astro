@@ -1,0 +1,49 @@
+---
+// The terminal call to action (DESIGN.md §5): the single Nightfall block per
+// page, placed last before the footer. Pass the heading as a prop; the default
+// slot is the supporting copy, the "actions" slot holds the buttons (use
+// inverseButton / ghostOnDarkButton from utils/designClasses), and the
+// optional "footnote" slot sits beneath them.
+import { container } from "../utils/designClasses";
+
+interface Props {
+  heading: string;
+  /** id for the heading, referenced by the section's aria-labelledby. */
+  headingId?: string;
+  /**
+   * Set false when the section above already ends with bottom padding on a
+   * Paper surface, so the gap is not doubled. Keep true after a band.
+   */
+  padTop?: boolean;
+}
+
+const { heading, headingId = "terminal-cta-heading", padTop = true } = Astro.props;
+const spacing = padTop ? "py-16 min-[810px]:py-20" : "pb-16 min-[810px]:pb-20";
+const hasFootnote = Astro.slots.has("footnote");
+---
+
+<section aria-labelledby={headingId} class={spacing}>
+  <div class={container}>
+    <div class="rounded-md bg-nightfall px-6 py-[clamp(3rem,5vw,4.5rem)] sm:px-10 lg:px-16">
+      <h2
+        id={headingId}
+        class="max-w-[20ch] text-[clamp(30px,4vw,46px)] font-extrabold leading-[1.1] text-white"
+      >
+        {heading}
+      </h2>
+      <div class="mt-5 max-w-[55ch] text-[17px] leading-[1.7] text-white/70">
+        <slot />
+      </div>
+      <div class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+        <slot name="actions" />
+      </div>
+      {
+        hasFootnote && (
+          <p class="mt-8 text-[15px] text-white/70">
+            <slot name="footnote" />
+          </p>
+        )
+      }
+    </div>
+  </div>
+</section>

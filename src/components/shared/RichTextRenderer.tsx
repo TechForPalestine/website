@@ -5,10 +5,10 @@ import type { RichTextRendererProps } from "../../types/richTextRenderer";
 function RichTextRenderer({
   richText,
   className = "",
-  linkClassName = "text-brand",
+  linkClassName = "font-bold text-grove underline decoration-grove/40 underline-offset-4",
   mutedTextClassName = "text-ink-secondary",
-  accentTextClassName = "text-brand",
-  codeClassName = "bg-sand",
+  accentTextClassName = "font-bold text-grove",
+  codeClassName = "bg-stone",
 }: RichTextRendererProps) {
   // Handle both direct array and Notion API response format
   const segments: RichTextSegment[] = Array.isArray(richText)
@@ -152,41 +152,27 @@ function RichTextRenderer({
     const { text, annotations, href } = segment;
     const content = contentOverride || text.content;
 
-    // Build style object based on annotations
-    const style: React.CSSProperties = {};
+    // Annotations map to Tailwind classes, never a `style` prop: CSP bans
+    // inline style attributes, and this component may be server-rendered.
     const classes: string[] = [];
 
-    if (annotations.bold) {
-      style.fontWeight = "bold";
-    }
-    if (annotations.italic) {
-      style.fontStyle = "italic";
-    }
-    if (annotations.strikethrough) {
-      style.textDecoration = (style.textDecoration || "") + " line-through";
-    }
-    if (annotations.underline) {
-      style.textDecoration = (style.textDecoration || "") + " underline";
+    if (annotations.bold) classes.push("font-bold");
+    if (annotations.italic) classes.push("italic");
+    if (annotations.strikethrough && annotations.underline) {
+      classes.push("[text-decoration-line:underline_line-through]");
+    } else if (annotations.strikethrough) {
+      classes.push("line-through");
+    } else if (annotations.underline) {
+      classes.push("underline");
     }
     if (annotations.code) {
       classes.push(`font-mono ${codeClassName} px-1 py-0.5 rounded text-sm`);
     }
-    if (annotations.color && annotations.color !== "default") {
-      const colorMap: Record<string, string> = {
-        gray: mutedTextClassName,
-        brown: "text-amber-800",
-        orange: "text-orange-600",
-        yellow: "text-yellow-600",
-        green: "text-green-600",
-        blue: "text-blue-600",
-        purple: "text-purple-600",
-        pink: "text-pink-600",
-        red: accentTextClassName,
-      };
-      if (colorMap[annotations.color]) {
-        classes.push(colorMap[annotations.color]);
-      }
-    }
+    // DESIGN.md's One Green Rule: only Notion's gray (de-emphasis) and red
+    // (emphasis) carry meaning on the site. Other Notion colours inherit the
+    // surrounding text colour rather than introducing off-system accents.
+    if (annotations.color === "gray") classes.push(mutedTextClassName);
+    if (annotations.color === "red") classes.push(accentTextClassName);
 
     // Determine if this is a link
     const linkUrl = text.link?.url || href;
@@ -198,7 +184,6 @@ function RichTextRenderer({
           href={linkUrl}
           target={linkUrl.startsWith("http") ? "_blank" : undefined}
           rel={linkUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-          style={style}
           className={`${linkClassName} hover:underline ${classes.join(" ")}`}
         >
           {content}
@@ -208,7 +193,7 @@ function RichTextRenderer({
 
     // Regular text
     return (
-      <span key={index} style={style} className={classes.join(" ")}>
+      <span key={index} className={classes.join(" ") || undefined}>
         {content}
       </span>
     );

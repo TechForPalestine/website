@@ -1,286 +1,216 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/base.css";
+import {
+  container,
+  headline,
+  overline,
+  body,
+  inverseButton,
+  ghostOnDarkButton,
+  inlineLink,
+  inlineLinkOnDark,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
+
+// Board members get the editorial treatment: a large portrait beside the full
+// bio. Each bio is an array of paragraphs.
+const board = [
+  {
+    name: "Paul Biggar",
+    role: "Founder & CEO",
+    photo: { src: "/paul-biggar.webp", width: 445, height: 462 },
+    bio: [
+      "Paul Biggar leads Tech for Palestine, a collaboration of tech projects advocating for Palestine. At its core, Tech for Palestine is an incubator to start and support projects for Palestine with mentorship, tech volunteers, marketing support, and connections to the broad Palestine advocacy community. He previously founded tech startups Darklang and CircleCI, as well as a Y Combinator-backed startup. He graduated with a PhD in Computer Science from Trinity College Dublin in 2010.",
+    ],
+  },
+  {
+    name: "Amir Nathoo",
+    role: "Co-founder & CEO of Outschool",
+    photo: { src: "/amir-nathoo.webp", width: 792, height: 800 },
+    bio: [
+      "Amir seeks technology and social levers to disrupt the status quo and drive positive change at scale. He is Co-founder and CEO of Outschool, an education marketplace for kids, having previously founded Trigger.io, a development platform for creating native mobile apps, and worked at Square, leading the development of Square Payroll. He holds an MEng in Electrical and Information Sciences from the University of Cambridge.",
+      "Since late 2023, Amir has led, funded and supported a variety of humanitarian, political and economic projects in resistance to Israel's genocide and in support of Palestinian liberation. He provides free classes for Palestinian refugee kids through Outschool.org's non profit initiative and is an investor in Boycat.io amongst others.",
+    ],
+  },
+];
+
+// Staff read as a dense directory: portrait, name, role. `position` keeps each
+// face in frame when the photo is cropped to a portrait ratio.
+const staff = [
+  {
+    name: "Afzal Mangal",
+    role: "Director of Marketing",
+    photo: { src: "/images/staff/afzal.webp", width: 800, height: 571 },
+    position: "object-center",
+  },
+  {
+    name: "Alexandra Fine",
+    role: "Researcher",
+    photo: { src: "/images/staff/alexandra.webp", width: 501, height: 501 },
+    position: "object-center",
+  },
+  {
+    name: "Azza Hararah",
+    role: "Director of Volunteering and Recruitment",
+    photo: { src: "/images/staff/azza.webp", width: 351, height: 366 },
+    position: "object-center",
+  },
+  {
+    name: "Cecile Potier",
+    role: "Volunteers and Members Coordinator",
+    photo: { src: "/images/staff/cecile.webp", width: 800, height: 800 },
+    position: "object-center",
+  },
+  {
+    name: "Iva Gumnishka",
+    role: "Director of Strategic Partnerships & Events",
+    photo: { src: "/images/staff/iva.webp", width: 533, height: 800 },
+    position: "object-top",
+  },
+  {
+    name: "Kate Kerpez",
+    role: "Director of Development",
+    photo: { src: "/images/staff/kate.webp", width: 451, height: 597 },
+    position: "object-top",
+  },
+  {
+    name: "Omar Hamayel",
+    role: "Director of Finance",
+    photo: { src: "/images/staff/omar.webp", width: 800, height: 533 },
+    position: "object-center",
+  },
+  {
+    name: "Samira Hayat",
+    role: "Project & Teams Operations Manager",
+    photo: { src: "/images/staff/samira.webp", width: 647, height: 800 },
+    position: "object-center",
+  },
+  {
+    name: "Tom Hall",
+    role: "Director of Incubation",
+    photo: { src: "/images/staff/tom.webp", width: 600, height: 800 },
+    position: "[object-position:center_43%]",
+  },
+  {
+    name: "Zahid Hanif",
+    role: "Director of Engineering",
+    photo: { src: "/images/staff/zahid.webp", width: 600, height: 800 },
+    position: "object-center",
+  },
+];
 ---
 
 <Layout title="Team & Board">
   <main>
-    <div class="relative isolate">
-      <!-- Background pattern from other pages -->
-      <svg
-        class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
-        aria-hidden="true"
-      >
-        <defs>
-          <pattern
-            id="team-pattern"
-            width="200"
-            height="200"
-            x="50%"
-            y="-1"
-            patternUnits="userSpaceOnUse"
-          >
-            <path d="M.5 200V.5H200" fill="none"></path>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" stroke-width="0" fill="url(#team-pattern)"></rect>
-      </svg>
-
-      <div class="px-6 py-24 sm:py-32 lg:px-8">
-        <div class="mx-auto max-w-6xl">
-          <!-- Page Header -->
-          <div class="mb-16 text-center">
-            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              <span class="text-green-800">Team & Board</span>
-            </h1>
-            <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-gray-600">
-              Meet the dedicated leaders guiding Tech for Palestine's mission to support Palestinian
-              liberation through technology and advocacy.
-            </p>
-          </div>
-
-          <!-- Board of Directors Section -->
-          <div class="mb-20">
-            <h2 class="mb-12 text-center text-3xl font-bold text-gray-900">Board of Directors</h2>
-            <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
-              <!-- Paul Biggar -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/paul-biggar.webp"
-                    alt="Paul Biggar"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Paul Biggar</h3>
-                  <p class="mb-3 font-medium text-green-700">Founder & CEO</p>
-                  <p class="text-sm text-gray-600">
-                    Paul Biggar leads Tech for Palestine, a collaboration of tech projects
-                    advocating for Palestine. At its core, Tech for Palestine is an incubator to
-                    start and support projects for Palestine with mentorship, tech volunteers,
-                    marketing support, and connections to the broad Palestine advocacy community. He
-                    previously founded tech startups Darklang and CircleCI, as well as a Y
-                    Combinator-backed startup. He graduated with a PhD in Computer Science from
-                    Trinity College Dublin in 2010.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Amir Nathoo -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/amir-nathoo.webp"
-                    alt="Amir Nathoo"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Amir Nathoo</h3>
-                  <p class="mb-3 font-medium text-green-700">Co-founder & CEO of Outschool</p>
-                  <p class="text-sm text-gray-600">
-                    Amir seeks technology and social levers to disrupt the status quo and drive
-                    positive change at scale. He is Co-founder and CEO of Outschool, an education
-                    marketplace for kids, having previously founded Trigger.io, a development
-                    platform for creating native mobile apps, and worked at Square, leading the
-                    development of Square Payroll. He holds an MEng in Electrical and Information
-                    Sciences from the University of Cambridge.<br /><br />Since late 2023, Amir has
-                    led, funded and supported a variety of humanitarian, political and economic
-                    projects in resistance to Israel's genocide and in support of Palestinian
-                    liberation. He provides free classes for Palestinian refugee kids through
-                    Outschool.org's non profit initiative and is an investor in Boycat.io amongst
-                    others.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Our Staff Section -->
-          <div class="mb-20">
-            <h2 class="mb-12 text-center text-3xl font-bold text-gray-900">Our Staff</h2>
-            <div class="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              <!-- Afzal Mangal -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/afzal.webp"
-                    alt="Afzal Mangal"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Afzal Mangal</h3>
-                  <p class="font-medium text-green-700">Director of Marketing</p>
-                </div>
-              </div>
-
-              <!-- Alexandra Fine -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/alexandra.webp"
-                    alt="Alexandra Fine"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Alexandra Fine</h3>
-                  <p class="font-medium text-green-700">Researcher</p>
-                </div>
-              </div>
-
-              <!-- Azza Hararah -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/azza.webp"
-                    alt="Azza Hararah"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Azza Hararah</h3>
-                  <p class="font-medium text-green-700">Director of Volunteering and Recruitment</p>
-                </div>
-              </div>
-
-              <!-- Cecile Potier -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/cecile.webp"
-                    alt="Cecile Potier"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Cecile Potier</h3>
-                  <p class="font-medium text-green-700">Volunteers and Members Coordinator</p>
-                </div>
-              </div>
-
-              <!-- Iva Gumnishka -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/iva.webp"
-                    alt="Iva Gumnishka"
-                    class="h-full w-full object-cover object-top"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Iva Gumnishka</h3>
-                  <p class="font-medium text-green-700">
-                    Director of Strategic Partnerships & Events
-                  </p>
-                </div>
-              </div>
-
-              <!-- Kate Kerpez -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/kate.webp"
-                    alt="Kate Kerpez"
-                    class="h-full w-full object-cover object-top"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Kate Kerpez</h3>
-                  <p class="font-medium text-green-700">Director of Development</p>
-                </div>
-              </div>
-
-              <!-- Omar Hamayel -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/omar.webp"
-                    alt="Omar Hamayel"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Omar Hamayel</h3>
-                  <p class="font-medium text-green-700">Director of Finance</p>
-                </div>
-              </div>
-
-              <!-- Samira Hayat -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/samira.webp"
-                    alt="Samira Hayat"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Samira Hayat</h3>
-                  <p class="font-medium text-green-700">Project & Teams Operations Manager</p>
-                </div>
-              </div>
-
-              <!-- Tom Hall -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/tom.webp"
-                    alt="Tom Hall"
-                    class="h-full w-full object-cover [object-position:center_43%]"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Tom Hall</h3>
-                  <p class="font-medium text-green-700">Director of Incubation</p>
-                </div>
-              </div>
-
-              <!-- Zahid Hanif -->
-              <div class="overflow-hidden rounded-lg bg-white shadow-md">
-                <div class="flex aspect-square items-center justify-center bg-gray-200">
-                  <img
-                    src="/images/staff/zahid.webp"
-                    alt="Zahid Hanif"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-                <div class="p-6">
-                  <h3 class="mb-2 text-xl font-bold text-gray-900">Zahid Hanif</h3>
-                  <p class="font-medium text-green-700">Director of Engineering</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Join Us Section -->
-          <div class="mt-12 text-center">
-            <div class="rounded-lg border-2 border-green-100 bg-white p-8">
-              <h3 class="mb-4 text-2xl font-bold text-gray-900">Join Our Mission</h3>
-              <p class="mx-auto mb-6 max-w-2xl text-gray-600">
-                We're always looking for passionate individuals to join our team and contribute to
-                Palestinian liberation through technology.
-              </p>
-              <div class="flex flex-col justify-center gap-4 sm:flex-row">
-                <a
-                  href="/volunteer"
-                  class="inline-flex items-center rounded-md border border-transparent bg-green-700 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-green-800"
-                >
-                  Get Involved
-                </a>
-                <a
-                  href="/contact"
-                  class="inline-flex items-center rounded-md border border-green-700 bg-white px-6 py-3 text-base font-medium text-green-700 transition-colors hover:bg-gray-50"
-                >
-                  Contact Us
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- Hero -->
+    <section class="py-16 min-[810px]:py-20">
+      <div class={container}>
+        <p class={overline}>Team & Board</p>
+        <h1
+          class="mt-4 max-w-[18ch] text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+        >
+          Putting tech to work for a free Palestine
+        </h1>
+        <p class={`mt-8 max-w-[60ch] text-ink-secondary ${body}`}>
+          A small staff runs Tech for Palestine day to day, incubating and scaling tech and advocacy
+          projects for Palestinian liberation, with guidance from our board of directors.
+        </p>
+        <nav aria-label="On this page" class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[15px]">
+          <a href="#board" class={inlineLink}>Board of Directors</a>
+          <a href="#staff" class={inlineLink}>Staff</a>
+        </nav>
       </div>
-    </div>
+    </section>
+
+    <!-- Board of Directors: large portraits with full bios -->
+    <section
+      id="board"
+      aria-labelledby="board-heading"
+      class="scroll-mt-24 border-y border-first-light-edge bg-first-light"
+    >
+      <div class={`${container} py-16 min-[810px]:py-20`}>
+        <h2 id="board-heading" class={headline}>Board of Directors</h2>
+
+        <ul class="mt-10 divide-y divide-first-light-edge">
+          {
+            board.map((member) => (
+              <li class="grid gap-8 py-12 first:pt-0 last:pb-0 md:grid-cols-[16rem_minmax(0,1fr)] md:gap-12 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-16">
+                <img
+                  src={member.photo.src}
+                  alt={`Portrait of ${member.name}`}
+                  width={member.photo.width}
+                  height={member.photo.height}
+                  loading="lazy"
+                  decoding="async"
+                  class="aspect-square h-auto w-full max-w-[20rem] rounded-lg bg-stone object-cover"
+                />
+                <div class="min-w-0">
+                  <h3 class="text-[24px] font-extrabold leading-tight text-ink min-[810px]:text-[30px]">
+                    {member.name}
+                  </h3>
+                  <p class="mt-2 text-[15px] font-bold text-grove">{member.role}</p>
+                  <div class="mt-6 max-w-[65ch] space-y-4">
+                    {member.bio.map((paragraph) => (
+                      <p class={`text-ink-secondary ${body}`}>{paragraph}</p>
+                    ))}
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Staff: a denser directory of faces, names and roles -->
+    <section
+      id="staff"
+      aria-labelledby="staff-heading"
+      class="scroll-mt-24 py-16 min-[810px]:py-20"
+    >
+      <div class={container}>
+        <h2 id="staff-heading" class={headline}>Staff</h2>
+
+        <ul
+          class="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-5 lg:gap-y-12"
+        >
+          {
+            staff.map((person) => (
+              <li class="min-w-0">
+                <img
+                  src={person.photo.src}
+                  alt={`Portrait of ${person.name}`}
+                  width={person.photo.width}
+                  height={person.photo.height}
+                  loading="lazy"
+                  decoding="async"
+                  class={`aspect-[4/5] h-auto w-full rounded-md bg-stone object-cover ${person.position}`}
+                />
+                <h3 class="mt-4 text-[17px] font-bold leading-snug text-ink">{person.name}</h3>
+                <p class="mt-1 text-base leading-snug text-ink-secondary">{person.role}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Terminal CTA: the one dark block on the page -->
+    <TerminalCta
+      padTop={false}
+      heading="Work alongside this team for a free Palestine."
+      headingId="join-heading"
+    >
+      Use your skills to support or start projects for Palestinian liberation, and sustain T4P with
+      grassroots funding.
+      <Fragment slot="actions">
+        <a href="/membership" class={inverseButton}>Become a member</a>
+        <a href="/volunteer" class={ghostOnDarkButton}>Get involved</a>
+      </Fragment>
+      <Fragment slot="footnote">
+        Want to reach the team directly? <a href="/contact" class={inlineLinkOnDark}>Contact us</a>.
+      </Fragment>
+    </TerminalCta>
   </main>
 </Layout>

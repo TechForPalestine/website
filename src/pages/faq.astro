@@ -2,6 +2,15 @@
 import Layout from "../layouts/Layout.astro";
 import FAQList from "../components/faq/FAQList.tsx";
 import "../styles/base.css";
+import {
+  container,
+  headline,
+  overline,
+  body,
+  inverseButton,
+  ghostOnDarkButton,
+} from "../utils/designClasses";
+import TerminalCta from "../components/TerminalCta.astro";
 ---
 
 <Layout
@@ -9,22 +18,53 @@ import "../styles/base.css";
   description="Frequently asked questions about Tech for Palestine. Learn about our mission, how to get involved, the T4P Incubator, volunteer opportunities, and how we support Palestinian liberation through technology."
 >
   <main>
-    <div class="relative isolate">
-      <div class="px-6 py-10 sm:py-16 lg:px-8">
-        <div class="mx-auto max-w-4xl">
-          <!-- Title -->
-          <h1
-            class="mt-2 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
-          >
-            <span class="text-green-800">Frequently Asked Questions</span>
-          </h1>
+    <!-- Hero -->
+    <section class="pb-12 pt-16 min-[810px]:pb-16 min-[810px]:pt-20">
+      <div class={container}>
+        <p class={overline}>Frequently asked questions</p>
+        <h1
+          class="mt-5 max-w-[18ch] text-[38px] font-extrabold leading-[1.05] text-ink min-[810px]:text-[54px] min-[810px]:leading-[1.02]"
+        >
+          Straight answers about working for Palestinian liberation
+        </h1>
+        <p class={`mt-6 max-w-[60ch] text-ink-secondary ${body}`}>
+          What Tech for Palestine does, how projects get support, and where your skills fit in. Open
+          any question below; every answer comes from the people who run T4P.
+        </p>
+      </div>
+    </section>
+
+    <!-- Questions -->
+    <section
+      aria-labelledby="questions-heading"
+      class="border-t border-ink-divider pb-16 pt-12 min-[810px]:pb-20 min-[810px]:pt-16"
+    >
+      <div
+        class={`${container} grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-14`}
+      >
+        <div class="min-w-0">
+          <h2 id="questions-heading" class={`${headline} lg:sticky lg:top-28`}>
+            What people ask us
+          </h2>
+        </div>
+        <div class="min-w-0">
+          <FAQList faqs={[]} client:only="react" />
         </div>
       </div>
-    </div>
-  </main>
+    </section>
 
-  <!-- FAQ List Section -->
-  <section class="mx-auto my-8 max-w-[700px] px-4">
-    <FAQList faqs={[]} client:only="react" />
-  </section>
+    <!-- Terminal CTA: the one dark block on the page -->
+    <TerminalCta
+      padTop={false}
+      heading="Still have a question? Ask a person."
+      headingId="ask-heading"
+    >
+      Write to the team and someone will get back to you. Members can also ask in the vetted member
+      chat, where the people building the projects answer directly.
+      <Fragment slot="actions">
+        <a href="/contact" class={inverseButton}>Contact us</a>
+        <a href="/membership" class={ghostOnDarkButton}>Become a member</a>
+      </Fragment>
+    </TerminalCta>
+  </main>
 </Layout>

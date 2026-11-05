@@ -1,0 +1,194 @@
+---
+import { container, overline, body, focusRing, inlineLink } from "../../utils/designClasses";
+// The Nov 2026 member-driven press release, shown inline on /media as a band
+// with progressive disclosure (it replaced the old PressReleaseDialog modal).
+// The shareable link is still /media#member-driven-press-release: the section
+// carries that id, so the browser scrolls to it, and the script below expands
+// the full text. Keep PRESS_RELEASE_ID in sync with the hero link in media.astro.
+const PRESS_RELEASE_ID = "member-driven-press-release";
+
+const subhead = "mt-10 text-[22px] font-extrabold leading-snug text-ink min-[810px]:text-[24px]";
+const para = "mt-4 text-lg leading-relaxed text-ink-secondary";
+---
+
+<section
+  id={PRESS_RELEASE_ID}
+  aria-labelledby="pr-title"
+  class="scroll-mt-6 border-y border-first-light-edge bg-first-light"
+>
+  <div
+    class={`${container} grid gap-x-12 gap-y-6 py-16 min-[810px]:py-20 lg:grid-cols-[18rem_minmax(0,1fr)]`}
+  >
+    <!-- Meta column: what a journalist checks before reading -->
+    <div class="lg:pt-2">
+      <p class={overline}>Press release</p>
+      <p class="mt-3 text-base font-bold text-ink">
+        <time datetime="2026-11-02">November 2, 2026</time>
+      </p>
+      <dl class="mt-6 text-base leading-relaxed">
+        <dt class="font-bold text-ink">Media contact</dt>
+        <dd class="text-ink-secondary">Afzal Mangal</dd>
+        <dd>
+          {/* MailtoFallback is rendered once by media.astro */}
+          <a
+            href="mailto:afzal@techforpalestine.org"
+            data-mailto-fallback
+            class={`break-words ${inlineLink}`}>afzal@techforpalestine.org</a
+          >
+        </dd>
+      </dl>
+    </div>
+
+    <article class="min-w-0 max-w-[65ch]">
+      <h2
+        id="pr-title"
+        class="text-[28px] font-extrabold leading-[1.15] text-ink min-[810px]:text-[38px]"
+      >
+        Tech for Palestine, Behind Apps With More Than 10 Million Users, Becomes a Member-Driven
+        Organization
+      </h2>
+
+      <p class={`mt-6 text-ink ${body}`}>
+        After three years as an incubator, Tech for Palestine is ready for more: more projects,
+        built faster, with more impact. That is why it now puts members at the center.
+      </p>
+
+      <img
+        src="/images/press/t4p-conference-barcelona-2026.webp"
+        alt="Tech for Palestine conference in Barcelona, 2026"
+        loading="lazy"
+        decoding="async"
+        class="mt-8 aspect-[3/2] h-auto w-full rounded-lg bg-stone object-cover"
+      />
+
+      <p class={para}>
+        Tech for Palestine (T4P), whose projects have reached more than 10 million users in less
+        than three years, today opened its membership to the public. From November 2, anyone can
+        become a member and build advocacy projects under the T4P banner. Members get a team to work
+        with and the backing of the organization behind Big Tech alternatives such as UpScrolled and
+        Thaura, and advocacy tools such as Boycat and NewsCord.
+      </p>
+
+      <details data-pr-details class="group mt-8">
+        <summary
+          class={`inline-flex min-h-[44px] cursor-pointer list-none items-center gap-2 rounded-pill border border-ink px-5 py-3 text-[13px] font-bold text-ink transition-colors hover:border-grove hover:text-grove motion-reduce:transition-none [&::-webkit-details-marker]:hidden ${focusRing}`}
+        >
+          <span class="group-open:hidden">Read the full release</span>
+          <span class="hidden group-open:inline">Hide the full release</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="h-4 w-4 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"
+            ></path>
+          </svg>
+        </summary>
+
+        <div class="pt-4">
+          <h3 class={subhead}>From incubator to member-driven organization</h3>
+          <p class={para}>
+            For the past three years, the T4P incubator helped the people behind more than 90
+            initiatives turn their ideas into advocacy tools. Those teams received mentorship,
+            connections and support, but the building itself happened in their own organizations,
+            outside T4P.
+          </p>
+          <p class={para}>
+            T4P is now bringing the building inside. The support it offered external teams is
+            available to every member. New projects carry the T4P name, and members build them
+            together.
+          </p>
+          <blockquote class="my-10">
+            <p class="text-[22px] font-extrabold leading-snug text-ink min-[810px]:text-[26px]">
+              <span class="text-grove" aria-hidden="true">“</span>Our incubator proved that small
+              teams with the right skills can build tools used by millions. Now we build with many
+              more people, and with far less distance between an idea and the team that ships it.<span
+                class="text-grove"
+                aria-hidden="true">”</span
+              >
+            </p>
+          </blockquote>
+
+          <h3 class={subhead}>How membership works</h3>
+          <p class={para}>
+            Members join with the skills they have: engineering, design, research, writing or
+            organizing. Some join an existing project that needs their expertise. Others bring their
+            own idea and start a new team, which T4P mentors help scope, staff with fellow members
+            and take to a first public version.
+          </p>
+          <p class={para}>
+            The model can move fast. When Macklemore was dropped from Ed Sheeran’s US tour after
+            saying “Free Palestine” on stage, he explained that Sheeran could not get past his
+            public stance of “I don’t take sides.” T4P members picked up the moment and built Ed
+            Takes No Sides, a directory where artists who do take a stand for Palestine can create a
+            profile and be found.
+          </p>
+
+          <h3 class={subhead}>25+ projects from a 200-member private beta</h3>
+          <p class={para}>
+            Before the public launch, T4P tested membership for several months with 200 members. In
+            that time, members built more than 25 new advocacy projects, including:
+          </p>
+          <ul
+            class="mt-4 list-disc space-y-2 pl-6 text-lg leading-relaxed text-ink-secondary marker:text-grove"
+          >
+            <li>Israel Bonds Tracker, a platform that raises awareness about Israeli bonds.</li>
+            <li>
+              Sponsored internships connecting students from Gaza with internships in the UK and
+              Ireland.
+            </li>
+            <li>
+              Profile Pic Maker, revived by members: a tool that adds a Palestinian-flag frame to
+              social media profile pictures.
+            </li>
+            <li>
+              A research team investigating bias against Palestinians in frontier large language
+              models.
+            </li>
+          </ul>
+
+          <h3 class={subhead}>Two ways to join</h3>
+          <p class={para}>
+            <strong class="font-bold text-ink">Members</strong> contribute time and skills. They can
+            join an existing team or form a new one with members who complement their skills. Sign-up
+            is at <a href="/membership" class={inlineLink}>techforpalestine.org/membership</a>, and
+            the T4P team helps each new member find a first project.
+          </p>
+          <p class={para}>
+            <strong class="font-bold text-ink">Supporting members</strong> back the work financially
+            and leave the building to others. Their dues fund the marketing, engineering, mentorship,
+            software access, partnerships and grants that T4P provides to its projects. Details are at
+            <a href="/supporting-member" class={inlineLink}
+              >techforpalestine.org/supporting-member</a
+            >.
+          </p>
+        </div>
+      </details>
+    </article>
+  </div>
+</section>
+
+<script>
+  // Expand the full release when someone arrives on (or navigates to) the
+  // shareable #member-driven-press-release link, and keep the analytics event
+  // the old dialog fired so the "Press Release Opened" goal stays continuous.
+  const ID = "member-driven-press-release";
+  const HASH = `#${ID}`;
+  const details = document.querySelector<HTMLDetailsElement>(`#${ID} [data-pr-details]`);
+
+  if (details) {
+    details.addEventListener("toggle", () => {
+      if (details.open) window.plausible?.("Press Release Opened", { props: { id: ID } });
+    });
+
+    const openFromHash = () => {
+      if (location.hash === HASH) details.open = true;
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+  }
+</script>
