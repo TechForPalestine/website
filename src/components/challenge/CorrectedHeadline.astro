@@ -21,24 +21,16 @@ const { outlet, original, corrected } = correctedHeadline;
 <figure class={`ch ch--${size} ch--${tone}`}>
   <div class="ch-card" aria-hidden="true">
     <div class="ch-bar">
-      <span class="ch-menu"><span></span><span></span><span></span></span>
       <span class="ch-logo">{outlet}</span>
       <span class="ch-section">World</span>
-      <span class="ch-subscribe">Subscribe</span>
     </div>
 
     <p class="ch-head">
-      38<span class="ch-caret"><span class="ch-ins">Palestinians</span></span> killed in Gaza strike<span
-        class="ch-caret"><span class="ch-ins">by Israel</span></span
-      >
-      <span class="ch-strike">as tensions rise,</span>
+      38<span class="ch-caret ch-caret--start"><span class="ch-ins">Palestinians</span></span> killed
+      in Gaza strike<span class="ch-caret"><span class="ch-ins">by Israel</span></span>
+      <span class="ch-strike">as tensions rise</span>,
       <span class="ch-strike">health ministry says</span>
       <span class="ch-fix">genocide continues</span>
-    </p>
-
-    <p class="ch-byline">By Staff Reporter, {outlet}</p>
-    <p class="ch-meta">
-      <span class="ch-clock"></span>3 minute read
     </p>
   </div>
   <figcaption class="ch-caption">
@@ -62,29 +54,19 @@ const { outlet, original, corrected } = correctedHeadline;
   }
 
   .ch-card {
-    padding: 1.1em 1.4em 1.3em;
+    padding: 1.1em 1.4em 0.7em;
     border-radius: 1.4em;
     background: #fff;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
 
-  /* The outlet's top bar: menu, wordmark, section, subscribe. */
+  /* The outlet's top bar: wordmark and section, just enough to read as a news site. */
   .ch-bar {
     display: flex;
     align-items: center;
     gap: 0.75em;
     padding-bottom: 0.8em;
     border-bottom: 2px solid #2a2428;
-  }
-  .ch-menu {
-    display: grid;
-    gap: 0.22em;
-    width: 1.15em;
-  }
-  .ch-menu span {
-    height: 2px;
-    border-radius: 1px;
-    background: #2a2428;
   }
   .ch-logo {
     padding: 0.1em 0.45em 0.15em;
@@ -100,22 +82,14 @@ const { outlet, original, corrected } = correctedHeadline;
     font-size: 1.05em;
     font-weight: 700;
   }
-  .ch-subscribe {
-    margin-left: auto;
-    padding: 0.4em 0.85em;
-    border-radius: 0.35em;
-    background: #c8102e;
-    color: #fff;
-    font-size: 0.85em;
-    font-weight: 700;
-  }
 
-  /* Headline: generous leading leaves room for the written-in corrections. */
+  /* Headline: the top margin leaves room for the written-in insertions, which
+     sit on the first line at every width the graphic is used at. */
   .ch-head {
-    margin-top: 1.5em;
+    margin-top: 2.1em;
     font-size: 1.6em;
     font-weight: 800;
-    line-height: 2;
+    line-height: 1.3;
     letter-spacing: -0.01em;
   }
 
@@ -128,23 +102,44 @@ const { outlet, original, corrected } = correctedHeadline;
   }
   .ch-ins {
     position: absolute;
-    bottom: 1.05em;
+    bottom: 2.25em;
     left: 50%;
     transform: translateX(-50%);
     color: #c8102e;
     font-size: 0.62em;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1;
     white-space: nowrap;
   }
+  /* A drawn arrow (shaft + chevron) down into the gap; the text arrow glyph
+     isn't in Outfit and fell back to a thin system one. */
   .ch-ins::after {
-    content: "↓";
+    content: "";
     position: absolute;
-    top: 100%;
+    top: calc(100% + 0.2em);
     left: 50%;
+    width: 2px;
+    height: 0.75em;
+    border-radius: 1px;
+    background: currentColor;
     transform: translateX(-50%);
-    font-size: 0.95em;
-    line-height: 1;
+  }
+  .ch-ins::before {
+    content: "";
+    position: absolute;
+    top: calc(100% + 0.62em);
+    left: 50%;
+    width: 0.42em;
+    height: 0.42em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateX(-50%) rotate(45deg);
+  }
+  /* At the start of the line, hang the insert over the first word, as a hand
+     would, instead of centring it past the headline's left edge. */
+  .ch-caret--start .ch-ins {
+    left: 0;
+    transform: translateX(-35%);
   }
 
   /* The framing, struck through by hand: a slightly tilted red line. */
@@ -167,26 +162,7 @@ const { outlet, original, corrected } = correctedHeadline;
   .ch-fix {
     color: #c8102e;
     font-weight: 500;
-  }
-
-  .ch-byline {
-    margin-top: 0.9em;
-    font-size: 0.95em;
-    color: #73656e;
-  }
-  .ch-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.45em;
-    margin-top: 0.35em;
-    font-size: 0.9em;
-    color: #73656e;
-  }
-  .ch-clock {
-    width: 0.9em;
-    height: 0.9em;
-    border: 1.5px solid currentColor;
-    border-radius: 999px;
+    white-space: nowrap;
   }
 
   .ch-caption {
@@ -196,6 +172,9 @@ const { outlet, original, corrected } = correctedHeadline;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #2f5c3f;
+  }
+  .ch--sm .ch-caption {
+    font-size: 11px;
   }
   .ch--green .ch-caption {
     color: #fff;
