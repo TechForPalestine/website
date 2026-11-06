@@ -66,3 +66,33 @@ describe("pickChallengeProjects", () => {
     expect(pickChallengeProjects([], [{ name: "UpScrolled" }])).toEqual([]);
   });
 });
+
+describe("pickChallengeProjects with a fallback", () => {
+  const fallback = {
+    pitch: "Independent news, by subscription.",
+    websiteUrl: "https://example.org",
+  };
+
+  it("builds a card from the fallback when ProjectHub doesn't list the project", () => {
+    const [card] = pickChallengeProjects([], [{ name: "Bulletin", fallback }]);
+    expect(card).toMatchObject({
+      name: "Bulletin",
+      elevatorPitch: fallback.pitch,
+      websiteUrl: fallback.websiteUrl,
+    });
+  });
+
+  it("prefers the live ProjectHub record over the fallback", () => {
+    const live = makeProject(7, "Bulletin");
+    expect(pickChallengeProjects([live], [{ name: "Bulletin", fallback }])).toEqual([live]);
+  });
+
+  it("keeps display order across live and fallback cards", () => {
+    const live = makeProject(8, "NewsCord");
+    const picked = pickChallengeProjects(
+      [live],
+      [{ name: "Bulletin", fallback }, { name: "NewsCord" }]
+    );
+    expect(picked.map((p) => p.name)).toEqual(["Bulletin", "NewsCord"]);
+  });
+});

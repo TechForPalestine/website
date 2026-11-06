@@ -1,0 +1,70 @@
+---
+// A supported-project card for the monthly challenge pages: logo (initials
+// underneath as the fallback), name, pitch, and a link to the project's own
+// site when ProjectHub has one, else its /projects profile. Sits inside a
+// First Light band, so the resting border is First Light Edge.
+import type { ProjectItem } from "../../types/projects";
+import { projectPath } from "../../utils/projectSlug";
+import { getInitials, getProjectText, resolveLogoSrc } from "../projects/projectData";
+import { focusRing } from "../../utils/designClasses";
+
+interface Props {
+  project: ProjectItem;
+}
+
+const { project } = Astro.props;
+const logo = resolveLogoSrc(project.logoUrl);
+const website = project.websiteUrl;
+---
+
+<a
+  href={website ?? projectPath(project)}
+  target={website ? "_blank" : undefined}
+  rel={website ? "noopener" : undefined}
+  class={`group flex w-full flex-col rounded-lg border border-first-light-edge bg-paper p-6 transition-[border-color,box-shadow] duration-150 hover:border-grove hover:shadow-sm motion-reduce:transition-none ${focusRing}`}
+>
+  <div class="flex items-center gap-4">
+    <span
+      class="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-first-light text-[15px] font-extrabold text-grove-deep"
+    >
+      <span aria-hidden="true">{getInitials(project.name)}</span>
+      {
+        logo && (
+          <img
+            src={logo}
+            alt=""
+            width="48"
+            height="48"
+            decoding="async"
+            data-project-logo
+            class="absolute inset-0 h-full w-full bg-paper object-contain"
+          />
+        )
+      }
+    </span>
+    <h3 class="text-[19px] font-extrabold leading-snug text-ink">{project.name}</h3>
+  </div>
+  <p class="mt-4 line-clamp-4 text-[16px] leading-relaxed text-ink-secondary">
+    {project.elevatorPitch || getProjectText(project)}
+  </p>
+  <span class="mt-auto pt-5">
+    <span
+      class="block border-t border-first-light-edge pt-4 text-[16px] font-bold text-grove group-hover:text-grove-hover"
+    >
+      <span class="underline decoration-1 underline-offset-4">
+        {website ? "Visit website" : "View project"}
+      </span>{" "}
+      <span aria-hidden="true">{website ? "↗" : "→"}</span>
+      {website && <span class="sr-only"> (opens in a new tab)</span>}
+    </span>
+  </span>
+</a>
+
+<script>
+  // Logos are remote; a broken one falls back to the initials underneath.
+  document.querySelectorAll<HTMLImageElement>("img[data-project-logo]").forEach((img) => {
+    const drop = () => img.remove();
+    if (img.complete && img.naturalWidth === 0) drop();
+    else img.addEventListener("error", drop, { once: true });
+  });
+</script>

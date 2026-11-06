@@ -1,0 +1,416 @@
+---
+// Homepage announcement for the November 2026 Incubator challenge. A compact
+// card: the question on Grove Green (the same surface as the challenge page
+// hero, so the click-through feels continuous), the actions on paper below.
+// Centred on desktop, a bottom sheet on phones. Shown once per visitor, after
+// 8s or a quarter of the page scrolled, and the newsletter popup stands down
+// for that page load. Renders nothing after November; delete it then.
+import { CHALLENGE_PATH } from "../../data/challenges";
+import { APPLY_URL, brainstorm, challenge } from "../../data/challenges/november-2026";
+import { isBrainstormOpen, isCampaignLive } from "../../utils/challengePopup";
+import CorrectedHeadline from "../challenge/CorrectedHeadline.astro";
+
+const now = Date.now();
+const live = isCampaignLive(now);
+const brainstormOpen = isBrainstormOpen(now);
+---
+
+{
+  live && (
+    <dialog id="challenge-popup" class="cp" aria-labelledby="cp-title">
+      <div class="cp-card">
+        <div class="cp-head">
+          <button
+            type="button"
+            class="cp-close"
+            data-cp-close
+            aria-label="Close challenge announcement"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.25"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+          <p class="cp-overline">New Incubator Challenge · {challenge.month}</p>
+          <h2 id="cp-title" class="cp-title">
+            {challenge.question}
+          </h2>
+        </div>
+
+        <div class="cp-body">
+          {/* The page hero's corrected headline in miniature, so the
+              click-through lands somewhere familiar. */}
+          <div class="cp-headline">
+            <CorrectedHeadline size="sm" />
+          </div>
+          {brainstormOpen ? (
+            <p class="cp-lede">
+              Build the tools that call out framing like this. Apply to the Incubator, or pitch your
+              idea first at our open brainstorming session.
+            </p>
+          ) : (
+            <p class="cp-lede">
+              Build the tools that call out framing like this. Apply to the Incubator and join this
+              month's cohort.
+            </p>
+          )}
+
+          {brainstormOpen && (
+            <p class="cp-date">
+              <time datetime={brainstorm.startsAt}>
+                <span class="cp-date-day">
+                  {brainstorm.monthShort} {brainstorm.day}
+                </span>
+                <span>
+                  {brainstorm.weekday} · {brainstorm.time} · on Zoom
+                </span>
+                <span class="cp-date-local" data-local-time={brainstorm.startsAt} hidden />
+              </time>
+            </p>
+          )}
+
+          <div class="cp-actions">
+            <a class="cp-btn cp-btn--primary" href={CHALLENGE_PATH} data-cp-cta="challenge">
+              See the challenge
+            </a>
+            {brainstormOpen ? (
+              <a
+                class="cp-btn cp-btn--ghost"
+                href={brainstorm.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cp-cta="brainstorm"
+              >
+                Register for Nov 20
+                <span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : (
+              <a class="cp-btn cp-btn--ghost" href={APPLY_URL} data-cp-cta="apply">
+                Apply now
+              </a>
+            )}
+          </div>
+
+          <button type="button" class="cp-later" data-cp-close>
+            No thanks
+          </button>
+        </div>
+      </div>
+    </dialog>
+  )
+}
+
+<style>
+  .cp {
+    width: min(560px, calc(100% - 48px));
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    background: transparent;
+    color: #2a2428;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .cp::backdrop {
+    background: rgb(16 16 16 / 0.5);
+  }
+  :global(html:has(#challenge-popup[open])) {
+    overflow: hidden;
+  }
+
+  .cp-card {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    font-family: Outfit, system-ui, sans-serif;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cp[open] .cp-card {
+      animation: cp-rise 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cp[open]::backdrop {
+      animation: cp-fade 320ms ease-out;
+    }
+  }
+  @keyframes cp-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  @keyframes cp-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .cp-head {
+    position: relative;
+    padding: 36px 36px 32px;
+    background: #157a3e;
+    color: #fff;
+  }
+  .cp-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    color: #fff;
+    transition: background-color 150ms;
+  }
+  .cp-close:hover {
+    background: rgb(255 255 255 / 0.15);
+  }
+  .cp-overline {
+    padding-right: 40px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .cp-title {
+    margin-top: 14px;
+    font-size: clamp(1.5rem, 3.2vw, 1.875rem);
+    font-weight: 800;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .cp-body {
+    padding: 28px 36px 24px;
+  }
+  .cp-headline {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 20px;
+    background: #f2f3ee;
+  }
+  .cp-lede {
+    max-width: 44ch;
+    font-size: 17px;
+    line-height: 1.55;
+    color: #73656e;
+  }
+  .cp-date {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 2px dashed #d6d6d6;
+    font-size: 15px;
+    font-weight: 700;
+    color: #2a2428;
+  }
+  .cp-date time {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  .cp-date-local {
+    flex-basis: 100%;
+    font-weight: 400;
+    color: #73656e;
+  }
+  .cp-date-day {
+    font-size: 22px;
+    font-weight: 800;
+    color: #157a3e;
+  }
+
+  .cp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .cp-btn {
+    display: inline-flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    transition:
+      background-color 150ms,
+      border-color 150ms,
+      color 150ms;
+  }
+  .cp-btn--primary {
+    background: #157a3e;
+    color: #fff;
+  }
+  .cp-btn--primary:hover {
+    background: #0e5a2f;
+  }
+  .cp-btn--ghost {
+    border: 1px solid #2a2428;
+    color: #2a2428;
+  }
+  .cp-btn--ghost:hover {
+    border-color: #157a3e;
+    color: #157a3e;
+  }
+  .cp-later {
+    display: block;
+    margin: 14px auto 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #73656e;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .cp-later:hover {
+    color: #2a2428;
+  }
+  .cp-btn:focus-visible,
+  .cp-later:focus-visible {
+    outline: 2px solid #157a3e;
+    outline-offset: 2px;
+  }
+  .cp-close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  /* Phones: a bottom sheet rather than a centred modal. */
+  @media (max-width: 767px) {
+    .cp {
+      width: 100%;
+      max-height: 88dvh;
+      margin: auto 0 0;
+      border-radius: 24px 24px 0 0;
+    }
+    .cp-card {
+      border-radius: 24px 24px 0 0;
+    }
+    .cp-head {
+      padding: 28px 20px 24px;
+    }
+    .cp-title {
+      font-size: 1.375rem;
+    }
+    .cp-body {
+      padding: 20px 20px calc(16px + env(safe-area-inset-bottom));
+    }
+    .cp-lede {
+      font-size: 16px;
+    }
+    .cp-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  import {
+    SHOW_DELAY_MS,
+    SHOWN_ATTRIBUTE,
+    SHOWN_EVENT,
+    hasReachedScrollTrigger,
+    readPopupState,
+    shouldShowPopup,
+    writePopupState,
+    type DismissReason,
+    type PopupCta,
+  } from "../../utils/challengePopup";
+  import { safeLocalStorage } from "../../utils/newsletterPopup";
+  import { localSessionTime } from "../../utils/localTime";
+
+  const dialog = document.getElementById("challenge-popup");
+  if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === "function") {
+    if (shouldShowPopup(readPopupState(safeLocalStorage()), Date.now())) schedule(dialog);
+  }
+
+  function track(event: string, props?: Record<string, string>) {
+    if (typeof window.plausible === "undefined") return;
+    window.plausible(event, props ? { props } : undefined);
+  }
+
+  function schedule(dialog: HTMLDialogElement) {
+    const localTime = dialog.querySelector<HTMLElement>("[data-local-time]");
+    if (localTime) {
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const local = localSessionTime(localTime.dataset.localTime ?? "", zone);
+      if (local) {
+        localTime.textContent = `${local} your time`;
+        localTime.hidden = false;
+      }
+    }
+
+    let reason: DismissReason = "escape";
+    const closeWith = (next: DismissReason) => {
+      reason = next;
+      dialog.close();
+    };
+
+    dialog.querySelectorAll("[data-cp-close]").forEach((button) => {
+      button.addEventListener("click", () => closeWith("close"));
+    });
+    dialog.querySelectorAll<HTMLAnchorElement>("[data-cp-cta]").forEach((link) => {
+      link.addEventListener("click", () => {
+        const cta = link.dataset.cpCta as PopupCta;
+        track("Challenge Popup CTA Click", { cta, challenge: "2026-11" });
+        closeWith(cta);
+      });
+    });
+    // A click whose target is the <dialog> itself landed on the backdrop. Check
+    // where the press began too, so a text-selection drag that ends outside
+    // the card doesn't close it.
+    let pressedBackdrop = false;
+    dialog.addEventListener("pointerdown", (event) => {
+      pressedBackdrop = event.target === dialog;
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog && pressedBackdrop) closeWith("backdrop");
+    });
+    // Fires for every close path, Esc included (which skips closeWith).
+    dialog.addEventListener(
+      "close",
+      () => {
+        writePopupState(safeLocalStorage(), { dismissedAt: Date.now() });
+        track("Challenge Popup Dismissed", { reason, challenge: "2026-11" });
+      },
+      { once: true }
+    );
+
+    // Engagement first: 8s on the page or a quarter of it scrolled.
+    let fired = false;
+    const open = () => {
+      if (fired) return;
+      fired = true;
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+      if (!dialog.isConnected || dialog.open) return;
+      dialog.showModal();
+      document.documentElement.setAttribute(SHOWN_ATTRIBUTE, "");
+      window.dispatchEvent(new Event(SHOWN_EVENT));
+      track("Challenge Popup Shown", { challenge: "2026-11" });
+    };
+    const onScroll = () => {
+      const docHeight = document.documentElement.scrollHeight;
+      if (hasReachedScrollTrigger(window.scrollY, window.innerHeight, docHeight)) open();
+    };
+    const timer = window.setTimeout(open, SHOW_DELAY_MS);
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+</script>

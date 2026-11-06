@@ -11,6 +11,29 @@ export interface WantedProject {
   name: string;
   /** Other names the project may be listed under in ProjectHub. */
   aliases?: string[];
+  /** Card details for a project ProjectHub doesn't list publicly yet. Used
+   * only when no live record matches. A website is required: there is no
+   * /projects profile to fall back on. */
+  fallback?: ProjectFallback;
+}
+
+export interface ProjectFallback {
+  pitch: string;
+  websiteUrl: string;
+  logoUrl?: string;
+}
+
+function fromFallback(name: string, fallback: ProjectFallback): ProjectItem {
+  return {
+    id: 0,
+    name,
+    description: fallback.pitch,
+    elevatorPitch: fallback.pitch,
+    websiteUrl: fallback.websiteUrl,
+    logoUrl: fallback.logoUrl,
+    createdAt: "",
+    updatedAt: "",
+  };
 }
 
 export function normalizeProjectName(name: string): string {
@@ -24,11 +47,15 @@ export function pickChallengeProjects(
   const byName = new Map(projects.map((p) => [normalizeProjectName(p.name ?? ""), p]));
   const picked: ProjectItem[] = [];
 
-  for (const { name, aliases = [] } of wanted) {
+  for (const { name, aliases = [], fallback } of wanted) {
     const match = [name, ...aliases]
       .map((candidate) => byName.get(normalizeProjectName(candidate)))
       .find((project) => project !== undefined);
-    if (match && !picked.includes(match)) picked.push(match);
+    if (match) {
+      if (!picked.includes(match)) picked.push(match);
+    } else if (fallback) {
+      picked.push(fromFallback(name, fallback));
+    }
   }
 
   return picked;

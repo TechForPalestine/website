@@ -1,0 +1,440 @@
+---
+// The live monthly Incubator challenge: November 2026, on mainstream media
+// bias. Past months live under /monthly-challenge/<month>-<year> and are listed
+// in "Previous challenges" at the foot of this page.
+import Layout from "../../layouts/Layout.astro";
+import TerminalCta from "../../components/TerminalCta.astro";
+import ChallengeProjectCard from "../../components/challenge/ChallengeProjectCard.astro";
+import CorrectedHeadline from "../../components/challenge/CorrectedHeadline.astro";
+import { previousChallenges, whatAreChallenges } from "../../data/challenges";
+import {
+  APPLY_URL,
+  aboutLead,
+  aboutNeed,
+  ask,
+  brainstorm,
+  challenge,
+  especially,
+  playbook,
+  questions,
+  supportedProjects,
+} from "../../data/challenges/november-2026";
+import { fetchProjectsData } from "../../store/projectsClient";
+import type { ProjectItem } from "../../types/projects";
+import { pickChallengeProjects } from "../../utils/challengeProjects";
+import { isBrainstormOpen } from "../../utils/challengePopup";
+import {
+  band,
+  container,
+  focusRing,
+  focusRingOnDark,
+  ghostOnDarkButton,
+  headline,
+  inlineLink,
+  inverseButton,
+  overline,
+  primaryButton,
+} from "../../utils/designClasses";
+import "../../styles/base.css";
+
+// Live from ProjectHub so names, logos and pitches stay current. On failure
+// the section falls back to a link to the directory rather than vanishing.
+let projects: ProjectItem[] | null = null;
+try {
+  const data = await fetchProjectsData(Astro.locals);
+  projects = pickChallengeProjects(data.projects, supportedProjects);
+} catch (error) {
+  console.error("[challenge] Could not load projects from ProjectHub", error);
+  // Don't let the middleware cache the degraded page past the outage.
+  Astro.response.headers.set("Cache-Control", "no-store");
+}
+
+const showBrainstorm = isBrainstormOpen(Date.now());
+
+// Four cards sit better as two pairs than as three plus an orphan.
+const projectCols =
+  projects && projects.length % 3 !== 0 && projects.length % 2 === 0
+    ? "md:grid-cols-2"
+    : "md:grid-cols-2 lg:grid-cols-3";
+
+const body = "max-w-[65ch] text-[17px] leading-relaxed text-ink-secondary";
+const textLink = `${inlineLink} inline-flex items-center gap-1.5 text-[17px]`;
+// The hero is drenched in Grove Green: buttons invert to white on it.
+const onGreenGhost = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill border border-white/60 px-5 py-3 text-[13px] font-bold text-white transition-colors hover:border-white hover:bg-white hover:text-grove-deep motion-reduce:transition-none ${focusRingOnDark}`;
+const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill bg-white px-5 py-3 text-[13px] font-bold text-grove-deep transition-colors hover:bg-first-light motion-reduce:transition-none ${focusRingOnDark}`;
+---
+
+<Layout
+  title={`Incubator Challenge ${challenge.month} - Tech for Palestine`}
+  description={`${challenge.question} Apply to the Tech for Palestine Incubator challenge for ${challenge.month}.`}
+>
+  <main>
+    <!-- Hero, drenched in Grove Green: the question carries the page, the
+         specimen shows the problem in one headline. -->
+    <section class="bg-grove text-white" aria-labelledby="challenge-heading">
+      <div
+        class={`${container} grid grid-cols-1 items-center gap-12 py-16 sm:px-8 min-[810px]:py-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16`}
+      >
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.14em] text-white">
+            Incubator Challenge · {challenge.month}
+          </p>
+          <h1
+            id="challenge-heading"
+            class="mt-4 max-w-[28ch] text-balance text-[34px] font-extrabold leading-[1.06] min-[810px]:text-[50px] min-[810px]:leading-[1.03]"
+          >
+            {challenge.question}
+          </h1>
+          <p
+            class="mt-6 max-w-[52ch] text-[19px] leading-relaxed text-white min-[810px]:text-[21px]"
+          >
+            {challenge.summary}
+          </p>
+          <div class="mt-9 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            <a
+              href={APPLY_URL}
+              data-track-challenge="apply"
+              data-cta-location="hero"
+              class={onGreenPrimary}
+            >
+              Apply for this challenge
+            </a>
+            {
+              showBrainstorm && (
+                <a
+                  href={brainstorm.url}
+                  target="_blank"
+                  rel="noopener"
+                  data-track-challenge="brainstorm"
+                  data-cta-location="hero"
+                  class={onGreenGhost}
+                >
+                  Join the brainstorming session on November 20th
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              )
+            }
+          </div>
+        </div>
+
+        <CorrectedHeadline tone="green" />
+      </div>
+    </section>
+
+    <!-- For visitors who arrive cold: what a monthly challenge is -->
+    <section aria-labelledby="challenges-heading">
+      <div class={`${container} py-14 sm:px-8 min-[810px]:py-16`}>
+        <div
+          class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16"
+        >
+          <h2 id="challenges-heading" class={`max-w-[20ch] text-balance ${headline}`}>
+            What are the Tech for Palestine Challenges?
+          </h2>
+          <div class="space-y-4">
+            {whatAreChallenges.map((paragraph) => <p class={body}>{paragraph}</p>)}
+            <a href="/incubator" class={`!mt-6 ${textLink}`}>
+              More about the Incubator <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band: the problem as a marked-up playbook, then the ask. The red proof
+         marks carry the hero specimen's copy-editor language down the page. -->
+    <section class={band} aria-labelledby="about-heading">
+      <div class={`${container} py-14 sm:px-8 min-[810px]:py-16`}>
+        <div
+          class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16"
+        >
+          <div>
+            <p class={`mb-4 ${overline}`}>About the challenge</p>
+            <h2 id="about-heading" class={`max-w-[16ch] text-balance ${headline}`}>
+              Hasbara has a newsroom. Palestine needs its own.
+            </h2>
+          </div>
+          <p
+            class="max-w-[60ch] self-end text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]"
+          >
+            {aboutLead}
+          </p>
+        </div>
+
+        <h3 class="mt-12 text-[17px] font-bold text-ink">The playbook</h3>
+        <ol class="mt-4 border-b border-first-light-edge">
+          {
+            playbook.map((move, i) => (
+              <li class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 border-t border-first-light-edge py-5 md:grid-cols-[auto_14rem_minmax(0,1fr)_auto] md:items-baseline md:gap-x-6">
+                <span
+                  class="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#C8102E] text-[13px] font-extrabold text-white"
+                  aria-hidden="true"
+                >
+                  {i + 1}
+                </span>
+                <span class="text-[19px] font-extrabold leading-snug text-ink">{move.name}</span>
+                <p class="col-start-2 max-w-[62ch] text-[17px] leading-relaxed text-ink-secondary md:col-start-auto">
+                  {move.detail}
+                </p>
+                <p class="col-start-2 text-[15px] font-bold text-ink-secondary md:col-start-auto md:whitespace-nowrap">
+                  <span class="sr-only">Taken on by </span>
+                  {move.questions.map((n, k) => (
+                    <>
+                      {k > 0 && <span aria-hidden="true">, </span>}
+                      <a
+                        href={`#question-${n}`}
+                        class={`text-grove underline decoration-grove/40 underline-offset-4 hover:decoration-grove ${focusRing}`}
+                      >
+                        <span class="sr-only">question </span>Q{String(n).padStart(2, "0")}
+                      </a>
+                    </>
+                  ))}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div
+          class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16"
+        >
+          <p class="max-w-[40ch] text-[17px] leading-relaxed text-ink">{aboutNeed}</p>
+          <div>
+            <p class="max-w-[65ch] text-[17px] leading-relaxed text-ink">
+              {ask}
+            </p>
+            <p
+              class="mt-5 max-w-[48ch] text-balance text-[21px] font-bold leading-snug text-grove-deep min-[810px]:text-[24px]"
+            >
+              {especially}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Questions: an index of starting points, numbered like a contents page -->
+    <section aria-labelledby="questions-heading">
+      <div class={`${container} py-16 sm:px-8 min-[810px]:py-20`}>
+        <div class="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+          <h2 id="questions-heading" class={`max-w-[18ch] text-balance ${headline}`}>
+            Some questions you can consider
+          </h2>
+          <a
+            href={APPLY_URL}
+            data-track-challenge="apply"
+            data-cta-location="questions-top"
+            class={textLink}
+          >
+            Apply for this challenge <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <ol class="mt-10 grid grid-cols-1 gap-x-10 lg:grid-cols-3">
+          {
+            questions.map((question, i) => (
+              <li
+                id={`question-${i + 1}`}
+                class="scroll-mt-28 border-t border-ink-divider pb-9 pt-5"
+              >
+                <span
+                  class="block text-[44px] font-extrabold tabular-nums leading-none text-grove"
+                  aria-hidden="true"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p class="mt-4 max-w-[40ch] text-[18px] leading-snug text-ink">{question}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <a
+          href={APPLY_URL}
+          data-track-challenge="apply"
+          data-cta-location="questions"
+          class={`mt-4 ${primaryButton}`}
+        >
+          Apply for this challenge
+        </a>
+      </div>
+    </section>
+
+    <!-- Band: incubator projects already working on this -->
+    <section class={band} aria-labelledby="projects-heading">
+      <div class={`${container} py-14 sm:px-8 min-[810px]:py-16`}>
+        <p class={`mb-4 ${overline}`}>Already in the Incubator</p>
+        <h2 id="projects-heading" class={`max-w-[26ch] text-balance ${headline}`}>
+          Incubator projects we already support
+        </h2>
+        {
+          projects && projects.length > 0 ? (
+            <ul class={`mt-10 grid grid-cols-1 gap-5 ${projectCols}`}>
+              {projects.map((project) => (
+                <li class="flex">
+                  <ChallengeProjectCard project={project} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class={`mt-6 ${body}`}>
+              Browse them in our{" "}
+              <a href="/projects" class={inlineLink}>
+                project directory
+              </a>
+              .
+            </p>
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Brainstorm: a ticket, date on the stub. Hidden once the session is over. -->
+    {
+      showBrainstorm && (
+        <section
+          id="brainstorm"
+          class={`${container} scroll-mt-24 py-16 sm:px-8 min-[810px]:py-20`}
+          aria-labelledby="brainstorm-heading"
+        >
+          <div class="grid grid-cols-1 overflow-hidden rounded-lg bg-stone md:grid-cols-[auto_minmax(0,1fr)]">
+            <time
+              datetime={brainstorm.startsAt}
+              class="flex flex-row items-baseline gap-4 border-b-2 border-dashed border-ink-divider px-6 py-6 sm:px-10 md:flex-col md:items-start md:justify-center md:gap-0 md:border-b-0 md:border-r-2 md:py-10"
+            >
+              <span class="text-[15px] font-bold uppercase tracking-[0.14em] text-grove-deep">
+                {brainstorm.monthShort}
+              </span>
+              <span class="text-[64px] font-extrabold tabular-nums leading-none text-grove md:text-[112px]">
+                {brainstorm.day}
+              </span>
+              <span class="text-[16px] font-bold text-ink md:mt-3">
+                {brainstorm.weekday} · {brainstorm.time}
+              </span>
+              <span
+                data-local-time={brainstorm.startsAt}
+                hidden
+                class="text-[15px] text-ink-secondary md:mt-1"
+              />
+            </time>
+            <div class="px-6 py-8 sm:px-10 md:py-10">
+              <h2 id="brainstorm-heading" class={headline}>
+                Join our brainstorming session!
+              </h2>
+              <p class="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+                {brainstorm.description}
+              </p>
+              <a
+                href={brainstorm.url}
+                target="_blank"
+                rel="noopener"
+                data-track-challenge="brainstorm"
+                data-cta-location="brainstorm"
+                class={`mt-7 ${primaryButton}`}
+              >
+                Register
+                <span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <TerminalCta
+      heading="Have an idea that gets Palestine's story past the gatekeepers?"
+      headingId="challenge-cta-heading"
+      padTop={!showBrainstorm}
+    >
+      Bring it to the Incubator. Projects approved on this challenge join a small cohort with
+      tailored support.
+      <Fragment slot="actions">
+        <a
+          href={APPLY_URL}
+          data-track-challenge="apply"
+          data-cta-location="terminal"
+          class={inverseButton}
+        >
+          Apply for this challenge
+        </a>
+        {
+          showBrainstorm && (
+            <a
+              href={brainstorm.url}
+              target="_blank"
+              rel="noopener"
+              data-track-challenge="brainstorm"
+              data-cta-location="terminal"
+              class={ghostOnDarkButton}
+            >
+              Register for November 20th
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          )
+        }
+      </Fragment>
+    </TerminalCta>
+
+    <!-- Archive: past months, quiet, after the ask -->
+    {
+      previousChallenges.length > 0 && (
+        <section
+          id="previous-challenges"
+          class={`${container} scroll-mt-24 pb-16 sm:px-8 min-[810px]:pb-20`}
+          aria-labelledby="previous-heading"
+        >
+          <h2 id="previous-heading" class="text-[24px] font-extrabold leading-tight text-ink">
+            Previous challenges
+          </h2>
+          <ul class="mt-6 border-b border-ink-divider">
+            {previousChallenges.map((past) => (
+              <li class="border-t border-ink-divider">
+                <a
+                  href={past.href}
+                  class={`group grid grid-cols-1 gap-x-10 gap-y-2 py-6 md:grid-cols-[10rem_minmax(0,1fr)_auto] md:items-baseline ${focusRing}`}
+                >
+                  <span class="text-[15px] font-bold text-grove-deep">{past.month}</span>
+                  <span class="max-w-[60ch] text-[19px] font-bold leading-snug text-ink transition-colors group-hover:text-grove motion-reduce:transition-none">
+                    {past.question}
+                  </span>
+                  <span class="text-[16px] font-bold text-grove underline decoration-grove/40 underline-offset-4 group-hover:decoration-grove">
+                    Read the challenge <span aria-hidden="true">→</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </main>
+
+  <script>
+    import { localSessionTime } from "../../utils/localTime";
+
+    // Restate the CET session time in the visitor's zone when it differs.
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.querySelectorAll<HTMLElement>("[data-local-time]").forEach((el) => {
+      const local = localSessionTime(el.dataset.localTime ?? "", zone);
+      if (!local) return;
+      el.textContent = `${local} your time`;
+      el.hidden = false;
+    });
+
+    const EVENTS = {
+      apply: "Challenge Apply Click",
+      brainstorm: "Challenge Brainstorm Click",
+    } as const;
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-track-challenge]").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (typeof window.plausible === "undefined") return;
+        const kind = link.dataset.trackChallenge as keyof typeof EVENTS;
+        window.plausible(EVENTS[kind], {
+          props: {
+            cta_location: link.dataset.ctaLocation ?? kind,
+            destination: link.getAttribute("href") ?? "",
+            challenge: "2026-11",
+          },
+        });
+      });
+    });
+  </script>
+</Layout>

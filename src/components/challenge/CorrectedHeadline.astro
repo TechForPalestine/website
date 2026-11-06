@@ -1,0 +1,188 @@
+---
+// A news-site article header from a fictional outlet ("The Consent", after
+// manufacturing consent), its headline corrected in red the way readers fix
+// real ones: what was left out written in above a caret, the framing struck
+// through, the truth written in after it. Used on the /monthly-challenge hero
+// and the homepage popup. Everything is sized in em off the root, so `size`
+// scales the whole graphic. The drawing is aria-hidden; screen readers get the
+// original and corrected headlines as text.
+import { correctedHeadline } from "../../data/challenges/november-2026";
+
+interface Props {
+  size?: "lg" | "sm";
+  /** "green" when placed on the Grove Green hero: the caption turns white. */
+  tone?: "paper" | "green";
+}
+
+const { size = "lg", tone = "paper" } = Astro.props;
+const { outlet, original, corrected } = correctedHeadline;
+---
+
+<figure class={`ch ch--${size} ch--${tone}`}>
+  <div class="ch-card" aria-hidden="true">
+    <div class="ch-bar">
+      <span class="ch-logo">{outlet}</span>
+      <span class="ch-section">World</span>
+    </div>
+
+    <p class="ch-head">
+      38<span class="ch-caret ch-caret--start"><span class="ch-ins">Palestinians</span></span> killed
+      in Gaza strike<span class="ch-caret"><span class="ch-ins">by Israel</span></span>
+      <span class="ch-strike">as tensions rise</span>,
+      <span class="ch-strike">health ministry says</span>
+      <span class="ch-fix">genocide continues</span>
+    </p>
+  </div>
+  <figcaption class="ch-caption">
+    <span class="sr-only">
+      Illustrative headline from a fictional outlet: “{original}”. Corrected: “{corrected}”.
+    </span>
+    <span aria-hidden="true">Illustrative headline, corrected</span>
+  </figcaption>
+</figure>
+
+<style>
+  .ch {
+    font-family: Outfit, system-ui, sans-serif;
+    color: #2a2428;
+  }
+  .ch--lg {
+    font-size: 16px;
+  }
+  .ch--sm {
+    font-size: 12.5px;
+  }
+
+  .ch-card {
+    padding: 1.1em 1.4em 0.7em;
+    border-radius: 1.4em;
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  /* The outlet's top bar: wordmark and section, just enough to read as a news site. */
+  .ch-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    padding-bottom: 0.8em;
+    border-bottom: 2px solid #2a2428;
+  }
+  .ch-logo {
+    padding: 0.1em 0.45em 0.15em;
+    border-radius: 0.3em;
+    background: #2a2428;
+    color: #fff;
+    font-size: 1.05em;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .ch-section {
+    font-size: 1.05em;
+    font-weight: 700;
+  }
+
+  /* Headline: the top margin leaves room for the written-in insertions, which
+     sit on the first line at every width the graphic is used at. */
+  .ch-head {
+    margin-top: 2.1em;
+    font-size: 1.6em;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  /* An insertion: red words above a caret arrow pointing at the gap. */
+  .ch-caret {
+    position: relative;
+    display: inline-block;
+    width: 0.3em;
+    height: 1em;
+  }
+  .ch-ins {
+    position: absolute;
+    bottom: 2.25em;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #c8102e;
+    font-size: 0.62em;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  /* A drawn arrow (shaft + chevron) down into the gap; the text arrow glyph
+     isn't in Outfit and fell back to a thin system one. */
+  .ch-ins::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 0.2em);
+    left: 50%;
+    width: 2px;
+    height: 0.6em;
+    border-radius: 1px;
+    background: currentColor;
+    transform: translateX(-50%);
+  }
+  .ch-ins::before {
+    content: "";
+    position: absolute;
+    top: calc(100% + 0.47em);
+    left: 50%;
+    width: 0.42em;
+    height: 0.42em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateX(-50%) rotate(45deg);
+  }
+  /* At the start of the line, hang the insert over the first word, as a hand
+     would, instead of centring it past the headline's left edge. */
+  .ch-caret--start .ch-ins {
+    left: 0;
+    transform: translateX(-35%);
+  }
+  /* The label moved, the gap didn't: the caret's left edge sits 35% into the
+     label, and its centre a further ~0.24 label-em (half the 0.3em caret). */
+  .ch-caret--start .ch-ins::before,
+  .ch-caret--start .ch-ins::after {
+    left: calc(35% + 0.24em);
+  }
+
+  /* The framing, struck through by hand: a slightly tilted red line. */
+  .ch-strike {
+    position: relative;
+    white-space: nowrap;
+  }
+  .ch-strike::after {
+    content: "";
+    position: absolute;
+    left: -0.08em;
+    right: -0.08em;
+    top: 52%;
+    height: 0.09em;
+    min-height: 2px;
+    border-radius: 999px;
+    background: #c8102e;
+    transform: rotate(-1.5deg);
+  }
+  .ch-fix {
+    color: #c8102e;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ch-caption {
+    margin-top: 0.9em;
+    font-size: 0.75em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #2f5c3f;
+  }
+  .ch--sm .ch-caption {
+    font-size: 11px;
+  }
+  .ch--green .ch-caption {
+    color: #fff;
+  }
+</style>
