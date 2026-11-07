@@ -18,7 +18,7 @@ const projectRole: OpenRole = {
   type: "project",
   skillCategories: [],
   areasOfInterest: [],
-  timeCommitment: "",
+  commitment: "",
   createdAt: "2026-10-14T18:35:10.338Z",
 };
 
@@ -41,6 +41,38 @@ describe("normalizeOpenRoles", () => {
     const twice = normalizeOpenRoles(JSON.parse(JSON.stringify(once)));
 
     expect(twice[0].orgName).toBe("Social Media Crossposting Team");
+  });
+
+  it("shows the Hub's structured commitment label instead of legacy free text", () => {
+    const [role] = normalizeOpenRoles([
+      {
+        ...hubRow,
+        timeCommitment: "6 hours/week",
+        hoursPerWeek: ["5-10 hours/week"],
+        commitment: "5-10 hours/week · Long-term (6+ months)",
+      },
+    ]);
+
+    expect(role.commitment).toBe("5-10 hours/week · Long-term (6+ months)");
+  });
+
+  it("falls back to legacy free text when the Hub sends no commitment label", () => {
+    const [role] = normalizeOpenRoles([
+      { ...hubRow, commitment: null, timeCommitment: " 2 hours a week " },
+    ]);
+
+    expect(role.commitment).toBe("2 hours a week");
+  });
+
+  it("leaves the commitment empty when neither field is set", () => {
+    expect(normalizeOpenRoles([hubRow])[0].commitment).toBe("");
+  });
+
+  it("keeps the commitment when normalizing an already-normalized role", () => {
+    const once = normalizeOpenRoles([{ ...hubRow, commitment: "1-5 hours/week" }]);
+    const twice = normalizeOpenRoles(JSON.parse(JSON.stringify(once)));
+
+    expect(twice[0].commitment).toBe("1-5 hours/week");
   });
 });
 
