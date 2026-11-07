@@ -123,17 +123,17 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
         </a>
       </div>
 
-      {(role.skillCategories.length > 0 || role.timeCommitment) && (
+      {(role.skillCategories.length > 0 || role.commitment) && (
         <ul className="mt-4 flex flex-wrap gap-2">
           {role.skillCategories.map((skill) => (
             <li key={skill} className={tokens.pill}>
               {skill}
             </li>
           ))}
-          {role.timeCommitment && (
+          {role.commitment && (
             <li className={tokens.pill}>
               <ClockIcon />
-              {role.timeCommitment}
+              {role.commitment}
             </li>
           )}
         </ul>
@@ -174,7 +174,8 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
         </>
       )}
 
-      {expanded && role.areasOfInterest.length > 0 && (
+      {/* Always shown: cards with short descriptions can't be expanded. */}
+      {role.areasOfInterest.length > 0 && (
         <p className="mt-3">
           <span className={tokens.detailLabel}>Areas of interest: </span>
           <span className={tokens.body}>{role.areasOfInterest.join(", ")}</span>

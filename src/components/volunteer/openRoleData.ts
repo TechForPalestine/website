@@ -31,8 +31,13 @@ export interface OpenRole {
   type: OpenRoleType;
   skillCategories: string[];
   areasOfInterest: string[];
-  /** Free text, e.g. "5 hours a week". Absent on most roles. */
-  timeCommitment: string;
+  /**
+   * Time commitment to show, e.g. "5-10 hours/week · Long-term (6+ months)".
+   * The Hub's `commitment` label is built from its structured Hours per week and
+   * Length of role fields, falling back to legacy free text. The raw legacy
+   * `timeCommitment` is used only if `commitment` is missing. "" when not set.
+   */
+  commitment: string;
   createdAt: string;
 }
 
@@ -94,7 +99,8 @@ export function normalizeOpenRole(raw: unknown): OpenRole | null {
     type: row.type === "team" ? "team" : "project",
     skillCategories: toStringArray(row.skillCategories),
     areasOfInterest: toStringArray(row.areasOfInterest),
-    timeCommitment: toTrimmedString(row.timeCommitment, 120),
+    // `row.commitment` also covers rows that were already normalized.
+    commitment: toTrimmedString(row.commitment, 160) || toTrimmedString(row.timeCommitment, 120),
     createdAt: toTrimmedString(row.createdAt, 40),
   };
 }
