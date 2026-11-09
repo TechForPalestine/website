@@ -1,25 +1,13 @@
 ---
-// Shared between index.astro (old homepage) and home-new.astro (new
-// homepage) — see design doc for why the insertion point differs between
-// the two (Layout.astro renders <Navigation /> above the slot; HomeLayout
-// does not).
+// Homepage strip announcing the next Community Call: shown only while a call
+// is live or starts within 7 days. It overlays the top of the hero, sliding
+// down from beneath the navbar, so the hero keeps its position: render it
+// inside a `relative` container (index.astro's <main>).
 import * as Sentry from "@sentry/astro";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
 import { reportError } from "../lib/report-error";
 import { formatShortCallTime } from "../utils/formatCallTime";
-
-interface Props {
-  // "new" (bg-ink/brand-light) matches home-new's editorial palette.
-  // "old" (bg-green-700/white) matches index.astro's existing green-700
-  // CTA/overline color used throughout contact.astro, faq.astro, etc. —
-  // bg-ink/brand-light belongs to the redesign, not the old homepage.
-  theme?: "new" | "old";
-}
-
-const { theme = "new" } = Astro.props;
-const bgClass = theme === "old" ? "bg-green-700" : "bg-ink";
-const pulseClass = theme === "old" ? "bg-white" : "bg-brand-light";
 
 const ctx = Astro.locals.runtime?.ctx;
 
@@ -54,33 +42,52 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
 
 {
   shouldShow && call && (
-    <div
-      class={`cc-banner flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2.5 text-center text-sm font-medium text-white ${bgClass}`}
-      data-start-iso={call.startUtcIso}
-      data-state={state}
-    >
-      <span class="cc-banner-live hidden items-center gap-1.5" data-cc-banner-state="live">
-        <span class={`inline-block h-1.5 w-1.5 animate-pulse rounded-full ${pulseClass}`} />
-        We're live now
-      </span>
-      <span data-cc-banner-state="upcoming">
-        Community Call — <span class="invisible" data-cc-banner-time>{localTime}</span>
-      </span>
-      <noscript>
-        <style>
-          [data-cc-banner-time] {
-            visibility: visible;
-          }
-        </style>
-      </noscript>
-      <a href="/community-call" class="underline">
-        <span data-cc-banner-cta="live">Join →</span>
-        <span data-cc-banner-cta="soon">Join →</span>
-        <span data-cc-banner-cta="far">Add to calendar →</span>
+    <div class="absolute inset-x-0 top-0 z-20 overflow-hidden">
+      <a
+        href="/community-call"
+        class="cc-banner cc-strip group block bg-grove text-white focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
+        data-start-iso={call.startUtcIso}
+        data-state={state}
+      >
+        <span class="mx-auto flex max-w-[1400px] items-center gap-x-4 px-6 py-2.5 md:px-8 lg:px-16 2xl:px-28">
+          <span class="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-x-4">
+            <span class="flex flex-shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-first-light">
+              <span
+                class="cc-live-dot hidden h-2 w-2 rounded-full bg-white motion-safe:animate-pulse"
+                aria-hidden="true"
+              />
+              <span data-cc-banner-state="upcoming">Community call</span>
+              <span data-cc-banner-state="live">Live now</span>
+            </span>
+            <span class="cc-title hidden min-w-0 truncate text-[15px] font-bold sm:block">
+              {call.title}
+            </span>
+            <span
+              class="invisible whitespace-nowrap text-[15px] font-bold sm:font-normal sm:text-first-light"
+              data-cc-banner-state="upcoming"
+              data-cc-banner-time
+            >
+              {localTime}
+            </span>
+          </span>
+          <span class="ml-auto inline-flex min-h-[32px] flex-shrink-0 items-center whitespace-nowrap rounded-pill bg-white px-4 text-[13px] font-bold text-grove-deep transition-colors group-hover:bg-first-light motion-reduce:transition-none">
+            <span data-cc-banner-cta="join">Join the call</span>
+            <span data-cc-banner-cta="far">Add to calendar</span>
+          </span>
+        </span>
       </a>
     </div>
   )
 }
+
+<!-- Without JS the server-rendered time (UTC) is the best available. -->
+<noscript>
+  <style is:inline>
+    [data-cc-banner-time] {
+      visibility: visible;
+    }
+  </style>
+</noscript>
 
 <script>
   import { formatShortCallTime } from "../utils/formatCallTime";
@@ -89,68 +96,70 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
   const DAY_MS = 24 * 60 * 60 * 1000;
 
   const banner = document.querySelector<HTMLElement>(".cc-banner");
-  if (banner) {
-    const startIso = banner.dataset.startIso;
-    if (startIso) {
-      const start = new Date(startIso).getTime();
-      const now = Date.now();
+  const startIso = banner?.dataset.startIso;
+  if (banner && startIso) {
+    const start = new Date(startIso).getTime();
+    const now = Date.now();
 
-      let state: "upcoming" | "live" | "ended" = "upcoming";
-      if (now >= start && now < start + LIVE_WINDOW_MS) state = "live";
-      else if (now >= start + LIVE_WINDOW_MS) state = "ended";
-      banner.dataset.state = state;
+    let state: "upcoming" | "live" | "ended" = "upcoming";
+    if (now >= start && now < start + LIVE_WINDOW_MS) state = "live";
+    else if (now >= start + LIVE_WINDOW_MS) state = "ended";
+    banner.dataset.state = state;
 
-      // Server-rendered time (and "Today"/"Tomorrow" framing) is computed
-      // in the SERVER's time zone and calendar day (Cloudflare's edge
-      // runtime is UTC, not the visitor's) — replace with the visitor's.
-      const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
-      if (timeEl) {
-        timeEl.textContent = formatShortCallTime(startIso, new Date());
-        timeEl.classList.remove("invisible");
-      }
+    // Ended (or the cached featured call went stale): the banner has nothing
+    // time-sensitive left to say, so hide it rather than show "ended" content.
+    if (state === "ended") banner.hidden = true;
 
-      // Ended (or the fetch's featured-call selection went stale in cache) —
-      // this banner has nothing time-sensitive left to say. Hide entirely
-      // rather than show "ended" content, which the banner never does.
-      if (state === "ended") {
-        banner.style.display = "none";
-      } else {
-        const cta = start - now < DAY_MS ? "soon" : "far";
-        banner
-          .querySelectorAll<HTMLElement>("[data-cc-banner-cta]")
-          .forEach((el) => (el.style.display = "none"));
-        const active = banner.querySelector<HTMLElement>(
-          `[data-cc-banner-cta="${state === "live" ? "live" : cta}"]`
-        );
-        if (active) active.style.display = "inline";
-      }
+    // "Join the call" when live or under a day out; otherwise the far CTA.
+    banner.dataset.cta = state === "live" || start - now < DAY_MS ? "join" : "far";
+
+    // The server renders the time (and "Today"/"Tomorrow") in the edge
+    // runtime's zone, which is UTC, not the visitor's. Replace it.
+    const timeEl = banner.querySelector<HTMLElement>("[data-cc-banner-time]");
+    if (timeEl) {
+      timeEl.textContent = formatShortCallTime(startIso, new Date());
+      timeEl.classList.remove("invisible");
     }
   }
 </script>
 
 <style>
-  .cc-banner[data-state="live"] .cc-banner-live {
-    display: flex;
+  @media (prefers-reduced-motion: no-preference) {
+    .cc-strip {
+      animation: cc-strip-slide 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms backwards;
+    }
   }
-  .cc-banner[data-state="live"] [data-cc-banner-state="upcoming"] {
+  @keyframes cc-strip-slide {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  .cc-banner[hidden] {
     display: none;
   }
+  .cc-banner[data-state="live"] [data-cc-banner-state="upcoming"],
   .cc-banner:not([data-state="live"]) [data-cc-banner-state="live"] {
     display: none;
   }
-  /* No-JS / pre-hydration fallback: show the safe default (7 days out is
-     the common case), then the inline script narrows it to "soon"/"live"
-     once real time is available. */
-  [data-cc-banner-cta] {
+  .cc-banner[data-state="live"] .cc-live-dot {
+    display: inline-block;
+  }
+  /* Live has no time to show, so the title takes its place on small screens. */
+  .cc-banner[data-state="live"] .cc-title {
+    display: block;
+  }
+  /* No-JS / pre-hydration default is the far CTA (7 days out is the common
+     case); the script narrows it to "join" once the real time is known. */
+  .cc-banner [data-cc-banner-cta="join"],
+  .cc-banner[data-state="live"] [data-cc-banner-cta="far"],
+  .cc-banner[data-cta="join"] [data-cc-banner-cta="far"] {
     display: none;
   }
-  [data-cc-banner-cta="far"] {
-    display: inline;
-  }
-  .cc-banner[data-state="live"] [data-cc-banner-cta="far"] {
-    display: none;
-  }
-  .cc-banner[data-state="live"] [data-cc-banner-cta="live"] {
+  .cc-banner[data-state="live"] [data-cc-banner-cta="join"],
+  .cc-banner[data-cta="join"] [data-cc-banner-cta="join"] {
     display: inline;
   }
 </style>

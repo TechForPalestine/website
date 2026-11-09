@@ -409,7 +409,7 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
   <script>
     import { localSessionTime } from "../../utils/localTime";
 
-    // Restate the CET session time in the visitor's zone when it differs.
+    // Restate the ET session time in the visitor's zone when it differs.
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     document.querySelectorAll<HTMLElement>("[data-local-time]").forEach((el) => {
       const local = localSessionTime(el.dataset.localTime ?? "", zone);
