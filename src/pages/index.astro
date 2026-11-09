@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
-import MembershipLaunchBanner from "../components/home/MembershipLaunchBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
 import ChallengePopup from "../components/home/ChallengePopup.astro";
 import "../styles/base.css";
@@ -165,8 +164,6 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 >
   <CommunityCallBanner theme="old" />
   <main class="relative">
-    <MembershipLaunchBanner />
-
     <!-- Hero -->
     <section
       class="flex flex-col-reverse bg-paper lg:grid lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[1.05fr_1fr] lg:items-center"

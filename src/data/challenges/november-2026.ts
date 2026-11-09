@@ -15,7 +15,7 @@ export const challenge = {
     "This month we're forming a cohort of projects that expose how the news is shaped, and build ways to get it out that can't be bought.",
 };
 
-/** The brainstorming session on Zoom. Times are CET (UTC+1 in November). */
+/** The brainstorming session on Zoom. Shown in ET (EST, UTC-5 in November). */
 export const brainstorm = {
   url: "https://us06web.zoom.us/meeting/register/VcASwZtkTsmH3poubwJcOw",
   startsAt: "2026-11-20T20:30:00+01:00",
@@ -24,7 +24,7 @@ export const brainstorm = {
   weekday: "Friday",
   day: "20",
   monthShort: "Nov",
-  time: "8:30pm CET",
+  time: "2:30pm ET",
   description:
     "Tech for Palestine is hosting an open brainstorming session for anyone who is interested in this challenge and wants to pitch an idea. You will be able to learn more about the T4P Incubator, get feedback on your idea, and find team members.",
 };
@@ -40,7 +40,7 @@ export const correctedHeadline = {
 };
 
 export const aboutLead =
-  "The mainstream media narrative on Palestine and the Gaza genocide is flooded with hasbara propaganda and consistently framed around Israel's talking points. It manufactures consent for, normalizes and downplays the atrocities Israel commits, through a playbook that is easy to spot once named.";
+  "The mainstream media narrative on Palestine and the Gaza genocide is flooded with hasbara propaganda and consistently framed around Israel's talking points. It normalizes, downplays and manufactures consent for the atrocities Israel commits, through a playbook that is easy to spot once named.";
 
 export interface PlaybookMove {
   name: string;
