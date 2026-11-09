@@ -1,7 +1,8 @@
 ---
 // Homepage strip announcing the next Community Call: shown only while a call
-// is live or starts within 7 days. Rendered by index.astro directly below the
-// navigation (Layout.astro renders <Navigation /> above the slot).
+// is live or starts within 7 days. It overlays the top of the hero, sliding
+// down from beneath the navbar, so the hero keeps its position: render it
+// inside a `relative` container (index.astro's <main>).
 import * as Sentry from "@sentry/astro";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
@@ -41,39 +42,41 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
 
 {
   shouldShow && call && (
-    <a
-      href="/community-call"
-      class="cc-banner group block bg-grove text-white focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
-      data-start-iso={call.startUtcIso}
-      data-state={state}
-    >
-      <span class="mx-auto flex max-w-[1400px] items-center gap-x-4 px-6 py-2.5 md:px-8 lg:px-16 2xl:px-28">
-        <span class="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-x-4">
-          <span class="flex flex-shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-first-light">
+    <div class="absolute inset-x-0 top-0 z-20 overflow-hidden">
+      <a
+        href="/community-call"
+        class="cc-banner cc-strip group block bg-grove text-white focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
+        data-start-iso={call.startUtcIso}
+        data-state={state}
+      >
+        <span class="mx-auto flex max-w-[1400px] items-center gap-x-4 px-6 py-2.5 md:px-8 lg:px-16 2xl:px-28">
+          <span class="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-x-4">
+            <span class="flex flex-shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-first-light">
+              <span
+                class="cc-live-dot hidden h-2 w-2 rounded-full bg-white motion-safe:animate-pulse"
+                aria-hidden="true"
+              />
+              <span data-cc-banner-state="upcoming">Community call</span>
+              <span data-cc-banner-state="live">Live now</span>
+            </span>
+            <span class="cc-title hidden min-w-0 truncate text-[15px] font-bold sm:block">
+              {call.title}
+            </span>
             <span
-              class="cc-live-dot hidden h-2 w-2 rounded-full bg-white motion-safe:animate-pulse"
-              aria-hidden="true"
-            />
-            <span data-cc-banner-state="upcoming">Community call</span>
-            <span data-cc-banner-state="live">Live now</span>
+              class="invisible whitespace-nowrap text-[15px] font-bold sm:font-normal sm:text-first-light"
+              data-cc-banner-state="upcoming"
+              data-cc-banner-time
+            >
+              {localTime}
+            </span>
           </span>
-          <span class="cc-title hidden min-w-0 truncate text-[15px] font-bold sm:block">
-            {call.title}
-          </span>
-          <span
-            class="invisible whitespace-nowrap text-[15px] font-bold sm:font-normal sm:text-first-light"
-            data-cc-banner-state="upcoming"
-            data-cc-banner-time
-          >
-            {localTime}
+          <span class="ml-auto inline-flex min-h-[32px] flex-shrink-0 items-center whitespace-nowrap rounded-pill bg-white px-4 text-[13px] font-bold text-grove-deep transition-colors group-hover:bg-first-light motion-reduce:transition-none">
+            <span data-cc-banner-cta="join">Join the call</span>
+            <span data-cc-banner-cta="far">Add to calendar</span>
           </span>
         </span>
-        <span class="ml-auto inline-flex min-h-[32px] flex-shrink-0 items-center whitespace-nowrap rounded-pill bg-white px-4 text-[13px] font-bold text-grove-deep transition-colors group-hover:bg-first-light motion-reduce:transition-none">
-          <span data-cc-banner-cta="join">Join the call</span>
-          <span data-cc-banner-cta="far">Add to calendar</span>
-        </span>
-      </span>
-    </a>
+      </a>
+    </div>
   )
 }
 
@@ -121,6 +124,19 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
 </script>
 
 <style>
+  @media (prefers-reduced-motion: no-preference) {
+    .cc-strip {
+      animation: cc-strip-slide 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms backwards;
+    }
+  }
+  @keyframes cc-strip-slide {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
   .cc-banner[hidden] {
     display: none;
   }
