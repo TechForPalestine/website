@@ -12,6 +12,7 @@ import { jsonError, jsonResponse } from "../../utils/apiResponse";
 import { redactEmail, subscribeMember } from "../../utils/emailOctopus";
 import { MEMBERSHIP_FORMS, verifyQgivTransaction } from "../../utils/qgivVerify";
 import { claimTransaction } from "../../utils/transactionReplay";
+import { parseTargetRoleId } from "../../utils/targetRole";
 
 export const prerender = false;
 
@@ -36,9 +37,10 @@ export const POST: APIRoute = withOriginGuard(
       return fail(400, "Invalid request body");
     }
 
-    // `transactionId` is the only thing read from the caller. Email, names and
-    // tier all come from Qgiv, so a forged request cannot name a victim's
-    // address or upgrade itself to the paid tier.
+    // Email, names and tier all come from Qgiv, never the caller, so a forged
+    // request cannot name a victim's address or upgrade itself to the paid
+    // tier. The caller supplies only `transactionId` and the optional
+    // `targetRoleId` hint.
     const verified = await verifyQgivTransaction(body.transactionId, ALLOWED_FORM_IDS, locals);
 
     if (!verified.ok) {
@@ -58,6 +60,10 @@ export const POST: APIRoute = withOriginGuard(
     }
 
     const { id, formId, email, firstName, lastName } = verified.transaction;
+    // The open role picked on /volunteer, if any. Unlike the fields above it is
+    // only a hint, so the caller may supply it: the Hub ignores an unknown,
+    // closed or non-volunteer role and creates the invite regardless.
+    const targetRoleId = parseTargetRoleId(body.targetRoleId);
     const tier = MEMBERSHIP_FORMS[formId];
     const redacted = redactEmail(email);
 
@@ -75,7 +81,11 @@ export const POST: APIRoute = withOriginGuard(
           ? fetch(`${hubApiUrl}/api/auth/invite`, {
               method: "POST",
               headers: { "Content-Type": "application/json", Authorization: `Bearer ${hubApiKey}` },
-              body: JSON.stringify({ email, type: "paid" }),
+              body: JSON.stringify({
+                email,
+                type: "paid",
+                ...(targetRoleId && { targetRoleId }),
+              }),
             })
               .then(async (res) => {
                 if (!res.ok) {

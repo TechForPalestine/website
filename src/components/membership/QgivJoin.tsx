@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { navExperimentProps } from "../../utils/navLabelExperiment";
+import { clearTargetRole, currentTargetRole, tabStorage } from "../../utils/targetRole";
 import {
   QGIV_EMBED_SCRIPT,
   QGIV_FORMS,
@@ -195,8 +196,8 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
       }
 
       // The server verifies this id against Qgiv and reads the contact details
-      // from Qgiv's own record, so nothing else needs to be sent — and nothing
-      // else would be trusted if it were.
+      // from Qgiv's own record. The only other field is the open role picked on
+      // /volunteer, which the server forwards to the Hub invite as a hint.
       const transactionId = transaction.id ?? window.QGIV?.transaction?.id ?? "";
       if (!transactionId) {
         if (typeof window.plausible !== "undefined") {
@@ -205,11 +206,18 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
         return;
       }
 
+      const storage = tabStorage();
+      const targetRoleId = currentTargetRole(window.location.search, storage);
       fetch("/api/membership-complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ transactionId }),
-      }).catch(() => {});
+        body: JSON.stringify({ transactionId, ...(targetRoleId && { targetRoleId }) }),
+      })
+        .then((response) => {
+          // Sent with this membership; don't attach it to a later one in the tab.
+          if (response.ok && targetRoleId) clearTargetRole(storage);
+        })
+        .catch(() => {});
     }
 
     document.addEventListener("QGIV.donationComplete", handleDonationComplete);
