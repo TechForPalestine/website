@@ -63,7 +63,7 @@ export function getTestimonials(): Testimonial[] {
     },
     {
       quote:
-        "T4P gave me a meaningful way to support the Palestinian cause and liberation. It is inspiring to connect with T4P's deeply committed people and volunteers, all united in driving positive change, through the high-impact projects we support.",
+        "T4P gave me a meaningful way to support the Palestinian cause and liberation. It is inspiring to connect with T4P's deeply committed people and volunteers, all united in driving positive change.",
       name: "Cecile",
       role: "Member, Tech for Palestine",
       kind: "member",
