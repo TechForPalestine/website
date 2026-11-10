@@ -9,6 +9,9 @@ export const securityHeaders = defineMiddleware(async (_context, next) => {
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  // One year, apex only: subdomains (hub., projecthub., data., …) are separate
+  // deployments, so includeSubDomains would need each one confirmed HTTPS-only.
+  response.headers.set("Strict-Transport-Security", "max-age=31536000");
 
   return response;
 });

@@ -1,5 +1,18 @@
 ---
 import ProjectsPage from "../components/projects/ProjectsPage.astro";
+import { fetchProjectsData } from "../store/projectsClient";
+import type { ProjectItem } from "../types/projects";
+import { reportAndFlush } from "../lib/report-error";
+
+// Server-fetched (cached in projectsClient) only for the crawlable project list
+// and ItemList schema; the island still loads its own data client-side.
+let projects: ProjectItem[] = [];
+try {
+  ({ projects } = await fetchProjectsData(Astro.locals));
+} catch (error) {
+  // The island loads its own data, so the page still works; just report it.
+  reportAndFlush(error, { context: "projects page: fetchProjectsData" }, Astro.locals);
+}
 ---
 
-<ProjectsPage meta={null} />
+<ProjectsPage meta={null} projects={projects} />

@@ -1,6 +1,14 @@
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import MembershipCalculator from "./MembershipCalculator";
 import QgivJoin from "./QgivJoin";
+import { rememberTargetRole, tabStorage } from "../../utils/targetRole";
 import { validateAboutYou, type AboutYouData } from "./aboutYou";
 import {
   aboutYouHelper,
@@ -111,7 +119,14 @@ interface AboutYouFormProps {
   onContinue: (data: AboutYouData) => void;
 }
 
-function AboutYouForm({ heading, helper, initialValues, submitting, styles, onContinue }: AboutYouFormProps) {
+function AboutYouForm({
+  heading,
+  helper,
+  initialValues,
+  submitting,
+  styles,
+  onContinue,
+}: AboutYouFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [nameError, setNameError] = useState("");
@@ -137,7 +152,7 @@ function AboutYouForm({ heading, helper, initialValues, submitting, styles, onCo
     const trimmedEmail = email.trim();
     const { nameError: nextNameError, emailError: nextEmailError } = validateAboutYou(
       trimmedName,
-      trimmedEmail,
+      trimmedEmail
     );
     setNameError(nextNameError);
     setEmailError(nextEmailError);
@@ -197,7 +212,12 @@ function AboutYouForm({ heading, helper, initialValues, submitting, styles, onCo
       </button>
 
       <p className={`mt-3.5 ${styles.helper}`}>{helper}</p>
-      <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className={`mt-3 inline-block ${styles.link}`}>
+      <a
+        href={CALENDLY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`mt-3 inline-block ${styles.link}`}
+      >
         Book an intro call →
       </a>
     </form>
@@ -227,7 +247,15 @@ function openWaiverCard(event: MouseEvent<HTMLAnchorElement>) {
   card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-function TierCard({ tier, title, description, benefits, selected, styles, onSelect }: TierCardProps) {
+function TierCard({
+  tier,
+  title,
+  description,
+  benefits,
+  selected,
+  styles,
+  onSelect,
+}: TierCardProps) {
   return (
     <button
       type="button"
@@ -271,15 +299,19 @@ function TierCard({ tier, title, description, benefits, selected, styles, onSele
       </ul>
       {tier === "member" && (
         <p className={`mt-3 ${styles.tierNote}`}>
-          Note: Our member community is fully vetted. To keep everyone safe and make sure we
-          share the same values, we do an identity and alignment check during onboarding.
+          Note: Our member community is fully vetted. To keep everyone safe and make sure we share
+          the same values, we do an identity and alignment check during onboarding.
         </p>
       )}
     </button>
   );
 }
 
-export default function JoinFlow({ designSystem = false, fixedTier, hideCalculator }: JoinFlowProps) {
+export default function JoinFlow({
+  designSystem = false,
+  fixedTier,
+  hideCalculator,
+}: JoinFlowProps) {
   const styles = getStyles(designSystem);
   const steps = fixedTier ? STEPS.filter((s) => s.id !== "tier") : STEPS;
   const [step, setStep] = useState<StepId>("about-you");
@@ -287,6 +319,13 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
   const [tier, setTier] = useState<MembershipTier | null>(fixedTier ?? null);
   const [mountedTiers, setMountedTiers] = useState<MembershipTier[]>(fixedTier ? [fixedTier] : []);
   const [advancing, setAdvancing] = useState(false);
+
+  // A role card on /volunteer links here with ?role=<id>. Remember it for the
+  // tab so it still reaches the Hub invite if the visitor browses away and
+  // comes back to /membership without the parameter (see utils/targetRole.ts).
+  useEffect(() => {
+    rememberTargetRole(window.location.search, tabStorage());
+  }, []);
 
   const stepIndex = steps.findIndex((s) => s.id === step);
 
@@ -332,7 +371,11 @@ export default function JoinFlow({ designSystem = false, fixedTier, hideCalculat
 
       {!fixedTier && step === "tier" && (
         <div>
-          <button type="button" onClick={() => setStep("about-you")} className={`mb-4 ${styles.backLink}`}>
+          <button
+            type="button"
+            onClick={() => setStep("about-you")}
+            className={`mb-4 ${styles.backLink}`}
+          >
             &larr; Back
           </button>
           <p className={`mb-4 ${styles.tierIntro}`}>

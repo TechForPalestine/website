@@ -3,6 +3,7 @@
 // bias. Past months live under /monthly-challenge/<month>-<year> and are listed
 // in "Previous challenges" at the foot of this page.
 import Layout from "../../layouts/Layout.astro";
+import { truncateDescription } from "../../utils/seo";
 import TerminalCta from "../../components/TerminalCta.astro";
 import ChallengeProjectCard from "../../components/challenge/ChallengeProjectCard.astro";
 import CorrectedHeadline from "../../components/challenge/CorrectedHeadline.astro";
@@ -66,7 +67,9 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
 
 <Layout
   title={`Incubator Challenge ${challenge.month} - Tech for Palestine`}
-  description={`${challenge.question} Apply to the Tech for Palestine Incubator challenge for ${challenge.month}.`}
+  description={truncateDescription(
+    `${challenge.question} Apply to the Tech for Palestine Incubator challenge for ${challenge.month}.`
+  )}
 >
   <main>
     <!-- Hero, drenched in Grove Green: the question carries the page, the

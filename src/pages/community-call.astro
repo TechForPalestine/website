@@ -6,9 +6,11 @@ import TerminalCta from "../components/TerminalCta.astro";
 import "../styles/base.css";
 import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import RichTextRenderer from "../components/shared/RichTextRenderer";
+import { youtubeThumbnailSources } from "../utils/youtubeThumbnail";
 import { featuredCall, callState } from "../utils/communityCall";
 import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";
+import { onlineEventSchema, truncateDescription } from "../utils/seo";
 import {
   container,
   display,
@@ -38,6 +40,20 @@ const initialState = call ? callState(call, now) : null;
 
 Astro.response.headers.set("Cache-Control", "private, max-age=300");
 
+// A call that has ended is shown for a week as a recap; it is no longer a
+// scheduled event.
+const eventSchema =
+  call && initialState !== "ended"
+    ? onlineEventSchema({
+        name: `Tech for Palestine ${call.title}`,
+        description: call.description,
+        startIso: call.startUtcIso,
+        durationMinutes: 60,
+        pageUrl: "https://techforpalestine.org/community-call",
+        streamUrl: call.youtubeUrl,
+      })
+    : null;
+
 function googleCalendarUrl(c: CommunityCall): string {
   const start = new Date(c.startUtcIso);
   const end = new Date(start.getTime() + 60 * 60 * 1000);
@@ -62,13 +78,22 @@ const agenda = [
 ];
 
 const panel = "min-w-0 rounded-lg bg-stone p-6 min-[810px]:p-8";
+
+// The stream/recording's own YouTube cover heads the panel: the custom
+// thumbnail carries the call's title and speakers' faces, which the text
+// alone does not. It bleeds to the panel's top edges so it reads as the head
+// of the panel. Mouse users can click it; keyboard and screen reader users get
+// the same destination from the labelled "Watch" button, so the image link is
+// kept out of the tab order and the accessibility tree.
+const cover = call?.youtubeUrl ? youtubeThumbnailSources(call.youtubeUrl) : null;
 const secondaryLink = `${inlineLink} text-[15px]`;
 ---
 
 <Layout
   title={call ? `${call.title} | Tech for Palestine` : "Community Call | Tech for Palestine"}
+  schema={eventSchema ? [eventSchema] : []}
   description={call
-    ? call.description || "Join the next Tech for Palestine community call."
+    ? truncateDescription(call.description || "Join the next Tech for Palestine community call.")
     : "The Tech for Palestine community call: a recurring open call for the coalition."}
 >
   <main>
@@ -123,6 +148,31 @@ const secondaryLink = `${inlineLink} text-[15px]`;
             </div>
 
             <div class={panel}>
+              {cover && (
+                <a
+                  href={call.youtubeUrl}
+                  class="cc-cover group relative -mx-6 -mt-6 mb-6 block overflow-hidden rounded-t-lg bg-ink-divider min-[810px]:-mx-8 min-[810px]:-mt-8"
+                  tabindex="-1"
+                  aria-hidden="true"
+                >
+                  <img
+                    src={cover.primary}
+                    data-fallback={cover.fallback}
+                    alt=""
+                    width="1280"
+                    height="720"
+                    decoding="async"
+                    class="block aspect-video w-full object-cover"
+                  />
+                  <span class="absolute inset-0 flex items-center justify-center">
+                    <span class="flex h-14 w-14 items-center justify-center rounded-pill bg-paper text-ink shadow-sm transition-colors duration-150 group-hover:bg-grove group-hover:text-paper motion-reduce:transition-none">
+                      <svg viewBox="0 0 24 24" class="ml-0.5 h-6 w-6" fill="currentColor">
+                        <path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z" />
+                      </svg>
+                    </span>
+                  </span>
+                </a>
+              )}
               <p class="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-grove-deep">
                 <span
                   class="cc-live-dot hidden h-2 w-2 rounded-full bg-grove motion-safe:animate-pulse"
@@ -243,6 +293,7 @@ const secondaryLink = `${inlineLink} text-[15px]`;
 
   <script>
     import { formatLongCallTime } from "../utils/formatCallTime";
+    import { isPlaceholderThumbnail } from "../utils/youtubeThumbnail";
 
     const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;
 
@@ -266,6 +317,24 @@ const secondaryLink = `${inlineLink} text-[15px]`;
         datetimeEl.textContent = formatLongCallTime(startIso, new Date());
         datetimeEl.classList.remove("invisible");
       }
+    }
+
+    // YouTube answers a missing HD cover with a 120x90 grey placeholder and a
+    // 200, not a 404, so the swap to hqdefault (which always exists) is decided
+    // on load by size. The image may have loaded before this script ran.
+    const coverImg = document.querySelector<HTMLImageElement>(".cc-cover img");
+    const fallbackSrc = coverImg?.dataset.fallback;
+    if (coverImg && fallbackSrc) {
+      const swapPlaceholderCover = () => {
+        if (isPlaceholderThumbnail(coverImg) && coverImg.src !== fallbackSrc) {
+          coverImg.src = fallbackSrc;
+        }
+      };
+      if (coverImg.complete) swapPlaceholderCover();
+      else coverImg.addEventListener("load", swapPlaceholderCover);
+      coverImg.addEventListener("error", () => coverImg.closest(".cc-cover")?.remove(), {
+        once: true,
+      });
     }
   </script>
 

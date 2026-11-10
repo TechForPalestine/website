@@ -114,4 +114,51 @@ describe("POST /api/membership-complete", () => {
       .mock.calls.map(([, init]) => String((init as RequestInit).body));
     expect(bodies.join(" ")).toContain("Supporting Member");
   });
+
+  describe("targetRoleId", () => {
+    function verifiedMember(id: string) {
+      vi.mocked(verifyQgivTransaction).mockResolvedValue({
+        ok: true,
+        transaction: {
+          id,
+          formId: "1116610",
+          email: "member@example.org",
+          firstName: "Ada",
+          lastName: "Lovelace",
+          amount: "25.00",
+          optedIn: true,
+        },
+      });
+    }
+
+    function inviteBody(): Record<string, unknown> {
+      const inviteCall = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => String(url).includes("/api/auth/invite"));
+      expect(inviteCall).toBeDefined();
+      return JSON.parse(String((inviteCall![1] as RequestInit).body));
+    }
+
+    it("passes the role picked on /volunteer to the Hub invite", async () => {
+      verifiedMember("555010");
+      await call({ transactionId: "555010", targetRoleId: "cm3x9k2ab0001" });
+      expect(inviteBody()).toEqual({
+        email: "member@example.org",
+        type: "paid",
+        targetRoleId: "cm3x9k2ab0001",
+      });
+    });
+
+    it("leaves the field out when no role was picked", async () => {
+      verifiedMember("555011");
+      await call({ transactionId: "555011" });
+      expect(inviteBody()).not.toHaveProperty("targetRoleId");
+    });
+
+    it("drops a malformed role id but still sends the invite", async () => {
+      verifiedMember("555012");
+      await call({ transactionId: "555012", targetRoleId: "<script>alert(1)</script>" });
+      expect(inviteBody()).toEqual({ email: "member@example.org", type: "paid" });
+    });
+  });
 });

@@ -11,9 +11,11 @@ import sentry from "@sentry/astro";
 // server/client instrumentation and a Vite plugin for no benefit.
 const isDev = process.argv.includes("dev");
 
+const SITE = "https://techforpalestine.org";
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://techforpalestine.org",
+  site: SITE,
   output: "server",
   prefetch: {
     defaultStrategy: "hover",
@@ -152,9 +154,18 @@ export default defineConfig({
           "/endorsements-new/",
           "/e4p/pledge-new/",
           "/newsletter-embed/",
+          // noindex: finished campaigns and archived challenges.
+          "/ramadan/",
+          "/monthly-challenge/october-2026/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },
+      // Canonical tags never use a trailing slash (src/utils/seo.ts), so the
+      // sitemap must not either, or every URL sends Google two signals.
+      serialize: (item) => ({
+        ...item,
+        url: item.url.length > SITE.length + 1 ? item.url.replace(/\/$/, "") : item.url,
+      }),
     }),
   ],
 });

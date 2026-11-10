@@ -1,6 +1,7 @@
 import React, { useId, useMemo, useState } from "react";
 import { parseDescriptionHtml, type DescriptionNode, type DescriptionTag } from "./descriptionHtml";
-import { MEMBERSHIP_URL, type OpenRole } from "./openRoleData";
+import type { OpenRole } from "./openRoleData";
+import { membershipUrlForRole } from "../../utils/targetRole";
 import type { SkinTokens } from "./openRoleSkins";
 
 /** Descriptions shorter than this read fine in full, so they get no toggle. */
@@ -117,7 +118,11 @@ export default function OpenRoleCard({ role, tokens }: OpenRoleCardProps) {
           <h3 className={`${tokens.title} break-words`}>{role.title}</h3>
         </div>
 
-        <a href={MEMBERSHIP_URL} className={`${tokens.applyTeam} ${tokens.focus} shrink-0`}>
+        {/* Carries the role id so the Hub invite can record which role they picked. */}
+        <a
+          href={membershipUrlForRole(role.id)}
+          className={`${tokens.applyTeam} ${tokens.focus} shrink-0`}
+        >
           Become a member
           <span className="sr-only"> to apply as {role.title}</span>
         </a>
