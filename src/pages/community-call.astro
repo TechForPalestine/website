@@ -9,6 +9,7 @@ import RichTextRenderer from "../components/shared/RichTextRenderer";
 import { featuredCall, callState } from "../utils/communityCall";
 import { formatLongCallTime } from "../utils/formatCallTime";
 import { reportError } from "../lib/report-error";
+import { onlineEventSchema, truncateDescription } from "../utils/seo";
 import {
   container,
   display,
@@ -37,6 +38,20 @@ const call = featuredCall(calls, now);
 const initialState = call ? callState(call, now) : null;
 
 Astro.response.headers.set("Cache-Control", "private, max-age=300");
+
+// A call that has ended is shown for a week as a recap; it is no longer a
+// scheduled event.
+const eventSchema =
+  call && initialState !== "ended"
+    ? onlineEventSchema({
+        name: `Tech for Palestine ${call.title}`,
+        description: call.description,
+        startIso: call.startUtcIso,
+        durationMinutes: 60,
+        pageUrl: "https://techforpalestine.org/community-call",
+        streamUrl: call.youtubeUrl,
+      })
+    : null;
 
 function googleCalendarUrl(c: CommunityCall): string {
   const start = new Date(c.startUtcIso);
@@ -67,8 +82,9 @@ const secondaryLink = `${inlineLink} text-[15px]`;
 
 <Layout
   title={call ? `${call.title} | Tech for Palestine` : "Community Call | Tech for Palestine"}
+  schema={eventSchema ? [eventSchema] : []}
   description={call
-    ? call.description || "Join the next Tech for Palestine community call."
+    ? truncateDescription(call.description || "Join the next Tech for Palestine community call.")
     : "The Tech for Palestine community call: a recurring open call for the coalition."}
 >
   <main>

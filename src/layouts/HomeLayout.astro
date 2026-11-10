@@ -1,6 +1,7 @@
 ---
 import FooterSection from "../components/home/FooterSection.astro";
 import { getEnv } from "../utils/getEnv";
+import { canonicalUrl as toCanonicalUrl, organizationSchema, serializeJsonLd } from "../utils/seo";
 import "@fontsource/fraunces/latin-400.css";
 import "@fontsource/outfit/latin-400.css";
 import "@fontsource/outfit/latin-500.css";
@@ -40,47 +41,10 @@ const {
 
 const membershipLive = getEnv("MEMBERSHIP_LIVE", Astro.locals) === "true";
 
-// Site-wide internal links never use a trailing slash, so the canonical tag
-// shouldn't either — otherwise /page and /page/ resolve to the same content
-// with two different self-referential canonicals.
-const normalizedPathname =
-  Astro.url.pathname.length > 1 && Astro.url.pathname.endsWith("/")
-    ? Astro.url.pathname.slice(0, -1)
-    : Astro.url.pathname;
+// /page and /page/ both resolve, so both must name the same no-slash canonical.
+const canonicalUrl = canonicalUrlOverride || toCanonicalUrl(Astro.url.pathname, Astro.site);
 
-const canonicalUrl =
-  canonicalUrlOverride ||
-  new URL(normalizedPathname, Astro.site || "https://techforpalestine.org").toString();
-
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "NonprofitOrganization",
-  "@id": "https://techforpalestine.org/#organization",
-  ...organizationSchemaExtra,
-  name: "Tech for Palestine",
-  url: "https://techforpalestine.org",
-  logo: "https://techforpalestine.org/t4p-social-logo.png",
-  taxID: "99-3441367",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "548 Market St #266950",
-    addressLocality: "San Francisco",
-    addressRegion: "CA",
-    postalCode: "94104-5401",
-    addressCountry: "US",
-  },
-  sameAs: [
-    "https://www.instagram.com/techforpalestine",
-    "https://twitter.com/tech4palestine",
-    "https://github.com/TechForPalestine/",
-    "https://www.linkedin.com/company/techforpalestine/",
-    "https://infosec.exchange/@tech4palestine",
-    "https://www.youtube.com/@tech4palestine",
-    "https://techforpalestine.org/discord-invite",
-    "https://www.tiktok.com/@techforpalestine",
-    "https://bsky.app/profile/techforpalestine.org",
-  ],
-};
+const organizationJsonLd = serializeJsonLd(organizationSchema(organizationSchemaExtra));
 ---
 
 <!doctype html>
@@ -177,7 +141,7 @@ const organizationSchema = {
     <meta property="twitter:description" name="twitter:description" content={description} />
     <meta property="twitter:image" name="twitter:image" content={image} />
     <meta property="twitter:creator" name="twitter:creator" content="@tech4palestine" />
-    <script type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" is:inline set:html={organizationJsonLd} />
 
     <slot name="head" />
 

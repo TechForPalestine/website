@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { websiteSchema } from "../utils/seo";
 import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
@@ -158,8 +159,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 ---
 
 <Layout
-  title="Tech For Palestine"
-  description="A coalition of thousands of founders, engineers, product marketers, investors and other professionals working in support of Palestinian liberation. The T4P Incubator helps pro-Palestine advocates build, grow, and scale their work towards a Free Palestine."
+  title="Tech for Palestine: Tech Nonprofit and Incubator for Palestine"
+  description="A 501(c)(3) coalition of founders, engineers and tech workers behind 100+ projects for Palestine. Become a member or build with the T4P Incubator."
+  schema={[websiteSchema()]}
   image="https://techforpalestine.org/happy-kids.jpg"
 >
   <main class="relative">
@@ -206,7 +208,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
 
       <figure class="relative h-[min(26rem,45vh)] bg-stone lg:h-auto lg:self-stretch">
         <img
-          src="/happy-kids.jpg"
+          src="/happy-kids-1600.webp"
+          srcset="/happy-kids-800.webp 800w, /happy-kids-1600.webp 1600w"
+          sizes="(min-width: 1024px) 50vw, 100vw"
           class="h-full w-full object-cover lg:absolute lg:inset-0"
           alt="Children in Gaza smiling for the camera"
           width="1600"

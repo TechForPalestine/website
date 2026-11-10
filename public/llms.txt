@@ -13,7 +13,6 @@ Tech for Palestine's mission is to harness technology and human innovation for a
 - [Ideas](https://techforpalestine.org/ideas): Project ideas available for advocates to pick up and lead.
 - [Membership](https://techforpalestine.org/membership): Paid membership program — suggested dues, fee waivers, and benefits.
 - [Volunteer](https://techforpalestine.org/volunteer): How to volunteer skills and time to Incubator projects.
-- [Mentorship](https://techforpalestine.org/mentorship): How to become a mentor for Incubator projects.
 - [Get Involved](https://techforpalestine.org/get-involved): Overview of every way to contribute — volunteering, mentoring, membership, and building.
 - [Events](https://techforpalestine.org/events): Community webinars, workshops, and in-person gatherings.
 - [FAQ](https://techforpalestine.org/faq): Answers to common questions about T4P's mission and programs.

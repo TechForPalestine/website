@@ -2,6 +2,7 @@
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 import CspStylePatch from "../components/CspStylePatch.astro";
+import { canonicalUrl as toCanonicalUrl, organizationSchema, serializeJsonLd } from "../utils/seo";
 // Outfit 400/500/600/700/800 — matches the weights used across the site's
 // font-normal/medium/semibold/bold/extrabold classes. Without the actual
 // weight files, the browser synthesizes ("faux") bold from whichever weight
@@ -22,6 +23,9 @@ interface Props {
   twitterCard?: "summary" | "summary_large_image";
   noindex?: boolean;
   hideDonatePopout?: boolean;
+  /** Page-specific JSON-LD nodes (FAQPage, ItemList, Event, …), emitted after
+   * the sitewide NonprofitOrganization node. */
+  schema?: Record<string, unknown>[];
 }
 
 const {
@@ -32,12 +36,12 @@ const {
   twitterCard = "summary_large_image",
   noindex = false,
   hideDonatePopout = false,
+  schema = [],
 } = Astro.props;
 
-const canonicalUrl = new URL(
-  Astro.url.pathname,
-  Astro.site || "https://techforpalestine.org"
-).toString();
+// /page and /page/ both resolve, so both must name the same no-slash canonical.
+const canonicalUrl = toCanonicalUrl(Astro.url.pathname, Astro.site);
+const structuredData = [organizationSchema(), ...schema];
 ---
 
 <!doctype html>
@@ -73,6 +77,12 @@ const canonicalUrl = new URL(
     {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
     <meta name="twitter:creator" content="@tech4palestine" />
 
+    {
+      structuredData.map((node) => (
+        <script type="application/ld+json" is:inline set:html={serializeJsonLd(node)} />
+      ))
+    }
+
     <slot name="head" />
 
     <!-- Privacy-friendly analytics -->
@@ -103,14 +113,9 @@ const canonicalUrl = new URL(
       !hideDonatePopout && (
         <a
           href="/donate"
-          class="donate-link fixed right-0 top-1/2 z-50 -mt-6 hidden items-center gap-3 rounded-l-pill bg-grove py-3.5 pl-3.5 pr-4 text-[15px] font-bold text-white shadow-sm ring-2 ring-white translate-x-[calc(100%-2.5rem)] transition duration-200 ease-out hover:translate-x-0 hover:bg-grove-hover focus-visible:translate-x-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-grove motion-safe:animate-donateIn md:flex"
+          class="donate-link fixed right-0 top-1/2 z-50 -mt-6 hidden translate-x-[calc(100%-2.5rem)] items-center gap-3 rounded-l-pill bg-grove py-3.5 pl-3.5 pr-4 text-[15px] font-bold text-white shadow-sm ring-2 ring-white transition duration-200 ease-out hover:translate-x-0 hover:bg-grove-hover focus-visible:translate-x-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-grove motion-safe:animate-donateIn md:flex"
         >
-          <svg
-            class="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
           Donate

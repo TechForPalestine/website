@@ -38,6 +38,7 @@ describe("middleware chain", () => {
     const { res } = await run("/");
     expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff");
     expect(res.headers.get("Referrer-Policy")).toBe("strict-origin-when-cross-origin");
+    expect(res.headers.get("Strict-Transport-Security")).toBe("max-age=31536000");
   });
 
   it.each(["/api/events", "/admin", "/admin/conversions"])("forces no-store on %s", async (p) => {

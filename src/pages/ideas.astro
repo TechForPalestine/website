@@ -66,7 +66,7 @@ const targets = [
 
 <Layout
   title="Project Ideas - Tech for Palestine"
-  description="Browse and lead project ideas that support Palestinian freedom. Tech for Palestine builds bold projects to support Palestinian advocacy and counter pro-Israel propaganda. Explore new ideas, existing projects, and initiatives that have already started."
+  description="Project ideas for Palestine that need a leader. Browse new and in-progress ideas from Tech for Palestine, then apply to build one with the T4P Incubator."
 >
   <main>
     <!-- Hero -->
@@ -98,30 +98,8 @@ const targets = [
             existingIdeas={existingIdeas}
             startedIdeas={startedIdeas}
             loadFailed={loadFailed}
-            client:only="react"
-          >
-            <div slot="fallback" role="status" aria-live="polite">
-              <span class="sr-only">Loading ideas</span>
-              <div aria-hidden="true" class="flex flex-wrap gap-2">
-                <div class="h-11 w-48 rounded-pill bg-stone"></div>
-                <div class="h-11 w-64 rounded-pill bg-stone"></div>
-                <div class="h-11 w-40 rounded-pill bg-stone"></div>
-              </div>
-              <ul
-                aria-hidden="true"
-                class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-              >
-                {
-                  ["w-3/5", "w-4/5", "w-1/2"].map((width) => (
-                    <li class="min-h-[180px] rounded-lg border border-ink-divider p-6">
-                      <div class={`h-5 rounded-sm bg-stone ${width}`} />
-                      <div class="mt-4 h-4 w-full rounded-sm bg-stone" />
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </IdeasWithTabs>
+            client:load
+          />
         </div>
       </div>
     </section>

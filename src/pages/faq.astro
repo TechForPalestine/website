@@ -11,11 +11,35 @@ import {
   ghostOnDarkButton,
 } from "../utils/designClasses";
 import TerminalCta from "../components/TerminalCta.astro";
+import { fetchNotionFAQ, type FaqItem } from "../store/notionClient";
+import { reportAndFlush } from "../lib/report-error";
+import { faqPageSchema } from "../utils/seo";
+
+// Fetched here so the questions and answers are in the server HTML (and the
+// FAQPage schema) rather than only appearing after the island loads. If Notion
+// fails, the island falls back to fetching /api/faq itself.
+// `?showAll=yes` previews hidden entries for editors, as /api/faq already does.
+const showAll = Astro.url.searchParams.get("showAll") === "yes";
+let faqs: FaqItem[] = [];
+try {
+  faqs = await fetchNotionFAQ(showAll, Astro.locals);
+} catch (error) {
+  reportAndFlush(error, { context: "faq page: fetchNotionFAQ" }, Astro.locals);
+}
+
+const plainText = (faq: FaqItem) => faq.answer.map((segment) => segment.plain_text).join("");
+// Draft previews must not publish hidden answers as structured data, and a
+// FAQPage with no questions is invalid.
+const faqSchema = faqPageSchema(
+  faqs.map((faq) => ({ question: faq.question, answer: plainText(faq) }))
+);
+const schema = !showAll && faqSchema.mainEntity.length > 0 ? [faqSchema] : [];
 ---
 
 <Layout
   title="FAQ - Tech for Palestine"
-  description="Frequently asked questions about Tech for Palestine. Learn about our mission, how to get involved, the T4P Incubator, volunteer opportunities, and how we support Palestinian liberation through technology."
+  schema={schema}
+  description="Answers about Tech for Palestine: our mission, the T4P Incubator, membership, volunteering, and how tech workers support Palestinian liberation."
 >
   <main>
     <!-- Hero -->
@@ -48,7 +72,7 @@ import TerminalCta from "../components/TerminalCta.astro";
           </h2>
         </div>
         <div class="min-w-0">
-          <FAQList faqs={[]} client:only="react" />
+          <FAQList faqs={faqs} client:load />
         </div>
       </div>
     </section>

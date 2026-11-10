@@ -3,6 +3,7 @@
 // promo (the event was Oct 31). Listed under "Previous challenges" on
 // /monthly-challenge.
 import Layout from "../../layouts/Layout.astro";
+import { truncateDescription } from "../../utils/seo";
 import ChallengeQuestion from "../../components/challenge/OctoberQuestion.astro";
 import { APPLY_URL } from "../../data/incubator";
 import {
@@ -49,7 +50,10 @@ try {
 
 <Layout
   title={`Incubator Challenge ${challenge.month} (archived) - Tech for Palestine`}
-  description={`${challenge.question} Apply to the Tech for Palestine Incubator challenge for ${challenge.month}.`}
+  description={truncateDescription(
+    `Archived Tech for Palestine Incubator challenge for ${challenge.month}: ${challenge.question}`
+  )}
+  noindex
 >
   <main>
     <!-- Archive notice: this month is closed; point at the live challenge -->

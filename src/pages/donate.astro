@@ -7,7 +7,11 @@ const country = Astro.request.headers.get("cf-ipcountry") || "UNKNOWN";
 const isUK = country === "GB";
 ---
 
-<Layout title="Donate" hideDonatePopout>
+<Layout
+  title="Donate to Tech for Palestine"
+  description="Make a tax-deductible donation to Tech for Palestine, a 501(c)(3) nonprofit funding tech projects for Palestinian liberation. Stock and crypto accepted."
+  hideDonatePopout
+>
   <div class="relative bg-gradient-to-b from-green-50 via-white to-blue-50">
     <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <!-- Hero -->
@@ -311,7 +315,8 @@ const isUK = country === "GB";
 
         // Opt-in is re-checked server-side against Qgiv's record; the client
         // check here only avoids a pointless request.
-        var transactionId = transaction.id || (window.QGIV && window.QGIV.transaction && window.QGIV.transaction.id);
+        var transactionId =
+          transaction.id || (window.QGIV && window.QGIV.transaction && window.QGIV.transaction.id);
         if (!transactionId) {
           if (typeof window.plausible !== "undefined") {
             window.plausible("Donation-complete-no-id");

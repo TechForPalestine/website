@@ -4,6 +4,14 @@ import ProjectsNewComponent from "./ProjectsDirectoryPage.tsx";
 import PageHeader from "../PageHeader.astro";
 import "../../styles/base.css";
 import type { ProjectMeta } from "../../utils/projectMeta";
+import type { ProjectItem } from "../../types/projects";
+import { projectPath } from "../../utils/projectSlug";
+import {
+  projectListSchema,
+  projectSchema,
+  projectSummary,
+  toAbsoluteHttpUrl,
+} from "../../utils/seo";
 
 // Shared by /projects and /projects/<slug>. The slug route renders this same
 // page with that project's preview tags; the island opens the matching dialog
@@ -11,9 +19,23 @@ import type { ProjectMeta } from "../../utils/projectMeta";
 // prop has to carry the matched project down to it.
 interface Props {
   meta: ProjectMeta | null;
+  /** Every project, server-fetched; empty when ProjectHub was unreachable. */
+  projects?: ProjectItem[];
+  /** The project a /projects/<slug> URL names, or null on /projects. */
+  project?: ProjectItem | null;
 }
 
-const { meta } = Astro.props;
+const { meta, projects = [], project = null } = Astro.props;
+
+// The directory and dialog are a client-only island, so without these the
+// server HTML holds no project content at all. Crawlers that don't run JS
+// (most AI crawlers) read the <noscript> copy below; everyone gets the schema.
+const schema = project
+  ? projectSchema(project)
+  : projects.length > 0
+    ? [projectListSchema(projects)]
+    : [];
+const projectWebsite = toAbsoluteHttpUrl(project?.websiteUrl);
 
 const APPLY_URL = "https://techforpalestine.org/project-application-form";
 ---
@@ -21,10 +43,11 @@ const APPLY_URL = "https://techforpalestine.org/project-application-form";
 <Layout
   title={meta?.title ?? "Incubator Projects - Tech for Palestine"}
   description={meta?.description ??
-    "Explore the projects in the Tech for Palestine Incubator. We help pro-Palestine advocates build, grow, and scale technical projects that support Palestinian freedom and counter pro-Israel propaganda."}
+    "Explore the projects in the Tech for Palestine Incubator: technology built by pro-Palestine advocates for Palestinian freedom, from boycott apps to media tools."}
   image={meta?.image}
   imageAlt={meta?.imageAlt}
   twitterCard={meta?.twitterCard}
+  schema={schema}
 >
   <main>
     <PageHeader
@@ -62,6 +85,52 @@ const APPLY_URL = "https://techforpalestine.org/project-application-form";
 
     {/* Data is fetched client-side by the island, matching the /events pattern. */}
     <ProjectsNewComponent projects={[]} loading={true} client:only="react" />
+
+    {
+      projects.length > 0 && (
+        <noscript>
+          <div class="mx-auto max-w-[1200px] px-4 pb-12">
+            {project && (
+              <article class="mb-12 max-w-[65ch]">
+                <h2 class="text-[28px] font-extrabold leading-tight text-ink">{project.name}</h2>
+                {project.leadName && (
+                  <p class="mt-2 text-[17px] text-ink-secondary">Led by {project.leadName}</p>
+                )}
+                {projectSummary(project) && (
+                  <p class="mt-4 whitespace-pre-line text-[17px] leading-relaxed text-ink">
+                    {projectSummary(project)}
+                  </p>
+                )}
+                {projectWebsite && (
+                  <p class="mt-4">
+                    <a
+                      href={projectWebsite}
+                      rel="noopener noreferrer"
+                      class="font-bold text-[#157A3E] underline"
+                    >
+                      Visit {project.name}
+                    </a>
+                  </p>
+                )}
+              </article>
+            )}
+            <h2 class="text-[22px] font-extrabold text-ink">All incubator projects</h2>
+            <ul class="mt-4 space-y-3">
+              {projects.map((item) => (
+                <li>
+                  <a href={projectPath(item)} class="font-bold text-[#157A3E] underline">
+                    {item.name}
+                  </a>
+                  {item.elevatorPitch && (
+                    <span class="text-ink-secondary">: {item.elevatorPitch}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </noscript>
+      )
+    }
 
     <div class="mx-auto max-w-[1200px] px-4 pb-16">
       <div

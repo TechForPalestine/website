@@ -6,6 +6,7 @@
 import { fetchProjectsData } from "../../store/projectsClient";
 import { findProjectBySlug, parseProjectId, projectPath } from "../../utils/projectSlug";
 import { projectMetaTags, type ProjectMeta } from "../../utils/projectMeta";
+import type { ProjectItem } from "../../types/projects";
 import ProjectsPage from "../../components/projects/ProjectsPage.astro";
 
 const slug = Astro.params.slug ?? "";
@@ -16,8 +17,10 @@ if (parseProjectId(slug) === null) {
 }
 
 let meta: ProjectMeta | null = null;
+let projects: ProjectItem[] = [];
+let project: ProjectItem | null = null;
 try {
-  const { projects } = await fetchProjectsData(Astro.locals);
+  ({ projects } = await fetchProjectsData(Astro.locals));
   const match = findProjectBySlug(projects, slug);
 
   // Only a real "no such project" redirects.
@@ -33,6 +36,7 @@ try {
   }
 
   meta = projectMetaTags(match);
+  project = match;
 } catch (error) {
   // ProjectHub being unreachable says nothing about whether this project
   // exists, so do not throw the visitor's link away: render the generic page
@@ -45,4 +49,4 @@ try {
 }
 ---
 
-<ProjectsPage meta={meta} />
+<ProjectsPage meta={meta} projects={projects} project={project} />
