@@ -3,7 +3,12 @@ import type { EventItem } from "../../store/eventsClient";
 import { groupIntoSections } from "../../utils/eventSections";
 import { eventPath } from "../../utils/eventSlug";
 import { EventDetailsDialog } from "./EventDetailsDialog";
-import { EventModalContext, type SelectedEvent } from "./EventsShared";
+import {
+  EventModalContext,
+  VisitorZoneContext,
+  useVisitorZoneReady,
+  type SelectedEvent,
+} from "./EventsShared";
 import { hasPastEvents, resolveSelectedEvent } from "./eventsLogic";
 import { PastEventsCategorySection } from "./PastEventsSection";
 import { TS_BODY_LARGE_SIZE, TS_BODY_SIZE } from "./typeScale";
@@ -77,6 +82,10 @@ export default function Events({
   const [loading, setLoading] = useState(initialLoading);
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
   const deepLinkHandled = useRef(false);
+  // Server-rendered (client:load): dates render in the organizer's zone on
+  // the server and first client pass, then switch to the visitor's zone
+  // after mount, so hydration doesn't mismatch. See VisitorZoneContext.
+  const zoneReady = useVisitorZoneReady();
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -112,7 +121,7 @@ export default function Events({
     }
   }, []);
 
-  // This whole component renders client-side only (client:only="react"), so a
+  // When the server fetch failed, the list arrives after a client fetch, so a
   // direct link to a category (e.g. /events#book-club) has nothing in the DOM
   // yet when the browser tries its native hash scroll — scroll to it ourselves
   // once the section is actually rendered.
@@ -158,36 +167,38 @@ export default function Events({
   const sections = groupIntoSections(events);
 
   return (
-    <EventModalContext.Provider value={openEvent}>
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        {loading && events.length === 0 && <LoadingSkeleton />}
+    <VisitorZoneContext.Provider value={zoneReady}>
+      <EventModalContext.Provider value={openEvent}>
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          {loading && events.length === 0 && <LoadingSkeleton />}
 
-        {!loading && events.length === 0 && <EmptyState />}
+          {!loading && events.length === 0 && <EmptyState />}
 
-        {events.length > 0 && (
-          <div>
-            <UpcomingEventsSection events={events} />
+          {events.length > 0 && (
+            <div>
+              <UpcomingEventsSection events={events} />
 
-            {hasPastEvents(sections) && (
-              <section
-                id="past-events"
-                className="mt-14 scroll-mt-24 border-t border-gray-200 pt-14"
-              >
-                <h2 className="text-[15px] font-semibold tracking-[0.02em] text-gray-900">
-                  Past events
-                </h2>
-              </section>
-            )}
+              {hasPastEvents(sections) && (
+                <section
+                  id="past-events"
+                  className="mt-14 scroll-mt-24 border-t border-gray-200 pt-14"
+                >
+                  <h2 className="text-[15px] font-semibold tracking-[0.02em] text-gray-900">
+                    Past events
+                  </h2>
+                </section>
+              )}
 
-            <div className="mt-2 space-y-12">
-              {sections.map((section) => (
-                <PastEventsCategorySection key={section.def.key} section={section} />
-              ))}
+              <div className="mt-2 space-y-12">
+                {sections.map((section) => (
+                  <PastEventsCategorySection key={section.def.key} section={section} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      <EventDetailsDialog selected={selectedEvent} onClose={closeModal} />
-    </EventModalContext.Provider>
+          )}
+        </div>
+        <EventDetailsDialog selected={selectedEvent} onClose={closeModal} />
+      </EventModalContext.Provider>
+    </VisitorZoneContext.Provider>
   );
 }

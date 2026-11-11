@@ -1,5 +1,8 @@
 ---
 import EventsPage from "../components/events/EventsPage.astro";
+import { fetchEvents } from "../store/eventsClient";
+
+const events = await fetchEvents(Astro.locals).catch(() => null);
 ---
 
-<EventsPage meta={null} />
+<EventsPage meta={null} events={events} />
