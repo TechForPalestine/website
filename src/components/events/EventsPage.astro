@@ -3,12 +3,17 @@ import Layout from "../../layouts/Layout.astro";
 import EventsComponent from "./EventsRoot.tsx";
 import "../../styles/base.css";
 import type { EventMeta } from "../../utils/eventMeta";
+import type { EventItem } from "../../types/events";
 
 interface Props {
   meta: EventMeta | null;
+  // Fetched by the route during SSR so the list (and the spotlight image, the
+  // LCP element) is in the initial HTML. null means the server fetch failed;
+  // the island then falls back to fetching /api/events itself.
+  events: EventItem[] | null;
 }
 
-const { meta } = Astro.props;
+const { meta, events } = Astro.props;
 ---
 
 <Layout
@@ -34,5 +39,5 @@ const { meta } = Astro.props;
     </header>
   </div>
 
-  <EventsComponent events={[]} loading={true} client:only="react" />
+  <EventsComponent events={events ?? []} loading={events === null} client:load />
 </Layout>
