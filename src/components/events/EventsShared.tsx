@@ -139,8 +139,9 @@ export function ChevronDown({ size = 18, expanded }: { size?: number; expanded: 
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className="transition-transform duration-200"
-      style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+      // A class, not a style prop: the list is server-rendered, so a style
+      // prop becomes a style="" attribute, which the CSP blocks.
+      className={`transition-transform duration-200 ${expanded ? "rotate-180" : "rotate-0"}`}
     >
       <path d="M6 9l6 6 6-6" />
     </svg>
