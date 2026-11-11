@@ -101,7 +101,8 @@ export default function MembershipCalculator({
       <p className={`mb-2 text-left ${overlineClass}`}>Calculate your suggested dues</p>
       <p className={`mb-5 text-left ${introClass}`}>
         Dues are pay-what-you-want. We suggest dues equal to one hour of income (1/2000th of your
-        annual income) per month.
+        annual income) per month,{" "}
+        <strong className="font-semibold text-ink">which you can calculate below</strong>.
       </p>
 
       {/* Inputs — single row on desktop */}

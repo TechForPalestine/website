@@ -19,6 +19,13 @@ const { designSystem = false } = Astro.props;
 // founders — those are the audience this page is actually recruiting.
 const featuredTestimonials = getTestimonials().filter((t) => t.kind === "member");
 
+// No member has a photo yet, so the generic silhouette is swapped for the T4P mark here.
+// A real headshot added to the testimonial data shows as-is.
+const ANONYMOUS_HEADSHOT = "/images/new-homepage/testimonials/anonymous.svg";
+const T4P_MARK = "/images/membership/t4p-mark.webp";
+const avatarFor = (headshot?: string) =>
+  !headshot || headshot === ANONYMOUS_HEADSHOT ? T4P_MARK : headshot;
+
 const aboutLinks = [
   { href: "#inside", label: "What does it mean to be a T4P member?" },
   { href: "#voices", label: "What do members say about T4P?" },
@@ -275,11 +282,11 @@ const cx = designSystem
               <blockquote class={cx.quote}>“{t.quote}”</blockquote>
               <figcaption class="mt-6 flex items-center gap-3">
                 <img
-                  src={t.headshot}
+                  src={avatarFor(t.headshot)}
                   alt=""
                   width="34"
                   height="34"
-                  class="block h-[34px] w-[34px] rounded-full"
+                  class="block h-[34px] w-[34px] rounded-full border border-ink-divider bg-white"
                 />
                 <span class="block leading-snug">
                   <strong class={`block ${cx.name}`}>{t.name}</strong>
