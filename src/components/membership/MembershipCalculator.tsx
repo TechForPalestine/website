@@ -27,7 +27,10 @@ interface MembershipCalculatorProps {
   designSystem?: boolean;
 }
 
-const THEME_CLASSES: Record<"brand" | "green", { border: string; text: string; ring: string; focusBorder: string }> = {
+const THEME_CLASSES: Record<
+  "brand" | "green",
+  { border: string; text: string; ring: string; focusBorder: string }
+> = {
   brand: {
     border: "border-brand",
     text: "text-brand",
@@ -51,12 +54,16 @@ export default function MembershipCalculator({
   const overlineClass = designSystem
     ? "ts-overline text-ink-secondary"
     : "text-xs font-medium uppercase tracking-[0.12em] text-ink-secondary";
-  const resultLabelClass = designSystem ? "ts-body-small text-ink-secondary" : "text-sm text-ink-secondary";
+  const resultLabelClass = designSystem
+    ? "ts-body-small text-ink-secondary"
+    : "text-sm text-ink-secondary";
   // font-serif (Fraunces) is a design-system-only choice — plain mode uses a
   // bold sans figure instead of pulling in the redesign's editorial font.
   const resultFigureClass = designSystem ? "ts-stat" : "text-3xl font-bold";
   const resultSubClass = designSystem ? "ts-caption text-ink-muted" : "text-sm text-ink-muted";
-  const emptyStateClass = designSystem ? "ts-body-small text-ink-muted" : "text-sm text-ink-muted";
+  const introClass = designSystem
+    ? "ts-body-small text-ink-secondary"
+    : "text-sm text-ink-secondary";
   // `bg-page`/`bg-sand`/`border-butter`/`rounded-[20px]` are the design
   // system's own surface tokens and corner radius — correct on
   // /membership-new, but they read as the redesign bleeding into the legacy
@@ -91,7 +98,12 @@ export default function MembershipCalculator({
   return (
     <div className={`mb-8 ${shellRadius} border-2 ${accent.border} ${shellBg} p-6 min-[810px]:p-8`}>
       {/* Header */}
-      <p className={`mb-5 text-left ${overlineClass}`}>Calculate your suggested dues</p>
+      <p className={`mb-2 text-left ${overlineClass}`}>Calculate your suggested dues</p>
+      <p className={`mb-5 text-left ${introClass}`}>
+        Dues are pay-what-you-want. We suggest dues equal to one hour of income (1/2000th of your
+        annual income) per month,{" "}
+        <strong className="font-semibold text-ink">which you can calculate below</strong>.
+      </p>
 
       {/* Inputs — single row on desktop */}
       <div className="flex flex-col gap-3 min-[640px]:flex-row min-[640px]:items-end">
@@ -178,7 +190,7 @@ export default function MembershipCalculator({
       </div>
 
       {/* Results */}
-      {hasValidIncome ? (
+      {hasValidIncome && (
         <div className="mt-5 grid grid-cols-2 gap-3" aria-live="polite">
           <div className={`${tileRadius} ${tileBg} px-5 py-4`}>
             <p className={`mb-1 ${resultLabelClass}`}>Monthly dues</p>
@@ -205,10 +217,6 @@ export default function MembershipCalculator({
             )}
           </div>
         </div>
-      ) : (
-        <p className={`mt-4 text-center ${emptyStateClass}`}>
-          Enter your income above to see a suggested amount.
-        </p>
       )}
     </div>
   );
