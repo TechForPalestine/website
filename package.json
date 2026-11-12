@@ -27,7 +27,7 @@
     "@astrojs/cloudflare": "^12.6.13",
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/svelte": "^7.2.5",
+    "@astrojs/svelte": "^9.1.2",
     "@astrojs/tailwind": "^6.0.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
