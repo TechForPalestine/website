@@ -72,6 +72,22 @@ export interface TrackNavLabelOptions {
 }
 
 const LINK_SELECTOR = "a[data-experiment][data-variant]";
+const SITE_ORIGIN = "https://techforpalestine.org";
+
+/** Where a nav click went, as sent in the click event's `destination` prop: a path for
+ * pages on this site ("/membership"), the full URL for other sites. Lets the dashboard
+ * count, per variant, clicks that lead to a given page. */
+export function navClickDestination(href: string | null): string | undefined {
+  if (!href) return undefined;
+  let url: URL;
+  try {
+    url = new URL(href, SITE_ORIGIN);
+  } catch {
+    return href;
+  }
+  if (url.origin !== SITE_ORIGIN) return href;
+  return url.pathname.length > 1 ? url.pathname.replace(/\/$/, "") : url.pathname;
+}
 
 /** The nav label test props for the page's navbar, to attach to conversion events
  * (About You Complete, Membership-complete). Empty when the visitor is not in the test.
@@ -90,8 +106,9 @@ const trackWithPlausible: TrackEvent = (name, props) => {
 };
 
 // Records one exposure per page view when the nav carries an experiment link, and every
-// click on that link or, for variant A, on any of its submenu links (desktop or mobile menu). The mobile menu is rendered on demand, so
-// clicks are caught by delegation on the document.
+// click on that link or, for variant A, on any of its submenu links (desktop or mobile menu).
+// Each click carries the link's `destination` (see navClickDestination). The mobile menu is
+// rendered on demand, so clicks are caught by delegation on the document.
 //
 // Layout prerenders some pages via speculation rules, and prerendered pages run their
 // scripts, so the exposure waits until the page is actually shown. Middle-clicks (open in
@@ -114,7 +131,9 @@ export function trackNavLabel(options: TrackNavLabelOptions = {}): void {
   const onClick = (event: MouseEvent): void => {
     if (event.type === "auxclick" && event.button !== MIDDLE_BUTTON) return;
     const clicked = (event.target as Element | null)?.closest?.(LINK_SELECTOR);
-    if (clicked) track(CLICK_EVENT, props);
+    if (!clicked) return;
+    const destination = navClickDestination(clicked.getAttribute("href"));
+    track(CLICK_EVENT, destination ? { ...props, destination } : props);
   };
   doc.addEventListener("click", onClick);
   doc.addEventListener("auxclick", onClick);
