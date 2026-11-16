@@ -37,3 +37,8 @@ export function appendixHref(letter: string): string {
   if (!APPENDIX_RE.test(letter)) throw new Error(`Not an appendix letter: ${letter}`);
   return `${REPORT_BASE_PATH}/appendix-${letter.toLowerCase()}`;
 }
+
+/** Id of the hidden "(opens in a new tab)" hint on each reader page. External
+ * links in the report content point at it with aria-describedby (set by the
+ * converter, which keeps a copy of this value; a test checks they match). */
+export const NEW_TAB_HINT_ID = "report-new-tab-hint";

@@ -13,6 +13,8 @@ import {
   linkCrossReferences,
   notesSectionHtml,
   parseHeading,
+  NEW_TAB_HINT_ID,
+  isExternalHref,
   sanitizeHtml,
   sectionAnchorId,
   sectionHref,
@@ -207,7 +209,7 @@ describe("sanitizeHtml", () => {
     const html =
       '<table><colgroup><col style="width: 50%" /></colgroup><tr><td><a href="https://x.org" class="uri">x</a> <a href="#fn-1">1</a></td></tr></table>';
     expect(sanitizeHtml(html)).toBe(
-      '<table><tr><td><a href="https://x.org" rel="noopener noreferrer">x</a> <a href="#fn-1">1</a></td></tr></table>'
+      '<table><tr><td><a href="https://x.org" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">x</a> <a href="#fn-1">1</a></td></tr></table>'
     );
   });
 
@@ -328,5 +330,27 @@ describe("verifyPages", () => {
         "section-1: forbidden markup (script, iframe, style or event handler)",
       ])
     );
+  });
+});
+
+describe("external links", () => {
+  it("open other sites in a new tab with a screen-reader hint", () => {
+    expect(sanitizeHtml('<a href="https://example.org/a" target="_self" rel="x">a</a>')).toBe(
+      '<a href="https://example.org/a" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">a</a>'
+    );
+  });
+
+  it("keep links to our own site and in-page links in the same tab", () => {
+    expect(sanitizeHtml('<a href="https://techforpalestine.org/wikipedia-report-2026">r</a>')).toBe(
+      '<a href="https://techforpalestine.org/wikipedia-report-2026">r</a>'
+    );
+    expect(sanitizeHtml('<a href="#fn-1">1</a>')).toBe('<a href="#fn-1">1</a>');
+    expect(isExternalHref("/wikipedia-report-2026/section-6")).toBe(false);
+  });
+});
+
+describe("new-tab hint id", () => {
+  it("matches the id the reader pages render", () => {
+    expect(NEW_TAB_HINT_ID).toBe(contract.NEW_TAB_HINT_ID);
   });
 });

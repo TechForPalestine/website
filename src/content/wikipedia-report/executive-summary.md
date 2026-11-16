@@ -64,7 +64,7 @@ toc:
 <li><p>In Sections <a href="/wikipedia-report-2026/section-2">2</a> and <a href="/wikipedia-report-2026/section-5">5</a> we explain the tools of Israeli propaganda as they relate to the attack on Wikipedia.</p></li>
 </ul>
 <p>Our goal is a strong commons, one based on facts and truth, and not controlled, influenced, or manipulated by propaganda or state actors.</p>
-<p><em>This document lives at <a href="https://techforpalestine.org/wikipedia-report-2026" rel="noopener noreferrer">https://techforpalestine.org/wikipedia-report-2026</a>, will be updated as corrections and or additional information comes in. Corrections and suggestions welcome: <a href="mailto:contact@techforpalestine.org">contact@techforpalestine.org</a></em></p>
+<p><em>This document lives at <a href="https://techforpalestine.org/wikipedia-report-2026">https://techforpalestine.org/wikipedia-report-2026</a>, will be updated as corrections and or additional information comes in. Corrections and suggestions welcome: <a href="mailto:contact@techforpalestine.org">contact@techforpalestine.org</a></em></p>
 <p>Primary Author: Paul Biggar (<a href="mailto:paul@techforpalestine.org">paul@techforpalestine.org</a>)</p>
 <p>Research &amp; Content: Paul Biggar, Alexandra Fine, and Mari Hall</p>
 <p>Editor: Alexandra Fine</p>

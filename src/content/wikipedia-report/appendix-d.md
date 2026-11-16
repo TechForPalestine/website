@@ -8,7 +8,7 @@ toc: []
 ---
 
 <p>Below is an analysis of GDPR provisions that the Heritage Foundation’s activities could violate. This analysis was performed by Anthropic Claude (model Opus 4.5), in January 2026.</p>
-<p>For transparency, <a href="https://claude.ai/share/e38520f8-8a70-49d1-adb4-c2cffed7becc" rel="noopener noreferrer">the entire conversation is available</a>.</p>
+<p>For transparency, <a href="https://claude.ai/share/e38520f8-8a70-49d1-adb4-c2cffed7becc" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">the entire conversation is available</a>.</p>
 <div class="report-table" role="region" aria-label="Table: Appendix D" tabindex="0">
 <table>
 <thead>

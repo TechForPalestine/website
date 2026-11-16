@@ -7,6 +7,7 @@ import { getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import TerminalCta from "../../components/TerminalCta.astro";
 import ReportContents from "../../components/wikipedia-report/ReportContents.astro";
+import NewTabHint from "../../components/wikipedia-report/NewTabHint.astro";
 import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
 import { getReportEntries } from "../../components/wikipedia-report/reportData";
 import {
@@ -120,6 +121,7 @@ const breadcrumbs = breadcrumbListSchema([
           <h2 id="summary-heading" class={headline}>{summary.data.title}</h2>
           <div class="report-prose mt-8">
             <Content />
+            <NewTabHint />
           </div>
         </div>
       </div>

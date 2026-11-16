@@ -8,6 +8,7 @@ import Layout from "../../layouts/Layout.astro";
 import { MEMBERSHIP_PITCH } from "../../data/wikipediaReport";
 import TerminalCta from "../../components/TerminalCta.astro";
 import ReportOutline from "../../components/wikipedia-report/ReportOutline.astro";
+import NewTabHint from "../../components/wikipedia-report/NewTabHint.astro";
 import ReportPager from "../../components/wikipedia-report/ReportPager.astro";
 import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
 import { getReportEntries, toEntryMeta } from "../../components/wikipedia-report/reportData";
@@ -102,6 +103,7 @@ const breadcrumbs = breadcrumbListSchema([
 
           <div class="report-prose">
             <Content />
+            <NewTabHint />
           </div>
         </article>
 

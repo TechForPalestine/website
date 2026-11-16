@@ -249,10 +249,30 @@ export const ALLOWED_CLASSES = new Set([
   "report-figure",
 ]);
 
+/** Id of the hidden "(opens in a new tab)" hint each reader page renders. */
+export const NEW_TAB_HINT_ID = "report-new-tab-hint";
+
+const LINK_ATTRS_SET_BELOW = new Set(["rel", "target", "aria-describedby"]);
+const OWN_HOSTS = new Set(["techforpalestine.org", "www.techforpalestine.org"]);
+
+/** True for http(s) links to another site. Links to our own site stay in the same tab. */
+export function isExternalHref(href) {
+  if (!/^https?:\/\//i.test(href)) return false;
+  try {
+    return !OWN_HOSTS.has(new URL(href).hostname.toLowerCase());
+  } catch {
+    return true;
+  }
+}
+
 /**
  * Clean pandoc HTML: drop every style attribute and any class not in the
  * contract, drop <colgroup> (column widths are inline styles), unwrap spans
- * left without attributes, and add rel="noopener noreferrer" to external links.
+ * left without attributes. External links (http/https to another site) open
+ * in a new tab: they get target="_blank", rel="noopener noreferrer" and
+ * aria-describedby pointing at the page's hidden "opens in a new tab" hint
+ * (NEW_TAB_HINT_ID, rendered by the reader pages). Links to our own site stay
+ * in the same tab.
  */
 export function sanitizeHtml(html) {
   let out = html.replace(/<colgroup>[\s\S]*?<\/colgroup>\s*/g, "");
@@ -268,12 +288,18 @@ export function sanitizeHtml(html) {
           if (classes.length) kept.push(`class="${classes.join(" ")}"`);
           continue;
         }
-        if (lower === "rel" && tag.toLowerCase() === "a") continue; // re-added below
+        if (LINK_ATTRS_SET_BELOW.has(lower) && tag.toLowerCase() === "a") continue;
         kept.push(value === undefined ? name : `${name}="${value}"`);
       }
       if (tag.toLowerCase() === "a") {
         const href = kept.find((a) => a.startsWith("href="));
-        if (href && /^href="https?:/i.test(href)) kept.push(`rel="noopener noreferrer"`);
+        if (href && isExternalHref(href.slice(6, -1))) {
+          kept.push(
+            `target="_blank"`,
+            `rel="noopener noreferrer"`,
+            `aria-describedby="${NEW_TAB_HINT_ID}"`
+          );
+        }
       }
       const attrText = kept.length ? ` ${kept.join(" ")}` : "";
       return `<${tag}${attrText}${selfClose ? " /" : ""}>`;

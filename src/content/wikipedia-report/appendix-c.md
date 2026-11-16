@@ -8,9 +8,9 @@ toc: []
 ---
 
 <p>Below is an analysis of U.S. laws that the Heritage Foundation’s activities could violate.</p>
-<p>This analysis was performed by Anthropic Claude (model Opus 4.5), in January 2026. using the prompt: <em>“In this article about the Heritage Foundation's attempts to dox wikipedia authors, discuss potential laws which might be broken <a href="https://forward.com/news/686797/heritage-foundation-wikipedia-antisemitism/" rel="noopener noreferrer">https://forward.com/news/686797/heritage-foundation-wikipedia-antisemitism/</a><br />
+<p>This analysis was performed by Anthropic Claude (model Opus 4.5), in January 2026. using the prompt: <em>“In this article about the Heritage Foundation's attempts to dox wikipedia authors, discuss potential laws which might be broken <a href="https://forward.com/news/686797/heritage-foundation-wikipedia-antisemitism/" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">https://forward.com/news/686797/heritage-foundation-wikipedia-antisemitism/</a><br />
 Read the pdf”</em></p>
-<p>For transparency, <a href="https://claude.ai/share/e38520f8-8a70-49d1-adb4-c2cffed7becc" rel="noopener noreferrer">the full conversation is available.</a></p>
+<p>For transparency, <a href="https://claude.ai/share/e38520f8-8a70-49d1-adb4-c2cffed7becc" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">the full conversation is available.</a></p>
 <div class="report-table" role="region" aria-label="Table: Appendix C" tabindex="0">
 <table>
 <thead>
