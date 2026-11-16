@@ -93,9 +93,7 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
       aria-labelledby="report-heading"
       class="pb-14 pt-16 min-[810px]:pb-16 min-[810px]:pt-20"
     >
-      <div
-        class={`${container} grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start lg:gap-16`}
-      >
+      <div class={container}>
         <div class="min-w-0">
           <p class={overline}>
             New report{
@@ -133,37 +131,11 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
             </a>
           </p>
         </div>
-
-        <!-- Contents: a jump index to the findings, desktop only (on mobile the
-             findings follow directly) -->
-        <nav
-          aria-labelledby="contents-heading"
-          class="hidden min-w-0 rounded-lg bg-stone p-8 lg:block"
-        >
-          <h2 id="contents-heading" class={overline}>What we found</h2>
-          <ol class="mt-5 divide-y divide-ink-divider">
-            {
-              FINDINGS.map((finding, i) => (
-                <li>
-                  <a
-                    href={`#${finding.id}`}
-                    class={`group flex gap-4 py-3 text-[16px] leading-snug text-ink transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
-                  >
-                    <span class="w-6 shrink-0 font-bold tabular-nums text-ink-muted group-hover:text-grove">
-                      {ordinal(i)}
-                    </span>
-                    <span>{finding.title}</span>
-                  </a>
-                </li>
-              ))
-            }
-          </ol>
-        </nav>
       </div>
     </section>
 
-    <!-- Key findings: one row per finding, the figure first so a skimmer can
-         read the left column as a summary of the report -->
+    <!-- Key findings: titles only; each opens to its figure, summary and a
+         link into the PDF. Native <details>, so no JS is needed to toggle. -->
     <section
       id="findings"
       aria-labelledby="findings-heading"
@@ -177,46 +149,57 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
         <ol class="mt-10 border-b border-ink-divider">
           {
             FINDINGS.map((finding, i) => (
-              <li
-                id={finding.id}
-                class="grid scroll-mt-6 gap-x-12 gap-y-4 border-t border-ink-divider py-10 min-[810px]:grid-cols-[14rem_minmax(0,1fr)]"
-              >
-                <div aria-hidden={finding.stat ? undefined : "true"}>
-                  {finding.stat ? (
-                    <>
-                      <p class="text-[44px] font-extrabold tabular-nums leading-none text-grove min-[810px]:text-[58px]">
-                        {finding.stat}
-                      </p>
-                      <p class="mt-3 max-w-[22ch] text-[15px] leading-snug text-ink-secondary">
-                        {finding.statLabel}
-                      </p>
-                    </>
-                  ) : (
-                    <p class="text-[44px] font-extrabold tabular-nums leading-none text-ink-divider min-[810px]:text-[58px]">
-                      {ordinal(i)}
-                    </p>
-                  )}
-                </div>
-
-                <div class="min-w-0 max-w-[65ch]">
-                  <h3 class="flex gap-3 text-[21px] font-extrabold leading-snug text-ink min-[810px]:text-[24px]">
-                    <span class="shrink-0 tabular-nums text-ink-muted">{ordinal(i)}</span>
-                    <span>{finding.title}</span>
-                  </h3>
-                  <p class="mt-3 text-[17px] leading-[1.7] text-ink-secondary min-[810px]:text-[18px]">
-                    {finding.body}
-                  </p>
-                  <a
-                    href={findingHref(finding)}
-                    target="_blank"
-                    rel="noopener"
-                    class={`mt-4 inline-flex items-center gap-1.5 text-[15px] ${inlineLink}`}
+              <li id={finding.id} class="scroll-mt-6 border-t border-ink-divider">
+                <details class="group">
+                  <summary
+                    class={`flex cursor-pointer list-none items-start gap-4 py-6 text-ink transition-colors hover:text-grove motion-reduce:transition-none min-[810px]:gap-6 min-[810px]:py-7 [&::-webkit-details-marker]:hidden ${focusRing}`}
                   >
-                    Read more: {findingLinkLabel(finding)}
-                    <Icon name="mdi:arrow-right" class="h-4 w-4" aria-hidden="true" />
-                    <span class="sr-only">{newTab}</span>
-                  </a>
-                </div>
+                    <span class="w-8 shrink-0 pt-0.5 text-[17px] font-bold tabular-nums text-ink-muted group-hover:text-grove min-[810px]:text-[19px]">
+                      {ordinal(i)}
+                    </span>
+                    <h3 class="min-w-0 flex-1 text-[21px] font-extrabold leading-snug min-[810px]:text-[24px]">
+                      {finding.title}
+                    </h3>
+                    <Icon
+                      name="mdi:plus"
+                      class="mt-1 h-6 w-6 shrink-0 text-grove transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none"
+                      aria-hidden="true"
+                    />
+                  </summary>
+
+                  <div class="grid gap-x-12 gap-y-4 pb-10 pl-12 min-[810px]:grid-cols-[12rem_minmax(0,1fr)] min-[810px]:pl-14">
+                    {finding.stat && (
+                      <div>
+                        <p class="text-[44px] font-extrabold tabular-nums leading-none text-grove min-[810px]:text-[52px]">
+                          {finding.stat}
+                        </p>
+                        <p class="mt-3 max-w-[22ch] text-[15px] leading-snug text-ink-secondary">
+                          {finding.statLabel}
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      class:list={[
+                        "min-w-0 max-w-[65ch]",
+                        !finding.stat && "min-[810px]:col-span-2",
+                      ]}
+                    >
+                      <p class="text-[17px] leading-[1.7] text-ink-secondary min-[810px]:text-[18px]">
+                        {finding.body}
+                      </p>
+                      <a
+                        href={findingHref(finding)}
+                        target="_blank"
+                        rel="noopener"
+                        class={`mt-4 inline-flex items-center gap-1.5 text-[15px] ${inlineLink}`}
+                      >
+                        Read more: {findingLinkLabel(finding)}
+                        <Icon name="mdi:arrow-right" class="h-4 w-4" aria-hidden="true" />
+                        <span class="sr-only">{newTab}</span>
+                      </a>
+                    </div>
+                  </div>
+                </details>
               </li>
             ))
           }
@@ -381,6 +364,17 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
 </Layout>
 
 <script>
+  // A link straight to a finding (/wikipedia-report#finding-ai) should land
+  // on it open, not on a bare title.
+  function openFindingFromHash(): void {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const details = document.getElementById(id)?.querySelector("details");
+    if (details) details.open = true;
+  }
+  openFindingFromHash();
+  window.addEventListener("hashchange", openFindingFromHash);
+
   document.querySelectorAll<HTMLElement>("[data-track-report-download]").forEach((link) => {
     link.addEventListener("click", () => {
       if (typeof window.plausible === "undefined") return;
