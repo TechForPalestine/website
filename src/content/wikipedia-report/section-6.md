@@ -9,82 +9,22 @@ toc:
   - { number: "6.1.1", title: "The invented group", depth: 3, id: "s6-1-1" }
   - { number: "6.1.2", title: "Unfalsifiable evidence", depth: 3, id: "s6-1-2" }
   - { number: "6.1.3", title: "Unsupported accusations of antisemitism", depth: 3, id: "s6-1-3" }
-  - {
-      number: "6.1.4",
-      title: "No false anti-Israel information was shown to be added",
-      depth: 3,
-      id: "s6-1-4",
-    }
+  - { number: "6.1.4", title: "No false anti-Israel information was shown to be added", depth: 3, id: "s6-1-4" }
   - { number: "6.1.5", title: "No divergence from scholarly opinion", depth: 3, id: "s6-1-5" }
   - { number: "6.1.6", title: "Severe methodological flaws", depth: 3, id: "s6-1-6" }
-  - {
-      number: "6.1.6.1",
-      title: "Working backwards from a predetermined conclusion",
-      depth: 4,
-      id: "s6-1-6-1",
-    }
-  - {
-      number: "6.1.6.2",
-      title: "Manufacturing the appearance of collusion",
-      depth: 4,
-      id: "s6-1-6-2",
-    }
-  - {
-      number: "6.1.6.3",
-      title: "Framing ordinary Wikipedia activity as sinister",
-      depth: 4,
-      id: "s6-1-6-3",
-    }
+  - { number: "6.1.6.1", title: "Working backwards from a predetermined conclusion", depth: 4, id: "s6-1-6-1" }
+  - { number: "6.1.6.2", title: "Manufacturing the appearance of collusion", depth: 4, id: "s6-1-6-2" }
+  - { number: "6.1.6.3", title: "Framing ordinary Wikipedia activity as sinister", depth: 4, id: "s6-1-6-3" }
   - { number: "6.1.6.4", title: "Cherry-picked evidence", depth: 4, id: "s6-1-6-4" }
   - { number: "6.1.6.5", title: "Lack of Wikimedia consultation", depth: 4, id: "s6-1-6-5" }
-  - {
-      number: "6.1.7",
-      title: "Manipulation and misrepresentation of evidence",
-      depth: 3,
-      id: "s6-1-7",
-    }
-  - {
-      number: "6.1.7.1",
-      title: "Distorting evidence through misleading descriptions and selective quotation",
-      depth: 4,
-      id: "s6-1-7-1",
-    }
-  - {
-      number: "6.1.7.2",
-      title: "Ignoring or hiding edit descriptions which undermined their narrative",
-      depth: 4,
-      id: "s6-1-7-2",
-    }
-  - {
-      number: "6.1.7.3",
-      title: "Withholding the links needed to scrutinize its claims",
-      depth: 4,
-      id: "s6-1-7-3",
-    }
-  - {
-      number: "6.1.8",
-      title: "Claims contradicted by the ADL’s own evidence",
-      depth: 3,
-      id: "s6-1-8",
-    }
-  - {
-      number: "6.1.8.1",
-      title: "Supposedly suspicious editing patterns also appear among other editors",
-      depth: 4,
-      id: "s6-1-8-1",
-    }
-  - {
-      number: "6.1.8.2",
-      title: "The ADL’s accusations are undermined by source data",
-      depth: 4,
-      id: "s6-1-8-2",
-    }
-  - {
-      number: "6.1.8.3",
-      title: "Wikipedia has demonstrated its tools capable of the challenge",
-      depth: 4,
-      id: "s6-1-8-3",
-    }
+  - { number: "6.1.7", title: "Manipulation and misrepresentation of evidence", depth: 3, id: "s6-1-7" }
+  - { number: "6.1.7.1", title: "Distorting evidence through misleading descriptions and selective quotation", depth: 4, id: "s6-1-7-1" }
+  - { number: "6.1.7.2", title: "Ignoring or hiding edit descriptions which undermined their narrative", depth: 4, id: "s6-1-7-2" }
+  - { number: "6.1.7.3", title: "Withholding the links needed to scrutinize its claims", depth: 4, id: "s6-1-7-3" }
+  - { number: "6.1.8", title: "Claims contradicted by the ADL’s own evidence", depth: 3, id: "s6-1-8" }
+  - { number: "6.1.8.1", title: "Supposedly suspicious editing patterns also appear among other editors", depth: 4, id: "s6-1-8-1" }
+  - { number: "6.1.8.2", title: "The ADL’s accusations are undermined by source data", depth: 4, id: "s6-1-8-2" }
+  - { number: "6.1.8.3", title: "Wikipedia has demonstrated its tools capable of the challenge", depth: 4, id: "s6-1-8-3" }
   - { number: "6.2", title: "Dr. Shira Klein’s Assessment", depth: 2, id: "s6-2" }
   - { number: "6.3", title: "Detailed Critique of Case Study 1", depth: 2, id: "s6-3" }
   - { number: "6.3.1", title: "“Bad-Faith” Editors (pg 6)", depth: 3, id: "s6-3-1" }
@@ -93,24 +33,14 @@ toc:
   - { number: "6.3.2.2", title: "Group Communication (pg 9-10)", depth: 4, id: "s6-3-2-2" }
   - { number: "6.3.2.3", title: "Tandem Editing (pg 10-13)", depth: 4, id: "s6-3-2-3" }
   - { number: "6.3.2.4", title: "Time Between Edits (pg 13-14)", depth: 4, id: "s6-3-2-4" }
-  - {
-      number: "6.3.2.5",
-      title: "“Coordinated editors” summary and verdict",
-      depth: 4,
-      id: "s6-3-2-5",
-    }
+  - { number: "6.3.2.5", title: "“Coordinated editors” summary and verdict", depth: 4, id: "s6-3-2-5" }
   - { number: "6.3.3", title: "Harassment and Intimidation (pg 14-15)", depth: 3, id: "s6-3-3" }
   - { number: "6.3.4", title: "Manipulation and Disinformation (pg 15-23)", depth: 3, id: "s6-3-4" }
   - { number: "6.3.4.1", title: "Avoiding detection (pg 15)", depth: 4, id: "s6-3-4-1" }
   - { number: "6.3.4.2", title: "Making Minor Edits (pg 16)", depth: 4, id: "s6-3-4-2" }
   - { number: "6.3.4.3", title: "Time Spent Editing (pg 16-17)", depth: 4, id: "s6-3-4-3" }
   - { number: "6.3.4.4", title: "A million edits (pg 17-18)", depth: 4, id: "s6-3-4-4" }
-  - {
-      number: "6.3.4.5",
-      title: "Examples of supposed biased edits (pg 18-24)",
-      depth: 4,
-      id: "s6-3-4-5",
-    }
+  - { number: "6.3.4.5", title: "Examples of supposed biased edits (pg 18-24)", depth: 4, id: "s6-3-4-5" }
   - { number: "6.3.4.5.1", title: "Samir Kuntar (pg 18)", depth: 4, id: "s6-3-4-5-1" }
   - { number: "6.3.4.5.2", title: "Palestinian violence (pg 18-19)", depth: 4, id: "s6-3-4-5-2" }
   - { number: "6.3.4.5.3", title: "Destruction of Israel (pg 19)", depth: 4, id: "s6-3-4-5-3" }
@@ -118,12 +48,7 @@ toc:
   - { number: "6.3.4.5.5", title: "Swastika Kite (pg 21)", depth: 4, id: "s6-3-4-5-5" }
   - { number: "6.3.4.5.6", title: "Zionism page (pg 22-23)", depth: 4, id: "s6-3-4-5-6" }
   - { number: "6.3.4.5.7", title: "1948 Palestine War page (pg 23-24)", depth: 4, id: "s6-3-4-5-7" }
-  - {
-      number: "6.3.4.6",
-      title: "“Manipulation and Disinformation” summary and verdict",
-      depth: 4,
-      id: "s6-3-4-6",
-    }
+  - { number: "6.3.4.6", title: "“Manipulation and Disinformation” summary and verdict", depth: 4, id: "s6-3-4-6" }
   - { number: "6.3.5", title: "Voting Patterns (pg 24-29)", depth: 3, id: "s6-3-5" }
   - { number: "6.3.5.1", title: "Evidence of collusion", depth: 4, id: "s6-3-5-1" }
   - { number: "6.3.5.2", title: "Articles with votes to keep", depth: 4, id: "s6-3-5-2" }
@@ -131,94 +56,29 @@ toc:
   - { number: "6.3.6", title: "Sources (pg 28-33)", depth: 3, id: "s6-3-6" }
   - { number: "6.4", title: "Detailed Critique of Case Study 2", depth: 2, id: "s6-4" }
   - { number: "6.4.1", title: "Hamas examples", depth: 3, id: "s6-4-1" }
-  - {
-      number: "6.4.1.1",
-      title: "Pro-Palestinian Phrases for Liberation Framed as Praise for Hamas",
-      depth: 4,
-      id: "s6-4-1-1",
-    }
-  - {
-      number: "6.4.1.2",
-      title: "“A Vision of the Liberation of Palestine” and Translating Religious Content",
-      depth: 4,
-      id: "s6-4-1-2",
-    }
-  - {
-      number: "6.4.1.3",
-      title: "Description of Hamas’ “Military Action”",
-      depth: 4,
-      id: "s6-4-1-3",
-    }
-  - {
-      number: "6.4.1.4",
-      title: "“Social and Charitable Work” and Citations",
-      depth: 4,
-      id: "s6-4-1-4",
-    }
+  - { number: "6.4.1.1", title: "Pro-Palestinian Phrases for Liberation Framed as Praise for Hamas", depth: 4, id: "s6-4-1-1" }
+  - { number: "6.4.1.2", title: "“A Vision of the Liberation of Palestine” and Translating Religious Content", depth: 4, id: "s6-4-1-2" }
+  - { number: "6.4.1.3", title: "Description of Hamas’ “Military Action”", depth: 4, id: "s6-4-1-3" }
+  - { number: "6.4.1.4", title: "“Social and Charitable Work” and Citations", depth: 4, id: "s6-4-1-4" }
   - { number: "6.4.1.5", title: "“Women’s Work”", depth: 4, id: "s6-4-1-5" }
-  - {
-      number: "6.4.1.6",
-      title: "Glorifying “Sons and Children of Movement Leaders Were Assassinated”",
-      depth: 4,
-      id: "s6-4-1-6",
-    }
-  - {
-      number: "6.4.1.7",
-      title: "Hamas’s Position on Fatah, Security Coordination, and Political Arrests",
-      depth: 4,
-      id: "s6-4-1-7",
-    }
-  - {
-      number: "6.4.1.8",
-      title: "The Position of European Union on Hamas",
-      depth: 4,
-      id: "s6-4-1-8",
-    }
+  - { number: "6.4.1.6", title: "Glorifying “Sons and Children of Movement Leaders Were Assassinated”", depth: 4, id: "s6-4-1-6" }
+  - { number: "6.4.1.7", title: "Hamas’s Position on Fatah, Security Coordination, and Political Arrests", depth: 4, id: "s6-4-1-7" }
+  - { number: "6.4.1.8", title: "The Position of European Union on Hamas", depth: 4, id: "s6-4-1-8" }
   - { number: "6.4.2", title: "“Additional examples”", depth: 3, id: "s6-4-2" }
   - { number: "6.4.2.1", title: "The Shalit Deal and “Praise” for Hamas", depth: 4, id: "s6-4-2-1" }
-  - {
-      number: "6.4.2.1.1",
-      title: "“Glorification” for the Gilad Shalit Deal",
-      depth: 4,
-      id: "s6-4-2-1-1",
-    }
-  - {
-      number: "6.4.2.1.2",
-      title: "Analyzing “Praise” in the “Hamas Poster”",
-      depth: 4,
-      id: "s6-4-2-1-2",
-    }
+  - { number: "6.4.2.1.1", title: "“Glorification” for the Gilad Shalit Deal", depth: 4, id: "s6-4-2-1-1" }
+  - { number: "6.4.2.1.2", title: "Analyzing “Praise” in the “Hamas Poster”", depth: 4, id: "s6-4-2-1-2" }
   - { number: "6.4.2.2", title: "The Killing of Yahya Sinwar", depth: 4, id: "s6-4-2-2" }
-  - {
-      number: "6.4.2.3",
-      title: "Al-Qassam Brigades and the Characterization of Resistance",
-      depth: 4,
-      id: "s6-4-2-3",
-    }
+  - { number: "6.4.2.3", title: "Al-Qassam Brigades and the Characterization of Resistance", depth: 4, id: "s6-4-2-3" }
   - { number: "6.4.3", title: "Conclusion on Case Study 2", depth: 3, id: "s6-4-3" }
-  - {
-      number: "6.5",
-      title: "Detailed Critique of “Damage Done” follow-up report",
-      depth: 2,
-      id: "s6-5",
-    }
+  - { number: "6.5", title: "Detailed Critique of “Damage Done” follow-up report", depth: 2, id: "s6-5" }
   - { number: "6.5.1", title: "“Finding 1”", depth: 3, id: "s6-5-1" }
   - { number: "6.5.1.1", title: "“Softening” Hamas", depth: 4, id: "s6-5-1-1" }
   - { number: "6.5.1.2", title: "“Recasting” Al Jazeera", depth: 4, id: "s6-5-1-2" }
   - { number: "6.5.1.3", title: "“Finding 1” conclusion", depth: 4, id: "s6-5-1-3" }
   - { number: "6.5.2", title: "“Finding 2”", depth: 3, id: "s6-5-2" }
-  - {
-      number: "6.5.2.1",
-      title: "Sustained, multi-front external pressure",
-      depth: 4,
-      id: "s6-5-2-1",
-    }
-  - {
-      number: "6.5.2.2",
-      title: "ADL demonstrates changes are unnecessary",
-      depth: 4,
-      id: "s6-5-2-2",
-    }
+  - { number: "6.5.2.1", title: "Sustained, multi-front external pressure", depth: 4, id: "s6-5-2-1" }
+  - { number: "6.5.2.2", title: "ADL demonstrates changes are unnecessary", depth: 4, id: "s6-5-2-2" }
   - { number: "6.5.2.3", title: "Further spin in “Finding 2”", depth: 4, id: "s6-5-2-3" }
   - { number: "6.5.2.4", title: "“Finding 2” conclusion", depth: 4, id: "s6-5-2-4" }
   - { number: "6.5.3", title: "“Finding 3”", depth: 3, id: "s6-5-3" }

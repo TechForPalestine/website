@@ -19,18 +19,8 @@ toc:
   - { number: "5.7", title: "ADL Racist Attacks on Student Activists", depth: 2, id: "s5-7" }
   - { number: "5.8", title: "Attacks on Nuns", depth: 2, id: "s5-8" }
   - { number: "5.9", title: "Absurd Allegations", depth: 2, id: "s5-9" }
-  - {
-      number: "5.10",
-      title: "Connections to Violence: Greenblatt's Partnership with Extremist Groups at UCLA",
-      depth: 2,
-      id: "s5-10",
-    }
-  - {
-      number: "5.11",
-      title: "Conclusion: The ADL as a Biased and Unreliable Narrator",
-      depth: 2,
-      id: "s5-11",
-    }
+  - { number: "5.10", title: "Connections to Violence: Greenblatt's Partnership with Extremist Groups at UCLA", depth: 2, id: "s5-10" }
+  - { number: "5.11", title: "Conclusion: The ADL as a Biased and Unreliable Narrator", depth: 2, id: "s5-11" }
 ---
 
 <p>Before examining the ADL’s report in <a href="/wikipedia-report-2026/section-6">Section 6</a>, it is necessary to first discuss the organization that produced it.</p>

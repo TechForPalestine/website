@@ -9,25 +9,10 @@ toc:
   - { number: "7.1.1", title: "Stand up to the Attack", depth: 3, id: "s7-1-1" }
   - { number: "7.1.2", title: "Beware of Inside-Outside Strategy", depth: 3, id: "s7-1-2" }
   - { number: "7.1.3", title: "Move out of the United States", depth: 3, id: "s7-1-3" }
-  - {
-      number: "7.1.4",
-      title: "Increase Transparency Related to Influence Attacks",
-      depth: 3,
-      id: "s7-1-4",
-    }
+  - { number: "7.1.4", title: "Increase Transparency Related to Influence Attacks", depth: 3, id: "s7-1-4" }
   - { number: "7.1.5", title: "Strengthen ArbCom", depth: 3, id: "s7-1-5" }
-  - {
-      number: "7.1.6",
-      title: "Jimmy Wales should step down from the Board of Trustees",
-      depth: 3,
-      id: "s7-1-6",
-    }
-  - {
-      number: "7.1.7",
-      title: "Clarify Israeli-influence on the Foundation",
-      depth: 3,
-      id: "s7-1-7",
-    }
+  - { number: "7.1.6", title: "Jimmy Wales should step down from the Board of Trustees", depth: 3, id: "s7-1-6" }
+  - { number: "7.1.7", title: "Clarify Israeli-influence on the Foundation", depth: 3, id: "s7-1-7" }
   - { number: "7.2", title: "Recommendations for the U.S. Government", depth: 2, id: "s7-2" }
   - { number: "7.3", title: "Recommendations to LLM providers", depth: 2, id: "s7-3" }
   - { number: "7.4", title: "Recommendations for Media", depth: 2, id: "s7-4" }

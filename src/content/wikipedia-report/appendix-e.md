@@ -5,16 +5,8 @@ label: "Appendix E"
 title: "Full Counts of deletion votes"
 order: 105
 toc:
-  - {
-      title: "Articles from Table 1 in the ADL report, labeled as “Notable articles multiple bad-faith editors voted to keep”, adding actual counts.",
-      depth: 2,
-      id: "articles-from-table-1-in-the-adl-report-labeled",
-    }
-  - {
-      title: "Articles from Table 2 in the ADL report, labeled as “Notable articles multiple bad-faith editors voted to delete”, adding actual counts.",
-      depth: 2,
-      id: "articles-from-table-2-in-the-adl-report-labeled",
-    }
+  - { title: "Articles from Table 1 in the ADL report, labeled as “Notable articles multiple bad-faith editors voted to keep”, adding actual counts.", depth: 2, id: "articles-from-table-1-in-the-adl-report-labeled" }
+  - { title: "Articles from Table 2 in the ADL report, labeled as “Notable articles multiple bad-faith editors voted to delete”, adding actual counts.", depth: 2, id: "articles-from-table-2-in-the-adl-report-labeled" }
 ---
 
 <p>The tables in this section were researched by ChatGPT on level 6 “Pro” in September 2026, using the prompts <em>“In this article, Table 1 and Table 2 link to pages on Wikipedia which had votes on whether to delete the pages. For each article, find how many editors actually voted on the deletion”, and “Revisit those page and count which editors voted for and which voted against, compiling a table like the one above, but adding the vote counts”.</em></p>

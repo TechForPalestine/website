@@ -5,29 +5,14 @@ label: "Section 4"
 title: "The Influence Operation on Wikipedia"
 order: 4
 toc:
-  - {
-      number: "4.1",
-      title: "Wasserman Schultz and 22 other members of Congress",
-      depth: 2,
-      id: "s4-1",
-    }
+  - { number: "4.1", title: "Wasserman Schultz and 22 other members of Congress", depth: 2, id: "s4-1" }
   - { number: "4.2", title: "U.S. Attorney for the District of Columbia", depth: 2, id: "s4-2" }
   - { number: "4.3", title: "Comer and Mace", depth: 2, id: "s4-3" }
   - { number: "4.4", title: "Ted Cruz", depth: 2, id: "s4-4" }
   - { number: "4.5", title: "Surveillance of Wikipedia", depth: 2, id: "s4-5" }
   - { number: "4.5.1", title: "The Heritage Foundation", depth: 3, id: "s4-5-1" }
-  - {
-      number: "4.5.1.1",
-      title: "Project Esther: Attacking Pro-Palestinian Activism",
-      depth: 4,
-      id: "s4-5-1-1",
-    }
-  - {
-      number: "4.5.1.2",
-      title: "Wikipedia surveillance by Heritage Foundation",
-      depth: 4,
-      id: "s4-5-1-2",
-    }
+  - { number: "4.5.1.1", title: "Project Esther: Attacking Pro-Palestinian Activism", depth: 4, id: "s4-5-1-1" }
+  - { number: "4.5.1.2", title: "Wikipedia surveillance by Heritage Foundation", depth: 4, id: "s4-5-1-2" }
   - { number: "4.5.2", title: "Builders for Tomorrow", depth: 3, id: "s4-5-2" }
   - { number: "4.5.3", title: "NPOV: “Wikipedia intelligence”", depth: 3, id: "s4-5-3" }
   - { number: "4.5.4", title: "ADL surveillance of Wikipedia", depth: 3, id: "s4-5-4" }
@@ -35,12 +20,7 @@ toc:
   - { number: "4.6", title: "Wikimedia Foundation’s new CEO", depth: 2, id: "s4-6" }
   - { number: "4.7", title: "Attacks on Academia", depth: 2, id: "s4-7" }
   - { number: "4.7.1", title: "Policing Free Speech", depth: 3, id: "s4-7-1" }
-  - {
-      number: "4.7.2",
-      title: "Attacks Against Palestinian Solidarity and the “Palestine Exception”",
-      depth: 3,
-      id: "s4-7-2",
-    }
+  - { number: "4.7.2", title: "Attacks Against Palestinian Solidarity and the “Palestine Exception”", depth: 3, id: "s4-7-2" }
 ---
 
 <p>In this section, we assess the various influence attacks on Wikipedia coming from Israel and the Israel Lobby.</p>

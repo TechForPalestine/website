@@ -16,18 +16,8 @@ toc:
   - { number: "2.3", title: "The Tools of Israel Propaganda", depth: 2, id: "s2-3" }
   - { number: "2.3.1", title: "Weaponizing Antisemitism", depth: 3, id: "s2-3-1" }
   - { number: "2.3.2", title: "IHRA Definition", depth: 3, id: "s2-3-2" }
-  - {
-      number: "2.3.2.1",
-      title: "Created by Pro-Israel organization to combat criticism of Israel",
-      depth: 4,
-      id: "s2-3-2-1",
-    }
-  - {
-      number: "2.3.2.2",
-      title: "Labeling Criticism of Israel as “antisemitic”",
-      depth: 4,
-      id: "s2-3-2-2",
-    }
+  - { number: "2.3.2.1", title: "Created by Pro-Israel organization to combat criticism of Israel", depth: 4, id: "s2-3-2-1" }
+  - { number: "2.3.2.2", title: "Labeling Criticism of Israel as “antisemitic”", depth: 4, id: "s2-3-2-2" }
   - { number: "2.3.3", title: "The “Pro-Hamas” Label", depth: 3, id: "s2-3-3" }
   - { number: "2.3.4", title: "Anti-Palestinian bias in Media", depth: 3, id: "s2-3-4" }
 ---

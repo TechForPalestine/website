@@ -26,12 +26,7 @@ toc:
   - { number: "3.17.2", title: "Responses", depth: 3, id: "s3-17-2" }
   - { number: "3.17.3", title: "Influence", depth: 3, id: "s3-17-3" }
   - { number: "3.17.4", title: "Abuse of Power", depth: 3, id: "s3-17-4" }
-  - {
-      number: "3.17.5",
-      title: "Continued pro-Israel actions in Zionism page",
-      depth: 3,
-      id: "s3-17-5",
-    }
+  - { number: "3.17.5", title: "Continued pro-Israel actions in Zionism page", depth: 3, id: "s3-17-5" }
   - { number: "3.17.6", title: "Further Biased edits", depth: 3, id: "s3-17-6" }
   - { number: "3.18", title: "“Wikipedia Lobby Group” (2024-ongoing)", depth: 2, id: "s3-18" }
 ---
