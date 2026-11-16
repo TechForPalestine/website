@@ -1,0 +1,173 @@
+---
+// Reader index for the online report: the executive summary, then the full
+// contents and a way into Section 1. Server-rendered like the rest of the
+// site (CSP nonces, nav A/B test); do not prerender.
+import { Icon } from "astro-icon/components";
+import { getEntry, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import TerminalCta from "../../components/TerminalCta.astro";
+import ReportContents from "../../components/wikipedia-report/ReportContents.astro";
+import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
+import { getReportEntries } from "../../components/wikipedia-report/reportData";
+import {
+  breadcrumbListSchema,
+  entryHref,
+  INDEX_SLUG,
+} from "../../components/wikipedia-report/reportNav";
+import {
+  OVERVIEW_HREF,
+  READER_SUBTITLE,
+  READER_TITLE,
+  REPORT_PDF_HREF,
+} from "../../components/wikipedia-report/reportMeta";
+import {
+  MEMBERSHIP_PITCH,
+  REPORT_PDF,
+  REPORT_PUBLISHED,
+  pdfMeta,
+} from "../../data/wikipediaReport";
+import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
+import { canonicalUrl, SITE_ORIGIN } from "../../utils/seo";
+import {
+  container,
+  display,
+  focusRing,
+  ghostButton,
+  headline,
+  inverseButton,
+  overline,
+  primaryButton,
+} from "../../utils/designClasses";
+import "../../styles/base.css";
+import "../../styles/wikipedia-report.css";
+
+const summary = await getEntry("wikipediaReport", INDEX_SLUG);
+if (!summary) {
+  return new Response(null, { status: 404 });
+}
+
+const rest = (await getReportEntries()).filter((entry) => entry.slug !== INDEX_SLUG);
+const first = rest[0];
+const { Content } = await render(summary);
+
+const pdfLabel = pdfMeta();
+// pdfMeta() is just "PDF" until comms fill in the size and page count.
+const pdfDetails = Boolean(REPORT_PDF.size || REPORT_PDF.pages);
+const publishedLabel = REPORT_PUBLISHED
+  ? new Date(`${REPORT_PUBLISHED}T12:00:00Z`).toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    })
+  : undefined;
+
+const breadcrumbs = breadcrumbListSchema([
+  { name: "Home", url: `${SITE_ORIGIN}/` },
+  { name: READER_TITLE, url: canonicalUrl(REPORT_BASE_PATH) },
+]);
+---
+
+<Layout
+  title={`${READER_TITLE} ${READER_SUBTITLE}: Read the report - Tech for Palestine`}
+  description="Read the full report online: twenty years of documented attacks on Wikipedia, and how they shape what search engines and AI tell you. By Tech for Palestine."
+  schema={[breadcrumbs]}
+  noindex
+>
+  <!-- noindex until the report launches, like /wikipedia-report. -->
+  <main>
+    <header
+      aria-labelledby="report-heading"
+      class="pb-12 pt-16 min-[810px]:pb-14 min-[810px]:pt-20"
+    >
+      <div class={container}>
+        <p class={overline}>Report · Tech for Palestine</p>
+        <h1 id="report-heading" class={`mt-5 max-w-[16ch] ${display}`}>
+          {READER_TITLE}
+          <span class="mt-2 block font-normal text-ink-secondary">{READER_SUBTITLE}</span>
+        </h1>
+        <p class="mt-6 text-[16px] text-ink-secondary">
+          A report by Tech for Palestine{
+            publishedLabel && (
+              <>
+                {" "}
+                · <time datetime={REPORT_PUBLISHED}>{publishedLabel}</time>
+              </>
+            )
+          }
+        </p>
+
+        <div
+          class="report-no-print mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap"
+        >
+          <a
+            href={REPORT_PDF_HREF}
+            download
+            data-track-report-download="reader-index"
+            class={primaryButton}
+          >
+            <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+            Download PDF
+          </a>
+          <a href={OVERVIEW_HREF} class={ghostButton}>Key findings</a>
+        </div>
+        {pdfDetails && <p class="mt-3 text-[15px] text-ink-secondary">{pdfLabel}</p>}
+      </div>
+    </header>
+
+    <section aria-labelledby="summary-heading" class="pb-16 min-[810px]:pb-20">
+      <div class={container}>
+        <div class="max-w-[45rem] border-t border-ink-divider pt-12 min-[810px]:pt-14">
+          <h2 id="summary-heading" class={headline}>{summary.data.title}</h2>
+          <div class="report-prose mt-8">
+            <Content />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {
+      rest.length > 0 && (
+        <section aria-labelledby="contents-heading" class="report-no-print pb-16 min-[810px]:pb-20">
+          <div class={container}>
+            <div class="max-w-[45rem]">
+              <h2
+                id="contents-heading"
+                class={`border-t border-ink-divider pt-12 min-[810px]:pt-14 ${headline}`}
+              >
+                Contents
+              </h2>
+              <div class="mt-8">
+                <ReportContents entries={rest} headingId="contents-heading" />
+              </div>
+
+              {first && (
+                <a
+                  href={entryHref(first.slug)}
+                  rel="next"
+                  class={`group mt-10 inline-flex min-h-[44px] items-center gap-3 rounded-sm text-[19px] font-extrabold text-grove transition-colors hover:text-grove-hover motion-reduce:transition-none min-[810px]:text-[21px] ${focusRing}`}
+                >
+                  Start reading{first.label && `: ${first.label}`}
+                  <Icon
+                    name="mdi:arrow-right"
+                    class="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-1 motion-reduce:transition-none"
+                    aria-hidden="true"
+                  />
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <div class="report-no-print">
+      <TerminalCta heading="Become a T4P member" headingId="report-cta-heading" padTop={false}>
+        {MEMBERSHIP_PITCH.map((paragraph, i) => <p class:list={[i > 0 && "mt-4"]}>{paragraph}</p>)}
+        <Fragment slot="actions">
+          <a href="/membership" class={inverseButton}>Become a T4P member</a>
+        </Fragment>
+      </TerminalCta>
+    </div>
+  </main>
+  <ReportScripts />
+</Layout>

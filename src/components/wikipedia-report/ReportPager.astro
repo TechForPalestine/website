@@ -1,0 +1,57 @@
+---
+// Previous / next page links at the foot of a reader page, in reading order.
+import { Icon } from "astro-icon/components";
+import { focusRing } from "../../utils/designClasses";
+import { entryHref, type ReportEntryMeta } from "./reportNav";
+
+interface Props {
+  prev: ReportEntryMeta | null;
+  next: ReportEntryMeta | null;
+}
+
+const { prev, next } = Astro.props;
+
+const linkClass = `group flex min-h-[44px] flex-col gap-1.5 rounded-sm py-6 transition-colors motion-reduce:transition-none ${focusRing}`;
+const eyebrow =
+  "flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-grove-deep";
+const titleClass =
+  "text-[19px] font-extrabold leading-snug text-ink transition-colors group-hover:text-grove motion-reduce:transition-none min-[810px]:text-[21px]";
+---
+
+{
+  (prev || next) && (
+    <nav
+      aria-label="Previous and next pages"
+      class="report-no-print grid border-y border-ink-divider min-[640px]:grid-cols-2 min-[640px]:gap-10"
+    >
+      {prev ? (
+        <a href={entryHref(prev.slug)} rel="prev" class={linkClass}>
+          <span class={eyebrow}>
+            <Icon name="mdi:arrow-left" class="h-4 w-4" aria-hidden="true" />
+            Previous{prev.label && `: ${prev.label}`}
+          </span>
+          <span class={titleClass}>{prev.title}</span>
+        </a>
+      ) : (
+        <span aria-hidden="true" class="hidden min-[640px]:block" />
+      )}
+      {next && (
+        <a
+          href={entryHref(next.slug)}
+          rel="next"
+          class:list={[
+            linkClass,
+            "min-[640px]:items-end min-[640px]:text-right",
+            prev && "border-t border-ink-divider min-[640px]:border-t-0",
+          ]}
+        >
+          <span class={eyebrow}>
+            Next{next.label && `: ${next.label}`}
+            <Icon name="mdi:arrow-right" class="h-4 w-4" aria-hidden="true" />
+          </span>
+          <span class={titleClass}>{next.title}</span>
+        </a>
+      )}
+    </nav>
+  )
+}

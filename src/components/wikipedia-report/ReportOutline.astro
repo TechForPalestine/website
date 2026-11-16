@@ -1,0 +1,122 @@
+---
+// The reader's navigation: every page of the report in order, with the
+// current page's headings beneath it. Rendered twice by ReportShell: as the
+// sticky sidebar on lg+ (`variant="sidebar"`, depth-3 headings included and
+// collapsed by ReportScripts to the group being read) and inside a <details>
+// disclosure on smaller screens (`variant="compact"`, depth-2 only).
+import { Icon } from "astro-icon/components";
+import { focusRing } from "../../utils/designClasses";
+import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
+import {
+  entryHref,
+  entryShortLabel,
+  groupToc,
+  INDEX_SLUG,
+  type ReportEntryMeta,
+} from "./reportNav";
+import { REPORT_PDF_HREF, READER_SUBTITLE, READER_TITLE } from "./reportMeta";
+
+interface Props {
+  entries: ReportEntryMeta[];
+  currentSlug: string;
+  variant: "sidebar" | "compact";
+}
+
+const { entries, currentSlug, variant } = Astro.props;
+const isSidebar = variant === "sidebar";
+
+const itemLink = `flex gap-3 rounded-sm py-1.5 text-[15px] leading-snug transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`;
+const headingLinkBase = `block rounded-sm py-1 leading-snug text-ink-secondary transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`;
+const headingLink = `${headingLinkBase} text-[14px]`;
+const childLink = `${headingLinkBase} text-[13px]`;
+---
+
+<nav
+  aria-label="Report contents"
+  data-report-outline={isSidebar ? "" : undefined}
+  class="report-no-print text-ink"
+>
+  {
+    isSidebar && (
+      <a
+        href={REPORT_BASE_PATH}
+        class={`block rounded-sm text-[17px] font-extrabold leading-tight text-ink transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
+      >
+        {READER_TITLE}
+        <span class="block font-normal text-ink-secondary">{READER_SUBTITLE}</span>
+      </a>
+    )
+  }
+
+  <ol class:list={["space-y-0.5", isSidebar && "mt-6 border-t border-ink-divider pt-4"]}>
+    {
+      entries.map((entry) => {
+        const isCurrent = entry.slug === currentSlug;
+        const short = entryShortLabel(entry);
+        const groups = isCurrent ? groupToc(entry.toc) : [];
+        return (
+          <li>
+            <a
+              href={entryHref(entry.slug)}
+              aria-current={isCurrent ? "page" : undefined}
+              class:list={[itemLink, isCurrent ? "font-bold text-ink" : "text-ink-secondary"]}
+            >
+              <span
+                class:list={[
+                  "w-5 shrink-0 font-bold tabular-nums",
+                  isCurrent ? "text-grove" : "text-ink-muted",
+                ]}
+                aria-hidden="true"
+              >
+                {short ?? (entry.slug === INDEX_SLUG ? "·" : "")}
+              </span>
+              <span class="min-w-0">
+                {short && <span class="sr-only">{entry.label}: </span>}
+                {entry.title}
+              </span>
+            </a>
+
+            {groups.length > 0 && (
+              <ol class="mb-3 ml-8 mt-1 space-y-0.5 border-l border-ink-divider pl-3">
+                {groups.map((group) => (
+                  <li data-toc-group={isSidebar ? "" : undefined}>
+                    <a href={`#${group.id}`} data-toc-link={group.id} class={headingLink}>
+                      {group.number && (
+                        <span class="mr-1.5 font-bold tabular-nums">{group.number}</span>
+                      )}
+                      {group.title}
+                    </a>
+                    {isSidebar && group.children.length > 0 && (
+                      <ol data-toc-children class="mb-1 ml-3 space-y-0.5">
+                        {group.children.map((child) => (
+                          <li>
+                            <a href={`#${child.id}`} data-toc-link={child.id} class={childLink}>
+                              {child.number && (
+                                <span class="mr-1.5 font-bold tabular-nums">{child.number}</span>
+                              )}
+                              {child.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <a
+    href={REPORT_PDF_HREF}
+    download
+    data-track-report-download={isSidebar ? "reader-sidebar" : "reader-contents"}
+    class={`mt-5 inline-flex min-h-[44px] items-center gap-2 rounded-sm text-[14px] font-bold text-grove transition-colors hover:text-grove-hover motion-reduce:transition-none ${focusRing}`}
+  >
+    <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+    Download PDF
+  </a>
+</nav>
