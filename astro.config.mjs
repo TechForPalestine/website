@@ -6,6 +6,7 @@ import react from "@astrojs/react";
 import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import sentry from "@sentry/astro";
+import { ICON_INCLUDE } from "./src/utils/iconInclude.mjs";
 
 // Sentry only reports from production builds. Loading it in `astro dev` adds
 // server/client instrumentation and a Vite plugin for no benefit.
@@ -101,7 +102,8 @@ export default defineConfig({
           enabled: !!process.env.SENTRY_AUTH_TOKEN,
         },
       }),
-    icon(),
+    // Bundle only the icons the site uses; see src/utils/iconInclude.mjs.
+    icon({ include: ICON_INCLUDE }),
     react(),
     tailwind({
       // Disable injecting a basic `base.css` import on every page.
