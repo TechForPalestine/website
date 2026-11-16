@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
   FINDINGS,
-  REPORT_PDF,
   findingHref,
   findingLinkLabel,
   pdfMeta,
@@ -11,19 +10,15 @@ import {
 const base: ReportFinding = { id: "f", title: "T", body: "B", section: "6.3" };
 
 describe("findingHref", () => {
-  it("links to the PDF without an anchor when the page is unknown", () => {
-    expect(findingHref(base)).toBe(REPORT_PDF.href);
-  });
-
-  it("jumps to the section's page when known", () => {
-    expect(findingHref({ ...base, page: 41 })).toBe(`${REPORT_PDF.href}#page=41`);
+  it("links to the finding's section in the online report", () => {
+    expect(findingHref(base)).toBe("/wikipedia-report-2026/section-6#s6-3");
+    expect(findingHref({ ...base, section: "4" })).toBe("/wikipedia-report-2026/section-4");
   });
 });
 
 describe("findingLinkLabel", () => {
-  it("names the section, adding the page number when known", () => {
+  it("names the section", () => {
     expect(findingLinkLabel(base)).toBe("Section 6.3");
-    expect(findingLinkLabel({ ...base, page: 41 })).toBe("Section 6.3 (p. 41)");
   });
 });
 
@@ -42,5 +37,11 @@ describe("FINDINGS", () => {
 
   it("pairs every stat with a label", () => {
     for (const f of FINDINGS) expect(Boolean(f.stat)).toBe(Boolean(f.statLabel));
+  });
+});
+
+describe("FINDINGS sections", () => {
+  it("all resolve to online report links", () => {
+    for (const f of FINDINGS) expect(() => findingHref(f)).not.toThrow();
   });
 });

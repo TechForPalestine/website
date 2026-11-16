@@ -160,7 +160,14 @@ export default defineConfig({
           // noindex until launch blockers in src/data/wikipediaReport.ts are resolved.
           "/wikipedia-report/",
         ];
-        return !exclude.some((path) => page.endsWith(path));
+        // Whole trees, matched by prefix. The online report is noindex until
+        // launch, like its landing page above.
+        const excludeTrees = ["/wikipedia-report-2026/"];
+        const { pathname } = new URL(page);
+        return (
+          !exclude.some((path) => page.endsWith(path)) &&
+          !excludeTrees.some((tree) => pathname.startsWith(tree))
+        );
       },
       // Canonical tags never use a trailing slash (src/utils/seo.ts), so the
       // sitemap must not either, or every URL sends Google two signals.

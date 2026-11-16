@@ -14,24 +14,28 @@ import {
   ghostButton,
   inlineLink,
   inverseButton,
-  ghostOnDarkButton,
 } from "../utils/designClasses";
 import { canonicalUrl, ORGANIZATION_ID, SITE_ORIGIN } from "../utils/seo";
 import TerminalCta from "../components/TerminalCta.astro";
 import TestimonialCard from "../components/membership/TestimonialCard.astro";
 import MailtoFallback from "../components/MailtoFallback.astro";
 import {
-  AUTHORS,
   CORRECTIONS_EMAIL,
+  CREDITS,
   FINDINGS,
-  METHODOLOGY,
+  MEMBERSHIP_PITCH,
+  METHODOLOGY_INTRO,
+  METHODOLOGY_NOTES,
+  METHODOLOGY_TRACKS,
   PRESS_EMAIL,
   QUOTES,
   RELATED_PROJECTS,
   REPORT_PDF,
+  REPORT_READ_HREF,
   REPORT_PUBLISHED,
   REPORT_SUMMARY,
   REPORT_TITLE,
+  SUMMARY_PDF,
   findingHref,
   findingLinkLabel,
   pdfMeta,
@@ -48,8 +52,7 @@ const publishedLabel = REPORT_PUBLISHED
   : undefined;
 
 const hasQuotes = QUOTES.length > 0;
-const hasRelated = RELATED_PROJECTS.length > 0;
-const newTab = "(PDF, opens in a new tab)";
+const pdfButtonLabel = REPORT_PDF.size ? `Download PDF (${REPORT_PDF.size})` : "Download PDF";
 
 // Report is an Article subtype; the PDF rides along as its encoding so search
 // and AI crawlers can find the document itself, not just this page.
@@ -58,7 +61,7 @@ const reportSchema = {
   "@type": "Report",
   headline: REPORT_TITLE,
   description: REPORT_SUMMARY,
-  url: canonicalUrl("/wikipedia-report"),
+  url: canonicalUrl(REPORT_READ_HREF),
   inLanguage: "en",
   ...(REPORT_PUBLISHED ? { datePublished: REPORT_PUBLISHED } : {}),
   author: { "@id": ORGANIZATION_ID, "@type": "NonprofitOrganization", name: "Tech for Palestine" },
@@ -109,18 +112,18 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
           <p class={`mt-6 max-w-[52ch] text-ink-secondary ${body}`}>{REPORT_SUMMARY}</p>
 
           <div class="mt-9 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            <a href={REPORT_READ_HREF} data-track-report-read="hero" class={primaryButton}>
+              <Icon name="mdi:book-open-page-variant-outline" class="h-4 w-4" aria-hidden="true" />
+              Read the report online
+            </a>
             <a
               href={REPORT_PDF.href}
               download
               data-track-report-download="hero"
-              class={primaryButton}
+              class={ghostButton}
             >
               <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
-              Download the report ({pdfLabel})
-            </a>
-            <a href="#findings" class={ghostButton}>
-              Key findings
-              <Icon name="mdi:arrow-down" class="h-4 w-4" aria-hidden="true" />
+              {pdfButtonLabel}
             </a>
           </div>
 
@@ -134,8 +137,8 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
       </div>
     </section>
 
-    <!-- Key findings: titles only; each opens to its figure, summary and a
-         link into the PDF. Native <details>, so no JS is needed to toggle. -->
+    <!-- Key findings: titles only; each opens to its figure, summary and a link
+         to its section in the online report. Native <details>, no JS to toggle. -->
     <section
       id="findings"
       aria-labelledby="findings-heading"
@@ -189,13 +192,10 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
                       </p>
                       <a
                         href={findingHref(finding)}
-                        target="_blank"
-                        rel="noopener"
                         class={`mt-4 inline-flex items-center gap-1.5 text-[15px] ${inlineLink}`}
                       >
                         Read more: {findingLinkLabel(finding)}
                         <Icon name="mdi:arrow-right" class="h-4 w-4" aria-hidden="true" />
-                        <span class="sr-only">{newTab}</span>
                       </a>
                     </div>
                   </div>
@@ -205,17 +205,20 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
           }
         </ol>
 
-        <div class="mt-10 flex flex-col gap-4 min-[480px]:flex-row min-[480px]:items-center">
+        <div class="mt-10 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+          <a href={REPORT_READ_HREF} data-track-report-read="findings" class={primaryButton}>
+            <Icon name="mdi:book-open-page-variant-outline" class="h-4 w-4" aria-hidden="true" />
+            Read the full report online
+          </a>
           <a
             href={REPORT_PDF.href}
             download
             data-track-report-download="findings"
-            class={primaryButton}
+            class={ghostButton}
           >
             <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
-            Read the full report
+            {pdfButtonLabel}
           </a>
-          <span class="text-[15px] text-ink-secondary">{pdfLabel}</span>
         </div>
       </div>
     </section>
@@ -237,76 +240,124 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
       )
     }
 
-    <!-- About this report: how it was made, who made it, how to correct it -->
-    <section aria-labelledby="about-heading" class="py-16 min-[810px]:py-20">
+    <!-- How we did this: method, sources and credits -->
+    <section
+      id="methodology"
+      aria-labelledby="method-heading"
+      class="scroll-mt-6 py-16 min-[810px]:py-20"
+    >
       <div class={container}>
         <h2
-          id="about-heading"
+          id="method-heading"
           class:list={[headline, !hasQuotes && "border-t border-ink-divider pt-14"]}
         >
-          About this report
+          How we did this
         </h2>
 
         <div class="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
-          <div class="min-w-0 max-w-[65ch] space-y-10">
-            {
-              METHODOLOGY.length > 0 && (
-                <div>
-                  <h3 class="text-[17px] font-bold text-ink">Methodology</h3>
-                  {METHODOLOGY.map((paragraph) => (
-                    <p class="mt-3 text-[17px] leading-[1.7] text-ink-secondary">{paragraph}</p>
-                  ))}
-                </div>
-              )
-            }
+          <div
+            class="min-w-0 max-w-[65ch] text-[17px] leading-[1.7] text-ink-secondary min-[810px]:text-[18px]"
+          >
+            {METHODOLOGY_INTRO.map((paragraph) => <p class="mb-5">{paragraph}</p>)}
+
+            <p class="mb-4 font-bold text-ink">We worked on three tracks:</p>
+            <ul class="mb-8 space-y-4 border-y border-ink-divider py-5">
+              {
+                METHODOLOGY_TRACKS.map((track) => (
+                  <li class="grid grid-cols-[1.25rem_minmax(0,1fr)]">
+                    <span class="font-bold text-grove" aria-hidden="true">
+                      ·
+                    </span>
+                    <span>
+                      <strong class="font-bold text-ink">{track.lead}</strong>
+                      {track.text && <> {track.text}</>}{" "}
+                      <a href={track.ref.href} class={inlineLink}>
+                        ({track.ref.label})
+                      </a>
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
 
             {
-              AUTHORS.length > 0 && (
-                <div>
-                  <h3 class="text-[17px] font-bold text-ink">Who made it</h3>
-                  <dl class="mt-3 divide-y divide-ink-divider border-y border-ink-divider">
-                    {AUTHORS.map((person) => (
-                      <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 py-3 text-[16px]">
-                        <dt class="font-bold text-ink">{person.name}</dt>
-                        <dd class="text-ink-secondary">{person.role}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              )
+              METHODOLOGY_NOTES.map((note) => (
+                <p class="mb-5">
+                  {note.text}
+                  {note.ref && (
+                    <>
+                      {" "}
+                      <a href={note.ref.href} class={inlineLink}>
+                        ({note.ref.label})
+                      </a>
+                    </>
+                  )}
+                </p>
+              ))
             }
 
-            <div>
-              <h3 class="text-[17px] font-bold text-ink">Corrections and responses</h3>
-              <p class="mt-3 text-[17px] leading-[1.7] text-ink-secondary">
-                Found an error, or named in the report and want to respond? Email
-                <a
-                  href={`mailto:${CORRECTIONS_EMAIL}?subject=${encodeURIComponent("Wikipedia report: correction")}`}
-                  data-mailto-fallback
-                  class={inlineLink}>{CORRECTIONS_EMAIL}</a
-                > with the page number and your source. We review every request, and if we change the
-                report, we will note the correction here with its date.
-              </p>
-            </div>
+            <p class="mt-8 rounded-lg bg-stone p-6 text-ink">
+              This is a living document. We update it when corrections or new information come in.
+              Found an error? Email{" "}
+              <a
+                href={`mailto:${CORRECTIONS_EMAIL}?subject=${encodeURIComponent("Wikipedia report: correction")}`}
+                data-mailto-fallback
+                class={inlineLink}>{CORRECTIONS_EMAIL}</a
+              >.
+            </p>
           </div>
 
-          <aside
-            aria-labelledby="press-heading"
-            class="min-w-0 self-start rounded-lg bg-stone p-6 sm:p-8"
+          <aside aria-labelledby="credits-heading" class="min-w-0 self-start">
+            <h3 id="credits-heading" class={overline}>Who made this</h3>
+            <dl class="mt-4 divide-y divide-ink-divider border-y border-ink-divider">
+              {
+                CREDITS.map((credit) => (
+                  <div class="py-4">
+                    <dt class="text-[15px] text-ink-secondary">{credit.role}</dt>
+                    <dd class="mt-1 text-[17px] font-bold leading-snug text-ink">{credit.names}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Press (band): contact and downloadable material -->
+    <section aria-labelledby="press-heading" class={band}>
+      <div
+        class={`${container} grid gap-x-12 gap-y-6 py-16 min-[810px]:py-20 lg:grid-cols-[12rem_minmax(0,1fr)]`}
+      >
+        <h2 id="press-heading" class={`${overline} lg:pt-2`}>Press</h2>
+        <div class="min-w-0">
+          <p class="text-[17px] text-ink-secondary">Press contact</p>
+          <a
+            href={`mailto:${PRESS_EMAIL}`}
+            data-mailto-fallback
+            class={`mt-1 inline-flex items-center gap-2 break-all text-[21px] min-[810px]:text-[24px] ${inlineLink}`}
           >
-            <h3 id="press-heading" class={overline}>Press inquiries</h3>
-            <p class="mt-4 text-base leading-relaxed text-ink-secondary">
-              For interviews and media requests, email:
-            </p>
-            <a
-              href={`mailto:${PRESS_EMAIL}`}
-              data-mailto-fallback
-              class={`mt-2 inline-flex items-center gap-2 break-all text-[19px] ${inlineLink}`}
-            >
-              <Icon name="mdi:email-outline" class="h-5 w-5 shrink-0" aria-hidden="true" />
-              {PRESS_EMAIL}
-            </a>
-            <div class="mt-6 border-t border-ink-divider pt-6">
+            <Icon name="mdi:email-outline" class="h-6 w-6 shrink-0" aria-hidden="true" />
+            {PRESS_EMAIL}
+          </a>
+
+          <ul class="mt-8 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            {
+              SUMMARY_PDF && (
+                <li>
+                  <a
+                    href={SUMMARY_PDF.href}
+                    download
+                    data-track-report-download="press-summary"
+                    class={ghostButton}
+                  >
+                    <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+                    Executive summary ({pdfMeta(SUMMARY_PDF)})
+                  </a>
+                </li>
+              )
+            }
+            <li>
               <a
                 href={REPORT_PDF.href}
                 download
@@ -314,49 +365,53 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
                 class={ghostButton}
               >
                 <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
-                Report ({pdfLabel})
+                Full report ({pdfLabel})
               </a>
-            </div>
-          </aside>
+            </li>
+            <li>
+              <a href="/media" class={ghostButton}>Logos and brand assets</a>
+            </li>
+          </ul>
         </div>
       </div>
     </section>
 
-    {
-      hasRelated && (
-        <section aria-labelledby="related-heading" class={band}>
-          <div
-            class={`${container} grid gap-x-12 gap-y-6 py-16 min-[810px]:py-20 lg:grid-cols-[12rem_minmax(0,1fr)]`}
-          >
-            <h2 id="related-heading" class={`${overline} lg:pt-5`}>
-              Related T4P work
-            </h2>
-            <ul class="divide-y divide-first-light-edge border-y border-first-light-edge">
-              {RELATED_PROJECTS.map((project) => (
-                <li class="py-5">
-                  <a href={project.href} class={`text-[19px] ${inlineLink}`}>
-                    {project.name}
-                  </a>
-                  <p class="mt-1 max-w-[60ch] text-base leading-relaxed text-ink-secondary">
-                    {project.description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )
-    }
+    <!-- Related T4P projects -->
+    <section aria-labelledby="related-heading" class="py-16 min-[810px]:py-20">
+      <div
+        class={`${container} grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]`}
+      >
+        <h2 id="related-heading" class={`max-w-[18ch] ${headline}`}>
+          T4P projects countering media bias and propaganda
+        </h2>
+        <ul class="divide-y divide-ink-divider border-y border-ink-divider">
+          {
+            RELATED_PROJECTS.map((project) => (
+              <li class="py-6">
+                <a
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={`inline-flex items-center gap-1.5 text-[21px] ${inlineLink}`}
+                >
+                  {project.name}
+                  <Icon name="mdi:open-in-new" class="h-4 w-4" aria-hidden="true" />
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+                <p class="mt-2 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+                  {project.description}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
 
-    <TerminalCta
-      heading="Become a Tech for Palestine member"
-      headingId="report-cta-heading"
-      padTop={hasRelated}
-    >
-      Members fund the work behind reports like this one, and join the teams that do it.
+    <TerminalCta heading="Become a T4P member" headingId="report-cta-heading" padTop={false}>
+      {MEMBERSHIP_PITCH.map((paragraph, i) => <p class:list={[i > 0 && "mt-4"]}>{paragraph}</p>)}
       <Fragment slot="actions">
-        <a href="/membership" class={inverseButton}>Become a member</a>
-        <a href="/donate" class={ghostOnDarkButton}>Donate</a>
+        <a href="/membership" class={inverseButton}>Become a T4P member</a>
       </Fragment>
     </TerminalCta>
   </main>
@@ -374,6 +429,15 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
   }
   openFindingFromHash();
   window.addEventListener("hashchange", openFindingFromHash);
+
+  document.querySelectorAll<HTMLElement>("[data-track-report-read]").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (typeof window.plausible === "undefined") return;
+      window.plausible("Wikipedia Report Read Online", {
+        props: { location: link.dataset.trackReportRead ?? "unknown" },
+      });
+    });
+  });
 
   document.querySelectorAll<HTMLElement>("[data-track-report-download]").forEach((link) => {
     link.addEventListener("click", () => {

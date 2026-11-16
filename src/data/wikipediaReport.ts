@@ -1,11 +1,14 @@
-// Content for /wikipedia-report ("Israel Is Attacking Wikipedia"). Copy lives
-// here so comms can edit it without touching the page markup.
+// Content for /wikipedia-report ("Israel Is Attacking Wikipedia"), the
+// landing page for the report. The report itself is online at
+// /wikipedia-report-2026 (src/pages/wikipedia-report-2026/) and as a PDF.
+// Copy lives here so comms can edit it without touching the page markup.
 //
-// Launch blockers are marked TODO(comms). Every optional section on the page
-// (quotes, methodology, authors, related projects) renders only when its data
-// is filled in, so nothing half-finished or placeholder ever ships. The page
-// is noindex and excluded from the sitemap until the blockers are resolved;
+// Open items are marked TODO(comms). Optional sections (quotes, the executive
+// summary PDF) render only when their data is filled in, so no placeholder
+// ever ships. The page is noindex and excluded from the sitemap until launch;
 // remove both (wikipedia-report.astro and astro.config.mjs) at launch.
+
+import { REPORT_BASE_PATH, appendixHref, sectionHref } from "../utils/wikipediaReportLinks";
 
 export interface ReportFinding {
   /** Anchor id, so a finding can be linked directly: /wikipedia-report#finding-ai */
@@ -15,17 +18,13 @@ export interface ReportFinding {
   statLabel?: string;
   title: string;
   body: string;
-  /** Report section, shown in the link text. */
+  /** Report section ("6.3"); "Read more" links to it in the online report. */
   section: string;
-  /** PDF page where the section starts. When set, the link jumps there
-   * (#page=N, honoured by desktop browsers) and the page number is shown so
-   * readers on mobile, which ignores the anchor, can still find it. */
-  page?: number;
 }
 
 export interface ReportPdf {
   href: string;
-  /** e.g. "4.2 MB". Shown beside the download links when set. */
+  /** e.g. "4.6 MB". Shown beside the download links when set. */
   size?: string;
   pages?: number;
 }
@@ -38,9 +37,26 @@ export interface ReportQuote {
   image?: string;
 }
 
-export interface ReportPerson {
-  name: string;
+/** A pointer into the online report, e.g. "(Section 6.4)". */
+export interface ReportRef {
+  label: string;
+  href: string;
+}
+
+export interface MethodologyTrack {
+  lead: string;
+  text: string;
+  ref: ReportRef;
+}
+
+export interface MethodologyNote {
+  text: string;
+  ref?: ReportRef;
+}
+
+export interface ReportCredit {
   role: string;
+  names: string;
 }
 
 export interface RelatedProject {
@@ -54,24 +70,33 @@ export const REPORT_TITLE = "Israel Is Attacking Wikipedia";
 export const REPORT_SUMMARY =
   "Read our new report: twenty years of documented attacks on Wikipedia, and what this means for the information you get from search and AI.";
 
-// TODO(comms): add the final PDF at this path in /public. Keep the filename
-// stable across revisions so links in press coverage keep working, and update
-// the size and page count below each time the file is replaced.
+/** The online report. Its address is printed in the PDF, so it must not move. */
+export const REPORT_READ_HREF = REPORT_BASE_PATH;
+
+// Keep the filename stable across revisions so links in press coverage keep
+// working, and update the size and page count each time the file is replaced.
+// The current file is the "Take 6" export with its internal draft page
+// removed. TODO(comms): replace with the final export when there is one.
 export const REPORT_PDF: ReportPdf = {
   href: "/reports/israel-is-attacking-wikipedia.pdf",
+  size: "4.6 MB",
+  pages: 250,
 };
 
-// TODO(comms): ISO date (YYYY-MM-DD) the report is published. Shown in the
-// hero and emitted as datePublished in the JSON-LD.
-export const REPORT_PUBLISHED: string | undefined = undefined;
+// TODO(comms): add the executive summary PDF at
+// /reports/israel-is-attacking-wikipedia-summary.pdf and set this to
+// { href: "/reports/israel-is-attacking-wikipedia-summary.pdf", size, pages }.
+// The press links show it only once it is set.
+export const SUMMARY_PDF: ReportPdf | undefined = undefined;
+
+/** Embargo date of the report. Shown in the hero and used as datePublished. */
+export const REPORT_PUBLISHED: string | undefined = "2026-11-17";
 
 export const PRESS_EMAIL = "media@techforpalestine.org";
 
-// TODO(comms): confirm the corrections address and policy wording below.
-export const CORRECTIONS_EMAIL = PRESS_EMAIL;
+/** The corrections address printed in the report itself. */
+export const CORRECTIONS_EMAIL = "contact@techforpalestine.org";
 
-// TODO(comms): fill in `page` for each finding from the final PDF, and recheck
-// them whenever the PDF is replaced.
 export const FINDINGS: readonly ReportFinding[] = [
   {
     id: "finding-twenty-years",
@@ -142,30 +167,88 @@ export const FINDINGS: readonly ReportFinding[] = [
 // section stays hidden until at least one is added.
 export const QUOTES: readonly ReportQuote[] = [];
 
-// TODO(comms): a few sentences covering main sources, time period and how the
-// research was done. The methodology block stays hidden until this is set.
-export const METHODOLOGY: readonly string[] = [];
+export const METHODOLOGY_INTRO: readonly string[] = [
+  "This report started in March 2025, when the ADL published “Editing for Hate”. The report claims Wikipedia editors colluded to add antisemitism. US politicians started using it to attack Wikipedia. We wanted to know if the report itself was part of an influence operation.",
+];
 
-// TODO(comms): authors and editors. Hidden until filled in.
-export const AUTHORS: readonly ReportPerson[] = [];
+export const METHODOLOGY_TRACKS: readonly MethodologyTrack[] = [
+  {
+    lead: "Israel’s efforts to influence Wikipedia.",
+    text: "We collected 18 publicly known campaigns from public reports, at least 9 of them still active. This is the first time they are documented in one place.",
+    ref: { label: "Sections 3 and 4", href: sectionHref("3") },
+  },
+  {
+    lead: "The ADL report.",
+    text: "We went through every claim and traced each one back to the Wikipedia edits and sources it cites. None held up.",
+    ref: { label: "Section 6", href: sectionHref("6") },
+  },
+  {
+    lead: "The propaganda tools behind the attack.",
+    text: "",
+    ref: { label: "Sections 2 and 5", href: sectionHref("2") },
+  },
+];
 
-// TODO(comms): related T4P projects (name, one line, link). Hidden until
-// filled in.
-export const RELATED_PROJECTS: readonly RelatedProject[] = [];
+export const METHODOLOGY_NOTES: readonly MethodologyNote[] = [
+  {
+    text: "The ADL analysed Arabic Wikipedia through English translations. We went back to the original Arabic.",
+    ref: { label: "Section 6.4", href: sectionHref("6.4") },
+  },
+  {
+    text: "Links to Wikipedia are permalinks to the exact edit. Content from pro-Israel organisations and paywalled sources is linked through archive.org, so it can’t be removed or changed.",
+    ref: { label: "Appendix B", href: appendixHref("B") },
+  },
+  {
+    text: "Where we used AI for research, we name the tool and the prompts and publish the full conversation. AI-reconstructed links used in the report were checked by hand.",
+    ref: { label: "Appendices C, D, E and F", href: appendixHref("C") },
+  },
+  { text: "Every claim in this report is footnoted, more than 450 in total." },
+];
 
-/** Link into the PDF for a finding's "Read more". */
+export const CREDITS: readonly ReportCredit[] = [
+  { role: "Primary author", names: "Paul Biggar" },
+  { role: "Research and content", names: "Paul Biggar, Alexandra Fine, Mari Hall" },
+  { role: "Editor", names: "Alexandra Fine" },
+  { role: "Early research assistance", names: "T4P volunteers" },
+];
+
+// TODO(comms): approve the one-line descriptions (condensed from each
+// project's ProjectHub entry).
+export const RELATED_PROJECTS: readonly RelatedProject[] = [
+  {
+    name: "NewsCord",
+    description:
+      "Pulls facts and angles from dozens of global sources, so you see the whole story and where each part of it comes from.",
+    href: "https://newscord.org/",
+  },
+  {
+    name: "Media Bias Watch",
+    description: "Uses advertiser boycotts to put pressure on biased media.",
+    href: "https://mediabiaswatch.org",
+  },
+  {
+    name: "SourcedPress",
+    description:
+      "Fact-checking in the open: every source document is published with annotations, and every fact-checking conversation is public.",
+    href: "https://sourced.press",
+  },
+];
+
+export const MEMBERSHIP_PITCH: readonly string[] = [
+  "Tech for Palestine is a member-driven organization that brings together people, skills and resources. Through technology and collaboration, our members build tools and solutions that support the movement for Palestine.",
+  "These projects include: protest apps, tools for boycotting, support for Palestinian students & businesses, ethical tech alternatives, and many more.",
+];
+
+/** "Read more" target for a finding: its section in the online report. */
 export function findingHref(finding: ReportFinding): string {
-  return finding.page ? `${REPORT_PDF.href}#page=${finding.page}` : REPORT_PDF.href;
+  return sectionHref(finding.section);
 }
 
-/** "Section 6.3 (p. 41)", or "Section 6.3" until page numbers are known. */
 export function findingLinkLabel(finding: ReportFinding): string {
-  return finding.page
-    ? `Section ${finding.section} (p. ${finding.page})`
-    : `Section ${finding.section}`;
+  return `Section ${finding.section}`;
 }
 
-/** "PDF, 4.2 MB, 64 pages", dropping whichever parts are not known yet. */
+/** "PDF, 4.6 MB, 250 pages", dropping whichever parts are not known. */
 export function pdfMeta(pdf: ReportPdf = REPORT_PDF): string {
   return ["PDF", pdf.size, pdf.pages ? `${pdf.pages} pages` : undefined].filter(Boolean).join(", ");
 }
