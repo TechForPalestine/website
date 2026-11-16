@@ -83,11 +83,13 @@ export const REPORT_PDF: ReportPdf = {
   pages: 250,
 };
 
-// TODO(comms): add the executive summary PDF at
-// /reports/israel-is-attacking-wikipedia-summary.pdf and set this to
-// { href: "/reports/israel-is-attacking-wikipedia-summary.pdf", size, pages }.
-// The press links show it only once it is set.
-export const SUMMARY_PDF: ReportPdf | undefined = undefined;
+// The executive summary as its own PDF, linked from the Press section. Keep
+// the filename stable and update size and pages when the file is replaced.
+export const SUMMARY_PDF: ReportPdf | undefined = {
+  href: "/reports/israel-is-attacking-wikipedia-summary.pdf",
+  size: "313 KB",
+  pages: 4,
+};
 
 /** Embargo date of the report. Shown in the hero and used as datePublished. */
 export const REPORT_PUBLISHED: string | undefined = "2026-11-17";
