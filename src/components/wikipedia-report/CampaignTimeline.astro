@@ -1,0 +1,246 @@
+---
+// Hero visual for /wikipedia-report: every campaign documented in Section 3,
+// on a timeline from the first to the report's year, the ones still active in
+// Grove Green. Drawn from the report content (campaigns.ts), so it updates
+// when the report is regenerated.
+//
+// Server-rendered SVG positioned with attributes only (CSP forbids style=""),
+// in two layouts: labels beside the bars from `sm` up, above them on phones
+// (outlined in Stone so the year gridlines stop short of the text).
+// The SVGs are decorative; screen readers get the list in the figure instead.
+import { sectionHref } from "../../utils/wikipediaReportLinks";
+import { inlineLink, overline } from "../../utils/designClasses";
+import {
+  campaignSpan,
+  campaignYears,
+  tickYears,
+  yearX,
+  type Axis,
+  type Campaign,
+} from "./campaigns";
+
+interface Props {
+  campaigns: Campaign[];
+  /** The report's year; ongoing campaigns run to its end. */
+  lastYear: number;
+}
+
+const { campaigns, lastYear } = Astro.props;
+const firstYear = Math.min(...campaigns.map((c) => c.start));
+const active = campaigns.filter((c) => c.ongoing).length;
+const ticks = tickYears(firstYear, lastYear);
+
+// Wide layout: labels right-aligned in a column, bars to their right.
+const WIDE = { width: 600, labelX: 238, top: 30, row: 22 };
+const wideAxis: Axis = { firstYear, lastYear, x0: 252, x1: 578 };
+const wideHeight = WIDE.top + campaigns.length * WIDE.row;
+
+// Narrow layout: label on its own line, bar beneath it.
+const NARROW = { width: 300, top: 30, row: 36 };
+const narrowAxis: Axis = { firstYear, lastYear, x0: 4, x1: 284 };
+// On phones a tick right after the first year collides with it.
+const narrowTicks = ticks.filter((year) => year === firstYear || year - firstYear >= 6);
+const narrowHeight = NARROW.top + campaigns.length * NARROW.row;
+
+const rows = campaigns.map((c) => ({ ...c, span: campaignSpan(c, lastYear) }));
+const ARROW = 8;
+---
+
+<figure aria-labelledby="campaigns-caption" class="min-w-0 rounded-lg bg-stone p-6 sm:p-8">
+  <p class={overline}>Campaigns to tilt Wikipedia, {firstYear} to today</p>
+
+  <svg
+    viewBox={`0 0 ${WIDE.width} ${wideHeight}`}
+    class="mt-5 hidden h-auto w-full sm:block"
+    aria-hidden="true"
+    focusable="false"
+  >
+    {
+      ticks.map((year) => (
+        <g>
+          <line
+            x1={yearX(year, wideAxis)}
+            x2={yearX(year, wideAxis)}
+            y1={WIDE.top - 8}
+            y2={wideHeight}
+            stroke="currentColor"
+            class="text-ink-divider"
+          />
+          <text
+            x={yearX(year, wideAxis)}
+            y={WIDE.top - 14}
+            text-anchor="middle"
+            font-size="12"
+            fill="currentColor"
+            class="text-ink-secondary"
+          >
+            {year}
+          </text>
+        </g>
+      ))
+    }
+    {
+      rows.map((c, i) => {
+        const y = WIDE.top + i * WIDE.row + WIDE.row / 2;
+        const from = yearX(c.span.from, wideAxis);
+        const to = yearX(c.span.to, wideAxis);
+        return (
+          <g class={c.ongoing ? "text-grove" : "text-ink-secondary"}>
+            <text
+              x={WIDE.labelX}
+              y={y + 4}
+              text-anchor="end"
+              font-size="13"
+              font-weight={c.ongoing ? 700 : 400}
+              fill="currentColor"
+              class={c.ongoing ? "text-ink" : "text-ink-secondary"}
+            >
+              {c.name}
+            </text>
+            {c.span.kind === "dot" ? (
+              <circle cx={from} cy={y} r="4.5" fill="currentColor" />
+            ) : (
+              <line
+                x1={from}
+                x2={c.span.kind === "ongoing" ? to - ARROW : to}
+                y1={y}
+                y2={y}
+                stroke="currentColor"
+                stroke-width={c.ongoing ? 6 : 4}
+                stroke-linecap="round"
+              />
+            )}
+            {c.span.kind === "ongoing" && (
+              <path
+                d={`M${to - ARROW},${y - 6} L${to + 2},${y} L${to - ARROW},${y + 6} Z`}
+                fill="currentColor"
+              />
+            )}
+          </g>
+        );
+      })
+    }
+  </svg>
+
+  <svg
+    viewBox={`0 0 ${NARROW.width} ${narrowHeight}`}
+    class="mt-5 h-auto w-full sm:hidden"
+    aria-hidden="true"
+    focusable="false"
+  >
+    {
+      narrowTicks.map((year) => (
+        <g>
+          <line
+            x1={yearX(year, narrowAxis)}
+            x2={yearX(year, narrowAxis)}
+            y1={NARROW.top - 8}
+            y2={narrowHeight}
+            stroke="currentColor"
+            class="text-ink-divider"
+          />
+          <text
+            x={yearX(year, narrowAxis)}
+            y={NARROW.top - 14}
+            text-anchor={year === firstYear ? "start" : "middle"}
+            font-size="12"
+            fill="currentColor"
+            class="text-ink-secondary"
+          >
+            {year}
+          </text>
+        </g>
+      ))
+    }
+    {
+      rows.map((c, i) => {
+        const top = NARROW.top + i * NARROW.row;
+        const y = top + 25;
+        const from = yearX(c.span.from, narrowAxis);
+        const to = yearX(c.span.to, narrowAxis);
+        return (
+          <g class={c.ongoing ? "text-grove" : "text-ink-secondary"}>
+            <text
+              x={narrowAxis.x0}
+              y={top + 12}
+              font-size="13"
+              stroke-width="5"
+              stroke-linejoin="round"
+              paint-order="stroke"
+              font-weight={c.ongoing ? 700 : 400}
+              fill="currentColor"
+              class={c.ongoing ? "stroke-stone text-ink" : "stroke-stone text-ink-secondary"}
+            >
+              {c.name}
+            </text>
+            {c.span.kind === "dot" ? (
+              <circle cx={from} cy={y} r="4.5" fill="currentColor" />
+            ) : (
+              <line
+                x1={from}
+                x2={c.span.kind === "ongoing" ? to - ARROW : to}
+                y1={y}
+                y2={y}
+                stroke="currentColor"
+                stroke-width={c.ongoing ? 6 : 4}
+                stroke-linecap="round"
+              />
+            )}
+            {c.span.kind === "ongoing" && (
+              <path
+                d={`M${to - ARROW},${y - 6} L${to + 2},${y} L${to - ARROW},${y + 6} Z`}
+                fill="currentColor"
+              />
+            )}
+          </g>
+        );
+      })
+    }
+  </svg>
+
+  <ol class="sr-only">
+    {
+      campaigns.map((c) => (
+        <li>
+          {c.name}: {campaignYears(c)}
+          {c.ongoing ? ", still active" : ""}
+        </li>
+      ))
+    }
+  </ol>
+
+  <figcaption id="campaigns-caption" class="mt-6 border-t border-ink-divider pt-5">
+    <p class="text-[17px] font-bold leading-snug text-ink">
+      {campaigns.length} campaigns since {firstYear}. {active} are still active.
+    </p>
+    <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px] text-ink-secondary">
+      <span class="inline-flex items-center gap-2">
+        <svg width="22" height="8" aria-hidden="true" focusable="false" class="text-grove">
+          <line
+            x1="3"
+            x2="19"
+            y1="4"
+            y2="4"
+            stroke="currentColor"
+            stroke-width="6"
+            stroke-linecap="round"></line>
+        </svg>
+        Still active
+      </span>
+      <span class="inline-flex items-center gap-2">
+        <svg width="22" height="8" aria-hidden="true" focusable="false" class="text-ink-secondary">
+          <line
+            x1="3"
+            x2="19"
+            y1="4"
+            y2="4"
+            stroke="currentColor"
+            stroke-width="4"
+            stroke-linecap="round"></line>
+        </svg>
+        Ended
+      </span>
+      <a href={sectionHref("3")} class={inlineLink}>Read Section 3</a>
+    </div>
+  </figcaption>
+</figure>
