@@ -157,6 +157,8 @@ export default defineConfig({
           // noindex: finished campaigns and archived challenges.
           "/ramadan/",
           "/monthly-challenge/october-2026/",
+          // noindex until launch blockers in src/data/wikipediaReport.ts are resolved.
+          "/wikipedia-report/",
         ];
         return !exclude.some((path) => page.endsWith(path));
       },

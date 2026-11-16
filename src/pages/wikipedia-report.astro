@@ -1,0 +1,392 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+import "../styles/base.css";
+import {
+  container,
+  display,
+  headline,
+  overline,
+  body,
+  focusRing,
+  band,
+  primaryButton,
+  ghostButton,
+  inlineLink,
+  inverseButton,
+  ghostOnDarkButton,
+} from "../utils/designClasses";
+import { canonicalUrl, ORGANIZATION_ID, SITE_ORIGIN } from "../utils/seo";
+import TerminalCta from "../components/TerminalCta.astro";
+import TestimonialCard from "../components/membership/TestimonialCard.astro";
+import MailtoFallback from "../components/MailtoFallback.astro";
+import {
+  AUTHORS,
+  CORRECTIONS_EMAIL,
+  FINDINGS,
+  METHODOLOGY,
+  PRESS_EMAIL,
+  QUOTES,
+  RELATED_PROJECTS,
+  REPORT_PDF,
+  REPORT_PUBLISHED,
+  REPORT_SUMMARY,
+  REPORT_TITLE,
+  findingHref,
+  findingLinkLabel,
+  pdfMeta,
+} from "../data/wikipediaReport";
+
+const pdfLabel = pdfMeta();
+const pdfUrl = `${SITE_ORIGIN}${REPORT_PDF.href}`;
+const publishedLabel = REPORT_PUBLISHED
+  ? new Date(`${REPORT_PUBLISHED}T12:00:00Z`).toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    })
+  : undefined;
+
+const hasQuotes = QUOTES.length > 0;
+const hasRelated = RELATED_PROJECTS.length > 0;
+const newTab = "(PDF, opens in a new tab)";
+
+// Report is an Article subtype; the PDF rides along as its encoding so search
+// and AI crawlers can find the document itself, not just this page.
+const reportSchema = {
+  "@context": "https://schema.org",
+  "@type": "Report",
+  headline: REPORT_TITLE,
+  description: REPORT_SUMMARY,
+  url: canonicalUrl("/wikipedia-report"),
+  inLanguage: "en",
+  ...(REPORT_PUBLISHED ? { datePublished: REPORT_PUBLISHED } : {}),
+  author: { "@id": ORGANIZATION_ID, "@type": "NonprofitOrganization", name: "Tech for Palestine" },
+  publisher: {
+    "@id": ORGANIZATION_ID,
+    "@type": "NonprofitOrganization",
+    name: "Tech for Palestine",
+  },
+  about: { "@type": "WebSite", name: "Wikipedia", url: "https://www.wikipedia.org" },
+  encoding: {
+    "@type": "MediaObject",
+    contentUrl: pdfUrl,
+    encodingFormat: "application/pdf",
+    ...(REPORT_PDF.size ? { contentSize: REPORT_PDF.size } : {}),
+  },
+};
+
+const ordinal = (i: number) => String(i + 1).padStart(2, "0");
+---
+
+<Layout
+  title={`${REPORT_TITLE}: Report - Tech for Palestine`}
+  description="Twenty years of documented attacks on Wikipedia, and what they mean for the information you get from search and AI. A report by Tech for Palestine."
+  schema={[reportSchema]}
+  noindex
+>
+  <!-- noindex (and the sitemap exclusion in astro.config.mjs) stay until the
+       TODO(comms) launch blockers in src/data/wikipediaReport.ts are resolved. -->
+  <main>
+    <!-- Hero: the claim and the download, both above the fold -->
+    <section
+      aria-labelledby="report-heading"
+      class="pb-14 pt-16 min-[810px]:pb-16 min-[810px]:pt-20"
+    >
+      <div
+        class={`${container} grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start lg:gap-16`}
+      >
+        <div class="min-w-0">
+          <p class={overline}>
+            New report{
+              publishedLabel && (
+                <>
+                  {" "}
+                  · <time datetime={REPORT_PUBLISHED}>{publishedLabel}</time>
+                </>
+              )
+            }
+          </p>
+          <h1 id="report-heading" class={`mt-5 max-w-[14ch] ${display}`}>{REPORT_TITLE}</h1>
+          <p class={`mt-6 max-w-[52ch] text-ink-secondary ${body}`}>{REPORT_SUMMARY}</p>
+
+          <div class="mt-9 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+            <a
+              href={REPORT_PDF.href}
+              download
+              data-track-report-download="hero"
+              class={primaryButton}
+            >
+              <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+              Download the report ({pdfLabel})
+            </a>
+            <a href="#findings" class={ghostButton}>
+              Key findings
+              <Icon name="mdi:arrow-down" class="h-4 w-4" aria-hidden="true" />
+            </a>
+          </div>
+
+          <p class="mt-6 text-[15px] text-ink-secondary">
+            Press:
+            <a href={`mailto:${PRESS_EMAIL}`} data-mailto-fallback class={inlineLink}>
+              {PRESS_EMAIL}
+            </a>
+          </p>
+        </div>
+
+        <!-- Contents: a jump index to the findings, desktop only (on mobile the
+             findings follow directly) -->
+        <nav
+          aria-labelledby="contents-heading"
+          class="hidden min-w-0 rounded-lg bg-stone p-8 lg:block"
+        >
+          <h2 id="contents-heading" class={overline}>What we found</h2>
+          <ol class="mt-5 divide-y divide-ink-divider">
+            {
+              FINDINGS.map((finding, i) => (
+                <li>
+                  <a
+                    href={`#${finding.id}`}
+                    class={`group flex gap-4 py-3 text-[16px] leading-snug text-ink transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
+                  >
+                    <span class="w-6 shrink-0 font-bold tabular-nums text-ink-muted group-hover:text-grove">
+                      {ordinal(i)}
+                    </span>
+                    <span>{finding.title}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Key findings: one row per finding, the figure first so a skimmer can
+         read the left column as a summary of the report -->
+    <section
+      id="findings"
+      aria-labelledby="findings-heading"
+      class="scroll-mt-6 pb-16 min-[810px]:pb-20"
+    >
+      <div class={container}>
+        <h2 id="findings-heading" class={`border-t border-ink-divider pt-14 ${headline}`}>
+          Key findings
+        </h2>
+
+        <ol class="mt-10 border-b border-ink-divider">
+          {
+            FINDINGS.map((finding, i) => (
+              <li
+                id={finding.id}
+                class="grid scroll-mt-6 gap-x-12 gap-y-4 border-t border-ink-divider py-10 min-[810px]:grid-cols-[14rem_minmax(0,1fr)]"
+              >
+                <div aria-hidden={finding.stat ? undefined : "true"}>
+                  {finding.stat ? (
+                    <>
+                      <p class="text-[44px] font-extrabold tabular-nums leading-none text-grove min-[810px]:text-[58px]">
+                        {finding.stat}
+                      </p>
+                      <p class="mt-3 max-w-[22ch] text-[15px] leading-snug text-ink-secondary">
+                        {finding.statLabel}
+                      </p>
+                    </>
+                  ) : (
+                    <p class="text-[44px] font-extrabold tabular-nums leading-none text-ink-divider min-[810px]:text-[58px]">
+                      {ordinal(i)}
+                    </p>
+                  )}
+                </div>
+
+                <div class="min-w-0 max-w-[65ch]">
+                  <h3 class="flex gap-3 text-[21px] font-extrabold leading-snug text-ink min-[810px]:text-[24px]">
+                    <span class="shrink-0 tabular-nums text-ink-muted">{ordinal(i)}</span>
+                    <span>{finding.title}</span>
+                  </h3>
+                  <p class="mt-3 text-[17px] leading-[1.7] text-ink-secondary min-[810px]:text-[18px]">
+                    {finding.body}
+                  </p>
+                  <a
+                    href={findingHref(finding)}
+                    target="_blank"
+                    rel="noopener"
+                    class={`mt-4 inline-flex items-center gap-1.5 text-[15px] ${inlineLink}`}
+                  >
+                    Read more: {findingLinkLabel(finding)}
+                    <Icon name="mdi:arrow-right" class="h-4 w-4" aria-hidden="true" />
+                    <span class="sr-only">{newTab}</span>
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="mt-10 flex flex-col gap-4 min-[480px]:flex-row min-[480px]:items-center">
+          <a
+            href={REPORT_PDF.href}
+            download
+            data-track-report-download="findings"
+            class={primaryButton}
+          >
+            <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+            Read the full report
+          </a>
+          <span class="text-[15px] text-ink-secondary">{pdfLabel}</span>
+        </div>
+      </div>
+    </section>
+
+    {
+      hasQuotes && (
+        <section aria-labelledby="voices-heading" class={band}>
+          <div class={`${container} py-16 min-[810px]:py-20`}>
+            <h2 id="voices-heading" class={overline}>
+              What people are saying
+            </h2>
+            <div class="mt-8 grid gap-5 min-[810px]:grid-cols-2 min-[810px]:[&>*:last-child:nth-child(odd)]:col-span-2">
+              {QUOTES.map((q) => (
+                <TestimonialCard quote={q.quote} name={q.name} role={q.role} image={q.image} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- About this report: how it was made, who made it, how to correct it -->
+    <section aria-labelledby="about-heading" class="py-16 min-[810px]:py-20">
+      <div class={container}>
+        <h2
+          id="about-heading"
+          class:list={[headline, !hasQuotes && "border-t border-ink-divider pt-14"]}
+        >
+          About this report
+        </h2>
+
+        <div class="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
+          <div class="min-w-0 max-w-[65ch] space-y-10">
+            {
+              METHODOLOGY.length > 0 && (
+                <div>
+                  <h3 class="text-[17px] font-bold text-ink">Methodology</h3>
+                  {METHODOLOGY.map((paragraph) => (
+                    <p class="mt-3 text-[17px] leading-[1.7] text-ink-secondary">{paragraph}</p>
+                  ))}
+                </div>
+              )
+            }
+
+            {
+              AUTHORS.length > 0 && (
+                <div>
+                  <h3 class="text-[17px] font-bold text-ink">Who made it</h3>
+                  <dl class="mt-3 divide-y divide-ink-divider border-y border-ink-divider">
+                    {AUTHORS.map((person) => (
+                      <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 py-3 text-[16px]">
+                        <dt class="font-bold text-ink">{person.name}</dt>
+                        <dd class="text-ink-secondary">{person.role}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )
+            }
+
+            <div>
+              <h3 class="text-[17px] font-bold text-ink">Corrections and responses</h3>
+              <p class="mt-3 text-[17px] leading-[1.7] text-ink-secondary">
+                Found an error, or named in the report and want to respond? Email
+                <a
+                  href={`mailto:${CORRECTIONS_EMAIL}?subject=${encodeURIComponent("Wikipedia report: correction")}`}
+                  data-mailto-fallback
+                  class={inlineLink}>{CORRECTIONS_EMAIL}</a
+                > with the page number and your source. We review every request, and if we change the
+                report, we will note the correction here with its date.
+              </p>
+            </div>
+          </div>
+
+          <aside
+            aria-labelledby="press-heading"
+            class="min-w-0 self-start rounded-lg bg-stone p-6 sm:p-8"
+          >
+            <h3 id="press-heading" class={overline}>Press inquiries</h3>
+            <p class="mt-4 text-base leading-relaxed text-ink-secondary">
+              For interviews and media requests, email:
+            </p>
+            <a
+              href={`mailto:${PRESS_EMAIL}`}
+              data-mailto-fallback
+              class={`mt-2 inline-flex items-center gap-2 break-all text-[19px] ${inlineLink}`}
+            >
+              <Icon name="mdi:email-outline" class="h-5 w-5 shrink-0" aria-hidden="true" />
+              {PRESS_EMAIL}
+            </a>
+            <div class="mt-6 border-t border-ink-divider pt-6">
+              <a
+                href={REPORT_PDF.href}
+                download
+                data-track-report-download="press"
+                class={ghostButton}
+              >
+                <Icon name="mdi:download" class="h-4 w-4" aria-hidden="true" />
+                Report ({pdfLabel})
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {
+      hasRelated && (
+        <section aria-labelledby="related-heading" class={band}>
+          <div
+            class={`${container} grid gap-x-12 gap-y-6 py-16 min-[810px]:py-20 lg:grid-cols-[12rem_minmax(0,1fr)]`}
+          >
+            <h2 id="related-heading" class={`${overline} lg:pt-5`}>
+              Related T4P work
+            </h2>
+            <ul class="divide-y divide-first-light-edge border-y border-first-light-edge">
+              {RELATED_PROJECTS.map((project) => (
+                <li class="py-5">
+                  <a href={project.href} class={`text-[19px] ${inlineLink}`}>
+                    {project.name}
+                  </a>
+                  <p class="mt-1 max-w-[60ch] text-base leading-relaxed text-ink-secondary">
+                    {project.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )
+    }
+
+    <TerminalCta
+      heading="Become a Tech for Palestine member"
+      headingId="report-cta-heading"
+      padTop={hasRelated}
+    >
+      Members fund the work behind reports like this one, and join the teams that do it.
+      <Fragment slot="actions">
+        <a href="/membership" class={inverseButton}>Become a member</a>
+        <a href="/donate" class={ghostOnDarkButton}>Donate</a>
+      </Fragment>
+    </TerminalCta>
+  </main>
+  <MailtoFallback />
+</Layout>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-track-report-download]").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (typeof window.plausible === "undefined") return;
+      window.plausible("Wikipedia Report Download", {
+        props: { location: link.dataset.trackReportDownload ?? "unknown" },
+      });
+    });
+  });
+</script>
