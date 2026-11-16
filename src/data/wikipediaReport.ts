@@ -63,6 +63,8 @@ export interface RelatedProject {
   name: string;
   description: string;
   href: string;
+  /** Square logo under /public, copied from the project's ProjectHub entry. */
+  logo: string;
 }
 
 export const REPORT_TITLE = "Israel Is Attacking Wikipedia";
@@ -222,17 +224,20 @@ export const RELATED_PROJECTS: readonly RelatedProject[] = [
     description:
       "Pulls facts and angles from dozens of global sources, so you see the whole story and where each part of it comes from.",
     href: "https://newscord.org/",
+    logo: "/projectIcons/NewsCord.webp",
   },
   {
     name: "Media Bias Watch",
     description: "Uses advertiser boycotts to put pressure on biased media.",
     href: "https://mediabiaswatch.org",
+    logo: "/projectIcons/MediaBiasWatch.webp",
   },
   {
     name: "SourcedPress",
     description:
       "Fact-checking in the open: every source document is published with annotations, and every fact-checking conversation is public.",
     href: "https://sourced.press",
+    logo: "/projectIcons/SourcedPress.webp",
   },
 ];
 

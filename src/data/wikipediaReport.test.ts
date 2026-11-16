@@ -1,6 +1,8 @@
+import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   FINDINGS,
+  RELATED_PROJECTS,
   findingHref,
   findingLinkLabel,
   pdfMeta,
@@ -43,5 +45,13 @@ describe("FINDINGS", () => {
 describe("FINDINGS sections", () => {
   it("all resolve to online report links", () => {
     for (const f of FINDINGS) expect(() => findingHref(f)).not.toThrow();
+  });
+});
+
+describe("RELATED_PROJECTS", () => {
+  it("points every logo at a file in /public", () => {
+    for (const project of RELATED_PROJECTS) {
+      expect(existsSync(`public${project.logo}`), project.logo).toBe(true);
+    }
   });
 });

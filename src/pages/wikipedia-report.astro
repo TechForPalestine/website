@@ -387,20 +387,31 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
         <ul class="divide-y divide-ink-divider border-y border-ink-divider">
           {
             RELATED_PROJECTS.map((project) => (
-              <li class="py-6">
-                <a
-                  href={project.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class={`inline-flex items-center gap-1.5 text-[21px] ${inlineLink}`}
-                >
-                  {project.name}
-                  <Icon name="mdi:open-in-new" class="h-4 w-4" aria-hidden="true" />
-                  <span class="sr-only">(opens in a new tab)</span>
-                </a>
-                <p class="mt-2 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
-                  {project.description}
-                </p>
+              <li class="grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-5 py-6">
+                <img
+                  src={project.logo}
+                  alt=""
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-14 w-14 rounded-sm border border-ink-divider object-cover"
+                />
+                <div class="min-w-0">
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={`inline-flex items-center gap-1.5 text-[21px] ${inlineLink}`}
+                  >
+                    {project.name}
+                    <Icon name="mdi:open-in-new" class="h-4 w-4" aria-hidden="true" />
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </a>
+                  <p class="mt-2 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+                    {project.description}
+                  </p>
+                </div>
               </li>
             ))
           }
