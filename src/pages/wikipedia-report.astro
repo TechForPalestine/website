@@ -154,27 +154,21 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
       </div>
     </section>
 
-    <!-- Key findings: titles only; each opens to its figure, summary and a link
+    <!-- Key findings (First Light band): titles only; each opens to its figure, summary and a link
          to its section in the online report. Native <details>, no JS to toggle. -->
-    <section
-      id="findings"
-      aria-labelledby="findings-heading"
-      class="scroll-mt-6 pb-16 min-[810px]:pb-20"
-    >
-      <div class={container}>
-        <h2 id="findings-heading" class={`border-t border-ink-divider pt-14 ${headline}`}>
-          Key findings
-        </h2>
+    <section id="findings" aria-labelledby="findings-heading" class={`scroll-mt-6 ${band}`}>
+      <div class={`${container} py-16 min-[810px]:py-20`}>
+        <h2 id="findings-heading" class={headline}>Key findings</h2>
 
-        <ol class="mt-10 border-b border-ink-divider">
+        <ol class="mt-10 border-b border-first-light-edge">
           {
             FINDINGS.map((finding, i) => (
-              <li id={finding.id} class="scroll-mt-6 border-t border-ink-divider">
+              <li id={finding.id} class="scroll-mt-6 border-t border-first-light-edge">
                 <details class="group">
                   <summary
                     class={`flex cursor-pointer list-none items-start gap-4 py-6 text-ink transition-colors hover:text-grove motion-reduce:transition-none min-[810px]:gap-6 min-[810px]:py-7 [&::-webkit-details-marker]:hidden ${focusRing}`}
                   >
-                    <span class="w-8 shrink-0 pt-0.5 text-[17px] font-bold tabular-nums text-ink-muted group-hover:text-grove min-[810px]:text-[19px]">
+                    <span class="w-8 shrink-0 pt-0.5 text-[17px] font-bold tabular-nums text-ink-secondary group-hover:text-grove min-[810px]:text-[19px]">
                       {ordinal(i)}
                     </span>
                     <h3 class="min-w-0 flex-1 text-[21px] font-extrabold leading-snug min-[810px]:text-[24px]">
@@ -242,8 +236,8 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
 
     {
       hasQuotes && (
-        <section aria-labelledby="voices-heading" class={band}>
-          <div class={`${container} py-16 min-[810px]:py-20`}>
+        <section aria-labelledby="voices-heading" class="py-16 min-[810px]:py-20">
+          <div class={container}>
             <h2 id="voices-heading" class={overline}>
               What people are saying
             </h2>
@@ -266,7 +260,7 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
       <div class={container}>
         <h2
           id="method-heading"
-          class:list={[headline, !hasQuotes && "border-t border-ink-divider pt-14"]}
+          class:list={[headline, hasQuotes && "border-t border-ink-divider pt-14"]}
         >
           How we did this
         </h2>
