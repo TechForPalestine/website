@@ -47,7 +47,10 @@ const IMAGE_URL = "/images/wikipedia-report";
 const ALT_TEXT_FILE = path.join(REPO_ROOT, "scripts/wikipedia-report/image-alt.json");
 const MAX_IMAGE_EDGE = 1600;
 const DRAFT_MARKERS = /\b(TODO|TBD|TK|FIXME|XXX)\b|\[citation needed\]|\[(?:cite|ref|link)\??\]/g;
-const EXPECTED_PAGES = 14;
+// Executive summary, sections 1-7 and appendices A-E. A deliberate tripwire:
+// when the report gains or loses a page, check the links into it from the
+// landing page (src/data/wikipediaReport.ts) before raising this.
+const EXPECTED_PAGES = 13;
 
 function run(cmd, args, options = {}) {
   return execFileSync(cmd, args, { maxBuffer: 512 * 1024 * 1024, encoding: "utf8", ...options });

@@ -2,7 +2,7 @@
 slug: appendix-d
 kind: appendix
 label: "Appendix D"
-title: "GDPR Violations Potentially Violated by the Heritage Foundation"
+title: "GDPR Provisions Potentially Violated by the Heritage Foundation"
 order: 104
 toc: []
 ---
