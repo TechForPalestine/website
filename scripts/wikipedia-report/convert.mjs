@@ -29,6 +29,7 @@ import {
   walkAst,
 } from "./ast.mjs";
 import {
+  applySourceCorrections,
   collapseBlankLines,
   frontmatter,
   imageSize,
@@ -246,7 +247,15 @@ function main() {
         n: note.n,
         html: clean(noteHtml[noteCursor++]),
       }));
-      const html = collapseBlankLines(`${clean(bodies[i])}\n${notesSectionHtml(renderedNotes)}`);
+      const corrected = applySourceCorrections(
+        collapseBlankLines(`${clean(bodies[i])}\n${notesSectionHtml(renderedNotes)}`)
+      );
+      for (const c of corrected.applied) {
+        log.warnings.push(
+          `${page.slug}: corrected ${c.count}× "${c.find}" → "${c.replace}" (${c.reason}); fix it in the Google Doc`
+        );
+      }
+      const html = corrected.html;
       return { slug: page.slug, page: { ...page, toc }, html, notes: notes.length };
     });
 

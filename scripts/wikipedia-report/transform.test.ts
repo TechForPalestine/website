@@ -14,6 +14,8 @@ import {
   notesSectionHtml,
   parseHeading,
   NEW_TAB_HINT_ID,
+  SOURCE_CORRECTIONS,
+  applySourceCorrections,
   isExternalHref,
   sanitizeHtml,
   sectionAnchorId,
@@ -352,5 +354,22 @@ describe("external links", () => {
 describe("new-tab hint id", () => {
   it("matches the id the reader pages render", () => {
     expect(NEW_TAB_HINT_ID).toBe(contract.NEW_TAB_HINT_ID);
+  });
+});
+
+describe("applySourceCorrections", () => {
+  it("rewrites the report's wrong address in links and text, and reports it", () => {
+    const html =
+      '<p>Lives at <a href="https://techforpalestine.org/wikipedia/report">https://techforpalestine.org/wikipedia/report</a>.</p>';
+    const { html: out, applied } = applySourceCorrections(html);
+    expect(out).toBe(
+      '<p>Lives at <a href="https://techforpalestine.org/wikipedia-report">https://techforpalestine.org/wikipedia-report</a>.</p>'
+    );
+    expect(applied).toEqual([{ ...SOURCE_CORRECTIONS[0], count: 2 }]);
+  });
+
+  it("does nothing once the document is fixed", () => {
+    const html = '<a href="https://techforpalestine.org/wikipedia-report">x</a>';
+    expect(applySourceCorrections(html)).toEqual({ html, applied: [] });
   });
 });

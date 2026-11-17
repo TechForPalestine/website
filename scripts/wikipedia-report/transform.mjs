@@ -255,6 +255,33 @@ export const NEW_TAB_HINT_ID = "report-new-tab-hint";
 const LINK_ATTRS_SET_BELOW = new Set(["rel", "target", "aria-describedby"]);
 const OWN_HOSTS = new Set(["techforpalestine.org", "www.techforpalestine.org"]);
 
+/**
+ * Known errors in the source document, corrected on the way out. Each one
+ * that fires is reported as a converter warning so it gets fixed in the
+ * Google Doc; once it is, the correction finds nothing and can be deleted.
+ */
+export const SOURCE_CORRECTIONS = [
+  {
+    find: "https://techforpalestine.org/wikipedia/report",
+    replace: "https://techforpalestine.org/wikipedia-report",
+    reason: "the report's own address; /wikipedia/report does not exist",
+  },
+];
+
+/** Apply SOURCE_CORRECTIONS (exact string matches) to a page's HTML. */
+export function applySourceCorrections(html, corrections = SOURCE_CORRECTIONS) {
+  let out = html;
+  const applied = [];
+  for (const correction of corrections) {
+    const parts = out.split(correction.find);
+    if (parts.length > 1) {
+      out = parts.join(correction.replace);
+      applied.push({ ...correction, count: parts.length - 1 });
+    }
+  }
+  return { html: out, applied };
+}
+
 /** True for http(s) links to another site. Links to our own site stay in the same tab. */
 export function isExternalHref(href) {
   if (!/^https?:\/\//i.test(href)) return false;
