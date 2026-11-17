@@ -78,10 +78,9 @@ function sectionTitle(number: string): string | undefined {
   const page = reportPage(`section-${number.split(".")[0]}`);
   if (!page) return undefined;
   if (!number.includes(".")) return /^title: "((?:[^"\\]|\\.)*)"$/m.exec(page)?.[1];
-  const entry = new RegExp(
-    `number: "${number.replace(/\./g, "\\.")}", title: "((?:[^"\\\\]|\\\\.)*)"`
-  );
-  return entry.exec(page)?.[1];
+  // Read every toc entry and compare numbers as strings (no regex built from input).
+  const entries = page.matchAll(/number: "([\d.]+)", title: "((?:[^"\\]|\\.)*)"/g);
+  return [...entries].find(([, n]) => n === number)?.[2];
 }
 
 describe("links from the landing page into the report", () => {
