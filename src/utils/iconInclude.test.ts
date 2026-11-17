@@ -26,7 +26,9 @@ describe("ICON_INCLUDE", () => {
     expect([...missing]).toEqual([]);
   });
 
-  it("only names icons that exist in their installed sets", async () => {
+  // Loads every installed icon set (tens of MB of JSON), which can outrun
+  // the default 5s timeout when the whole suite runs in parallel.
+  it("only names icons that exist in their installed sets", { timeout: 30_000 }, async () => {
     for (const [set, icons] of Object.entries(ICON_INCLUDE)) {
       const { icons: available } = (await import(`@iconify-json/${set}/icons.json`)).default;
       expect(
