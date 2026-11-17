@@ -108,7 +108,7 @@ export const CORRECTIONS_EMAIL = "contact@techforpalestine.org";
 
 export const FINDINGS: readonly ReportFinding[] = [
   {
-    id: "finding-twenty-years",
+    id: "finding-us-government",
     stat: "$98M",
     statLabel: "from pro-Israel PACs to 26 U.S. politicians behind it",
     title: "US government attacks on Wikipedia",
@@ -117,7 +117,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     sectionTitle: "The Influence Operation on Wikipedia",
   },
   {
-    id: "finding-adl-evidence",
+    id: "finding-ai",
     stat: "$729M",
     statLabel: "Israel’s 2026 propaganda budget, up from $150M",
     title: "The real target is AI",
@@ -126,33 +126,30 @@ export const FINDINGS: readonly ReportFinding[] = [
     sectionTitle: "Influencing AI via Wikipedia",
   },
   {
-    id: "finding-circular-logic",
-    stat: "22–2",
-    statLabel: "",
+    id: "finding-billionaires",
     title: "The Billionaire tech bros behind it all",
     body: "Our research shows that the ADL's partner in the attack on Wikipedia was likely funded by billionaire tech bros. “Builders for Tomorrow” came out of “Builders for Israel”, a WhatsApp group started in 2023 with Sheryl Sandberg, Bill Ackman, Shaun Maguire, and David Marcus.",
     section: "4.6.2",
     sectionTitle: "Builders for Tomorrow",
   },
   {
-    id: "finding-96-million",
-    stat: "$96M",
-    statLabel: "",
+    id: "finding-adl-admits",
     title: "The ADL admits it",
     body: "From the ADL’s mouth: “The pressure came from several directions: congressional scrutiny, including a House Committee on Oversight investigation and a bipartisan Congressional letter from 23 members, federal inquiries from the Department of Justice and the Senate Commerce Committee; enforcement work by Wikipedia’s NPOV-policy editors, ADL reporting, and broader media scrutiny.”",
-    section: "6.5.2",
-    sectionTitle: "Dr. Shira Klein’s Assessment",
+    section: "6.5.2.1",
+    sectionTitle: "Sustained, multi-front external pressure",
   },
   {
-    id: "finding-adl-admits",
+    id: "finding-adl-evidence",
+    stat: "0",
     statLabel: "ADL claims that survived scrutiny",
     title: "The evidence from the Anti-Defamation League (ADL) doesn’t hold up",
     body: "We checked every claim in the ADL’s “Editing for Hate” report, and the “Damage Done”. No claim survived scrutiny. It doesn’t show a single false fact, or any antisemitic content added to Wikipedia.",
     section: "6",
-    sectionTitle: "The ADL Report",
+    sectionTitle: "The ADL report",
   },
   {
-    id: "finding-surveillance",
+    id: "finding-jimmy-wales",
     stat: "$900,000",
     statLabel: "Prize from an Israeli foundation, the largest prize he has received",
     title: "Jimmy Wales should step down",
@@ -161,7 +158,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     sectionTitle: "Jimmy Wales (2025-ongoing)",
   },
   {
-    id: "finding-ai",
+    id: "finding-drop-the-adl",
     stat: "287",
     statLabel: "civil rights groups who say #DropTheADL",
     title: "The ADL doesn’t care about Civil rights",
@@ -179,7 +176,7 @@ export const FINDINGS: readonly ReportFinding[] = [
   //   sectionTitle: "“Systematic” Edits",
   // },
   {
-    id: "finding-t4p-campaign",
+    id: "finding-twenty-years",
     stat: "17",
     statLabel: "efforts since 2001, nine still active",
     title: "Twenty years of manipulating Wikipedia",
@@ -188,8 +185,8 @@ export const FINDINGS: readonly ReportFinding[] = [
     sectionTitle: "Direct Manipulation of Wikipedia",
   },
   {
-    id: "finding-t4p-campaign",
-    stat: "17",
+    id: "finding-surveillance",
+    stat: "45",
     statLabel: "full-time ADL analysts “tracking” Wikipedia editors",
     title: "Wikipedia editors under surveillance",
     body: "Four groups are targeting Wikipedia editors: the Heritage Foundation, the ADL, NPOV and Builders for Tomorrow. Some editors who were doxxed have received death threats. The ADL’s CEO says he has 45 full-time analysts “tracking” Wikipedia editors, whom he calls “weirdos with email addresses”.",
@@ -206,7 +203,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     sectionTitle: "“Systematic” Edits",
   },
   {
-    id: "finding-t4p-campaign",
+    id: "finding-arabic",
     stat: "The Hadith",
     statLabel: "Look it up",
     title: "The ADL can't read Arabic",
