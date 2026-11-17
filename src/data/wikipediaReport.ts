@@ -111,7 +111,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     id: "finding-twenty-years",
     stat: "17",
     statLabel: "efforts since 2001, nine still active",
-    title: "Twenty years of attempts to tilt Wikipedia",
+    title: "Twenty years of attempts to skew Wikipedia",
     body: "We document 17 pro-Israel efforts to manipulate Wikipedia since 2001. Nine are still active, from CAMERA’s secret editor recruitment to a “Wikipedia war room” and editing courses run by Zionist groups.",
     section: "3",
     sectionTitle: "Direct Manipulation of Wikipedia",
@@ -120,7 +120,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     id: "finding-adl-evidence",
     stat: "0",
     statLabel: "ADL claims that survived scrutiny",
-    title: "The ADL’s evidence doesn’t hold up",
+    title: "The evidence from the Anti-Defamation League (ADL) doesn’t hold up",
     body: "We checked every claim in the ADL’s “Editing for Hate” report. No claim survived scrutiny. It doesn’t show a single false fact, or any antisemitic content added to Wikipedia.",
     section: "6",
     sectionTitle: "The ADL report",
@@ -128,9 +128,10 @@ export const FINDINGS: readonly ReportFinding[] = [
   {
     id: "finding-circular-logic",
     stat: "22–2",
-    statLabel: "vote to keep an article the ADL called a “bad-faith keep”",
+    statLabel:
+      "votes to keep vs. delete “Racial profiling in Israel”, an article the ADL used as evidence of collusion",
     title: "A conspiracy built from circular logic",
-    body: "The ADL picked 30 editors, then treated the traits it had picked them for as proof they were colluding. It left out the edit explanations that told a different story. Our recount of the votes shows that articles the ADL called “bad-faith keeps” were kept by wide margins, such as 22–2 and 37–14.",
+    body: "The ADL picked 30 editors and called them “bad-faith”. It then listed articles these editors voted to keep, as if that proved they were working together. But the ADL left out the vote counts. We added them up. On “Racial profiling in Israel”, 22 editors voted to keep and 2 voted to delete. On “Allegations of Israeli apartheid”, it was 37 to 14. Nearly everyone who voted agreed.",
     section: "6.3",
     sectionTitle: "Detailed Critique of Case Study 1",
   },
@@ -226,6 +227,7 @@ export const CREDITS: readonly ReportCredit[] = [
   { role: "Primary author", names: "Paul Biggar" },
   { role: "Research and content", names: "Paul Biggar, Alexandra Fine, Mari Hall" },
   { role: "Editor", names: "Alexandra Fine" },
+  { role: "Reviewed by", names: "Institute for the Understanding of Anti-Palestinian Racism" },
   { role: "Early research assistance", names: "T4P volunteers" },
 ];
 
