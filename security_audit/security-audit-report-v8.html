@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Security Audit — Tech for Palestine Website — v8</title>
+<style>
+  @page { size: Letter; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #1f2937;
+    font-size: 10.5px;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  code, pre { font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; }
+
+  .page { width: 8.5in; height: 11in; padding: 0.6in 0.75in 0.5in; position: relative; overflow: hidden; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+
+  /* ---------- cover ---------- */
+  .cover { background: linear-gradient(160deg, #142433 0%, #0e1b26 55%, #0b1620 100%); color: #e5edf3; padding: 1.6in 0.9in; }
+  .cover .badges { margin-bottom: 0.55in; }
+  .pill-outline { display: inline-block; border: 1px solid #2f7d63; color: #4ade80; border-radius: 999px; padding: 4px 12px; font-size: 7.5px; letter-spacing: 1.3px; font-weight: 700; text-transform: uppercase; margin-right: 8px; }
+  .pill-outline.alt { border-color: #3b5a78; color: #93b4d4; }
+  .cover h1 { font-size: 34px; line-height: 1.16; margin: 0 0 14px 0; font-weight: 800; letter-spacing: -0.5px; }
+  .cover h1 .accent { color: #3ddc97; display: block; }
+  .cover .url { color: #8ba2b4; font-size: 11px; margin: 0 0 30px 0; }
+  .cover .lede { background: rgba(28, 74, 58, 0.45); border: 1px solid #2c6650; border-left: 3px solid #3ddc97; border-radius: 6px; padding: 16px 18px; font-size: 10px; line-height: 1.7; color: #d6e6de; }
+  .cover .lede b { color: #ffffff; }
+  .timeline { display: flex; gap: 0; margin-top: 46px; border-top: 1px solid #273a4a; padding-top: 18px; }
+  .timeline div { flex: 1; }
+  .timeline .v { font-size: 7.5px; letter-spacing: 1.2px; text-transform: uppercase; color: #6f889c; font-weight: 700; line-height: 1.5; }
+  .timeline .d { font-size: 9.5px; color: #c7d7e3; margin-top: 6px; }
+  .timeline .cur .v { color: #3ddc97; }
+  .timeline .cur .d { color: #ffffff; font-weight: 700; }
+
+  /* ---------- headings ---------- */
+  h2.page-title { font-size: 20px; font-weight: 800; margin: 0 0 6px 0; color: #10202c; letter-spacing: -0.3px; }
+  p.page-sub { color: #6b7280; margin: 0 0 20px 0; font-size: 10px; }
+  .kicker { font-size: 8px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; color: #0f766e; margin: 26px 0 12px 0; }
+  .kicker:first-child { margin-top: 0; }
+
+  /* ---------- metric tiles ---------- */
+  .tiles { display: flex; gap: 9px; margin-bottom: 20px; }
+  .tile { flex: 1; border-radius: 7px; padding: 12px 6px; text-align: center; border: 1px solid #e5e7eb; background: #fafafa; }
+  .tile .n { font-size: 24px; font-weight: 800; line-height: 1; }
+  .tile .l { font-size: 7px; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; margin-top: 7px; color: #6b7280; }
+  .t-fixed { background: #ecfdf5; border-color: #a7f3d0; } .t-fixed .n { color: #047857; }
+  .t-crit  { background: #fef2f2; border-color: #fecaca; } .t-crit .n { color: #b91c1c; }
+  .t-high  { background: #fff7ed; border-color: #fed7aa; } .t-high .n { color: #c2410c; }
+  .t-med   { background: #fffbeb; border-color: #fde68a; } .t-med .n { color: #b45309; }
+  .t-low   { background: #f0fdfa; border-color: #99f6e4; } .t-low .n { color: #0f766e; }
+  .t-open  { background: #eff6ff; border-color: #bfdbfe; } .t-open .n { color: #1d4ed8; }
+
+  .progress-label { font-size: 9px; color: #6b7280; margin-bottom: 5px; }
+  .bar { height: 13px; background: #e5e7eb; border-radius: 999px; overflow: hidden; position: relative; }
+  .bar .fill { height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 999px; display: flex; align-items: center; justify-content: flex-end; padding-right: 7px; color: #fff; font-size: 7.5px; font-weight: 800; }
+
+  /* ---------- callouts ---------- */
+  .callout { border-radius: 7px; padding: 15px 17px; margin: 18px 0; font-size: 9.5px; line-height: 1.65; }
+  .callout .ct { font-weight: 800; font-size: 11px; margin-bottom: 7px; }
+  .callout-dark { background: #10402f; color: #d3e9dd; } .callout-dark .ct { color: #6ee7b7; }
+  .callout-red  { background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #dc2626; color: #55212a; } .callout-red .ct { color: #b91c1c; }
+  .callout-amber { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #d97706; color: #4b3a15; } .callout-amber .ct { color: #b45309; }
+  .callout b { color: inherit; }
+  .callout-dark b { color: #ffffff; }
+
+  /* ---------- tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 9px; }
+  thead th { background: #10202c; color: #cfe3d9; text-align: left; font-size: 7.5px; letter-spacing: 0.9px; text-transform: uppercase; padding: 8px 9px; font-weight: 700; }
+  tbody td { padding: 7px 9px; border-bottom: 1px solid #edf0f2; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #fafbfc; }
+  td.id { font-weight: 800; color: #10202c; white-space: nowrap; }
+  .sev { display: inline-block; border-radius: 999px; padding: 2px 8px; font-size: 7px; font-weight: 800; letter-spacing: 0.6px; color: #fff; text-transform: uppercase; }
+  .sev-crit { background: #dc2626; } .sev-high { background: #ea580c; } .sev-med { background: #d97706; } .sev-low { background: #0f766e; }
+  .st { font-weight: 700; font-size: 8.5px; }
+  .st-fixed { color: #047857; } .st-open { color: #b91c1c; } .st-reg { color: #b45309; }
+
+  /* ---------- finding cards ---------- */
+  .finding { border: 1px solid #e3e7ea; border-radius: 8px; margin-bottom: 12px; overflow: hidden; page-break-inside: avoid; }
+  .finding > .head { display: flex; align-items: flex-start; gap: 10px; background: #f6f8f9; border-bottom: 1px solid #e3e7ea; padding: 10px 13px; }
+  .finding > .head .fid { font-weight: 800; color: #4b5563; font-size: 9px; padding-top: 2px; white-space: nowrap; }
+  .finding > .head .ft { font-weight: 800; font-size: 11px; color: #10202c; line-height: 1.35; }
+  .finding .body { padding: 10px 13px; }
+  .meta { font-size: 8.5px; color: #4b5563; margin-bottom: 10px; padding-bottom: 9px; border-bottom: 1px dashed #e3e7ea; }
+  .meta b { color: #10202c; }
+  .meta .sep { color: #cbd5e1; padding: 0 7px; }
+  .finding p { margin: 0 0 8px 0; }
+  .finding p:last-child { margin-bottom: 0; }
+  ul.tight { margin: 0 0 9px 0; padding-left: 16px; }
+  ul.tight li { margin-bottom: 4px; }
+  pre { background: #10202c; color: #dbe7ef; border-radius: 6px; padding: 9px 11px; font-size: 7.6px; line-height: 1.5; overflow: hidden; margin: 8px 0; white-space: pre-wrap; word-break: break-word; }
+  pre .c { color: #7f9db5; }
+  pre .g { color: #6ee7b7; }
+  pre .r { color: #fca5a5; }
+  pre .y { color: #fcd34d; }
+  code.inl { background: #eef2f4; border: 1px solid #e0e6ea; border-radius: 3px; padding: 0.5px 4px; font-size: 8.5px; color: #0f3b30; }
+  .fixbar { background: #ecfdf5; border-left: 4px solid #059669; color: #065f46; font-weight: 800; font-size: 8px; letter-spacing: 1.1px; text-transform: uppercase; padding: 6px 11px; margin: 10px 0 0 0; border-radius: 3px; }
+
+  ul.checks { list-style: none; margin: 0; padding: 0; }
+  ul.checks li { position: relative; padding-left: 17px; margin-bottom: 9px; font-size: 9.5px; line-height: 1.6; }
+  ul.checks li:before { content: "▪"; position: absolute; left: 3px; top: -1px; color: #059669; font-size: 11px; }
+  ul.checks li b { color: #10202c; }
+
+  .footer { position: absolute; left: 0.75in; right: 0.75in; bottom: 0.34in; display: flex; justify-content: space-between; font-size: 7.5px; color: #9aa6b2; border-top: 1px solid #edf0f2; padding-top: 7px; }
+
+@page { size: Letter; margin: 0.6in 0.7in 0.6in; }
+@page :first { margin: 0; }
+.page { height: auto; min-height: 11in; }
+.cover { height: 11in; }
+.content h2 { font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #10202c; letter-spacing: -0.3px; margin-top: 30px; break-after: avoid; }
+.content h2.pb { break-before: page; margin-top: 0; }
+.content h2:first-child { break-before: auto; }
+.content h3 { font-size: 12px; color: #10202c; margin: 18px 0 8px; }
+.content p { margin: 0 0 8px 0; }
+.content ul { margin: 0 0 9px 0; padding-left: 16px; }
+.content li { margin-bottom: 4px; }
+.content table { margin: 6px 0 16px; page-break-inside: auto; }
+.content tr { page-break-inside: avoid; }
+.content strong { color: #10202c; }
+.content td.st strong { color: inherit; }
+.content p.meta { font-size: 8.5px; color: #4b5563; padding-bottom: 8px; border-bottom: 1px dashed #e3e7ea; margin-bottom: 10px; }
+.finding .head .sev { margin-left: 6px; vertical-align: 1px; }
+.callout-green { background: #ecfdf5; border: 1px solid #a7f3d0; border-left: 4px solid #059669; color: #064e3b; }
+.callout-green .ct { color: #047857; }
+.callout p:last-child { margin-bottom: 0; }
+.finding { page-break-inside: auto; }
+.finding .head { break-after: avoid; }
+.fill-75 { width: 75%; }
+.endnote { margin-top: 24px; font-size: 8px; color: #9aa6b2; border-top: 1px solid #edf0f2; padding-top: 7px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="page cover">
+  <div class="badges">
+    <span class="pill-outline">Confidential · Security Audit</span>
+    <span class="pill-outline alt">Version 8 · Re-review</span>
+  </div>
+  <h1>Security Audit<span class="accent">Tech for Palestine</span>Website</h1>
+  <p class="url">techforpalestine.org · Astro 5 SSR on Cloudflare Pages</p>
+  <div class="lede">
+    This is the eighth-round re-review. It covers <b>44 commits</b> landed between v7 (2026-09-22) and
+    2026-11-03: 315 files, +18,727 / −34,113 lines. All 36 findings in the v7 register were re-verified.
+    <b>Five v7 findings are now fixed, including the high-severity S-1</b> (payment verification restored
+    against Qgiv), and none of the 25 findings fixed in v1–v6 has regressed. <b>Four new low-severity
+    findings</b> were identified. No Critical, High or new Medium issues remain open.
+  </div>
+  <div class="timeline">
+    <div><div class="v">V1<br>Original</div><div class="d">2026-03-31</div></div>
+    <div><div class="v">V2 Re-<br>review</div><div class="d">2026-04-02</div></div>
+    <div><div class="v">V3 Re-<br>review</div><div class="d">2026-04-06</div></div>
+    <div><div class="v">V4 Re-<br>review</div><div class="d">2026-04-09</div></div>
+    <div><div class="v">V5 Re-<br>review</div><div class="d">2026-04-13</div></div>
+    <div><div class="v">V6 Re-<br>review</div><div class="d">2026-04-14</div></div>
+    <div><div class="v">V7 Re-<br>review</div><div class="d">2026-09-22</div></div>
+    <div class="cur"><div class="v">V8 Re-<br>review</div><div class="d">2026-11-03</div></div>
+  </div>
+</div>
+<div class="content">
+<h2>Executive Summary — v8 Re-review</h2>
+
+<div class="tiles">
+  <div class="tile t-fixed"><div class="n">30</div><div class="l">Total<br>fixed</div></div>
+  <div class="tile t-crit"><div class="n">0</div><div class="l">Critical</div></div>
+  <div class="tile t-high"><div class="n">0</div><div class="l">High</div></div>
+  <div class="tile t-med"><div class="n">1</div><div class="l">Medium</div></div>
+  <div class="tile t-low"><div class="n">9</div><div class="l">Low</div></div>
+  <div class="tile t-open"><div class="n">10</div><div class="l">Open</div></div>
+</div>
+<div class="progress-label">Remediation progress: 30 of 40 findings resolved (75%)</div>
+<div class="bar"><div class="fill fill-75">75%</div></div>
+
+<div class="callout callout-green"><div class="ct">✓ S-1 is closed: payment side effects are verified with Qgiv</div>
+<p><code class="inl">/api/membership-complete</code> and <code class="inl">/api/donation-complete</code> now read only a <code class="inl">transactionId</code> from the request and
+look the transaction up in Qgiv&#39;s reporting API (<code class="inl">src/utils/qgivVerify.ts</code>). Email, names, tier and marketing
+opt-in all come from Qgiv&#39;s record. The lookup fails closed in every case: missing token, timeout, non-2xx
+response, mismatched id, status other than <code class="inl">Accepted</code>, form not on the endpoint&#39;s allowlist, or no email. The
+tier is chosen by Qgiv <code class="inl">formId</code>, so a donation cannot be used to get a membership invite.
+<strong>Confirmed live:</strong> a forged <code class="inl">Origin</code> with a bogus transaction now gets <code class="inl">402 Could not verify transaction</code>
+(in v7 the same request reached the business logic). Some weaknesses remain; they are low severity and are
+recorded as <strong>T-3</strong> and <strong>T-4</strong>.</p>
+</div><div class="callout callout-green"><div class="ct">✓ The response-header and caching findings are closed</div>
+<p>Security headers are now set in middleware (<code class="inl">src/middleware/security-headers.ts</code>), so SSR responses carry
+<code class="inl">X-Content-Type-Options</code>, <code class="inl">Referrer-Policy</code>, <code class="inl">Permissions-Policy</code>, <code class="inl">X-Frame-Options: DENY</code> and a CSP with
+<code class="inl">frame-ancestors &#39;none&#39;</code>. The one exception is <code class="inl">/newsletter-embed</code>, which allows framing by the site itself.
+Pages default to <code class="inl">private</code> caching, and <code class="inl">/admin*</code>, <code class="inl">/api/*</code> and non-GET requests get <code class="inl">no-store</code> (S-2, S-3).
+Sentry scrubbing is wired into all three <code class="inl">Sentry.init</code> calls (S-5), and the raw-HTML sink in the volunteer form
+was removed along with the file (S-8).</p>
+</div><div class="callout callout-amber"><div class="ct">What is still open</div>
+<ul>
+<li><strong>S-6 (Medium):</strong> Astro is still on 5.18.2. All four v7 Astro advisories, plus seven new ones, need 6.x or
+7.x. <code class="inl">axios</code> was bumped to 1.18.0 but now has 13 advisories (7 high) that are fixed in 1.20.0, and it runs
+both in the browser and in the Worker. The new CI audit step uses <code class="inl">continue-on-error</code>, so it never blocks.</li>
+<li><strong>Unchanged from v7:</strong> S-4 (uncached Notion routes), S-7 (nonce <code class="inl">meta</code> tag), S-9 (<code class="inl">/api/pipe</code> origin
+policy), S-10 and L-2 (no integrity pinning on the Plausible and Qgiv scripts).</li>
+<li><strong>New:</strong> HSTS is not sent (T-1), event-description links accept any URL scheme (T-2), and two residual
+weaknesses in the Qgiv verification flow (T-3, T-4).</li>
+</ul>
+</div><h2 class="pb">Complete issue register — v8 status</h2>
+<h3>Findings from rounds v1–v6</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Finding</th>
+<th>Peak severity</th>
+<th>v8 status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C-1</td>
+<td>API key &amp; account ID in wrangler configs</td>
+<td><span class="sev sev-crit">CRITICAL</span></td>
+<td class="st st-fixed">Fixed v2 · re-verified</td>
+</tr>
+<tr>
+<td>C-2, C-3</td>
+<td>Unauthenticated / unverified membership invite</td>
+<td><span class="sev sev-crit">CRITICAL</span></td>
+<td class="st st-fixed">Fixed v2 · routes deleted</td>
+</tr>
+<tr>
+<td>N-1</td>
+<td>Webhook secret exposed in URL query param</td>
+<td><span class="sev sev-crit">CRITICAL</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>N-2</td>
+<td>Timing attack on token comparison</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>H-1, R-1</td>
+<td>Secret key in client bundle / console</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed">Fixed v3/v4 · re-verified</td>
+</tr>
+<tr>
+<td>H-2, M-4</td>
+<td>Donor PII in responses / logs</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed">Fixed v4 · re-verified</td>
+</tr>
+<tr>
+<td>H-3</td>
+<td>Middleware caches POST/API responses as public</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>H-4</td>
+<td>No rate limiting</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed">Fixed v6 · WAF, not in repo</td>
+</tr>
+<tr>
+<td>H-5</td>
+<td>Wildcard CORS on all endpoints</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>N-3</td>
+<td>membership-invite proxies arbitrary body fields</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v3 · route deleted</td>
+</tr>
+<tr>
+<td>M-1, M-2</td>
+<td>No Origin check / input validation on forms</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v4 · re-verified</td>
+</tr>
+<tr>
+<td>M-3</td>
+<td>getEnv globalThis fallback</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>M-5</td>
+<td>Internal error.message in HTTP responses</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>M-6</td>
+<td>Dual middleware conflict</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v6 · re-verified</td>
+</tr>
+<tr>
+<td>R-2, L-4</td>
+<td>CSP <code class="inl">&#39;unsafe-inline&#39;</code></td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v4/v6 · re-verified live</td>
+</tr>
+<tr>
+<td>P-1, P-2, L-5</td>
+<td>project-proxy path / header issues</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed">Fixed v5/v6 · re-verified</td>
+</tr>
+<tr>
+<td>L-1</td>
+<td>Notion DB IDs in wrangler.toml</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-fixed">Fixed v3 · re-verified</td>
+</tr>
+<tr>
+<td>L-3</td>
+<td>Image proxy has no authentication</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-fixed">Fixed v6 · worker gone</td>
+</tr>
+<tr>
+<td><strong>L-2</strong></td>
+<td>QGiv embed script loaded without SRI</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open"><strong>Open since v1</strong></td>
+</tr>
+</tbody></table>
+<h3>Findings from v7</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Finding</th>
+<th>Severity</th>
+<th>v8 status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S-1</td>
+<td>Completion endpoints grant invites behind a spoofable Origin check</td>
+<td><span class="sev sev-high">HIGH</span></td>
+<td class="st st-fixed"><strong>Fixed v8</strong> · verified live (402); see T-3/T-4</td>
+</tr>
+<tr>
+<td>S-2</td>
+<td>Security headers absent on SSR pages</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed"><strong>Fixed v8</strong> · verified live</td>
+</tr>
+<tr>
+<td>S-3</td>
+<td>Admin dashboard served <code class="inl">public, max-age=600</code></td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed"><strong>Fixed v8</strong> · verified live (<code class="inl">no-store</code>)</td>
+</tr>
+<tr>
+<td>S-4</td>
+<td>Uncached Notion GET routes fail under load</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · unchanged</td>
+</tr>
+<tr>
+<td>S-5</td>
+<td>Events feed token reaches telemetry unscrubbed</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-fixed"><strong>Fixed v8</strong> · rotation not verifiable</td>
+</tr>
+<tr>
+<td><strong>S-6</strong></td>
+<td>Astro two majors behind; runtime advisories</td>
+<td><span class="sev sev-med">MEDIUM</span></td>
+<td class="st st-reg"><strong>Partial</strong> · svelte fixed; astro, axios open</td>
+</tr>
+<tr>
+<td>S-7</td>
+<td>CSP nonce republished in a <code class="inl">&lt;meta&gt;</code> tag</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · unchanged</td>
+</tr>
+<tr>
+<td>S-8</td>
+<td>Raw-HTML sink in volunteer form</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-fixed"><strong>Fixed v8</strong> · file deleted</td>
+</tr>
+<tr>
+<td>S-9</td>
+<td><code class="inl">/api/pipe</code> accepts no Origin and any <code class="inl">*.pages.dev</code></td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · confirmed live</td>
+</tr>
+<tr>
+<td>S-10</td>
+<td>Plausible script re-served first-party without integrity</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · unchanged</td>
+</tr>
+</tbody></table>
+<h3>New in v8</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Finding</th>
+<th>Severity</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T-1</td>
+<td>No <code class="inl">Strict-Transport-Security</code> header on any response</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · new v8</td>
+</tr>
+<tr>
+<td>T-2</td>
+<td>Event-description Markdown links rendered with any URL scheme (regression from #555)</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · new v8</td>
+</tr>
+<tr>
+<td>T-3</td>
+<td>Qgiv verification has no recency or amount check, leaks transaction state, and replay protection fails open</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · new v8</td>
+</tr>
+<tr>
+<td>T-4</td>
+<td>Fabricated transaction IDs each cost a Qgiv API call and a Sentry event</td>
+<td><span class="sev sev-low">LOW</span></td>
+<td class="st st-open">Open · new v8</td>
+</tr>
+</tbody></table>
+<h2>Live verification log — 2026-11-03, against production</h2>
+<table>
+<thead>
+<tr>
+<th>Probe</th>
+<th>Result</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code class="inl">GET /</code>, <code class="inl">/donate</code>, <code class="inl">/membership</code></td>
+<td>CSP nonce + <code class="inl">strict-dynamic</code>, <code class="inl">frame-ancestors &#39;none&#39;</code>, XFO DENY, nosniff, Referrer-Policy, Permissions-Policy. <strong>No HSTS</strong></td>
+<td>S-2 fixed; T-1</td>
+</tr>
+<tr>
+<td><code class="inl">GET /admin/conversions</code></td>
+<td>401, <code class="inl">Cache-Control: no-store</code></td>
+<td>S-3 fixed</td>
+</tr>
+<tr>
+<td><code class="inl">GET /api/events</code></td>
+<td>200, <code class="inl">no-store</code>, <code class="inl">ACAO: *</code></td>
+<td>H-3 / H-5 still correct</td>
+</tr>
+<tr>
+<td><code class="inl">POST /api/membership-complete</code> (no Origin)</td>
+<td>403</td>
+<td>Origin gate active</td>
+</tr>
+<tr>
+<td><code class="inl">POST /api/membership-complete</code> (forged Origin, bogus transaction)</td>
+<td><strong>402 &quot;Could not verify transaction&quot;</strong></td>
+<td>S-1 fixed</td>
+</tr>
+<tr>
+<td><code class="inl">POST /api/donation-complete</code> (both variants)</td>
+<td>403, then 402</td>
+<td>S-1 fixed</td>
+</tr>
+<tr>
+<td><code class="inl">POST /api/pipe</code> (no Origin) / (<code class="inl">Origin: https://evil.pages.dev</code>)</td>
+<td>502 from upstream in both cases, never 403</td>
+<td>S-9 confirmed</td>
+</tr>
+<tr>
+<td><code class="inl">GET /api/project-proxy?path=/api/method/../../api/auth/admin</code></td>
+<td>503 &quot;Proxy not configured&quot;</td>
+<td>Proxy inert; guard verified in code</td>
+</tr>
+<tr>
+<td><code class="inl">GET /js/web.js</code></td>
+<td>200, <code class="inl">public, max-age=86400</code></td>
+<td>S-10 unchanged</td>
+</tr>
+<tr>
+<td>20 × concurrent <code class="inl">GET /api/faq</code></td>
+<td>20 × 200</td>
+<td>Below GET threshold (no large burst)</td>
+</tr>
+</tbody></table>
+<p>No probe wrote data. The completion-endpoint probes used a non-existent transaction id, which Qgiv rejects
+before any Hub or EmailOctopus call.</p>
+<h2 class="pb">New findings — detail</h2>
+<div class="finding"><div class="head"><div class="fid">T-1</div><div class="ft">No <code class="inl">Strict-Transport-Security</code> header <span class="sev sev-low">LOW</span></div></div><div class="body">
+<p class="meta"><strong>Files:</strong> <code class="inl">src/middleware/security-headers.ts</code> · Cloudflare zone settings<br><strong>OWASP:</strong> A05:2021 – Security Misconfiguration</p>
+<p>None of the HTML, API or static responses checked carries HSTS. Cloudflare redirects HTTP to HTTPS, but
+without HSTS a visitor&#39;s first plain-HTTP request (from a typed URL or an old link) can be intercepted on a
+hostile network before that redirect happens. The donate and membership pages make this worth closing.</p>
+<p><strong>Fix:</strong> Enable HSTS in the Cloudflare dashboard (SSL/TLS → Edge Certificates), or add it to the middleware:</p>
+<pre><code class="language-ts">response.headers.set(&quot;Strict-Transport-Security&quot;, &quot;max-age=31536000; includeSubDomains&quot;);
+</code></pre>
+<p>Start without <code class="inl">preload</code>, and only add <code class="inl">includeSubDomains</code> after confirming every subdomain serves HTTPS.</p>
+</div></div><div class="finding"><div class="head"><div class="fid">T-2</div><div class="ft">Event-description Markdown links are rendered with any URL scheme <span class="sev sev-low">LOW</span></div></div><div class="body">
+<p class="meta"><strong>Files:</strong> <code class="inl">src/utils/eventDescription.tsx:69-82</code> · <code class="inl">src/store/eventsClient.ts</code> (<code class="inl">resolveLinks</code>) ·
+<code class="inl">src/components/events/EventDetailsDialog.tsx:194,205</code><br><strong>OWASP:</strong> A03:2021 – Injection · <strong>Introduced:</strong> PR #555 (regression)</p>
+<p>#555 replaced the hand-written description parser, which only made links out of <code class="inl">https?://</code> targets, with the
+<code class="inl">marked</code> lexer. The <code class="inl">link</code> token&#39;s <code class="inl">href</code> now goes straight into <code class="inl">&lt;a href&gt;</code> without a scheme check. Anyone who
+can write to the Mattermost Events Calendar can publish <code class="inl">[Register](data:…)</code> or a link to an OS protocol handler
+(<code class="inl">ms-officecmd:</code>, <code class="inl">search-ms:</code>), and it will appear in the event dialog on <code class="inl">/events</code>. <code class="inl">javascript:</code> URLs are
+neutralised twice: React 19 blocks them, and the nonce CSP would block them anyway. That leaves phishing and
+protocol-handler abuse, and it needs calendar write access, so the severity is Low. The <code class="inl">registerLink</code>,
+<code class="inl">locationLink</code> and <code class="inl">watchLink</code> fields from the ICS feed were already unsanitised before v7 and should be fixed
+together with this.</p>
+<p><strong>Fix:</strong> Reuse the existing helper, as <code class="inl">projectsClient.ts</code> already does:</p>
+<pre><code class="language-tsx">case &quot;link&quot;: {
+  const href = sanitizeUrl(link.href);
+  if (!href) return &lt;Fragment key={key}&gt;{renderInlineTokens(link.tokens, key)}&lt;/Fragment&gt;;
+  return &lt;a key={key} href={href} target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; className=&quot;underline&quot;&gt;…&lt;/a&gt;;
+}
+</code></pre>
+<p>Apply <code class="inl">sanitizeUrl</code> to the three link fields in <code class="inl">resolveLinks()</code>, and add tests with <code class="inl">javascript:</code> and <code class="inl">data:</code> links.</p>
+</div></div><div class="finding"><div class="head"><div class="fid">T-3</div><div class="ft">Qgiv verification has no recency or amount check, leaks transaction state, and replay protection fails open <span class="sev sev-low">LOW</span></div></div><div class="body">
+<p class="meta"><strong>Files:</strong> <code class="inl">src/utils/qgivVerify.ts:102-155</code> · <code class="inl">src/utils/transactionReplay.ts</code> ·
+<code class="inl">src/pages/api/membership-complete.ts:42-65</code> · <code class="inl">src/pages/api/donation-complete.ts:39-66</code><br><strong>OWASP:</strong> A04:2021 – Insecure Design</p>
+<p>S-1&#39;s fix is sound: an attacker can no longer cause an invite or subscription for an address that has not
+paid. These residual gaps all fall short of that:</p>
+<ul>
+<li><strong>No recency check.</strong> Any <code class="inl">Accepted</code> transaction on an allowed form, at any age, is acted on once. Qgiv
+transaction ids are numeric and probably sequential (not confirmed), so ids can be enumerated within the
+POST rate limit to trigger Hub invites and list tags for real past payers. Those emails go to the people who
+actually paid, so the harm is unwanted contact and data-integrity noise, not access.</li>
+<li><strong>Responses reveal transaction state.</strong> <code class="inl">402</code>, <code class="inl">200 Not opted in</code>, <code class="inl">200 Already processed</code> and
+<code class="inl">200 success</code> let an enumerator tell real transactions from fake ones and learn each donor&#39;s opt-in choice.</li>
+<li><strong>The amount is not checked.</strong> <code class="inl">amount</code> is parsed but never used. If the Pilot Membership form accepts
+custom amounts, a token payment still earns a paid-tier invite. This depends on the Qgiv form configuration.</li>
+<li><strong>Replay protection fails open and is not atomic.</strong> <code class="inl">claimTransaction()</code> allows the request when the KV
+binding is missing or KV throws (this is deliberate, and documented in the file). Its <code class="inl">get</code> then <code class="inl">put</code> can be
+raced by concurrent requests, and keys expire after 30 days, after which the same id can be processed again.
+The replay keys also share the <code class="inl">DROPPED_CONVERSIONS</code> namespace with <code class="inl">/api/pipe</code>.</li>
+</ul>
+<p><strong>Fix:</strong></p>
+<ul>
+<li>Reject transactions older than a short window (24–72 h) using Qgiv&#39;s transaction date, and keep the replay
+TTL at least that long. This one change also closes the enumeration and expiry gaps.</li>
+<li>Return the same response body for every verified outcome, and the same one for every failure.</li>
+<li>Check <code class="inl">amount</code> against a minimum for each form in <code class="inl">MEMBERSHIP_FORMS</code>.</li>
+<li>Move the replay keys to their own KV namespace.</li>
+</ul>
+</div></div><div class="finding"><div class="head"><div class="fid">T-4</div><div class="ft">Fabricated transaction IDs each cost a Qgiv API call and a Sentry event <span class="sev sev-low">LOW</span></div></div><div class="body">
+<p class="meta"><strong>Files:</strong> <code class="inl">src/utils/qgivVerify.ts:21,107-126</code> · <code class="inl">membership-complete.ts:41-56</code> · <code class="inl">donation-complete.ts:38-53</code><br><strong>OWASP:</strong> A04:2021 – Insecure Design / A09:2021</p>
+<p>The handlers skip Sentry for <code class="inl">invalid-id</code> so that callers cannot burn Sentry quota, but
+<code class="inl">TRANSACTION_ID_PATTERN</code> (<code class="inl">/^[A-Za-z0-9_-]{1,64}$/</code>) accepts any made-up id such as <code class="inl">&quot;1&quot;</code>. Each request with a
+forged <code class="inl">Origin</code> then makes an authenticated call to Qgiv&#39;s reporting API with the organisation-wide token,
+fails as <code class="inl">lookup-failed</code>, and is sent to Sentry. A loop can therefore flood Sentry, hiding the real
+&quot;propagation lag&quot; signal and using up quota. It could also get the Qgiv token throttled, and because
+verification fails closed, genuine new members would then get no invite. The POST rate limit caps the rate.</p>
+<p><strong>Fix:</strong> Narrow the pattern to Qgiv&#39;s real format (<code class="inl">/^\d{1,20}$/</code>). Sample or aggregate <code class="inl">lookup-failed</code>
+reports instead of sending one per request. Consider a per-IP KV counter on these two routes.</p>
+</div></div><h2 class="pb">Still open from earlier rounds</h2>
+<div class="finding"><div class="head"><div class="fid">S-6</div><div class="ft">Runtime dependency advisories <span class="sev sev-med">MEDIUM partial</span></div></div><div class="body">
+<p><code class="inl">pnpm audit</code> on the committed lockfile reports 3 critical, 19 high, 33 moderate and 11 low (prod only: 1 / 19 / 30 / 11).
+Since v7, svelte was bumped to 5.55.7 (clean), <code class="inl">react-router-dom</code> and <code class="inl">install</code> were removed, and a CI audit step
+was added. The runtime packages that still have advisories:</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Pinned</th>
+<th>Fixed in</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>astro</td>
+<td>5.18.2</td>
+<td>6.x / 7.3.2</td>
+<td>The four v7 GHSAs plus 7 new ones, including authorization-bypass/path-segment issues. AVIF RCE mitigated by <code class="inl">imageService: &quot;cloudflare&quot;</code></td>
+</tr>
+<tr>
+<td>axios</td>
+<td>1.18.0</td>
+<td>1.20.0</td>
+<td>13 advisories, 7 high. Used by <code class="inl">src/store/api.ts</code> (browser) and <code class="inl">notionClient.ts</code> (Worker)</td>
+</tr>
+<tr>
+<td>follow-redirects</td>
+<td>1.16.0</td>
+<td>1.16.2</td>
+<td>3 high, pulled in by axios</td>
+</tr>
+<tr>
+<td>zod</td>
+<td>3.25.76 / 4.6.5</td>
+<td>4.6.6</td>
+<td>High (memory exhaustion)</td>
+</tr>
+<tr>
+<td>undici</td>
+<td>6.29.0</td>
+<td>6.29.1</td>
+<td>3 high</td>
+</tr>
+<tr>
+<td>@astrojs/cloudflare</td>
+<td>12.6.13</td>
+<td>13.1.10</td>
+<td>Low (SSRF via redirect following)</td>
+</tr>
+</tbody></table>
+<p><strong>Fix:</strong> Bump axios to ≥ 1.20.0 now (minor version). Refresh follow-redirects, zod and undici through
+<code class="inl">pnpm.overrides</code>. Schedule the Astro 5 → 7 upgrade with <code class="inl">@astrojs/cloudflare</code> 13 as its own piece of work.
+Remove <code class="inl">continue-on-error</code> from the CI audit step once the baseline is clean.</p>
+</div></div><div class="finding"><div class="head"><div class="ft">S-4, S-7, S-9, S-10, L-2 — unchanged</div></div><div class="body">
+<p>The code and fixes described in v7 still apply as written. S-4: only <code class="inl">projectsClient.ts</code> uses
+<code class="inl">resolveWithCache()</code>. S-7: the nonce <code class="inl">meta</code> tag and prototype patches are now in <code class="inl">CspStylePatch.astro</code>. S-9:
+<code class="inl">pipe.ts:8-11</code> still has <code class="inl">allowedSuffixes: [&quot;.pages.dev&quot;]</code> and <code class="inl">allowMissingOrigin: true</code>, and both were confirmed
+live. S-10 / L-2: there is still no integrity check on <code class="inl">web.js.ts</code> or on the Qgiv <code class="inl">embed.js</code> injections.</p>
+</div></div><h2>Observations (not rated)</h2>
+<ul>
+<li><strong>Sentry context is not scrubbed.</strong> <code class="inl">beforeSend</code> cleans messages, exceptions, request URLs and breadcrumbs,
+but not <code class="inl">event.contexts</code> or <code class="inl">extra</code>. Today <code class="inl">reportError</code> contexts include upstream response bodies
+(<code class="inl">pipe.ts</code>, Hub errors in <code class="inl">membership-complete.ts</code>). None carries the ICS token now, but a scrub of those
+fields would keep it that way.</li>
+<li><strong><code class="inl">project-proxy.ts</code> passes all upstream response headers back to the browser</strong>, including any
+<code class="inl">Set-Cookie</code>. The proxy is unconfigured in production; fix it before it is switched back on.</li>
+<li><strong>CI actions are pinned by mutable tag</strong> (<code class="inl">lycheeverse/lychee-action@v2</code>,
+<code class="inl">anthropics/claude-code-security-review@v1</code>, <code class="inl">pnpm/action-setup@v6</code>). Workflows use <code class="inl">pull_request</code>, not
+<code class="inl">pull_request_target</code>, so fork PRs get no secrets. Pinning to commit SHAs is cheap hardening.</li>
+<li><strong><code class="inl">isParsableUrl</code> accepts <code class="inl">javascript:</code></strong> on the E4P <code class="inl">linkedin</code> field. The value is never rendered back
+today; switch to <code class="inl">sanitizeUrl</code> if that changes.</li>
+</ul>
+<h2 class="pb">Security posture progress — all rounds</h2>
+<table>
+<thead>
+<tr>
+<th>Round</th>
+<th>Date</th>
+<th>Critical</th>
+<th>High</th>
+<th>Medium</th>
+<th>Low</th>
+<th>Total open</th>
+<th>Fixed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1</td>
+<td>2026-03-31</td>
+<td>3</td>
+<td>5</td>
+<td>6</td>
+<td>3</td>
+<td>17</td>
+<td>—</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>2026-04-02</td>
+<td>1</td>
+<td>6</td>
+<td>7</td>
+<td>3</td>
+<td>17</td>
+<td>3</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>2026-04-06</td>
+<td>0</td>
+<td>2</td>
+<td>5</td>
+<td>3</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>v4</td>
+<td>2026-04-09</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td>16</td>
+</tr>
+<tr>
+<td>v5</td>
+<td>2026-04-13</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>7</td>
+<td>17</td>
+</tr>
+<tr>
+<td>v6</td>
+<td>2026-04-14</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>24</td>
+</tr>
+<tr>
+<td>v7</td>
+<td>2026-09-22</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+<td>6</td>
+<td>11</td>
+<td>25</td>
+</tr>
+<tr>
+<td><strong>v8</strong></td>
+<td><strong>2026-11-03</strong></td>
+<td><strong>0</strong></td>
+<td><strong>0</strong></td>
+<td><strong>1</strong></td>
+<td><strong>9</strong></td>
+<td><strong>10</strong></td>
+<td><strong>30</strong></td>
+</tr>
+</tbody></table>
+<h2>Remediation plan — v8</h2>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Action</th>
+<th>ID</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>This week</strong></td>
+<td>Bump axios to ≥ 1.20.0; override follow-redirects, zod and undici.</td>
+<td>S-6</td>
+<td>1 hour</td>
+</tr>
+<tr>
+<td><strong>This week</strong></td>
+<td>Enable HSTS (Cloudflare dashboard or middleware).</td>
+<td>T-1</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td><strong>This week</strong></td>
+<td>Pass event-description and ICS link fields through <code class="inl">sanitizeUrl</code>.</td>
+<td>T-2</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td><strong>This month</strong></td>
+<td>Add a recency window and per-form minimum amount to Qgiv verification; make responses uniform; narrow the id pattern; sample <code class="inl">lookup-failed</code> reports.</td>
+<td>T-3, T-4</td>
+<td>half day</td>
+</tr>
+<tr>
+<td><strong>This month</strong></td>
+<td>Tighten <code class="inl">/api/pipe</code>&#39;s origin policy to <code class="inl">.website-aun.pages.dev</code> and drop <code class="inl">allowMissingOrigin</code>.</td>
+<td>S-9</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td><strong>This month</strong></td>
+<td>Cache the Notion reads through <code class="inl">resolveWithCache()</code>.</td>
+<td>S-4</td>
+<td>half day</td>
+</tr>
+<tr>
+<td>Backlog</td>
+<td>Astro 5 → 7 upgrade; then make the CI audit step blocking.</td>
+<td>S-6</td>
+<td>multi-day</td>
+</tr>
+<tr>
+<td>Backlog</td>
+<td>Pin SHA-384 hashes for the Qgiv embed and the proxied Plausible script.</td>
+<td>L-2, S-10</td>
+<td>2 hours + vendor</td>
+</tr>
+<tr>
+<td>Backlog</td>
+<td>Replace the nonce <code class="inl">meta</code> tag and prototype patches with an Emotion cache nonce.</td>
+<td>S-7</td>
+<td>1 day</td>
+</tr>
+</tbody></table>
+<h2>Good practices confirmed in the v8 codebase</h2>
+<ul>
+<li><strong>Payment verification is well built.</strong> Fixed API base URL, a bounded id pattern, matching of the
+requested id, a per-endpoint form allowlist, fail-closed on every error path, and the token sent in the POST
+body rather than the URL. The supporting-member form deliberately gets no Hub invite.</li>
+<li><strong>No new raw-HTML sinks.</strong> The only <code class="inl">set:html</code> uses are JSON-LD built from constants. The Hub open-roles
+<code class="inl">descriptionHtml.ts</code> is an allowlisting tokenizer that sanitises hrefs.</li>
+<li><strong>The newsletter embed&#39;s <code class="inl">postMessage</code> is checked properly.</strong> It checks both <code class="inl">event.origin</code> and
+<code class="inl">event.source</code>, and validates and caps the payload.</li>
+<li><strong>The nav A/B test sets no cookie.</strong> It assigns variants with an HMAC of day + IP + User-Agent under a secret
+resolved through <code class="inl">getEnv</code>, and the IP is never stored or sent to the client.</li>
+<li><strong>The middleware order is pinned by a test</strong> (<code class="inl">src/middleware/index.test.ts</code>), and the shared
+<code class="inl">withOriginGuard</code> checks Origin before parsing the body, with suffix matching on label boundaries.</li>
+<li><strong>Test coverage of the security utilities grew substantially.</strong> <code class="inl">crypto</code>, <code class="inl">getEnv</code>, <code class="inl">origin</code>, <code class="inl">basicAuth</code>,
+<code class="inl">qgivVerify</code>, <code class="inl">transactionReplay</code>, <code class="inl">safeProxy</code>, <code class="inl">sanitizeUrl</code> and <code class="inl">validate</code> all have suites now.</li>
+<li><strong>No secrets in the diff.</strong> A pattern scan for keys, tokens, JWTs, DSNs and PEM headers found none.</li>
+</ul>
+<h2>Method and scope</h2>
+<p>Static review of the full diff <code class="inl">7c7a563..52e647a</code> (44 commits), with current-file reading of every API route,
+the middleware chain, the security utilities, the data clients and the components that render upstream
+content. Each of the 36 findings in the v7 register was re-checked against current code. This was supplemented
+by <code class="inl">pnpm audit</code> against the committed <code class="inl">pnpm-lock.yaml</code> and the non-destructive live probes logged above.</p>
+<p>Not covered: the ProjectHub, Hub, Qgiv and Mattermost services themselves; Cloudflare dashboard configuration
+(including the WAF rate-limit thresholds) beyond what live responses reveal; whether the ICS token was rotated
+after S-5; and authenticated behaviour of <code class="inl">/admin/conversions</code>.</p>
+<h2>Bottom line</h2>
+<p>The urgent item from v7 is resolved properly. Payment-triggered actions are now decided by Qgiv&#39;s own record,
+fail closed, and the fix was verified against production. The headers, caching and telemetry findings are also
+closed. What remains is a Medium dependency backlog, mainly the Astro major upgrade and a cheap axios bump,
+and nine Low items, most of which take under an hour each. The new findings are all small. T-2 is worth
+noting as a pattern: replacing a hand-written parser with a library silently dropped a scheme check the old
+code had, and the existing <code class="inl">sanitizeUrl</code> helper closes it.</p>
+
+<div class="endnote">Tech for Palestine — Security Audit Report v8 — 2026-11-03 — Confidential · Internal Use Only</div>
+</div>
+</body>
+</html>
