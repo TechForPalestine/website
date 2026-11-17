@@ -1,0 +1,131 @@
+---
+// Hero visual for /wikipedia-report: who is trying to shape what AI learns,
+// through Wikipedia and universities.
+//
+// A static image rendered from the comms team's HTML map (every element in it
+// is positioned with inline style="", which the CSP blocks, so it cannot be
+// inlined). To update it, re-render the source HTML at 1840x1440 and replace
+// public/images/wikipedia-report/influence-map.webp.
+// Screen readers get the relationships as a list instead of the image.
+// Clicking the map (or "Open full size") opens it in a modal <dialog> sized to
+// the viewport, scrollable on phones; without JS the links open the image.
+import { focusRing, inlineLink, overline } from "../../utils/designClasses";
+
+const SRC = "/images/wikipedia-report/influence-map.webp";
+
+const RELATIONSHIPS = [
+  "Wikipedia content feeds AI tools (OpenAI, Google, Anthropic).",
+  "Media and propaganda are inputs to AI.",
+  "Scholarship from universities (professors, students, Middle East studies) is a source for Wikipedia content.",
+  "Inside Wikipedia, editors edit content, ArbCom sanctions editors, policy sets the rules, and changes to policy are sought from the Wikimedia Foundation.",
+  "Mass surveillance (the ADL, NPOV, the Heritage Foundation, Builders for Tomorrow) is used to expose and intimidate editors and to put outside pressure on ArbCom.",
+  "An ADL influence and pressure campaign, joined by Builders for Tomorrow and by letters from members of Congress, pressures the Wikimedia Foundation and universities.",
+  "The ADL also influences media and reportedly works directly on AI. Clock Tower X targets AI through web content.",
+  "The Trump administration and DOJ apply federal pressure on universities (IHRA, the Columbia example) and add a tax status threat to the ADL pressure campaign.",
+  "Backed by: AIPAC and PACs back members of Congress; billionaires back Builders for Tomorrow, the Trump administration and DOJ, and fund media and propaganda.",
+];
+---
+
+<figure aria-labelledby="influence-map-caption" class="min-w-0 rounded-lg bg-stone p-6 sm:p-8">
+  <p class={overline}>Who is trying to shape what AI learns</p>
+
+  <a
+    href={SRC}
+    target="_blank"
+    rel="noopener"
+    data-map-open
+    aria-haspopup="dialog"
+    class={`mt-5 block cursor-zoom-in overflow-hidden rounded-md bg-white ${focusRing}`}
+  >
+    <img
+      src={SRC}
+      width="1840"
+      height="1440"
+      alt="Wikipedia influence map. Diagram of who is trying to shape what AI learns. The relationships are listed below."
+      loading="eager"
+      decoding="async"
+      class="block h-auto w-full"
+    />
+  </a>
+
+  <ul class="sr-only">
+    {RELATIONSHIPS.map((r) => <li>{r}</li>)}
+  </ul>
+
+  <figcaption
+    id="influence-map-caption"
+    class="mt-6 border-t border-ink-divider pt-5 text-[15px] text-ink-secondary"
+  >
+    Relationships described in the report. Dashed lines are plans, intended or inferred effects.
+    <a
+      href={SRC}
+      target="_blank"
+      rel="noopener"
+      data-map-open
+      aria-haspopup="dialog"
+      class={inlineLink}>Open full size</a
+    >
+  </figcaption>
+</figure>
+
+<dialog
+  id="influence-map-dialog"
+  aria-label="Wikipedia influence map, full size"
+  class="m-auto h-[calc(100dvh-2rem)] max-h-none w-[calc(100vw-2rem)] max-w-[1840px] overflow-hidden rounded-lg bg-white p-0 backdrop:bg-ink/80"
+>
+  <div class="relative h-full">
+    <button
+      type="button"
+      data-map-close
+      aria-label="Close influence map"
+      class={`absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-white shadow-md transition-opacity hover:opacity-85 motion-reduce:transition-none ${focusRing}`}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.25"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+    <div
+      data-map-scroller
+      class="flex h-full items-start overflow-auto overscroll-contain md:items-center"
+    >
+      <img
+        src={SRC}
+        width="1840"
+        height="1440"
+        alt="Wikipedia influence map, full size. The relationships are listed in the figure on the page."
+        loading="lazy"
+        decoding="async"
+        class="m-auto block h-auto w-full min-w-[1000px] max-w-[1840px] md:max-h-full md:w-auto md:min-w-0"
+      />
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById("influence-map-dialog");
+  if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === "function") {
+    document.querySelectorAll<HTMLAnchorElement>("[data-map-open]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+        event.preventDefault();
+        dialog.showModal();
+      });
+    });
+    dialog.querySelector("[data-map-close]")?.addEventListener("click", () => dialog.close());
+    // A click on the backdrop lands on the <dialog> itself; one on the white
+    // margin around the map lands on the scroller. Both close it.
+    const scroller = dialog.querySelector("[data-map-scroller]");
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog || event.target === scroller) dialog.close();
+    });
+  }
+</script>
