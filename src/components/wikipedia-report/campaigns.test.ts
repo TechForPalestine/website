@@ -55,13 +55,13 @@ describe("campaignsFromToc", () => {
     expect(campaignsFromToc(toc).map((c) => c.number)).toEqual(["3.4", "3.6", "3.5"]);
   });
 
-  it("finds the report's 18 campaigns, 9 of them still active", () => {
+  it("finds the report's 17 campaigns, 9 of them still active", () => {
     const md = readFileSync("src/content/wikipedia-report/section-3.md", "utf8");
     const toc = [...md.matchAll(/number: "([\d.]+)", title: "((?:[^"\\]|\\.)*)"/g)].map(
       ([, number, title]) => item(number, title.replace(/\\"/g, '"'))
     );
     const campaigns = campaignsFromToc(toc);
-    expect(campaigns).toHaveLength(18);
+    expect(campaigns).toHaveLength(17);
     expect(campaigns.filter((c) => c.ongoing)).toHaveLength(9);
     expect(campaigns[0].start).toBe(2001);
   });

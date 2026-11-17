@@ -20,6 +20,10 @@ export interface ReportFinding {
   body: string;
   /** Report section ("6.3"); "Read more" links to it in the online report. */
   section: string;
+  /** That section's heading in the report, without its number. A test checks
+   * it still matches, so renumbering in a new report version can't silently
+   * point a finding at the wrong section. */
+  sectionTitle: string;
 }
 
 export interface ReportPdf {
@@ -77,20 +81,21 @@ export const REPORT_READ_HREF = REPORT_BASE_PATH;
 
 // Keep the filename stable across revisions so links in press coverage keep
 // working, and update the size and page count each time the file is replaced.
-// The current file is the "Take 6" export with its internal draft page
-// removed. TODO(comms): replace with the final export when there is one.
+// The current file is the 17 Nov Google Docs export (version 2 of "Take 6").
 export const REPORT_PDF: ReportPdf = {
   href: "/reports/israel-is-attacking-wikipedia.pdf",
-  size: "4.6 MB",
-  pages: 250,
+  size: "6.5 MB",
+  pages: 221,
 };
 
-// The executive summary as its own PDF, linked from the Press section. Keep
-// the filename stable and update size and pages when the file is replaced.
+// The executive summary as its own PDF, linked from the Press section: pages
+// 1-7 of the full report (cover, executive summary, claims in brief, about
+// the report, about T4P), so it always matches the report's wording. Keep the
+// filename stable and update size and pages when the file is replaced.
 export const SUMMARY_PDF: ReportPdf | undefined = {
   href: "/reports/israel-is-attacking-wikipedia-summary.pdf",
-  size: "313 KB",
-  pages: 4,
+  size: "69 KB",
+  pages: 7,
 };
 
 /** Embargo date of the report. Shown in the hero and used as datePublished. */
@@ -104,11 +109,12 @@ export const CORRECTIONS_EMAIL = "contact@techforpalestine.org";
 export const FINDINGS: readonly ReportFinding[] = [
   {
     id: "finding-twenty-years",
-    stat: "18",
+    stat: "17",
     statLabel: "efforts since 2001, nine still active",
     title: "Twenty years of attempts to tilt Wikipedia",
-    body: "We document 18 pro-Israel efforts to manipulate Wikipedia since 2001. Nine are still active, from CAMERA’s secret editor recruitment to a “Wikipedia war room” and editing courses run by Zionist groups.",
+    body: "We document 17 pro-Israel efforts to manipulate Wikipedia since 2001. Nine are still active, from CAMERA’s secret editor recruitment to a “Wikipedia war room” and editing courses run by Zionist groups.",
     section: "3",
+    sectionTitle: "Direct Manipulation of Wikipedia",
   },
   {
     id: "finding-adl-evidence",
@@ -117,6 +123,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     title: "The ADL’s evidence doesn’t hold up",
     body: "We checked every claim in the ADL’s “Editing for Hate” report. No claim survived scrutiny. It doesn’t show a single false fact, or any antisemitic content added to Wikipedia.",
     section: "6",
+    sectionTitle: "The ADL report",
   },
   {
     id: "finding-circular-logic",
@@ -125,6 +132,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     title: "A conspiracy built from circular logic",
     body: "The ADL picked 30 editors, then treated the traits it had picked them for as proof they were colluding. It left out the edit explanations that told a different story. Our recount of the votes shows that articles the ADL called “bad-faith keeps” were kept by wide margins, such as 22–2 and 37–14.",
     section: "6.3",
+    sectionTitle: "Detailed Critique of Case Study 1",
   },
   {
     id: "finding-96-million",
@@ -133,12 +141,14 @@ export const FINDINGS: readonly ReportFinding[] = [
     title: "$96 million behind the political attacks",
     body: "The ADL report was used in four US government actions against Wikipedia, including a letter from 23 members of Congress. Those 23 signatories have received more than $96M from pro-Israel PACs.",
     section: "4",
+    sectionTitle: "The Influence Operation on Wikipedia",
   },
   {
     id: "finding-adl-admits",
     title: "The ADL admits it",
     body: "In its October 2026 follow-up report, the ADL describes the “sustained, multi-front external pressure on the platform” from Congress, federal inquiries and its own reporting.",
     section: "6.5",
+    sectionTitle: "Detailed Critique of “Damage Done” Follow-Up Report",
   },
   {
     id: "finding-surveillance",
@@ -146,7 +156,8 @@ export const FINDINGS: readonly ReportFinding[] = [
     statLabel: "full-time ADL analysts “tracking” editors",
     title: "Volunteer editors under surveillance",
     body: "Four groups are targeting Wikipedia editors: the Heritage Foundation, the ADL, NPOV and Builders for Tomorrow. Some editors who were doxxed have received death threats. The ADL’s CEO says he has 45 full-time analysts “tracking” editors, whom he calls “weirdos with email addresses.”",
-    section: "4.5",
+    section: "4.6",
+    sectionTitle: "Surveillance of Wikipedia",
   },
   {
     id: "finding-ai",
@@ -155,6 +166,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     title: "The real target is AI",
     body: "Wikipedia feeds Google Search and every major AI chatbot. Israel’s 2026 propaganda budget is $729M, up from $150M in 2025. That includes a $46.5M contract to make AI chatbots more pro-Israel.",
     section: "2.2",
+    sectionTitle: "Influencing AI via Wikipedia",
   },
   {
     id: "finding-t4p-campaign",
@@ -163,6 +175,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     title: "The “Tech for Palestine campaign” that wasn’t",
     body: "The ADL blamed a coordinated editing campaign on us. Our volunteer workgroup made about 260 edits over 8 months, none of them in the core Palestine–Israel articles. That’s one fewer edit than the ADL’s own 2021 editing campaign.",
     section: "6.6",
+    sectionTitle: "“Systematic” Edits",
   },
 ];
 
@@ -178,7 +191,7 @@ export const METHODOLOGY_INTRO: readonly string[] = [
 export const METHODOLOGY_TRACKS: readonly MethodologyTrack[] = [
   {
     lead: "Israel’s efforts to influence Wikipedia.",
-    text: "We collected 18 publicly known campaigns from public reports, at least 9 of them still active. This is the first time they are documented in one place.",
+    text: "We collected 17 publicly known campaigns from public reports, at least 9 of them still active. This is the first time they are documented in one place.",
     ref: { label: "Sections 3 and 4", href: sectionHref("3") },
   },
   {
@@ -204,9 +217,9 @@ export const METHODOLOGY_NOTES: readonly MethodologyNote[] = [
   },
   {
     text: "Where we used AI for research, we name the tool and the prompts and publish the full conversation. AI-reconstructed links used in the report were checked by hand.",
-    ref: { label: "Appendices C, D, E and F", href: appendixHref("C") },
+    ref: { label: "Appendices C, D and E", href: appendixHref("C") },
   },
-  { text: "Every claim in this report is footnoted, more than 450 in total." },
+  { text: "Every claim in this report is footnoted, more than 500 in total." },
 ];
 
 export const CREDITS: readonly ReportCredit[] = [

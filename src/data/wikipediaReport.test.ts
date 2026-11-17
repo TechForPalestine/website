@@ -1,7 +1,9 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   FINDINGS,
+  METHODOLOGY_NOTES,
+  METHODOLOGY_TRACKS,
   RELATED_PROJECTS,
   findingHref,
   findingLinkLabel,
@@ -9,7 +11,13 @@ import {
   type ReportFinding,
 } from "./wikipediaReport";
 
-const base: ReportFinding = { id: "f", title: "T", body: "B", section: "6.3" };
+const base: ReportFinding = {
+  id: "f",
+  title: "T",
+  body: "B",
+  section: "6.3",
+  sectionTitle: "S",
+};
 
 describe("findingHref", () => {
   it("links to the finding's section in the online report", () => {
@@ -52,6 +60,48 @@ describe("RELATED_PROJECTS", () => {
   it("points every logo at a file in /public", () => {
     for (const project of RELATED_PROJECTS) {
       expect(existsSync(`public${project.logo}`), project.logo).toBe(true);
+    }
+  });
+});
+
+// Guards for new report versions: section numbers move when the report is
+// revised, and the landing page links into it by number.
+const CONTENT_DIR = "src/content/wikipedia-report";
+
+function reportPage(slug: string): string | undefined {
+  const file = `${CONTENT_DIR}/${slug}.md`;
+  return existsSync(file) ? readFileSync(file, "utf8") : undefined;
+}
+
+/** The heading text for a section number, from the converter's frontmatter. */
+function sectionTitle(number: string): string | undefined {
+  const page = reportPage(`section-${number.split(".")[0]}`);
+  if (!page) return undefined;
+  if (!number.includes(".")) return /^title: "((?:[^"\\]|\\.)*)"$/m.exec(page)?.[1];
+  const entry = new RegExp(
+    `number: "${number.replace(/\./g, "\\.")}", title: "((?:[^"\\\\]|\\\\.)*)"`
+  );
+  return entry.exec(page)?.[1];
+}
+
+describe("links from the landing page into the report", () => {
+  it("point each finding at the section it describes", () => {
+    for (const f of FINDINGS) {
+      expect(sectionTitle(f.section), `${f.id} → Section ${f.section}`).toBe(f.sectionTitle);
+    }
+  });
+
+  it("all resolve to an existing page and heading", () => {
+    const hrefs = [
+      ...FINDINGS.map(findingHref),
+      ...METHODOLOGY_TRACKS.map((t) => t.ref.href),
+      ...METHODOLOGY_NOTES.flatMap((n) => (n.ref ? [n.ref.href] : [])),
+    ];
+    for (const href of hrefs) {
+      const [path, hash] = href.split("#");
+      const page = reportPage(path.split("/").pop() ?? "");
+      expect(page, href).toBeDefined();
+      if (hash) expect(page?.includes(`id="${hash}"`), href).toBe(true);
     }
   });
 });
