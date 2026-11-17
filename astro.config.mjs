@@ -6,6 +6,7 @@ import react from "@astrojs/react";
 import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import sentry from "@sentry/astro";
+import { ICON_INCLUDE } from "./src/utils/iconInclude.mjs";
 
 // Sentry only reports from production builds. Loading it in `astro dev` adds
 // server/client instrumentation and a Vite plugin for no benefit.
@@ -101,7 +102,8 @@ export default defineConfig({
           enabled: !!process.env.SENTRY_AUTH_TOKEN,
         },
       }),
-    icon(),
+    // Bundle only the icons the site uses; see src/utils/iconInclude.mjs.
+    icon({ include: ICON_INCLUDE }),
     react(),
     tailwind({
       // Disable injecting a basic `base.css` import on every page.
@@ -157,8 +159,17 @@ export default defineConfig({
           // noindex: finished campaigns and archived challenges.
           "/ramadan/",
           "/monthly-challenge/october-2026/",
+          // noindex until launch blockers in src/data/wikipediaReport.ts are resolved.
+          "/wikipedia-report/",
         ];
-        return !exclude.some((path) => page.endsWith(path));
+        // Whole trees, matched by prefix. The online report is noindex until
+        // launch, like its landing page above.
+        const excludeTrees = ["/wikipedia-report-2026/"];
+        const { pathname } = new URL(page);
+        return (
+          !exclude.some((path) => page.endsWith(path)) &&
+          !excludeTrees.some((tree) => pathname.startsWith(tree))
+        );
       },
       // Canonical tags never use a trailing slash (src/utils/seo.ts), so the
       // sitemap must not either, or every URL sends Google two signals.

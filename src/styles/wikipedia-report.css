@@ -1,0 +1,446 @@
+/*
+ * Long-form reading typography for the online Wikipedia report
+ * (/wikipedia-report-2026). DESIGN.md leaves article typography unspecified;
+ * this derives it from the live system: Outfit only, warm ink, the 800/400
+ * weight gap, Grove Green links, Stone for recessed material.
+ *
+ * Scale (mobile → ≥810px):
+ *   body   18 → 19px / 1.7, max 68ch
+ *   h4     18 → 19px / 700   (same size as body; weight and space set it apart)
+ *   h3     21 → 24px / 800
+ *   h2     26 → 30px / 800
+ *   notes, tables, captions  15px / 1.6
+ *
+ * Measure: every block is capped at 45rem (~68ch of 19px Outfit). Tables are
+ * the exception: they may use the full article column, which on desktop is
+ * wide enough that the four-column appendix tables do not need to scroll.
+ *
+ * Everything is scoped under .report-prose because the markup comes from the
+ * converted .docx and carries no utility classes. No `style=""` anywhere: the
+ * CSP blocks inline styles in production.
+ */
+
+.report-prose {
+  --rp-ink: #2a2428;
+  --rp-ink-secondary: #73656e;
+  --rp-divider: #d6d6d6;
+  --rp-stone: #f2f3ee;
+  --rp-first-light: #e7f2e9;
+  --rp-grove: #157a3e;
+  --rp-grove-hover: #0e5a2f;
+  --rp-anchor-offset: 6.5rem; /* sticky nav (80px) plus breathing room */
+
+  --rp-measure: 45rem;
+
+  color: var(--rp-ink);
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+  font-variant-numeric: proportional-nums;
+}
+
+@media (min-width: 810px) {
+  .report-prose {
+    font-size: 19px;
+  }
+}
+
+/* ── Flow ───────────────────────────────────────────────────────────────── */
+
+.report-prose > :not(.report-table) {
+  max-width: var(--rp-measure);
+}
+
+/* The converter emits the odd empty paragraph left over from the .docx. */
+.report-prose p:empty {
+  display: none;
+}
+
+.report-prose :is(li, blockquote) > p + p {
+  margin-top: 0.6em;
+}
+
+.report-prose > * + * {
+  margin-top: 1.15em;
+}
+
+.report-prose :is(p, ul, ol, blockquote, figure, .report-table, table, hr) {
+  margin-bottom: 0;
+}
+
+/* ── Headings ───────────────────────────────────────────────────────────── */
+
+.report-prose :is(h2, h3, h4) {
+  color: var(--rp-ink);
+  scroll-margin-top: var(--rp-anchor-offset);
+  text-wrap: balance;
+}
+
+.report-prose h2 {
+  margin-top: 2.6em;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.report-prose h3 {
+  margin-top: 2.1em;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.report-prose h4 {
+  margin-top: 1.9em;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+@media (min-width: 810px) {
+  .report-prose h2 {
+    font-size: 30px;
+  }
+  .report-prose h3 {
+    font-size: 24px;
+  }
+  .report-prose h4 {
+    font-size: 19px;
+  }
+}
+
+/* Heading directly under a heading: the space above already separates it. */
+.report-prose :is(h2, h3, h4) + :is(h3, h4) {
+  margin-top: 0.9em;
+}
+
+/* Heading to its first paragraph: tight, so the heading belongs to its text. */
+.report-prose :is(h2, h3, h4) + * {
+  margin-top: 0.6em;
+}
+
+.report-prose > :first-child {
+  margin-top: 0;
+}
+
+/* ── Inline ─────────────────────────────────────────────────────────────── */
+
+.report-prose a {
+  color: var(--rp-grove);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgb(21 122 62 / 0.4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition:
+    color 150ms ease-out,
+    text-decoration-color 150ms ease-out;
+}
+
+.report-prose a:hover {
+  color: var(--rp-grove-hover);
+  text-decoration-color: currentColor;
+}
+
+.report-prose a:focus-visible {
+  outline: 2px solid var(--rp-grove);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Some cross-references arrive as <a><u>…</u></a>; one underline is enough. */
+.report-prose a u {
+  text-decoration: none;
+}
+
+.report-prose :is(strong, b) {
+  font-weight: 700;
+}
+
+/* ── Footnote references ────────────────────────────────────────────────── */
+/* Superscript that does not push the line apart (preflight's line-height: 0), with an
+   invisible pseudo-element enlarging the hit area to ~24px without moving
+   the surrounding text. */
+
+/* Tailwind's preflight already raises sup with position/top and
+   line-height: 0; only the size changes here. Adding vertical-align: super
+   on top would raise it twice. */
+.report-prose sup {
+  font-size: 0.68em;
+}
+
+.report-prose sup.fn-ref a {
+  position: relative;
+  padding: 0 0.12em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+
+.report-prose sup.fn-ref a::after {
+  content: "";
+  position: absolute;
+  inset: -0.9em -0.45em;
+}
+
+.report-prose sup.fn-ref a:hover {
+  text-decoration: underline;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────────────── */
+
+.report-prose :is(ul, ol) {
+  padding-left: 1.4em;
+}
+
+.report-prose ul {
+  list-style: disc;
+}
+
+.report-prose ol {
+  list-style: decimal;
+}
+
+.report-prose :is(ul, ol) :is(ul, ol) {
+  margin-top: 0.4em;
+}
+
+.report-prose ul ul {
+  list-style: circle;
+}
+
+.report-prose li + li {
+  margin-top: 0.4em;
+}
+
+.report-prose li::marker {
+  color: var(--rp-ink-secondary);
+}
+
+/* ── Blockquotes ────────────────────────────────────────────────────────── */
+/* A recessed Stone panel rather than a coloured side stripe. */
+
+.report-prose blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 1.1em 1.35em;
+  border-radius: 16px;
+  background: var(--rp-stone);
+  font-size: 0.95em;
+}
+
+.report-prose blockquote > * + * {
+  margin-top: 0.8em;
+}
+
+/* ── Figures ────────────────────────────────────────────────────────────── */
+
+.report-prose figure {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.report-prose figure img,
+.report-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.report-prose figure img {
+  border: 1px solid var(--rp-divider);
+}
+
+.report-prose figcaption {
+  margin-top: 0.75rem;
+  color: var(--rp-ink-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+/* The wrapper scrolls sideways on narrow screens; the table keeps a usable
+   minimum width rather than squeezing columns to one word each. */
+
+.report-prose .report-table {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--rp-divider);
+  border-radius: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.report-prose .report-table:focus-visible {
+  outline: 2px solid var(--rp-grove);
+  outline-offset: 2px;
+}
+
+.report-prose table {
+  width: 100%;
+  min-width: 30rem;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Four or more columns of prose (Appendix F) need room before they wrap
+   to one word per line; narrower screens scroll the wrapper instead. */
+.report-prose table:has(tr > :nth-child(4)) {
+  min-width: 44rem;
+}
+
+.report-prose .report-table table {
+  margin: 0;
+}
+
+.report-prose :is(th, td) {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--rp-divider);
+  text-align: left;
+  vertical-align: top;
+}
+
+.report-prose thead th,
+.report-prose tr:first-child > th {
+  background: var(--rp-stone);
+  font-weight: 700;
+}
+
+.report-prose tbody tr:last-child > :is(th, td) {
+  border-bottom: 0;
+}
+
+.report-prose :is(th, td) > * + * {
+  margin-top: 0.5em;
+}
+
+/* ── Rules ──────────────────────────────────────────────────────────────── */
+
+.report-prose hr {
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+  border: 0;
+  border-top: 1px solid var(--rp-divider);
+}
+
+/* ── Notes ──────────────────────────────────────────────────────────────── */
+
+.report-prose .report-notes {
+  margin-top: 4em;
+  padding-top: 2em;
+  border-top: 1px solid var(--rp-divider);
+  color: var(--rp-ink-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.report-prose .report-notes :is(h2, h3) {
+  margin-top: 0;
+  color: var(--rp-ink);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.report-prose .report-notes ol {
+  margin-top: 1em;
+  padding-left: 2.75em;
+  font-variant-numeric: tabular-nums;
+}
+
+.report-prose .report-notes li {
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  scroll-margin-top: var(--rp-anchor-offset);
+}
+
+.report-prose .report-notes li + li {
+  margin-top: 0.35em;
+}
+
+.report-prose .report-notes li:target {
+  background: var(--rp-first-light);
+  color: var(--rp-ink);
+}
+
+.report-prose .report-notes a {
+  font-weight: 400;
+}
+
+.report-prose a.fn-back {
+  display: inline-flex;
+  min-width: 24px;
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.15em;
+  text-decoration: none;
+  font-weight: 700;
+  /* "↩" renders as a colour emoji on some platforms without this. */
+  font-variant-emoji: text;
+}
+
+/* Long URLs in notes would otherwise force sideways scrolling on phones. */
+.report-prose .report-notes li {
+  overflow-wrap: anywhere;
+}
+
+/* Anchored headings elsewhere in the article also land below the nav. */
+.report-prose [id] {
+  scroll-margin-top: var(--rp-anchor-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .report-prose a {
+    transition: none;
+  }
+}
+
+/* ── Sidebar outline (progressive enhancement) ─────────────────────────── */
+/* Without JS every depth-3 list is shown. Once the outline script runs it
+   marks the nav `data-enhanced`, and only the group containing the current
+   heading stays open, so section 6's ~60 headings stay scannable. */
+
+[data-report-outline][data-enhanced] [data-toc-group]:not([data-open]) > [data-toc-children] {
+  display: none;
+}
+
+[data-report-outline] a[aria-current="location"] {
+  color: var(--rp-ink, #2a2428);
+  font-weight: 700;
+}
+
+/* ── Print ──────────────────────────────────────────────────────────────── */
+
+@media print {
+  /* Site nav (inside its astro-island), footer, donate tab and reader chrome. */
+  body:has(.report-prose) > :is(astro-island, header, footer, .donate-link),
+  body:has(.report-prose) .report-no-print {
+    display: none !important;
+  }
+
+  .report-prose {
+    --rp-measure: none;
+
+    font-size: 11pt;
+    line-height: 1.55;
+  }
+
+  .report-prose :is(h2, h3, h4) {
+    break-after: avoid;
+  }
+
+  .report-prose :is(figure, blockquote, tr) {
+    break-inside: avoid;
+  }
+
+  .report-prose .report-table {
+    overflow: visible;
+    border: 0;
+  }
+
+  .report-prose table {
+    min-width: 0;
+  }
+}

@@ -1,0 +1,126 @@
+---
+// One page of the online report: a section (/wikipedia-report-2026/section-6)
+// or an appendix (/wikipedia-report-2026/appendix-e). Server-rendered on
+// purpose: the middleware (CSP nonces) and the nav A/B test depend on SSR, so
+// do not add `export const prerender = true`.
+import { getEntry, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { MEMBERSHIP_PITCH } from "../../data/wikipediaReport";
+import TerminalCta from "../../components/TerminalCta.astro";
+import ReportOutline from "../../components/wikipedia-report/ReportOutline.astro";
+import NewTabHint from "../../components/wikipedia-report/NewTabHint.astro";
+import ReportPager from "../../components/wikipedia-report/ReportPager.astro";
+import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
+import { getReportEntries, toEntryMeta } from "../../components/wikipedia-report/reportData";
+import {
+  adjacentEntries,
+  breadcrumbListSchema,
+  entryFullTitle,
+  entryHref,
+  INDEX_SLUG,
+} from "../../components/wikipedia-report/reportNav";
+import { READER_SUBTITLE, READER_TITLE } from "../../components/wikipedia-report/reportMeta";
+import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
+import { canonicalUrl, SITE_ORIGIN, truncateDescription } from "../../utils/seo";
+import { container, display, focusRing, inverseButton, overline } from "../../utils/designClasses";
+import "../../styles/base.css";
+import "../../styles/wikipedia-report.css";
+
+const slug = Astro.params.slug ?? "";
+
+// The executive summary is the index page; keep one URL for it.
+if (slug === INDEX_SLUG) {
+  return Astro.redirect(REPORT_BASE_PATH, 301);
+}
+
+const entry = await getEntry("wikipediaReport", slug);
+if (!entry) {
+  // An empty 404 response makes Astro render src/pages/404.astro.
+  return new Response(null, { status: 404 });
+}
+
+const entries = await getReportEntries();
+const current = toEntryMeta(entry);
+const { prev, next } = adjacentEntries(entries, current.slug);
+const { Content } = await render(entry);
+
+const fullTitle = entryFullTitle(current);
+const description = truncateDescription(
+  `${fullTitle}. Part of "${READER_TITLE} ${READER_SUBTITLE}", a report by Tech for Palestine.`
+);
+const breadcrumbs = breadcrumbListSchema([
+  { name: "Home", url: `${SITE_ORIGIN}/` },
+  { name: READER_TITLE, url: canonicalUrl(REPORT_BASE_PATH) },
+  { name: fullTitle, url: canonicalUrl(entryHref(current.slug)) },
+]);
+---
+
+<Layout
+  title={`${fullTitle} - ${READER_TITLE} - Tech for Palestine`}
+  description={description}
+  schema={[breadcrumbs]}
+  noindex
+>
+  <!-- noindex until the report launches, like /wikipedia-report. -->
+  <main>
+    <div
+      class={`${container} pb-16 pt-10 min-[810px]:pb-20 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-14 lg:pt-14 xl:grid-cols-[18rem_minmax(0,1fr)] xl:gap-20`}
+    >
+      <aside class="report-no-print hidden lg:block">
+        <div
+          data-outline-scroller
+          class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain pb-8 pr-3"
+        >
+          <ReportOutline entries={entries} currentSlug={current.slug} variant="sidebar" />
+        </div>
+      </aside>
+
+      <div class="min-w-0">
+        <details class="report-no-print group mb-10 border-y border-ink-divider lg:hidden">
+          <summary
+            class={`flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-4 py-3 text-[15px] font-bold text-ink [&::-webkit-details-marker]:hidden ${focusRing}`}
+          >
+            <span>
+              Contents
+              <span class="font-normal text-ink-secondary"> · {READER_TITLE}</span>
+            </span>
+            <span
+              aria-hidden="true"
+              class="text-[22px] font-normal leading-none text-grove transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none"
+              >+</span
+            >
+          </summary>
+          <div class="pb-5 pt-1">
+            <ReportOutline entries={entries} currentSlug={current.slug} variant="compact" />
+          </div>
+        </details>
+
+        <article aria-labelledby="report-page-heading">
+          <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
+            {current.label && <p class={overline}>{current.label}</p>}
+            <h1 id="report-page-heading" class={`mt-4 ${display}`}>{current.title}</h1>
+          </header>
+
+          <div class="report-prose">
+            <Content />
+            <NewTabHint />
+          </div>
+        </article>
+
+        <div class="mt-16 max-w-[45rem] min-[810px]:mt-20">
+          <ReportPager prev={prev} next={next} />
+        </div>
+      </div>
+    </div>
+
+    <div class="report-no-print">
+      <TerminalCta heading="Become a T4P member" headingId="report-cta-heading" padTop={false}>
+        {MEMBERSHIP_PITCH.map((paragraph, i) => <p class:list={[i > 0 && "mt-4"]}>{paragraph}</p>)}
+        <Fragment slot="actions">
+          <a href="/membership" class={inverseButton}>Become a T4P member</a>
+        </Fragment>
+      </TerminalCta>
+    </div>
+  </main>
+  <ReportScripts />
+</Layout>

@@ -1,0 +1,9 @@
+---
+// Hidden description for the report's external links, which open in a new
+// tab. Each one references this element with aria-describedby, so screen
+// readers announce it without repeating the text inside ~1,000 links.
+// Render once per page, next to the report content.
+import { NEW_TAB_HINT_ID } from "../../utils/wikipediaReportLinks";
+---
+
+<span id={NEW_TAB_HINT_ID} hidden>(opens in a new tab)</span>
