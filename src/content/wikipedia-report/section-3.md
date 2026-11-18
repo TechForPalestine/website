@@ -153,7 +153,11 @@ toc:
 <p>I was asked point-blank in a high profile media interview about this article, and I answered with transparency and honesty: this article fails to meet our high standards and needs immediate attention.</p>
 <p>As many of you will know, I have been leading an NPOV working group and studying the issue of neutrality in Wikipedia across many articles and topic areas including “Zionism”. While this article is a particularly egregious example, there is much more work to do. It should go without saying that I am writing this in my personal capacity, and I am not speaking on behalf of the Wikimedia Foundation or anyone else!</p>
 <p>I assume good faith of everyone who has worked on this Gaza “genocide” article. At present, the lede and the overall presentation state, in Wikipedia’s voice, that Israel is committing genocide, although that claim is highly contested. This is a violation of <a href="https://en.wikipedia.org/wiki/Wikipedia:NPOV" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:NPOV</a> and <a href="https://en.wikipedia.org/wiki/Wikipedia:ATTRIBUTEPOV" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:ATTRIBUTEPOV</a> that requires immediate correction. Remember: "This policy is non-negotiable, and the principles upon which it is based cannot be superseded by other policies or guidelines, nor by editor consensus."</p>
+</blockquote>
+<blockquote>
 <p>A neutral approach would begin with a formulation such as: “Multiple governments, NGOs, and legal bodies have described or rejected the characterization of Israel’s actions in Gaza as genocide.”</p>
+</blockquote>
+<blockquote>
 <p><strong>What I’m asking for</strong></p>
 <p><strong>Be bold and start editing</strong> (<a href="https://en.wikipedia.org/wiki/Wikipedia:BOLD" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:BOLD</a>). Move from debate to concrete improvements immediately.</p>
 <p><strong>Assume good faith</strong> (<a href="https://en.wikipedia.org/wiki/Wikipedia:AGF" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:AGF</a>). Avoid personalizing disagreements. Focus only on text and sources.</p>

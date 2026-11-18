@@ -214,6 +214,7 @@ function main() {
       warnings: [],
       images: [],
       omitted: [],
+      quoteNotes: [],
       highlights: [],
       crossRefs: { linked: [], unresolved: [], skipped: [] },
     };
@@ -233,6 +234,8 @@ function main() {
     const ctx = {
       captions: captionInfo.texts,
       captionMatched,
+      breaks: captionInfo.breaks,
+      note: (kind, location, text) => log.quoteNotes.push({ kind, location, text }),
       index,
       noteNumbers,
       image: createImageProcessor(workDir, altText, log),
@@ -360,6 +363,8 @@ function report(output, log, dropped, doc) {
   );
   for (const [key, text] of info.originals)
     if (!matched.has(key)) console.log(`  not in a blockquote (left as is): ${text.slice(0, 90)}`);
+  for (const n of log.quoteNotes)
+    console.log(`  quote ${n.kind} [${n.location}]: ${n.text.slice(0, 100)}`);
   for (const text of info.skipped)
     console.log(`  indented oddly after a quote, not treated as caption: ${text.slice(0, 90)}`);
   const missingAlt = log.images.filter((i) => !i.alt && !i.decorative);

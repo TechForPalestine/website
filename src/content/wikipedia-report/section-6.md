@@ -403,6 +403,8 @@ toc:
 <blockquote>
 <p>‘The data the ADL does give is cherry-picked to show Wikipedia’s alleged overemphasis on Israeli crimes and underemphasis on Palestinian violence.</p>
 <p>For example, one screenshot shows that, in November 2023, an editor removed a line about Palestinian groups that “seek the destruction of the State of Israel” from the Wikipedia article “Palestinian political violence.” The ADL describes that removal as the work of one of those “30 suspicious editors,” “removing references to calls for the destruction of Israel.”</p>
+</blockquote>
+<blockquote>
 <p>Sounds nefarious. But here’s what actually happened, according to the publicly viewable edit history on that article. One editor deleted that line, citing its poor grammar. Other editors weighed in, wordsmithed, and ultimately <a href="https://en.wikipedia.org/w/index.php?title=Talk:Palestinian_political_violence/Archive_5&amp;oldid=1285728728#seek_the_destruction_of_israel" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">agreed</a> to reinsert it—which they <a href="https://en.wikipedia.org/w/index.php?title=Palestinian_political_violence&amp;diff=next&amp;oldid=1187074615" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">did</a>, just two days after its deletion. End of story.</p>
 <p>This process—editors going back and forth and resolving things together—is exactly how Wikipedia is supposed to work. This happens, quite literally, hundreds of times a week. That is how content amasses on Wikipedia, through a never-ending negotiation of deletions, additions and modifications. Far from “bad-faith,” this is actually textbook editing.’</p>
 </blockquote>
@@ -411,10 +413,13 @@ Shira Klein, “Is Wikipedia a cesspool of antisemitism? Don’t trust the ADL�
 </figcaption></figure>
 <h4 id="s6-3-4-5-4">6.3.4.5.4 Hamas edits (pg 20)</h4>
 <p>One of the biased claims that the ADL cites is:</p>
+<figure class="report-quote">
 <blockquote>
 <p>‘The main Wikipedia entry on Hamas underwent changes to de-emphasize the organization’s terrorist actions. A sentence indicating that multiple governments designate Hamas as a terrorist group was moved from the beginning of the second paragraph to near the end of the fourth. The first reference to Hamas as a terrorist organization now appears further down in the lead section, which also no longer mentions the more than 1,100 fatalities of the October 7 attack. Instead, the lead section focuses on Hamas’s role as a political, social, and military organization that promotes “Palestinian nationalism in an Islamic context.”’</p>
-<p>Page 20, “Manipulation and Disinformation”</p>
 </blockquote>
+<figcaption>
+Page 20, “Manipulation and Disinformation”
+</figcaption></figure>
 <p>The ADL did not provide any citations, permalinks or even screenshots to support their narrative of the changes.</p>
 <p>Based on our research, these changes were made over a large series of edits by a range of editors, matching what we would expect from a collaborative online encyclopedia like Wikipedia. Extrapolating malicious intent from these edits seems to be a stretch from the ADL, who certainly did not attempt to provide any justification or references for their claims.<br />
 <br />
@@ -425,24 +430,32 @@ Another edit<sup class="fn-ref"><a href="#fn-405" id="fnref-405">405</a></sup> i
 <p>Looking at the current Wikipedia page for Hamas at time of writing,<sup class="fn-ref"><a href="#fn-409" id="fnref-409">409</a></sup> the first paragraph is an introduction, the second provides history on the organization, the third is what they stand for, and the fourth describes its relations with other countries, a logical place to include its designation as a terrorist group by various countries.</p>
 <h4 id="s6-3-4-5-4-lengthy-discussion">Lengthy discussion</h4>
 <p>Similarly, the ADL claim that</p>
+<figure class="report-quote">
 <blockquote>
 <p>“A lengthy discussion of attacks against Israeli civilians and military targets was also removed, including a list of rocket attacks, a description of Hamas’s rocket arsenal, and language describing Hamas attacks on Israeli civilians as retaliation for assassinations of Hamas leaders.”</p>
-<p>Page 20, “Manipulation and Disinformation”</p>
 </blockquote>
+<figcaption>
+Page 20, “Manipulation and Disinformation”
+</figcaption></figure>
 <p>This appears to refer to an edit<sup class="fn-ref"><a href="#fn-410" id="fnref-410">410</a></sup>, marked with the comment “→Overview: the existence of this mini lede is not supported by any Wikipedia guideline and does not add anything of substance to the article”. That is, an editor had added a large “mini lede”, which provided a broad discussion of Hamas, but was not in a format which matched Wikipedia guidelines.</p>
 <p>Again, the ADL spins the mundane, ordinary operation of Wikipedia into something malicious, by leaving out the evidence that would demonstrate otherwise.</p>
 <h4 id="s6-3-4-5-4-sexual-violence">Sexual violence</h4>
 <p>The ADL follows up by claiming that the same author edited the Gaza War page, claiming:</p>
+<figure class="report-quote">
 <blockquote>
-<p>“In an example from August 2024, the same editor mentioned earlier removed</p>
-<p>references to reports of widespread sexual violence perpetrated by Hamas during the October 7 attacks”</p>
-<p>Page 20, “Manipulation and Disinformation”</p>
+<p>“In an example from August 2024, the same editor mentioned earlier removed references to reports of widespread sexual violence perpetrated by Hamas during the October 7 attacks”</p>
 </blockquote>
+<figcaption>
+Page 20, “Manipulation and Disinformation”
+</figcaption></figure>
 <p>Once again the ADL relies on hiding context for its claims, in this case hiding the edit’s explanatory comments:</p>
+<figure class="report-quote">
 <blockquote>
 <p>“Undid revision <a href="https://en.wikipedia.org/wiki/Special:Diff/1240287591" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">1240287591</a> by OtterAM (talk) we had an rfc on including this in the lead, did not gain consensus”</p>
-<p>Nableezy, Wikipedia edit comment on Gaza War change<sup class="fn-ref"><a href="#fn-411" id="fnref-411">411</a></sup></p>
 </blockquote>
+<figcaption>
+Nableezy, Wikipedia edit comment on Gaza War change<sup class="fn-ref"><a href="#fn-411" id="fnref-411">411</a></sup>
+</figcaption></figure>
 <p>This comment, omitted by the ADL in their attempt to assign malice to the editor, explains that this was discussed in a Wikipedia “Request for Comment”. This RFC<sup class="fn-ref"><a href="#fn-412" id="fnref-412">412</a></sup>, entitled “RfC on sexual violence in lead section”, had 177 comments from 69 editors.</p>
 <p>In the discussion, many editors discuss how the Gaza War article is an inappropriate place to discuss October 7 alleged sexual violence as it was neither something that happened during the Gaza War, nor something that was known or claimed at the time of Israel’s invasion. As such, its presence in the lead was repeatedly questioned by Wikipedia editors.</p>
 <p>Other editors discussed that the New York Times article on sexual violence was widely discredited<sup class="fn-ref"><a href="#fn-413" id="fnref-413">413</a></sup>, and that similar articles on the Bosnian genocide did not include similar discussion in the lead, even though in the Bosnian case those claims were proven.</p>
@@ -572,10 +585,13 @@ ShulMaven, Articles for deletion/2014 Rosh Hashanah Terror Tunnel Plot
 <p>In fact, these editors mostly quoted mainstream publications, including four Israeli news media (Haaretz, Jerusalem Post, Times of Israel, and Ynetnews), three mainstream Western media which have had multiple reports<sup class="fn-ref"><a href="#fn-434" id="fnref-434">434</a></sup> about having significant pro-Israel bias (BBC<sup class="fn-ref"><a href="#fn-435" id="fnref-435">435</a></sup>, New York Times<sup class="fn-ref"><a href="#fn-436" id="fnref-436">436</a></sup>, and The Guardian<sup class="fn-ref"><a href="#fn-437" id="fnref-437">437</a></sup>), and two websites commonly used for citing academic papers (JSTOR and DOI), plus Google Books in first position. In addition, they cite the Israeli Ministry of Foreign Affairs, the United Nations, and two renowned Human Rights groups, one of which is Israeli.</p>
 <p>Not only that, but the ADL notes that PalestineRemembered.com was cited specifically for village statistics in 1945 for which it appears to be a reputable and incredibly detailed resource.</p>
 <p>The ADL further attempted to slander <a href="http://palestineremembered.com" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">palestineremembered.com</a> by claiming</p>
+<figure class="report-quote">
 <blockquote>
 <p>‘For example, the site includes an FAQ on why Palestinians purportedly want to “destroy Israel and drive Israeli Jews into the sea.”’</p>
-<p>Page 29, Sources</p>
 </blockquote>
+<figcaption>
+Page 29, Sources
+</figcaption></figure>
 <p>Once again, the ADL is twisting the actual evidence. Indeed, the actual passage,<sup class="fn-ref"><a href="#fn-438" id="fnref-438">438</a></sup> shown above, is incredibly clear, and very obviously indicates the opposite from what the ADL claims. That is, Palestine Remembered was refuting a supposedly common question asked of Palestinians by Israelis and Zionists. This is obvious from the title of the page “Zionist FAQs: Why do Palestinians want to destroy Israel and drive Israeli Jews into the sea?” and the first sentence on the page “This is the question asked most frequently by Israelis and Zionists”. As usual, the ADL did not provide a link to this page where their claim could be easily seen to be false.</p>
 <figure class="report-figure"><img src="/images/wikipedia-report/d1d64e4c86f9.webp" alt="" width="739" height="275" loading="lazy" decoding="async"></figure>
 <p><em>Screenshot of Palestine Remembered, showing the actual content for which the ADL claimed: ‘For example, the site includes an FAQ on why Palestinians purportedly want to “destroy Israel and drive Israeli Jews into the sea.”’</em></p>
@@ -835,7 +851,7 @@ Notably, the ADL even puts quotation marks around “Palestine”, signaling an 
 <p>“The sequence began on December 13, 2024, when the account <a href="https://en.wikipedia.org/wiki/Special:Diff/1262958326" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">removed all mentions of the Israeli police</a> from the article’s account of the attacks. Two days later, it flagged a sentence in the sexual violence section with a “by whom” tag, and nine days after that it <a href="https://en.wikipedia.org/wiki/Special:Diff/1264954767" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">deleted the sentence it had tagged.</a>”</p>
 </blockquote>
 <figcaption>
-“Damage Done” report, from “Tagging, then removing” section
+— “Damage Done” report, from “Tagging, then removing” section
 </figcaption></figure>
 <p>If we inspect the edits, we see the first comment includes an explanation of“per talk”—referring to the Talk section of Wikipedia where changes are discussed. The second comment is extremely detailed, explaining that the comment is presented in “wikivoice” (that is, a factual uncontested claim), which goes against Wikipedia policies:</p>
 <blockquote>
@@ -866,11 +882,7 @@ Notably, the ADL even puts quotation marks around “Palestine”, signaling an 
 <p>Example 3:</p>
 <figure class="report-quote">
 <blockquote>
-<p>“The coordinated mechanics of the campaign have visibly diminished, and the</p>
-<p>Wikimedia Foundation has signaled an intention to invest in anti-abuse</p>
-<p>infrastructure. <strong>That decline is real, but it is not repair.</strong> The campaign now edits more quietly, not less effectively, and the text it already wrote has never been</p>
-<p>systematically reviewed. Neither response — individual bans nor promised</p>
-<p>infrastructure — closes the governance gap that allowed a coordinated campaign to operate for years. Reviewing and repairing the distortions is the work that has not yet begun. As long as it remains undone, every search query, AI-generated answer, and knowledge panel drawing on those articles carries the distortions forward”.</p>
+<p>“The coordinated mechanics of the campaign have visibly diminished, and the Wikimedia Foundation has signaled an intention to invest in anti-abuse infrastructure. <strong>That decline is real, but it is not repair.</strong> The campaign now edits more quietly, not less effectively, and the text it already wrote has never been systematically reviewed. Neither response — individual bans nor promised infrastructure — closes the governance gap that allowed a coordinated campaign to operate for years. Reviewing and repairing the distortions is the work that has not yet begun. As long as it remains undone, every search query, AI-generated answer, and knowledge panel drawing on those articles carries the distortions forward”.</p>
 </blockquote>
 <figcaption>
 — Third section of believed AI slop, 2nd paragraph of “Conclusion”. (emphasis ours)
@@ -915,9 +927,13 @@ Introduction, pg 5 (emphasis ours)
 </figcaption></figure>
 <figure class="report-quote">
 <blockquote>
-<p>“the larger pattern of changes demonstrates a <strong>systematic</strong> effort to</p>
-<p>skew numerous Wikipedia entries”</p>
-<p>Manipulation and disinformation, pg 24 (emphasis ours)</p>
+<p>“the larger pattern of changes demonstrates a <strong>systematic</strong> effort to skew numerous Wikipedia entries”</p>
+</blockquote>
+<figcaption>
+Manipulation and disinformation, pg 24 (emphasis ours)
+</figcaption></figure>
+<figure class="report-quote">
+<blockquote>
 <p>“We are not suggesting simply that people critical of Israel are systematically revising Wikipedia.”</p>
 </blockquote>
 <figcaption>
@@ -929,7 +945,7 @@ Conclusion, pg 42 (emphasis ours)
 <p>“One recent report raised troubling questions about <em><strong>potentially systematic efforts</strong></em> to advance antisemitic and anti-Israel information in Wikipedia articles related to conflicts with the State of Israel”</p>
 </blockquote>
 <figcaption>
-Letter from James Comer, Chair of Committee on Oversight and Government Reform; and Nancy Mace, Chair of the Subcommittee on Cybersecurity, Information Technology, and Government Innovation to Wikimedia, August 27, 2025<sup class="fn-ref"><a href="#fn-489" id="fnref-489">489</a></sup> (emphasis ours)
+— Letter from James Comer, Chair of Committee on Oversight and Government Reform; and Nancy Mace, Chair of the Subcommittee on Cybersecurity, Information Technology, and Government Innovation to Wikimedia, August 27, 2025<sup class="fn-ref"><a href="#fn-489" id="fnref-489">489</a></sup> (emphasis ours)
 </figcaption></figure>
 <p>The ADL is attempting to create a narrative that editors who report genuine facts about Israel and Palestine’s history, and work within the Wikipedia system, are colluding and being coordinated by anti-Israel factions.</p>
 <p>However, at no point did they demonstrate this. All of their claims about systematic editing campaigns rely on their low-quality evidence from Case Study 1, which does not even try to show actual collusion, but tries at best to infer it from statistical signals, and does a very poor job at that. They cannot point to a single case of actual collusion, of editors who know each other, of chat rooms in which they work.</p>

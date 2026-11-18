@@ -621,21 +621,30 @@ const CAPTION_INDENT = 1440;
  * caption. `skipped` lists paragraphs right after a quote that have some other
  * unusual indent (not quote, body or heading) so misses stay visible.
  * @param {string} documentXml word/document.xml
- * @returns {{ texts: Set<string>, originals: Map<string, string>, count: number, skipped: string[] }}
+ * @returns {{ texts: Set<string>, originals: Map<string, string>, count: number, skipped: string[], breaks: Set<string> }}
  *   count includes duplicate texts
  */
 export function extractCaptionTexts(documentXml) {
   const texts = new Set();
   const originals = new Map(); // normalized → display text
   const skipped = [];
+  // Texts of quote-run paragraphs directly followed by an empty paragraph;
+  // pandoc drops empty paragraphs, but they separate one quote from the next.
+  const breaks = new Set();
+  let prevNorm = null;
   let count = 0;
   let prevLeft = null;
   let prevIsPlainQuote = false;
   let prevWasCaption = false;
   for (const [para] of documentXml.matchAll(/<w:p[ >][\s\S]*?<\/w:p>/g)) {
     const text = paragraphText(para).trim();
-    if (!text) continue;
+    if (!text) {
+      const hasObject = /<w:(?:drawing|pict|object)\b/.test(para);
+      if (!hasObject && prevNorm !== null && prevLeft >= QUOTE_INDENT) breaks.add(prevNorm);
+      continue;
+    }
     const { left, firstLine, hanging } = paragraphIndent(para);
+    prevNorm = normalizeCaption(text);
     const afterQuote = prevLeft === QUOTE_INDENT || prevWasCaption;
     const isCaption = left + firstLine >= CAPTION_INDENT && afterQuote;
     if (isCaption) {
@@ -660,5 +669,5 @@ export function extractCaptionTexts(documentXml) {
     prevIsPlainQuote = left === QUOTE_INDENT && firstLine === 0 && hanging === 0;
     prevWasCaption = isCaption;
   }
-  return { texts, originals, count, skipped };
+  return { texts, originals, count, skipped, breaks };
 }
