@@ -94,11 +94,35 @@ describe("wikipedia-report.css reader layout in print", () => {
   });
 
   it("applies the hidden-rail layout rules to screens only", () => {
-    const media = [
-      ...css.matchAll(/@media([^{]*)\{\s*\[data-report-layout\]\[data-sidebar-hidden\]/g),
-    ];
-    expect(media.length).toBeGreaterThan(0);
-    for (const [, query] of media) expect(query, query).toMatch(/\bscreen\b/);
+    // Every rule whose selector uses [data-sidebar-hidden] (as a state, not in
+    // :not()) must sit inside an @media block whose query names `screen`.
+    const offending: string[] = [];
+    const queries: string[] = [];
+    let found = 0;
+    let preludeStart = 0;
+    for (let i = 0; i < css.length; i++) {
+      const char = css[i];
+      if (char === "{") {
+        const prelude = css
+          .slice(preludeStart, i)
+          .replace(/\/\*[\s\S]*?\*\//g, "")
+          .trim();
+        queries.push(prelude);
+        if (/\[data-sidebar-hidden\]/.test(prelude.replace(/:not\([^)]*\)/g, ""))) {
+          found++;
+          const media = queries.filter((query) => query.startsWith("@media"));
+          if (!media.some((query) => /\bscreen\b/.test(query))) offending.push(prelude);
+        }
+        preludeStart = i + 1;
+      } else if (char === "}") {
+        queries.pop();
+        preludeStart = i + 1;
+      } else if (char === ";") {
+        preludeStart = i + 1;
+      }
+    }
+    expect(found).toBeGreaterThan(0);
+    expect(offending).toEqual([]);
   });
 });
 

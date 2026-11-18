@@ -3,8 +3,8 @@
 // contents rail on the left from md (768px), the article in the slot.
 //
 //   md+     sticky rail with collapsible groups and a "Hide contents" button;
-//           when hidden, a fixed "Contents" tab at the left edge brings it back
-//           (remembered in localStorage, see ReportScripts).
+//           when hidden, an icon button beside the article's top-left brings
+//           it back (remembered in localStorage, see ReportScripts).
 //   <md     a sticky "Contents" bar under the navbar opens a <dialog> drawer
 //           holding the compact outline.
 //   no JS   the rail shows fully expanded at md+; phones keep the <details>
@@ -27,8 +27,6 @@ interface Props {
 }
 
 const { entries, currentSlug, mode = "pages", currentTitle } = Astro.props;
-
-const chevronLeft = "M15 6l-6 6 6 6";
 ---
 
 <div
@@ -59,45 +57,38 @@ const chevronLeft = "M15 6l-6 6 6 6";
         aria-controls="report-sidebar"
         class={`report-sidebar-hide mb-4 inline-flex min-h-[32px] items-center gap-1.5 rounded-sm text-[13px] font-bold text-ink-secondary transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
       >
-        <svg
-          class="h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.25"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"><path d={chevronLeft}></path></svg
-        >
+        <Icon
+          name="tabler:layout-sidebar-left-collapse"
+          class="h-[18px] w-[18px]"
+          aria-hidden="true"
+        />
         Hide contents
       </button>
       <ReportOutline entries={entries} currentSlug={currentSlug} variant="sidebar" mode={mode} />
     </div>
   </aside>
 
-  <button
-    type="button"
-    data-sidebar-show
-    aria-controls="report-sidebar"
-    aria-expanded="false"
-    class={`report-no-print report-sidebar-tab fixed left-0 top-28 z-40 items-center gap-2 rounded-r-sm border border-l-0 border-ink-divider bg-white px-2 py-3 text-[14px] font-bold text-ink shadow-sm transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
-  >
-    <!-- Vertical tab read bottom to top (CSS rotates it), so the label comes first
-         and the chevron, drawn pointing left, ends up on top pointing right. -->
-    Contents
-    <svg
-      class="h-4 w-4 text-grove"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.25"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"><path d={chevronLeft}></path></svg
-    >
-  </button>
-
   <div class="min-w-0">
+    <!--
+      Show button for a hidden rail (md+ only, see wikipedia-report.css). A
+      zero-height sticky anchor keeps it at the article's top-left while
+      scrolling; the button sits in the layout's hidden-state left padding, so
+      it never covers text.
+    -->
+    <div class="report-sidebar-show report-no-print sticky top-24 z-20 h-0">
+      <button
+        type="button"
+        data-sidebar-show
+        aria-controls="report-sidebar"
+        aria-expanded="false"
+        aria-label="Show contents"
+        title="Show contents"
+        class={`absolute right-full top-0 mr-3 grid h-9 w-9 place-items-center rounded-sm text-ink-secondary transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
+      >
+        <Icon name="tabler:layout-sidebar-left-expand" class="h-5 w-5" aria-hidden="true" />
+      </button>
+    </div>
+
     <div
       data-report-bar
       hidden

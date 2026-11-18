@@ -448,38 +448,31 @@
   display: none;
 }
 
-.report-sidebar-tab {
+.report-sidebar-show {
   display: none;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
 }
 
 /* Screen only: print resets the layout (see @media print). */
 @media screen and (min-width: 768px) {
+  /* The left padding (in place of the container's 1.5rem) makes room for the
+     36px show button plus its 12px gap beside the article column. */
   [data-report-layout][data-sidebar-hidden] {
     grid-template-columns: minmax(0, 1fr);
+    padding-left: 3.5rem;
   }
 
   [data-report-layout][data-sidebar-hidden] > [data-report-sidebar] {
     display: none;
   }
 
-  [data-report-layout][data-sidebar-hidden] > .report-sidebar-tab {
-    display: flex;
+  [data-report-layout][data-sidebar-hidden] .report-sidebar-show {
+    display: block;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     [data-report-layout][data-sidebar-revealed]:not([data-sidebar-hidden]) > [data-report-sidebar] {
       animation: report-rail-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-  }
-}
-
-/* Keep the article clear of the fixed tab until the container's own margin
-   is wider than the tab (1280px container + 2 × ~48px). */
-@media screen and (min-width: 768px) and (max-width: 1400px) {
-  [data-report-layout][data-sidebar-hidden] {
-    padding-left: 3.5rem;
   }
 }
 
