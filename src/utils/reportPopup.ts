@@ -14,7 +14,7 @@ export const REPORT_AFTER_CHALLENGE_GAP_MS = 12 * 60 * 60 * 1000;
 export const REPORT_SHOWN_ATTRIBUTE = "data-report-popup-shown";
 export const REPORT_SHOWN_EVENT = "t4p:report-popup-shown";
 
-export type ReportPopupCta = "read" | "pdf";
+export type ReportPopupCta = "read";
 export type ReportDismissReason = "close" | "escape" | "backdrop" | ReportPopupCta;
 
 export function isReportPopupLive(): boolean {

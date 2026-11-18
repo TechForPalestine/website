@@ -4,7 +4,7 @@
 // phones, shown once per visitor after 8s or a quarter of the page scrolled.
 // It waits for the challenge popup (see reportPopup.ts) and the newsletter
 // popup stands down when it opens.
-import { REPORT_PDF, REPORT_SUMMARY, REPORT_TITLE } from "../../data/wikipediaReport";
+import { REPORT_SUMMARY, REPORT_TITLE } from "../../data/wikipediaReport";
 // The landing page (key findings, both ways to read), not the reader itself.
 import { OVERVIEW_HREF } from "../wikipedia-report/reportMeta";
 import { isReportPopupLive } from "../../utils/reportPopup";
@@ -48,9 +48,6 @@ const live = isReportPopupLive();
           <div class="rp-actions">
             <a class="rp-btn rp-btn--primary" href={OVERVIEW_HREF} data-rp-cta="read">
               Read the report
-            </a>
-            <a class="rp-btn rp-btn--ghost" href={REPORT_PDF.href} download data-rp-cta="pdf">
-              Download PDF
             </a>
           </div>
         </div>
@@ -188,14 +185,6 @@ const live = isReportPopupLive();
   }
   .rp-btn--primary:hover {
     background: #0e5a2f;
-  }
-  .rp-btn--ghost {
-    border: 1px solid #2a2428;
-    color: #2a2428;
-  }
-  .rp-btn--ghost:hover {
-    border-color: #157a3e;
-    color: #157a3e;
   }
   .rp-btn:focus-visible,
   .rp-close:focus-visible {
