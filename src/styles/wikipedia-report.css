@@ -679,6 +679,16 @@ html:has(.report-drawer[open]) {
   contain-intrinsic-size: auto 200px;
 }
 
+/* No nesting: inside a full-text entry only the entry itself skips. A skipped
+   entry remembers its height with its inner blocks still at their 200px
+   placeholders, so it changed size every time it crossed the viewport margin;
+   scroll anchoring then moved the page and pushed it back across, and the page
+   jittered at entry boundaries. */
+.report-cv .report-prose > :is(table, figure, ol, ul, .report-notes) {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+
 /* ── Print ──────────────────────────────────────────────────────────────── */
 
 @media print {

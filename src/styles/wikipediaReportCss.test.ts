@@ -89,6 +89,14 @@ describe("wikipedia-report.css content-visibility", () => {
     }
   });
 
+  it("does not nest content-visibility inside full-text entries", () => {
+    // Nested skipping made entries change height at the viewport margin and
+    // the page jitter at entry boundaries.
+    const body = ruleBody(css, /\.report-cv\s+\.report-prose\s*>\s*:is\(/);
+    expect(body).toBeDefined();
+    expect(body).toMatch(/content-visibility\s*:\s*visible/);
+  });
+
   it("offsets .report-cv anchors below the sticky nav", () => {
     const body = ruleBody(css, /\.report-cv\[id\]/);
     expect(body).toMatch(/scroll-margin-top\s*:\s*var\(--rp-anchor-offset/);
