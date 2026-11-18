@@ -239,12 +239,15 @@
   margin-top: 0.75em;
 }
 
+/* Matches the Google Doc: the caption sits under the quote, one indent step
+   deeper than the quote text, with wrapped lines hanging after the "— ". */
 .report-prose figure.report-quote > figcaption {
-  margin-top: 0.6em;
-  padding-inline: 1.35em; /* lines up with the blockquote text */
-  color: var(--rp-ink-secondary);
-  font-size: 0.9em;
-  line-height: 1.5;
+  margin-top: 0.4em;
+  padding-inline: calc(1.35em + 2.25em) 1.35em;
+  text-indent: -1.1em;
+  color: var(--rp-ink);
+  font-size: 0.95em;
+  line-height: 1.6;
 }
 
 /* ── Figures ────────────────────────────────────────────────────────────── */

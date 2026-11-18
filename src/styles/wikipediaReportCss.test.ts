@@ -89,6 +89,8 @@ describe("wikipedia-report.css quote captions", () => {
   it("styles the caption under a grouped quote", () => {
     const body = ruleBody(css, /\.report-prose\s+figure\.report-quote\s*>\s*figcaption/);
     expect(body).toBeDefined();
-    expect(body).toMatch(/color\s*:\s*var\(--rp-ink-secondary\)/);
+    // Doc layout: deeper indent than the quote text, hanging after the dash.
+    expect(body).toMatch(/padding-inline\s*:/);
+    expect(body).toMatch(/text-indent\s*:\s*-/);
   });
 });
