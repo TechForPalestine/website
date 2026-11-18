@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import {
   APPLY_URL,
+  GUIDE_URL,
   applicationSteps,
   expectations,
   focusAreas,
@@ -11,6 +12,7 @@ import {
 } from "../data/incubator";
 import { getTestimonials } from "../data/testimonials";
 import TestimonialCard from "../components/membership/TestimonialCard.astro";
+import { inlineLink } from "../utils/designClasses";
 import "../styles/base.css";
 
 const container = "mx-auto max-w-[1280px] px-6 sm:px-8";
@@ -78,6 +80,13 @@ const projectLeaderVoices = getTestimonials()
               </a>
               <p class="text-[16px] text-ink-secondary">
                 Takes 10 to 30 minutes. Decision within 10 days.
+              </p>
+              <p class="text-[16px] text-ink-secondary">
+                Before you apply, read our <a
+                  href={GUIDE_URL}
+                  data-track-incubator-click="hero-guide"
+                  class={inlineLink}>project leader guide</a
+                >.
               </p>
             </div>
             <a href="/membership" class:list={[secondaryButton, heroButton]}>
@@ -194,6 +203,13 @@ const projectLeaderVoices = getTestimonials()
           <p class={`mt-5 max-w-[40ch] ${lede}`}>
             Interviews and decisions happen twice a week. We aim to give every applicant a decision
             within <strong class="font-bold text-[#157A3E]">10 days</strong>.
+          </p>
+          <p class="mt-4 max-w-[40ch] text-[17px] leading-relaxed text-ink-secondary">
+            First, read the <a
+              href={GUIDE_URL}
+              data-track-incubator-click="process-guide"
+              class={inlineLink}>project leader guide</a
+            > to see what we ask of you and the support we give.
           </p>
           <a
             href={APPLY_URL}

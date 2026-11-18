@@ -1,0 +1,156 @@
+/*
+ * Long-form reading typography for the incubator project leader guide
+ * (/incubator/guide). Derived from the Wikipedia report's .report-prose
+ * (styles/wikipedia-report.css), which set the site's article typography:
+ * Outfit only, warm ink, the 800/400 weight gap, Grove Green links, Stone for
+ * recessed material. Scoped under .guide-prose because the markup comes from
+ * Markdown and carries no utility classes. No `style=""`: the CSP blocks it.
+ *
+ * Scale (mobile → ≥810px): body 18 → 19px / 1.7, h3 21 → 24px, h2 26 → 30px.
+ * Every block is capped at 45rem (~68ch).
+ */
+
+.guide-prose {
+  --gp-ink: #2a2428;
+  --gp-ink-secondary: #73656e;
+  --gp-stone: #f2f3ee;
+  --gp-grove: #157a3e;
+  --gp-grove-hover: #0e5a2f;
+
+  color: var(--gp-ink);
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 810px) {
+  .guide-prose {
+    font-size: 19px;
+  }
+}
+
+/* ── Flow ───────────────────────────────────────────────────────────────── */
+
+.guide-prose > * {
+  max-width: 45rem;
+}
+
+.guide-prose > * + * {
+  margin-top: 1.15em;
+}
+
+.guide-prose > :first-child {
+  margin-top: 0;
+}
+
+/* ── Headings ───────────────────────────────────────────────────────────── */
+
+.guide-prose :is(h2, h3) {
+  color: var(--gp-ink);
+  font-weight: 800;
+  scroll-margin-top: 6.5rem; /* sticky nav (80px) plus breathing room */
+  text-wrap: balance;
+}
+
+.guide-prose h2 {
+  margin-top: 2.4em;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.guide-prose h3 {
+  margin-top: 1.9em;
+  font-size: 21px;
+  line-height: 1.3;
+}
+
+@media (min-width: 810px) {
+  .guide-prose h2 {
+    font-size: 30px;
+  }
+  .guide-prose h3 {
+    font-size: 24px;
+  }
+}
+
+.guide-prose h2 + h3 {
+  margin-top: 0.9em;
+}
+
+/* Heading to its first paragraph: tight, so the heading belongs to its text. */
+.guide-prose :is(h2, h3) + * {
+  margin-top: 0.6em;
+}
+
+/* ── Inline ─────────────────────────────────────────────────────────────── */
+
+.guide-prose a {
+  color: var(--gp-grove);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgb(21 122 62 / 0.4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition:
+    color 150ms ease-out,
+    text-decoration-color 150ms ease-out;
+}
+
+.guide-prose a:hover {
+  color: var(--gp-grove-hover);
+  text-decoration-color: currentColor;
+}
+
+.guide-prose a:focus-visible {
+  outline: 2px solid var(--gp-grove);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.guide-prose strong {
+  font-weight: 700;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────────────── */
+
+.guide-prose :is(ul, ol) {
+  padding-left: 1.4em;
+}
+
+.guide-prose ul {
+  list-style: disc;
+}
+
+.guide-prose ol {
+  list-style: decimal;
+}
+
+.guide-prose li + li {
+  margin-top: 0.4em;
+}
+
+.guide-prose li::marker {
+  color: var(--gp-ink-secondary);
+}
+
+/* ── Blockquotes ────────────────────────────────────────────────────────── */
+/* A recessed Stone panel rather than a coloured side stripe (DESIGN.md). */
+
+.guide-prose blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 1.1em 1.35em;
+  border-radius: 16px;
+  background: var(--gp-stone);
+  font-size: 0.95em;
+}
+
+.guide-prose blockquote > * + * {
+  margin-top: 0.8em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-prose a {
+    transition: none;
+  }
+}
