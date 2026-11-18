@@ -1,12 +1,13 @@
 ---
-// Reader index for the online report: the executive summary, then the full
-// contents and a way into Section 1. Server-rendered like the rest of the
-// site (CSP nonces, nav A/B test); do not prerender.
+// Reader index for the online report: the executive summary and a way into
+// Section 1, inside ReportShell so the contents rail (md+) or the phone
+// Contents bar is visible from the start. Server-rendered like the rest of
+// the site (CSP nonces, nav A/B test); do not prerender.
 import { Icon } from "astro-icon/components";
 import { getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import TerminalCta from "../../components/TerminalCta.astro";
-import ReportContents from "../../components/wikipedia-report/ReportContents.astro";
+import ReportShell from "../../components/wikipedia-report/ReportShell.astro";
 import NewTabHint from "../../components/wikipedia-report/NewTabHint.astro";
 import InfluenceMap from "../../components/wikipedia-report/InfluenceMap.astro";
 import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
@@ -49,8 +50,8 @@ if (!summary) {
   return new Response(null, { status: 404 });
 }
 
-const rest = (await getReportEntries()).filter((entry) => entry.slug !== INDEX_SLUG);
-const first = rest[0];
+const entries = await getReportEntries();
+const first = entries.find((entry) => entry.slug !== INDEX_SLUG);
 const { Content } = await render(summary);
 
 // The influence map sits just above "Our Claims in Brief". The summary is
@@ -83,10 +84,7 @@ const breadcrumbs = breadcrumbListSchema([
   schema={[breadcrumbs]}
 >
   <main>
-    <header
-      aria-labelledby="report-heading"
-      class="pb-12 pt-16 min-[810px]:pb-14 min-[810px]:pt-20"
-    >
+    <header aria-labelledby="report-heading" class="pt-16 min-[810px]:pt-20">
       <div class={container}>
         <p class={overline}>Report · Tech for Palestine</p>
         <h1 id="report-heading" class={`mt-5 max-w-[16ch] ${display}`}>
@@ -125,9 +123,9 @@ const breadcrumbs = breadcrumbListSchema([
       </div>
     </header>
 
-    <section aria-labelledby="summary-heading" class="pb-16 min-[810px]:pb-20">
-      <div class={container}>
-        <div class="max-w-[45rem] border-t border-ink-divider pt-12 min-[810px]:pt-14">
+    <ReportShell entries={entries} currentSlug={INDEX_SLUG} currentTitle={summary.data.title}>
+      <section aria-labelledby="summary-heading" class="pb-10">
+        <div class="max-w-[45rem]">
           <h2 id="summary-heading" class={headline}>{summary.data.title}</h2>
           {
             summaryParts ? (
@@ -156,43 +154,25 @@ const breadcrumbs = breadcrumbListSchema([
             )
           }
         </div>
-      </div>
-    </section>
+      </section>
 
-    {
-      rest.length > 0 && (
-        <section aria-labelledby="contents-heading" class="report-no-print pb-16 min-[810px]:pb-20">
-          <div class={container}>
-            <div class="max-w-[45rem]">
-              <h2
-                id="contents-heading"
-                class={`border-t border-ink-divider pt-12 min-[810px]:pt-14 ${headline}`}
-              >
-                Contents
-              </h2>
-              <div class="mt-8">
-                <ReportContents entries={rest} headingId="contents-heading" />
-              </div>
-
-              {first && (
-                <a
-                  href={entryHref(first.slug)}
-                  rel="next"
-                  class={`group mt-10 inline-flex min-h-[44px] items-center gap-3 rounded-sm text-[19px] font-extrabold text-grove transition-colors hover:text-grove-hover motion-reduce:transition-none min-[810px]:text-[21px] ${focusRing}`}
-                >
-                  Start reading{first.label && `: ${first.label}`}
-                  <Icon
-                    name="mdi:arrow-right"
-                    class="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-1 motion-reduce:transition-none"
-                    aria-hidden="true"
-                  />
-                </a>
-              )}
-            </div>
-          </div>
-        </section>
-      )
-    }
+      {
+        first && (
+          <a
+            href={entryHref(first.slug)}
+            rel="next"
+            class={`report-no-print group inline-flex min-h-[44px] items-center gap-3 rounded-sm text-[19px] font-extrabold text-grove transition-colors hover:text-grove-hover motion-reduce:transition-none min-[810px]:text-[21px] ${focusRing}`}
+          >
+            Start reading{first.label && `: ${first.label}`}
+            <Icon
+              name="mdi:arrow-right"
+              class="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-1 motion-reduce:transition-none"
+              aria-hidden="true"
+            />
+          </a>
+        )
+      }
+    </ReportShell>
 
     <div class="report-no-print">
       <TerminalCta heading="Become a T4P member" headingId="report-cta-heading" padTop={false}>
