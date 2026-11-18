@@ -8,6 +8,7 @@ import {
   appendixHref,
   escapeAttr,
   figureHtml,
+  normalizeCaption,
   footnoteRefHtml,
   headingLevel,
   headingPrefixLength,
@@ -57,6 +58,58 @@ const INLINE_TYPES = new Set([
   "Note",
   "Span",
 ]);
+
+/** Items of a pandoc BulletList (c) or OrderedList (c[1]). */
+const listItems = (list) => (list.t === "BulletList" ? list.c : list.c[1]);
+
+const OPENING_QUOTE = /^["\u201C\u2018]/;
+/** A bold-only paragraph is a heading inside the quote, never a broken sentence. */
+const isAllStrong = (inlines) =>
+  inlines.every((n) => n.t === "Space" || n.t === "SoftBreak" || n.t === "Strong");
+
+/** Ends with sentence punctuation (a paragraph break after it is genuine). */
+const SENTENCE_END = /[.?!:;][\s)\]]*$/;
+/** Ends with a closing quote mark, ignoring trailing whitespace and punctuation. */
+const CLOSED_QUOTE = /["\u201D\u2019][\s.,;:)\]]*$/;
+const isFigureBlock = (b) =>
+  b.t === "RawBlock" && b.c[1].startsWith('<figure class="report-figure"');
+
+/** "- Source" / "– Source" / "— Source" caption lead becomes "— Source". */
+function dashToEmDash(inlines, forceLead = false) {
+  const [first, ...rest] = inlines;
+  if (forceLead && !(first?.t === "Str" && /^[-\u2013\u2014]/.test(first.c)))
+    return [{ t: "Str", c: "\u2014" }, { t: "Space" }, ...inlines];
+  if (first?.t !== "Str" || !/^[-\u2013\u2014]/.test(first.c)) return inlines;
+  const tail = first.c.replace(/^[-\u2013\u2014]+/, "");
+  const lead = { t: "Str", c: "\u2014" };
+  return tail ? [lead, { t: "Space" }, { t: "Str", c: tail }, ...rest] : [lead, ...rest];
+}
+
+/**
+ * A paragraph merged from several quotes by double line breaks is split where
+ * the text after the break opens with a quotation mark.
+ */
+function splitMergedQuotes(block) {
+  if (block.t !== "Para" && block.t !== "Plain") return [block];
+  const parts = [];
+  let run = [];
+  const inlines = block.c;
+  for (let i = 0; i < inlines.length; i++) {
+    if (inlines[i].t === "LineBreak" && inlines[i + 1]?.t === "LineBreak") {
+      let j = i;
+      while (inlines[j]?.t === "LineBreak") j++;
+      if (OPENING_QUOTE.test(stringify(inlines.slice(j)).trimStart())) {
+        parts.push(run);
+        run = [];
+        i = j - 1;
+        continue;
+      }
+    }
+    run.push(inlines[i]);
+  }
+  parts.push(run);
+  return parts.filter((r) => r.length).map((c) => ({ ...block, c }));
+}
 
 const raw = (html) => ({ t: "RawBlock", c: ["html", html] });
 const rawInline = (html) => ({ t: "RawInline", c: ["html", html] });
@@ -305,6 +358,8 @@ export function isEmptyParagraph(inlines) {
  * @param {object} ctx { index, noteNumbers, image(src) → {src,alt,width,height}, warn(msg) }
  */
 export function transformPage(page, ctx) {
+  const captions = ctx.captions ?? new Set();
+  const breaks = ctx.breaks ?? new Set();
   const plan = ctx.index.plans.get(page);
   const state = {
     toc: [],
@@ -330,7 +385,33 @@ export function transformPage(page, ctx) {
     return x;
   };
 
-  const transformBlocks = (blocks) => blocks.flatMap(transformBlock);
+  const transformBlocks = (blocks) => foldListCaptions(blocks).flatMap(transformBlock);
+
+  /**
+   * Pandoc turns a caption that Google Docs formatted as a one-item list
+   * into a BulletList/OrderedList right after the BlockQuote. Move it back
+   * into the quote so it is handled as a caption.
+   */
+  function foldListCaptions(blocks) {
+    const out = [];
+    for (const block of blocks) {
+      const prev = out.at(-1);
+      const item = captionListItem(block);
+      if (item && prev?.t === "BlockQuote") out[out.length - 1] = { ...prev, c: [...prev.c, item] };
+      else out.push(block);
+    }
+    return out;
+  }
+
+  function captionListItem(block) {
+    const items = block.t === "BulletList" || block.t === "OrderedList" ? listItems(block) : null;
+    if (items?.length !== 1 || items[0].length !== 1) return null;
+    const [para] = items[0];
+    if (para.t !== "Para" && para.t !== "Plain") return null;
+    return captions.has(normalizeCaption(stringify(para.c).trim()))
+      ? { ...para, fromList: true }
+      : null;
+  }
 
   function transformBlock(block) {
     switch (block.t) {
@@ -341,6 +422,8 @@ export function transformPage(page, ctx) {
         return transformParagraph(block);
       case "Table":
         return transformTable(block);
+      case "BlockQuote":
+        return transformBlockQuote(block);
       case "Figure":
         ctx.warn(`${state.location}: unexpected pandoc Figure block`);
         return [mapNode(block)];
@@ -369,6 +452,135 @@ export function transformPage(page, ctx) {
       { t: "Plain", c: transformInlines(entry.inlines) },
       raw(`</${tag}>`),
     ];
+  }
+
+  /**
+   * One pandoc BlockQuote holds several quotes and their captions (see
+   * extractCaptionTexts). Split it: each quote becomes its own <blockquote>,
+   * and quotes followed by a caption are grouped in a
+   * <figure class="report-quote"> with a <figcaption>.
+   */
+  function transformBlockQuote(block) {
+    const out = [];
+    let quotes = []; // each: transformed blocks of one quote
+    const flushBare = () => {
+      for (const q of quotes) out.push(raw("<blockquote>"), ...q, raw("</blockquote>"));
+      quotes = [];
+    };
+    let lastQuoteText = ""; // text of the last quote paragraph in this group
+    let forceNewQuote = false; // an empty docx paragraph separated two closed quotes
+    let noJoin = false; // an empty docx paragraph is a genuine break inside an open quote
+    // An empty docx paragraph after a closed quote ends it; after an unclosed
+    // one it is only a paragraph break inside the same quote.
+    const applyBreak = (brk) => {
+      if (!brk) return;
+      if (CLOSED_QUOTE.test(lastQuoteText)) {
+        forceNewQuote = true;
+        lastQuoteText = "";
+      } else noJoin = true;
+    };
+
+    const paraText = (b) => (b.t === "Para" || b.t === "Plain" ? stringify(b.c).trim() : "");
+    const isCaptionText = (b) => {
+      const t = paraText(b);
+      return t !== "" && captions.has(normalizeCaption(t));
+    };
+    // Items carry `brk`: the docx has an empty paragraph right after it.
+    const items = block.c.flatMap((b) => {
+      const brk = breaks.has(normalizeCaption(paraText(b)));
+      const parts = splitMergedQuotes(b);
+      return parts.map((part, i) => ({ block: part, brk: brk && i === parts.length - 1 }));
+    });
+
+    function emitCaption(inner) {
+      const lead = transformInlines(inner.c);
+      const inlines = dashToEmDash(lead, inner.fromList);
+      out.push(raw('<figure class="report-quote">'));
+      for (const q of quotes) out.push(raw("<blockquote>"), ...q, raw("</blockquote>"));
+      out.push(raw("<figcaption>"), { t: "Plain", c: inlines }, raw("</figcaption></figure>"));
+      quotes = [];
+    }
+
+    items.forEach(({ block: inner, brk }, idx) => {
+      const isPara = inner.t === "Para" || inner.t === "Plain";
+      const text = paraText(inner);
+      const next = items[idx + 1]?.block;
+      if (isPara && text && captions.has(normalizeCaption(text))) {
+        ctx.captionMatched?.add(normalizeCaption(text));
+        if (!quotes.length) {
+          ctx.warn(`${state.location}: caption without a preceding quote: "${text.slice(0, 60)}"`);
+          out.push(...transformParagraph(inner));
+          return;
+        }
+        emitCaption(inner);
+        forceNewQuote = false;
+        lastQuoteText = "";
+        return;
+      }
+      // A closed quote followed by a paragraph that does not open a new quote
+      // and that ends the run (or sits before an empty paragraph or a caption)
+      // is a caption the docx did not indent.
+      if (
+        isPara &&
+        text &&
+        quotes.length &&
+        CLOSED_QUOTE.test(lastQuoteText) &&
+        !OPENING_QUOTE.test(text) &&
+        (brk || !next || isCaptionText(next))
+      ) {
+        ctx.note?.("unindented caption", state.location, text);
+        emitCaption(inner);
+        forceNewQuote = false;
+        lastQuoteText = "";
+        return;
+      }
+      const blocks = transformBlock(inner);
+      if (isPara && blocks.length && blocks.every(isFigureBlock)) {
+        flushBare();
+        out.push(...blocks); // image-only paragraph: no blockquote wrapper
+        return;
+      }
+      // A quote broken mid-sentence across paragraphs is joined with a space.
+      const lastBlock = quotes.at(-1)?.at(-1);
+      if (
+        isPara &&
+        !forceNewQuote &&
+        !noJoin &&
+        !OPENING_QUOTE.test(text) &&
+        lastBlock?.t === "Para" &&
+        blocks.length === 1 &&
+        (blocks[0].t === "Para" || blocks[0].t === "Plain") &&
+        lastQuoteText &&
+        !CLOSED_QUOTE.test(lastQuoteText) &&
+        !SENTENCE_END.test(lastQuoteText) &&
+        !isAllStrong(lastBlock.c)
+      ) {
+        ctx.note?.("joined", state.location, `${lastQuoteText.slice(-40)} + ${text.slice(0, 40)}`);
+        quotes.at(-1)[quotes.at(-1).length - 1] = {
+          ...lastBlock,
+          c: [...lastBlock.c, { t: "Space" }, ...blocks[0].c],
+        };
+        lastQuoteText = `${lastQuoteText} ${text}`;
+        noJoin = false;
+        applyBreak(brk);
+        return;
+      }
+      // Multi-paragraph quotes open every paragraph with a quote mark but
+      // close only the last, so a new quote needs the previous one closed.
+      if (
+        !quotes.length ||
+        forceNewQuote ||
+        (isPara && OPENING_QUOTE.test(text) && CLOSED_QUOTE.test(lastQuoteText))
+      )
+        quotes.push([]);
+      forceNewQuote = false;
+      noJoin = false;
+      quotes.at(-1).push(...blocks);
+      if (isPara) lastQuoteText = text;
+      applyBreak(brk);
+    });
+    flushBare();
+    return out;
   }
 
   /**
@@ -411,7 +623,8 @@ export function transformPage(page, ctx) {
     for (const node of inlines) {
       if (node.t === "Image") {
         flush();
-        out.push(raw(figureHtml(ctx.image(node.c[2][0], state.location))));
+        const img = ctx.image(node.c[2][0], state.location);
+        if (img) out.push(raw(figureHtml(img))); // null: omitted via image-alt.json
       } else run.push(node);
     }
     flush();
@@ -437,6 +650,7 @@ export function transformPage(page, ctx) {
       case "Image": {
         ctx.warn(`${state.location}: image nested inside inline content; emitted without <figure>`);
         const img = ctx.image(node.c[2][0], state.location);
+        if (!img) return [];
         return [rawInline(figureHtml(img).replace(/^<figure[^>]*>|<\/figure>$/g, ""))];
       }
       default:

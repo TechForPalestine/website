@@ -10,6 +10,9 @@
 
 export const REPORT_BASE_PATH = "/wikipedia-report-2026";
 
+/** One-page full text of the whole report. */
+export const REPORT_FULL_PATH = "/wikipedia-report-2026/full";
+
 const SECTION_RE = /^(\d+)(?:\.(\d+(?:\.\d+)*))?$/;
 const APPENDIX_RE = /^[A-Z]$/;
 

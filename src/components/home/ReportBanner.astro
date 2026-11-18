@@ -1,0 +1,70 @@
+---
+// Homepage strip promoting the Wikipedia report. Same slot and look as the
+// Community Call strip, which takes priority: CommunityCallBanner renders this
+// as `standby` when it shows, and its script reveals it if the call turns out
+// to have ended. Render inside a `relative` container (index.astro's <main>).
+import { REPORT_TITLE } from "../../data/wikipediaReport";
+// The landing page (key findings, both ways to read), not the reader itself.
+import { OVERVIEW_HREF } from "../wikipedia-report/reportMeta";
+
+interface Props {
+  /** Hidden until revealed client-side (Community Call strip is in the slot). */
+  standby?: boolean;
+}
+const { standby = false } = Astro.props;
+---
+
+<div class="absolute inset-x-0 top-0 z-20 overflow-hidden">
+  <a
+    href={OVERVIEW_HREF}
+    class="report-banner report-strip group block bg-grove text-white focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
+    data-track-report-read="home-banner"
+    hidden={standby}
+  >
+    <span
+      class="mx-auto flex max-w-[1400px] items-center gap-x-4 px-6 py-2.5 md:px-8 lg:px-16 2xl:px-28"
+    >
+      <span class="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-x-4">
+        <span class="flex-shrink-0 text-xs font-bold uppercase tracking-[0.14em] text-first-light">
+          New report
+        </span>
+        <span class="min-w-0 truncate text-[15px] font-bold">{REPORT_TITLE}</span>
+      </span>
+      <span
+        class="ml-auto inline-flex min-h-[32px] flex-shrink-0 items-center whitespace-nowrap rounded-pill bg-white px-4 text-[13px] font-bold text-grove-deep transition-colors group-hover:bg-first-light motion-reduce:transition-none"
+      >
+        Read the report
+      </span>
+    </span>
+  </a>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-track-report-read]").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (typeof window.plausible === "undefined") return;
+      window.plausible("Wikipedia Report Read Online", {
+        props: { location: link.dataset.trackReportRead ?? "unknown" },
+      });
+    });
+  });
+</script>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .report-strip {
+      animation: report-strip-slide 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms backwards;
+    }
+  }
+  @keyframes report-strip-slide {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  .report-banner[hidden] {
+    display: none;
+  }
+</style>

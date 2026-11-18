@@ -11,11 +11,13 @@ import {
   focusRing,
   band,
   primaryButton,
+  primaryButtonLarge,
   ghostButton,
   inlineLink,
   inverseButton,
 } from "../utils/designClasses";
 import { canonicalUrl, ORGANIZATION_ID, SITE_ORIGIN } from "../utils/seo";
+import { REPORT_FULL_PATH } from "../utils/wikipediaReportLinks";
 import TerminalCta from "../components/TerminalCta.astro";
 import TestimonialCard from "../components/membership/TestimonialCard.astro";
 import MailtoFallback from "../components/MailtoFallback.astro";
@@ -88,10 +90,7 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
   title={`${REPORT_TITLE}: Report - Tech for Palestine`}
   description="Twenty years of documented attacks on Wikipedia, and what they mean for the information you get from search and AI. A report by Tech for Palestine."
   schema={[reportSchema]}
-  noindex
 >
-  <!-- noindex (and the sitemap exclusion in astro.config.mjs) stay until the
-       TODO(comms) launch blockers in src/data/wikipediaReport.ts are resolved. -->
   <main>
     <!-- Hero: the claim and the download, both above the fold -->
     <section
@@ -116,8 +115,8 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
           <p class={`mt-6 max-w-[52ch] text-ink-secondary ${body}`}>{REPORT_SUMMARY}</p>
 
           <div class="mt-9 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
-            <a href={REPORT_READ_HREF} data-track-report-read="hero" class={primaryButton}>
-              <Icon name="mdi:book-open-page-variant-outline" class="h-4 w-4" aria-hidden="true" />
+            <a href={REPORT_READ_HREF} data-track-report-read="hero" class={primaryButtonLarge}>
+              <Icon name="mdi:book-open-page-variant-outline" class="h-5 w-5" aria-hidden="true" />
               Read the report online
             </a>
             <a
@@ -130,6 +129,13 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
               {pdfButtonLabel}
             </a>
           </div>
+
+          <p class="mt-5 text-[15px] text-ink-secondary">
+            Prefer one long page?
+            <a href={REPORT_FULL_PATH} data-track-report-read="hero-full" class={inlineLink}>
+              Read the full text
+            </a>
+          </p>
 
           <p class="mt-6 text-[15px] text-ink-secondary">
             Press:

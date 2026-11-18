@@ -233,6 +233,23 @@
   margin-top: 0.8em;
 }
 
+/* Quotes with a caption: separate panels, one caption under the group. */
+
+.report-prose figure.report-quote > blockquote + blockquote {
+  margin-top: 0.75em;
+}
+
+/* Matches the Google Doc: the caption sits under the quote, one indent step
+   deeper than the quote text, with wrapped lines hanging after the "— ". */
+.report-prose figure.report-quote > figcaption {
+  margin-top: 0.4em;
+  padding-inline: calc(1.35em + 2.25em) 1.35em;
+  text-indent: -1.1em;
+  color: var(--rp-ink);
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
 /* ── Figures ────────────────────────────────────────────────────────────── */
 
 .report-prose figure {
@@ -398,22 +415,301 @@
 }
 
 /* ── Sidebar outline (progressive enhancement) ─────────────────────────── */
-/* Without JS every depth-3 list is shown. Once the outline script runs it
-   marks the nav `data-enhanced`, and only the group containing the current
-   heading stays open, so section 6's ~60 headings stay scannable. */
+/* Without JS every depth-3 list is shown and the toggles are hidden. Once the
+   outline script runs it marks the nav `data-enhanced` and sets `data-open`
+   on the groups that should show their children (see outlineGroups.ts), so
+   section 6's ~60 headings stay scannable. */
+
+/* Groups collapse by animating grid rows 0fr <-> 1fr (OutlineCollapse.astro
+   wraps the list in a clip box), so no height is measured in JS and only the
+   rail re-lays out. A closed list is visibility:hidden, which takes its links
+   out of the tab order and the accessibility tree; on close, visibility only
+   flips at the end of the transition. */
+[data-report-outline][data-enhanced] [data-toc-group] > [data-toc-children] {
+  display: grid;
+  grid-template-rows: 1fr;
+}
 
 [data-report-outline][data-enhanced] [data-toc-group]:not([data-open]) > [data-toc-children] {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+}
+
+.report-toc-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* `data-motion` is set two frames after the first render, so groups closing
+   on page load do not animate. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-report-outline][data-motion] [data-toc-group] > [data-toc-children] {
+    transition:
+      grid-template-rows 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 220ms;
+  }
+
+  .report-toc-toggle svg {
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+[data-report-outline]:not([data-enhanced]) [data-toc-toggle] {
   display: none;
 }
 
-[data-report-outline] a[aria-current="location"] {
+.report-toc-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+:is([data-report-outline], [data-outline-compact]) a[aria-current="location"] {
   color: var(--rp-ink, #2a2428);
   font-weight: 700;
+}
+
+/* ── Hide / show the rail (md+) ─────────────────────────────────────────── */
+/* The hide button needs JS; without it the rail simply stays. */
+
+[data-report-layout]:not([data-sidebar-ready]) .report-sidebar-hide {
+  display: none;
+}
+
+.report-sidebar-show {
+  display: none;
+}
+
+/* Screen only: print resets the layout (see @media print). */
+@media screen and (min-width: 768px) {
+  /* The left padding (in place of the container's 1.5rem) makes room for the
+     36px show button plus its 12px gap beside the article column. */
+  [data-report-layout][data-sidebar-hidden] {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 3.5rem;
+  }
+
+  [data-report-layout][data-sidebar-hidden] > [data-report-sidebar] {
+    display: none;
+  }
+
+  [data-report-layout][data-sidebar-hidden] .report-sidebar-show {
+    display: block;
+  }
+}
+
+/* Hide/show motion (FLIP, driven by readerMotion.ts). Transform and opacity
+   only: the new grid is applied in one step, then
+   - the article glides from its old x (--rp-flip-x) back to 0;
+   - a leaving rail is pinned `fixed` at its old box and slides/fades out;
+   - an arriving rail slides/fades in;
+   - the show button fades and scales in.
+   `data-sidebar-animate` is set on the first click, never on page load. */
+@media screen and (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  /* While the article is still translated it can stick out to the right;
+     clip (not hidden) so no sideways scroll appears and sticky still works. */
+  [data-report-layout][data-flip] {
+    overflow-x: clip;
+  }
+
+  [data-report-layout][data-flip="from"] > [data-report-main] {
+    transform: translateX(var(--rp-flip-x, 0px));
+  }
+
+  [data-report-layout][data-flip="play"] > [data-report-main] {
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-report-layout][data-sidebar-animate]:not([data-sidebar-hidden]) > [data-report-sidebar] {
+    animation: report-rail-in 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-report-layout][data-sidebar-hidden][data-sidebar-leaving] > [data-report-sidebar] {
+    display: block;
+    position: fixed;
+    top: var(--rp-rail-top);
+    left: var(--rp-rail-left);
+    width: var(--rp-rail-width);
+    pointer-events: none;
+    animation: report-rail-out 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  [data-report-layout][data-sidebar-animate] .report-sidebar-show button {
+    animation: report-pop-in 220ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+  }
+}
+
+/* Typed and non-inherited, so setting them on one element never restyles the
+   article's whole subtree. */
+@property --rp-flip-x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --rp-rail-top {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --rp-rail-left {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --rp-rail-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes report-rail-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes report-rail-out {
+  to {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes report-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* ── Smooth in-page jumps ───────────────────────────────────────────────── */
+/* Opt-in per click: readerMotion.ts sets html[data-report-smooth] only for a
+   short in-page jump (outline links, footnote refs/backrefs, /full
+   cross-links) and clears it once the page lands or the reader takes over.
+   Hash URLs, back/forward, long jumps and no-JS clicks stay instant, so a
+   glide never crosses dozens of content-visibility sections. Explicit
+   scrollTo() calls (the rail's keepInView) pass their own behavior. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-report-smooth] {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── Phone contents bar and drawer (<768px) ─────────────────────────────── */
+
+.report-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(22rem, calc(100vw - 3rem));
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #2a2428;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 0 24px rgb(16 16 16 / 0.18);
+}
+
+.report-drawer::backdrop {
+  background: rgb(16 16 16 / 0.5);
+}
+
+html:has(.report-drawer[open]) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .report-drawer[open] {
+    animation: report-drawer-in 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .report-drawer[open]::backdrop {
+    animation: report-fade-in 240ms ease-out;
+  }
+}
+
+@keyframes report-drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes report-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ── Rendering speed ────────────────────────────────────────────────────── */
+/* Full-text entries and the large prose blocks inside them (tables, figures,
+   lists and the footnote section, which is the biggest) skip layout and paint
+   while off-screen. Headings and paragraphs stay in flow so anchor targets
+   and scroll positions remain exact. */
+
+.report-cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2000px;
+}
+
+/* Entry sections sit outside .report-prose, so give anchors the nav offset. */
+.report-cv[id] {
+  scroll-margin-top: var(--rp-anchor-offset, 6.5rem);
+}
+
+/* On phones the contents bar (48px, ReportShell) also sits under the nav, so
+   anchors land lower. ReportScripts moves its activation line to match. */
+@media (max-width: 767px) {
+  body:has([data-report-bar]:not([hidden])) :is(.report-prose, .report-cv[id]) {
+    --rp-anchor-offset: 9.5rem;
+  }
+}
+
+.report-prose > table,
+.report-prose > figure,
+.report-prose > ol,
+.report-prose > ul,
+.report-prose > .report-notes {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+}
+
+/* No nesting: inside a full-text entry only the entry itself skips. A skipped
+   entry remembers its height with its inner blocks still at their 200px
+   placeholders, so it changed size every time it crossed the viewport margin;
+   scroll anchoring then moved the page and pushed it back across, and the page
+   jittered at entry boundaries. */
+.report-cv .report-prose > :is(table, figure, ol, ul, .report-notes) {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
 }
 
 /* ── Print ──────────────────────────────────────────────────────────────── */
 
 @media print {
+  /* Print needs every block laid out, so skipping is switched off. */
+  .report-cv,
+  .report-prose > table,
+  .report-prose > figure,
+  .report-prose > ol,
+  .report-prose > ul,
+  .report-prose > .report-notes {
+    content-visibility: visible;
+  }
+
+  /* A printed page can be 768px+ wide (US Letter is 816px), which would keep
+     the md: grid and print the article in the rail's 14rem column. The rail
+     is hidden in print anyway, so drop the grid. Tailwind's md:grid has the
+     same specificity and may load later, hence !important. */
+  [data-report-layout] {
+    display: block !important;
+  }
+
   /* Site nav (inside its astro-island), footer, donate tab and reader chrome. */
   body:has(.report-prose) > :is(astro-island, header, footer, .donate-link),
   body:has(.report-prose) .report-no-print {
@@ -433,6 +729,11 @@
 
   .report-prose :is(figure, blockquote, tr) {
     break-inside: avoid;
+  }
+
+  /* A long quote group may span pages; each quote panel still stays whole. */
+  .report-prose figure.report-quote {
+    break-inside: auto;
   }
 
   .report-prose .report-table {

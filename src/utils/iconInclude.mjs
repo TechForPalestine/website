@@ -28,5 +28,5 @@ export const ICON_INCLUDE = {
   ic: ["baseline-discord", "baseline-tiktok"],
   "simple-icons": ["bluesky"],
   solar: ["hamburger-menu-outline"],
-  tabler: ["video"],
+  tabler: ["layout-sidebar-left-collapse", "layout-sidebar-left-expand", "video"],
 };

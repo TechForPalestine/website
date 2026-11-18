@@ -8,6 +8,7 @@ import { fetchCommunityCalls, type CommunityCall } from "../store/notionClient";
 import { featuredCall, callState } from "../utils/communityCall";
 import { reportError } from "../lib/report-error";
 import { formatShortCallTime } from "../utils/formatCallTime";
+import ReportBanner from "./home/ReportBanner.astro";
 
 const ctx = Astro.locals.runtime?.ctx;
 
@@ -80,6 +81,10 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
   )
 }
 
+<!-- The report strip owns the slot whenever no call strip does. While the call
+     strip shows it stays hidden; the script below reveals it if the call ended. -->
+<ReportBanner standby={Boolean(shouldShow && call)} />
+
 <!-- Without JS the server-rendered time (UTC) is the best available. -->
 <noscript>
   <style is:inline>
@@ -108,7 +113,11 @@ const localTime = call ? formatShortCallTime(call.startUtcIso, now) : "";
 
     // Ended (or the cached featured call went stale): the banner has nothing
     // time-sensitive left to say, so hide it rather than show "ended" content.
-    if (state === "ended") banner.hidden = true;
+    // The report strip (standby) takes the empty slot instead.
+    if (state === "ended") {
+      banner.hidden = true;
+      document.querySelector<HTMLElement>(".report-banner")?.removeAttribute("hidden");
+    }
 
     // "Join the call" when live or under a day out; otherwise the far CTA.
     banner.dataset.cta = state === "live" || start - now < DAY_MS ? "join" : "far";

@@ -242,6 +242,7 @@ export function tableOpenHtml(label) {
 }
 
 export const ALLOWED_CLASSES = new Set([
+  "report-quote",
   "fn-ref",
   "fn-back",
   "report-notes",
@@ -566,4 +567,107 @@ export function verifyPages(pages) {
     }
   }
   return errors;
+}
+
+// --- Quote captions ------------------------------------------------------------
+// In the Google Doc, quoted passages are indented 720 twips and the caption /
+// attribution line under them 1440. Pandoc merges both levels into one
+// BlockQuote, so the indentation in word/document.xml is the only reliable
+// signal for which paragraphs are captions.
+
+/** Comparable form of paragraph text: no whitespace, straight quotes, lower case. */
+export function normalizeCaption(text) {
+  return text
+    .replace(/[\u201C\u201D\u201E]/g, '"')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\s\u00A0]+/g, "")
+    .toLowerCase();
+}
+
+const XML_ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" };
+
+function paragraphText(xml) {
+  let out = "";
+  for (const m of xml.matchAll(/<w:t(?:\s[^>]*)?>([^<]*)<\/w:t>|<w:(?:br|tab)\b[^>]*\/>/g)) {
+    out += m[1] === undefined ? " " : m[1];
+  }
+  return out.replace(/&(#x?[0-9a-f]+|amp|lt|gt|quot|apos);/gi, (_m, e) => {
+    if (e[0] === "#") {
+      const code = e[1].toLowerCase() === "x" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return String.fromCodePoint(code);
+    }
+    return XML_ENTITIES[e.toLowerCase()];
+  });
+}
+
+/** Paragraph indent in twips: { left, firstLine, hanging } (absent = 0). */
+function paragraphIndent(paraXml) {
+  const tag = paraXml.match(/<w:ind\b[^>]*\/>/)?.[0] ?? "";
+  const get = (name) => Number(tag.match(new RegExp(`\\sw:${name}="(-?\\d+)"`))?.[1] ?? 0);
+  return {
+    left: get("left") || get("start"),
+    firstLine: get("firstLine"),
+    hanging: get("hanging"),
+  };
+}
+
+const QUOTE_INDENT = 720;
+const CAPTION_INDENT = 1440;
+
+/**
+ * Normalized text of every caption paragraph: its effective first-line indent
+ * (left + firstLine, e.g. left 1440 or left 720 + firstLine 720) is at least
+ * 1440 and the previous non-empty paragraph is a quote (left 720) or another
+ * caption. `skipped` lists paragraphs right after a quote that have some other
+ * unusual indent (not quote, body or heading) so misses stay visible.
+ * @param {string} documentXml word/document.xml
+ * @returns {{ texts: Set<string>, originals: Map<string, string>, count: number, skipped: string[], breaks: Set<string> }}
+ *   count includes duplicate texts
+ */
+export function extractCaptionTexts(documentXml) {
+  const texts = new Set();
+  const originals = new Map(); // normalized → display text
+  const skipped = [];
+  // Texts of quote-run paragraphs directly followed by an empty paragraph;
+  // pandoc drops empty paragraphs, but they separate one quote from the next.
+  const breaks = new Set();
+  let prevNorm = null;
+  let count = 0;
+  let prevLeft = null;
+  let prevIsPlainQuote = false;
+  let prevWasCaption = false;
+  for (const [para] of documentXml.matchAll(/<w:p[ >][\s\S]*?<\/w:p>/g)) {
+    const text = paragraphText(para).trim();
+    if (!text) {
+      const hasObject = /<w:(?:drawing|pict|object)\b/.test(para);
+      if (!hasObject && prevNorm !== null && prevLeft >= QUOTE_INDENT) breaks.add(prevNorm);
+      continue;
+    }
+    const { left, firstLine, hanging } = paragraphIndent(para);
+    prevNorm = normalizeCaption(text);
+    const afterQuote = prevLeft === QUOTE_INDENT || prevWasCaption;
+    const isCaption = left + firstLine >= CAPTION_INDENT && afterQuote;
+    if (isCaption) {
+      // A caption line can share its paragraph with the next quote after a
+      // line break; the first line alone is then the caption.
+      const firstLineText = paragraphText(para.split(/<w:br\b[^>]*\/>/)[0]).trim();
+      for (const t of new Set([text, firstLineText])) {
+        if (!t) continue;
+        texts.add(normalizeCaption(t));
+        originals.set(normalizeCaption(t), t);
+      }
+      count++;
+    } else if (
+      prevIsPlainQuote &&
+      hanging === 0 &&
+      (left > QUOTE_INDENT || firstLine > 0 || /^[-\u2013\u2014]\s/.test(text)) &&
+      !(left === QUOTE_INDENT && firstLine === 0)
+    ) {
+      skipped.push(text);
+    }
+    prevLeft = left;
+    prevIsPlainQuote = left === QUOTE_INDENT && firstLine === 0 && hanging === 0;
+    prevWasCaption = isCaption;
+  }
+  return { texts, originals, count, skipped, breaks };
 }

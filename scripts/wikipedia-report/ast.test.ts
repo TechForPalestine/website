@@ -13,7 +13,7 @@ import {
   stringify,
   transformPage,
 } from "./ast.mjs";
-import { splitIntoPages } from "./transform.mjs";
+import { extractCaptionTexts, normalizeCaption, splitIntoPages } from "./transform.mjs";
 
 type Node = { t: string; c?: any };
 
@@ -146,6 +146,245 @@ describe("transformPage", () => {
       '<figure class=\\"report-figure\\"><img src=\\"/images/media/a.png\\" alt=\\"\\" width=\\"10\\" height=\\"20\\"'
     );
     expect(section.blocks.at(-1)).toEqual({ t: "Para", c: [{ t: "Str", c: "after" }] });
+  });
+});
+
+describe("omitted images", () => {
+  it("removes the whole figure when the image callback returns null", () => {
+    const blocks = [
+      header(1, "Executive Summary", "executive-summary"),
+      para(
+        ...text("before"),
+        { t: "Image", c: [["", [], []], [], ["media/skip.png", ""]] },
+        { t: "Image", c: [["", [], []], [], ["media/keep.png", ""]] }
+      ),
+      para({ t: "Image", c: [["", [], []], [], ["media/skip.png", ""]] }),
+    ];
+    const { pages } = splitIntoPages(blocks, headerText);
+    const base = buildDoc(blocks);
+    const ctx = {
+      index: base.index,
+      noteNumbers: numberNotes(blocks),
+      warn: () => {},
+      image: (src: string) =>
+        src.includes("skip") ? null : { src: `/images/${src}`, alt: "", width: 10, height: 20 },
+    };
+    const out = html(transformPage(pages[0], ctx).blocks);
+    expect(out).not.toContain("skip");
+    expect(out.match(/<figure/g)).toHaveLength(1);
+    expect(out).toContain("keep.png");
+  });
+});
+
+describe("quote captions", () => {
+  const quoteOf = (...blocks: Node[]): Node => ({ t: "BlockQuote", c: blocks });
+  const render = (blocks: Node[], captionTexts: string[], breakTexts: string[] = []) => {
+    const all = [header(1, "Executive Summary", "executive-summary"), ...blocks];
+    const { pages } = splitIntoPages(all, headerText);
+    const base = buildDoc(all);
+    const ctx = {
+      index: base.index,
+      noteNumbers: numberNotes(all),
+      warn: () => {},
+      captions: new Set(captionTexts.map(normalizeCaption)),
+      breaks: new Set(breakTexts.map(normalizeCaption)),
+      image: (src: string) => ({ src: `/images/${src}`, alt: "", width: 10, height: 20 }),
+    };
+    return (transformPage(pages[0], ctx).blocks as Node[])
+      .map((b) =>
+        b.t === "RawBlock"
+          ? b.c[1]
+          : b.t === "Plain" || b.t === "Para"
+            ? `[${b.t}:${stringify(b.c)}${b.c.some((n: Node) => n.t === "RawInline" && n.c[1].includes("fn-ref")) ? "+note" : ""}]`
+            : b.t
+      )
+      .join("");
+  };
+  const q = (s: string) => para(...text(s));
+
+  it("groups quotes with their caption, em dash and footnote kept", () => {
+    const out = render(
+      [
+        quoteOf(
+          q("“One quote.”"),
+          q("“Second quote.”"),
+          para(...text("- Dr. Klein"), note("source"), ...text(" (selected quotes)"))
+        ),
+      ],
+      ["- Dr. Klein (selected quotes)"]
+    );
+    expect(out).toBe(
+      '<figure class="report-quote"><blockquote>[Para:“One quote.”]</blockquote>' +
+        "<blockquote>[Para:“Second quote.”]</blockquote><figcaption>" +
+        "[Plain:— Dr. Klein (selected quotes)+note]</figcaption></figure>"
+    );
+  });
+
+  it("makes one figure per quote and caption pair; captions without a dash are left as is", () => {
+    const out = render(
+      [quoteOf(q("“A.”"), q("Tandem, page 10"), q("“B.”"), q("Tandem, page 12"))],
+      ["Tandem, page 10", "Tandem, page 12"]
+    );
+    expect(out.match(/<figure class="report-quote">/g)).toHaveLength(2);
+    expect(out).toContain("[Plain:Tandem, page 10]");
+    expect(out).toContain("[Plain:Tandem, page 12]");
+    expect(out).not.toContain("—");
+  });
+
+  it("keeps a continuation paragraph without an opening quote mark in the same blockquote", () => {
+    const out = render([quoteOf(q("“First part."), q("Second part.”"), q("- Cap"))], ["- Cap"]);
+    expect(out.match(/<blockquote>/g)).toHaveLength(1);
+    expect(out).toContain("[Para:“First part.][Para:Second part.”]</blockquote>");
+  });
+
+  it("keeps paragraphs that open with a quote mark in one quote until the previous one closed", () => {
+    const out = render(
+      [quoteOf(q("“First part, still open."), q("“Second part closes.”"), q("“New quote.”"))],
+      []
+    );
+    expect(out.match(/<blockquote>/g)).toHaveLength(2);
+    expect(out).toContain(
+      "<blockquote>[Para:“First part, still open.][Para:“Second part closes.”]</blockquote><blockquote>[Para:“New quote.”]</blockquote>"
+    );
+  });
+
+  it("ends a quote group at an empty docx paragraph after a closed quote", () => {
+    const paras = [q("“One.”"), q("Unmarked next paragraph, open"), q("and its end.”")];
+    const joined = render([quoteOf(...paras)], []);
+    expect(joined.match(/<blockquote>/g)).toHaveLength(1);
+    const split = render([quoteOf(...paras)], [], ["“One.”"]);
+    expect(split.match(/<blockquote>/g)).toHaveLength(2);
+  });
+
+  it("keeps an empty paragraph inside an unclosed quote as a paragraph break", () => {
+    const out = render(
+      [quoteOf(q("“Part one, still open"), q("part two continues.”"))],
+      [],
+      ["“Part one, still open"]
+    );
+    expect(out).toBe(
+      "<blockquote>[Para:“Part one, still open][Para:part two continues.”]</blockquote>"
+    );
+  });
+
+  it("does not join into a paragraph that opens with a quote mark", () => {
+    const out = render([quoteOf(q("“Open, no end"), q("“Nested start.”"))], []);
+    expect(out).toContain("[Para:“Open, no end][Para:“Nested start.”]");
+  });
+
+  it("treats an unindented paragraph closing a run after a closed quote as a caption", () => {
+    const blocks = [quoteOf(q("“Quote.”"), q("Pg 24 (emphasis ours)"), q("“Next.”"), q("Pg 25"))];
+    const out = render(blocks, [], ["Pg 24 (emphasis ours)"]);
+    expect(out).toContain("<figcaption>[Plain:Pg 24 (emphasis ours)]</figcaption>");
+    expect(out).toContain("<figcaption>[Plain:Pg 25]</figcaption>");
+    expect(out.match(/<figure class="report-quote">/g)).toHaveLength(2);
+    // Not a caption when the quote is still open.
+    const open = render([quoteOf(q("“Quote, open"), q("continues here"))], []);
+    expect(open).not.toContain("figcaption");
+  });
+
+  it("joins a quote broken mid-sentence but not a genuine paragraph break", () => {
+    const joined = render([quoteOf(q("“a systematic effort to"), q("skew entries.”"))], []);
+    expect(joined).toBe("<blockquote>[Para:“a systematic effort to skew entries.”]</blockquote>");
+    const dotted = render([quoteOf(q("“First paragraph."), q("Second paragraph.”"))], []);
+    expect(dotted).toBe(
+      "<blockquote>[Para:“First paragraph.][Para:Second paragraph.”]</blockquote>"
+    );
+    const closed = render([quoteOf(q("“Whole quote”"), q("continues"))], []);
+    expect(closed).not.toContain("Whole quote” continues");
+  });
+
+  it("does not join a bold heading line with the next paragraph", () => {
+    const out = render(
+      [quoteOf(para({ t: "Strong", c: text("What I am asking for") }), q("Be bold"))],
+      []
+    );
+    expect(out).toContain("What I am asking for]");
+    expect(out).toContain("[Para:Be bold]");
+  });
+
+  it("prefixes an em dash to a caption that came from a list", () => {
+    const list: Node = { t: "BulletList", c: [[{ t: "Plain", c: text("Damage Done report") }]] };
+    const out = render([quoteOf(q("“Q.”")), list], ["Damage Done report"]);
+    expect(out).toContain("<figcaption>[Plain:— Damage Done report]</figcaption>");
+  });
+
+  it("emits a quote without a caption as a bare blockquote", () => {
+    const out = render([quoteOf(q("“Alone.”"))], []);
+    expect(out).toBe("<blockquote>[Para:“Alone.”]</blockquote>");
+  });
+
+  it("splits quotes merged by a double line break", () => {
+    const out = render(
+      [
+        quoteOf(
+          para(...text("“One.”"), { t: "LineBreak" }, { t: "LineBreak" }, ...text("“Two.”")),
+          q("- Cap")
+        ),
+      ],
+      ["- Cap"]
+    );
+    expect(out.match(/<blockquote>/g)).toHaveLength(2);
+    expect(out).toContain("[Para:“One.”]</blockquote><blockquote>[Para:“Two.”]");
+  });
+
+  it("unwraps an image-only blockquote", () => {
+    const image = para({ t: "Image", c: [["", [], []], [], ["media/a.png", ""]] });
+    const out = render([quoteOf(q("“Before.”"), image)], []);
+    expect(out).toContain("</blockquote>");
+    expect(out).toMatch(/<\/blockquote><figure class="report-figure">/);
+    const only = render([quoteOf(image)], []);
+    expect(only).not.toContain("blockquote");
+    expect(only).toContain("report-figure");
+  });
+
+  it("treats a one-item list right after a quote as its caption", () => {
+    const list: Node = { t: "BulletList", c: [[{ t: "Plain", c: text("Letter from Comer") }]] };
+    const out = render([quoteOf(q("“Q.”")), list], ["Letter from Comer"]);
+    expect(out).toContain("<figcaption>[Plain:— Letter from Comer]</figcaption>");
+  });
+});
+
+describe("extractCaptionTexts", () => {
+  const p = (left: number | null, t: string, extra = "") =>
+    `<w:p><w:pPr>${left === null ? "" : `<w:ind w:left="${left}"${extra}/>`}</w:pPr><w:r><w:t>${t}</w:t></w:r></w:p>`;
+
+  it("collects 1440 paragraphs that follow a 720 quote, not other 1440 paragraphs", () => {
+    const xml = [
+      p(1440, "bullet before any quote"),
+      p(720, "“quote”"),
+      p(1440, "- caption &amp; more"),
+      p(null, "body"),
+      p(1440, "bullet after body"),
+    ].join("");
+    const { texts, count } = extractCaptionTexts(xml);
+    expect(count).toBe(1);
+    expect(texts).toEqual(new Set([normalizeCaption("- caption & more")]));
+  });
+
+  it("treats left 720 + firstLine 720 as a caption indent, and lists skipped indents", () => {
+    const xml = [
+      p(720, "“quote”"),
+      p(720, "- first-line caption", ' w:firstLine="720"'),
+      p(720, "“quote 2”"),
+      p(1080, "odd indent after quote"),
+      p(0, "body"),
+    ].join("");
+    const { texts, count, skipped } = extractCaptionTexts(xml);
+    expect(count).toBe(1);
+    expect(texts).toEqual(new Set([normalizeCaption("- first-line caption")]));
+    expect(skipped).toEqual(["odd indent after quote"]);
+  });
+});
+
+describe("extractCaptionTexts breaks", () => {
+  const p = (left: number, t: string) =>
+    `<w:p><w:pPr><w:ind w:left="${left}"/></w:pPr>${t ? `<w:r><w:t>${t}</w:t></w:r>` : ""}</w:p>`;
+  it("records quote-run paragraphs followed by an empty paragraph", () => {
+    const { breaks } = extractCaptionTexts(
+      [p(720, "“a”"), p(720, ""), p(720, "“b”"), p(0, "body"), p(0, "")].join("")
+    );
+    expect(breaks).toEqual(new Set([normalizeCaption("“a”")]));
   });
 });
 

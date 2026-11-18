@@ -92,10 +92,13 @@ toc:
 <h2 id="s3-7">3.7 NGO Monitor (2013)</h2>
 <p>Soosim, an editor identified as Arnie Draiman, was indefinitely banned in June 2013.<sup class="fn-ref"><a href="#fn-109" id="fnref-109">109</a></sup> Soosim was an employee of pro-Israel group NGO Monitor, an organization which works to criticize and delegitimize NGOs critical of Israel. Soosim’s editing history reveals hundreds of edits to organizations that are criticized by NGO Monitor, and 91 edits of the NGO Monitor page itself.<sup class="fn-ref"><a href="#fn-110" id="fnref-110">110</a></sup> He is also alleged to have used a sockpuppet account.</p>
 <p>Additionally, it was claimed that NGO Monitor laundered claims into Wikipedia. According to a report in The Signpost, Wikipedia’s internal media, editor Nomoskedasticity claimed that NGO Monitor would publish a claim, it would be reported by news media, and then that news article would be cited on Wikipedia:<sup class="fn-ref"><a href="#fn-111" id="fnref-111">111</a></sup></p>
+<figure class="report-quote">
 <blockquote>
 <p>“The writer who complained about Soosim (user name Nomoskedasticity) also wrote that NGO Monitor has the custom of issuing a press release, waiting until it is quoted in a newspaper, and then quoting the news item in the relevant articles as fact. During the conversation, it turned out that Draiman even explained this during a workshop he gave on Israel advocacy in which he called on pro-Israel advocates to join the "wiki war."”</p>
-<p>- The Signpost: “Partisan editing of Israel topics”, 19 June 2013<sup class="fn-ref"><a href="#fn-112" id="fnref-112">112</a></sup></p>
 </blockquote>
+<figcaption>
+— The Signpost: “Partisan editing of Israel topics”, 19 June 2013<sup class="fn-ref"><a href="#fn-112" id="fnref-112">112</a></sup>
+</figcaption></figure>
 <h2 id="s3-8">3.8 The Israel Group (2015*–2021)</h2>
 <p>The Israel Group is a U.S.-based non-profit founded by a former Israeli soldier. They announced in 2019 a program called Wiki-Israel, which it had been working on “for many years” (we conservatively used 2015 in our timeline). The program’s intention was to dox what it referred to as “anti-Israel” editors on Wikipedia,<sup class="fn-ref"><a href="#fn-113" id="fnref-113">113</a></sup> following up on this claim by doxing two Wikipedia editors in 2020.</p>
 <p>Speaking to the Washington Free Beacon—later known for alleging plagiarism against then-Harvard President Claudine Gay<sup class="fn-ref"><a href="#fn-114" id="fnref-114">114</a></sup>—the Israel Group claimed that it “has been working for many years, under the radar, on a confidential initiative, Wiki-Israel, that combats Wikipedia's antisemitic bias against Israel”.<sup class="fn-ref"><a href="#fn-115" id="fnref-115">115</a></sup></p>
@@ -105,9 +108,7 @@ toc:
 <p>The ADL itself has also been criticized for coordinating Wikipedia edits in violation of site rules. According to reports, the ADL hired an experienced editor to train staffers on how to incorporate ADL sources into various articles. Nine staffers then subsequently made 261 edits across 34 articles, which added more than 9,000 words that focused on the ADL’s own research into domestic extremism.<sup class="fn-ref"><a href="#fn-118" id="fnref-118">118</a></sup></p>
 <h2 id="s3-10">3.10 Wikipedia Command Center (2023–ongoing)</h2>
 <p>In October 2023, Wikipedia editors noticed a WhatsApp group that was announced to “fight against anti-Israel bias”.<sup class="fn-ref"><a href="#fn-119" id="fnref-119">119</a></sup> This group was announced on Hebrew Wikipedia, and promoted on the Hebrew Wikipedia Facebook Group. It was described as a private coordination hub for pro-Israel editing, and was criticized for violating the Wikipedia policies WP:CANVASS, WP:MEATPUPPET, and WP:NPOV.</p>
-<blockquote>
 <figure class="report-figure"><img src="/images/wikipedia-report/bb3aaf1c449a.webp" alt="" width="1600" height="464" loading="lazy" decoding="async"></figure>
-</blockquote>
 <p>According to the announcement, this group was run by Dr. Shlomit Lir, a researcher from the gender studies program in the Bar Ilan University.<sup class="fn-ref"><a href="#fn-120" id="fnref-120">120</a></sup> Dr. Lir is the author of multiple articles and reports sharing her beliefs about Wikipedia being manipulated by anti-Israel editors. These reports, entitled “Manipulated History: Past Version vs. Present Subversion – The Growing Bias Against Israel on Wikipedia”, and “The bias against Israel on Wikipedia”, were published by the World Jewish Congress, a pro-Israel advocacy organization.</p>
 <p>The Signpost, Wikipedia’s internal newsletter, reported comments from Lauren Dickinson from the Wikimedia Foundation's Communications Department, saying that ‘several staff had reviewed the [report], and found that “the WJC report makes a number of unsubstantiated claims of bias on Wikipedia.<sup class="fn-ref"><a href="#fn-121" id="fnref-121">121</a></sup> It lacks adequate references, quotes, links, or other sources to support its purported findings. Further, the report misunderstands Wikipedia's NPOV policy, as well as the importance of anonymity for user privacy on Wikimedia projects.”’</p>
 <figure class="report-figure"><img src="/images/wikipedia-report/b0c580670705.webp" alt="" width="912" height="159" loading="lazy" decoding="async"></figure>
@@ -145,13 +146,18 @@ toc:
 <p>In 2025, Wales attempted to use his influence to change a Wikipedia page’s content in a pro-Israel direction, saying “At present, the lede and the overall presentation state, in Wikipedia’s voice, that Israel is committing genocide, although that claim is highly contested”, which “requires immediate correction” and that the relevant policy was “non-negotiable”.<sup class="fn-ref"><a href="#fn-137" id="fnref-137">137</a></sup></p>
 <h3 id="s3-16-1">3.16.1 Wales’ post</h3>
 <p>The full content of Wales’ post<sup class="fn-ref"><a href="#fn-138" id="fnref-138">138</a></sup> reads:</p>
+<figure class="report-quote">
 <blockquote>
 <p><em>“This message is from me, <a href="https://en.wikipedia.org/wiki/User:Jimbo_Wales" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">Jimbo Wales</a>, co-founder of Wikipedia.</em></p>
 <p>I believe that Wikipedia is at its best when we can have reasonable discussion rooted in a commitment to write articles that reflect a neutral point of view. I believe that's especially important on highly difficult or contentious topics.</p>
 <p>I was asked point-blank in a high profile media interview about this article, and I answered with transparency and honesty: this article fails to meet our high standards and needs immediate attention.</p>
 <p>As many of you will know, I have been leading an NPOV working group and studying the issue of neutrality in Wikipedia across many articles and topic areas including “Zionism”. While this article is a particularly egregious example, there is much more work to do. It should go without saying that I am writing this in my personal capacity, and I am not speaking on behalf of the Wikimedia Foundation or anyone else!</p>
 <p>I assume good faith of everyone who has worked on this Gaza “genocide” article. At present, the lede and the overall presentation state, in Wikipedia’s voice, that Israel is committing genocide, although that claim is highly contested. This is a violation of <a href="https://en.wikipedia.org/wiki/Wikipedia:NPOV" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:NPOV</a> and <a href="https://en.wikipedia.org/wiki/Wikipedia:ATTRIBUTEPOV" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:ATTRIBUTEPOV</a> that requires immediate correction. Remember: "This policy is non-negotiable, and the principles upon which it is based cannot be superseded by other policies or guidelines, nor by editor consensus."</p>
+</blockquote>
+<blockquote>
 <p>A neutral approach would begin with a formulation such as: “Multiple governments, NGOs, and legal bodies have described or rejected the characterization of Israel’s actions in Gaza as genocide.”</p>
+</blockquote>
+<blockquote>
 <p><strong>What I’m asking for</strong></p>
 <p><strong>Be bold and start editing</strong> (<a href="https://en.wikipedia.org/wiki/Wikipedia:BOLD" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:BOLD</a>). Move from debate to concrete improvements immediately.</p>
 <p><strong>Assume good faith</strong> (<a href="https://en.wikipedia.org/wiki/Wikipedia:AGF" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:AGF</a>). Avoid personalizing disagreements. Focus only on text and sources.</p>
@@ -160,8 +166,10 @@ toc:
 <p><strong>Use the best sources</strong> (<a href="https://en.wikipedia.org/wiki/Wikipedia:RS" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:RS</a> / <a href="https://en.wikipedia.org/wiki/Wikipedia:V" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:V</a>). Prefer primary official statements and major secondary coverage. Avoid synthesis (<a href="https://en.wikipedia.org/wiki/Wikipedia:SYN" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:SYN</a> / <a href="https://en.wikipedia.org/wiki/Wikipedia:NOR" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">WP:NOR</a>).</p>
 <p><strong>Clarify scope.</strong> Separate factual reporting on conduct and casualties from legal characterization. Editors with strong, policy-compliant sources who have felt sidelined are welcome. Your participation is needed now. Editors are reminded this article falls under the Arab–Israeli conflict topic area; all participation must comply with the corresponding editing restrictions and civility expectations.</p>
 <p>By focusing on verifiable sources and neutrality, we can quickly deliver an article that meets our standards for contentious topics.”</p>
-<p>- “Statement from Jimmy Wales” in Talk:Gaza genocide/Archive 22</p>
 </blockquote>
+<figcaption>
+— “Statement from Jimmy Wales” in Talk:Gaza genocide/Archive 22
+</figcaption></figure>
 <h3 id="s3-16-2">3.16.2 Responses</h3>
 <p>Editor “Hemiauchenia” described Wales’ statement as “patronising” and accused Wales of “seeking to unfairly equate the opinion of impartial organisations with those of partial or political ones”.<sup class="fn-ref"><a href="#fn-139" id="fnref-139">139</a></sup> Hemiauchenia rightly asked why Wikipedia should consider the “opinions of the largely impartial UN and human rights scholars” as “weighed equally to the obviously partisan opinions of commentators and governments?” They continued, stating,</p>
 <blockquote>
@@ -181,10 +189,13 @@ toc:
 <p>In addition, the idea that a founder, senior leader, and Board Trustee of an organization can speak without authority is laughable. If Wales had wanted to simply bring up the point, he could have done it anonymously. Instead, he started by asserting who he was, just in case his username was not known to readers.</p>
 <p>As a member of the Board of Trustees, his aggressive attempt to change Wikipedia content on the basis of his personal opinion violates the Abuse of Power section of Wikimedia Foundation’s Universal Code of Conduct (section 3.2).<sup class="fn-ref"><a href="#fn-145" id="fnref-145">145</a></sup></p>
 <p>It further violates the Code of Conduct of the Wikimedia Foundation Board of Trustees, Section 4,<sup class="fn-ref"><a href="#fn-146" id="fnref-146">146</a></sup> which states:</p>
+<figure class="report-quote">
 <blockquote>
 <p><strong>The Foundation recognizes as bullying behavior that may be characterized as offensive, intimidating</strong>, malicious or insulting, <strong>or an abuse or misuse of power through means intended to undermine</strong>, humiliate, denigrate or injure the recipient. <strong>Bullying does not need to be deliberate; someone may demonstrate bullying behavior without intending to.</strong> Whichever form it takes, it is unwarranted and unwelcome to the individual and will often cause embarrassment, fear, humiliation or distress to an individual or group of individuals. <strong>Bullying often results from a misuse of individual power derived from status/position</strong>, physical strength or force of personality. It can also arise from collective power arising out of strength of numbers.</p>
-<p>- Code of Conduct of the Wikimedia Foundation Board of Trustees, Section 4, “Respect &amp; Fairness” (emphasis ours)</p>
 </blockquote>
+<figcaption>
+— Code of Conduct of the Wikimedia Foundation Board of Trustees, Section 4, “Respect &amp; Fairness” (emphasis ours)
+</figcaption></figure>
 <p>Indeed, it also contradicts the Wikimedia Foundation’s response to the letter from Ted Cruz which we discuss in <a href="/wikipedia-report-2026/section-4#s4-4">Section 4.4</a>. Cruz asked “what supervision, oversight, or influence, if any, the Wikimedia Foundation has over the editing community”,<sup class="fn-ref"><a href="#fn-147" id="fnref-147">147</a></sup> to which the Foundation responded “The Wikimedia Foundation provides technology and legal support but does not write or control the content on Wikipedia—volunteer editors do”.<sup class="fn-ref"><a href="#fn-148" id="fnref-148">148</a></sup></p>
 <p>We refer to this as “ongoing”, as Wales has not apologized, backed-down, or indicated that he would not repeat the behaviour. In subsequent interviews, he reiterated his approach, saying “I'm going to make my case as best I can”.<sup class="fn-ref"><a href="#fn-149" id="fnref-149">149</a></sup> When asked how he felt about the editors who had built a consensus, he stated “Yeah, I think they’re wrong”.<sup class="fn-ref"><a href="#fn-150" id="fnref-150">150</a></sup></p>
 <p>In <a href="/wikipedia-report-2026/section-7#s7-1-6">Section 7.1.6</a>, we recommend Jimmy Wales step down for his abuse of power.</p>
@@ -203,12 +214,20 @@ toc:
 <p>“Both the State of Israel and the State of Palestine claim Jerusalem as their capital city. Israel maintains its primary governmental institutions there, and the State of Palestine ultimately foresees it as its seat of power. Neither claim is widely recognized internationally.”<sup class="fn-ref"><a href="#fn-153" id="fnref-153">153</a></sup></p>
 </blockquote>
 <p>Wales’ biased and uneducated comments:</p>
+<figure class="report-quote">
 <blockquote>
 <p>“:It's very much worth noting that the idea that the status is disputed does not extend to where Jerusalem is actually located. <strong>It is located in Israel.</strong> There is of course a well-known controversy about the question of it's recognition internationally as the capital of Israel, but that's not about where it is located. As noted by Schazjmd, we use the construct "Jerusalem, Israel" all over the place, which is 100% correct becuase that's where Jerusalem is.”<sup class="fn-ref"><a href="#fn-154" id="fnref-154">154</a></sup></p>
-<p>- Jimmy Wales’ comment from February 5, 2025 (emphasis ours)</p>
-<p>“::This comment fails to assume good faith, and I don't know why you made it. Do you have any policy based arguments? <strong>Jerusalem is, indisputably, in Israel, that's where it is physically located</strong>. I haven't solved any of the very real controversies nor attempted to. My point is that none of those controversies has any place in this article, since it's a very simple fact. If you want to fight about Israel and Palestine, please go do it somewhere else”<sup class="fn-ref"><a href="#fn-155" id="fnref-155">155</a></sup></p>
-<p>- Jimmy Wales’ comment from February 5, 2025 (emphasis ours)</p>
 </blockquote>
+<figcaption>
+— Jimmy Wales’ comment from February 5, 2025 (emphasis ours)
+</figcaption></figure>
+<figure class="report-quote">
+<blockquote>
+<p>“::This comment fails to assume good faith, and I don't know why you made it. Do you have any policy based arguments? <strong>Jerusalem is, indisputably, in Israel, that's where it is physically located</strong>. I haven't solved any of the very real controversies nor attempted to. My point is that none of those controversies has any place in this article, since it's a very simple fact. If you want to fight about Israel and Palestine, please go do it somewhere else”<sup class="fn-ref"><a href="#fn-155" id="fnref-155">155</a></sup></p>
+</blockquote>
+<figcaption>
+— Jimmy Wales’ comment from February 5, 2025 (emphasis ours)
+</figcaption></figure>
 <p>For reference, East Jerusalem and West Jerusalem are on different sides of the Green Line, and widely regarded as the capitals of Palestine and Israel, respectively. East Jerusalem is widely recognized to be in Occupied Palestinian territory, while West Jerusalem is widely recognized to be part of Israel.<sup class="fn-ref"><a href="#fn-156" id="fnref-156">156</a></sup></p>
 <p>Ironically, Natalie Portman, whose birthplace was the subject of the controversy, was born in the Hadassah Mount Scopus hospital, which is an Israeli enclave located in East Jerusalem, east of the Green Line.<sup class="fn-ref"><a href="#fn-157" id="fnref-157">157</a></sup></p>
 <h2 id="s3-17">3.17 “Wikipedia Lobby Group” (2024-ongoing)</h2>

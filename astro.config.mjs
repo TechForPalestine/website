@@ -7,6 +7,7 @@ import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import sentry from "@sentry/astro";
 import { ICON_INCLUDE } from "./src/utils/iconInclude.mjs";
+import { reportSitemapPages } from "./src/utils/reportSitemap.mjs";
 
 // Sentry only reports from production builds. Loading it in `astro dev` adds
 // server/client instrumentation and a Vite plugin for no benefit.
@@ -159,18 +160,22 @@ export default defineConfig({
           // noindex: finished campaigns and archived challenges.
           "/ramadan/",
           "/monthly-challenge/october-2026/",
-          // noindex until launch blockers in src/data/wikipediaReport.ts are resolved.
-          "/wikipedia-report/",
+          // The one-page full text duplicates the section pages; it is
+          // indexable but never listed. Discovered URLs end in a slash and
+          // custom ones do not, so match both.
+          "/wikipedia-report-2026/full/",
+          "/wikipedia-report-2026/full",
         ];
-        // Whole trees, matched by prefix. The online report is noindex until
-        // launch, like its landing page above.
-        const excludeTrees = ["/wikipedia-report-2026/"];
-        const { pathname } = new URL(page);
-        return (
-          !exclude.some((path) => page.endsWith(path)) &&
-          !excludeTrees.some((tree) => pathname.startsWith(tree))
-        );
+        return !exclude.some((path) => page.endsWith(path));
       },
+      // The integration lists static routes itself (/wikipedia-report and
+      // /wikipedia-report-2026) but not the dynamic [slug] pages, so only
+      // those are added here. Adding the static two would duplicate them:
+      // routes carry a trailing slash, custom pages do not, and dedupe runs
+      // before `serialize` strips it.
+      customPages: reportSitemapPages(SITE, "src/content/wikipedia-report").filter((url) =>
+        url.includes("/wikipedia-report-2026/")
+      ),
       // Canonical tags never use a trailing slash (src/utils/seo.ts), so the
       // sitemap must not either, or every URL sends Google two signals.
       serialize: (item) => ({
