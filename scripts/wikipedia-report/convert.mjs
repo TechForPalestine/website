@@ -31,6 +31,7 @@ import {
 import {
   applySourceCorrections,
   collapseBlankLines,
+  extractCaptionTexts,
   frontmatter,
   imageSize,
   linkCrossReferences,
@@ -46,6 +47,10 @@ const CONTENT_DIR = path.join(REPO_ROOT, "src/content/wikipedia-report");
 const IMAGE_DIR = path.join(REPO_ROOT, "public/images/wikipedia-report");
 const IMAGE_URL = "/images/wikipedia-report";
 const ALT_TEXT_FILE = path.join(REPO_ROOT, "scripts/wikipedia-report/image-alt.json");
+// Hand-maintained files that live in the regenerated image folder. The folder
+// is wiped on every run, so these are saved first and restored afterwards.
+// influence-map.webp backs the interactive InfluenceMap.astro component.
+const KEEP_IMAGES = ["influence-map.webp"];
 const MAX_IMAGE_EDGE = 1600;
 const DRAFT_MARKERS = /\b(TODO|TBD|TK|FIXME|XXX)\b|\[citation needed\]|\[(?:cite|ref|link)\??\]/g;
 // Executive summary, sections 1-7 and appendices A-E. A deliberate tripwire:
@@ -75,6 +80,13 @@ function createImageProcessor(workDir, altText, log) {
     if (done.has(srcPath)) return done.get(srcPath);
     const original = fs.readFileSync(srcPath);
     const hash = createHash("sha256").update(original).digest("hex").slice(0, 12);
+    const entry = altText[hash] ?? {};
+    if (entry.omit) {
+      // The site renders this image another way (see image-alt.json context).
+      log.omitted.push({ hash, source: path.basename(srcPath), location });
+      done.set(srcPath, null);
+      return null;
+    }
     const ext = path.extname(srcPath).toLowerCase();
     let bytes = original;
     let outExt = ext;
@@ -112,7 +124,6 @@ function createImageProcessor(workDir, altText, log) {
     const size = imageSize(bytes);
     if (!size) throw new Error(`${srcPath}: could not read image dimensions`);
     const name = `${hash}${outExt}`;
-    const entry = altText[hash] ?? {};
     const alt = entry.alt ?? "";
     const result = { src: `${IMAGE_URL}/${name}`, alt, width: size.width, height: size.height };
     log.images.push({
@@ -137,13 +148,15 @@ function loadAltText() {
 }
 
 /** Rewrite the alt-text manifest: keep filled-in alt text, refresh context, drop stale images. */
-function saveAltText(altText, images) {
+function saveAltText(altText, images, omitted) {
   const out = {};
+  for (const o of omitted) out[o.hash] = { ...altText[o.hash] };
   for (const img of images) {
     const prev = altText[img.hash] ?? {};
     out[img.hash] = {
       alt: prev.alt ?? "",
       decorative: prev.decorative ?? false,
+      ...(prev.omit ? { omit: true } : {}),
       context: `${img.location} (docx ${img.source}, published as ${img.name})`,
     };
   }
@@ -190,6 +203,7 @@ function main() {
   }
 
   const workDir = fs.mkdtempSync(path.join(os.tmpdir(), "wikipedia-report-"));
+  let restoreKept = null;
   try {
     const doc = JSON.parse(
       run("pandoc", [path.resolve(docx), "-t", "json", `--extract-media=${workDir}`], {
@@ -199,6 +213,7 @@ function main() {
     const log = {
       warnings: [],
       images: [],
+      omitted: [],
       highlights: [],
       crossRefs: { linked: [], unresolved: [], skipped: [] },
     };
@@ -212,7 +227,12 @@ function main() {
     }
     const index = buildDocumentIndex(doc, pages);
     const altText = loadAltText();
+    const documentXml = run("unzip", ["-p", path.resolve(docx), "word/document.xml"]);
+    const captionMatched = new Set();
+    const captionInfo = extractCaptionTexts(documentXml);
     const ctx = {
+      captions: captionInfo.texts,
+      captionMatched,
       index,
       noteNumbers,
       image: createImageProcessor(workDir, altText, log),
@@ -275,6 +295,17 @@ function main() {
     }
 
     fs.rmSync(CONTENT_DIR, { recursive: true, force: true });
+    // Staged in workDir (removed only in `finally`), so a failure part-way
+    // through the rewrite below cannot lose them.
+    const kept = KEEP_IMAGES.filter((n) => fs.existsSync(path.join(IMAGE_DIR, n))).map((n) => {
+      const staged = path.join(workDir, `keep-${n}`);
+      fs.copyFileSync(path.join(IMAGE_DIR, n), staged);
+      return [n, staged];
+    });
+    restoreKept = () => {
+      fs.mkdirSync(IMAGE_DIR, { recursive: true });
+      for (const [n, staged] of kept) fs.copyFileSync(staged, path.join(IMAGE_DIR, n));
+    };
     fs.rmSync(IMAGE_DIR, { recursive: true, force: true });
     fs.mkdirSync(CONTENT_DIR, { recursive: true });
     fs.mkdirSync(IMAGE_DIR, { recursive: true });
@@ -291,10 +322,13 @@ function main() {
         path.join(IMAGE_DIR, name)
       );
     }
-    saveAltText(altText, log.images);
+    restoreKept();
+    saveAltText(altText, log.images, log.omitted);
+    log.captions = { info: captionInfo, matched: captionMatched };
 
     report(output, log, dropped, doc);
   } finally {
+    restoreKept?.(); // idempotent; covers an exception mid-write
     fs.rmSync(workDir, { recursive: true, force: true });
   }
 }
@@ -316,6 +350,18 @@ function report(output, log, dropped, doc) {
       `  ${img.name.padEnd(18)} ${`${img.width}x${img.height}`.padEnd(10)} ${kb(img.bytes).padStart(7)}  ${img.location}`
     );
   }
+  if (log.omitted.length)
+    console.log(
+      `Omitted images (omit: true in image-alt.json): ${log.omitted.map((o) => `${o.hash} (${o.location})`).join(" | ")}`
+    );
+  const { info, matched } = log.captions;
+  console.log(
+    `\nQuote captions: ${info.count} caption-indented paragraphs after a quote (left 1440, or left 720 + first line 720) (${info.texts.size} distinct texts), ${matched.size} distinct texts matched inside quotes`
+  );
+  for (const [key, text] of info.originals)
+    if (!matched.has(key)) console.log(`  not in a blockquote (left as is): ${text.slice(0, 90)}`);
+  for (const text of info.skipped)
+    console.log(`  indented oddly after a quote, not treated as caption: ${text.slice(0, 90)}`);
   const missingAlt = log.images.filter((i) => !i.alt && !i.decorative);
   if (missingAlt.length) {
     console.log(

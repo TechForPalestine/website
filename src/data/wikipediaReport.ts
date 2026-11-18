@@ -5,8 +5,8 @@
 //
 // Open items are marked TODO(comms). Optional sections (quotes, the executive
 // summary PDF) render only when their data is filled in, so no placeholder
-// ever ships. The page is noindex and excluded from the sitemap until launch;
-// remove both (wikipedia-report.astro and astro.config.mjs) at launch.
+// ever ships. The page is indexable and listed in the sitemap (see
+// src/utils/reportSitemap.mjs).
 
 import { REPORT_BASE_PATH, appendixHref, sectionHref } from "../utils/wikipediaReportLinks";
 
@@ -81,21 +81,22 @@ export const REPORT_READ_HREF = REPORT_BASE_PATH;
 
 // Keep the filename stable across revisions so links in press coverage keep
 // working, and update the size and page count each time the file is replaced.
-// The current file is the 17 Nov Google Docs export (version 2 of "Take 6").
+// The current file is the 18 Nov Google Docs export (version 3 of "Take 6"), matching the online report.
 export const REPORT_PDF: ReportPdf = {
   href: "/reports/israel-is-attacking-wikipedia.pdf",
-  size: "6.5 MB",
-  pages: 221,
+  size: "7.0 MB",
+  pages: 223,
 };
 
 // The executive summary as its own PDF, linked from the Press section: pages
-// 1-7 of the full report (cover, executive summary, claims in brief, about
-// the report, about T4P), so it always matches the report's wording. Keep the
-// filename stable and update size and pages when the file is replaced.
+// 1-9 of the full report minus its blank page 7 (cover, executive summary,
+// influence map, claims in brief, about the report, about T4P), so it always
+// matches the report's wording. Keep the filename stable and update size and
+// pages when the file is replaced.
 export const SUMMARY_PDF: ReportPdf | undefined = {
   href: "/reports/israel-is-attacking-wikipedia-summary.pdf",
-  size: "69 KB",
-  pages: 7,
+  size: "267 KB",
+  pages: 8,
 };
 
 /** Embargo date of the report. Shown in the hero and used as datePublished. */

@@ -233,6 +233,20 @@
   margin-top: 0.8em;
 }
 
+/* Quotes with a caption: separate panels, one caption under the group. */
+
+.report-prose figure.report-quote > blockquote + blockquote {
+  margin-top: 0.75em;
+}
+
+.report-prose figure.report-quote > figcaption {
+  margin-top: 0.6em;
+  padding-inline: 1.35em; /* lines up with the blockquote text */
+  color: var(--rp-ink-secondary);
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
 /* ── Figures ────────────────────────────────────────────────────────────── */
 
 .report-prose figure {
@@ -411,9 +425,44 @@
   font-weight: 700;
 }
 
+/* ── Rendering speed ────────────────────────────────────────────────────── */
+/* Full-text entries and the large prose blocks inside them (tables, figures,
+   lists and the footnote section, which is the biggest) skip layout and paint
+   while off-screen. Headings and paragraphs stay in flow so anchor targets
+   and scroll positions remain exact. */
+
+.report-cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2000px;
+}
+
+/* Entry sections sit outside .report-prose, so give anchors the nav offset. */
+.report-cv[id] {
+  scroll-margin-top: var(--rp-anchor-offset, 6.5rem);
+}
+
+.report-prose > table,
+.report-prose > figure,
+.report-prose > ol,
+.report-prose > ul,
+.report-prose > .report-notes {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+}
+
 /* ── Print ──────────────────────────────────────────────────────────────── */
 
 @media print {
+  /* Print needs every block laid out, so skipping is switched off. */
+  .report-cv,
+  .report-prose > table,
+  .report-prose > figure,
+  .report-prose > ol,
+  .report-prose > ul,
+  .report-prose > .report-notes {
+    content-visibility: visible;
+  }
+
   /* Site nav (inside its astro-island), footer, donate tab and reader chrome. */
   body:has(.report-prose) > :is(astro-island, header, footer, .donate-link),
   body:has(.report-prose) .report-no-print {
@@ -433,6 +482,11 @@
 
   .report-prose :is(figure, blockquote, tr) {
     break-inside: avoid;
+  }
+
+  /* A long quote group may span pages; each quote panel still stays whole. */
+  .report-prose figure.report-quote {
+    break-inside: auto;
   }
 
   .report-prose .report-table {

@@ -1,0 +1,333 @@
+---
+// Homepage announcement for the Wikipedia report. Same shell as
+// ChallengePopup: native <dialog>, centred card on desktop, bottom sheet on
+// phones, shown once per visitor after 8s or a quarter of the page scrolled.
+// It waits for the challenge popup (see reportPopup.ts) and the newsletter
+// popup stands down when it opens.
+import {
+  REPORT_PDF,
+  REPORT_READ_HREF,
+  REPORT_SUMMARY,
+  REPORT_TITLE,
+} from "../../data/wikipediaReport";
+import { isReportPopupLive } from "../../utils/reportPopup";
+
+const live = isReportPopupLive();
+---
+
+{
+  live && (
+    <dialog id="report-popup" class="rp" aria-labelledby="rp-title">
+      <div class="rp-card">
+        <button type="button" class="rp-close" data-rp-close aria-label="Close report announcement">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+        <img
+          class="rp-image"
+          src="/images/wikipedia-report/influence-map.webp"
+          width="1840"
+          height="1440"
+          alt="Map of who is trying to shape what AI learns through Wikipedia"
+          fetchpriority="low"
+          decoding="async"
+        />
+        <div class="rp-body">
+          <p class="rp-overline">New report · Tech for Palestine</p>
+          <h2 id="rp-title" class="rp-title">
+            {REPORT_TITLE}
+          </h2>
+          <p class="rp-summary">{REPORT_SUMMARY}</p>
+          <div class="rp-actions">
+            <a class="rp-btn rp-btn--primary" href={REPORT_READ_HREF} data-rp-cta="read">
+              Read the report
+            </a>
+            <a class="rp-btn rp-btn--ghost" href={REPORT_PDF.href} download data-rp-cta="pdf">
+              Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  )
+}
+
+<style>
+  .rp {
+    width: min(560px, calc(100% - 48px));
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    background: transparent;
+    color: #2a2428;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .rp::backdrop {
+    background: rgb(16 16 16 / 0.5);
+  }
+  :global(html:has(#report-popup[open])) {
+    overflow: hidden;
+  }
+
+  .rp-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    font-family: Outfit, system-ui, sans-serif;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .rp[open] .rp-card {
+      animation: rp-rise 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rp[open]::backdrop {
+      animation: rp-fade 320ms ease-out;
+    }
+  }
+  @keyframes rp-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  @keyframes rp-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .rp-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.9);
+    color: #2a2428;
+    transition: background-color 150ms;
+  }
+  .rp-close:hover {
+    background: #fff;
+  }
+  .rp-image {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: #f2f3ee;
+  }
+
+  .rp-body {
+    padding: 24px 36px 28px;
+  }
+  .rp-overline {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: #157a3e;
+  }
+  .rp-title {
+    margin-top: 10px;
+    font-size: clamp(1.5rem, 3.2vw, 1.875rem);
+    font-weight: 800;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+  .rp-summary {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    margin-top: 12px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: #73656e;
+  }
+
+  .rp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .rp-btn {
+    display: inline-flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    transition:
+      background-color 150ms,
+      border-color 150ms,
+      color 150ms;
+  }
+  .rp-btn--primary {
+    background: #157a3e;
+    color: #fff;
+  }
+  .rp-btn--primary:hover {
+    background: #0e5a2f;
+  }
+  .rp-btn--ghost {
+    border: 1px solid #2a2428;
+    color: #2a2428;
+  }
+  .rp-btn--ghost:hover {
+    border-color: #157a3e;
+    color: #157a3e;
+  }
+  .rp-btn:focus-visible,
+  .rp-close:focus-visible {
+    outline: 2px solid #157a3e;
+    outline-offset: 2px;
+  }
+
+  /* Phones: a bottom sheet rather than a centred modal. */
+  @media (max-width: 767px) {
+    .rp {
+      width: 100%;
+      max-height: 88dvh;
+      margin: auto 0 0;
+      border-radius: 24px 24px 0 0;
+    }
+    .rp-card {
+      border-radius: 24px 24px 0 0;
+    }
+    .rp-image {
+      height: 140px;
+    }
+    .rp-body {
+      padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    }
+    .rp-title {
+      font-size: 1.375rem;
+    }
+    .rp-summary {
+      font-size: 16px;
+    }
+    .rp-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  import {
+    SHOW_DELAY_MS,
+    SHOWN_ATTRIBUTE,
+    hasReachedScrollTrigger,
+    readPopupState,
+  } from "../../utils/challengePopup";
+  import { safeLocalStorage } from "../../utils/newsletterPopup";
+  import {
+    REPORT_SHOWN_ATTRIBUTE,
+    REPORT_SHOWN_EVENT,
+    readReportPopupState,
+    shouldShowReportPopup,
+    writeReportPopupState,
+    type ReportDismissReason,
+    type ReportPopupCta,
+  } from "../../utils/reportPopup";
+
+  const dialog = document.getElementById("report-popup");
+  if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === "function") {
+    const ls = safeLocalStorage();
+    if (
+      shouldShowReportPopup({
+        report: readReportPopupState(ls),
+        challenge: readPopupState(ls),
+        now: Date.now(),
+      })
+    ) {
+      schedule(dialog);
+    }
+  }
+
+  function track(event: string, props?: Record<string, string>) {
+    if (typeof window.plausible === "undefined") return;
+    window.plausible(event, props ? { props } : undefined);
+  }
+
+  function schedule(dialog: HTMLDialogElement) {
+    let reason: ReportDismissReason = "escape";
+    const closeWith = (next: ReportDismissReason) => {
+      reason = next;
+      dialog.close();
+    };
+
+    dialog.querySelectorAll("[data-rp-close]").forEach((button) => {
+      button.addEventListener("click", () => closeWith("close"));
+    });
+    dialog.querySelectorAll<HTMLAnchorElement>("[data-rp-cta]").forEach((link) => {
+      link.addEventListener("click", () => {
+        const cta = link.dataset.rpCta as ReportPopupCta;
+        track("Report Popup CTA Click", { cta });
+        closeWith(cta);
+      });
+    });
+    // A click whose target is the <dialog> itself landed on the backdrop. Check
+    // where the press began too, so a text-selection drag that ends outside
+    // the card doesn't close it.
+    let pressedBackdrop = false;
+    dialog.addEventListener("pointerdown", (event) => {
+      pressedBackdrop = event.target === dialog;
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog && pressedBackdrop) closeWith("backdrop");
+    });
+    // Fires for every close path, Esc included (which skips closeWith).
+    dialog.addEventListener(
+      "close",
+      () => {
+        writeReportPopupState(safeLocalStorage(), { dismissedAt: Date.now() });
+        track("Report Popup Dismissed", { reason });
+      },
+      { once: true }
+    );
+
+    let fired = false;
+    const open = () => {
+      if (fired) return;
+      fired = true;
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+      if (!dialog.isConnected || dialog.open) return;
+      // Defensive: never stack on top of the challenge popup.
+      if (document.documentElement.hasAttribute(SHOWN_ATTRIBUTE)) return;
+      dialog.showModal();
+      document.documentElement.setAttribute(REPORT_SHOWN_ATTRIBUTE, "");
+      window.dispatchEvent(new Event(REPORT_SHOWN_EVENT));
+      track("Report Popup Shown");
+    };
+    const onScroll = () => {
+      const docHeight = document.documentElement.scrollHeight;
+      if (hasReachedScrollTrigger(window.scrollY, window.innerHeight, docHeight)) open();
+    };
+    const timer = window.setTimeout(open, SHOW_DELAY_MS);
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+</script>

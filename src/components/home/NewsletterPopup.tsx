@@ -21,6 +21,7 @@ import {
   SHOWN_ATTRIBUTE as CHALLENGE_SHOWN_ATTRIBUTE,
   SHOWN_EVENT as CHALLENGE_SHOWN_EVENT,
 } from "../../utils/challengePopup";
+import { REPORT_SHOWN_ATTRIBUTE, REPORT_SHOWN_EVENT } from "../../utils/reportPopup";
 
 // Homepage mailing-list popup. Spec: docs/superpowers/specs/2026-09-23-newsletter-popup-design.md
 
@@ -99,16 +100,22 @@ function Popup() {
   const bottomFormInView = useInView(FOOTER_SECTION_ID);
   const isDesktop = useIsDesktop();
   const [closed, setClosed] = useState(false);
-  // The homepage challenge popup wins the page load: once it has opened, this
-  // popup stays hidden until the next page load. Not a dismissal, so nothing
-  // is written to storage.
-  const [challengeShown, setChallengeShown] = useState(() =>
-    document.documentElement.hasAttribute(CHALLENGE_SHOWN_ATTRIBUTE)
+  // The homepage challenge and report popups win the page load: once either
+  // has opened, this popup stays hidden until the next page load. Not a
+  // dismissal, so nothing is written to storage.
+  const [otherPopupShown, setOtherPopupShown] = useState(
+    () =>
+      document.documentElement.hasAttribute(CHALLENGE_SHOWN_ATTRIBUTE) ||
+      document.documentElement.hasAttribute(REPORT_SHOWN_ATTRIBUTE)
   );
   useEffect(() => {
-    const onChallengeShown = () => setChallengeShown(true);
-    window.addEventListener(CHALLENGE_SHOWN_EVENT, onChallengeShown);
-    return () => window.removeEventListener(CHALLENGE_SHOWN_EVENT, onChallengeShown);
+    const onOtherPopupShown = () => setOtherPopupShown(true);
+    window.addEventListener(CHALLENGE_SHOWN_EVENT, onOtherPopupShown);
+    window.addEventListener(REPORT_SHOWN_EVENT, onOtherPopupShown);
+    return () => {
+      window.removeEventListener(CHALLENGE_SHOWN_EVENT, onOtherPopupShown);
+      window.removeEventListener(REPORT_SHOWN_EVENT, onOtherPopupShown);
+    };
   }, []);
   // Desktop opens straight to the card; mobile starts collapsed to a slim bar
   // (see the render branch below — the same collapsed/expanded split now also
@@ -119,7 +126,7 @@ function Popup() {
   const shownRef = useRef(false);
   const resetIdleTimerRef = useRef(() => {});
 
-  const mounted = enabled && eligible && triggered && !closed && !challengeShown;
+  const mounted = enabled && eligible && triggered && !closed && !otherPopupShown;
   const visible = mounted && !bottomFormInView;
 
   useEffect(() => {

@@ -20,9 +20,16 @@ import {
   INDEX_SLUG,
 } from "../../components/wikipedia-report/reportNav";
 import { READER_SUBTITLE, READER_TITLE } from "../../components/wikipedia-report/reportMeta";
-import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
+import { REPORT_BASE_PATH, REPORT_FULL_PATH } from "../../utils/wikipediaReportLinks";
 import { canonicalUrl, SITE_ORIGIN, truncateDescription } from "../../utils/seo";
-import { container, display, focusRing, inverseButton, overline } from "../../utils/designClasses";
+import {
+  container,
+  display,
+  focusRing,
+  inlineLink,
+  inverseButton,
+  overline,
+} from "../../utils/designClasses";
 import "../../styles/base.css";
 import "../../styles/wikipedia-report.css";
 
@@ -59,9 +66,7 @@ const breadcrumbs = breadcrumbListSchema([
   title={`${fullTitle} - ${READER_TITLE} - Tech for Palestine`}
   description={description}
   schema={[breadcrumbs]}
-  noindex
 >
-  <!-- noindex until the report launches, like /wikipedia-report. -->
   <main>
     <div
       class={`${container} pb-16 pt-10 min-[810px]:pb-20 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-14 lg:pt-14 xl:grid-cols-[18rem_minmax(0,1fr)] xl:gap-20`}
@@ -99,6 +104,11 @@ const breadcrumbs = breadcrumbListSchema([
           <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
             {current.label && <p class={overline}>{current.label}</p>}
             <h1 id="report-page-heading" class={`mt-4 ${display}`}>{current.title}</h1>
+            <p class="mt-4 text-[15px]">
+              <a href={REPORT_FULL_PATH} data-track-report-read="section-full" class={inlineLink}>
+                View the whole report on one page
+              </a>
+            </p>
           </header>
 
           <div class="report-prose">

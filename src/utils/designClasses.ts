@@ -41,6 +41,13 @@ export const pill = `${pillBase} ${focusRing}`;
 export const pillOnDark = `${pillBase} ${focusRingOnDark}`;
 
 export const primaryButton = `${pill} bg-grove text-white hover:bg-grove-hover`;
+
+const pillLargeBase =
+  "inline-flex min-h-[56px] items-center justify-center gap-2 rounded-pill px-8 py-3 text-[18px] font-bold min-[810px]:text-[19px] transition-colors motion-reduce:transition-none";
+
+/** Larger primary pill for hero calls to action. */
+export const primaryButtonLarge = `${pillLargeBase} ${focusRing} bg-grove text-white hover:bg-grove-hover`;
+
 export const ghostButton = `${pill} border border-ink text-ink hover:border-grove hover:text-grove`;
 /** Inverse: white pill, used only inside the terminal CTA. */
 export const inverseButton = `${pillOnDark} bg-white text-nightfall hover:bg-first-light`;

@@ -11,6 +11,7 @@ import NewTabHint from "../../components/wikipedia-report/NewTabHint.astro";
 import InfluenceMap from "../../components/wikipedia-report/InfluenceMap.astro";
 import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
 import { getReportEntries } from "../../components/wikipedia-report/reportData";
+import { splitAtMapAnchor } from "../../components/wikipedia-report/fullText";
 import {
   breadcrumbListSchema,
   entryHref,
@@ -28,7 +29,7 @@ import {
   REPORT_PUBLISHED,
   pdfMeta,
 } from "../../data/wikipediaReport";
-import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
+import { REPORT_BASE_PATH, REPORT_FULL_PATH } from "../../utils/wikipediaReportLinks";
 import { canonicalUrl, SITE_ORIGIN } from "../../utils/seo";
 import {
   container,
@@ -57,10 +58,7 @@ const { Content } = await render(summary);
 // so rather than edit it we split its HTML body at that heading. The converter
 // emits plain HTML with no inline styles or scripts, so set:html is safe. If
 // the heading moves, the summary renders whole and the map follows it.
-const MAP_ANCHOR = '<h2 id="claims-in-brief">';
-const body = summary.body ?? "";
-const mapAt = body.indexOf(MAP_ANCHOR);
-const summaryParts = mapAt > 0 ? [body.slice(0, mapAt), body.slice(mapAt)] : null;
+const summaryParts = splitAtMapAnchor(summary.body ?? "");
 
 const pdfLabel = pdfMeta();
 // pdfMeta() is just "PDF" until comms fill in the size and page count.
@@ -83,9 +81,7 @@ const breadcrumbs = breadcrumbListSchema([
   title={`${READER_TITLE} ${READER_SUBTITLE}: Read the report - Tech for Palestine`}
   description="Read the full report online: twenty years of documented attacks on Wikipedia, and how they shape what search engines and AI tell you. By Tech for Palestine."
   schema={[breadcrumbs]}
-  noindex
 >
-  <!-- noindex until the report launches, like /wikipedia-report. -->
   <main>
     <header
       aria-labelledby="report-heading"
@@ -121,6 +117,9 @@ const breadcrumbs = breadcrumbListSchema([
             Download PDF
           </a>
           <a href={OVERVIEW_HREF} class={ghostButton}>Key findings</a>
+          <a href={REPORT_FULL_PATH} data-track-report-read="reader-index-full" class={ghostButton}>
+            Read it all on one page
+          </a>
         </div>
         {pdfDetails && <p class="mt-3 text-[15px] text-ink-secondary">{pdfLabel}</p>}
       </div>

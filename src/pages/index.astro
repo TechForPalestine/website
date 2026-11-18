@@ -5,6 +5,7 @@ import SignUpForm from "../structures/SignUpForm.astro";
 import CommunityCallBanner from "../components/CommunityCallBanner.astro";
 import NewsletterPopup from "../components/home/NewsletterPopup";
 import ChallengePopup from "../components/home/ChallengePopup.astro";
+import ReportPopup from "../components/home/ReportPopup.astro";
 import "../styles/base.css";
 
 const stats = [
@@ -491,6 +492,7 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
   </main>
   <NewsletterPopup client:only="react" />
   <ChallengePopup />
+  <ReportPopup />
   <script>
     import {
       FOOTER_SECTION_ID,

@@ -18,7 +18,7 @@ toc:
   - { number: "2.2.4", title: "The ADL’s plans for AI", depth: 3, id: "s2-2-4" }
   - { number: "2.2.5", title: "Use of AI in Israel’s Gaza Genocide and the U.S. Iran War", depth: 3, id: "s2-2-5" }
   - { number: "2.2.6", title: "Wikipedia accuracy: Spin vs scholarly sources", depth: 3, id: "s2-2-6" }
-  - { number: "2.2.7", title: "Wikipedia considers the ADL “unreliable”", depth: 3, id: "s2-2-7" }
+  - { number: "2.2.7", title: "Wikipedia considers the ADL “generally unreliable”", depth: 3, id: "s2-2-7" }
   - { number: "2.2.8", title: "The Attack on Academia", depth: 3, id: "s2-2-8" }
   - { number: "2.3", title: "The Tools of Israeli Propaganda", depth: 2, id: "s2-3" }
   - { number: "2.3.1", title: "Weaponizing Antisemitism", depth: 3, id: "s2-3-1" }
@@ -113,7 +113,7 @@ toc:
 <p>Wikipedia’s accuracy on the subject of Palestine-Israel stems from its reliance on reputable scholarly sources. Wikipedia’s “Reliable Sources” page explains, “Many Wikipedia articles rely on scholarly material. When available, academic and peer-reviewed publications, scholarly monographs, and textbooks are usually the most reliable sources”.<sup class="fn-ref"><a href="#fn-51" id="fnref-51">51</a></sup></p>
 <p>Since Wikipedia favors academic rigor, articles throughout the Palestine-Israel Articles (PIA) section of Wikipedia cite textbooks and scholarly works as their main sources of information. These scholarly works frequently document accurate histories of Israel, and often, that truth is critical of Israel. As discussed, occupation, displacement, and apartheid have been an integral part of Israel since its violent founding in 1948, and Wikipedia shows this.</p>
 <p>Israel’s Hasbara, however, is largely based on spin and narrative control, especially in the U.S., and lacks the academic rigor that Wikipedia expects. Wikipedia’s rules encourage detailed analysis by editors who are trained to see through propaganda and to focus on substantiated evidence.</p>
-<h3 id="s2-2-7">2.2.7 Wikipedia considers the ADL “unreliable”</h3>
+<h3 id="s2-2-7">2.2.7 Wikipedia considers the ADL “generally unreliable”</h3>
 <p>The ADL routinely works to promote pro-Israel content and disseminate propaganda as fact. This has led Wikipedia editors to ban citations of the ADL in most circumstances related to Palestine-Israel, stating:</p>
 <blockquote>
 <p>“There is consensus that the ADL is a generally unreliable source for the Israeli–Palestinian conflict, due to significant evidence that the ADL acts as a pro-Israeli advocacy group and has repeatedly published false and misleading statements as fact, un-retracted, regarding the Israeli–Palestinian conflict. The general unreliability of the ADL extends to the intersection of the topics of antisemitism and the Israeli–Palestinian conflict”<sup class="fn-ref"><a href="#fn-52" id="fnref-52">52</a></sup></p>

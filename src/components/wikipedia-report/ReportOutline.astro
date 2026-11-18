@@ -20,9 +20,12 @@ interface Props {
   entries: ReportEntryMeta[];
   currentSlug: string;
   variant: "sidebar" | "compact";
+  /** "single": every entry is an anchor on one page and all headings are listed. */
+  mode?: "pages" | "single";
 }
 
-const { entries, currentSlug, variant } = Astro.props;
+const { entries, currentSlug, variant, mode = "pages" } = Astro.props;
+const isSingle = mode === "single";
 const isSidebar = variant === "sidebar";
 
 const itemLink = `flex gap-3 rounded-sm py-1.5 text-[15px] leading-snug transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`;
@@ -51,13 +54,13 @@ const childLink = `${headingLinkBase} text-[13px]`;
   <ol class:list={["space-y-0.5", isSidebar && "mt-6 border-t border-ink-divider pt-4"]}>
     {
       entries.map((entry) => {
-        const isCurrent = entry.slug === currentSlug;
+        const isCurrent = !isSingle && entry.slug === currentSlug;
         const short = entryShortLabel(entry);
-        const groups = isCurrent ? groupToc(entry.toc) : [];
+        const groups = isCurrent || isSingle ? groupToc(entry.toc) : [];
         return (
           <li>
             <a
-              href={entryHref(entry.slug)}
+              href={isSingle ? `#${entry.slug}` : entryHref(entry.slug)}
               aria-current={isCurrent ? "page" : undefined}
               class:list={[itemLink, isCurrent ? "font-bold text-ink" : "text-ink-secondary"]}
             >
