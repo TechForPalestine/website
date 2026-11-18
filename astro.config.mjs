@@ -7,7 +7,7 @@ import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import sentry from "@sentry/astro";
 import { ICON_INCLUDE } from "./src/utils/iconInclude.mjs";
-import { reportSitemapPages } from "./src/utils/reportSitemap.mjs";
+import { guideSitemapPages, reportSitemapPages } from "./src/utils/reportSitemap.mjs";
 
 // Sentry only reports from production builds. Loading it in `astro dev` adds
 // server/client instrumentation and a Vite plugin for no benefit.
@@ -173,9 +173,13 @@ export default defineConfig({
       // those are added here. Adding the static two would duplicate them:
       // routes carry a trailing slash, custom pages do not, and dedupe runs
       // before `serialize` strips it.
-      customPages: reportSitemapPages(SITE, "src/content/wikipedia-report").filter((url) =>
-        url.includes("/wikipedia-report-2026/")
-      ),
+      // The incubator guide's [slug] chapters are added the same way.
+      customPages: [
+        ...reportSitemapPages(SITE, "src/content/wikipedia-report").filter((url) =>
+          url.includes("/wikipedia-report-2026/")
+        ),
+        ...guideSitemapPages(SITE, "src/content/incubator-guide"),
+      ],
       // Canonical tags never use a trailing slash (src/utils/seo.ts), so the
       // sitemap must not either, or every URL sends Google two signals.
       serialize: (item) => ({

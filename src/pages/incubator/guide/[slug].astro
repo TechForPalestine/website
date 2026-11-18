@@ -1,0 +1,90 @@
+---
+// One playbook chapter of the project leader guide (/incubator/guide/launch).
+// Server-rendered like the rest of the site: the CSP middleware and the nav
+// A/B test depend on SSR, so do not add `export const prerender = true`.
+import { getEntry, render } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import TerminalCta from "../../../components/TerminalCta.astro";
+import GuideShell from "../../../components/incubator-guide/GuideShell.astro";
+import GuidePager from "../../../components/incubator-guide/GuidePager.astro";
+import ApplyTracking from "../../../components/incubator-guide/ApplyTracking.astro";
+import { getGuideChapters } from "../../../components/incubator-guide/guideData";
+import {
+  adjacentLinks,
+  chapterHref,
+  guideLinks,
+} from "../../../components/incubator-guide/guideNav";
+import { APPLY_URL, GUIDE_URL } from "../../../data/incubator";
+import { GUIDE_TITLE } from "../../../data/incubatorGuide";
+import { breadcrumbListSchema } from "../../../components/wikipedia-report/reportNav";
+import { canonicalUrl, SITE_ORIGIN, truncateDescription } from "../../../utils/seo";
+import { display, ghostOnDarkButton, inverseButton, overline } from "../../../utils/designClasses";
+import "../../../styles/base.css";
+import "../../../styles/incubator-guide.css";
+
+const slug = Astro.params.slug ?? "";
+const entry = await getEntry("incubatorGuide", slug);
+if (!entry) {
+  // An empty 404 response makes Astro render src/pages/404.astro.
+  return new Response(null, { status: 404 });
+}
+
+const chapters = await getGuideChapters();
+const links = guideLinks(chapters);
+const { prev, next } = adjacentLinks(chapters, slug);
+const chapterNumber = chapters.findIndex((c) => c.slug === slug) + 1;
+const { Content } = await render(entry);
+
+const breadcrumbs = breadcrumbListSchema([
+  { name: "Home", url: `${SITE_ORIGIN}/` },
+  { name: "Incubator", url: canonicalUrl("/incubator") },
+  { name: GUIDE_TITLE, url: canonicalUrl(GUIDE_URL) },
+  { name: entry.data.title, url: canonicalUrl(chapterHref(slug)) },
+]);
+---
+
+<Layout
+  title={`${entry.data.title} - ${GUIDE_TITLE} - Tech for Palestine`}
+  description={truncateDescription(entry.data.description)}
+  schema={[breadcrumbs]}
+>
+  <main>
+    <GuideShell links={links} currentSlug={slug}>
+      <article aria-labelledby="guide-page-heading">
+        <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
+          <p class={overline}>{GUIDE_TITLE} · Chapter {chapterNumber}</p>
+          <h1 id="guide-page-heading" class={`mt-4 ${display}`}>{entry.data.title}</h1>
+          <p class="mt-5 text-[19px] leading-relaxed text-ink-secondary min-[810px]:text-[21px]">
+            {entry.data.description}
+          </p>
+        </header>
+
+        <div class="guide-prose">
+          <Content />
+        </div>
+      </article>
+
+      <div class="mt-16 max-w-[45rem] min-[810px]:mt-20">
+        <GuidePager prev={prev} next={next} />
+      </div>
+    </GuideShell>
+
+    <TerminalCta
+      heading="Have a project for Palestine?"
+      headingId="guide-cta-heading"
+      padTop={false}
+    >
+      <p>
+        If this sounds like the way you want to work, apply to the incubator. It takes 10 to 30
+        minutes, and we aim to decide within 10 days.
+      </p>
+      <Fragment slot="actions">
+        <a href={APPLY_URL} data-track-incubator-click="guide-chapter" class={inverseButton}>
+          Apply to the incubator
+        </a>
+        <a href={GUIDE_URL} class={ghostOnDarkButton}>What to expect</a>
+      </Fragment>
+    </TerminalCta>
+  </main>
+  <ApplyTracking />
+</Layout>

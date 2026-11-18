@@ -3,6 +3,16 @@
 
 export const APPLY_URL = "/project-application-form";
 
+/** The project leader guide that applicants are asked to read before applying. */
+export const GUIDE_URL = "/incubator/guide";
+
+/** Office Hours facts, shared by /incubator and the guide so they cannot drift. */
+export const OFFICE_HOURS = {
+  format: "20- or 30-minute 1:1 calls with T4P mentors, booked in the T4P Hub",
+  cadence:
+    "at least once a week for your first 6 weeks, then at least once a month until you reach product-market fit",
+};
+
 export interface IncubatorItem {
   title: string;
   description: string;
@@ -31,12 +41,12 @@ export const offerings: IncubatorItem[] = [
   {
     title: "Strategic advice",
     description:
-      "Every project starts with a strategy session, honing your approach with expertise from 200+ projects.",
+      "Every project starts with a strategy session, honing your approach with expertise from 80+ projects.",
   },
   {
     title: "Mentorship",
     description:
-      "Office Hours with Paul Biggar six times a week, plus optional weekly sessions with a dedicated mentor.",
+      "1:1 Office Hours with T4P mentors, booked when it suits you, plus optional weekly sessions with a dedicated mentor.",
   },
   {
     title: "Marketing",
@@ -62,8 +72,7 @@ export const offerings: IncubatorItem[] = [
   },
   {
     title: "Education",
-    description:
-      "Seminars on marketing, sales, go-to-market, technical projects and T4P branding.",
+    description: "Seminars on marketing, sales, go-to-market, technical projects and T4P branding.",
   },
 ];
 
@@ -78,8 +87,7 @@ export const expectations: IncubatorItem[] = [
   },
   {
     title: "Communication",
-    description:
-      "Stay in touch: attend Office Hours, send updates and work with T4P staff where needed. Attend at least one Office Hours call a week for your first 6 weeks, then at least once a month until you reach product-market fit.",
+    description: `Stay in touch: attend Office Hours, send updates and work with T4P staff where needed. Attend Office Hours ${OFFICE_HOURS.cadence}.`,
   },
   {
     title: "Flexible participation",

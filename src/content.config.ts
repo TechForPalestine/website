@@ -22,4 +22,16 @@ const wikipediaReport = defineCollection({
   }),
 });
 
-export const collections = { wikipediaReport };
+// Playbook chapters of the incubator project leader guide (/incubator/guide).
+// Hand-written; `order` sets reading order and the file name is the URL slug.
+const incubatorGuide = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/incubator-guide" }),
+  schema: z.object({
+    title: z.string(),
+    /** Meta description, and the chapter's line in the guide's contents. */
+    description: z.string(),
+    order: z.number().int(),
+  }),
+});
+
+export const collections = { wikipediaReport, incubatorGuide };

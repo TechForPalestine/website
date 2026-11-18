@@ -22,3 +22,18 @@ export function reportSitemapPages(site, contentDir) {
     ...slugs.map((slug) => `${site}/wikipedia-report-2026/${slug}`),
   ];
 }
+
+/**
+ * Sitemap URLs for the incubator guide's chapter pages. The overview
+ * (/incubator/guide) is a static route the integration lists itself.
+ *
+ * @param {string} site Site origin, no trailing slash.
+ * @param {string} contentDir Directory holding the guide's *.md files.
+ * @returns {string[]} Absolute URLs without trailing slashes.
+ */
+export function guideSitemapPages(site, contentDir) {
+  return readdirSync(contentDir)
+    .filter((file) => file.endsWith(".md"))
+    .map((file) => `${site}/incubator/guide/${file.slice(0, -".md".length)}`)
+    .sort();
+}

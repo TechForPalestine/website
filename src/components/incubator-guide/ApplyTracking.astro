@@ -1,0 +1,19 @@
+---
+// Sends Plausible's "Incubator Apply Click" for links marked
+// data-track-incubator-click, as /incubator does, so guide clicks show up in
+// the same goal with their own cta_location.
+---
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("[data-track-incubator-click]").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (typeof window.plausible === "undefined") return;
+      window.plausible("Incubator Apply Click", {
+        props: {
+          cta_location: link.dataset.trackIncubatorClick ?? "unknown",
+          destination: link.getAttribute("href") ?? "",
+        },
+      });
+    });
+  });
+</script>

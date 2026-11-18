@@ -1,0 +1,105 @@
+---
+// Reading layout for the project leader guide: a sticky contents rail on the
+// left from md (768px), a <details> disclosure above the article on phones.
+// No JavaScript; all non-utility styling is in styles/incubator-guide.css.
+import { container, focusRing } from "../../utils/designClasses";
+import { APPLY_URL } from "../../data/incubator";
+import { GUIDE_TITLE } from "../../data/incubatorGuide";
+import type { GuideLink } from "./guideNav";
+
+interface Props {
+  links: GuideLink[];
+  /** The page being read: a chapter slug, or null for the overview. */
+  currentSlug: string | null;
+}
+
+const { links, currentSlug } = Astro.props;
+
+const linkClass = `block rounded-sm py-1.5 text-[15px] leading-snug transition-colors motion-reduce:transition-none ${focusRing}`;
+---
+
+{/* Rendered twice (rail and disclosure), so each list gets its own label. */}
+<div
+  class={`${container} pb-16 pt-10 min-[810px]:pb-20 md:grid md:grid-cols-[14rem_minmax(0,1fr)] md:gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-14 lg:pt-14 xl:gap-20`}
+>
+  <aside class="hidden md:block">
+    <nav aria-label={`${GUIDE_TITLE} contents`} class="sticky top-24">
+      <p class="text-xs font-bold uppercase tracking-[0.14em] text-grove-deep">{GUIDE_TITLE}</p>
+      <ol class="mt-4 border-l border-ink-divider">
+        {
+          links.map((link) => {
+            const current = link.slug === currentSlug;
+            return (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={current ? "page" : undefined}
+                  class:list={[
+                    linkClass,
+                    "-ml-px border-l-2 pl-4",
+                    current
+                      ? "border-grove font-bold text-ink"
+                      : "border-transparent text-ink-secondary hover:text-grove",
+                  ]}
+                >
+                  {link.title}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ol>
+      <a
+        href={APPLY_URL}
+        data-track-incubator-click="guide-sidebar"
+        class={`mt-8 inline-flex items-center gap-1.5 rounded-sm text-[15px] font-bold text-grove underline decoration-grove/40 underline-offset-4 transition-colors hover:decoration-grove motion-reduce:transition-none ${focusRing}`}
+      >
+        Apply to the incubator <span aria-hidden="true">→</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="min-w-0">
+    <details class="group mb-10 border-y border-ink-divider md:hidden">
+      <summary
+        class={`flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-4 py-3 text-[15px] font-bold text-ink [&::-webkit-details-marker]:hidden ${focusRing}`}
+      >
+        <span>
+          Contents
+          <span class="font-normal text-ink-secondary"> · {GUIDE_TITLE}</span>
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-[22px] font-normal leading-none text-grove transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none"
+          >+</span
+        >
+      </summary>
+      <nav aria-label={`${GUIDE_TITLE} contents (compact)`} class="pb-5 pt-1">
+        <ol>
+          {
+            links.map((link) => {
+              const current = link.slug === currentSlug;
+              return (
+                <li>
+                  <a
+                    href={link.href}
+                    aria-current={current ? "page" : undefined}
+                    class:list={[
+                      linkClass,
+                      "min-h-[44px] py-2.5",
+                      current ? "font-bold text-ink" : "text-ink-secondary hover:text-grove",
+                    ]}
+                  >
+                    {link.title}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ol>
+      </nav>
+    </details>
+
+    <slot />
+  </div>
+</div>
