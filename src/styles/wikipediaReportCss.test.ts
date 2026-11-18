@@ -29,6 +29,41 @@ function ruleBody(source: string, selector: RegExp): string | undefined {
   return source.match(pattern)?.[1];
 }
 
+interface CssRule {
+  selector: string;
+  body: string;
+  /** Enclosing @media preludes, outermost first. */
+  media: string[];
+}
+
+/** Flat list of style rules with their enclosing @media queries (comments stripped). */
+function cssRules(source: string): CssRule[] {
+  const text = source.replace(/\/\*[\s\S]*?\*\//g, "");
+  const rules: CssRule[] = [];
+  const stack: { prelude: string; start: number }[] = [];
+  let preludeStart = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (char === "{") {
+      stack.push({ prelude: text.slice(preludeStart, i).trim(), start: i + 1 });
+      preludeStart = i + 1;
+    } else if (char === "}") {
+      const block = stack.pop();
+      if (block && !block.prelude.startsWith("@")) {
+        rules.push({
+          selector: block.prelude,
+          body: text.slice(block.start, i),
+          media: stack.map((outer) => outer.prelude).filter((p) => p.startsWith("@media")),
+        });
+      }
+      preludeStart = i + 1;
+    } else if (char === ";") {
+      preludeStart = i + 1;
+    }
+  }
+  return rules;
+}
+
 const LIST_SELECTORS = [
   String.raw`\.report-prose\s*>\s*table`,
   String.raw`\.report-prose\s*>\s*figure`,
@@ -94,35 +129,67 @@ describe("wikipedia-report.css reader layout in print", () => {
   });
 
   it("applies the hidden-rail layout rules to screens only", () => {
-    // Every rule whose selector uses [data-sidebar-hidden] (as a state, not in
-    // :not()) must sit inside an @media block whose query names `screen`.
-    const offending: string[] = [];
-    const queries: string[] = [];
-    let found = 0;
-    let preludeStart = 0;
-    for (let i = 0; i < css.length; i++) {
-      const char = css[i];
-      if (char === "{") {
-        const prelude = css
-          .slice(preludeStart, i)
-          .replace(/\/\*[\s\S]*?\*\//g, "")
-          .trim();
-        queries.push(prelude);
-        if (/\[data-sidebar-hidden\]/.test(prelude.replace(/:not\([^)]*\)/g, ""))) {
-          found++;
-          const media = queries.filter((query) => query.startsWith("@media"));
-          if (!media.some((query) => /\bscreen\b/.test(query))) offending.push(prelude);
-        }
-        preludeStart = i + 1;
-      } else if (char === "}") {
-        queries.pop();
-        preludeStart = i + 1;
-      } else if (char === ";") {
-        preludeStart = i + 1;
-      }
+    // Every rule using [data-sidebar-hidden] as a state (not inside :not())
+    // must sit inside an @media whose query names `screen`.
+    const rules = cssRules(css).filter((rule) =>
+      /\[data-sidebar-hidden\]/.test(rule.selector.replace(/:not\([^)]*\)/g, ""))
+    );
+    expect(rules.length).toBeGreaterThan(0);
+    const offending = rules.filter((rule) => !rule.media.some((q) => /\bscreen\b/.test(q)));
+    expect(offending.map((rule) => rule.selector)).toEqual([]);
+  });
+});
+
+describe("wikipedia-report.css reader motion", () => {
+  const MOTION = /(^|;|\s)(transition|animation|scroll-behavior)\s*:/;
+  const noPreference = (rule: CssRule) =>
+    rule.media.some((q) => /prefers-reduced-motion\s*:\s*no-preference/.test(q));
+
+  it("guards every reader-chrome transition and animation behind no-preference", () => {
+    const READER_CHROME =
+      /data-report-smooth|data-flip|data-sidebar-leaving|data-sidebar-animate|data-toc-children|report-toc-toggle|report-sidebar-show|report-drawer|data-report-layout/;
+    const rules = cssRules(css).filter(
+      (rule) => READER_CHROME.test(rule.selector) && MOTION.test(rule.body)
+    );
+    // The FLIP, rail, show-button, group and drawer motion are all present...
+    for (const hook of [
+      "data-flip",
+      "data-sidebar-leaving",
+      "data-sidebar-animate",
+      "data-toc-children",
+      "report-sidebar-show",
+    ]) {
+      expect(
+        rules.some((rule) => rule.selector.includes(hook)),
+        hook
+      ).toBe(true);
     }
-    expect(found).toBeGreaterThan(0);
-    expect(offending).toEqual([]);
+    // ...and none of it runs for readers who asked for reduced motion.
+    expect(rules.filter((rule) => !noPreference(rule)).map((rule) => rule.selector)).toEqual([]);
+  });
+
+  it("only turns on smooth scrolling inside a no-preference guard, opted in by JS", () => {
+    const smooth = cssRules(css).filter((rule) => /scroll-behavior\s*:\s*smooth/.test(rule.body));
+    expect(smooth.length).toBeGreaterThan(0);
+    for (const rule of smooth) {
+      expect(noPreference(rule), rule.selector).toBe(true);
+      // Never on before JS: hash URLs, back/forward and no-JS clicks stay instant.
+      expect(rule.selector).toBe("html[data-report-smooth]");
+    }
+  });
+
+  it("clips sideways overflow while the article is mid-FLIP", () => {
+    const rule = cssRules(css).find((r) => r.selector === "[data-report-layout][data-flip]");
+    expect(rule?.body).toMatch(/overflow-x\s*:\s*clip/);
+  });
+
+  it("registers the FLIP custom properties as non-inherited lengths", () => {
+    for (const name of ["--rp-flip-x", "--rp-rail-top", "--rp-rail-left", "--rp-rail-width"]) {
+      const block = css.match(new RegExp(`@property\\s+${name}\\s*\\{([^}]*)\\}`))?.[1];
+      expect(block, name).toBeDefined();
+      expect(block, name).toMatch(/inherits\s*:\s*false/);
+      expect(block, name).toMatch(/syntax\s*:\s*"<length>"/);
+    }
   });
 });
 

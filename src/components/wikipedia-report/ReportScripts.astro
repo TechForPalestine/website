@@ -9,7 +9,8 @@
 //      group being read opens by itself, the reader's own toggles win (state
 //      rules in outlineGroups.ts). Without JS the outline shows every heading
 //      and nothing is highlighted.
-//   4. "Hide contents" on md+, remembered in localStorage.
+//   4. "Hide contents" on md+, remembered in localStorage, animated (FLIP)
+//      by readerMotion.ts, which also handles smooth in-page anchor jumps.
 //   5. Phone drawer: swaps the <details> disclosure for the sticky bar and a
 //      modal <dialog>.
 // See ReportShell for the markup.
@@ -25,6 +26,7 @@
     type GroupOverrides,
   } from "./outlineGroups";
   import { safeLocalStorage } from "../../utils/newsletterPopup";
+  import { animateRailToggle, initAnchorScroll } from "./readerMotion";
 
   document.querySelectorAll<HTMLElement>("[data-track-report-download]").forEach((link) => {
     link.addEventListener("click", () => {
@@ -105,10 +107,19 @@
       );
     }
 
+    // Links in a closed group (collapsed by visibility:hidden and 0fr rows,
+    // so they still have boxes) or in a hidden rail (display:none: phones,
+    // "Hide contents") must not steer the rail's scroll.
+    function isShown(link: HTMLElement): boolean {
+      if (link.closest("[data-toc-group]:not([data-open]) > [data-toc-children]")) return false;
+      if (typeof link.checkVisibility === "function") {
+        return link.checkVisibility({ visibilityProperty: true });
+      }
+      return link.getClientRects().length > 0;
+    }
+
     function keepInView(link: HTMLElement): void {
-      // Skip links that are not rendered: inside a group the reader closed by
-      // hand, or the whole rail hidden (phones, "Hide contents").
-      if (!scroller || link.getClientRects().length === 0) return;
+      if (!scroller || !isShown(link)) return;
       const linkBox = link.getBoundingClientRect();
       const box = scroller.getBoundingClientRect();
       if (linkBox.top >= box.top && linkBox.bottom <= box.bottom) return;
@@ -191,6 +202,13 @@
     observe();
     renderGroups();
     update();
+    // Let the first render settle before group open/close animates, so
+    // groups closing on page load do not slide shut.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        outline.dataset.motion = "";
+      })
+    );
   }
 
   // ── Hide / show the rail (md+ only; CSS ignores the attribute below md) ──
@@ -229,17 +247,19 @@
     setHidden(readSidebarHidden());
     layout.dataset.sidebarReady = "";
 
+    // Animate only changes the reader asked for, never the initial render.
+    const toggle = (hidden: boolean) => {
+      layout.dataset.sidebarAnimate = "";
+      animateRailToggle(layout, () => setHidden(hidden), hidden);
+      writeSidebarHidden(hidden);
+    };
     hideButton.addEventListener("click", () => {
-      setHidden(true);
-      writeSidebarHidden(true);
-      showButton.focus();
+      toggle(true);
+      showButton.focus({ preventScroll: true });
     });
     showButton.addEventListener("click", () => {
-      setHidden(false);
-      // Animate only reveals the reader asked for, never the initial render.
-      layout.dataset.sidebarRevealed = "";
-      writeSidebarHidden(false);
-      hideButton.focus();
+      toggle(false);
+      hideButton.focus({ preventScroll: true });
       // The outline scrolls the rail back to the current heading.
       layout.dispatchEvent(new Event(SIDEBAR_SHOWN_EVENT, { bubbles: true }));
     });
@@ -305,4 +325,5 @@
   // activation line.
   initDrawer();
   document.querySelectorAll<HTMLElement>("[data-report-outline]").forEach(initOutline);
+  initAnchorScroll();
 </script>

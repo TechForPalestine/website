@@ -1,0 +1,25 @@
+---
+// Collapsible wrapper for an outline group's children. With `enabled` it
+// renders the [data-toc-children] grid (0fr ↔ 1fr height animation in
+// wikipedia-report.css) around a clipping box; otherwise it renders the slot
+// unwrapped. The clip box's -m-1/p-1 pair leaves room for focus rings
+// (2px offset + 2px outline) that overflow:hidden would otherwise cut off.
+interface Props {
+  id?: string;
+  enabled: boolean;
+}
+
+const { id, enabled } = Astro.props;
+---
+
+{
+  enabled ? (
+    <div id={id} data-toc-children>
+      <div class="report-toc-clip -m-1 p-1">
+        <slot />
+      </div>
+    </div>
+  ) : (
+    <slot />
+  )
+}

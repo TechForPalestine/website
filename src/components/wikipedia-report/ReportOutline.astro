@@ -11,6 +11,7 @@
 // reveals them and drives open/closed state (see outlineGroups.ts).
 import { Icon } from "astro-icon/components";
 import { focusRing } from "../../utils/designClasses";
+import OutlineCollapse from "./OutlineCollapse.astro";
 import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
 import {
   entryHref,
@@ -120,72 +121,77 @@ const chevron = "M9 6l6 6-6 6";
             </div>
 
             {groups.length > 0 && (
-              <ol
+              <OutlineCollapse
                 id={entryGroupId && `toc-sub-${entryGroupId}`}
-                data-toc-children={entryGroupId ? "" : undefined}
-                class="mb-3 ml-8 mt-1 space-y-0.5 border-l border-ink-divider pl-3"
+                enabled={entryGroupId !== undefined}
               >
-                {groups.map((group) => {
-                  const hasToggle = isSidebar && group.children.length > 0;
-                  return (
-                    <li data-toc-group={hasToggle ? group.id : undefined}>
-                      <div class="flex items-start gap-1">
-                        <a
-                          href={`#${group.id}`}
-                          data-toc-link={group.id}
-                          class:list={[headingLink, "min-w-0 flex-1"]}
-                        >
-                          {group.number && (
-                            <span class="mr-1.5 font-bold tabular-nums">{group.number}</span>
-                          )}
-                          {group.title}
-                        </a>
-                        {hasToggle && (
-                          <button
-                            type="button"
-                            data-toc-toggle
-                            aria-expanded="true"
-                            aria-controls={`toc-sub-${group.id}`}
-                            aria-label={`${group.title}: subsections`}
-                            class={toggleClass}
+                <ol class="mb-3 ml-8 mt-1 space-y-0.5 border-l border-ink-divider pl-3">
+                  {groups.map((group) => {
+                    const hasToggle = isSidebar && group.children.length > 0;
+                    return (
+                      <li data-toc-group={hasToggle ? group.id : undefined}>
+                        <div class="flex items-start gap-1">
+                          <a
+                            href={`#${group.id}`}
+                            data-toc-link={group.id}
+                            class:list={[headingLink, "min-w-0 flex-1"]}
                           >
-                            <svg
-                              class="h-4 w-4"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2.25"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              aria-hidden="true"
+                            {group.number && (
+                              <span class="mr-1.5 font-bold tabular-nums">{group.number}</span>
+                            )}
+                            {group.title}
+                          </a>
+                          {hasToggle && (
+                            <button
+                              type="button"
+                              data-toc-toggle
+                              aria-expanded="true"
+                              aria-controls={`toc-sub-${group.id}`}
+                              aria-label={`${group.title}: subsections`}
+                              class={toggleClass}
                             >
-                              <path d={chevron} />
-                            </svg>
-                          </button>
+                              <svg
+                                class="h-4 w-4"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.25"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d={chevron} />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                        {hasToggle && (
+                          <OutlineCollapse id={`toc-sub-${group.id}`} enabled>
+                            <ol class="mb-1 ml-3 space-y-0.5">
+                              {group.children.map((child) => (
+                                <li>
+                                  <a
+                                    href={`#${child.id}`}
+                                    data-toc-link={child.id}
+                                    class={childLink}
+                                  >
+                                    {child.number && (
+                                      <span class="mr-1.5 font-bold tabular-nums">
+                                        {child.number}
+                                      </span>
+                                    )}
+                                    {child.title}
+                                  </a>
+                                </li>
+                              ))}
+                            </ol>
+                          </OutlineCollapse>
                         )}
-                      </div>
-                      {isSidebar && group.children.length > 0 && (
-                        <ol
-                          id={`toc-sub-${group.id}`}
-                          data-toc-children
-                          class="mb-1 ml-3 space-y-0.5"
-                        >
-                          {group.children.map((child) => (
-                            <li>
-                              <a href={`#${child.id}`} data-toc-link={child.id} class={childLink}>
-                                {child.number && (
-                                  <span class="mr-1.5 font-bold tabular-nums">{child.number}</span>
-                                )}
-                                {child.title}
-                              </a>
-                            </li>
-                          ))}
-                        </ol>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </OutlineCollapse>
             )}
           </li>
         );
