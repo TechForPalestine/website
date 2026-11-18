@@ -3,7 +3,9 @@
 // Community Call strip, which takes priority: CommunityCallBanner renders this
 // as `standby` when it shows, and its script reveals it if the call turns out
 // to have ended. Render inside a `relative` container (index.astro's <main>).
-import { REPORT_TITLE, REPORT_READ_HREF } from "../../data/wikipediaReport";
+import { REPORT_TITLE } from "../../data/wikipediaReport";
+// The landing page (key findings, both ways to read), not the reader itself.
+import { OVERVIEW_HREF } from "../wikipedia-report/reportMeta";
 
 interface Props {
   /** Hidden until revealed client-side (Community Call strip is in the slot). */
@@ -14,7 +16,7 @@ const { standby = false } = Astro.props;
 
 <div class="absolute inset-x-0 top-0 z-20 overflow-hidden">
   <a
-    href={REPORT_READ_HREF}
+    href={OVERVIEW_HREF}
     class="report-banner report-strip group block bg-grove text-white focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
     data-track-report-read="home-banner"
     hidden={standby}
