@@ -85,6 +85,23 @@ describe("wikipedia-report.css content-visibility", () => {
   });
 });
 
+describe("wikipedia-report.css reader layout in print", () => {
+  it("drops the md: grid so the article does not print in the rail column", () => {
+    const print = extractPrintBlock(css);
+    const body = ruleBody(print, /\[data-report-layout\]\s*(?=\{)/);
+    expect(body).toBeDefined();
+    expect(body).toMatch(/display\s*:\s*block\s*!important/);
+  });
+
+  it("applies the hidden-rail layout rules to screens only", () => {
+    const media = [
+      ...css.matchAll(/@media([^{]*)\{\s*\[data-report-layout\]\[data-sidebar-hidden\]/g),
+    ];
+    expect(media.length).toBeGreaterThan(0);
+    for (const [, query] of media) expect(query, query).toMatch(/\bscreen\b/);
+  });
+});
+
 describe("wikipedia-report.css quote captions", () => {
   it("styles the caption under a grouped quote", () => {
     const body = ruleBody(css, /\.report-prose\s+figure\.report-quote\s*>\s*figcaption/);

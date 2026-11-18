@@ -7,7 +7,7 @@ import { getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { MEMBERSHIP_PITCH } from "../../data/wikipediaReport";
 import TerminalCta from "../../components/TerminalCta.astro";
-import ReportOutline from "../../components/wikipedia-report/ReportOutline.astro";
+import ReportShell from "../../components/wikipedia-report/ReportShell.astro";
 import NewTabHint from "../../components/wikipedia-report/NewTabHint.astro";
 import InfluenceMap from "../../components/wikipedia-report/InfluenceMap.astro";
 import ReportScripts from "../../components/wikipedia-report/ReportScripts.astro";
@@ -21,14 +21,7 @@ import { breadcrumbListSchema, INDEX_SLUG } from "../../components/wikipedia-rep
 import { READER_SUBTITLE, READER_TITLE } from "../../components/wikipedia-report/reportMeta";
 import { REPORT_BASE_PATH, REPORT_FULL_PATH } from "../../utils/wikipediaReportLinks";
 import { canonicalUrl, SITE_ORIGIN } from "../../utils/seo";
-import {
-  container,
-  display,
-  focusRing,
-  headline,
-  inverseButton,
-  overline,
-} from "../../utils/designClasses";
+import { display, headline, inverseButton, overline } from "../../utils/designClasses";
 import "../../styles/base.css";
 import "../../styles/wikipedia-report.css";
 
@@ -61,90 +54,58 @@ const breadcrumbs = breadcrumbListSchema([
   schema={[breadcrumbs]}
 >
   <main>
-    <div
-      class={`${container} pb-16 pt-10 min-[810px]:pb-20 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-14 lg:pt-14 xl:grid-cols-[18rem_minmax(0,1fr)] xl:gap-20`}
-    >
-      <aside class="report-no-print hidden lg:block">
-        <div
-          data-outline-scroller
-          class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain pb-8 pr-3"
-        >
-          <ReportOutline entries={entries} currentSlug="" variant="sidebar" mode="single" />
-        </div>
-      </aside>
+    <ReportShell entries={entries} currentSlug="" mode="single" currentTitle="Full report">
+      <article aria-labelledby="report-page-heading">
+        <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
+          <p class={overline}>Full report</p>
+          <h1 id="report-page-heading" class={`mt-4 ${display}`}>
+            {READER_TITLE}
+            <span class="mt-2 block font-normal text-ink-secondary">{READER_SUBTITLE}</span>
+          </h1>
+        </header>
 
-      <div class="min-w-0">
-        <details class="report-no-print group mb-10 border-y border-ink-divider lg:hidden">
-          <summary
-            class={`flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-4 py-3 text-[15px] font-bold text-ink [&::-webkit-details-marker]:hidden ${focusRing}`}
-          >
-            <span>
-              Contents
-              <span class="font-normal text-ink-secondary"> · {READER_TITLE}</span>
-            </span>
-            <span
-              aria-hidden="true"
-              class="text-[22px] font-normal leading-none text-grove transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none"
-              >+</span
+        {
+          sections.map(({ meta, html, parts }) => (
+            <section
+              id={meta.slug}
+              class="report-cv mt-16 max-w-[45rem] border-t border-ink-divider pt-12 first-of-type:mt-0 min-[810px]:mt-20 min-[810px]:pt-14"
+              aria-labelledby={`${meta.slug}-title`}
             >
-          </summary>
-          <div class="pb-5 pt-1">
-            <ReportOutline entries={entries} currentSlug="" variant="compact" mode="single" />
-          </div>
-        </details>
-
-        <article aria-labelledby="report-page-heading">
-          <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
-            <p class={overline}>Full report</p>
-            <h1 id="report-page-heading" class={`mt-4 ${display}`}>
-              {READER_TITLE}
-              <span class="mt-2 block font-normal text-ink-secondary">{READER_SUBTITLE}</span>
-            </h1>
-          </header>
-
-          {
-            sections.map(({ meta, html, parts }) => (
-              <section
-                id={meta.slug}
-                class="report-cv mt-16 max-w-[45rem] border-t border-ink-divider pt-12 first-of-type:mt-0 min-[810px]:mt-20 min-[810px]:pt-14"
-                aria-labelledby={`${meta.slug}-title`}
-              >
-                <h2 id={`${meta.slug}-title`} class={headline}>
-                  {meta.label && <span class={`mb-3 block ${overline}`}>{meta.label}</span>}
-                  {meta.title}
-                </h2>
-                {parts ? (
-                  <>
-                    <div class="report-prose mt-8">
-                      <Fragment set:html={parts[0]} />
-                    </div>
-                    <div class="my-12">
-                      <InfluenceMap />
-                    </div>
-                    <div class="report-prose">
-                      <Fragment set:html={parts[1]} />
-                    </div>
-                  </>
-                ) : (
+              <h2 id={`${meta.slug}-title`} class={headline}>
+                {meta.label && <span class={`mb-3 block ${overline}`}>{meta.label}</span>}
+                {meta.title}
+              </h2>
+              {parts ? (
+                <>
                   <div class="report-prose mt-8">
-                    <Fragment set:html={html} />
+                    <Fragment set:html={parts[0]} />
                   </div>
-                )}
-                {meta.slug === INDEX_SLUG && !parts && (
-                  <div class="mt-12">
+                  <div class="my-12">
                     <InfluenceMap />
                   </div>
-                )}
-              </section>
-            ))
-          }
+                  <div class="report-prose">
+                    <Fragment set:html={parts[1]} />
+                  </div>
+                </>
+              ) : (
+                <div class="report-prose mt-8">
+                  <Fragment set:html={html} />
+                </div>
+              )}
+              {meta.slug === INDEX_SLUG && !parts && (
+                <div class="mt-12">
+                  <InfluenceMap />
+                </div>
+              )}
+            </section>
+          ))
+        }
 
-          <div class="report-prose">
-            <NewTabHint />
-          </div>
-        </article>
-      </div>
-    </div>
+        <div class="report-prose">
+          <NewTabHint />
+        </div>
+      </article>
+    </ReportShell>
 
     <div class="report-no-print">
       <TerminalCta heading="Become a T4P member" headingId="report-cta-heading" padTop={false}>

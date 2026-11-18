@@ -415,17 +415,134 @@
 }
 
 /* ── Sidebar outline (progressive enhancement) ─────────────────────────── */
-/* Without JS every depth-3 list is shown. Once the outline script runs it
-   marks the nav `data-enhanced`, and only the group containing the current
-   heading stays open, so section 6's ~60 headings stay scannable. */
+/* Without JS every depth-3 list is shown and the toggles are hidden. Once the
+   outline script runs it marks the nav `data-enhanced` and sets `data-open`
+   on the groups that should show their children (see outlineGroups.ts), so
+   section 6's ~60 headings stay scannable. */
 
 [data-report-outline][data-enhanced] [data-toc-group]:not([data-open]) > [data-toc-children] {
   display: none;
 }
 
-[data-report-outline] a[aria-current="location"] {
+[data-report-outline]:not([data-enhanced]) [data-toc-toggle] {
+  display: none;
+}
+
+.report-toc-toggle svg {
+  transition: transform 150ms ease-out;
+}
+
+.report-toc-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+:is([data-report-outline], [data-outline-compact]) a[aria-current="location"] {
   color: var(--rp-ink, #2a2428);
   font-weight: 700;
+}
+
+/* ── Hide / show the rail (md+) ─────────────────────────────────────────── */
+/* The hide button needs JS; without it the rail simply stays. */
+
+[data-report-layout]:not([data-sidebar-ready]) .report-sidebar-hide {
+  display: none;
+}
+
+.report-sidebar-tab {
+  display: none;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* Screen only: print resets the layout (see @media print). */
+@media screen and (min-width: 768px) {
+  [data-report-layout][data-sidebar-hidden] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  [data-report-layout][data-sidebar-hidden] > [data-report-sidebar] {
+    display: none;
+  }
+
+  [data-report-layout][data-sidebar-hidden] > .report-sidebar-tab {
+    display: flex;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-report-layout][data-sidebar-revealed]:not([data-sidebar-hidden]) > [data-report-sidebar] {
+      animation: report-rail-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+}
+
+/* Keep the article clear of the fixed tab until the container's own margin
+   is wider than the tab (1280px container + 2 × ~48px). */
+@media screen and (min-width: 768px) and (max-width: 1400px) {
+  [data-report-layout][data-sidebar-hidden] {
+    padding-left: 3.5rem;
+  }
+}
+
+@keyframes report-rail-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+/* ── Phone contents bar and drawer (<768px) ─────────────────────────────── */
+
+.report-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(22rem, calc(100vw - 3rem));
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #2a2428;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 0 24px rgb(16 16 16 / 0.18);
+}
+
+.report-drawer::backdrop {
+  background: rgb(16 16 16 / 0.5);
+}
+
+html:has(.report-drawer[open]) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .report-drawer[open] {
+    animation: report-drawer-in 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .report-drawer[open]::backdrop {
+    animation: report-fade-in 240ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .report-toc-toggle svg {
+    transition: none;
+  }
+}
+
+@keyframes report-drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes report-fade-in {
+  from {
+    opacity: 0;
+  }
 }
 
 /* ── Rendering speed ────────────────────────────────────────────────────── */
@@ -442,6 +559,14 @@
 /* Entry sections sit outside .report-prose, so give anchors the nav offset. */
 .report-cv[id] {
   scroll-margin-top: var(--rp-anchor-offset, 6.5rem);
+}
+
+/* On phones the contents bar (48px, ReportShell) also sits under the nav, so
+   anchors land lower. ReportScripts moves its activation line to match. */
+@media (max-width: 767px) {
+  body:has([data-report-bar]:not([hidden])) :is(.report-prose, .report-cv[id]) {
+    --rp-anchor-offset: 9.5rem;
+  }
 }
 
 .report-prose > table,
@@ -464,6 +589,14 @@
   .report-prose > ul,
   .report-prose > .report-notes {
     content-visibility: visible;
+  }
+
+  /* A printed page can be 768px+ wide (US Letter is 816px), which would keep
+     the md: grid and print the article in the rail's 14rem column. The rail
+     is hidden in print anyway, so drop the grid. Tailwind's md:grid has the
+     same specificity and may load later, hence !important. */
+  [data-report-layout] {
+    display: block !important;
   }
 
   /* Site nav (inside its astro-island), footer, donate tab and reader chrome. */

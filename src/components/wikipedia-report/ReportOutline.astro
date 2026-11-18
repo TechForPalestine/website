@@ -1,9 +1,14 @@
 ---
 // The reader's navigation: every page of the report in order, with the
-// current page's headings beneath it. Rendered twice by ReportShell: as the
-// sticky sidebar on lg+ (`variant="sidebar"`, depth-3 headings included and
-// collapsed by ReportScripts to the group being read) and inside a <details>
-// disclosure on smaller screens (`variant="compact"`, depth-2 only).
+// current page's headings beneath it (every entry's headings on the full
+// page). Rendered twice by ReportShell: as the sticky rail on md+
+// (`variant="sidebar"`, depth-3 headings included) and in the phone drawer /
+// no-JS <details> (`variant="compact"`, depth-2 only).
+//
+// In the sidebar every group with children ([data-toc-group]: a depth-2
+// heading, or on the full page an entry) gets a chevron toggle. Without JS the
+// toggles are hidden by CSS and every group shows expanded; ReportScripts
+// reveals them and drives open/closed state (see outlineGroups.ts).
 import { Icon } from "astro-icon/components";
 import { focusRing } from "../../utils/designClasses";
 import { REPORT_BASE_PATH } from "../../utils/wikipediaReportLinks";
@@ -32,11 +37,14 @@ const itemLink = `flex gap-3 rounded-sm py-1.5 text-[15px] leading-snug transiti
 const headingLinkBase = `block rounded-sm py-1 leading-snug text-ink-secondary transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`;
 const headingLink = `${headingLinkBase} text-[14px]`;
 const childLink = `${headingLinkBase} text-[13px]`;
+const toggleClass = `report-toc-toggle grid h-7 w-7 shrink-0 place-items-center rounded-sm text-ink-muted transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`;
+const chevron = "M9 6l6 6-6 6";
 ---
 
 <nav
   aria-label="Report contents"
   data-report-outline={isSidebar ? "" : undefined}
+  data-outline-compact={isSidebar ? undefined : ""}
   class="report-no-print text-ink"
 >
   {
@@ -57,54 +65,126 @@ const childLink = `${headingLinkBase} text-[13px]`;
         const isCurrent = !isSingle && entry.slug === currentSlug;
         const short = entryShortLabel(entry);
         const groups = isCurrent || isSingle ? groupToc(entry.toc) : [];
+        // On the full page each entry is itself a collapsible group.
+        const entryGroupId =
+          isSidebar && isSingle && groups.length > 0 ? `entry-${entry.slug}` : undefined;
         return (
-          <li>
-            <a
-              href={isSingle ? `#${entry.slug}` : entryHref(entry.slug)}
-              aria-current={isCurrent ? "page" : undefined}
-              class:list={[itemLink, isCurrent ? "font-bold text-ink" : "text-ink-secondary"]}
-            >
-              <span
+          <li data-toc-group={entryGroupId}>
+            <div class="flex items-start gap-1">
+              <a
+                href={isSingle ? `#${entry.slug}` : entryHref(entry.slug)}
+                aria-current={isCurrent ? "page" : undefined}
                 class:list={[
-                  "w-5 shrink-0 font-bold tabular-nums",
-                  isCurrent ? "text-grove" : "text-ink-muted",
+                  itemLink,
+                  "min-w-0 flex-1",
+                  isCurrent ? "font-bold text-ink" : "text-ink-secondary",
                 ]}
-                aria-hidden="true"
               >
-                {short ?? (entry.slug === INDEX_SLUG ? "·" : "")}
-              </span>
-              <span class="min-w-0">
-                {short && <span class="sr-only">{entry.label}: </span>}
-                {entry.title}
-              </span>
-            </a>
+                <span
+                  class:list={[
+                    "w-5 shrink-0 font-bold tabular-nums",
+                    isCurrent ? "text-grove" : "text-ink-muted",
+                  ]}
+                  aria-hidden="true"
+                >
+                  {short ?? (entry.slug === INDEX_SLUG ? "·" : "")}
+                </span>
+                <span class="min-w-0">
+                  {short && <span class="sr-only">{entry.label}: </span>}
+                  {entry.title}
+                </span>
+              </a>
+              {entryGroupId && (
+                <button
+                  type="button"
+                  data-toc-toggle
+                  aria-expanded="true"
+                  aria-controls={`toc-sub-${entryGroupId}`}
+                  aria-label={`${entry.title}: headings`}
+                  class:list={[toggleClass, "mt-1"]}
+                >
+                  <svg
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.25"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d={chevron} />
+                  </svg>
+                </button>
+              )}
+            </div>
 
             {groups.length > 0 && (
-              <ol class="mb-3 ml-8 mt-1 space-y-0.5 border-l border-ink-divider pl-3">
-                {groups.map((group) => (
-                  <li data-toc-group={isSidebar ? "" : undefined}>
-                    <a href={`#${group.id}`} data-toc-link={group.id} class={headingLink}>
-                      {group.number && (
-                        <span class="mr-1.5 font-bold tabular-nums">{group.number}</span>
+              <ol
+                id={entryGroupId && `toc-sub-${entryGroupId}`}
+                data-toc-children={entryGroupId ? "" : undefined}
+                class="mb-3 ml-8 mt-1 space-y-0.5 border-l border-ink-divider pl-3"
+              >
+                {groups.map((group) => {
+                  const hasToggle = isSidebar && group.children.length > 0;
+                  return (
+                    <li data-toc-group={hasToggle ? group.id : undefined}>
+                      <div class="flex items-start gap-1">
+                        <a
+                          href={`#${group.id}`}
+                          data-toc-link={group.id}
+                          class:list={[headingLink, "min-w-0 flex-1"]}
+                        >
+                          {group.number && (
+                            <span class="mr-1.5 font-bold tabular-nums">{group.number}</span>
+                          )}
+                          {group.title}
+                        </a>
+                        {hasToggle && (
+                          <button
+                            type="button"
+                            data-toc-toggle
+                            aria-expanded="true"
+                            aria-controls={`toc-sub-${group.id}`}
+                            aria-label={`${group.title}: subsections`}
+                            class={toggleClass}
+                          >
+                            <svg
+                              class="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2.25"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d={chevron} />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                      {isSidebar && group.children.length > 0 && (
+                        <ol
+                          id={`toc-sub-${group.id}`}
+                          data-toc-children
+                          class="mb-1 ml-3 space-y-0.5"
+                        >
+                          {group.children.map((child) => (
+                            <li>
+                              <a href={`#${child.id}`} data-toc-link={child.id} class={childLink}>
+                                {child.number && (
+                                  <span class="mr-1.5 font-bold tabular-nums">{child.number}</span>
+                                )}
+                                {child.title}
+                              </a>
+                            </li>
+                          ))}
+                        </ol>
                       )}
-                      {group.title}
-                    </a>
-                    {isSidebar && group.children.length > 0 && (
-                      <ol data-toc-children class="mb-1 ml-3 space-y-0.5">
-                        {group.children.map((child) => (
-                          <li>
-                            <a href={`#${child.id}`} data-toc-link={child.id} class={childLink}>
-                              {child.number && (
-                                <span class="mr-1.5 font-bold tabular-nums">{child.number}</span>
-                              )}
-                              {child.title}
-                            </a>
-                          </li>
-                        ))}
-                      </ol>
-                    )}
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ol>
             )}
           </li>

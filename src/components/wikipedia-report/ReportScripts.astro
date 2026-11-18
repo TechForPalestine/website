@@ -4,13 +4,27 @@
 //   1. Plausible "Wikipedia Report Download" events on [data-track-report-download],
 //      mirroring /wikipedia-report so both pages report into one goal.
 //   2. "Wikipedia Report Read Online" events on [data-track-report-read].
-//   3. Current-heading highlight in the sidebar outline, which also collapses
-//      depth-3 headings to the group being read. Without JS the outline shows
-//      every heading and nothing is highlighted.
+//   3. Current-heading highlight in the sidebar outline (mirrored in the
+//      compact outline and the phone bar), plus the collapsible groups: the
+//      group being read opens by itself, the reader's own toggles win (state
+//      rules in outlineGroups.ts). Without JS the outline shows every heading
+//      and nothing is highlighted.
+//   4. "Hide contents" on md+, remembered in localStorage.
+//   5. Phone drawer: swaps the <details> disclosure for the sticky bar and a
+//      modal <dialog>.
+// See ReportShell for the markup.
 ---
 
 <script>
   import { currentHeadingBySection, currentHeadingLinear } from "./outlineCurrent";
+  import {
+    EMPTY_OVERRIDES,
+    isGroupOpen,
+    settleOverrides,
+    toggleGroup,
+    type GroupOverrides,
+  } from "./outlineGroups";
+  import { safeLocalStorage } from "../../utils/newsletterPopup";
 
   document.querySelectorAll<HTMLElement>("[data-track-report-download]").forEach((link) => {
     link.addEventListener("click", () => {
@@ -31,8 +45,19 @@
   });
 
   // A heading counts as "current" once its top passes this line, just under
-  // the sticky nav.
+  // the sticky nav. On phones the contents bar (48px) sits under the nav too,
+  // and anchors land lower (--rp-anchor-offset: 9.5rem in wikipedia-report.css),
+  // so the line moves down with them.
   const ACTIVATION_OFFSET_PX = 128;
+  const PHONE_ACTIVATION_OFFSET_PX = 160;
+  const phoneQuery = window.matchMedia("(max-width: 767px)");
+  // Sent by the "Contents" tab when the hidden rail comes back.
+  const SIDEBAR_SHOWN_EVENT = "report:sidebar-shown";
+
+  function activationOffset(): number {
+    const barShown = document.querySelector("[data-report-bar]:not([hidden])") !== null;
+    return phoneQuery.matches && barShown ? PHONE_ACTIVATION_OFFSET_PX : ACTIVATION_OFFSET_PX;
+  }
 
   function initOutline(outline: HTMLElement): void {
     const links = Array.from(outline.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"));
@@ -45,6 +70,7 @@
     const scroller = outline.closest<HTMLElement>("[data-outline-scroller]");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let activeId: string | null = null;
+    let offset = activationOffset();
 
     // On the full page headings live in content-visibility sections. Measure
     // only the (cheap) sections, then the headings of the one being read, so
@@ -69,18 +95,20 @@
 
     function currentHeadingId(): string | null {
       if (sections.length === 0) {
-        return currentHeadingLinear(headings.map(measure), ACTIVATION_OFFSET_PX);
+        return currentHeadingLinear(headings.map(measure), offset);
       }
       return currentHeadingBySection(
         sections.map((section) => section.getBoundingClientRect().top),
         (index) => sectionHeadings[index].map(measure),
         (index) => sectionHeadings[index].at(-1)?.id ?? null,
-        ACTIVATION_OFFSET_PX
+        offset
       );
     }
 
     function keepInView(link: HTMLElement): void {
-      if (!scroller) return;
+      // Skip links that are not rendered: inside a group the reader closed by
+      // hand, or the whole rail hidden (phones, "Hide contents").
+      if (!scroller || link.getClientRects().length === 0) return;
       const linkBox = link.getBoundingClientRect();
       const box = scroller.getBoundingClientRect();
       if (linkBox.top >= box.top && linkBox.bottom <= box.bottom) return;
@@ -91,31 +119,190 @@
       });
     }
 
+    const groups = Array.from(outline.querySelectorAll<HTMLElement>("[data-toc-group]"));
+    const mirrorLinks = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>("[data-outline-compact] [data-toc-link]")
+    );
+    const currentLabel = document.querySelector<HTMLElement>("[data-outline-current]");
+    const defaultLabel = currentLabel?.textContent ?? "";
+    let activeGroups: ReadonlySet<string> = new Set();
+    let overrides: GroupOverrides = EMPTY_OVERRIDES;
+
+    function renderGroups(): void {
+      for (const group of groups) {
+        const open = isGroupOpen(group.dataset.tocGroup ?? "", activeGroups, overrides);
+        group.toggleAttribute("data-open", open);
+        // Only this group's own toggle, not those of nested groups.
+        const toggle = group.querySelector<HTMLButtonElement>(":scope > div > [data-toc-toggle]");
+        toggle?.setAttribute("aria-expanded", String(open));
+      }
+    }
+
+    outline.addEventListener("click", (event) => {
+      const toggle = (event.target as Element).closest<HTMLButtonElement>("[data-toc-toggle]");
+      const group = toggle?.closest<HTMLElement>("[data-toc-group]");
+      if (!group) return;
+      overrides = toggleGroup(overrides, group.dataset.tocGroup ?? "", activeGroups);
+      renderGroups();
+    });
+
     function update(): void {
       const id = currentHeadingId();
       if (id === activeId) return;
       activeId = id;
 
-      for (const link of links) {
+      for (const link of [...links, ...mirrorLinks]) {
         if (link.dataset.tocLink === id) link.setAttribute("aria-current", "location");
         else link.removeAttribute("aria-current");
       }
       const activeLink = links.find((link) => link.dataset.tocLink === id);
-      outline.querySelectorAll<HTMLElement>("[data-toc-group]").forEach((group) => {
-        if (activeLink && group.contains(activeLink)) group.dataset.open = "";
-        else delete group.dataset.open;
-      });
+      activeGroups = new Set(
+        groups
+          .filter((group) => activeLink && group.contains(activeLink))
+          .map((group) => group.dataset.tocGroup ?? "")
+      );
+      overrides = settleOverrides(overrides, activeGroups);
+      renderGroups();
+      if (currentLabel) {
+        currentLabel.textContent =
+          activeLink?.textContent?.replace(/\s+/g, " ").trim() || defaultLabel;
+      }
       if (activeLink) keepInView(activeLink);
     }
 
     // The observer only signals that something crossed the line; update()
     // then works out which heading is current from positions.
-    const observer = new IntersectionObserver(update, {
-      rootMargin: `-${ACTIVATION_OFFSET_PX}px 0px 0px 0px`,
+    let observer: IntersectionObserver | null = null;
+    function observe(): void {
+      offset = activationOffset();
+      observer?.disconnect();
+      observer = new IntersectionObserver(update, { rootMargin: `-${offset}px 0px 0px 0px` });
+      headings.forEach((heading) => observer?.observe(heading));
+    }
+    // keepInView skips links in a hidden rail, so catch up when it reappears.
+    document.addEventListener(SIDEBAR_SHOWN_EVENT, () => {
+      const activeLink = links.find((link) => link.dataset.tocLink === activeId);
+      if (activeLink) keepInView(activeLink);
     });
-    headings.forEach((heading) => observer.observe(heading));
+    phoneQuery.addEventListener("change", () => {
+      observe();
+      update();
+    });
+    observe();
+    renderGroups();
     update();
   }
 
+  // ── Hide / show the rail (md+ only; CSS ignores the attribute below md) ──
+  // An inline script in ReportShell pre-sets data-sidebar-hidden from the
+  // same key to avoid a flash; this module stays authoritative.
+  const SIDEBAR_HIDDEN_KEY = "t4p-report-sidebar-hidden";
+
+  function readSidebarHidden(): boolean {
+    try {
+      return safeLocalStorage()?.getItem(SIDEBAR_HIDDEN_KEY) === "1";
+    } catch {
+      return false;
+    }
+  }
+
+  function writeSidebarHidden(hidden: boolean): void {
+    try {
+      const storage = safeLocalStorage();
+      if (hidden) storage?.setItem(SIDEBAR_HIDDEN_KEY, "1");
+      else storage?.removeItem(SIDEBAR_HIDDEN_KEY);
+    } catch {
+      // Private mode or blocked storage: the choice lasts for this page only.
+    }
+  }
+
+  function initSidebarToggle(layout: HTMLElement): void {
+    const hideButton = layout.querySelector<HTMLButtonElement>("[data-sidebar-hide]");
+    const showButton = layout.querySelector<HTMLButtonElement>("[data-sidebar-show]");
+    if (!hideButton || !showButton) return;
+
+    const setHidden = (hidden: boolean) => {
+      layout.toggleAttribute("data-sidebar-hidden", hidden);
+      showButton.setAttribute("aria-expanded", String(!hidden));
+    };
+
+    setHidden(readSidebarHidden());
+    layout.dataset.sidebarReady = "";
+
+    hideButton.addEventListener("click", () => {
+      setHidden(true);
+      writeSidebarHidden(true);
+      showButton.focus();
+    });
+    showButton.addEventListener("click", () => {
+      setHidden(false);
+      // Animate only reveals the reader asked for, never the initial render.
+      layout.dataset.sidebarRevealed = "";
+      writeSidebarHidden(false);
+      hideButton.focus();
+      // The outline scrolls the rail back to the current heading.
+      layout.dispatchEvent(new Event(SIDEBAR_SHOWN_EVENT, { bubbles: true }));
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-report-layout]").forEach(initSidebarToggle);
+
+  // ── Phone drawer ─────────────────────────────────────────────────────────
+  // Native modal <dialog>: focus trap, Esc and the backdrop come for free.
+  // Without showModal (or JS) the <details> disclosure stays in place.
+  function initDrawer(): void {
+    const drawer = document.querySelector<HTMLDialogElement>("[data-report-drawer]");
+    const bar = document.querySelector<HTMLElement>("[data-report-bar]");
+    const opener = bar?.querySelector<HTMLButtonElement>("[data-drawer-open]");
+    const details = document.querySelector<HTMLDetailsElement>("[data-report-contents]");
+    const compact = details?.querySelector<HTMLElement>("[data-compact-outline]");
+    const body = drawer?.querySelector<HTMLElement>("[data-drawer-body]");
+    if (!drawer || !bar || !opener || !details || !compact || !body) return;
+    if (typeof drawer.showModal !== "function") return;
+
+    // Move (not copy) the outline so it exists once on the page.
+    compact.classList.remove("pb-5", "pt-1");
+    body.append(compact);
+    details.hidden = true;
+    bar.hidden = false;
+
+    opener.addEventListener("click", () => {
+      if (drawer.open) return;
+      drawer.showModal();
+      opener.setAttribute("aria-expanded", "true");
+    });
+    // Esc, the close button and the backdrop return focus to the bar button.
+    // A tapped link does not: the reader is moving on to its target.
+    let closedByLink = false;
+    drawer.addEventListener("close", () => {
+      opener.setAttribute("aria-expanded", "false");
+      if (!closedByLink) opener.focus({ preventScroll: true });
+      closedByLink = false;
+    });
+    drawer.querySelector("[data-drawer-close]")?.addEventListener("click", () => drawer.close());
+    // Tapping a link closes the drawer; the link's own navigation still runs.
+    body.addEventListener("click", (event) => {
+      if (!(event.target as Element).closest("a")) return;
+      closedByLink = true;
+      drawer.close();
+    });
+    // A click whose target is the <dialog> itself landed on the backdrop. Check
+    // where the press began too, so a drag that ends outside doesn't close it.
+    let pressedBackdrop = false;
+    drawer.addEventListener("pointerdown", (event) => {
+      pressedBackdrop = event.target === drawer;
+    });
+    drawer.addEventListener("click", (event) => {
+      if (event.target === drawer && pressedBackdrop) drawer.close();
+    });
+    // The drawer is a phone affordance; widening past md hands over to the rail.
+    window.matchMedia("(min-width: 768px)").addEventListener("change", (query) => {
+      if (query.matches && drawer.open) drawer.close();
+    });
+  }
+
+  // The drawer first: it reveals the phone bar, which sets the outline's
+  // activation line.
+  initDrawer();
   document.querySelectorAll<HTMLElement>("[data-report-outline]").forEach(initOutline);
 </script>

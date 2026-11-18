@@ -1,0 +1,181 @@
+---
+// Reading layout shared by the section pages and the full-text page: the
+// contents rail on the left from md (768px), the article in the slot.
+//
+//   md+     sticky rail with collapsible groups and a "Hide contents" button;
+//           when hidden, a fixed "Contents" tab at the left edge brings it back
+//           (remembered in localStorage, see ReportScripts).
+//   <md     a sticky "Contents" bar under the navbar opens a <dialog> drawer
+//           holding the compact outline.
+//   no JS   the rail shows fully expanded at md+; phones keep the <details>
+//           disclosure. The hide button, group toggles and bar stay hidden.
+//
+// All behaviour lives in ReportScripts; all non-utility styling in
+// wikipedia-report.css (no inline styles: CSP).
+import { Icon } from "astro-icon/components";
+import { container, focusRing } from "../../utils/designClasses";
+import ReportOutline from "./ReportOutline.astro";
+import { READER_TITLE } from "./reportMeta";
+import type { ReportEntryMeta } from "./reportNav";
+
+interface Props {
+  entries: ReportEntryMeta[];
+  currentSlug: string;
+  mode?: "pages" | "single";
+  /** Shown in the phone bar until the reader reaches the first heading. */
+  currentTitle: string;
+}
+
+const { entries, currentSlug, mode = "pages", currentTitle } = Astro.props;
+
+const chevronLeft = "M15 6l-6 6 6 6";
+---
+
+<div
+  data-report-layout
+  class={`${container} pb-16 pt-10 min-[810px]:pb-20 md:grid md:grid-cols-[14rem_minmax(0,1fr)] md:gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-14 lg:pt-14 xl:grid-cols-[18rem_minmax(0,1fr)] xl:gap-20`}
+>
+  <!--
+    Applies a remembered "Hide contents" before first paint; the bundled
+    ReportScripts module is deferred, so without this the rail flashes. Keep it
+    to this one attribute: ReportScripts reads the same key and stays the
+    source of truth. The CSP middleware nonces every <script>.
+  -->
+  <script is:inline>
+    try {
+      if (localStorage.getItem("t4p-report-sidebar-hidden") === "1") {
+        document.currentScript.parentElement.setAttribute("data-sidebar-hidden", "");
+      }
+    } catch (_e) {}
+  </script>
+  <aside id="report-sidebar" data-report-sidebar class="report-no-print hidden md:block">
+    <div
+      data-outline-scroller
+      class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain pb-8 pr-3"
+    >
+      <button
+        type="button"
+        data-sidebar-hide
+        aria-controls="report-sidebar"
+        class={`report-sidebar-hide mb-4 inline-flex min-h-[32px] items-center gap-1.5 rounded-sm text-[13px] font-bold text-ink-secondary transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"><path d={chevronLeft}></path></svg
+        >
+        Hide contents
+      </button>
+      <ReportOutline entries={entries} currentSlug={currentSlug} variant="sidebar" mode={mode} />
+    </div>
+  </aside>
+
+  <button
+    type="button"
+    data-sidebar-show
+    aria-controls="report-sidebar"
+    aria-expanded="false"
+    class={`report-no-print report-sidebar-tab fixed left-0 top-28 z-40 items-center gap-2 rounded-r-sm border border-l-0 border-ink-divider bg-white px-2 py-3 text-[14px] font-bold text-ink shadow-sm transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
+  >
+    <!-- Vertical tab read bottom to top (CSS rotates it), so the label comes first
+         and the chevron, drawn pointing left, ends up on top pointing right. -->
+    Contents
+    <svg
+      class="h-4 w-4 text-grove"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.25"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"><path d={chevronLeft}></path></svg
+    >
+  </button>
+
+  <div class="min-w-0">
+    <div
+      data-report-bar
+      hidden
+      class="report-no-print sticky top-20 z-30 -mx-6 mb-8 border-b border-ink-divider bg-white px-6 md:hidden"
+    >
+      <button
+        type="button"
+        data-drawer-open
+        aria-haspopup="dialog"
+        aria-controls="report-drawer"
+        aria-expanded="false"
+        class={`flex min-h-[48px] w-full items-center gap-3 py-2 text-left text-[15px] ${focusRing}`}
+      >
+        <Icon
+          name="solar:hamburger-menu-outline"
+          class="h-5 w-5 shrink-0 text-grove"
+          aria-hidden="true"
+        />
+        <span class="shrink-0 font-bold text-ink">Contents</span>
+        <span
+          data-outline-current
+          class="min-w-0 flex-1 truncate border-l border-ink-divider pl-3 text-ink-secondary"
+          >{currentTitle}</span
+        >
+      </button>
+    </div>
+
+    <details
+      data-report-contents
+      class="report-no-print group mb-10 border-y border-ink-divider md:hidden"
+    >
+      <summary
+        class={`flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-4 py-3 text-[15px] font-bold text-ink [&::-webkit-details-marker]:hidden ${focusRing}`}
+      >
+        <span>
+          Contents
+          <span class="font-normal text-ink-secondary"> · {READER_TITLE}</span>
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-[22px] font-normal leading-none text-grove transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none"
+          >+</span
+        >
+      </summary>
+      <div data-compact-outline class="pb-5 pt-1">
+        <ReportOutline entries={entries} currentSlug={currentSlug} variant="compact" mode={mode} />
+      </div>
+    </details>
+
+    <slot />
+  </div>
+</div>
+
+<dialog
+  id="report-drawer"
+  data-report-drawer
+  class="report-drawer report-no-print"
+  aria-labelledby="report-drawer-title"
+>
+  <!-- Fills the dialog so only clicks on the backdrop target the <dialog> itself. -->
+  <div class="min-h-full">
+    <div
+      class="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-ink-divider bg-white px-5 py-2"
+    >
+      <p id="report-drawer-title" class="text-[15px] font-bold text-ink">
+        Contents
+        <span class="font-normal text-ink-secondary"> · {READER_TITLE}</span>
+      </p>
+      <button
+        type="button"
+        data-drawer-close
+        aria-label="Close contents"
+        class={`grid h-11 w-11 shrink-0 place-items-center rounded-full text-ink transition-colors hover:text-grove motion-reduce:transition-none ${focusRing}`}
+      >
+        <Icon name="mdi:close" class="h-5 w-5" aria-hidden="true" />
+      </button>
+    </div>
+    <!-- ReportScripts moves the compact outline here from the <details> above. -->
+    <div data-drawer-body class="px-5 pb-8 pt-4"></div>
+  </div>
+</dialog>
