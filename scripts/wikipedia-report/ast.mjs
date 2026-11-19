@@ -434,7 +434,10 @@ export function transformPage(page, ctx) {
 
   function transformHeader(block) {
     const entry = plan.get(block);
-    if (!entry) return [];
+    // A heading with no text is dropped, but the docx sometimes puts a figure
+    // in a heading-styled paragraph (the 1.2 influence-campaign diagram): keep
+    // its images as ordinary figures rather than losing them silently.
+    if (!entry) return transformParagraph({ t: "Para", c: block.c[2] });
     const tag = `h${entry.level}`;
     if (entry.number || page.kind !== "section") {
       state.toc.push({

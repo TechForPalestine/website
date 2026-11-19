@@ -5,6 +5,11 @@
     "context": "Executive Summary (docx image8.png): the influence map. Omitted because the site renders the interactive InfluenceMap component right before \"Our Claims in Brief\"",
     "omit": true
   },
+  "2e69852bdcca": {
+    "alt": "The full pro-Israel influence campaign: a diagram of who is trying to shape what AI learns, in three layers. AI (OpenAI, Google, Anthropic) learns from data: Wikipedia, the media and universities. Wikipedia content is shaped by its editors, ArbCom and Wikimedia Foundation policy. University research is shrinking: professors fired, students expelled or deported, Middle East Studies shut down, and the IHRA definition imposed through university administrations. A Zionist media campaign (Jewish Insider, Pirate Wires and many others) targets ArbCom and the Wikimedia Foundation. The ADL-led campaign, with Builders for Tomorrow, Comer and Mace, Ted Cruz, Wasserman Schultz and 22 others, and Trump and the DOJ, pressures the Wikimedia Foundation and universities and works directly with AI companies. Mass surveillance by NPOV, the Heritage Foundation, the ADL and Builders for Tomorrow doxxes and intimidates editors. CAMERA, Starboard and Clock Tower X shape the media and web content. The network is funded by billionaires, AIPAC and PACs, the Foundation for Defense of Democracies, and Israel.",
+    "decorative": false,
+    "context": "1.2 The full influence campaign (docx image35.png, published as 2e69852bdcca.webp)"
+  },
   "59bd4af2c59a": {
     "alt": "",
     "decorative": false,

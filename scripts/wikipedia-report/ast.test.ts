@@ -149,6 +149,25 @@ describe("transformPage", () => {
   });
 });
 
+describe("image-only headings", () => {
+  it("keeps the image as a figure instead of dropping the empty heading", () => {
+    const { run } = buildDoc([
+      header(1, "Section 1: Introduction", "section-1-introduction"),
+      para(...text("Body.")),
+      header(2, "1.2: The full campaign", "campaign"),
+      {
+        t: "Header",
+        c: [1, ["diagram", [], []], [{ t: "Image", c: [["", [], []], [], ["media/map.png", ""]] }]],
+      },
+    ]);
+    const { blocks, toc } = run(0);
+    const out = html(blocks);
+    expect(out).toContain("media/map.png");
+    expect(out.match(/<figure/g)).toHaveLength(1);
+    expect(toc.map((e: { title: string }) => e.title)).not.toContain("");
+  });
+});
+
 describe("omitted images", () => {
   it("removes the whole figure when the image callback returns null", () => {
     const blocks = [
