@@ -10,7 +10,7 @@ toc:
 ---
 
 <p>The tables in this section were researched by ChatGPT on level 6 “Pro” in September 2026, using the prompts <em>“In this article, Table 1 and Table 2 link to pages on Wikipedia which had votes on whether to delete the pages. For each article, find how many editors actually voted on the deletion”, and “Revisit those page and count which editors voted for and which voted against, compiling a table like the one above, but adding the vote counts”.</em></p>
-<p>For transparency, the <a href="https://chatgpt.com/g/g-p-6aad3209482c819197432b4ed8ec4197/c/6aad31fd-ebdc-83eb-bff0-49260a97731c" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">entire conversation is available</a><em>.</em></p>
+<p>For transparency, the <a href="https://chatgpt.com/share/6ab5035c-f06c-83eb-9b57-b67d85a64f84" target="_blank" rel="noopener noreferrer" aria-describedby="report-new-tab-hint">entire conversation is available</a><em>.</em></p>
 <h2 id="articles-from-table-1-in-the-adl-report-labeled">Articles from Table 1 in the ADL report, labeled as “Notable articles multiple bad-faith editors voted to keep”, adding actual counts.</h2>
 <div class="report-table" role="region" aria-label="Table: Appendix E › Articles from Table 1 in the ADL report, labeled as “Notable articles multiple bad-faith editors voted to keep”, adding actual counts." tabindex="0">
 <table>

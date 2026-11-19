@@ -83,11 +83,11 @@ export const REPORT_READ_HREF = REPORT_BASE_PATH;
 
 // Keep the filename stable across revisions so links in press coverage keep
 // working, and update the size and page count each time the file is replaced.
-// The current file is the 18 Nov Google Docs export (version 3 of "Take 6"), matching the online report.
+// The current file is the 19 Nov Google Docs export ("Take 6 - T4P Wiki Report (3)"), matching the online report.
 export const REPORT_PDF: ReportPdf = {
   href: "/reports/israel-is-attacking-wikipedia.pdf",
-  size: "7.0 MB",
-  pages: 223,
+  size: "7.5 MB",
+  pages: 224,
 };
 
 // The executive summary as its own PDF, linked from the Press section: pages
@@ -97,7 +97,7 @@ export const REPORT_PDF: ReportPdf = {
 // pages when the file is replaced.
 export const SUMMARY_PDF: ReportPdf | undefined = {
   href: "/reports/israel-is-attacking-wikipedia-summary.pdf",
-  size: "267 KB",
+  size: "407 KB",
   pages: 8,
 };
 
