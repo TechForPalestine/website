@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasSettled, isLongJump, jumpDistance, needsLandingFix } from "./readerMotion";
+import { hasSettled, isLongJump, jumpDistance, needsJumpHold } from "./readerMotion";
 
 describe("isLongJump", () => {
   it("glides for jumps within a couple of screens", () => {
@@ -45,37 +45,19 @@ describe("jumpDistance", () => {
   });
 });
 
-describe("needsLandingFix", () => {
-  const VIEWPORT = 800;
-
+describe("needsJumpHold", () => {
   it("accepts a landing within tolerance of the scroll margin", () => {
-    expect(
-      needsLandingFix({ top: 105, scrollMargin: 104, atPageEnd: false, viewport: VIEWPORT })
-    ).toBe(false);
+    expect(needsJumpHold({ top: 101, scrollMargin: 104, atPageEnd: false })).toBe(false);
   });
 
-  it("corrects a small drift caused by sections rendering mid-glide", () => {
-    expect(
-      needsLandingFix({ top: 340, scrollMargin: 104, atPageEnd: false, viewport: VIEWPORT })
-    ).toBe(true);
-    expect(
-      needsLandingFix({ top: -200, scrollMargin: 104, atPageEnd: false, viewport: VIEWPORT })
-    ).toBe(true);
-  });
-
-  it("leaves large drifts alone: the reader has most likely scrolled away", () => {
-    expect(
-      needsLandingFix({ top: 104 + 900, scrollMargin: 104, atPageEnd: false, viewport: VIEWPORT })
-    ).toBe(false);
-    expect(
-      needsLandingFix({ top: 104 - 900, scrollMargin: 104, atPageEnd: false, viewport: VIEWPORT })
-    ).toBe(false);
+  it("re-aims however far sections rendering above pushed the target away", () => {
+    // Measured in Chrome: /full#section-4 landed at 104, then 23,740 px off a frame later.
+    expect(needsJumpHold({ top: 23740, scrollMargin: 104, atPageEnd: false })).toBe(true);
+    expect(needsJumpHold({ top: -523, scrollMargin: 104, atPageEnd: false })).toBe(true);
   });
 
   it("leaves targets near the page end alone (the page cannot scroll further)", () => {
-    expect(
-      needsLandingFix({ top: 500, scrollMargin: 104, atPageEnd: true, viewport: VIEWPORT })
-    ).toBe(false);
+    expect(needsJumpHold({ top: 500, scrollMargin: 104, atPageEnd: true })).toBe(false);
   });
 });
 

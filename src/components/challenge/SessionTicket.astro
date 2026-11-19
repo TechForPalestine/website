@@ -1,0 +1,48 @@
+---
+// A session promo on /monthly-challenge, drawn as a ticket: the date on the
+// stub, separated by a dashed tear line, and the pitch plus actions beside it.
+// The actions go in the default slot.
+import { headline } from "../../utils/designClasses";
+
+interface Props {
+  headingId: string;
+  heading: string;
+  description: string;
+  /** ISO 8601 start, for <time> and the visitor's-local-time line. */
+  startsAt: string;
+  monthShort: string;
+  day: string;
+  weekday: string;
+  /** Start time as printed on the stub, e.g. "9am ET". */
+  time: string;
+}
+
+const { headingId, heading, description, startsAt, monthShort, day, weekday, time } = Astro.props;
+---
+
+<div class="grid grid-cols-1 overflow-hidden rounded-lg bg-stone md:grid-cols-[auto_minmax(0,1fr)]">
+  <time
+    datetime={startsAt}
+    class="flex flex-row items-baseline gap-4 border-b-2 border-dashed border-ink-divider px-6 py-6 sm:px-10 md:flex-col md:items-start md:justify-center md:gap-0 md:border-b-0 md:border-r-2 md:py-10"
+  >
+    <span class="text-[15px] font-bold uppercase tracking-[0.14em] text-grove-deep">
+      {monthShort}
+    </span>
+    <span class="text-[64px] font-extrabold tabular-nums leading-none text-grove md:text-[112px]">
+      {day}
+    </span>
+    <span class="text-[16px] font-bold text-ink md:mt-3">
+      {weekday} · {time}
+    </span>
+    <span data-local-time={startsAt} hidden class="text-[15px] text-ink-secondary md:mt-1"></span>
+  </time>
+  <div class="px-6 py-8 sm:px-10 md:py-10">
+    <h2 id={headingId} class={headline}>{heading}</h2>
+    <p class="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
+      {description}
+    </p>
+    <div class="mt-7 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
+      <slot />
+    </div>
+  </div>
+</div>

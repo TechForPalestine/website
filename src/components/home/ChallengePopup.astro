@@ -6,13 +6,41 @@
 // 8s or a quarter of the page scrolled, and the newsletter popup stands down
 // for that page load. Renders nothing after November; delete it then.
 import { CHALLENGE_PATH } from "../../data/challenges";
-import { APPLY_URL, brainstorm, challenge } from "../../data/challenges/november-2026";
-import { isBrainstormOpen, isCampaignLive } from "../../utils/challengePopup";
+import {
+  APPLY_URL,
+  brainstorm,
+  buildSession,
+  challenge,
+} from "../../data/challenges/november-2026";
+import { isBrainstormOpen, isBuildSessionOpen, isCampaignLive } from "../../utils/challengePopup";
 import CorrectedHeadline from "../challenge/CorrectedHeadline.astro";
 
 const now = Date.now();
 const live = isCampaignLive(now);
 const brainstormOpen = isBrainstormOpen(now);
+const buildOpen = isBuildSessionOpen(now);
+
+// Upcoming sessions, soonest first; each one drops out once it is over.
+const sessions = [
+  brainstormOpen && {
+    cta: "brainstorm",
+    url: brainstorm.url,
+    startsAt: brainstorm.startsAt,
+    date: `${brainstorm.monthShort} ${brainstorm.day}`,
+    when: `${brainstorm.weekday.slice(0, 3)} · ${brainstorm.time} · Brainstorm on Zoom`,
+    button: "Register",
+    label: "for the November 20 brainstorm",
+  },
+  buildOpen && {
+    cta: "build",
+    url: buildSession.url,
+    startsAt: buildSession.startsAt,
+    date: `${buildSession.monthShort} ${buildSession.day}`,
+    when: `${buildSession.weekday.slice(0, 3)} · ${buildSession.time} · Build session on Discord`,
+    button: "Sign up",
+    label: "for the November 28 build session",
+  },
+].filter((session) => session !== false);
 ---
 
 {
@@ -47,14 +75,15 @@ const brainstormOpen = isBrainstormOpen(now);
 
         <div class="cp-body">
           {/* The page hero's corrected headline in miniature, so the
-              click-through lands somewhere familiar. */}
+              click-through lands somewhere familiar. Dropped on phones and
+              short screens (CSS) so the popup never has to scroll. */}
           <div class="cp-headline">
             <CorrectedHeadline size="sm" />
           </div>
-          {brainstormOpen ? (
+          {sessions.length > 0 ? (
             <p class="cp-lede">
-              Build the tools that call out framing like this. Apply to the Incubator, or pitch your
-              idea first at our open brainstorming session.
+              Build the tools that call out framing like this. Apply to the Incubator, or start at
+              one of our open sessions.
             </p>
           ) : (
             <p class="cp-lede">
@@ -63,45 +92,43 @@ const brainstormOpen = isBrainstormOpen(now);
             </p>
           )}
 
-          {brainstormOpen && (
-            <p class="cp-date">
-              <time datetime={brainstorm.startsAt}>
-                <span class="cp-date-day">
-                  {brainstorm.monthShort} {brainstorm.day}
-                </span>
-                <span>
-                  {brainstorm.weekday} · {brainstorm.time} · on Zoom
-                </span>
-                <span class="cp-date-local" data-local-time={brainstorm.startsAt} hidden />
-              </time>
-            </p>
+          {sessions.length > 0 && (
+            <ul class="cp-sessions">
+              {sessions.map((session) => (
+                <li class="cp-session">
+                  <time datetime={session.startsAt}>
+                    <span class="cp-date-day">{session.date}</span>
+                    <span>{session.when}</span>
+                    <span class="cp-date-local" data-local-time={session.startsAt} hidden />
+                  </time>
+                  <a
+                    class="cp-btn cp-btn--ghost cp-btn--row"
+                    href={session.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cp-cta={session.cta}
+                  >
+                    {session.button}
+                    <span class="sr-only"> {session.label} (opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           )}
 
           <div class="cp-actions">
             <a class="cp-btn cp-btn--primary" href={CHALLENGE_PATH} data-cp-cta="challenge">
               See the challenge
             </a>
-            {brainstormOpen ? (
-              <a
-                class="cp-btn cp-btn--ghost"
-                href={brainstorm.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cp-cta="brainstorm"
-              >
-                Register for Nov 20
-                <span class="sr-only"> (opens in a new tab)</span>
-              </a>
-            ) : (
+            {sessions.length === 0 && (
               <a class="cp-btn cp-btn--ghost" href={APPLY_URL} data-cp-cta="apply">
                 Apply now
               </a>
             )}
+            <button type="button" class="cp-later" data-cp-close>
+              No thanks
+            </button>
           </div>
-
-          <button type="button" class="cp-later" data-cp-close>
-            No thanks
-          </button>
         </div>
       </div>
     </dialog>
@@ -208,36 +235,50 @@ const brainstormOpen = isBrainstormOpen(now);
     line-height: 1.55;
     color: #73656e;
   }
-  .cp-date {
-    margin-top: 18px;
-    padding-top: 16px;
+  .cp-sessions {
+    margin-top: 16px;
     border-top: 2px dashed #d6d6d6;
+  }
+  .cp-session {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+  }
+  .cp-session + .cp-session {
+    border-top: 1px solid #d6d6d6;
+  }
+  .cp-session time {
+    display: grid;
+    flex: 1;
+    grid-template-columns: 4.25rem minmax(0, 1fr);
+    column-gap: 10px;
+    align-items: baseline;
+    min-width: 0;
     font-size: 15px;
     font-weight: 700;
+    line-height: 1.35;
     color: #2a2428;
   }
-  .cp-date time {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 12px;
-  }
   .cp-date-local {
-    flex-basis: 100%;
+    grid-column: 2;
+    font-size: 14px;
     font-weight: 400;
     color: #73656e;
   }
   .cp-date-day {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
+    white-space: nowrap;
     color: #157a3e;
   }
 
   .cp-actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
-    margin-top: 22px;
+    margin-top: 16px;
   }
   .cp-btn {
     display: inline-flex;
@@ -269,9 +310,12 @@ const brainstormOpen = isBrainstormOpen(now);
     border-color: #157a3e;
     color: #157a3e;
   }
+  .cp-btn--row {
+    flex: none;
+    padding: 10px 18px;
+  }
   .cp-later {
-    display: block;
-    margin: 14px auto 0;
+    min-height: 44px;
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 15px;
@@ -290,6 +334,24 @@ const brainstormOpen = isBrainstormOpen(now);
   .cp-close:focus-visible {
     outline: 2px solid #fff;
     outline-offset: 2px;
+  }
+
+  /* No room for the specimen: the popup must fit without scrolling. */
+  @media (max-width: 767px), (max-height: 859px) {
+    .cp-headline {
+      display: none;
+    }
+  }
+
+  /* Very short phones: the session rows say what the lede would. */
+  @media (max-width: 767px) and (max-height: 720px) {
+    .cp-lede {
+      display: none;
+    }
+    .cp-sessions {
+      margin-top: 0;
+      border-top: 0;
+    }
   }
 
   /* Phones: a bottom sheet rather than a centred modal. */
@@ -315,8 +377,19 @@ const brainstormOpen = isBrainstormOpen(now);
     .cp-lede {
       font-size: 16px;
     }
+    .cp-session time {
+      grid-template-columns: auto minmax(0, 1fr);
+      font-size: 14px;
+    }
+    .cp-date-day {
+      font-size: 17px;
+    }
+    .cp-date-local {
+      font-size: 13px;
+    }
     .cp-actions {
       flex-direction: column;
+      align-items: stretch;
     }
   }
 </style>
@@ -347,15 +420,13 @@ const brainstormOpen = isBrainstormOpen(now);
   }
 
   function schedule(dialog: HTMLDialogElement) {
-    const localTime = dialog.querySelector<HTMLElement>("[data-local-time]");
-    if (localTime) {
-      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    dialog.querySelectorAll<HTMLElement>("[data-local-time]").forEach((localTime) => {
       const local = localSessionTime(localTime.dataset.localTime ?? "", zone);
-      if (local) {
-        localTime.textContent = `${local} your time`;
-        localTime.hidden = false;
-      }
-    }
+      if (!local) return;
+      localTime.textContent = `${local} your time`;
+      localTime.hidden = false;
+    });
 
     let reason: DismissReason = "escape";
     const closeWith = (next: DismissReason) => {

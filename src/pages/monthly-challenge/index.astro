@@ -7,6 +7,7 @@ import { truncateDescription } from "../../utils/seo";
 import TerminalCta from "../../components/TerminalCta.astro";
 import ChallengeProjectCard from "../../components/challenge/ChallengeProjectCard.astro";
 import CorrectedHeadline from "../../components/challenge/CorrectedHeadline.astro";
+import SessionTicket from "../../components/challenge/SessionTicket.astro";
 import { previousChallenges, whatAreChallenges } from "../../data/challenges";
 import {
   APPLY_URL,
@@ -14,6 +15,7 @@ import {
   aboutNeed,
   ask,
   brainstorm,
+  buildSession,
   challenge,
   especially,
   playbook,
@@ -23,12 +25,14 @@ import {
 import { fetchProjectsData } from "../../store/projectsClient";
 import type { ProjectItem } from "../../types/projects";
 import { pickChallengeProjects } from "../../utils/challengeProjects";
-import { isBrainstormOpen } from "../../utils/challengePopup";
+import { isBrainstormOpen, isBuildSessionOpen } from "../../utils/challengePopup";
+import { googleCalendarUrl } from "../../utils/googleCalendar";
 import {
   band,
   container,
   focusRing,
   focusRingOnDark,
+  ghostButton,
   ghostOnDarkButton,
   headline,
   inlineLink,
@@ -50,7 +54,16 @@ try {
   Astro.response.headers.set("Cache-Control", "no-store");
 }
 
-const showBrainstorm = isBrainstormOpen(Date.now());
+const now = Date.now();
+const showBrainstorm = isBrainstormOpen(now);
+const showBuildSession = isBuildSessionOpen(now);
+const showSessions = showBrainstorm || showBuildSession;
+const buildSessionCalendarUrl = googleCalendarUrl({
+  title: buildSession.title,
+  startsAt: buildSession.startsAt,
+  endsAt: buildSession.endsAt,
+  details: `${buildSession.description}\n\nSign up: ${buildSession.url}`,
+});
 
 // Four cards sit better as two pairs than as three plus an orphan.
 const projectCols =
@@ -113,6 +126,21 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
                   class={onGreenGhost}
                 >
                   Join the brainstorming session on November 20th
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              )
+            }
+            {
+              showBuildSession && (
+                <a
+                  href={buildSession.url}
+                  target="_blank"
+                  rel="noopener"
+                  data-track-challenge="build"
+                  data-cta-location="hero"
+                  class={onGreenGhost}
+                >
+                  Build session on November 28th
                   <span class="sr-only"> (opens in a new tab)</span>
                 </a>
               )
@@ -289,54 +317,76 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
       </div>
     </section>
 
-    <!-- Brainstorm: a ticket, date on the stub. Hidden once the session is over. -->
+    <!-- Sessions: tickets, date on the stub. Each hides once it is over. -->
     {
-      showBrainstorm && (
+      showSessions && (
         <section
-          id="brainstorm"
-          class={`${container} scroll-mt-24 py-16 sm:px-8 min-[810px]:py-20`}
-          aria-labelledby="brainstorm-heading"
+          class={`${container} space-y-10 py-16 sm:px-8 min-[810px]:space-y-12 min-[810px]:py-20`}
+          aria-label="Sessions"
         >
-          <div class="grid grid-cols-1 overflow-hidden rounded-lg bg-stone md:grid-cols-[auto_minmax(0,1fr)]">
-            <time
-              datetime={brainstorm.startsAt}
-              class="flex flex-row items-baseline gap-4 border-b-2 border-dashed border-ink-divider px-6 py-6 sm:px-10 md:flex-col md:items-start md:justify-center md:gap-0 md:border-b-0 md:border-r-2 md:py-10"
-            >
-              <span class="text-[15px] font-bold uppercase tracking-[0.14em] text-grove-deep">
-                {brainstorm.monthShort}
-              </span>
-              <span class="text-[64px] font-extrabold tabular-nums leading-none text-grove md:text-[112px]">
-                {brainstorm.day}
-              </span>
-              <span class="text-[16px] font-bold text-ink md:mt-3">
-                {brainstorm.weekday} · {brainstorm.time}
-              </span>
-              <span
-                data-local-time={brainstorm.startsAt}
-                hidden
-                class="text-[15px] text-ink-secondary md:mt-1"
-              />
-            </time>
-            <div class="px-6 py-8 sm:px-10 md:py-10">
-              <h2 id="brainstorm-heading" class={headline}>
-                Join our brainstorming session!
-              </h2>
-              <p class="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
-                {brainstorm.description}
-              </p>
-              <a
-                href={brainstorm.url}
-                target="_blank"
-                rel="noopener"
-                data-track-challenge="brainstorm"
-                data-cta-location="brainstorm"
-                class={`mt-7 ${primaryButton}`}
+          {showBrainstorm && (
+            <div id="brainstorm" class="scroll-mt-24">
+              <SessionTicket
+                headingId="brainstorm-heading"
+                heading="Join our brainstorming session!"
+                description={brainstorm.description}
+                startsAt={brainstorm.startsAt}
+                monthShort={brainstorm.monthShort}
+                day={brainstorm.day}
+                weekday={brainstorm.weekday}
+                time={brainstorm.time}
               >
-                Register
-                <span class="sr-only"> (opens in a new tab)</span>
-              </a>
+                <a
+                  href={brainstorm.url}
+                  target="_blank"
+                  rel="noopener"
+                  data-track-challenge="brainstorm"
+                  data-cta-location="brainstorm"
+                  class={primaryButton}
+                >
+                  Register
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              </SessionTicket>
             </div>
-          </div>
+          )}
+          {showBuildSession && (
+            <div id="build-session" class="scroll-mt-24">
+              <SessionTicket
+                headingId="build-session-heading"
+                heading="Join our online build session!"
+                description={buildSession.description}
+                startsAt={buildSession.startsAt}
+                monthShort={buildSession.monthShort}
+                day={buildSession.day}
+                weekday={buildSession.weekday}
+                time={buildSession.time}
+              >
+                <a
+                  href={buildSession.url}
+                  target="_blank"
+                  rel="noopener"
+                  data-track-challenge="build"
+                  data-cta-location="build-session"
+                  class={primaryButton}
+                >
+                  Sign up for the build session
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+                <a
+                  href={buildSessionCalendarUrl}
+                  target="_blank"
+                  rel="noopener"
+                  data-track-challenge="calendar"
+                  data-cta-location="build-session"
+                  class={ghostButton}
+                >
+                  Add to calendar
+                  <span class="sr-only"> (Google Calendar, opens in a new tab)</span>
+                </a>
+              </SessionTicket>
+            </div>
+          )}
         </section>
       )
     }
@@ -344,7 +394,7 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
     <TerminalCta
       heading="Have an idea that gets Palestine's story past the gatekeepers?"
       headingId="challenge-cta-heading"
-      padTop={!showBrainstorm}
+      padTop={!showSessions}
     >
       Bring it to the Incubator. Projects approved on this challenge join a small cohort with
       tailored support.
@@ -368,6 +418,21 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
               class={ghostOnDarkButton}
             >
               Register for November 20th
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          )
+        }
+        {
+          !showBrainstorm && showBuildSession && (
+            <a
+              href={buildSession.url}
+              target="_blank"
+              rel="noopener"
+              data-track-challenge="build"
+              data-cta-location="terminal"
+              class={ghostOnDarkButton}
+            >
+              Sign up for November 28th
               <span class="sr-only"> (opens in a new tab)</span>
             </a>
           )
@@ -424,6 +489,8 @@ const onGreenPrimary = `inline-flex min-h-[44px] items-center justify-center gap
     const EVENTS = {
       apply: "Challenge Apply Click",
       brainstorm: "Challenge Brainstorm Click",
+      build: "Challenge Build Session Click",
+      calendar: "Challenge Calendar Click",
     } as const;
 
     document.querySelectorAll<HTMLAnchorElement>("[data-track-challenge]").forEach((link) => {

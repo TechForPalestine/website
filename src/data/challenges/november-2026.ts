@@ -29,6 +29,22 @@ export const brainstorm = {
     "Tech for Palestine is hosting an open brainstorming session for anyone who is interested in this challenge and wants to pitch an idea. You will be able to learn more about the T4P Incubator, get feedback on your idea, and find team members.",
 };
 
+/** The online build session on the T4P Discord, Saturday Nov 28, 9am to 1pm
+ * ET (EST, UTC-5). Signup lives on its own site. */
+export const buildSession = {
+  url: "https://buildwith.techforpalestine.org/",
+  startsAt: "2026-11-28T09:00:00-05:00",
+  /** When the session ends; the promo hides after this. */
+  endsAt: "2026-11-28T13:00:00-05:00",
+  weekday: "Saturday",
+  day: "28",
+  monthShort: "Nov",
+  time: "9am ET",
+  title: "Tech for Palestine build session",
+  description:
+    "Work on this challenge with a team on the Tech for Palestine Discord, from 9am to 1pm ET (3pm to 7pm CET, 4pm to 8pm Palestine). Turn an idea into a campaign, a guide, a dataset or a tool, and apply to the Incubator with it before you log off. Free, and you don't need a team or to code.",
+};
+
 /** The corrected-headline graphic (CorrectedHeadline.astro) on the page hero
  * and homepage popup. A fictional outlet and an illustrative headline built
  * from the patterns the brief names; no real outlet is quoted. These two lines

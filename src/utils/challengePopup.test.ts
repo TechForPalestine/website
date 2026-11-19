@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   BRAINSTORM_ENDS_AT,
+  BUILD_SESSION_ENDS_AT,
   CAMPAIGN_ENDS_AT,
   STORAGE_KEY,
   hasReachedScrollTrigger,
   isBrainstormOpen,
+  isBuildSessionOpen,
   isCampaignLive,
   parsePopupState,
   readPopupState,
@@ -35,6 +37,18 @@ describe("isBrainstormOpen", () => {
   it("closes once the session is over, 10pm CET", () => {
     expect(BRAINSTORM_ENDS_AT).toBe(Date.parse("2026-11-20T21:00:00Z"));
     expect(isBrainstormOpen(BRAINSTORM_ENDS_AT)).toBe(false);
+  });
+});
+
+describe("isBuildSessionOpen", () => {
+  it("stays open after the brainstorm and during the Nov 28 session", () => {
+    expect(isBuildSessionOpen(BRAINSTORM_ENDS_AT)).toBe(true);
+    expect(isBuildSessionOpen(Date.parse("2026-11-28T15:00:00Z"))).toBe(true);
+  });
+
+  it("closes when the session ends, 1pm ET", () => {
+    expect(BUILD_SESSION_ENDS_AT).toBe(Date.parse("2026-11-28T18:00:00Z"));
+    expect(isBuildSessionOpen(BUILD_SESSION_ENDS_AT)).toBe(false);
   });
 });
 

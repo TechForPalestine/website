@@ -10,9 +10,11 @@
 //                      html[data-report-smooth] (the only thing that turns on
 //                      scroll-behavior: smooth) and clears it after landing.
 //                      Long jumps, hash URLs, back/forward and no-JS clicks
-//                      stay instant. A glide's landing is checked, because
-//                      content-visibility sections rendering mid-glide can
-//                      move the target; any reader input cancels the check.
+//                      stay instant. Either way the target is then held for a
+//                      few frames (any reader input ends the hold): Chrome
+//                      lands it, then sections above render at their real
+//                      height and push it thousands of px off (measured on
+//                      /full: #section-4 ended 23,740 px below the screen).
 
 /** Glide at most this many viewport heights; farther jumps are instant. */
 const MAX_GLIDE_VIEWPORTS = 2.5;
@@ -26,6 +28,10 @@ const SCROLL_SAMPLE_MS = 80;
 const SETTLED_SAMPLES = 3;
 /** Give up waiting (and skip the landing check) after this long. */
 const SETTLE_GIVE_UP_MS = 4000;
+/** A held jump ends once the target stays put for this many frames... */
+const HOLD_STABLE_FRAMES = 6;
+/** ...or after this many frames (~1s at 60Hz), whichever comes first. */
+const HOLD_MAX_FRAMES = 60;
 
 export function isLongJump(distancePx: number, viewportPx: number): boolean {
   if (viewportPx <= 0) return true;
@@ -60,24 +66,24 @@ export function hasSettled(positions: readonly number[]): boolean {
   return recent.every((position) => position === recent[0]);
 }
 
-export interface Landing {
-  /** Target's top relative to the viewport after scrolling. */
+export interface JumpLanding {
+  /** Target's top relative to the viewport. */
   top: number;
   /** Its resolved scroll-margin-top in px. */
   scrollMargin: number;
   /** The page is scrolled to the bottom, so the target cannot rise further. */
   atPageEnd: boolean;
-  viewport: number;
 }
 
 /**
- * Correct only small drifts. A target a viewport or more away from where it
- * should be means the reader moved on; leave the page where it is.
+ * While a jump is held the reader has not moved (any input ends the hold), so
+ * every drift is layout pushing the target away, however large. A glide's
+ * distance is estimated from content-visibility placeholders and can be off by
+ * tens of thousands of px, so its landing gets the same treatment.
  */
-export function needsLandingFix({ top, scrollMargin, atPageEnd, viewport }: Landing): boolean {
+export function needsJumpHold({ top, scrollMargin, atPageEnd }: JumpLanding): boolean {
   if (atPageEnd) return false;
-  const drift = Math.abs(top - scrollMargin);
-  return drift > LANDING_TOLERANCE_PX && drift < viewport;
+  return Math.abs(top - scrollMargin) > LANDING_TOLERANCE_PX;
 }
 
 const reduceMotion = (): boolean => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -182,6 +188,56 @@ function whenScrollStops(onStop: () => void, onGiveUp: () => void): () => void {
 
 const USER_INPUT = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
 
+/** Listens for reader input until the returned function is called. */
+function onReaderInput(handler: () => void): () => void {
+  for (const type of USER_INPUT) {
+    window.addEventListener(type, handler, { capture: true, passive: true });
+  }
+  return () => {
+    for (const type of USER_INPUT) window.removeEventListener(type, handler, true);
+  };
+}
+
+function measureLanding(target: HTMLElement): JumpLanding {
+  const root = document.documentElement;
+  return {
+    top: target.getBoundingClientRect().top,
+    scrollMargin: parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
+    atPageEnd: Math.ceil(window.scrollY + window.innerHeight) >= root.scrollHeight - 1,
+  };
+}
+
+/**
+ * Keeps an instant jump's target at its scroll margin while the
+ * content-visibility sections around it render, re-aiming each frame it has
+ * moved. Ends once it holds still, after HOLD_MAX_FRAMES, or on reader input.
+ * Returns a cancel function.
+ */
+function holdJumpTarget(target: HTMLElement): () => void {
+  let frame = 0;
+  let frames = 0;
+  let stable = 0;
+  const stop = () => {
+    window.cancelAnimationFrame(frame);
+    stopListening();
+  };
+  const stopListening = onReaderInput(stop);
+  const check = () => {
+    frames += 1;
+    if (needsJumpHold(measureLanding(target))) {
+      stable = 0;
+      target.scrollIntoView({ block: "start", behavior: "instant" });
+    } else {
+      stable += 1;
+    }
+    if (stable >= HOLD_STABLE_FRAMES || frames >= HOLD_MAX_FRAMES) stop();
+    else frame = window.requestAnimationFrame(check);
+  };
+  // The navigation runs right after the click handler; check from the next frame.
+  frame = window.requestAnimationFrame(check);
+  return stop;
+}
+
 /**
  * Smooth scrolling is opt-in per click: html[data-report-smooth] is the only
  * thing that enables it (wikipedia-report.css), so hash URLs, back/forward,
@@ -207,29 +263,26 @@ export function initAnchorScroll(): void {
       window.innerHeight,
       () => target.getBoundingClientRect().top
     );
-    if (isLongJump(distance, window.innerHeight)) return;
+    if (isLongJump(distance, window.innerHeight)) {
+      cancelPending = holdJumpTarget(target);
+      return;
+    }
 
     // The navigation runs right after this handler, with smooth scrolling on.
     root.dataset.reportSmooth = "";
     let stopWaiting = () => {};
+    let stopListening = () => {};
     const finish = () => {
       stopWaiting();
-      for (const type of USER_INPUT) window.removeEventListener(type, finish, true);
+      stopListening();
       delete root.dataset.reportSmooth;
       cancelPending = null;
     };
     // The reader takes over: stop the glide-mode and never correct.
-    for (const type of USER_INPUT) {
-      window.addEventListener(type, finish, { capture: true, passive: true });
-    }
+    stopListening = onReaderInput(finish);
     stopWaiting = whenScrollStops(() => {
       finish();
-      const scrollMargin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-      const atPageEnd = Math.ceil(window.scrollY + window.innerHeight) >= root.scrollHeight - 1;
-      const top = target.getBoundingClientRect().top;
-      if (needsLandingFix({ top, scrollMargin, atPageEnd, viewport: window.innerHeight })) {
-        target.scrollIntoView({ block: "start", behavior: "instant" });
-      }
+      if (needsJumpHold(measureLanding(target))) cancelPending = holdJumpTarget(target);
     }, finish);
     cancelPending = finish;
   });
