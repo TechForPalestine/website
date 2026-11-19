@@ -263,7 +263,10 @@ export const CREDITS: readonly ReportCredit[] = [
   { role: "Primary author", names: "Paul Biggar" },
   { role: "Research and content", names: "Paul Biggar, Alexandra Fine, Mari Hall" },
   { role: "Editor", names: "Alexandra Fine" },
-  { role: "Reviewed by", names: "Institute for the Understanding of Anti-Palestinian Racism" },
+  {
+    role: "Reviewed by",
+    names: "Institute for the Understanding of Anti-Palestinian Racism, 7amleh",
+  },
   { role: "Early research assistance", names: "T4P volunteers" },
 ];
 
