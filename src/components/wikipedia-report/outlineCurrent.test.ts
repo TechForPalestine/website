@@ -68,6 +68,23 @@ describe("currentHeadingBySection", () => {
     ).toBe("a");
   });
 
+  it("highlights the entry itself while its opening text is read (full page)", () => {
+    // /full: Section 1 has passed the line but its first sub-heading has not,
+    // so "Introduction" is current, not the previous entry's last heading.
+    const full = [
+      [h("executive-summary", -4000), h("about-this-report", -1200)],
+      [h("section-1", 60), h("s1-1", 700)],
+    ];
+    expect(
+      currentHeadingBySection(
+        [-4000, 60],
+        (i) => full[i],
+        (i) => full[i].at(-1)?.id ?? null,
+        OFFSET
+      )
+    ).toBe("section-1");
+  });
+
   it("returns null above all sections", () => {
     expect(
       currentHeadingBySection(

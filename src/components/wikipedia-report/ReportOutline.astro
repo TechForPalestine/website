@@ -9,6 +9,10 @@
 // heading, or on the full page an entry) gets a chevron toggle. Without JS the
 // toggles are hidden by CSS and every group shows expanded; ReportScripts
 // reveals them and drives open/closed state (see outlineGroups.ts).
+//
+// On the full page the entry links carry data-toc-link too, so the entry
+// itself is highlighted while its opening text (before its first heading) is
+// on screen, rather than the previous entry's last heading.
 import { Icon } from "astro-icon/components";
 import { focusRing } from "../../utils/designClasses";
 import OutlineCollapse from "./OutlineCollapse.astro";
@@ -75,6 +79,7 @@ const chevron = "M9 6l6 6-6 6";
               <a
                 href={isSingle ? `#${entry.slug}` : entryHref(entry.slug)}
                 aria-current={isCurrent ? "page" : undefined}
+                data-toc-link={isSingle ? entry.slug : undefined}
                 class:list={[
                   itemLink,
                   "min-w-0 flex-1",
