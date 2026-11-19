@@ -6,13 +6,39 @@
 // 8s or a quarter of the page scrolled, and the newsletter popup stands down
 // for that page load. Renders nothing after November; delete it then.
 import { CHALLENGE_PATH } from "../../data/challenges";
-import { APPLY_URL, brainstorm, challenge } from "../../data/challenges/november-2026";
-import { isBrainstormOpen, isCampaignLive } from "../../utils/challengePopup";
+import {
+  APPLY_URL,
+  brainstorm,
+  buildSession,
+  challenge,
+} from "../../data/challenges/november-2026";
+import { isBrainstormOpen, isBuildSessionOpen, isCampaignLive } from "../../utils/challengePopup";
 import CorrectedHeadline from "../challenge/CorrectedHeadline.astro";
 
 const now = Date.now();
 const live = isCampaignLive(now);
 const brainstormOpen = isBrainstormOpen(now);
+const buildOpen = isBuildSessionOpen(now);
+
+// Upcoming sessions, soonest first; each one drops out once it is over.
+const sessions = [
+  brainstormOpen && {
+    cta: "brainstorm",
+    url: brainstorm.url,
+    startsAt: brainstorm.startsAt,
+    date: `${brainstorm.monthShort} ${brainstorm.day}`,
+    when: `${brainstorm.weekday} · ${brainstorm.time} · Brainstorm on Zoom`,
+    button: "Register for Nov 20",
+  },
+  buildOpen && {
+    cta: "build",
+    url: buildSession.url,
+    startsAt: buildSession.startsAt,
+    date: `${buildSession.monthShort} ${buildSession.day}`,
+    when: `${buildSession.weekday} · ${buildSession.time} · Build session on Discord`,
+    button: "Join the Nov 28 build",
+  },
+].filter((session) => session !== false);
 ---
 
 {
@@ -51,10 +77,15 @@ const brainstormOpen = isBrainstormOpen(now);
           <div class="cp-headline">
             <CorrectedHeadline size="sm" />
           </div>
-          {brainstormOpen ? (
+          {brainstormOpen && buildOpen ? (
             <p class="cp-lede">
-              Build the tools that call out framing like this. Apply to the Incubator, or pitch your
-              idea first at our open brainstorming session.
+              Build the tools that call out framing like this. Apply to the Incubator, pitch your
+              idea at our open brainstorm, or build it with a team at our online build session.
+            </p>
+          ) : buildOpen ? (
+            <p class="cp-lede">
+              Build the tools that call out framing like this. Apply to the Incubator, or build your
+              idea with a team at our online build session.
             </p>
           ) : (
             <p class="cp-lede">
@@ -63,35 +94,37 @@ const brainstormOpen = isBrainstormOpen(now);
             </p>
           )}
 
-          {brainstormOpen && (
-            <p class="cp-date">
-              <time datetime={brainstorm.startsAt}>
-                <span class="cp-date-day">
-                  {brainstorm.monthShort} {brainstorm.day}
-                </span>
-                <span>
-                  {brainstorm.weekday} · {brainstorm.time} · on Zoom
-                </span>
-                <span class="cp-date-local" data-local-time={brainstorm.startsAt} hidden />
-              </time>
-            </p>
+          {sessions.length > 0 && (
+            <ul class="cp-date">
+              {sessions.map((session) => (
+                <li>
+                  <time datetime={session.startsAt}>
+                    <span class="cp-date-day">{session.date}</span>
+                    <span>{session.when}</span>
+                    <span class="cp-date-local" data-local-time={session.startsAt} hidden />
+                  </time>
+                </li>
+              ))}
+            </ul>
           )}
 
           <div class="cp-actions">
             <a class="cp-btn cp-btn--primary" href={CHALLENGE_PATH} data-cp-cta="challenge">
               See the challenge
             </a>
-            {brainstormOpen ? (
-              <a
-                class="cp-btn cp-btn--ghost"
-                href={brainstorm.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cp-cta="brainstorm"
-              >
-                Register for Nov 20
-                <span class="sr-only"> (opens in a new tab)</span>
-              </a>
+            {sessions.length > 0 ? (
+              sessions.map((session) => (
+                <a
+                  class="cp-btn cp-btn--ghost"
+                  href={session.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cp-cta={session.cta}
+                >
+                  {session.button}
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              ))
             ) : (
               <a class="cp-btn cp-btn--ghost" href={APPLY_URL} data-cp-cta="apply">
                 Apply now
@@ -215,6 +248,9 @@ const brainstormOpen = isBrainstormOpen(now);
     font-size: 15px;
     font-weight: 700;
     color: #2a2428;
+  }
+  .cp-date li + li {
+    margin-top: 12px;
   }
   .cp-date time {
     display: flex;
@@ -347,15 +383,13 @@ const brainstormOpen = isBrainstormOpen(now);
   }
 
   function schedule(dialog: HTMLDialogElement) {
-    const localTime = dialog.querySelector<HTMLElement>("[data-local-time]");
-    if (localTime) {
-      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    dialog.querySelectorAll<HTMLElement>("[data-local-time]").forEach((localTime) => {
       const local = localSessionTime(localTime.dataset.localTime ?? "", zone);
-      if (local) {
-        localTime.textContent = `${local} your time`;
-        localTime.hidden = false;
-      }
-    }
+      if (!local) return;
+      localTime.textContent = `${local} your time`;
+      localTime.hidden = false;
+    });
 
     let reason: DismissReason = "escape";
     const closeWith = (next: DismissReason) => {

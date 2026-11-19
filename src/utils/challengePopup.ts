@@ -20,7 +20,7 @@ export const SHOWN_ATTRIBUTE = "data-challenge-popup-shown";
 export const SHOWN_EVENT = "t4p:challenge-popup-shown";
 
 export type PopupState = { dismissedAt: number } | null;
-export type PopupCta = "challenge" | "brainstorm" | "apply";
+export type PopupCta = "challenge" | "brainstorm" | "build" | "apply";
 export type DismissReason = "close" | "escape" | "backdrop" | PopupCta;
 
 export function isCampaignLive(now: number): boolean {
