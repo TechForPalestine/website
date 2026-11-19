@@ -4,7 +4,7 @@
 // phones, shown once per visitor after 8s or a quarter of the page scrolled.
 // It waits for the challenge popup (see reportPopup.ts) and the newsletter
 // popup stands down when it opens.
-import { REPORT_SUMMARY, REPORT_TITLE } from "../../data/wikipediaReport";
+import { REPORT_SUBTITLE, REPORT_SUMMARY, REPORT_TITLE } from "../../data/wikipediaReport";
 // The landing page (key findings, both ways to read), not the reader itself.
 import { OVERVIEW_HREF } from "../wikipedia-report/reportMeta";
 import { isReportPopupLive } from "../../utils/reportPopup";
@@ -43,6 +43,7 @@ const live = isReportPopupLive();
           <p class="rp-overline">New report · Tech for Palestine</p>
           <h2 id="rp-title" class="rp-title">
             {REPORT_TITLE}
+            <span class="rp-subtitle">{REPORT_SUBTITLE}</span>
           </h2>
           <p class="rp-summary">{REPORT_SUMMARY}</p>
           <div class="rp-actions">
@@ -145,6 +146,12 @@ const live = isReportPopupLive();
     font-weight: 800;
     line-height: 1.12;
     text-wrap: balance;
+  }
+  .rp-subtitle {
+    display: block;
+    margin-top: 4px;
+    font-weight: 400;
+    color: #73656e;
   }
   .rp-summary {
     display: -webkit-box;
