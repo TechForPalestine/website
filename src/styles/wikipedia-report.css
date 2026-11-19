@@ -592,6 +592,15 @@
    glide never crosses dozens of content-visibility sections. Explicit
    scrollTo() calls (the rail's keepInView) pass their own behavior. */
 @media (prefers-reduced-motion: no-preference) {
+  /* base.css turns smooth scrolling on site-wide. A smooth jump aims at a
+     target measured while the sections between are content-visibility
+     placeholders, and stops short as they render (TOC links to Section 4 or
+     the appendices landed tens of thousands of px early). Switch it off on
+     reader pages so only the opt-in below glides. */
+  html:has([data-report-layout]):not([data-report-smooth]) {
+    scroll-behavior: auto;
+  }
+
   html[data-report-smooth] {
     scroll-behavior: smooth;
   }

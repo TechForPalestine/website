@@ -186,6 +186,19 @@ describe("wikipedia-report.css reader motion", () => {
     }
   });
 
+  it("overrides the site-wide smooth scroll (base.css) so long jumps stay instant", () => {
+    // base.css sets html { scroll-behavior: smooth } for every page. A smooth
+    // jump aims at a target measured with content-visibility placeholders and
+    // stops short as sections render, so the reader must switch it off.
+    const off = cssRules(css).find(
+      (rule) =>
+        /scroll-behavior\s*:\s*auto/.test(rule.body) &&
+        rule.selector.includes(":has([data-report-layout])") &&
+        rule.selector.includes(":not([data-report-smooth])")
+    );
+    expect(off?.selector).toMatch(/^html/);
+  });
+
   it("clips sideways overflow while the article is mid-FLIP", () => {
     const rule = cssRules(css).find((r) => r.selector === "[data-report-layout][data-flip]");
     expect(rule?.body).toMatch(/overflow-x\s*:\s*clip/);
