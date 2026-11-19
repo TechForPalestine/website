@@ -231,6 +231,8 @@ function main() {
     const documentXml = run("unzip", ["-p", path.resolve(docx), "word/document.xml"]);
     const captionMatched = new Set();
     const captionInfo = extractCaptionTexts(documentXml);
+    const processImage = createImageProcessor(workDir, altText, log);
+    const seenImages = new Set();
     const ctx = {
       captions: captionInfo.texts,
       captionMatched,
@@ -238,7 +240,10 @@ function main() {
       note: (kind, location, text) => log.quoteNotes.push({ kind, location, text }),
       index,
       noteNumbers,
-      image: createImageProcessor(workDir, altText, log),
+      image: (srcPath, location) => {
+        seenImages.add(srcPath);
+        return processImage(srcPath, location);
+      },
       warn: (msg) => log.warnings.push(msg),
       highlight: (location, text) => log.highlights.push(`${location}: ${text.slice(0, 80)}`),
     };
@@ -283,6 +288,14 @@ function main() {
     });
 
     const errors = verifyPages(output);
+    // Every image on a kept page must reach the image processor (published or
+    // omitted on purpose); anything else was dropped by a transform.
+    for (const page of pages) {
+      walkAst(page.blocks, (node) => {
+        const src = node.t === "Image" ? node.c[2][0] : undefined;
+        if (src && !seenImages.has(src)) errors.push(`${page.slug}: image ${src} was dropped`);
+      });
+    }
     const referenced = new Set(
       output.flatMap((o) => [...o.html.matchAll(/<li id="fn-(\d+)"/g)].map((m) => Number(m[1])))
     );
