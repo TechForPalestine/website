@@ -39,6 +39,11 @@ describe("sectionForEvent", () => {
     expect(sectionForEvent(event)?.key).toBe("roundtable");
   });
 
+  it("routes webinar-only events into Webinars", () => {
+    const event = makeEvent({ tags: ["online", "webinar"] });
+    expect(sectionForEvent(event)?.key).toBe("webinars");
+  });
+
   it("falls back to title keywords when no tag matches", () => {
     const event = makeEvent({ title: "June Community Call" });
     expect(sectionForEvent(event)?.key).toBe("community-calls");

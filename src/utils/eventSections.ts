@@ -46,6 +46,13 @@ export const SECTION_DEFS: EventSectionDef[] = [
     matchTags: ["roundtable"],
   },
   {
+    // After Roundtable so "webinar,roundtable" events stay in Roundtable.
+    key: "webinars",
+    title: "Webinars",
+    subtitle: "Talks, Q&As and workshops from the T4P community.",
+    matchTags: ["webinar"],
+  },
+  {
     key: "book-club",
     title: "Book Club",
     subtitle: "Reading and discussing work that shapes the movement.",
