@@ -3,7 +3,7 @@
 // Community Call strip, which takes priority: CommunityCallBanner renders this
 // as `standby` when it shows, and its script reveals it if the call turns out
 // to have ended. Render inside a `relative` container (index.astro's <main>).
-import { REPORT_TITLE } from "../../data/wikipediaReport";
+import { REPORT_SUBTITLE, REPORT_TITLE } from "../../data/wikipediaReport";
 // The landing page (key findings, both ways to read), not the reader itself.
 import { OVERVIEW_HREF } from "../wikipedia-report/reportMeta";
 
@@ -28,7 +28,9 @@ const { standby = false } = Astro.props;
         <span class="flex-shrink-0 text-xs font-bold uppercase tracking-[0.14em] text-first-light">
           New report
         </span>
-        <span class="min-w-0 truncate text-[15px] font-bold">{REPORT_TITLE}</span>
+        <span class="min-w-0 truncate text-[15px] font-bold"
+          >{REPORT_TITLE} <span class="font-normal">{REPORT_SUBTITLE}</span></span
+        >
       </span>
       <span
         class="ml-auto inline-flex min-h-[32px] flex-shrink-0 items-center whitespace-nowrap rounded-pill bg-white px-4 text-[13px] font-bold text-grove-deep transition-colors group-hover:bg-first-light motion-reduce:transition-none"

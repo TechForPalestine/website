@@ -72,6 +72,8 @@ export interface RelatedProject {
 }
 
 export const REPORT_TITLE = "Israel Is Attacking Wikipedia";
+/** Set apart from the title, on its own line where there is room. */
+export const REPORT_SUBTITLE = "(to influence AI)";
 
 export const REPORT_SUMMARY =
   "Read our new report: twenty years of documented attacks on Wikipedia, and what this means for the information you get from search and AI.";

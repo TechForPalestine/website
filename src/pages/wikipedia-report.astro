@@ -36,6 +36,7 @@ import {
   REPORT_PDF,
   REPORT_READ_HREF,
   REPORT_PUBLISHED,
+  REPORT_SUBTITLE,
   REPORT_SUMMARY,
   REPORT_TITLE,
   SUMMARY_PDF,
@@ -111,7 +112,10 @@ const ordinal = (i: number) => String(i + 1).padStart(2, "0");
               )
             }
           </p>
-          <h1 id="report-heading" class={`mt-5 max-w-[14ch] ${display}`}>{REPORT_TITLE}</h1>
+          <h1 id="report-heading" class={`mt-5 max-w-[14ch] ${display}`}>
+            {REPORT_TITLE}
+            <span class="mt-2 block font-normal text-ink-secondary">{REPORT_SUBTITLE}</span>
+          </h1>
           <p class={`mt-6 max-w-[52ch] text-ink-secondary ${body}`}>{REPORT_SUMMARY}</p>
 
           <div class="mt-9 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
