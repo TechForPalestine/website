@@ -1,8 +1,8 @@
 // Pure decision logic for the homepage November 2026 challenge popup
-// (src/components/home/ChallengePopup.astro) and the brainstorm promo on
-// /monthly-challenge. Kept DOM-free so it runs under Vitest's node environment.
+// (src/components/home/ChallengePopup.astro) and the brainstorm and build
+// session promos on /monthly-challenge. Kept DOM-free so it runs under Vitest's node environment.
 
-import { brainstorm } from "../data/challenges/november-2026";
+import { brainstorm, buildSession } from "../data/challenges/november-2026";
 
 export const STORAGE_KEY = "t4p-challenge-2026-11-popup";
 // The popup waits for engagement rather than greeting arrivals: it fires on
@@ -13,6 +13,7 @@ export const SCROLL_TRIGGER_RATIO = 0.25;
 // Midnight CET going into December.
 export const CAMPAIGN_ENDS_AT = Date.parse("2026-12-01T00:00:00+01:00");
 export const BRAINSTORM_ENDS_AT = Date.parse(brainstorm.endsAt);
+export const BUILD_SESSION_ENDS_AT = Date.parse(buildSession.endsAt);
 // Set on <html> and fired on window once the popup opens, so the newsletter
 // popup (a separate React bundle) can stand down for this page load.
 export const SHOWN_ATTRIBUTE = "data-challenge-popup-shown";
@@ -28,6 +29,10 @@ export function isCampaignLive(now: number): boolean {
 
 export function isBrainstormOpen(now: number): boolean {
   return now < BRAINSTORM_ENDS_AT;
+}
+
+export function isBuildSessionOpen(now: number): boolean {
+  return now < BUILD_SESSION_ENDS_AT;
 }
 
 export function hasReachedScrollTrigger(
