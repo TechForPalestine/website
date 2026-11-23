@@ -9,7 +9,7 @@ toc:
   - { number: "2.1.1", title: "Historical Context", depth: 3, id: "s2-1-1" }
   - { number: "2.1.2", title: "Hasbara", depth: 3, id: "s2-1-2" }
   - { number: "2.1.3", title: "Zionism", depth: 3, id: "s2-1-3" }
-  - { number: "2.2", title: "Influencing AI via Wikipedia", depth: 2, id: "s2-2" }
+  - { number: "2.2", title: "Manipulating AI via Wikipedia", depth: 2, id: "s2-2" }
   - { number: "2.2.1", title: "Connection between Wikipedia and AI", depth: 3, id: "s2-2-1" }
   - { number: "2.2.1.1", title: "Basics of AI / LLMs", depth: 4, id: "s2-2-1-1" }
   - { number: "2.2.1.2", title: "How Wikipedia plugs in", depth: 4, id: "s2-2-1-2" }
@@ -70,7 +70,7 @@ toc:
 <p>Through the history of the Zionist movement, which violently colonized and ethnically-cleansed Palestine to create Israel, we understand Zionism as a racist and violent movement, dedicated to Jewish control of Israel at the expense of Palestinians.</p>
 <p>Zionists themselves often claim that Zionism’s purpose is to create in Israel a “homeland for the Jewish people”. However, this claim ignores that this homeland comes at the expense of the human rights of the Palestinian population who have lived there for millennia, and relies on the violent and ongoing settlement and colonization of Palestine.</p>
 <p>Zionism is the key ideology behind the brutal subjugation of Palestinians, including through a long history of massacres against Palestinians since 1948, through the apartheid across the Occupied Palestinian Territories (OPT) and Israel, and the genocide in Gaza since 2023.</p>
-<h2 id="s2-2">2.2 Influencing AI via Wikipedia</h2>
+<h2 id="s2-2">2.2 Manipulating AI via Wikipedia</h2>
 <p>Wikipedia is given a privileged place in our digital society, showing up in Google searches and feeding into AI such as ChatGPT. By attempting to control Wikipedia, the Israel Lobby seeks to hide Israel’s atrocities not just from the public, but also from the AI systems that will shape how we access information in the future.</p>
 <p>In this section, we provide background on how Wikipedia data feeds into AI, existing anti-Palestinian biases in AI, and how those biases get there through AI poisoning, media bias, and direct influence on AI companies.</p>
 <h3 id="s2-2-1">2.2.1 Connection between Wikipedia and AI</h3>
