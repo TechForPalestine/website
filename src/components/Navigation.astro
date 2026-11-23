@@ -23,8 +23,8 @@ const isBuildSessionUpcoming = Date.now() < Date.parse(buildSession.endsAt);
 const eventsSubmenu: [string, string][] = [
   ["All Events", "/events"],
   ...(isBuildSessionUpcoming ? [["Nov 28 Hackathon", buildSession.url] as [string, string]] : []),
-  ["Berlin Tech Rebellion", "https://techrebellion.techforpalestine.org/"],
   ["Rooted · Amman", "https://rooted.techforpalestine.org/"],
+  ["Berlin Tech Rebellion", "https://techrebellion.techforpalestine.org/"],
 ];
 
 type NavItem = {
