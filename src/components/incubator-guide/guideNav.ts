@@ -8,6 +8,7 @@ export interface GuideChapter {
   title: string;
   description: string;
   order: number;
+  part?: string;
 }
 
 /** A link in the guide's contents: the overview page or a chapter. */
@@ -19,7 +20,7 @@ export interface GuideLink {
 
 export const OVERVIEW_LINK: GuideLink = {
   slug: null,
-  title: "Overview: what to expect",
+  title: "Welcome to the T4P Incubator",
   href: GUIDE_URL,
 };
 

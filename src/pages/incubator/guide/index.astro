@@ -1,7 +1,7 @@
 ---
-// Overview of the project leader guide: what the incubator asks and gives,
-// for people deciding whether to apply. The playbook chapters are
-// src/content/incubator-guide/*.md, rendered by ./[slug].astro.
+// Start of the project leader guide: the welcome tab of the incubator's Google
+// Doc, word for word (src/data/incubator-guide-welcome.md), then the contents.
+// The chapters are src/content/incubator-guide/*.md, rendered by ./[slug].astro.
 import Layout from "../../../layouts/Layout.astro";
 import TerminalCta from "../../../components/TerminalCta.astro";
 import GuideShell from "../../../components/incubator-guide/GuideShell.astro";
@@ -15,27 +15,24 @@ import {
 } from "../../../components/incubator-guide/guideNav";
 import { APPLY_URL, GUIDE_URL } from "../../../data/incubator";
 import {
-  commitments,
-  goodStanding,
   GUIDE_DESCRIPTION,
   GUIDE_TITLE,
   INCUBATOR_EMAIL,
-  journey,
-  successTraits,
-  support,
+  WELCOME_HEADING,
 } from "../../../data/incubatorGuide";
+import { Content as Welcome } from "../../../data/incubator-guide-welcome.md";
 import { breadcrumbListSchema } from "../../../components/wikipedia-report/reportNav";
 import { canonicalUrl, SITE_ORIGIN } from "../../../utils/seo";
 import {
   display,
   focusRing,
   ghostOnDarkButton,
-  inlineLink,
   inlineLinkOnDark,
   inverseButton,
   overline,
 } from "../../../utils/designClasses";
 import "../../../styles/base.css";
+import "../../../styles/incubator-guide.css";
 
 const chapters = await getGuideChapters();
 const links = guideLinks(chapters);
@@ -46,13 +43,6 @@ const breadcrumbs = breadcrumbListSchema([
   { name: "Incubator", url: canonicalUrl("/incubator") },
   { name: GUIDE_TITLE, url: canonicalUrl(GUIDE_URL) },
 ]);
-
-const sectionHeading =
-  "scroll-mt-28 text-[26px] font-extrabold leading-[1.2] text-ink min-[810px]:text-[30px]";
-const sectionIntro =
-  "mt-3 max-w-[45rem] text-[18px] leading-[1.7] text-ink-secondary min-[810px]:text-[19px]";
-const itemTitle = "text-[17px] font-bold leading-snug text-ink";
-const itemText = "mt-1 max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary";
 ---
 
 <Layout
@@ -63,144 +53,42 @@ const itemText = "mt-1 max-w-[60ch] text-[17px] leading-relaxed text-ink-seconda
   <main>
     <GuideShell links={links} currentSlug={null}>
       <article aria-labelledby="guide-page-heading">
-        <header class="max-w-[45rem]">
+        <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
           <p class={overline}>Incubator · {GUIDE_TITLE}</p>
-          <h1 id="guide-page-heading" class={`mt-4 ${display}`}>
-            What it takes to lead a project for Palestine
-          </h1>
-          <p class="mt-5 text-[19px] leading-relaxed text-ink min-[810px]:text-[21px]">
-            Please read this guide before you apply to the Tech for Palestine incubator. It explains
-            what we ask of project leaders, the support we give, and how we think projects should be
-            built, so you can judge whether the incubator is right for you.
-          </p>
-          <p class="mt-4 text-[17px] leading-relaxed text-ink-secondary">
-            Questions before you apply? Email <a
-              href={`mailto:${INCUBATOR_EMAIL}`}
-              class={inlineLink}>{INCUBATOR_EMAIL}</a
-            >.
-          </p>
+          <h1 id="guide-page-heading" class={`mt-4 ${display}`}>{WELCOME_HEADING}</h1>
         </header>
 
-        <section aria-labelledby="success-heading" class="mt-14 min-[810px]:mt-16">
-          <h2 id="success-heading" class={sectionHeading}>
-            What successful projects have in common
-          </h2>
-          <p class={sectionIntro}>
-            We've supported over 80 projects. The ones that do well tend to share these habits.
-          </p>
-          <ul class="mt-6 max-w-[45rem] rounded-lg bg-stone p-6 min-[810px]:p-8">
-            {
-              successTraits.map((trait) => (
-                <li class="flex gap-3 py-1.5 text-[17px] leading-relaxed text-ink">
-                  <span
-                    aria-hidden="true"
-                    class="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-grove"
-                  />
-                  <span>{trait}</span>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
+        <div class="guide-prose">
+          <Welcome />
+        </div>
 
-        <section aria-labelledby="journey-heading" class="mt-14 min-[810px]:mt-16">
-          <h2 id="journey-heading" class={sectionHeading}>Your path through the incubator</h2>
-          <ol class="mt-8 max-w-[45rem]">
-            {
-              journey.map((step, i) => (
-                <li class="relative pb-8 pl-9 before:absolute before:bottom-0 before:left-[5px] before:top-[22px] before:w-px before:bg-ink-divider last:pb-0 last:before:hidden">
-                  <span
-                    class:list={[
-                      "absolute left-0 top-[7px] h-[11px] w-[11px] rounded-full border-2 border-grove",
-                      i === journey.length - 1 ? "bg-grove" : "bg-white",
-                    ]}
-                    aria-hidden="true"
-                  />
-                  <h3 class={itemTitle}>{step.title}</h3>
-                  <p class={itemText}>{step.description}</p>
-                </li>
-              ))
-            }
-          </ol>
-        </section>
-
-        <section aria-labelledby="ask-heading" class="mt-14 min-[810px]:mt-16">
-          <h2 id="ask-heading" class={sectionHeading}>What we ask of you</h2>
-          <p class={sectionIntro}>
-            The incubator doesn't need daily meetings, T4P branding or ownership of your work. It
-            does need you to drive your project and stay in touch.
-          </p>
-          <dl class="mt-6 max-w-[45rem] border-b border-ink-divider">
-            {
-              commitments.map((item) => (
-                <div class="grid grid-cols-1 gap-1 border-t border-ink-divider py-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
-                  <dt class={itemTitle}>{item.title}</dt>
-                  <dd class="max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
-                    {item.description}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
-          <p
-            class="mt-6 max-w-[45rem] rounded-lg border border-first-light-edge bg-first-light p-6 text-[17px] leading-relaxed text-ink"
+        <nav aria-labelledby="contents-heading" class="mt-14 max-w-[45rem] min-[810px]:mt-16">
+          <h2
+            id="contents-heading"
+            class="text-[26px] font-extrabold leading-[1.2] text-ink min-[810px]:text-[30px]"
           >
-            <strong class="font-bold">Good standing.</strong>
-            {goodStanding}
-          </p>
-        </section>
-
-        <section aria-labelledby="support-heading" class="mt-14 min-[810px]:mt-16">
-          <h2 id="support-heading" class={sectionHeading}>What we give you</h2>
-          <p class={sectionIntro}>
-            Once you're in, you can use all of this. Most of it starts with a message to us or a
-            request in the T4P Hub.
-          </p>
-          <dl class="mt-6 max-w-[45rem] border-b border-ink-divider">
-            {
-              support.map((item) => (
-                <div class="grid grid-cols-1 gap-1 border-t border-ink-divider py-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
-                  <dt class={itemTitle}>{item.title}</dt>
-                  <dd class="max-w-[60ch] text-[17px] leading-relaxed text-ink-secondary">
-                    {item.description}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
-        </section>
-
-        <section aria-labelledby="playbook-heading" class="mt-14 min-[810px]:mt-16">
-          <h2 id="playbook-heading" class={sectionHeading}>The playbook</h2>
-          <p class={sectionIntro}>
-            How we think projects for Palestine should be built. This is the advice you'll hear in
-            Office Hours, written down.
-          </p>
-          <ol class="mt-6 max-w-[45rem] border-b border-ink-divider">
+            Contents
+          </h2>
+          <ol class="mt-6 border-b border-ink-divider">
             {
               chapters.map((chapter, i) => (
                 <li class="border-t border-ink-divider">
                   <a
                     href={chapterHref(chapter.slug)}
-                    class={`group grid grid-cols-[2rem_minmax(0,1fr)] gap-x-2 rounded-sm py-5 ${focusRing}`}
+                    class={`group grid grid-cols-[2rem_minmax(0,1fr)] gap-x-2 rounded-sm py-4 ${focusRing}`}
                   >
                     <span class="text-[17px] font-extrabold text-grove" aria-hidden="true">
                       {i + 1}
                     </span>
-                    <span>
-                      <span class="block text-[19px] font-extrabold leading-snug text-ink transition-colors group-hover:text-grove motion-reduce:transition-none">
-                        {chapter.title}
-                      </span>
-                      <span class="mt-1 block text-[16px] leading-relaxed text-ink-secondary">
-                        {chapter.description}
-                      </span>
+                    <span class="text-[19px] font-extrabold leading-snug text-ink transition-colors group-hover:text-grove motion-reduce:transition-none">
+                      {chapter.title}
                     </span>
                   </a>
                 </li>
               ))
             }
           </ol>
-        </section>
+        </nav>
       </article>
 
       <div class="mt-16 max-w-[45rem] min-[810px]:mt-20">

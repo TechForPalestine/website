@@ -22,15 +22,19 @@ const wikipediaReport = defineCollection({
   }),
 });
 
-// Playbook chapters of the incubator project leader guide (/incubator/guide).
-// Hand-written; `order` sets reading order and the file name is the URL slug.
+// Chapters of the incubator project leader guide (/incubator/guide), taken
+// word for word from the incubator's Google Doc: keep the Doc's wording and
+// only change formatting. `order` sets reading order and the file name is the
+// URL slug. The welcome tab lives in src/data/incubator-guide-welcome.md.
 const incubatorGuide = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/incubator-guide" }),
   schema: z.object({
     title: z.string(),
-    /** Meta description, and the chapter's line in the guide's contents. */
+    /** Meta description only: the chapter's opening sentence from the Doc. */
     description: z.string(),
     order: z.number().int(),
+    /** The Doc's heading above this chapter, shown as its overline. */
+    part: z.string().optional(),
   }),
 });
 

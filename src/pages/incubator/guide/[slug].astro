@@ -1,5 +1,5 @@
 ---
-// One playbook chapter of the project leader guide (/incubator/guide/launch).
+// One playbook chapter of the project leader guide (/incubator/guide/getting-to-launch).
 // Server-rendered like the rest of the site: the CSP middleware and the nav
 // A/B test depend on SSR, so do not add `export const prerender = true`.
 import { getEntry, render } from "astro:content";
@@ -52,11 +52,8 @@ const breadcrumbs = breadcrumbListSchema([
     <GuideShell links={links} currentSlug={slug}>
       <article aria-labelledby="guide-page-heading">
         <header class="mb-10 max-w-[45rem] min-[810px]:mb-12">
-          <p class={overline}>{GUIDE_TITLE} · Chapter {chapterNumber}</p>
+          <p class={overline}>{entry.data.part ?? `${GUIDE_TITLE} · Chapter ${chapterNumber}`}</p>
           <h1 id="guide-page-heading" class={`mt-4 ${display}`}>{entry.data.title}</h1>
-          <p class="mt-5 text-[19px] leading-relaxed text-ink-secondary min-[810px]:text-[21px]">
-            {entry.data.description}
-          </p>
         </header>
 
         <div class="guide-prose">
@@ -82,7 +79,7 @@ const breadcrumbs = breadcrumbListSchema([
         <a href={APPLY_URL} data-track-incubator-click="guide-chapter" class={inverseButton}>
           Apply to the incubator
         </a>
-        <a href={GUIDE_URL} class={ghostOnDarkButton}>What to expect</a>
+        <a href={GUIDE_URL} class={ghostOnDarkButton}>Start of the guide</a>
       </Fragment>
     </TerminalCta>
   </main>
