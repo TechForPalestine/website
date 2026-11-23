@@ -1,69 +1,83 @@
 ---
-title: Further reading
-description: Books, essays and resources on customer development, product-market fit, marketing, sales, team management and running a non-profit.
-order: 7
+title: "Resources"
+description: "Customer development, iterating and product market fit, sales, marketing, people and team management, startup reading, and resources for non-profits."
+order: 12
 ---
 
-Most writing about building products comes from the startup world. Some of these authors hold views we strongly oppose, including on Palestine. We recommend these resources for their ideas, not their authors.
+_Note, most of these are written by people that aren’t exactly great (NG), with some written by Zionists (Z). Not much can be done about that._
 
 ## Customer development
 
-- [How to talk to users](https://www.ycombinator.com/library/JQ-how-to-start-a-startup-talking-to-users), a Startup School talk by Emmett Shear.
-- [Steve Blank on customer development](https://steveblank.com/category/customer-development/). Blank is one of the best writers on the subject.
-- [_The Four Steps to the Epiphany_](https://www.amazon.com/Four-Steps-Epiphany-Successful-Strategies-dp-1119690358/dp/1119690358/) by Steve Blank, a somewhat dated book on customer development. Its follow-up is [_The Startup Owner's Manual_](https://www.amazon.com/Startup-Owners-Manual-Step-Step/dp/0984999302).
+- [User Interviews](https://www.ycombinator.com/library/JQ-how-to-start-a-startup-talking-to-users) - startup school, Emmet Shear
+- Steve Blank is one of the best authors on Customer Development. [See his blog for tons of discussions](https://steveblank.com/category/customer-development/)
+- [4 Steps to the Epiphany](https://www.amazon.com/Four-Steps-Epiphany-Successful-Strategies-dp-1119690358/dp/1119690358/ref=dp_ob_title_bk) - possibly dated book on Customer Development (the followup book is [Startup Owner’s Manual](https://www.amazon.com/Startup-Owners-Manual-Step-Step/dp/0984999302))
 
-## Iterating and product-market fit
+## Iterating / Product Market Fit
 
-- [Do things that don't scale](https://www.paulgraham.com/ds.html), an essay by Paul Graham.
-- [_The Lean Startup_](https://theleanstartup.com/) by Eric Ries.
-- [_Lean Impact_](https://www.annmei.com/) by Ann Mei Chang, which adapts these ideas for impact organizations like ours. There's also [a talk on it](https://www.youtube.com/watch?v=E4ex0fejo8w).
+- [Do things that don’t scale](https://www.paulgraham.com/ds.html) - Paul Graham (NG)
+- [Lean Startup](https://theleanstartup.com/) - Eric Ries (Z)  
+  [Lean Impact](https://www.annmei.com/) is a variation on this for Impact orgs like us
+- [https://www.youtube.com/watch?v=E4ex0fejo8w](https://www.youtube.com/watch?v=E4ex0fejo8w)
 
 ## Sales
 
-In advocacy, "sales" matters when you need to win over organizations, businesses or groups such as student encampments.
+“Sales” in the context of Palestinian Advocacy is for groups who have to “sell” to individual entities, such as organizations, businesses, student encampments, etc.
 
-- [_Founding Sales_](https://www.foundingsales.com/), a book on early-stage sales.
-- [_Predictable Revenue_](https://www.amazon.com/Predictable-Revenue-Business-Practices-Salesforce-com/dp/0984380213), on how sales works at scale. Less a playbook than a way to understand sales deeply.
-- [Founder sales](https://www.kracov.co/writing/founder-sales), an article that helps you get your head around what selling something like this means.
+- This is apparently a [good book for early sales](https://www.foundingsales.com/), though I haven’t read it.
+- [Predictable Revenue](https://www.amazon.com/Predictable-Revenue-Business-Practices-Salesforce-com/dp/0984380213) describes how scaled sales organizations look. This is less of a playbook and more about deep understanding of how sales works at scale
+- [This article](https://www.kracov.co/writing/founder-sales) is a good read to get your head around what it means to sell something like we’re doing here
+- Short video showing how to use AI to get leads and send emails
+  - [https://www.loom.com/share/bdeff4b1ef4246baae42fc51abb71e54?sid=dc159a27-a814-4a2b-9350-830d9fbf902e](https://www.loom.com/share/bdeff4b1ef4246baae42fc51abb71e54?sid=dc159a27-a814-4a2b-9350-830d9fbf902e)
+
+##
 
 ## Marketing
 
-- [_Traction_](https://www.amazon.com/Traction-Startup-Achieve-Explosive-Customer-ebook/dp/B00TY3ZOMS) by Gabriel Weinberg and Justin Mares. It lists many ways to market a product and discusses each in a few pages. Its "Bullseye framework" is a good way to choose marketing experiments.
+- [Traction](https://www.amazon.com/Traction-Startup-Achieve-Explosive-Customer-ebook/dp/B00TY3ZOMS) is my favourite book about marketing. It provides a list of different ways to market, and discusses them for a few pages each. I also really like their “Bullseye framework” as a way of generating experiments ([PDF of first two chapters](https://growthorientedsustainableentrepreneurship.wordpress.com/wp-content/uploads/2016/07/en-traction-channels.pdf))
 
-## Teams and management
+## People / team management
 
-- [_Good Boss, Bad Boss_](https://www.gsb.stanford.edu/faculty-research/books/good-boss-bad-boss-how-be-best-learn-worst) by Robert Sutton.
-- [_The Five Dysfunctions of a Team_](https://www.tablegroup.com/product/dysfunctions/) by Patrick Lencioni.
-- [_Measure What Matters_](https://www.whatmatters.com/okrs-explained) by John Doerr, on setting goals with OKRs.
+- [Good Boss Bad Boss](https://www.gsb.stanford.edu/faculty-research/books/good-boss-bad-boss-how-be-best-learn-worst)
+- [5 dysfunctions of a team](https://www.tablegroup.com/product/dysfunctions/)
 
-## Startup thinking
+## General startup mentality / discussion
 
-- [_Founders at Work_](https://www.amazon.com/Founders-Work-Stories-Startups-Early/dp/1430210788) by Jessica Livingston.
-- [_The Hard Thing About Hard Things_](https://www.amazon.com/Hard-Thing-About-Things-Building/dp/0062273205) by Ben Horowitz.
-- [_Zero to One_](https://www.amazon.com/Zero-One-Notes-Startups-Future/dp/0804139296) by Peter Thiel.
-- [_High Growth Handbook_](https://growth.eladgil.com/) by Elad Gil.
-- Essays by Paul Graham: [Default alive or default dead?](https://www.paulgraham.com/aord.html), [How not to die](https://www.paulgraham.com/die.html), [Ramen profitable](https://www.paulgraham.com/ramenprofitable.html) and [Don't talk to corp dev](https://www.paulgraham.com/corpdev.html).
+I've grown to dislike Paul Graham a lot, but he's got some good essays:
 
-## For non-profits
+- [https://www.paulgraham.com/aord.html](https://www.paulgraham.com/aord.html)
+- [https://www.paulgraham.com/die.html](https://www.paulgraham.com/die.html)
+- [https://www.paulgraham.com/ramenprofitable.html](https://www.paulgraham.com/ramenprofitable.html)
+- [https://www.paulgraham.com/corpdev.html](https://www.paulgraham.com/corpdev.html)
 
-- [TechSoup](https://www.techsoup.org/): free and discounted software for non-profits.
-- [Free stuff for nonprofits](https://socialimpactarchitects.com/free-stuff-for-nonprofits/) from Social Impact Architects.
-- [Free or low-cost services](https://www.idealist.org/en/fundraising-resources/free-or-low-cost-services) from Idealist.
-- [Nonprofit discounts](https://www.goraisemore.com/resources/nonprofit-discounts) from Raise More.
+Very good books about Startups
 
-## Impact and social innovation
+- [The hard things about hard things](https://www.amazon.com/Hard-Thing-About-Things-Building/dp/0062273205) - Ben Horowitz (Z, NG)
+- [Zero to One](https://www.amazon.com/Zero-One-Notes-Startups-Future/dp/0804139296) - Peter Thiel (Z, NG)
+- [Lean startup](https://theleanstartup.com/) - Eric Ries (Z, NG)
+- [Founders at Work](https://www.amazon.com/Founders-Work-Stories-Startups-Early/dp/1430210788) - Jessica Livingston
+- [The startup owner's manual](https://www.amazon.com/Startup-Owners-Manual-Step-Step/dp/0984999302) - Steve Blank (haven't read this, but i read the book that became this)
+- [High growth handbook](https://growth.eladgil.com/) - Elad Gil (havent read, but came recommended, Z, NG)
+- [Measure What Matters / OKRs](https://www.whatmatters.com/okrs-explained) - John Doerr
 
-Resources and case studies from the _Lean Impact_ world:
+## Resources for non-profits
 
-- [Design Kit](https://www.designkit.org/) from IDEO.org
-- [MicroMentor](https://micromentor.org/)
-- [Civilla](https://civilla.org/)
-- [Skoll Foundation](https://skoll.org/about/)
-- [Freedom to Marry's roadmap to victory](http://www.freedomtomarry.org/pages/roadmap-to-victory)
-- [CASE Smart Impact Capital](https://casesmartimpact.com/capital/)
-- [Global Innovation Fund](https://www.globalinnovation.fund/)
-- [The Giving Code](https://openimpact.io/2016/10/the-giving-code-silicon-valley-nonprofits-and-philanthropy/) from Open Impact
-- [Fast Forward](https://www.ffwd.org/)
-- [Accelerate Change](https://acceleratechange.org/)
-- [Acumen Academy](https://acumenacademy.org/courseCatalog/)
-- [Independent Sector](https://independentsector.org/)
+- [Techsoup](https://www.techsoup.org/) - Free and discounted software for non-profits
+- [https://socialimpactarchitects.com/free-stuff-for-nonprofits/](https://socialimpactarchitects.com/free-stuff-for-nonprofits/)
+- [https://www.idealist.org/en/fundraising-resources/free-or-low-cost-services](https://www.idealist.org/en/fundraising-resources/free-or-low-cost-services)
+- [https://www.goraisemore.com/resources/nonprofit-discounts](https://www.goraisemore.com/resources/nonprofit-discounts)
+
+**Some resources and case studies via “Lean Impact”**
+
+- [https://www.designkit.org/](https://www.designkit.org/)
+- [https://micromentor.org/](https://micromentor.org/)
+- [https://bhub.org](https://bhub.org)
+- [https://civilla.org/](https://civilla.org/)
+- [https://skoll.org/about/](https://skoll.org/about/)
+- [http://www.freedomtomarry.org/pages/roadmap-to-victory](http://www.freedomtomarry.org/pages/roadmap-to-victory)
+- [https://casesmartimpact.com/capital/](https://casesmartimpact.com/capital/)
+- [https://www.globalinnovation.fund/](https://www.globalinnovation.fund/)
+- [https://openimpact.io/2016/10/the-giving-code-silicon-valley-nonprofits-and-philanthropy/](https://openimpact.io/2016/10/the-giving-code-silicon-valley-nonprofits-and-philanthropy/)
+- [https://www.ffwd.org/](https://www.ffwd.org/)
+- [https://acceleratechange.org/](https://acceleratechange.org/)
+- [https://acumenacademy.org/courseCatalog/](https://acumenacademy.org/courseCatalog/)
+- [https://independentsector.org/](https://independentsector.org/)

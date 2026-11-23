@@ -79,3 +79,10 @@
 
 /growthbook-test / 301
 /growthbook-test/ / 301
+
+# Incubator guide chapters renamed to follow the Google Doc's sections
+/incubator/guide/build-less /incubator/guide/building-a-product 301
+/incubator/guide/launch /incubator/guide/getting-to-launch 301
+/incubator/guide/building-with-ai /incubator/guide/building-with-genai 301
+/incubator/guide/updates-and-motivation /incubator/guide/how-to-give-an-update 301
+/incubator/guide/building-your-team /incubator/guide/working-with-volunteers 301
