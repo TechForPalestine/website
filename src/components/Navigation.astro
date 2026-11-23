@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import NavBar from "./NavBar.svelte";
 import { assignNavLabelVariant } from "../lib/navAssignment";
 import { NAV_LABEL_EXPERIMENT, NAV_VARIANTS } from "../utils/navLabelExperiment";
+import { buildSession } from "../data/challenges/november-2026";
 
 const currentRoute = Astro.url.pathname;
 
@@ -15,6 +16,16 @@ const currentRoute = Astro.url.pathname;
 // src/middleware/cache-control.ts) so a shared cache never hands one visitor's label to others.
 const assignedVariant = await assignNavLabelVariant(Astro.request, Astro.locals);
 const navVariant = NAV_VARIANTS[assignedVariant ?? "A"];
+
+// Temporary Events entries. The build session link drops out on its own once
+// the session ends (pages are SSR'd per request).
+const isBuildSessionUpcoming = Date.now() < Date.parse(buildSession.endsAt);
+const eventsSubmenu: [string, string][] = [
+  ["All Events", "/events"],
+  ...(isBuildSessionUpcoming ? [["Nov 28 Hackathon", buildSession.url] as [string, string]] : []),
+  ["Rooted · Amman", "https://rooted.techforpalestine.org/"],
+  ["Berlin Tech Rebellion", "https://techrebellion.techforpalestine.org/"],
+];
 
 type NavItem = {
   href: string;
@@ -70,10 +81,7 @@ const navigation: Map<string, NavItem> = new Map([
     "Events",
     {
       href: "/events",
-      submenu: [
-        ["All Events", "/events"],
-        ["Berlin Tech Rebellion", "https://techrebellion.techforpalestine.org/"],
-      ] as [string, string][],
+      submenu: eventsSubmenu,
     },
   ],
   [
