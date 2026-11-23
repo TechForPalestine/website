@@ -2,7 +2,7 @@
 slug: section-4
 kind: section
 label: "Section 4"
-title: "The Influence Operation on Wikipedia"
+title: "The Manipulation Operation on Wikipedia"
 order: 4
 toc:
   - { number: "4.1", title: "Wasserman Schultz and 22 other members of Congress", depth: 2, id: "s4-1" }

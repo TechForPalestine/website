@@ -73,7 +73,7 @@ export interface RelatedProject {
 
 export const REPORT_TITLE = "Israel Is Attacking Wikipedia";
 /** Set apart from the title, on its own line where there is room. */
-export const REPORT_SUBTITLE = "(to influence AI)";
+export const REPORT_SUBTITLE = "(to manipulate AI)";
 
 export const REPORT_SUMMARY =
   "Read our new report: twenty years of documented attacks on Wikipedia, and what this means for the information you get from search and AI.";
@@ -115,9 +115,9 @@ export const FINDINGS: readonly ReportFinding[] = [
     stat: "$98M",
     statLabel: "from pro-Israel PACs to 26 U.S. politicians behind it",
     title: "US government attacks on Wikipedia",
-    body: "The US government used a report from the ADL to attack Wikipedia. The goal is for the Israel Lobby to gain influence over it.",
+    body: "The US government used a report from the ADL to attack Wikipedia. The goal is for the Israel Lobby to manipulate it.",
     section: "4",
-    sectionTitle: "The Influence Operation on Wikipedia",
+    sectionTitle: "The Manipulation Operation on Wikipedia",
   },
   {
     id: "finding-ai",
@@ -126,7 +126,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     title: "The real target is AI",
     body: "Wikipedia feeds Google Search and every major AI chatbot. Israel’s 2026 propaganda budget is $729M, up from $150M in 2025. That includes a $46.5M contract to make AI chatbots more pro-Israel.",
     section: "2.2",
-    sectionTitle: "Influencing AI via Wikipedia",
+    sectionTitle: "Manipulating AI via Wikipedia",
   },
   {
     id: "finding-billionaires",
@@ -156,7 +156,7 @@ export const FINDINGS: readonly ReportFinding[] = [
     stat: "$900,000",
     statLabel: "Prize from an Israeli foundation, the largest prize he has received",
     title: "Jimmy Wales should step down",
-    body: "Wikipedia founder Jimmy Wales calls himself a “strong supporter of Israel”, and has visited Israel over ten times. In 2025 he tried to influence the Gaza Genocide page to be more pro-Israel, in a clear abuse of power. In November 2026, he's trying again, with the Zionism page. We recommend that Wales step down from the Board and disable his user account",
+    body: "Wikipedia founder Jimmy Wales calls himself a “strong supporter of Israel”, and has visited Israel over ten times. In 2025 he tried to manipulate the Gaza Genocide page to be more pro-Israel, in a clear abuse of power. In November 2026, he's trying again, with the Zionism page. We recommend that Wales step down from the Board and disable his user account",
     section: "3.16",
     sectionTitle: "Jimmy Wales (2025-ongoing)",
   },
@@ -222,12 +222,12 @@ export const FINDINGS: readonly ReportFinding[] = [
 export const QUOTES: readonly ReportQuote[] = [];
 
 export const METHODOLOGY_INTRO: readonly string[] = [
-  "This report started in March 2025, when the ADL published “Editing for Hate”. The report claims Wikipedia editors colluded to add antisemitism. US politicians started using it to attack Wikipedia. We wanted to know if the report itself was part of an influence operation.",
+  "This report started in March 2025, when the ADL published “Editing for Hate”. The report claims Wikipedia editors colluded to add antisemitism. US politicians started using it to attack Wikipedia. We wanted to know if the report itself was part of a manipulation operation.",
 ];
 
 export const METHODOLOGY_TRACKS: readonly MethodologyTrack[] = [
   {
-    lead: "Israel’s efforts to influence Wikipedia.",
+    lead: "Israel’s efforts to manipulate Wikipedia.",
     text: "We collected 17 publicly known campaigns from public reports, at least 9 of them still active. This is the first time they are documented in one place.",
     ref: { label: "Sections 3 and 4", href: sectionHref("3") },
   },
