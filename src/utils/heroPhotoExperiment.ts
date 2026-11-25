@@ -71,3 +71,54 @@ export function variantFromFeature({ value, source }: FeatureOutcome): HeroPhoto
   if (source !== "experiment") return null;
   return VARIANTS.find((variant) => variant === value) ?? null;
 }
+
+export const LINK_CLICK_EVENT = "Homepage Link Click";
+
+export type HomepageDestination = "/membership" | "/volunteer" | "/projects" | "/incubator";
+
+const DESTINATIONS: readonly HomepageDestination[] = [
+  "/membership",
+  "/volunteer",
+  "/projects",
+  "/incubator",
+];
+const MIDDLE_BUTTON = 1;
+
+/** The tracked homepage destination an href points at, or null for any other link. */
+export function destinationFor(href: string, origin: string): HomepageDestination | null {
+  let url: URL;
+  try {
+    url = new URL(href, origin);
+  } catch {
+    return null;
+  }
+  if (url.origin !== origin) return null;
+  const path = url.pathname.replace(/\/$/, "");
+  return DESTINATIONS.find((destination) => destination === path) ?? null;
+}
+
+export interface TrackHomepageLinksOptions {
+  track?: (name: string, props: Record<string, string>) => void;
+  doc?: Pick<Document, "addEventListener">;
+  origin?: string;
+}
+
+const trackWithPlausible: NonNullable<TrackHomepageLinksOptions["track"]> = (name, props) => {
+  window.plausible?.(name, { props });
+};
+
+// Records clicks on links to the four pages the experiment measures. Delegated on the
+// document so the on-demand mobile menu counts too; middle-clicks (new tab) count, other
+// buttons do not. `hero_photo` is attached to every event by Plausible's customProperties.
+export function trackHomepageLinks(options: TrackHomepageLinksOptions = {}): void {
+  const { track = trackWithPlausible, doc = document, origin = location.origin } = options;
+
+  const onClick = (event: MouseEvent): void => {
+    if (event.type === "auxclick" && event.button !== MIDDLE_BUTTON) return;
+    const link = (event.target as Element | null)?.closest?.("a[href]");
+    const destination = destinationFor(link?.getAttribute("href") ?? "", origin);
+    if (destination) track(LINK_CLICK_EVENT, { destination });
+  };
+  doc.addEventListener("click", onClick);
+  doc.addEventListener("auxclick", onClick);
+}
