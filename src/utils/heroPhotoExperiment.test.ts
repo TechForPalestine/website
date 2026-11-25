@@ -105,7 +105,9 @@ describe("trackHomepageLinks", () => {
   }
 
   const linkTo = (href: string) => ({ getAttribute: () => href });
-  const insideLink = (href: string) => ({ closest: () => linkTo(href) });
+  const insideLink = (href: string) => ({
+    closest: (selector: string) => (selector === "a[href]" ? linkTo(href) : null),
+  });
 
   it("tracks a click on a link once", () => {
     const { track, fire } = setup();

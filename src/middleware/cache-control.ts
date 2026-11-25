@@ -4,8 +4,10 @@ export const cacheControl = defineMiddleware(async (context, next) => {
   const response = await next();
 
   // Pages are `private`: the navbar label is an A/B test picked per request
-  // (src/components/Navigation.astro), so a shared cache must not store one
-  // visitor's variant and serve it to everyone. Browsers may still cache for 10 minutes.
+  // (src/components/Navigation.astro), and the homepage hero photo A/B test
+  // (src/pages/index.astro, src/lib/heroPhotoAssignment.ts) also needs `/` out of
+  // shared caches, so a shared cache must not store one visitor's variant and
+  // serve it to everyone. Browsers may still cache for 10 minutes.
 
   const pathname = context.url.pathname;
   const isApi = pathname.startsWith("/api/");
