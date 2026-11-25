@@ -132,7 +132,7 @@ function Popup() {
   useEffect(() => {
     if (!visible || shownRef.current) return;
     shownRef.current = true;
-    window.plausible("Newsletter Popup Shown");
+    window.plausible("Newsletter Popup Shown", { interactive: false });
   }, [visible]);
 
   // Auto-collapse the open card/bar after COLLAPSE_IDLE_MS of no activity.

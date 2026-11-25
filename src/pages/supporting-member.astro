@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import JoinFlow from "../components/membership/JoinFlow";
 import DuesUsage from "../components/membership/DuesUsage.astro";
+import OtherWaysToGive from "../components/donate/OtherWaysToGive.astro";
 import { showcaseProjects } from "../data/membershipBenefits";
 import { getTestimonials } from "../data/testimonials";
 import "../styles/base.css";
@@ -257,17 +258,29 @@ const logoWallLabel = `Projects supported by Tech for Palestine: ${showcaseProje
     </div>
 
     <div class="mx-auto max-w-[1280px] px-6 pb-12 pt-16 sm:px-8">
-      <div id="join" class="mx-auto max-w-[560px] scroll-mt-24">
-        <JoinFlow client:only="react" fixedTier="supporting" hideCalculator />
-        <section
-          aria-labelledby="dues-usage-heading"
-          class="mt-6 rounded-lg border border-ink-divider bg-white px-6 py-5 shadow-sm"
-        >
-          <h2 id="dues-usage-heading" class="mb-3 text-[17px] font-bold text-ink">
-            How does T4P use dues?
-          </h2>
-          <DuesUsage />
-        </section>
+      <!-- Payment form, with the /donate page's "Other ways to give" card beside it on wide
+           screens and below it on narrow ones. -->
+      <div
+        class="mx-auto grid max-w-[560px] grid-cols-1 gap-6 lg:max-w-[960px] lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:items-start"
+      >
+        <div id="join" class="scroll-mt-24">
+          <JoinFlow
+            client:only="react"
+            fixedTier="supporting"
+            hideCalculator
+            oneTimeDonationHref="/donate"
+          />
+          <section
+            aria-labelledby="dues-usage-heading"
+            class="mt-6 rounded-lg border border-ink-divider bg-white px-6 py-5 shadow-sm"
+          >
+            <h2 id="dues-usage-heading" class="mb-3 text-[17px] font-bold text-ink">
+              How does T4P use dues?
+            </h2>
+            <DuesUsage />
+          </section>
+        </div>
+        <OtherWaysToGive />
       </div>
     </div>
 

@@ -4,14 +4,13 @@ import Socials from "./Socials.astro";
 
 const currentYear = new Date().getFullYear();
 
-// Mirrors the navbar's categories/links exactly (src/components/NavBar.svelte navigation map)
+// Mirrors the navbar's categories/links (the navigation map in src/components/Navigation.astro)
 const footerNavigation: Record<string, { href?: string; links: [string, string][] }> = {
   About: {
     href: "/about",
     links: [
       ["Our Organization", "/about"],
       ["Team", "/team"],
-      ["Media", "/media"],
       ["FAQ", "/faq"],
       ["Contact Us", "/contact"],
     ],
@@ -22,8 +21,7 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
       ["Start a project", "/incubator"],
       ["November Challenge", "/monthly-challenge"],
       ["All projects", "/projects"],
-      ["Project Opportunities", "/ideas"],
-      ["Tools", "/tools"],
+      ["Adopt a Project", "/ideas"],
     ],
   },
   "Get Involved": {
@@ -43,6 +41,15 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
     links: [
       ["All Events", "/events"],
       ["Berlin Tech Rebellion", "https://techrebellion.techforpalestine.org/"],
+    ],
+  },
+  Resources: {
+    href: "/tools",
+    links: [
+      ["Updates", "https://updates.techforpalestine.org"],
+      ["Tools", "/tools"],
+      ["Hiring Palestinians", "/help/hire"],
+      ["Media", "/media"],
     ],
   },
 };
@@ -95,7 +102,7 @@ const footerNavigation: Record<string, { href?: string; links: [string, string][
         </div>
 
         <!-- Right Columns: Site Index -->
-        <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:col-span-7">
+        <div class="grid grid-cols-2 gap-8 md:grid-cols-3 lg:col-span-7 lg:grid-cols-5">
           {
             Object.entries(footerNavigation).map(([category, { href, links }]) => (
               <div class="space-y-4">

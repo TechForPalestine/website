@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { navExperimentProps } from "../../utils/navLabelExperiment";
 import { clearTargetRole, currentTargetRole, tabStorage } from "../../utils/targetRole";
 import {
   QGIV_EMBED_SCRIPT,
@@ -190,7 +189,6 @@ export default function QgivJoin({ tier, className, prefill }: QgivJoinProps) {
           props: {
             amount: transaction.total != null ? String(transaction.total) : "",
             membership_tier: tier,
-            ...navExperimentProps(),
           },
         });
       }

@@ -414,9 +414,13 @@ const sessions = [
     if (shouldShowPopup(readPopupState(safeLocalStorage()), Date.now())) schedule(dialog);
   }
 
-  function track(event: string, props?: Record<string, string>) {
+  function track(
+    event: string,
+    props?: Record<string, string>,
+    options?: { interactive?: boolean }
+  ) {
     if (typeof window.plausible === "undefined") return;
-    window.plausible(event, props ? { props } : undefined);
+    window.plausible(event, props || options ? { props, ...options } : undefined);
   }
 
   function schedule(dialog: HTMLDialogElement) {
@@ -475,7 +479,7 @@ const sessions = [
       dialog.showModal();
       document.documentElement.setAttribute(SHOWN_ATTRIBUTE, "");
       window.dispatchEvent(new Event(SHOWN_EVENT));
-      track("Challenge Popup Shown", { challenge: "2026-11" });
+      track("Challenge Popup Shown", { challenge: "2026-11" }, { interactive: false });
     };
     const onScroll = () => {
       const docHeight = document.documentElement.scrollHeight;

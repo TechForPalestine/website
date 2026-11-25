@@ -1,24 +1,20 @@
 import { getEnv } from "../utils/getEnv";
-import {
-  NAV_LABEL_EXPERIMENT,
-  type NavLabelVariant,
-  variantFromFeature,
-} from "../utils/navLabelExperiment";
-import { evalServerFeature, loadFeaturePayload } from "./growthbookServer";
 
 // A/B test id that is stable for one visitor for one UTC day, without storing anything on
 // the visitor's device. Same idea as Plausible's own visitor id: a keyed hash of the date,
 // the IP and the User-Agent. The IP and User-Agent are only read here, in memory, and never
 // stored; the hash never leaves the server (GrowthBook evaluates it in-process, see
-// src/lib/growthbookServer.ts).
+// src/lib/growthbookServer.ts). Used by the homepage hero photo test
+// (src/lib/heroPhotoAssignment.ts).
 //
 // The date is part of the hash input, so the id rotates daily with no stored salt.
 //
-// The test is only meaningful if a visitor keeps one label, because the sign-up on /membership
-// is credited to the label on that page. So without the secret, or without an IP (pnpm dev),
-// there is no assignment at all: everyone sees "Get Involved" and nothing is tracked, rather
-// than a random label per page that would make the result noise.
+// A test is only meaningful if a visitor keeps one variant. So without the secret, or without
+// an IP (pnpm dev), there is no id at all: callers show their control and track nothing,
+// rather than a random variant per page that would make the result noise.
 
+// The name predates the hero photo test (it was first used by the navbar label test) and is
+// kept because it is what the Cloudflare Pages environment sets.
 export const ASSIGNMENT_SECRET_ENV = "NAV_ASSIGNMENT_SECRET";
 
 const IPV6_PREFIX_GROUPS = 4;
@@ -92,7 +88,7 @@ export async function requestAssignmentId(
   if (!secret) {
     if (ip && !warnedMissingSecret) {
       warnedMissingSecret = true;
-      console.warn(`${ASSIGNMENT_SECRET_ENV} is not set: the nav label A/B test is inactive`);
+      console.warn(`${ASSIGNMENT_SECRET_ENV} is not set: server-side A/B tests are inactive`);
     }
     return null;
   }
@@ -103,19 +99,4 @@ export async function requestAssignmentId(
     userAgent: request.headers.get("user-agent") ?? "",
     date: now(),
   });
-}
-
-/** The nav label variant GrowthBook assigns this visitor, or null when they are not in the
- * test (flag off, CDN down, or no stable id). `now` is for tests. */
-export async function assignNavLabelVariant(
-  request: Request,
-  locals: unknown,
-  now?: () => Date
-): Promise<NavLabelVariant | null> {
-  const clientKey = getEnv("PUBLIC_GROWTHBOOK_CLIENT_KEY", locals);
-  const payload = clientKey ? await loadFeaturePayload(clientKey) : undefined;
-  if (!payload) return null;
-  const id = await requestAssignmentId(request, locals, now);
-  if (!id) return null;
-  return variantFromFeature(evalServerFeature(payload, NAV_LABEL_EXPERIMENT, id));
 }

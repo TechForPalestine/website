@@ -46,6 +46,10 @@ interface JoinFlowProps {
    * /supporting-member. Without it the calculator still only shows for the
    * Member tier. */
   hideCalculator?: boolean;
+  /** When set, the payment step shows an "I want to make a one-time donation" link to this
+   * address under its step header, for visitors who came to give once rather than join.
+   * Used on /supporting-member (→ /donate). */
+  oneTimeDonationHref?: string;
   /** Uses the design system's ts-* typography scale (Fraunces/Outfit) instead
    * of plain Tailwind sizes — only correct where `design-system.css` is
    * loaded (HomeLayout, i.e. /membership-new). The legacy /membership page
@@ -311,6 +315,7 @@ export default function JoinFlow({
   designSystem = false,
   fixedTier,
   hideCalculator,
+  oneTimeDonationHref,
 }: JoinFlowProps) {
   const styles = getStyles(designSystem);
   const steps = fixedTier ? STEPS.filter((s) => s.id !== "tier") : STEPS;
@@ -357,6 +362,14 @@ export default function JoinFlow({
       <p className={`mb-4 ${styles.stepLabel}`}>
         Step {stepIndex + 1} of {steps.length}: {steps[stepIndex]?.label}
       </p>
+
+      {step === "payment" && oneTimeDonationHref && (
+        <p className={`-mt-2 mb-4 ${styles.helper}`}>
+          <a href={oneTimeDonationHref} className={styles.link}>
+            I want to make a one-time donation
+          </a>
+        </p>
+      )}
 
       {step === "about-you" && (
         <AboutYouForm

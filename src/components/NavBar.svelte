@@ -4,8 +4,6 @@
   export let navigation: Map<string, {
     href: string,
     submenu: Array<[string, string]> | null,
-    // Set when the item is under an A/B test; read by trackNavLabel (src/utils/navLabelExperiment.ts).
-    experiment?: {name: string, variant: string},
   }>;
   export let currentRoute: string;
   // Unused: only declared so @astrojs/svelte's generated types allow the named
@@ -107,10 +105,10 @@
         </a>
       </div>
 
-      <!-- Desktop Navigation: from xl (1280px). Below that the items plus the two
-           buttons don't fit on one line ("Member Opportunities", the nav label A/B
-           variant, is the longest), so narrower screens use the burger menu. -->
-      <nav class="hidden xl:flex xl:items-center xl:space-x-8">
+      <!-- Desktop Navigation: from xl (1280px). Below that the items plus the three
+           buttons don't fit on one line ("Member Opportunities" is the longest), so narrower screens use the burger menu. The gap
+           between items is tighter until 2xl so everything fits at 1280px. -->
+      <nav class="hidden xl:flex xl:items-center xl:space-x-6 2xl:space-x-8">
         {#each navigation as [label, item]}
           <div class="relative">
             {#if item.submenu}
@@ -123,8 +121,6 @@
               >
                 <a
                   href={item.href}
-                  data-experiment={item.experiment?.name}
-                  data-variant={item.experiment?.variant}
                   on:focus={() => activeDropdown = label}
                   class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
                 >
@@ -160,8 +156,6 @@
                     <a
                       href={subHref}
                       role="menuitem"
-                      data-experiment={item.experiment?.name}
-                      data-variant={item.experiment?.variant}
                       on:keydown={handleMenuKeydown}
                       target={subHref.startsWith('http') ? '_blank' : undefined}
                       rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -176,8 +170,6 @@
               <!-- Regular Menu Item -->
               <a
                 href={item.href}
-                data-experiment={item.experiment?.name}
-                data-variant={item.experiment?.variant}
                 class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
               >
                 {label}
@@ -188,7 +180,7 @@
       </nav>
     </div>
 
-    <!-- Right side: Hub and Become a Member -->
+    <!-- Right side: Hub, Become a Member and Donate -->
     <div class="hidden xl:flex gap-4 2xl:gap-6 items-center">
       <a
         href={HUB_URL}
@@ -204,6 +196,12 @@
           Become a Member
         </a>
       </div>
+      <a
+        href="/supporting-member"
+        class="bg-[#101010] hover:bg-[#2c2d29] text-white font-semibold py-2.5 px-5 text-sm 2xl:py-3 2xl:px-7 2xl:text-base 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101010] focus-visible:ring-offset-2"
+      >
+        Donate
+      </a>
     </div>
 
     <!-- Mobile Header -->
@@ -240,8 +238,6 @@
               <div class="flex items-center justify-between w-full">
                 <a
                   href={item.href}
-                  data-experiment={item.experiment?.name}
-                  data-variant={item.experiment?.variant}
                   class="flex-1 text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
                 >
                   {label}
@@ -274,8 +270,6 @@
                     <a
                       href={subHref}
                       role="menuitem"
-                      data-experiment={item.experiment?.name}
-                      data-variant={item.experiment?.variant}
                       on:keydown={handleMenuKeydown}
                       target={subHref.startsWith('http') ? '_blank' : undefined}
                       rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -290,8 +284,6 @@
               <!-- Regular Mobile Item -->
               <a
                 href={item.href}
-                data-experiment={item.experiment?.name}
-                data-variant={item.experiment?.variant}
                 class="block w-full text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
               >
                 {label}
@@ -305,6 +297,12 @@
         class="mt-6 block w-full text-center bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
       >
         Become a Member
+      </a>
+      <a
+        href="/supporting-member"
+        class="mt-3 block w-full text-center bg-[#101010] hover:bg-[#2c2d29] text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+      >
+        Donate
       </a>
       <a
         href={HUB_URL}
