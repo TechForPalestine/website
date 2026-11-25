@@ -188,7 +188,7 @@
       </nav>
     </div>
 
-    <!-- Right side: Hub and Become a Member -->
+    <!-- Right side: Hub, Become a Member and Donate -->
     <div class="hidden xl:flex gap-4 2xl:gap-6 items-center">
       <a
         href={HUB_URL}
@@ -204,6 +204,12 @@
           Become a Member
         </a>
       </div>
+      <a
+        href="/supporting-member"
+        class="bg-[#101010] hover:bg-[#2c2d29] text-white font-semibold py-2.5 px-5 text-sm 2xl:py-3 2xl:px-7 2xl:text-base 2xl:font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101010] focus-visible:ring-offset-2"
+      >
+        Donate
+      </a>
     </div>
 
     <!-- Mobile Header -->
@@ -305,6 +311,12 @@
         class="mt-6 block w-full text-center bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
       >
         Become a Member
+      </a>
+      <a
+        href="/supporting-member"
+        class="mt-3 block w-full text-center bg-[#101010] hover:bg-[#2c2d29] text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+      >
+        Donate
       </a>
       <a
         href={HUB_URL}

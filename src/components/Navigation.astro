@@ -48,7 +48,6 @@ const navigation: Map<string, NavItem> = new Map([
       submenu: [
         ["Our Organization", "/about"],
         ["Team", "/team"],
-        ["Media", "/media"],
         ["FAQ", "/faq"],
         ["Contact Us", "/contact"],
       ] as [string, string][],
@@ -62,8 +61,7 @@ const navigation: Map<string, NavItem> = new Map([
         ["View Projects", "/projects"],
         ["Start a project", "/incubator"],
         ["November Challenge", "/monthly-challenge"],
-        ["Project Opportunities", "/ideas"],
-        ["Tools", "/tools"],
+        ["Adopt a Project", "/ideas"],
       ] as [string, string][],
     },
   ],
@@ -85,10 +83,17 @@ const navigation: Map<string, NavItem> = new Map([
     },
   ],
   [
-    "Updates",
+    // Tools and Media moved here from Projects and About. The label itself has no page of
+    // its own, so it opens Tools, the first internal page in the list.
+    "Resources",
     {
-      href: "https://updates.techforpalestine.org",
-      submenu: null,
+      href: "/tools",
+      submenu: [
+        ["Updates", "https://updates.techforpalestine.org"],
+        ["Tools", "/tools"],
+        ["Hiring Palestinians", "/help/hire"],
+        ["Media", "/media"],
+      ] as [string, string][],
     },
   ],
 ]);
