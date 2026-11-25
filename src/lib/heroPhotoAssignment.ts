@@ -5,7 +5,7 @@ import {
   variantFromFeature,
 } from "../utils/heroPhotoExperiment";
 import { evalServerFeature, loadFeaturePayload } from "./growthbookServer";
-import { requestAssignmentId } from "./navAssignment";
+import { requestAssignmentId } from "./visitorAssignment";
 
 /** The hero photo variant GrowthBook assigns this visitor, or null when they are not in the
  * test (flag off, CDN down, or no stable id). `now` is for tests. */

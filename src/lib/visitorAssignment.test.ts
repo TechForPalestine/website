@@ -1,18 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./growthbookServer", () => ({
-  loadFeaturePayload: vi.fn(),
-  evalServerFeature: vi.fn(),
-}));
-
-const { loadFeaturePayload, evalServerFeature } = await import("./growthbookServer");
-const {
-  assignNavLabelVariant,
+import {
   computeAssignmentId,
   normalizeIp,
   requestAssignmentId,
   resetAssignmentWarning,
-} = await import("./navAssignment");
+} from "./visitorAssignment";
 
 const base = {
   secret: "test-secret",
@@ -92,37 +85,5 @@ describe("requestAssignmentId", () => {
     expect(await requestAssignmentId(req(headers), {}, now)).toBeNull();
     expect(await requestAssignmentId(req(headers), {}, now)).toBeNull();
     expect(warn).toHaveBeenCalledOnce();
-  });
-});
-
-describe("assignNavLabelVariant", () => {
-  const env = { NAV_ASSIGNMENT_SECRET: "test-secret", PUBLIC_GROWTHBOOK_CLIENT_KEY: "sdk-test" };
-  const locals = { runtime: { env } };
-  const headers = { "cf-connecting-ip": base.ip, "user-agent": base.userAgent };
-  const req = () => new Request("https://techforpalestine.org/", { headers });
-  const now = () => base.date;
-
-  beforeEach(() => {
-    resetAssignmentWarning();
-    vi.mocked(loadFeaturePayload).mockResolvedValue({ features: {} });
-    vi.mocked(evalServerFeature).mockReturnValue({ value: "B", source: "force" } as never);
-  });
-  afterEach(() => vi.clearAllMocks());
-
-  it("returns the variant GrowthBook assigned, evaluated on the daily id", async () => {
-    expect(await assignNavLabelVariant(req(), locals, now)).toBe("B");
-    expect(vi.mocked(evalServerFeature).mock.calls[0][2]).toBe(await computeAssignmentId(base));
-  });
-
-  it("is inactive without the secret: no assignment, GrowthBook is never asked", async () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    const noSecret = { runtime: { env: { PUBLIC_GROWTHBOOK_CLIENT_KEY: "sdk-test" } } };
-    expect(await assignNavLabelVariant(req(), noSecret, now)).toBeNull();
-    expect(evalServerFeature).not.toHaveBeenCalled();
-  });
-
-  it("returns null when the GrowthBook payload is unavailable", async () => {
-    vi.mocked(loadFeaturePayload).mockResolvedValue(undefined);
-    expect(await assignNavLabelVariant(req(), locals, now)).toBeNull();
   });
 });

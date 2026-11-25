@@ -1,21 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 import NavBar from "./NavBar.svelte";
-import { assignNavLabelVariant } from "../lib/navAssignment";
-import { NAV_LABEL_EXPERIMENT, NAV_VARIANTS } from "../utils/navLabelExperiment";
 import { buildSession } from "../data/challenges/november-2026";
 
 const currentRoute = Astro.url.pathname;
-
-// A: "Get Involved" with its submenu vs B: "Member Opportunities" linking straight to
-// /volunteer. GrowthBook picks the variant on the
-// server and it is rendered into the HTML, so there is no flicker. The id is a keyed hash of
-// the day, IP and User-Agent (src/lib/navAssignment.ts): a visitor keeps one label all day
-// and nothing is stored on their device. Without an assignment (flag off, CDN down, or
-// NAV_ASSIGNMENT_SECRET unset) everyone sees variant A and nothing is tracked. Pages are served `private` (see
-// src/middleware/cache-control.ts) so a shared cache never hands one visitor's label to others.
-const assignedVariant = await assignNavLabelVariant(Astro.request, Astro.locals);
-const navVariant = NAV_VARIANTS[assignedVariant ?? "A"];
 
 // Temporary Events entries. The build session link drops out on its own once
 // the session ends (pages are SSR'd per request).
@@ -30,7 +18,6 @@ const eventsSubmenu: [string, string][] = [
 type NavItem = {
   href: string;
   submenu: [string, string][] | null;
-  experiment?: { name: string; variant: string };
 };
 
 const navigation: Map<string, NavItem> = new Map([
@@ -66,13 +53,11 @@ const navigation: Map<string, NavItem> = new Map([
     },
   ],
   [
-    navVariant.label,
+    // Won the "Get Involved" vs "Member Opportunities" A/B test (November 2026).
+    "Member Opportunities",
     {
-      href: navVariant.href,
-      submenu: navVariant.submenu,
-      experiment: assignedVariant
-        ? { name: NAV_LABEL_EXPERIMENT, variant: assignedVariant }
-        : undefined,
+      href: "/volunteer",
+      submenu: null,
     },
   ],
   [
@@ -105,9 +90,3 @@ const navigation: Map<string, NavItem> = new Map([
   <Icon name="solar:hamburger-menu-outline" class="h-8 w-8" slot="burger-icon" />
   <Icon name="mdi:close" class="h-8 w-8" slot="close" />
 </NavBar>
-
-<script>
-  import { trackNavLabel } from "../utils/navLabelExperiment";
-
-  trackNavLabel();
-</script>

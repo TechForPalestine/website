@@ -4,8 +4,6 @@
   export let navigation: Map<string, {
     href: string,
     submenu: Array<[string, string]> | null,
-    // Set when the item is under an A/B test; read by trackNavLabel (src/utils/navLabelExperiment.ts).
-    experiment?: {name: string, variant: string},
   }>;
   export let currentRoute: string;
   // Unused: only declared so @astrojs/svelte's generated types allow the named
@@ -108,8 +106,7 @@
       </div>
 
       <!-- Desktop Navigation: from xl (1280px). Below that the items plus the three
-           buttons don't fit on one line ("Member Opportunities", the nav label A/B
-           variant, is the longest), so narrower screens use the burger menu. The gap
+           buttons don't fit on one line ("Member Opportunities" is the longest), so narrower screens use the burger menu. The gap
            between items is tighter until 2xl so everything fits at 1280px. -->
       <nav class="hidden xl:flex xl:items-center xl:space-x-6 2xl:space-x-8">
         {#each navigation as [label, item]}
@@ -124,8 +121,6 @@
               >
                 <a
                   href={item.href}
-                  data-experiment={item.experiment?.name}
-                  data-variant={item.experiment?.variant}
                   on:focus={() => activeDropdown = label}
                   class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
                 >
@@ -161,8 +156,6 @@
                     <a
                       href={subHref}
                       role="menuitem"
-                      data-experiment={item.experiment?.name}
-                      data-variant={item.experiment?.variant}
                       on:keydown={handleMenuKeydown}
                       target={subHref.startsWith('http') ? '_blank' : undefined}
                       rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -177,8 +170,6 @@
               <!-- Regular Menu Item -->
               <a
                 href={item.href}
-                data-experiment={item.experiment?.name}
-                data-variant={item.experiment?.variant}
                 class="whitespace-nowrap text-gray-900 hover:text-blue-600 font-medium transition-colors duration-200 {currentRoute.replace(/\/$/, '') === item.href ? 'text-blue-600' : ''}"
               >
                 {label}
@@ -247,8 +238,6 @@
               <div class="flex items-center justify-between w-full">
                 <a
                   href={item.href}
-                  data-experiment={item.experiment?.name}
-                  data-variant={item.experiment?.variant}
                   class="flex-1 text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
                 >
                   {label}
@@ -281,8 +270,6 @@
                     <a
                       href={subHref}
                       role="menuitem"
-                      data-experiment={item.experiment?.name}
-                      data-variant={item.experiment?.variant}
                       on:keydown={handleMenuKeydown}
                       target={subHref.startsWith('http') ? '_blank' : undefined}
                       rel={subHref.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -297,8 +284,6 @@
               <!-- Regular Mobile Item -->
               <a
                 href={item.href}
-                data-experiment={item.experiment?.name}
-                data-variant={item.experiment?.variant}
                 class="block w-full text-lg text-gray-800 hover:text-blue-600 transition duration-200 ease-in-out {currentRoute.replace(/\/$/, '') === item.href ? 'font-semibold text-blue-600' : ''}"
               >
                 {label}

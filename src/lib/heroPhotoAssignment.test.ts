@@ -4,12 +4,12 @@ vi.mock("./growthbookServer", () => ({
   loadFeaturePayload: vi.fn(),
   evalServerFeature: vi.fn(),
 }));
-vi.mock("./navAssignment", () => ({
+vi.mock("./visitorAssignment", () => ({
   requestAssignmentId: vi.fn(),
 }));
 
 const { loadFeaturePayload, evalServerFeature } = await import("./growthbookServer");
-const { requestAssignmentId } = await import("./navAssignment");
+const { requestAssignmentId } = await import("./visitorAssignment");
 const { assignHeroPhoto } = await import("./heroPhotoAssignment");
 
 describe("assignHeroPhoto", () => {

@@ -40,7 +40,7 @@ export const onRequest = sequence(sentryInit, securityHeaders, cacheControl, csp
 
 ## Homepage hero photo A/B test
 
-The homepage hero photo is a GrowthBook experiment (`homepage-hero-photo`, four variants), assigned server-side in `src/pages/index.astro` via `src/lib/heroPhotoAssignment.ts` and measured in Plausible through the `hero_photo` pageview property and `Homepage Link Click` events. It shares the daily visitor hash with the nav label test. Any assignment failure falls back to the control photo. See `docs/superpowers/specs/2026-11-25-homepage-hero-photo-ab-test-design.md`.
+The homepage hero photo is a GrowthBook experiment (`homepage-hero-photo`, four variants), assigned server-side in `src/pages/index.astro` via `src/lib/heroPhotoAssignment.ts` and measured in Plausible through the `hero_photo` pageview property and `Homepage Link Click` events. Visitors are assigned with the daily cookieless visitor hash in `src/lib/visitorAssignment.ts`. Any assignment failure falls back to the control photo. See `docs/superpowers/specs/2026-11-25-homepage-hero-photo-ab-test-design.md`.
 
 ## Content collections
 
