@@ -32,8 +32,7 @@ export const HERO_PHOTOS: Readonly<Record<HeroPhotoVariant, HeroPhoto>> = {
     width: 1600,
     height: 1068,
     alt: "A man reads from a sheet of paper to a seated group, with an embroidered map of Palestine hanging on the wall behind him",
-    // TODO(launch): photographer credit from the team
-    credit: "TODO credit",
+    credit: "© Tech for Palestine",
     position: "object-center",
   },
   laptops: {
@@ -42,8 +41,7 @@ export const HERO_PHOTOS: Readonly<Record<HeroPhotoVariant, HeroPhoto>> = {
     width: 1600,
     height: 994,
     alt: "Three people work together at laptops covered in Palestinian flag and watermelon stickers",
-    // TODO(launch): photographer credit from the team
-    credit: "TODO credit",
+    credit: "© Tech for Palestine",
     position: "object-[50%_50%] lg:object-[52%_50%]",
   },
   stage: {
@@ -52,8 +50,7 @@ export const HERO_PHOTOS: Readonly<Record<HeroPhotoVariant, HeroPhoto>> = {
     width: 1600,
     height: 898,
     alt: "Two people on stage applaud between a Thaura banner and a Tech for Palestine banner",
-    // TODO(launch): photographer credit from the team
-    credit: "TODO credit",
+    credit: "© Tech for Palestine",
     position: "object-[50%_50%]",
   },
 };

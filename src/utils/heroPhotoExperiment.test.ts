@@ -31,6 +31,7 @@ describe("HERO_PHOTOS", () => {
     const photo = HERO_PHOTOS[variant];
     expect(photo.alt).not.toBe("");
     expect(photo.credit).not.toBe("");
+    expect(photo.credit).not.toMatch(/TODO/i);
     expect(photo.srcset).toContain("800w");
     expect(photo.srcset).toContain("1600w");
   });
