@@ -26,6 +26,8 @@ interface Props {
   /** Page-specific JSON-LD nodes (FAQPage, ItemList, Event, …), emitted after
    * the sitewide NonprofitOrganization node. */
   schema?: Record<string, unknown>[];
+  /** Custom properties for this page's Plausible pageview and every later event on it. */
+  analyticsProps?: Record<string, string>;
 }
 
 const {
@@ -37,6 +39,7 @@ const {
   noindex = false,
   hideDonatePopout = false,
   schema = [],
+  analyticsProps = {},
 } = Astro.props;
 
 // /page and /page/ both resolve, so both must name the same no-slash canonical.
@@ -86,8 +89,15 @@ const structuredData = [organizationSchema(), ...schema];
     <slot name="head" />
 
     <!-- Privacy-friendly analytics -->
+    {
+      Object.keys(analyticsProps).length > 0 && (
+        <meta name="t4p:analytics-props" content={JSON.stringify(analyticsProps)} />
+      )
+    }
     <script is:inline async src="/js/web.js"></script>
     <script>
+      import { readAnalyticsProps } from "../utils/analyticsProps";
+
       (window as any).plausible =
         (window as any).plausible ||
         function () {
@@ -100,7 +110,10 @@ const structuredData = [organizationSchema(), ...schema];
         function (i: any) {
           ((window as any).plausible as any).o = i || {};
         };
-      ((window as any).plausible as any).init({ endpoint: "/api/pipe" });
+      ((window as any).plausible as any).init({
+        endpoint: "/api/pipe",
+        customProperties: readAnalyticsProps(document),
+      });
     </script>
   </head>
   <body class="relative flex min-h-screen flex-col bg-white text-gray-900">
