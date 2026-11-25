@@ -107,10 +107,11 @@
         </a>
       </div>
 
-      <!-- Desktop Navigation: from xl (1280px). Below that the items plus the two
+      <!-- Desktop Navigation: from xl (1280px). Below that the items plus the three
            buttons don't fit on one line ("Member Opportunities", the nav label A/B
-           variant, is the longest), so narrower screens use the burger menu. -->
-      <nav class="hidden xl:flex xl:items-center xl:space-x-8">
+           variant, is the longest), so narrower screens use the burger menu. The gap
+           between items is tighter until 2xl so everything fits at 1280px. -->
+      <nav class="hidden xl:flex xl:items-center xl:space-x-6 2xl:space-x-8">
         {#each navigation as [label, item]}
           <div class="relative">
             {#if item.submenu}
