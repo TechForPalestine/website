@@ -7,6 +7,14 @@ import NewsletterPopup from "../components/home/NewsletterPopup";
 import ChallengePopup from "../components/home/ChallengePopup.astro";
 import ReportPopup from "../components/home/ReportPopup.astro";
 import "../styles/base.css";
+import { assignHeroPhoto } from "../lib/heroPhotoAssignment";
+import { HERO_PHOTOS } from "../utils/heroPhotoExperiment";
+
+// The assignment id is a daily hash, so a visitor sees one photo per day. `/` must stay out of
+// shared caches (cache-control.ts sends `private, max-age=600`) or one visitor's photo would be
+// served to everyone.
+const heroVariant = await assignHeroPhoto(Astro.request, Astro.locals);
+const hero = HERO_PHOTOS[heroVariant ?? "control"];
 
 const stats = [
   { value: "100+", label: "Projects incubated" },
@@ -164,6 +172,7 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
   description="A 501(c)(3) coalition of founders, engineers and tech workers behind 100+ projects for Palestine. Become a member or build with the T4P Incubator."
   schema={[websiteSchema()]}
   image="https://techforpalestine.org/happy-kids.jpg"
+  analyticsProps={heroVariant ? { hero_photo: heroVariant } : undefined}
 >
   <main class="relative">
     <CommunityCallBanner />
@@ -207,22 +216,25 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
         </div>
       </div>
 
-      <figure class="relative h-[min(26rem,45vh)] bg-stone lg:h-auto lg:self-stretch">
+      <figure
+        class="relative h-[min(26rem,45vh)] bg-stone lg:h-auto lg:self-stretch"
+        data-hero-photo={heroVariant ?? undefined}
+      >
         <img
-          src="/happy-kids-1600.webp"
-          srcset="/happy-kids-800.webp 800w, /happy-kids-1600.webp 1600w"
+          src={hero.src}
+          srcset={hero.srcset}
           sizes="(min-width: 1024px) 50vw, 100vw"
-          class="h-full w-full object-cover lg:absolute lg:inset-0"
-          alt="Children in Gaza smiling for the camera"
-          width="1600"
-          height="1200"
+          class:list={["h-full w-full object-cover lg:absolute lg:inset-0", hero.position]}
+          alt={hero.alt}
+          width={hero.width}
+          height={hero.height}
           fetchpriority="high"
           decoding="async"
         />
         <figcaption
           class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-10 text-right text-xs font-medium text-white"
         >
-          &copy; Motaz Azaiza
+          {hero.credit}
         </figcaption>
       </figure>
     </section>
@@ -501,6 +513,9 @@ const cardBase = `group relative flex flex-col rounded-lg border border-ink-divi
       writePopupState,
     } from "../utils/newsletterPopup";
     import { watchSignupSuccess } from "../utils/watchSignupSuccess";
+    import { trackHomepageLinks } from "../utils/heroPhotoExperiment";
+
+    if (document.querySelector("[data-hero-photo]")) trackHomepageLinks();
 
     const bottomForm = document.getElementById(FOOTER_SECTION_ID);
     if (bottomForm) {

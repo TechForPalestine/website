@@ -54,4 +54,14 @@ describe("assignHeroPhoto", () => {
     expect(await assignHeroPhoto(req(), locals)).toBeNull();
     expect(evalServerFeature).not.toHaveBeenCalled();
   });
+
+  it("returns null and logs when evaluation throws", async () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.mocked(evalServerFeature).mockImplementation(() => {
+      throw new Error("boom");
+    });
+    expect(await assignHeroPhoto(req(), locals)).toBeNull();
+    expect(spy).toHaveBeenCalledWith("Hero photo assignment failed", expect.any(Error));
+    spy.mockRestore();
+  });
 });

@@ -38,6 +38,10 @@ export const onRequest = sequence(sentryInit, securityHeaders, cacheControl, csp
 | **EmailOctopus**                                                   | `api/donation-complete.ts`, `api/membership-complete.ts`                                                                    | Donor/member mailing list sync                                                                                                                     |
 | **Sentry**                                                         | `sentry.client.config.js`, `sentry.server.config.js`, `src/lib/report-error.ts`, inbound webhook at `api/sentry-webhook.ts` | Error monitoring + Mattermost alert relay                                                                                                          |
 
+## Homepage hero photo A/B test
+
+The homepage hero photo is a GrowthBook experiment (`homepage-hero-photo`, four variants), assigned server-side in `src/pages/index.astro` via `src/lib/heroPhotoAssignment.ts` and measured in Plausible through the `hero_photo` pageview property and `Homepage Link Click` events. It shares the daily visitor hash with the nav label test. Any assignment failure falls back to the control photo. See `docs/superpowers/specs/2026-11-25-homepage-hero-photo-ab-test-design.md`.
+
 ## Content collections
 
 `src/content/config.ts` currently defines `collections = {}` — empty. Older documentation and some historical plans reference markdown-based `ideas/`/`projects/` content collections; that data now comes from Notion and ProjectHub respectively (see tables above). Don't assume `src/content/` holds live data without checking the collections config first.
