@@ -92,7 +92,7 @@ export async function requestAssignmentId(
   if (!secret) {
     if (ip && !warnedMissingSecret) {
       warnedMissingSecret = true;
-      console.warn(`${ASSIGNMENT_SECRET_ENV} is not set: the nav label A/B test is inactive`);
+      console.warn(`${ASSIGNMENT_SECRET_ENV} is not set: server-side A/B tests are inactive`);
     }
     return null;
   }

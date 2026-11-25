@@ -335,7 +335,10 @@ const isUK = country === "GB";
 
       // Track form variant (safely)
       if (typeof window.plausible !== "undefined") {
-        window.plausible("Donate Form", { props: { donate_form_variant: trackingVariant } });
+        window.plausible("Donate Form", {
+          props: { donate_form_variant: trackingVariant },
+          interactive: false,
+        });
       }
 
       const presetAmount = urlParams.get("amount");

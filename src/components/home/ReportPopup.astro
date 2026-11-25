@@ -260,9 +260,13 @@ const live = isReportPopupLive();
     }
   }
 
-  function track(event: string, props?: Record<string, string>) {
+  function track(
+    event: string,
+    props?: Record<string, string>,
+    options?: { interactive?: boolean }
+  ) {
     if (typeof window.plausible === "undefined") return;
-    window.plausible(event, props ? { props } : undefined);
+    window.plausible(event, props || options ? { props, ...options } : undefined);
   }
 
   function schedule(dialog: HTMLDialogElement) {
@@ -314,7 +318,7 @@ const live = isReportPopupLive();
       dialog.showModal();
       document.documentElement.setAttribute(REPORT_SHOWN_ATTRIBUTE, "");
       window.dispatchEvent(new Event(REPORT_SHOWN_EVENT));
-      track("Report Popup Shown");
+      track("Report Popup Shown", undefined, { interactive: false });
     };
     const onScroll = () => {
       const docHeight = document.documentElement.scrollHeight;

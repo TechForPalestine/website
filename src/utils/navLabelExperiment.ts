@@ -53,7 +53,13 @@ export function variantFromFeature({ value, source }: FeatureOutcome): NavLabelV
   return VARIANTS.find((variant) => variant === value) ?? null;
 }
 
-export type TrackEvent = (name: string, props: Record<string, string>) => void;
+// `interactive: false` marks an event Plausible should not count as an interaction, so a
+// visit that only fires it is still a bounce.
+export type TrackEvent = (
+  name: string,
+  props: Record<string, string>,
+  options?: { interactive?: boolean }
+) => void;
 
 // The parts of Document this needs. `prerendering` is not in TypeScript's DOM lib yet.
 export interface ExperimentDocument {
@@ -85,8 +91,8 @@ export function navExperimentProps(
   return experiment && variant ? { experiment, variant } : {};
 }
 
-const trackWithPlausible: TrackEvent = (name, props) => {
-  window.plausible?.(name, { props });
+const trackWithPlausible: TrackEvent = (name, props, options) => {
+  window.plausible?.(name, { props, ...options });
 };
 
 // Records one exposure per page view when the nav carries an experiment link, and every
@@ -104,7 +110,7 @@ export function trackNavLabel(options: TrackNavLabelOptions = {}): void {
   if (!experiment || !variant) return;
 
   const props = { experiment, variant };
-  const recordExposure = (): void => track(EXPOSURE_EVENT, props);
+  const recordExposure = (): void => track(EXPOSURE_EVENT, props, { interactive: false });
   if (doc.prerendering) {
     doc.addEventListener("prerenderingchange", recordExposure, { once: true });
   } else {

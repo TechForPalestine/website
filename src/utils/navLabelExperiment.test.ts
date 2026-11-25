@@ -56,7 +56,7 @@ describe("trackNavLabel", () => {
     trackNavLabel({ track, doc: fakeDocument().doc });
 
     expect(track).toHaveBeenCalledOnce();
-    expect(track).toHaveBeenCalledWith(EXPOSURE_EVENT, props);
+    expect(track).toHaveBeenCalledWith(EXPOSURE_EVENT, props, { interactive: false });
   });
 
   it("waits for a prerendered page to be shown before recording the exposure", () => {
@@ -67,7 +67,7 @@ describe("trackNavLabel", () => {
     expect(track).not.toHaveBeenCalled();
 
     fire("prerenderingchange", false);
-    expect(track).toHaveBeenCalledWith(EXPOSURE_EVENT, props);
+    expect(track).toHaveBeenCalledWith(EXPOSURE_EVENT, props, { interactive: false });
   });
 
   it("does nothing when the nav has no experiment link", () => {
